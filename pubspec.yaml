@@ -59,11 +59,20 @@ flutter:
     - assets/images/bg_alarm_manage_todo.png
     - assets/images/bg_outlet_audit_todo.png
     - assets/images/bg_factor_audit_todo.png
-    - assets/images/state.png
-    - assets/images/province.png
-    - assets/images/county.png
-    - assets/images/water.png
-    - assets/images/metal.png
+    - assets/images/icon_water_state.png
+    - assets/images/icon_water_province.png
+    - assets/images/icon_water_county.png
+    - assets/images/icon_water_water.png
+    - assets/images/icon_water_metal.png
+    - assets/images/icon_monitor_all.png
+    - assets/images/icon_monitor_online.png
+    - assets/images/icon_monitor_alarm.png
+    - assets/images/icon_monitor_over.png
+    - assets/images/icon_monitor_offline.png
+    - assets/images/icon_monitor_stop.png
+    - assets/images/icon_card_title.png
+    - assets/images/icon_aqi_examine_pm25.png
+    - assets/images/icon_aqi_examine_quality.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
