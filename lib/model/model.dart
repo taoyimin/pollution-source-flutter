@@ -19,3 +19,16 @@ class Monitor {
   Color color;  //图标颜色
   String imagePath; //图片路径
 }
+
+class AqiExamine {
+  AqiExamine(this.title, this.imagePath, this.title1, this.value1, this.title2, this.value2, this.title3, this.value3);
+
+  String title; //标题
+  String imagePath; //图片路径
+  String title1;
+  String value1;
+  String title2;
+  String value2;
+  String title3;
+  String value3;
+}
