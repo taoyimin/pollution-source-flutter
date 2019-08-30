@@ -23,18 +23,24 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  english_words: ^3.1.0
+  # english_words: ^3.1.0
   flutter_easyrefresh: ^2.0.3
-  json_annotation: ^2.0.0
-  percent_indicator: ^2.1.1
-  flutter_swiper : ^1.1.6
+  # json_annotation: ^2.0.0
+  # percent_indicator: ^2.1.1
+  # flutter_swiper : ^1.1.6
+  charts_flutter: ^0.7.0
+  fl_chart: ^0.2.0
+  flutter_spinkit: ^4.0.0
+  flare_flutter: ^1.2.0
+  # flutter_lottie: ^0.2.0
+  dio: ^2.1.16
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^1.0.0
-  json_serializable: ^2.0.0
+  #build_runner: ^1.0.0
+  #json_serializable: ^2.0.0
 
 
 # For information on the generic Dart part of this file, see the
@@ -53,26 +59,38 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-    - assets/images/index_location.png
-    - assets/images/bg.png
-    - assets/images/indexbg.png
-    - assets/images/bg_alarm_manage_todo.png
-    - assets/images/bg_outlet_audit_todo.png
-    - assets/images/bg_factor_audit_todo.png
-    - assets/images/icon_water_state.png
-    - assets/images/icon_water_province.png
-    - assets/images/icon_water_county.png
-    - assets/images/icon_water_water.png
-    - assets/images/icon_water_metal.png
-    - assets/images/icon_monitor_all.png
-    - assets/images/icon_monitor_online.png
-    - assets/images/icon_monitor_alarm.png
-    - assets/images/icon_monitor_over.png
-    - assets/images/icon_monitor_offline.png
-    - assets/images/icon_monitor_stop.png
-    - assets/images/icon_card_title.png
-    - assets/images/icon_aqi_examine_pm25.png
-    - assets/images/icon_aqi_examine_quality.png
+    #    - assets/images/index_location.png
+    #    - assets/images/bg.png
+    #    - assets/images/indexbg.png
+    #    - assets/images/bg_alarm_manage_todo.png
+    #    - assets/images/bg_outlet_audit_todo.png
+    #    - assets/images/bg_factor_audit_todo.png
+    #    - assets/images/icon_water_state.png
+    #    - assets/images/icon_water_province.png
+    #    - assets/images/icon_water_county.png
+    #    - assets/images/icon_water_water.png
+    #    - assets/images/icon_water_metal.png
+    #    - assets/images/icon_monitor_all.png
+    #    - assets/images/icon_monitor_online.png
+    #    - assets/images/icon_monitor_alarm.png
+    #    - assets/images/icon_monitor_over.png
+    #    - assets/images/icon_monitor_offline.png
+    #    - assets/images/icon_monitor_stop.png
+    #    - assets/images/icon_card_title.png
+    #    - assets/images/icon_aqi_examine_pm25.png
+    #    - assets/images/icon_aqi_examine_quality.png
+    #    - assets/images/icon_pollution_all_enter.png
+    #    - assets/images/icon_pollution_point_enter.png
+    #    - assets/images/icon_pollution_online_enter.png
+    #    - assets/images/icon_pollution_water_enter.png
+    #    - assets/images/icon_pollution_air_enter.png
+    #    - assets/images/icon_pollution_air_water.png
+    #    - assets/images/icon_pollution_water_outlet.png
+    #    - assets/images/icon_pollution_air_outlet.png
+    #    - assets/images/icon_pollution_licence_enter.png
+    - assets/flare/
+    - assets/images/
+    # - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
