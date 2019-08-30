@@ -32,3 +32,21 @@ class AqiExamine {
   String title3;
   String value3;
 }
+
+class PollutionEnter {
+  PollutionEnter(this.title, this.count, this.imagePath, this.color);
+
+  String title; //标题
+  int count;  //个数
+  Color color;  //图标颜色
+  String imagePath; //图片路径
+}
+
+class SummaryStatistics {
+  SummaryStatistics(this.title, this.count, this.imagePath, this.color);
+
+  String title; //标题
+  int count;  //个数
+  Color color;  //图标颜色
+  String imagePath; //图片路径
+}
