@@ -43,10 +43,11 @@ class PollutionEnter {
 }
 
 class SummaryStatistics {
-  SummaryStatistics(this.title, this.count, this.imagePath, this.color);
+  SummaryStatistics(this.title, this.count, this.color, this.imagePath, this.backgroundPath);
 
   String title; //标题
   int count;  //个数
   Color color;  //图标颜色
   String imagePath; //图片路径
+  String backgroundPath;  //背景路径
 }

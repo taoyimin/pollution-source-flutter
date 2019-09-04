@@ -10,6 +10,8 @@ import 'dart:math';
 import 'package:pollution_source/widget/space_header.dart';
 import 'dart:async';
 
+import 'enter_list.dart';
+
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
 
@@ -101,11 +103,7 @@ class _IndexPageState extends State<IndexPage>
             ),
           ),*/
           SliverToBoxAdapter(
-            child: Container(
-              height: 280,
-              color: Colours.primary_color,
-              child: AqiWidget(),
-            ),
+            child: AqiWidget(),
           ),
           SliverToBoxAdapter(
             child: TodoTasksWidget(),
@@ -127,10 +125,11 @@ class _IndexPageState extends State<IndexPage>
                           Expanded(
                             flex: 1,
                             child: BarChartWidget(
-                                "AQI",
-                                "空气质量",
-                                Color.fromRGBO(136, 191, 89, 1),
-                                "assets/images/icon_aqi_examine_quality.png"),
+                                title: "AQI",
+                                subTitle: "空气质量",
+                                color: Color.fromRGBO(136, 191, 89, 1),
+                                imagePath:
+                                    "assets/images/icon_aqi_examine_quality.png"),
                           ),
                           SizedBox(
                             width: 10,
@@ -138,10 +137,11 @@ class _IndexPageState extends State<IndexPage>
                           Expanded(
                             flex: 1,
                             child: BarChartWidget(
-                                "PM2.5",
-                                "细颗粒物",
-                                Color.fromRGBO(241, 190, 67, 1),
-                                "assets/images/icon_aqi_examine_pm25.png"),
+                                title: "PM2.5",
+                                subTitle: "细颗粒物",
+                                color: Color.fromRGBO(241, 190, 67, 1),
+                                imagePath:
+                                    "assets/images/icon_aqi_examine_pm25.png"),
                           ),
                         ],
                       ),
@@ -236,6 +236,175 @@ class AqiWidget extends StatefulWidget {
 }
 
 class _AqiWidgetState extends State<AqiWidget> with TickerProviderStateMixin {
+  //获取空气质量因子监测值的grid item
+  Widget _getAqiGridItem(factorName, factorValue) {
+    return Expanded(
+      flex: 1, //设置一个宽度，防止宽度不同无法对齐
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            factorValue,
+            style: TextStyle(
+              fontSize: 17,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            factorName,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 190,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 80,
+            padding: EdgeInsets.fromLTRB(16, 35, 16, 0),
+            //color: Colours.accent_color,
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 30,
+                  height: 30,
+                  padding: EdgeInsets.all(5),
+                  child: Image(
+                      image: AssetImage("assets/images/index_location.png")),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                Text(
+                  "赣州市",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: Text(
+                    "2019年8月16日 15时",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "25",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 38,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(3), //3像素圆角
+                      ),
+                      child: Text(
+                        "优",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "首要污染物:颗粒物及二氧化硫",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    _getAqiGridItem("PM2.5", "25"),
+                    Container(
+                      height: 26,
+                      width: 1,
+                      color: Colors.white,
+                    ),
+                    _getAqiGridItem("PM10", "25"),
+                    Container(
+                      height: 26,
+                      width: 1,
+                      color: Colors.white,
+                    ),
+                    _getAqiGridItem("SO₂", "25"),
+                    Container(
+                      height: 26,
+                      width: 1,
+                      color: Colors.white,
+                    ),
+                    _getAqiGridItem("NO₂", "25"),
+                    Container(
+                      height: 26,
+                      width: 1,
+                      color: Colors.white,
+                    ),
+                    _getAqiGridItem("O₃", "25"),
+                    Container(
+                      height: 26,
+                      width: 1,
+                      color: Colors.white,
+                    ),
+                    _getAqiGridItem("CO", "25"),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/*class _AqiWidgetState extends State<AqiWidget> with TickerProviderStateMixin {
   //获取空气质量因子监测值的grid item
   Widget _getAqiGridItem(factorName, factorValue) {
     return Container(
@@ -423,7 +592,7 @@ class _AqiWidgetState extends State<AqiWidget> with TickerProviderStateMixin {
       ],
     );
   }
-}
+}*/
 
 //空气质量考核达标
 class AqiExamineWidget extends StatefulWidget {
@@ -738,12 +907,6 @@ class _TodoTasksWidgetState extends State<TodoTasksWidget> {
                 image,
                 fit: BoxFit.cover,
               ),
-              InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  print('Card tapped.');
-                },
-              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -766,8 +929,17 @@ class _TodoTasksWidgetState extends State<TodoTasksWidget> {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
-                  )
+                  ),
                 ],
+              ),
+              InkWell(
+                splashColor: Colors.blue.withAlpha(30),
+                onTap: () {
+                  print("点击了");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return EnterListPage();
+                  }));
+                },
               ),
             ],
           ),
@@ -784,18 +956,22 @@ class _TodoTasksWidgetState extends State<TodoTasksWidget> {
         children: <Widget>[
           TitleWidget("待办任务统计"),
           Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                _getTodoTaskRowItem(
-                    "报警单待处理", "232", "assets/images/bg_alarm_manage_todo.png"),
-                SizedBox(width: 6,),
-                _getTodoTaskRowItem(
-                    "排口异常待审核", "45", "assets/images/bg_outlet_audit_todo.png"),
-                SizedBox(width: 6,),
-                _getTodoTaskRowItem(
-                    "因子异常待审核", "8", "assets/images/bg_factor_audit_todo.png"),
-              ],
-            ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _getTodoTaskRowItem(
+                  "报警单待处理", "232", "assets/images/bg_alarm_manage_todo.png"),
+              SizedBox(
+                width: 6,
+              ),
+              _getTodoTaskRowItem(
+                  "排口异常待审核", "45", "assets/images/bg_outlet_audit_todo.png"),
+              SizedBox(
+                width: 6,
+              ),
+              _getTodoTaskRowItem(
+                  "因子异常待审核", "8", "assets/images/bg_factor_audit_todo.png"),
+            ],
+          ),
         ],
       ),
     );
@@ -1260,12 +1436,27 @@ class SummaryStatisticsWidget extends StatefulWidget {
 
 class _SummaryStatisticsWidgetState extends State<SummaryStatisticsWidget> {
   final List<SummaryStatistics> _summaryStatistics = [
-    SummaryStatistics("监察执法", 145, "assets/images/icon_pollution_all_enter.png",
-        Color.fromRGBO(77, 167, 248, 1)),
-    SummaryStatistics("项目审批", 32, "assets/images/icon_pollution_all_enter.png",
-        Color.fromRGBO(241, 190, 67, 1)),
-    SummaryStatistics("信访投诉", 5, "assets/images/icon_pollution_all_enter.png",
-        Color.fromRGBO(136, 191, 89, 1)),
+    SummaryStatistics(
+      "监察执法",
+      145,
+      Color.fromRGBO(77, 167, 248, 1),
+      "assets/images/icon_pollution_all_enter.png",
+      "assets/images/bg_button3.png",
+    ),
+    SummaryStatistics(
+      "项目审批",
+      32,
+      Color.fromRGBO(241, 190, 67, 1),
+      "assets/images/icon_pollution_all_enter.png",
+      "assets/images/bg_button2.png",
+    ),
+    SummaryStatistics(
+      "信访投诉",
+      5,
+      Color.fromRGBO(136, 191, 89, 1),
+      "assets/images/icon_pollution_all_enter.png",
+      "assets/images/bg_button1.png",
+    ),
   ];
 
   Widget _getSummaryStatisticsRowItem(SummaryStatistics summaryStatistics) {
@@ -1276,6 +1467,15 @@ class _SummaryStatisticsWidgetState extends State<SummaryStatisticsWidget> {
         padding: EdgeInsets.all(10),
         child: Stack(
           children: <Widget>[
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Image.asset(
+                summaryStatistics.backgroundPath,
+                width: 50,
+                fit: BoxFit.cover,
+              ),
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -1346,23 +1546,19 @@ class BarChartWidget extends StatefulWidget {
   final String subTitle;
   final String imagePath;
 
-  BarChartWidget(this.title, this.subTitle, this.color, this.imagePath,
-      {Key key})
+  BarChartWidget(
+      {@required this.title,
+      @required this.subTitle,
+      @required this.color,
+      @required this.imagePath,
+      Key key})
       : super(key: key);
 
   @override
-  _BarChartWidgetState createState() => _BarChartWidgetState(
-      this.title, this.subTitle, this.color, this.imagePath);
+  _BarChartWidgetState createState() => _BarChartWidgetState();
 }
 
 class _BarChartWidgetState extends State<BarChartWidget> {
-  final Color color;
-  final String title;
-  final String subTitle;
-  final String imagePath;
-
-  _BarChartWidgetState(this.title, this.subTitle, this.color, this.imagePath);
-
   //final Color barColor = color;
   //final Color barBackgroundColor = const Color(0xff72d8bf);
   final double width = 6;
@@ -1449,9 +1645,9 @@ class _BarChartWidgetState extends State<BarChartWidget> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Text(
-                this.title,
+                widget.title,
                 style: TextStyle(
-                  color: this.color,
+                  color: widget.color,
                   fontSize: 18,
                 ),
               ),
@@ -1459,7 +1655,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                 height: 4,
               ),
               Text(
-                this.subTitle,
+                widget.subTitle,
                 style: TextStyle(
                   color: Colours.secondary_text,
                   fontSize: 12,
@@ -1514,8 +1710,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                       bottomTitles: SideTitles(
                           showTitles: true,
                           textStyle: TextStyle(
-                              color: Colours.primary_text,
-                              fontSize: 11),
+                              color: Colours.primary_text, fontSize: 11),
                           margin: 8,
                           getTitles: (double value) {
                             switch (value.toInt()) {
@@ -1533,6 +1728,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                                 return '六';
                               case 6:
                                 return '日';
+                              default:
+                                return '未知';
                             }
                           }),
                       leftTitles: SideTitles(
@@ -1556,12 +1753,12 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               height: 30,
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: this.color.withOpacity(0.3),
+                color: widget.color.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(3),
               ),
               child: Image.asset(
-                this.imagePath,
-                color: this.color,
+                widget.imagePath,
+                color: widget.color,
               ),
             ),
           ),
@@ -1574,13 +1771,13 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     return BarChartGroupData(x: x, barRods: [
       BarChartRodData(
         y: y,
-        color: this.color,
+        color: widget.color,
         width: width,
         isRound: true,
         backDrawRodData: BackgroundBarChartRodData(
           show: true,
           y: 20,
-          color: this.color.withOpacity(0.3),
+          color: widget.color.withOpacity(0.3),
         ),
       ),
     ]);
