@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/model/model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'dart:ui';
@@ -166,12 +167,6 @@ class _IndexPageState extends State<IndexPage>
           SliverToBoxAdapter(
             child: SummaryStatisticsWidget(),
           ),
-          SliverToBoxAdapter(
-            child: Text(_text),
-          ),
-          SliverToBoxAdapter(
-            child: Text(_count.toString()),
-          ),
         ],
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {
@@ -268,135 +263,149 @@ class _AqiWidgetState extends State<AqiWidget> with TickerProviderStateMixin {
       height: 190,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/bg.png"),
+          image: AssetImage("assets/images/index_header_bg.png"),
           fit: BoxFit.cover,
         ),
       ),
-      child: Column(
+      child: Stack(
         children: <Widget>[
-          Container(
-            height: 80,
-            padding: EdgeInsets.fromLTRB(16, 35, 16, 0),
-            //color: Colours.accent_color,
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 30,
-                  height: 30,
-                  padding: EdgeInsets.all(5),
-                  child: Image(
-                      image: AssetImage("assets/images/index_location.png")),
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  "赣州市",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: Text(
-                    "2019年8月16日 15时",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ],
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: SvgPicture.asset(
+              "assets/images/index_header_image.svg",
+              width: 150,
+              fit: BoxFit.fill,
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "25",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 38,
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            children: <Widget>[
+              Container(
+                height: 80,
+                padding: EdgeInsets.fromLTRB(16, 35, 16, 0),
+                //color: Colours.accent_color,
+                child: Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(5, 1, 5, 1),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(3), //3像素圆角
-                      ),
+                      width: 30,
+                      height: 30,
+                      padding: EdgeInsets.all(5),
+                      child: Image(
+                          image:
+                              AssetImage("assets/images/index_location.png")),
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Text(
+                      "赣州市",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
                       child: Text(
-                        "优",
+                        "2019年8月16日 15时",
+                        textAlign: TextAlign.right,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 15,
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
                     Text(
-                      "首要污染物:颗粒物及二氧化硫",
+                      "25",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12,
+                        fontSize: 38,
                       ),
                     ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(3), //3像素圆角
+                          ),
+                          child: Text(
+                            "优",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "首要污染物:颗粒物及二氧化硫",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    _getAqiGridItem("PM2.5", "25"),
-                    Container(
-                      height: 26,
-                      width: 1,
-                      color: Colors.white,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        _getAqiGridItem("PM2.5", "25"),
+                        Container(
+                          height: 26,
+                          width: 1,
+                          color: Colors.white,
+                        ),
+                        _getAqiGridItem("PM10", "25"),
+                        Container(
+                          height: 26,
+                          width: 1,
+                          color: Colors.white,
+                        ),
+                        _getAqiGridItem("SO₂", "25"),
+                        Container(
+                          height: 26,
+                          width: 1,
+                          color: Colors.white,
+                        ),
+                        _getAqiGridItem("NO₂", "25"),
+                        Container(
+                          height: 26,
+                          width: 1,
+                          color: Colors.white,
+                        ),
+                        _getAqiGridItem("O₃", "25"),
+                        Container(
+                          height: 26,
+                          width: 1,
+                          color: Colors.white,
+                        ),
+                        _getAqiGridItem("CO", "25"),
+                      ],
                     ),
-                    _getAqiGridItem("PM10", "25"),
-                    Container(
-                      height: 26,
-                      width: 1,
-                      color: Colors.white,
-                    ),
-                    _getAqiGridItem("SO₂", "25"),
-                    Container(
-                      height: 26,
-                      width: 1,
-                      color: Colors.white,
-                    ),
-                    _getAqiGridItem("NO₂", "25"),
-                    Container(
-                      height: 26,
-                      width: 1,
-                      color: Colors.white,
-                    ),
-                    _getAqiGridItem("O₃", "25"),
-                    Container(
-                      height: 26,
-                      width: 1,
-                      color: Colors.white,
-                    ),
-                    _getAqiGridItem("CO", "25"),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -932,15 +941,6 @@ class _TodoTasksWidgetState extends State<TodoTasksWidget> {
                   ),
                 ],
               ),
-              InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  print("点击了");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return EnterListPage();
-                  }));
-                },
-              ),
             ],
           ),
         ),
@@ -1301,55 +1301,73 @@ class _PollutionEnterWidgetState extends State<PollutionEnterWidget> {
   ];
 
   Widget _getPollutionEnterRowItem(PollutionEnter pollutionEnter) {
+    /*InkWell(
+      splashColor: Colors.blue.withAlpha(30),
+      onTap: () {
+        print("点击了");
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return EnterListPage();
+        }));
+      },
+    ),*/
     return Expanded(
       flex: 1,
-      child: Container(
-        height: 60,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: pollutionEnter.color.withOpacity(0.3),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  pollutionEnter.imagePath,
-                  width: 15,
-                  height: 15,
+      child: InkWell(
+        splashColor: pollutionEnter.color.withOpacity(0.3),
+        onTap: () {
+          print("点击了");
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return EnterListPage();
+          }));
+        },
+        child: Container(
+          height: 60,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: pollutionEnter.color.withOpacity(0.3),
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    pollutionEnter.imagePath,
+                    width: 15,
+                    height: 15,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        pollutionEnter.title,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: pollutionEnter.color,
+              Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          pollutionEnter.title,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: pollutionEnter.color,
+                          ),
                         ),
-                      ),
-                      Text(
-                        pollutionEnter.count.toString(),
-                        style: TextStyle(
-                          fontSize: 18,
+                        Text(
+                          pollutionEnter.count.toString(),
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )),
-          ],
+                      ],
+                    ),
+                  )),
+            ],
+          ),
         ),
       ),
     );
