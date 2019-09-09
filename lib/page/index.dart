@@ -21,9 +21,10 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
+  AnimationController _animationController;
 
   // 总数
   bool _haveData = true;
@@ -34,6 +35,15 @@ class _IndexPageState extends State<IndexPage>
   void initState() {
     super.initState();
     print("_IndexPageState的initState方法执行了！");
+    _animationController = new AnimationController(
+        vsync: this, duration: new Duration(milliseconds: 500));
+    //_animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
   }
 
   @override
@@ -48,29 +58,30 @@ class _IndexPageState extends State<IndexPage>
           height: double.infinity,
           color: Colors.white,
           child: Center(
-              child: SizedBox(
-            height: 200.0,
-            width: 300.0,
-            child: Card(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 50.0,
-                    height: 50.0,
-                    child: SpinKitFadingCube(
-                      color: Theme.of(context).primaryColor,
-                      size: 25.0,
+            child: SizedBox(
+              height: 200.0,
+              width: 300.0,
+              child: Card(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 50.0,
+                      height: 50.0,
+                      child: SpinKitFadingCube(
+                        color: Theme.of(context).primaryColor,
+                        size: 25.0,
+                      ),
                     ),
-                  ),
-                  Container(
-                    child: Text('加载中'),
-                  )
-                ],
+                    Container(
+                      child: Text('加载中'),
+                    )
+                  ],
+                ),
               ),
             ),
-          )),
+          ),
         ),
         emptyWidget: !_haveData
             ? Container(
@@ -103,7 +114,7 @@ class _IndexPageState extends State<IndexPage>
               background: AqiWidget(),
             ),
           ),*/
-          SliverToBoxAdapter(
+          /*SliverToBoxAdapter(
             child: AqiWidget(),
           ),
           SliverToBoxAdapter(
@@ -113,44 +124,7 @@ class _IndexPageState extends State<IndexPage>
             child: AqiExamineWidget(),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    TitleWidget("最近一周变化趋势"),
-                    Container(
-                      height: 200,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: BarChartWidget(
-                                title: "AQI",
-                                subTitle: "空气质量",
-                                color: Color.fromRGBO(136, 191, 89, 1),
-                                imagePath:
-                                    "assets/images/icon_aqi_examine_quality.png"),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: BarChartWidget(
-                                title: "PM2.5",
-                                subTitle: "细颗粒物",
-                                color: Color.fromRGBO(241, 190, 67, 1),
-                                imagePath:
-                                    "assets/images/icon_aqi_examine_pm25.png"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            child: WeekTrendWidget(),
           ),
           SliverToBoxAdapter(
             child: AlarmListWidget(),
@@ -166,10 +140,29 @@ class _IndexPageState extends State<IndexPage>
           ),
           SliverToBoxAdapter(
             child: SummaryStatisticsWidget(),
+          ),*/
+          SliverToBoxAdapter(
+            child: FadeTransition(
+              opacity: _animationController,
+              child: Column(
+                children: <Widget>[
+                  AqiWidget(),
+                  TodoTasksWidget(),
+                  AqiExamineWidget(),
+                  WeekTrendWidget(),
+                  AlarmListWidget(),
+                  OnlineMonitorWidget(),
+                  WaterWidget(),
+                  PollutionEnterWidget(),
+                  SummaryStatisticsWidget(),
+                ],
+              ),
+            ),
           ),
         ],
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {
+            _animationController.forward();
             setState(() {
               _count += 20;
             });
@@ -959,17 +952,17 @@ class _TodoTasksWidgetState extends State<TodoTasksWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _getTodoTaskRowItem(
-                  "报警单待处理", "232", "assets/images/bg_alarm_manage_todo.png"),
+                  "报警单待处理", "232", "assets/images/button_bg_blue.png"),
               SizedBox(
                 width: 6,
               ),
               _getTodoTaskRowItem(
-                  "排口异常待审核", "45", "assets/images/bg_outlet_audit_todo.png"),
+                  "排口异常待审核", "45", "assets/images/button_bg_green.png"),
               SizedBox(
                 width: 6,
               ),
               _getTodoTaskRowItem(
-                  "因子异常待审核", "8", "assets/images/bg_factor_audit_todo.png"),
+                  "因子异常待审核", "8", "assets/images/button_bg_pink.png"),
             ],
           ),
         ],
@@ -1459,21 +1452,21 @@ class _SummaryStatisticsWidgetState extends State<SummaryStatisticsWidget> {
       145,
       Color.fromRGBO(77, 167, 248, 1),
       "assets/images/icon_pollution_all_enter.png",
-      "assets/images/bg_button3.png",
+      "assets/images/button_image3.png",
     ),
     SummaryStatistics(
       "项目审批",
       32,
       Color.fromRGBO(241, 190, 67, 1),
       "assets/images/icon_pollution_all_enter.png",
-      "assets/images/bg_button2.png",
+      "assets/images/button_image2.png",
     ),
     SummaryStatistics(
       "信访投诉",
       5,
       Color.fromRGBO(136, 191, 89, 1),
       "assets/images/icon_pollution_all_enter.png",
-      "assets/images/bg_button1.png",
+      "assets/images/button_image1.png",
     ),
   ];
 
@@ -1553,6 +1546,49 @@ class _SummaryStatisticsWidgetState extends State<SummaryStatisticsWidget> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class WeekTrendWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            TitleWidget("最近一周变化趋势"),
+            Container(
+              height: 200,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: BarChartWidget(
+                        title: "AQI",
+                        subTitle: "空气质量",
+                        color: Color.fromRGBO(136, 191, 89, 1),
+                        imagePath:
+                            "assets/images/icon_aqi_examine_quality.png"),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: BarChartWidget(
+                        title: "PM2.5",
+                        subTitle: "细颗粒物",
+                        color: Color.fromRGBO(241, 190, 67, 1),
+                        imagePath: "assets/images/icon_aqi_examine_pm25.png"),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -9,6 +9,8 @@ import 'package:pollution_source/widget/label.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 
+import 'enter_detail.dart';
+
 class EnterListPage extends StatefulWidget {
   @override
   _EnterListPageState createState() => _EnterListPageState();
@@ -55,66 +57,65 @@ class _EnterListPageState extends State<EnterListPage> {
             SliverAppBar(
               title: Text("企业列表"),
               expandedHeight: 150.0,
+              pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                height: 190,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      "assets/images/index_header_bg.png",
+                background: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        "assets/images/index_header_bg.png",
+                      ),
+                      fit: BoxFit.cover,
                     ),
-                    fit: BoxFit.cover,
+                  ),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        right: -20,
+                        bottom: 0,
+                        child: Image.asset(
+                          "assets/images/enter_list_bg_image.png",
+                          width: 300,
+                        ),
+                      ),
+                      Positioned(
+                        top: 80,
+                        left: 20,
+                        bottom: 20,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              width: 110,
+                              child: Text(
+                                "展示污染源企业列表，点击列表项查看该企业的详细信息",
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: Text(
+                                "点我筛选",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.blue),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      right: -20,
-                      bottom: 0,
-                      child: Image.asset(
-                        "assets/images/Advertising.png",
-                        width: 300,
-                      ),
-                    ),
-                    Positioned(
-                      top: 80,
-                      left: 20,
-                      bottom: 20,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: 110,
-                            child: Text(
-                              "展示污染源企业列表，点击列表项查看该企业的详细信息",
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.white),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            child: Text(
-                              "点我筛选",
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.blue),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-              floating: false,
-              pinned: true,
+              ),
               actions: <Widget>[
                 new IconButton(
                     icon: new Icon(Icons.search),
@@ -147,6 +148,8 @@ class _EnterListPageState extends State<EnterListPage> {
         body: extended.NestedScrollViewInnerScrollPositionKeyWidget(
           Key('Tab0'),
           EasyRefresh.custom(
+            header: getRefreshClassicalHeader(),
+            footer: getLoadClassicalFooter(),
             slivers: <Widget>[
               EnterListWidget(),
             ],
@@ -297,6 +300,11 @@ class _EnterListWidgetState extends State<EnterListWidget> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SliverFixedExtentList(
       itemExtent: 125,
@@ -313,7 +321,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
-                      StyleUtil.getBoxShadow(),
+                      getBoxShadow(),
                     ],
                   ),
                   child: Row(
@@ -467,7 +475,16 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return EnterDetailPage();
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
