@@ -36,6 +36,7 @@ dependencies:
   # flutter_lottie: ^0.2.0
   dio: ^2.1.16
   flutter_svg: ^0.14.1
+  url_launcher: ^5.1.2
 
 dev_dependencies:
   flutter_test:
@@ -64,9 +65,9 @@ flutter:
     #    - assets/images/index_location.png
     #    - assets/images/index_header_bg.png
     #    - assets/images/indexbg.png
-    #    - assets/images/bg_alarm_manage_todo.png
-    #    - assets/images/bg_outlet_audit_todo.png
-    #    - assets/images/bg_factor_audit_todo.png
+    #    - assets/images/button_bg_blue.png
+    #    - assets/images/button_bg_green.png
+    #    - assets/images/button_bg_pink.png
     #    - assets/images/icon_water_state.png
     #    - assets/images/icon_water_province.png
     #    - assets/images/icon_water_county.png
