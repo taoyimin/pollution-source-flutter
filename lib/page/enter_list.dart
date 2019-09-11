@@ -81,7 +81,6 @@ class _EnterListPageState extends State<EnterListPage> {
                       Positioned(
                         top: 80,
                         left: 20,
-                        bottom: 20,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -341,6 +340,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(right: 16),
@@ -352,9 +352,6 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                   fontSize: 15,
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 6,
                             ),
                             Row(
                               children: <Widget>[
@@ -432,9 +429,6 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 6,
-                            ),
                             Text(
                               "地址：${enterList[index].address}",
                               maxLines: 1,
@@ -443,9 +437,6 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                 color: Colours.secondary_text,
                                 fontSize: 12,
                               ),
-                            ),
-                            SizedBox(
-                              height: 6,
                             ),
                             Text(
                               "行业类别：${enterList[index].industryType}",

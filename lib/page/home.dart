@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pollution_source/page/index.dart';
 
+import 'mine.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -18,10 +20,7 @@ class _HomePageState extends State<HomePage> {
       'Index 1: Business',
       style: optionStyle,
     ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    MinePage(),
   ];
 
   final pageController = PageController();
@@ -49,15 +48,15 @@ class _HomePageState extends State<HomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            title: Text('首页'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
             title: Text('Business'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            title: Text('School'),
+            icon: Icon(Icons.person),
+            title: Text('我的'),
           ),
         ],
         currentIndex: _selectedIndex,

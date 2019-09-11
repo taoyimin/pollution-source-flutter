@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:pollution_source/util/ui_util.dart';
 
 /// 个人中心页面
