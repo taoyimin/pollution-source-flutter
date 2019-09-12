@@ -37,6 +37,7 @@ dependencies:
   dio: ^2.1.16
   flutter_svg: ^0.14.1
   url_launcher: ^5.1.2
+  city_pickers: ^0.1.25
 
 dev_dependencies:
   flutter_test:
