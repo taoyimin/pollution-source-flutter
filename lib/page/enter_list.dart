@@ -8,6 +8,7 @@ import 'package:pollution_source/util/ui_util.dart';
 import 'package:pollution_source/widget/label.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/widget/search.dart';
 
 import 'enter_detail.dart';
 
@@ -16,21 +17,55 @@ class EnterListPage extends StatefulWidget {
   _EnterListPageState createState() => _EnterListPageState();
 }
 
-class _EnterListPageState extends State<EnterListPage> {
+class _EnterListPageState extends State<EnterListPage>
+    with TickerProviderStateMixin {
   ScrollController _scrollController;
 
   int _listCount = 100;
+
+  AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(
+      () {
+        switch (_tabController.index) {
+          case 0:
+            setState(
+              () {
+                if (_actionIcon == Icons.close) {
+                  _actionIcon = Icons.search;
+                }
+              },
+            );
+            break;
+          case 1:
+            setState(
+              () {
+                if (_actionIcon == Icons.search) {
+                  _actionIcon = Icons.close;
+                }
+              },
+            );
+            break;
+        }
+      },
+    );
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+      value: 1.0,
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+    _animationController.dispose();
   }
 
   Widget _selectView(IconData icon, String text, String id) {
@@ -43,6 +78,24 @@ class _EnterListPageState extends State<EnterListPage> {
             new Text(text),
           ],
         ));
+  }
+
+  TabController _tabController;
+
+  IconData _actionIcon = Icons.search;
+
+  changePage() {
+    setState(
+      () {
+        if (_actionIcon == Icons.search) {
+          _actionIcon = Icons.close;
+          _tabController.index = 1;
+        } else {
+          _actionIcon = Icons.search;
+          _tabController.index = 0;
+        }
+      },
+    );
   }
 
   @override
@@ -58,70 +111,92 @@ class _EnterListPageState extends State<EnterListPage> {
               title: Text("企业列表"),
               expandedHeight: 150.0,
               pinned: true,
+              floating: false,
+              snap: false,
               flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        "assets/images/index_header_bg.png",
+                background: TabBarView(
+                  controller: _tabController,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            "assets/images/index_header_bg.png",
+                          ),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      fit: BoxFit.cover,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            right: -20,
+                            bottom: 0,
+                            child: Image.asset(
+                              "assets/images/enter_list_bg_image.png",
+                              width: 300,
+                            ),
+                          ),
+                          Positioned(
+                            top: 80,
+                            left: 20,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  width: 110,
+                                  child: Text(
+                                    "展示污染源企业列表，点击列表项查看该企业的详细信息",
+                                    style: TextStyle(
+                                        fontSize: 10, color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  child: Text(
+                                    "点我筛选",
+                                    style: TextStyle(
+                                        fontSize: 10, color: Colors.blue),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                        right: -20,
-                        bottom: 0,
-                        child: Image.asset(
-                          "assets/images/enter_list_bg_image.png",
-                          width: 300,
-                        ),
-                      ),
-                      Positioned(
-                        top: 80,
-                        left: 20,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              width: 110,
-                              child: Text(
-                                "展示污染源企业列表，点击列表项查看该企业的详细信息",
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.white),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              child: Text(
-                                "点我筛选",
-                                style:
-                                    TextStyle(fontSize: 10, color: Colors.blue),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    SearchWidget(height: 100,),
+                  ],
                 ),
               ),
+              /*bottom: PreferredSize(
+                child: SearchWidget(height: 100,),
+                preferredSize: Size(double.infinity, 100),
+              ),*/
               actions: <Widget>[
-                new IconButton(
-                    icon: new Icon(Icons.search),
-                    tooltip: '搜索',
-                    onPressed: () {}),
+                AnimatedSwitcher(
+                  transitionBuilder: (child, anim) {
+                    return ScaleTransition(child: child, scale: anim);
+                  },
+                  duration: Duration(milliseconds: 300),
+                  child: IconButton(
+                    key: ValueKey(_actionIcon),
+                    icon: Icon(_actionIcon),
+                    onPressed: () {
+                      changePage();
+                    },
+                  ),
+                ),
                 // 隐藏的菜单
-                new PopupMenuButton<String>(
+                PopupMenuButton<String>(
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuItem<String>>[
                     this._selectView(Icons.message, '发起群聊', 'A'),
@@ -142,6 +217,12 @@ class _EnterListPageState extends State<EnterListPage> {
                 ),
               ],
             ),
+            /*SliverPersistentHeader(
+              pinned: true,
+              delegate: SearchBarDelegate(
+                animation: animation,
+              ),
+            ),*/
           ];
         },
         body: extended.NestedScrollViewInnerScrollPositionKeyWidget(
@@ -170,52 +251,6 @@ class _EnterListPageState extends State<EnterListPage> {
         ),
       ),
     );
-
-    /*return Scaffold(
-      body: EasyRefresh.custom(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 150.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: const Text('企业列表',),
-              background: Image.asset(
-                "./images/avatar.png",
-                fit: BoxFit.cover,
-              ),
-            ),
-            actions: <Widget>[
-              new IconButton(
-                  icon: new Icon(Icons.search),
-                  tooltip: '搜索',
-                  onPressed: () {}),
-              // 隐藏的菜单
-              new PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  this._selectView(Icons.message, '发起群聊', 'A'),
-                  this._selectView(Icons.group_add, '添加服务', 'B'),
-                  this._selectView(Icons.cast_connected, '扫一扫码', 'C'),
-                ],
-                onSelected: (String action) {
-                  // 点击选项的时候
-                  switch (action) {
-                    case 'A':
-                      break;
-                    case 'B':
-                      break;
-                    case 'C':
-                      break;
-                  }
-                },
-              ),
-            ],
-          ),
-          EnterListWidget(),
-        ],
-        onRefresh: () async {},
-        onLoad: () async {},
-      ),
-    );*/
   }
 }
 

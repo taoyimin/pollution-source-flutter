@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/model/model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/util/ui_util.dart';
@@ -124,7 +125,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: CustomScrollView(
+      body: EasyRefresh.custom(
         //controller: _controller,
         slivers: <Widget>[
           SliverAppBar(

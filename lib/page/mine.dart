@@ -216,7 +216,8 @@ class _MinePageState extends State<MinePage> {
                           child: Column(
                             children: <Widget>[
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -284,9 +285,12 @@ class _MinePageState extends State<MinePage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 20,),
+                              SizedBox(
+                                height: 20,
+                              ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
