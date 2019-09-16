@@ -90,6 +90,8 @@ class SearchBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
+
+
 class EnterSearchWidget extends StatefulWidget {
   @override
   _EnterSearchWidgetState createState() => _EnterSearchWidgetState();
@@ -243,7 +245,8 @@ class _EnterSearchWidgetState extends State<EnterSearchWidget>{
                   width: 70,
                   color: Colors.orange,
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                     child: Text(
                       "重置",
                       style: TextStyle(color: Colors.white),
