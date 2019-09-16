@@ -61,9 +61,9 @@ class Enter {
   Enter({
     @required this.name,
     @required this.address,
-    @required this.isImportant,
+    @required this.isImportant, //是否重点
     @required this.imagePath,
-    @required this.industryType,
+    @required this.industryType,  //行业类别
   });
 
   String name;
@@ -71,4 +71,24 @@ class Enter {
   bool isImportant;
   String imagePath;
   String industryType;
+}
+
+class Task {
+  Task({
+    @required this.name,
+    @required this.imagePath,
+    @required this.createTime,
+    @required this.deadline,
+    @required this.outletName,
+    @required this.alarmType,
+    @required this.alarmRemark,
+  });
+
+  String name;
+  String imagePath;
+  String createTime;
+  String deadline;
+  String outletName;
+  String alarmType;
+  String alarmRemark;
 }
