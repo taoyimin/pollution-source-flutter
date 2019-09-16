@@ -20,10 +20,11 @@ class EnterListPage extends StatefulWidget {
 class _EnterListPageState extends State<EnterListPage>
     with TickerProviderStateMixin {
   ScrollController _scrollController;
+  TabController _tabController;
 
   int _listCount = 100;
 
-  AnimationController _animationController;
+  //AnimationController _animationController;
 
   @override
   void initState() {
@@ -54,18 +55,19 @@ class _EnterListPageState extends State<EnterListPage>
         }
       },
     );
-    _animationController = AnimationController(
+    /*_animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
       value: 1.0,
-    );
+    );*/
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
-    _animationController.dispose();
+    _tabController.dispose();
+    //_animationController.dispose();
   }
 
   Widget _selectView(IconData icon, String text, String id) {
@@ -79,8 +81,6 @@ class _EnterListPageState extends State<EnterListPage>
           ],
         ));
   }
-
-  TabController _tabController;
 
   IconData _actionIcon = Icons.search;
 
@@ -102,6 +102,7 @@ class _EnterListPageState extends State<EnterListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: extended.NestedScrollView(
+        controller: _scrollController,
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
         },
@@ -173,7 +174,18 @@ class _EnterListPageState extends State<EnterListPage>
                         ],
                       ),
                     ),
-                    SearchWidget(height: 100,),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(16, 70, 16, 0),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(
+                            "assets/images/index_header_bg.png",
+                          ),
+                        ),
+                      ),
+                      child: EnterSearchWidget(),
+                    ),
                   ],
                 ),
               ),
@@ -191,6 +203,7 @@ class _EnterListPageState extends State<EnterListPage>
                     key: ValueKey(_actionIcon),
                     icon: Icon(_actionIcon),
                     onPressed: () {
+                      _scrollController.jumpTo(0);
                       changePage();
                     },
                   ),
