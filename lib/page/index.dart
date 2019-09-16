@@ -5,6 +5,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/model/model.dart';
+import 'package:pollution_source/page/task_list.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'dart:ui';
 import 'dart:math';
@@ -934,6 +935,13 @@ class _TodoTasksWidgetState extends State<TodoTasksWidget> {
                   ),
                 ],
               ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return TaskListPage();
+                  }));
+                },
+              ),
             ],
           ),
         ),
@@ -1308,7 +1316,6 @@ class _PollutionEnterWidgetState extends State<PollutionEnterWidget> {
       child: InkWell(
         splashColor: pollutionEnter.color.withOpacity(0.3),
         onTap: () {
-          print("点击了");
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return EnterListPage();
           }));

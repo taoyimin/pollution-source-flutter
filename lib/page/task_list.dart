@@ -402,7 +402,7 @@ class _TaskListWidgetState extends State<TaskListWidget> {
                           Container(
                             width: 50,
                             child: Text(
-                              "无数据上传",
+                              taskList[index].alarmType,
                               textAlign: TextAlign.center,
                             ),
                           ),
