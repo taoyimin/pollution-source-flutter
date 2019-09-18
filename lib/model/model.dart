@@ -76,19 +76,31 @@ class Enter {
 class Task {
   Task({
     @required this.name,
-    @required this.imagePath,
-    @required this.createTime,
-    @required this.deadline,
     @required this.outletName,
-    @required this.alarmType,
+    @required this.alarmTime,
+    @required this.area,
+    @required this.statue,
+    @required this.alarmTypeList,
     @required this.alarmRemark,
   });
 
   String name;
-  String imagePath;
-  String createTime;
-  String deadline;
   String outletName;
-  String alarmType;
+  String alarmTime;
+  String area;
+  String statue;
+  List<AlarmType> alarmTypeList;
   String alarmRemark;
+}
+
+class AlarmType{
+  AlarmType({
+    @required this.color,
+    @required this.name,
+    @required this.imagePath,
+  });
+
+  Color color;
+  String name;
+  String imagePath;
 }
