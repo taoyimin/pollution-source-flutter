@@ -103,20 +103,8 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      _showSnackBar("无法调用$url");
+      showSnackBar(_scaffoldKey, "无法调用$url");
     }
-  }
-
-  void _showSnackBar(String message) {
-    var snackBar = SnackBar(
-      content: Text(message),
-      action: new SnackBarAction(
-          label: '我知道了',
-          onPressed: () {
-            // do something to undo
-          }),
-    );
-    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -129,38 +117,29 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         //controller: _controller,
         slivers: <Widget>[
           SliverAppBar(
-            title: Text("企业详情"),
+            title: Text("督办单详情"),
             expandedHeight: 150.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
+                padding: EdgeInsets.fromLTRB(10, 75, 10, 10),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
-                      "assets/images/button_bg_lightblue.png",
+                      "assets/images/button_bg_green.png",
                     ),
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: Stack(
+                child: Row(
                   children: <Widget>[
-                    Positioned(
-                      right: -20,
-                      bottom: 10,
-                      child: SvgPicture.asset(
-                        "assets/images/enter_detail_bg_image.svg",
-                        width: 150,
-                      ),
-                    ),
-                    Positioned(
-                      top: 75,
-                      left: 20,
+                    Expanded(
+                      flex: 3,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Container(
-                            width: 180,
                             child: Text(
                               "深圳市腾讯计算机系统有限公司",
                               style: TextStyle(
@@ -169,11 +148,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
                           Container(
-                            width: 180,
                             child: Text(
                               "深圳市南山区高新区高新南一路飞亚达大厦5-10楼",
                               style: TextStyle(
@@ -183,6 +158,12 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: SvgPicture.asset(
+                        "assets/images/task_detail_bg_image.svg",
                       ),
                     ),
                   ],
@@ -226,137 +207,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                       Row(
                         children: <Widget>[
                           Expanded(
-                            flex: 2,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text("联系人", style: _getContentTextStyle()),
-                                Expanded(child: SizedBox()),
-                                Text("张三", style: _getContentTextStyle()),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.phone,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text("联系电话", style: _getContentTextStyle()),
-                                Expanded(child: SizedBox()),
-                                GestureDetector(
-                                  onTap: () {
-                                    _launchURL("tel:15879085164");
-                                  },
-                                  child: Text(
-                                    "15879085164",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text("法人姓名", style: _getContentTextStyle()),
-                                Expanded(child: SizedBox()),
-                                Text("李四", style: _getContentTextStyle()),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.phone,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text("法人电话", style: _getContentTextStyle()),
-                                Expanded(child: SizedBox()),
-                                GestureDetector(
-                                  onTap: () {
-                                    _launchURL("tel:15879085164");
-                                  },
-                                  child: Text(
-                                    "15879085164",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.star,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text("关注程度", style: _getContentTextStyle()),
-                                Expanded(child: SizedBox()),
-                                Text("重点源", style: _getContentTextStyle()),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            flex: 3,
+                            flex: 4,
                             child: Row(
                               children: <Widget>[
                                 Icon(
@@ -366,9 +217,29 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                                 SizedBox(
                                   width: 3,
                                 ),
-                                Text("所属区域", style: _getContentTextStyle()),
+                                Text("行政区划", style: _getContentTextStyle()),
                                 Expanded(child: SizedBox()),
-                                Text("赣州市章贡区", style: _getContentTextStyle()),
+                                Text("市辖区", style: _getContentTextStyle()),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.linked_camera,
+                                  size: 14,
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text("监控点名称", style: _getContentTextStyle()),
+                                Expanded(child: SizedBox()),
+                                Text("废水排放口", style: _getContentTextStyle()),
                               ],
                             ),
                           ),
@@ -379,37 +250,113 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                       ),
                       Row(
                         children: <Widget>[
-                          Icon(
-                            Icons.work,
-                            size: 14,
+                          Expanded(
+                            flex: 4,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.date_range,
+                                  size: 14,
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text("报警时间", style: _getContentTextStyle()),
+                                Expanded(child: SizedBox()),
+                                Text("9月18日", style: _getContentTextStyle()),
+                              ],
+                            ),
                           ),
                           SizedBox(
-                            width: 3,
+                            width: 20,
                           ),
-                          Text("行业类别    稀有稀土金属冶炼、常用有色金属冶炼",
-                              style: _getContentTextStyle()),
+                          Expanded(
+                            flex: 5,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.assignment_late,
+                                  size: 14,
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text("报警单状态", style: _getContentTextStyle()),
+                                Expanded(child: SizedBox()),
+                                Text("县局待督办", style: _getContentTextStyle()),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(
-                            Icons.mail,
-                            size: 14,
+                          //加一个padding和后面的中文对齐
+                          Padding(
+                            padding: EdgeInsets.only(top: 2),
+                            child: Icon(
+                              Icons.alarm,
+                              size: 14,
+                            ),
                           ),
                           SizedBox(
                             width: 3,
                           ),
-                          Text("信用代码    FSD545G2125FD1GF51D5F5",
-                              style: _getContentTextStyle()),
+                          Text(
+                            "报警类型",
+                            style: _getContentTextStyle(),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "连续恒值  数采仪掉线  污染物超标",
+                              style: _getContentTextStyle(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          //加一个padding和后面的中文对齐
+                          Padding(
+                            padding: EdgeInsets.only(top: 2),
+                            child: Icon(
+                              Icons.receipt,
+                              size: 14,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            "报警描述",
+                            style: _getContentTextStyle(),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
+                              style: _getContentTextStyle(),
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                //报警管理单
+                //联系人
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Column(
@@ -418,14 +365,14 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                       Row(
                         children: <Widget>[
                           Image.asset(
-                            "assets/images/icon_alarm_manage.png",
+                            "assets/images/icon_enter_contacts.png",
                             height: 18,
                           ),
                           SizedBox(
                             width: 6,
                           ),
                           Text(
-                            "报警管理单",
+                            "企业联系人",
                             style: _getTitleTextStyle(),
                           ),
                         ],
@@ -434,402 +381,57 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                         height: 10,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Stack(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [getBoxShadow()],
-                                    border: Border(
-                                        top: BorderSide(
-                                            color: Color(0xFF45C4FF),
-                                            width: 3)),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFF45C4FF)
-                                                .withOpacity(0.3),
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: Image.asset(
-                                          "assets/images/icon_alarm_manage_complete.png",
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 16,
-                                      ),
-                                      Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            "已办结",
-                                            style: TextStyle(fontSize: 12),
-                                          ),
-                                          Text(
-                                            "254",
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Positioned.fill(
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          Container(
+                            height: 50,
+                            width: 50,
+                            child: CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  "assets/images/mine_user_header.png"),
                             ),
                           ),
                           SizedBox(
                             width: 10,
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Stack(
+                          Container(
+                            height: 50,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [getBoxShadow()],
-                                    border: Border(
-                                        top: BorderSide(
-                                            color: Color(0xFFFFB709),
-                                            width: 3)),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFFFB709)
-                                                .withOpacity(0.3),
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: Image.asset(
-                                          "assets/images/icon_alarm_manage_all.png",
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 16,
-                                      ),
-                                      Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            "全部",
-                                            style: TextStyle(fontSize: 12),
-                                          ),
-                                          Text(
-                                            "5254",
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                Text(
+                                  "张三",
+                                  style: TextStyle(fontSize: 16),
                                 ),
-                                Positioned.fill(
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                ),
+                                Text("15879085164"),
                               ],
                             ),
+                          ),
+                          Expanded(child: SizedBox()),
+                          Container(
+                            width: 0.5,
+                            height: 26,
+                            color: Colours.divider_color,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.phone,
+                              color: Colours.primary_color,
+                            ),
+                            onPressed: () {
+                              _launchURL("tel:15879085164");
+                            },
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                //异常申报信息
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Image.asset(
-                            "assets/images/icon_outlet_report.png",
-                            height: 18,
-                          ),
-                          SizedBox(
-                            width: 6,
-                          ),
-                          Text(
-                            "异常申报信息",
-                            style: _getTitleTextStyle(),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 86,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/button_bg_blue.png"),
-                                  fit: BoxFit.fill,
-                                ),
-                                boxShadow: [getBoxShadow()],
-                              ),
-                              child: Stack(
-                                children: <Widget>[
-                                  Positioned(
-                                    top: 10,
-                                    left: 10,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Container(
-                                          width: 80,
-                                          child: Text(
-                                            "排口异常申报有效数",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          "42",
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 10,
-                                    child: Image.asset(
-                                      "assets/images/button_image2.png",
-                                      width: 70,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 86,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/button_bg_pink.png"),
-                                  fit: BoxFit.fill,
-                                ),
-                                boxShadow: [getBoxShadow()],
-                              ),
-                              child: Stack(
-                                children: <Widget>[
-                                  Positioned(
-                                    top: 10,
-                                    left: 10,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Container(
-                                          width: 80,
-                                          child: Text(
-                                            "排口异常申报总数",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          "42",
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 10,
-                                    child: Image.asset(
-                                      "assets/images/button_image1.png",
-                                      width: 70,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 86,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/button_bg_green.png"),
-                                  fit: BoxFit.fill,
-                                ),
-                                boxShadow: [getBoxShadow()],
-                              ),
-                              child: Stack(
-                                children: <Widget>[
-                                  Positioned(
-                                    top: 10,
-                                    left: 10,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Container(
-                                          width: 80,
-                                          child: Text(
-                                            "因子异常申报有效数",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          "42",
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 10,
-                                    child: Image.asset(
-                                      "assets/images/button_image3.png",
-                                      width: 70,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 86,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/button_bg_yellow.png"),
-                                  fit: BoxFit.fill,
-                                ),
-                                boxShadow: [getBoxShadow()],
-                              ),
-                              child: Stack(
-                                children: <Widget>[
-                                  Positioned(
-                                    top: 10,
-                                    left: 10,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Container(
-                                          width: 80,
-                                          child: Text(
-                                            "因子异常申报总数",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          "42",
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 10,
-                                    child: Image.asset(
-                                      "assets/images/button_image4.png",
-                                      width: 70,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                //监控点信息
+                //处理流程
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Column(
@@ -845,167 +447,52 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                             width: 6,
                           ),
                           Text(
-                            "监控点信息",
+                            "处理流程",
                             style: _getTitleTextStyle(),
                           ),
                         ],
                       ),
                       SizedBox(
                         height: 10,
-                      ),
-                      OnlineMonitorWidget(),
-                    ],
-                  ),
-                ),
-                //排污许可证信息
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Image.asset(
-                            "assets/images/icon_discharge_permit.png",
-                            height: 18,
-                          ),
-                          SizedBox(
-                            width: 6,
-                          ),
-                          Text(
-                            "排污许可证信息",
-                            style: _getTitleTextStyle(),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                                AssetImage("assets/images/button_bg_red.png"),
-                            fit: BoxFit.cover,
-                          ),
-                          boxShadow: [getBoxShadow()],
-                        ),
-                        child: Stack(
-                          children: <Widget>[
-                            Positioned(
-                              bottom: -5,
-                              right: -20,
-                              child: Image.asset(
-                                "assets/images/discharge_permit.png",
-                                height: 100,
-                              ),
-                            ),
-                            Positioned(
-                              top: 10,
-                              left: 20,
-                              bottom: 10,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Container(
-                                    width: 100,
-                                    child: Text(
-                                      "许可证编号",
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.white),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    child: Text(
-                                      "546DSAFKSJDHKJHF546545DFHAJKH",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.white),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    child: Text(
-                                      "查看详情",
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.pinkAccent),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                //其他信息
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Image.asset(
-                            "assets/images/icon_enter_other_info.png",
-                            height: 18,
-                          ),
-                          SizedBox(
-                            width: 6,
-                          ),
-                          Text(
-                            "其他信息统计",
-                            style: _getTitleTextStyle(),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          _getOtherInfoRowItem(
-                            title: "建设项目",
-                            count: "12",
-                            bgPath: "assets/images/button_bg_lightblue.png",
-                            imagePath: "assets/images/button_image2.png",
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          _getOtherInfoRowItem(
-                            title: "现场执法",
-                            count: "4",
-                            bgPath: "assets/images/button_bg_red.png",
-                            imagePath: "assets/images/button_image1.png",
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          _getOtherInfoRowItem(
-                            title: "环境信访",
-                            count: "25",
-                            bgPath: "assets/images/button_bg_yellow.png",
-                            imagePath: "assets/images/button_image3.png",
-                          ),
-                        ],
                       ),
                     ],
                   ),
                 ),
               ],
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  child: Row(
+                    children: <Widget>[
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(Icons.assignment_late),
+                          Container(
+                            width: 1,
+                            height: 20,
+                            color: Colours.secondary_text,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text("哈哈"),
+                          Text("哈哈"),
+                          Text("哈哈"),
+                          Text("哈哈"),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+              childCount: 10,
             ),
           ),
         ],
@@ -1097,7 +584,7 @@ class _OnlineMonitorWidgetState extends State<OnlineMonitorWidget> {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: (){},
+                onTap: () {},
               ),
             ),
           )

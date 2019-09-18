@@ -1,3 +1,4 @@
+import 'package:city_pickers/modal/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_svg/svg.dart';
@@ -85,7 +86,7 @@ class _TaskListPageState extends State<TaskListPage>
 
   IconData _actionIcon = Icons.search;
 
-  changePage() {
+  _changePage() {
     setState(
       () {
         if (_actionIcon == Icons.search) {
@@ -163,11 +164,17 @@ class _TaskListPageState extends State<TaskListPage>
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                   ),
-                                  child: Text(
-                                    "点我筛选",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Color(0xFF22D2BE),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _scrollController.jumpTo(0);
+                                      _changePage();
+                                    },
+                                    child: Text(
+                                      "点我筛选",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Color(0xFF29D0BF),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -207,7 +214,7 @@ class _TaskListPageState extends State<TaskListPage>
                     icon: Icon(_actionIcon),
                     onPressed: () {
                       _scrollController.jumpTo(0);
-                      changePage();
+                      _changePage();
                     },
                   ),
                 ),
@@ -279,83 +286,131 @@ class _TaskListWidgetState extends State<TaskListWidget> {
   final List<Task> taskList = [
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_error.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "排放流量异常",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.blue,name: "污染物超标", imagePath: "assets/images/icon_alarm_type_factor_outrange.png"),
+        AlarmType(color: Colors.red,name: "排放流量异常", imagePath: "assets/images/icon_alarm_type_discharge_abnormal.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_no_upload.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "无数据上传",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.orange,name: "无数据上传", imagePath: "assets/images/icon_alarm_type_no_upload.png"),
+        AlarmType(color: Colors.grey,name: "数采仪掉线", imagePath: "assets/images/icon_alarm_type_device_offline.png"),
+        AlarmType(color: Colors.red,name: "排放流量异常", imagePath: "assets/images/icon_alarm_type_discharge_abnormal.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_outrange.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "污染物超标",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.blue,name: "污染物超标", imagePath: "assets/images/icon_alarm_type_factor_outrange.png"),
+        AlarmType(color: Colors.orange,name: "无数据上传", imagePath: "assets/images/icon_alarm_type_no_upload.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_error.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "排放流量异常",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.blue,name: "污染物超标", imagePath: "assets/images/icon_alarm_type_factor_outrange.png"),
+        AlarmType(color: Colors.orange,name: "无数据上传", imagePath: "assets/images/icon_alarm_type_no_upload.png"),
+        AlarmType(color: Colors.grey,name: "数采仪掉线", imagePath: "assets/images/icon_alarm_type_device_offline.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_no_upload.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "无数据上传",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.blue,name: "污染物超标", imagePath: "assets/images/icon_alarm_type_factor_outrange.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_outrange.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "污染物超标",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.blue,name: "污染物超标", imagePath: "assets/images/icon_alarm_type_factor_outrange.png"),
+        AlarmType(color: Colors.orange,name: "无数据上传", imagePath: "assets/images/icon_alarm_type_no_upload.png"),
+        AlarmType(color: Colors.grey,name: "数采仪掉线", imagePath: "assets/images/icon_alarm_type_device_offline.png"),
+        AlarmType(color: Colors.red,name: "排放流量异常", imagePath: "assets/images/icon_alarm_type_discharge_abnormal.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_error.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "排放流量异常",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.orange,name: "无数据上传", imagePath: "assets/images/icon_alarm_type_no_upload.png"),
+        AlarmType(color: Colors.grey,name: "数采仪掉线", imagePath: "assets/images/icon_alarm_type_device_offline.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_no_upload.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "无数据上传",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+        AlarmType(color: Colors.blue,name: "污染物超标", imagePath: "assets/images/icon_alarm_type_factor_outrange.png"),
+        AlarmType(color: Colors.grey,name: "数采仪掉线", imagePath: "assets/images/icon_alarm_type_device_offline.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
     Task(
       name: "深圳市腾讯计算机系统有限公司",
-      imagePath: "assets/images/icon_alarm_outrange.png",
-      createTime: "2019-09-12",
-      deadline: "2019-09-14",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
       outletName: "废水排放口",
-      alarmType: "污染物超标",
+      alarmTypeList: [
+        AlarmType(color: Colors.green,name: "连续恒值", imagePath: "assets/images/icon_alarm_type_constant_value.png"),
+      ],
+      alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
+    ),
+    Task(
+      name: "深圳市腾讯计算机系统有限公司",
+      area: "南昌市 市辖区",
+      alarmTime: "2019-09-12",
+      statue: "县局待督办",
+      outletName: "废水排放口",
+      alarmTypeList: [
+        AlarmType(color: Colors.orange,name: "无数据上传", imagePath: "assets/images/icon_alarm_type_no_upload.png"),
+      ],
       alarmRemark: "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
     ),
   ];
@@ -365,10 +420,37 @@ class _TaskListWidgetState extends State<TaskListWidget> {
     super.initState();
   }
 
+  List<Widget> _getAlarmTypeWidgetList(List<AlarmType> alarmTypeList) {
+    return alarmTypeList.map((alarmType) {
+      return Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: 5, vertical: 2),
+        decoration: BoxDecoration(
+          color: alarmType.color.withOpacity(0.2),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image.asset(
+              alarmType.imagePath,
+              width: 8,
+              height: 8,
+              color: alarmType.color,
+            ),
+            Text(
+              alarmType.name,
+              style: TextStyle(
+                  color: alarmType.color, fontSize: 10),
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SliverFixedExtentList(
-      itemExtent: 125,
+    return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           //创建列表项
@@ -385,103 +467,32 @@ class _TaskListWidgetState extends State<TaskListWidget> {
                       getBoxShadow(),
                     ],
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(
-                        width: 10,
+                      Text(
+                        taskList[index].name,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 3,
+                        children: _getAlarmTypeWidgetList(taskList[index].alarmTypeList),
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Row(
                         children: <Widget>[
-                          Image.asset(
-                            taskList[index].imagePath,
-                            width: 40,
-                            height: 40,
-                          ),
-                          Container(
-                            width: 50,
+                          Expanded(
+                            flex: 1,
                             child: Text(
-                              taskList[index].alarmType,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              taskList[index].name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "排口名称：${taskList[index].outletName}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colours.secondary_text,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "创建时间：${taskList[index].createTime}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colours.secondary_text,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "报警类型：${taskList[index].alarmType}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colours.secondary_text,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "截至时间：${taskList[index].deadline}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colours.secondary_text,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "报警描述：${taskList[index].alarmRemark}",
+                              "排口名称：${taskList[index].outletName}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -489,7 +500,62 @@ class _TaskListWidgetState extends State<TaskListWidget> {
                                 fontSize: 12,
                               ),
                             ),
-                          ],
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "区域：${taskList[index].area}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colours.secondary_text,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "报警时间：${taskList[index].alarmTime}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colours.secondary_text,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "报警单状态：${taskList[index].statue}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colours.secondary_text,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Text(
+                        "报警描述：${taskList[index].alarmRemark}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colours.secondary_text,
+                          fontSize: 12,
                         ),
                       ),
                     ],

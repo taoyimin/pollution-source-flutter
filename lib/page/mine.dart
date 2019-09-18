@@ -71,7 +71,7 @@ class _MinePageState extends State<MinePage> {
                           child: new Text(
                             '环境保护厅',
                             style: new TextStyle(
-                                fontSize: 25.0, color: Colors.white),
+                                fontSize: 25.0, color: Colors.white,),
                           ),
                         ),
                       ),
@@ -187,6 +187,11 @@ class _MinePageState extends State<MinePage> {
                           height: 30,
                           fit: BoxFit.cover,
                         ),
+                      ),
+                      Positioned(
+                        top: 36,
+                        left: 16,
+                        child: Icon(Icons.notifications_none,color: Colors.white,),
                       ),
                     ],
                   ),

@@ -103,20 +103,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      _showSnackBar("无法调用$url");
+      showSnackBar(_scaffoldKey, "无法调用$url");
     }
-  }
-
-  void _showSnackBar(String message) {
-    var snackBar = SnackBar(
-      content: Text(message),
-      action: new SnackBarAction(
-          label: '我知道了',
-          onPressed: () {
-            // do something to undo
-          }),
-    );
-    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -134,6 +122,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
+                padding: EdgeInsets.fromLTRB(10, 75, 10, 10),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
@@ -142,10 +131,47 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: Stack(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              "深圳市腾讯计算机系统有限公司",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              "深圳市南山区高新区高新南一路飞亚达大厦5-10楼",
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: SvgPicture.asset(
+                        "assets/images/enter_detail_bg_image.svg",
+                      ),
+                    ),
+                  ],
+                ),
+                /*child: Stack(
                   children: <Widget>[
                     Positioned(
-                      right: -20,
+                      right: 10,
                       bottom: 10,
                       child: SvgPicture.asset(
                         "assets/images/enter_detail_bg_image.svg",
@@ -186,7 +212,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       ),
                     ),
                   ],
-                ),
+                ),*/
               ),
             ),
           ),
@@ -378,32 +404,68 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         height: 10,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(
-                            Icons.work,
-                            size: 14,
+                          //加一个padding和后面的中文对齐
+                          Padding(
+                            padding: EdgeInsets.only(top: 2),
+                            child: Icon(
+                              Icons.work,
+                              size: 14,
+                            ),
                           ),
                           SizedBox(
                             width: 3,
                           ),
-                          Text("行业类别    稀有稀土金属冶炼、常用有色金属冶炼",
-                              style: _getContentTextStyle()),
+                          Text(
+                            "行业类别",
+                            style: _getContentTextStyle(),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "稀有稀土金属冶炼、常用有色金属冶炼稀有稀土金属冶炼、常用有色金属冶炼稀有稀土金属冶炼、常用有色金属冶炼",
+                              style: _getContentTextStyle(),
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(
-                            Icons.mail,
-                            size: 14,
+                          //加一个padding和后面的中文对齐
+                          Padding(
+                            padding: EdgeInsets.only(top: 2),
+                            child: Icon(
+                              Icons.mail,
+                              size: 14,
+                            ),
                           ),
                           SizedBox(
                             width: 3,
                           ),
-                          Text("信用代码    FSD545G2125FD1GF51D5F5",
-                              style: _getContentTextStyle()),
+                          Text(
+                            "信用代码",
+                            style: _getContentTextStyle(),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            //纯英文无法和前面中文对齐，所以加一个padding
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 2),
+                              child: Text(
+                                "G2125FD1GF51D5F5FSD545G2125FD",
+                                style: _getContentTextStyle(),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -1097,7 +1159,7 @@ class _OnlineMonitorWidgetState extends State<OnlineMonitorWidget> {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: (){},
+                onTap: () {},
               ),
             ),
           )

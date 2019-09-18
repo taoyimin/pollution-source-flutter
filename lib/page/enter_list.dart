@@ -123,7 +123,7 @@ class _EnterListPageState extends State<EnterListPage>
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                            "assets/images/index_header_bg.png",
+                            "assets/images/button_bg_lightblue.png",
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -162,10 +162,16 @@ class _EnterListPageState extends State<EnterListPage>
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                   ),
-                                  child: Text(
-                                    "点我筛选",
-                                    style: TextStyle(
-                                        fontSize: 10, color: Colors.blue),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _scrollController.jumpTo(0);
+                                      changePage();
+                                    },
+                                    child: Text(
+                                      "点我筛选",
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.blue),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -353,8 +359,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFixedExtentList(
-      itemExtent: 125,
+    return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           //创建列表项
@@ -394,14 +399,15 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                               padding: EdgeInsets.only(right: 16),
                               child: Text(
                                 enterList[index].name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
                               ),
                             ),
-                            Row(
+                            SizedBox(height: 6,),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 3,
                               children: <Widget>[
                                 Container(
                                   padding: EdgeInsets.symmetric(
@@ -410,6 +416,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                     color: Colors.blue.withOpacity(0.2),
                                   ),
                                   child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Image.asset(
                                         "assets/images/icon_pollution_water_outlet.png",
@@ -425,9 +432,6 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 6,
-                                ),
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 2),
@@ -435,6 +439,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                     color: Colors.orange.withOpacity(0.2),
                                   ),
                                   child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Image.asset(
                                         "assets/images/icon_pollution_air_outlet.png",
@@ -450,9 +455,6 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 6,
-                                ),
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 2),
@@ -460,6 +462,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                     color: Colors.green.withOpacity(0.2),
                                   ),
                                   child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Image.asset(
                                         "assets/images/icon_pollution_water_enter.png",
@@ -477,6 +480,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 6,),
                             Text(
                               "地址：${enterList[index].address}",
                               maxLines: 1,
@@ -486,6 +490,7 @@ class _EnterListWidgetState extends State<EnterListWidget> {
                                 fontSize: 12,
                               ),
                             ),
+                            SizedBox(height: 6,),
                             Text(
                               "行业类别：${enterList[index].industryType}",
                               maxLines: 1,

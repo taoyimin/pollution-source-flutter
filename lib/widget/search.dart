@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/util/constant.dart';
 
 //暂未使用
 class SearchWidget extends StatefulWidget {
@@ -90,17 +91,15 @@ class SearchBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-
-
 class EnterSearchWidget extends StatefulWidget {
   @override
   _EnterSearchWidgetState createState() => _EnterSearchWidgetState();
 }
 
-class _EnterSearchWidgetState extends State<EnterSearchWidget>{
+class _EnterSearchWidgetState extends State<EnterSearchWidget> {
   TextEditingController _controller;
 
-  String enterName="";
+  String enterName = "";
 
   @override
   void initState() {
@@ -112,6 +111,14 @@ class _EnterSearchWidgetState extends State<EnterSearchWidget>{
         //_controller.text = "哈哈";
       });
     });
+  }
+
+  _openPicker() async {
+    Result result = await CityPickers.showCityPicker(
+      context: context,
+      //citiesData: citiesData,
+      //provincesData: provincesData,
+    );
   }
 
   @override
@@ -161,8 +168,7 @@ class _EnterSearchWidgetState extends State<EnterSearchWidget>{
                   width: 70,
                   color: Colors.orange,
                   child: RaisedButton(
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                     child: Text(
                       "搜索",
                       style: TextStyle(color: Colors.white),
@@ -205,11 +211,16 @@ class _EnterSearchWidgetState extends State<EnterSearchWidget>{
                     child: Container(
                       height: 36,
                       alignment: Alignment.center,
-                      child: Text(
-                        "选择市",
-                        style: TextStyle(
-                          color: Colours.secondary_text,
-                          fontSize: 15,
+                      child: GestureDetector(
+                        onTap: () {
+                          _openPicker();
+                        },
+                        child: Text(
+                          "选择市",
+                          style: TextStyle(
+                            color: Colours.secondary_text,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                       decoration: BoxDecoration(color: Colors.white),
@@ -245,8 +256,7 @@ class _EnterSearchWidgetState extends State<EnterSearchWidget>{
                   width: 70,
                   color: Colors.orange,
                   child: RaisedButton(
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                     child: Text(
                       "重置",
                       style: TextStyle(color: Colors.white),
