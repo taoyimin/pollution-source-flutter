@@ -33,3 +33,15 @@ ClassicalFooter getLoadClassicalFooter() {
     infoText: "更新于 %T",
   );
 }
+
+void showSnackBar(GlobalKey<ScaffoldState> scaffoldKey, String message) {
+  var snackBar = SnackBar(
+    content: Text(message),
+    action: SnackBarAction(
+        label: '我知道了',
+        onPressed: () {
+          // do something to undo
+        }),
+  );
+  scaffoldKey.currentState.showSnackBar(snackBar);
+}
