@@ -63,7 +63,7 @@ class Enter {
     @required this.address,
     @required this.isImportant, //是否重点
     @required this.imagePath,
-    @required this.industryType,  //行业类别
+    @required this.industryType, //行业类别
   });
 
   String name;
@@ -93,7 +93,7 @@ class Task {
   String alarmRemark;
 }
 
-class AlarmType{
+class AlarmType {
   AlarmType({
     @required this.color,
     @required this.name,
@@ -103,4 +103,49 @@ class AlarmType{
   Color color;
   String name;
   String imagePath;
+}
+
+class Attachment {
+  Attachment({
+    @required this.type,
+    @required this.fileName,
+    @required this.url,
+    @required this.size,
+  });
+
+  String fileName;
+  String url;
+  int type;
+  String size;
+
+  String get imagePath{
+    switch (type){
+      case 0:
+        return "assets/images/icon_attachment_image.png";
+      case 1:
+        return "assets/images/icon_attachment_doc.png";
+      case 2:
+        return "assets/images/icon_attachment_xls.png";
+      case 3:
+        return "assets/images/icon_attachment_pdf.png";
+      default:
+        return "assets/images/icon_attachment_other.png";
+    }
+  }
+}
+
+class DealStep {
+  DealStep({
+    @required this.dealType,
+    @required this.dealPerson,
+    @required this.dealTime,
+    @required this.dealRemark,
+    @required this.attachmentList,
+  });
+
+  String dealType;
+  String dealPerson;
+  String dealTime;
+  String dealRemark;
+  List<Attachment> attachmentList;
 }
