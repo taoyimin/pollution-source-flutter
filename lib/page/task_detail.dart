@@ -17,6 +17,40 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
   double _appbarOpacity = 0;
   final double _headerHeight = 150;*/
 
+  List<DealStep> stepList = [
+    DealStep(
+      dealType: "县局督办",
+      dealPerson: "南昌市市辖区管理员",
+      dealTime: "2019-09-19 11:13",
+      dealRemark: "操作描述操作描述操作描述操作描述操作描述操作描述操作描述",
+      attachmentList: [
+        Attachment(type: 0, fileName: "文件名文件名.png", url: "", size: "1.2M"),
+        Attachment(type: 1, fileName: "文件名文件名文件名.doc", url: "", size: "56KB"),
+      ],
+    ),
+    DealStep(
+      dealType: "园区处理",
+      dealPerson: "南昌市市辖区管理员",
+      dealTime: "2019-09-19 11:13",
+      dealRemark: "操作描述操作描述操作描述操作描述操作描述操作描述操作描述",
+      attachmentList: [
+        Attachment(
+            type: 2, fileName: "文件名文件名文件名4515455.xls", url: "", size: "256KB"),
+      ],
+    ),
+    DealStep(
+      dealType: "县局审核",
+      dealPerson: "南昌市市辖区管理员",
+      dealTime: "2019-09-19 11:13",
+      dealRemark: "操作描述操作描述操作描述操作描述操作描述操作描述操作描述",
+      attachmentList: [
+        Attachment(
+            type: 3, fileName: "文件文件名文件文件文件名.pdf", url: "", size: "4.3M"),
+        Attachment(type: 5, fileName: "文件文件名文件文件名.psd", url: "", size: "412KB"),
+      ],
+    ),
+  ];
+
   @override
   void initState() {
     /*_controller.addListener(() {
@@ -48,57 +82,6 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
     );
   }
 
-  Widget _getOtherInfoRowItem(
-      {@required String title,
-      @required String count,
-      @required String bgPath,
-      @required String imagePath}) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              bgPath,
-            ),
-            fit: BoxFit.cover,
-          ),
-          boxShadow: [getBoxShadow()],
-        ),
-        padding: EdgeInsets.all(10),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Image.asset(
-                imagePath,
-                width: 40,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  count,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                ),
-                Text(
-                  title,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   _launchURL(url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -108,6 +91,39 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
   }
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  List<Widget> _getAttachmentWidgets(List<Attachment> attachmentList) {
+    return attachmentList.map((attachment) {
+      return InkWell(
+        onTap: () {},
+        child: Container(
+          height: 40,
+          padding: EdgeInsets.symmetric(vertical: 3),
+          child: Row(
+            children: <Widget>[
+              Image.asset(
+                attachment.imagePath,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    attachment.fileName,
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    attachment.size,
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -347,7 +363,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                           ),
                           Expanded(
                             child: Text(
-                              "报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
+                              "报警描述报警描述报警描述报警描述报警描述报警描述报警描述",
                               style: _getContentTextStyle(),
                             ),
                           ),
@@ -431,6 +447,195 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                     ],
                   ),
                 ),
+                //快速链接
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/images/icon_fast_link.png",
+                            height: 18,
+                            width: 18,
+                          ),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            "快速链接",
+                            style: _getTitleTextStyle(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 150,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/button_bg_green.png"),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "监控数据",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 23,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          flex: 4,
+                                          child: Text(
+                                            "查看该企业在报警发生时间段的监控数据",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 5,
+                                          child: Image.asset(
+                                              "assets/images/image_task_monitor_data.png"),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    height: 72,
+                                    padding: EdgeInsets.all(10),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/button_bg_lightblue.png"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          flex: 3,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                "企业信息",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Text(
+                                                "查看该企业的详细信息",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Image.asset(
+                                            "assets/images/image_task_enter_info.png",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Container(
+                                    height: 72,
+                                    padding: EdgeInsets.all(10),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/button_bg_yellow.png"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          flex: 3,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                "监控点列表",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Text(
+                                                "查看该企业监控点列表",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Image.asset(
+                                            "assets/images/image_task_monitor_list.png",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 //处理流程
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -440,7 +645,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                       Row(
                         children: <Widget>[
                           Image.asset(
-                            "assets/images/icon_monitor_info.png",
+                            "assets/images/icon_deal_step.png",
                             height: 18,
                           ),
                           SizedBox(
@@ -464,35 +669,86 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Container(
-                  child: Row(
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(Icons.assignment_late),
                           Container(
-                            width: 1,
-                            height: 20,
-                            color: Colours.secondary_text,
+                            // 圆和线
+                            height: 42,
+                            child: LeftLineWidget(
+                                index != 0,
+                                index != stepList.length - 1,
+                                index == stepList.length - 1),
                           ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(top: 4),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    stepList[index].dealType,
+                                    style: TextStyle(fontSize: 15),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    stepList[index].dealTime,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colours.secondary_text),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text("哈哈"),
-                          Text("哈哈"),
-                          Text("哈哈"),
-                          Text("哈哈"),
-                        ],
-                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              width: 2,
+                              color: index == stepList.length - 1
+                                  ? Colors.transparent
+                                  : Colours.divider_color,
+                            ),
+                          ),
+                        ),
+                        margin: EdgeInsets.only(left: 23),
+                        padding: EdgeInsets.fromLTRB(22, 0, 16, 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "操作人：${stepList[index].dealPerson}；",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            Text(
+                              "操作描述：${stepList[index].dealRemark}；",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _getAttachmentWidgets(
+                                  stepList[index].attachmentList),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 );
               },
-              childCount: 10,
+              childCount: stepList.length,
             ),
           ),
         ],
@@ -641,5 +897,59 @@ class _OnlineMonitorWidgetState extends State<OnlineMonitorWidget> {
         ],
       ),
     );
+  }
+}
+
+class LeftLineWidget extends StatelessWidget {
+  final bool showTop;
+  final bool showBottom;
+  final bool isLight;
+
+  const LeftLineWidget(this.showTop, this.showBottom, this.isLight);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      width: 16,
+      child: CustomPaint(
+        painter: LeftLinePainter(showTop, showBottom, isLight),
+      ),
+    );
+  }
+}
+
+class LeftLinePainter extends CustomPainter {
+  static const double _topHeight = 16;
+  static const Color _lightColor = Colors.green;
+  static const Color _normalColor = Colours.divider_color;
+
+  final bool showTop;
+  final bool showBottom;
+  final bool isLight;
+
+  const LeftLinePainter(this.showTop, this.showBottom, this.isLight);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double lineWidth = 2;
+    double centerX = size.width / 2;
+    Paint linePain = Paint();
+    linePain.color = showTop ? Colours.divider_color : Colors.transparent;
+    linePain.strokeWidth = lineWidth;
+    linePain.strokeCap = StrokeCap.square;
+    canvas.drawLine(Offset(centerX, 0), Offset(centerX, _topHeight), linePain);
+    Paint circlePaint = Paint();
+    circlePaint.color = isLight ? _lightColor : _normalColor;
+    circlePaint.style = PaintingStyle.fill;
+    linePain.color = showBottom ? Colours.divider_color : Colors.transparent;
+    canvas.drawLine(
+        Offset(centerX, _topHeight), Offset(centerX, size.height), linePain);
+    canvas.drawCircle(Offset(centerX, _topHeight), centerX, circlePaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
