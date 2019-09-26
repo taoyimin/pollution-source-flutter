@@ -23,21 +23,21 @@ class AqiStatistics extends IndexData {
   final String o3;
   final String co;
 
-  AqiStatistics(
-      {@required this.key,
-      @required this.show,
-      this.areaName,
-      this.updateTime,
-      this.aqi,
-      this.aqiLevel,
-      this.pp,
-      this.pm25,
-      this.pm10,
-      this.so2,
-      this.no2,
-      this.o3,
-      this.co})
-      : super([
+  AqiStatistics({
+    @required this.key,
+    @required this.show,
+    this.areaName,
+    this.updateTime,
+    this.aqi,
+    this.aqiLevel,
+    this.pp,
+    this.pm25,
+    this.pm10,
+    this.so2,
+    this.no2,
+    this.o3,
+    this.co,
+  }) : super([
           key,
           show,
           areaName,
@@ -50,7 +50,7 @@ class AqiStatistics extends IndexData {
           so2,
           no2,
           o3,
-          co
+          co,
         ]);
 
   @override
@@ -73,19 +73,19 @@ class AqiExamine extends IndexData {
   final String title3;
   final String value3;
 
-  AqiExamine(
-      {@required this.key,
-      @required this.show,
-      this.title,
-      this.imagePath,
-      this.color,
-      this.title1,
-      this.value1,
-      this.title2,
-      this.value2,
-      this.title3,
-      this.value3})
-      : super([
+  AqiExamine({
+    @required this.key,
+    @required this.show,
+    this.title,
+    this.imagePath,
+    this.color,
+    this.title1,
+    this.value1,
+    this.title2,
+    this.value2,
+    this.title3,
+    this.value3,
+  }) : super([
           key,
           show,
           title,
@@ -95,7 +95,7 @@ class AqiExamine extends IndexData {
           title2,
           value2,
           title3,
-          value3
+          value3,
         ]);
 
   @override
@@ -105,7 +105,7 @@ class AqiExamine extends IndexData {
 }
 
 //地表水统计
-class SurfaceWater extends IndexData {
+class WaterStatistics extends IndexData {
   final String key;
   final bool show;
   final String title; //标题
@@ -116,17 +116,17 @@ class SurfaceWater extends IndexData {
   final String monthOnMonth; //环比
   final String yearOnYear; //同比
 
-  SurfaceWater(
-      {this.key,
-      this.show,
-      this.title,
-      this.imagePath,
-      this.color,
-      this.count,
-      this.achievementRate,
-      this.monthOnMonth,
-      this.yearOnYear})
-      : super([
+  WaterStatistics({
+    this.key,
+    this.show,
+    this.title,
+    this.imagePath,
+    this.color,
+    this.count,
+    this.achievementRate,
+    this.monthOnMonth,
+    this.yearOnYear,
+  }) : super([
           key,
           show,
           title,
@@ -134,13 +134,163 @@ class SurfaceWater extends IndexData {
           color,
           count,
           achievementRate,
-          monthOnMonth
+          monthOnMonth,
         ]);
 
   @override
   String toString() {
-    return 'SurfaceWater{key: $key, show: $show, title: $title, imagePath: $imagePath, color: $color, count: $count, achievementRate: $achievementRate, monthOnMonth: $monthOnMonth, yearOnYear: $yearOnYear}';
+    return 'WaterStatistics{key: $key, show: $show, title: $title, imagePath: $imagePath, color: $color, count: $count, achievementRate: $achievementRate, monthOnMonth: $monthOnMonth, yearOnYear: $yearOnYear}';
   }
+}
 
+//污染源企业统计
+class PollutionEnterStatistics extends IndexData {
+  final String key;
+  final bool show;
+  final String title; //标题
+  final String count; //个数
+  final Color color; //图标颜色
+  final String imagePath; //图标路径
 
+  PollutionEnterStatistics({
+    this.key,
+    this.show,
+    this.title,
+    this.count,
+    this.color,
+    this.imagePath,
+  }) : super([
+          key,
+          show,
+          title,
+          count,
+          color,
+          imagePath,
+        ]);
+
+  @override
+  String toString() {
+    return 'PollutionEnterStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
+  }
+}
+
+//在线监控点统计
+class OnlineMonitorStatistics extends IndexData {
+  final String key;
+  final bool show;
+  final String title; //状态
+  final String count; //个数
+  final Color color; //图标颜色
+  final String imagePath; //图片路径
+
+  OnlineMonitorStatistics({
+    this.key,
+    this.show,
+    this.title,
+    this.count,
+    this.color,
+    this.imagePath,
+  }) : super([
+          key,
+          show,
+          title,
+          count,
+          color,
+          imagePath,
+        ]);
+
+  @override
+  String toString() {
+    return 'OnlineMonitorStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
+  }
+}
+
+//代办任务统计
+class TodoTaskStatistics extends IndexData {
+  final String key;
+  final bool show;
+  final String title; //标题
+  final String count; //个数
+  final String imagePath; //图片路径
+
+  TodoTaskStatistics({
+    this.key,
+    this.show,
+    this.title,
+    this.count,
+    this.imagePath,
+  }) : super([
+          key,
+          show,
+          title,
+          count,
+          imagePath,
+        ]);
+
+  @override
+  String toString() {
+    return 'TodoTaskStatistics{key: $key, show: $show, title: $title, count: $count, imagePath: $imagePath}';
+  }
+}
+
+//综合统计信息
+class ComprehensiveStatistics extends IndexData {
+  final String key;
+  final bool show;
+  final String title; //标题
+  final String count; //个数
+  final Color color; //图标颜色
+  final String imagePath; //图片路径
+
+  ComprehensiveStatistics({
+    this.key,
+    this.show,
+    this.title,
+    this.count,
+    this.color,
+    this.imagePath,
+  }) : super([
+          key,
+          show,
+          title,
+          count,
+          color,
+          imagePath,
+        ]);
+
+  @override
+  String toString() {
+    return 'ComprehensiveStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
+  }
+}
+
+//雨水企业统计
+class RainEnterStatistics extends IndexData {
+  final String key;
+  final bool show;
+  final String title; //标题
+  final String count; //个数
+  final Color color; //图标颜色
+  final String imagePath; //图片路径
+
+  RainEnterStatistics({
+    this.key,
+    this.show,
+    this.title,
+    this.count,
+    this.color,
+    this.imagePath,
+  }) : super([
+          key,
+          show,
+          title,
+          count,
+          color,
+          imagePath,
+        ]);
+
+  @override
+  String toString() {
+    return 'RainEnterStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
+  }
 }

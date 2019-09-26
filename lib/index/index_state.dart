@@ -15,13 +15,32 @@ class IndexLoading extends IndexState {
 class IndexLoaded extends IndexState {
   final aqiStatistics;
   final aqiExamineList;
-  final surfaceWaterList;
+  final waterStatisticsList;
+  final pollutionEnterStatisticsList;
+  final onlineMonitorStatisticsList;
+  final todoTaskStatisticsList;
+  final comprehensiveStatisticsList;
+  final rainEnterStatisticsList;
 
   IndexLoaded({
     @required this.aqiStatistics,
     @required this.aqiExamineList,
-    @required this.surfaceWaterList,
-  }) : super([aqiStatistics, aqiExamineList, surfaceWaterList]);
+    @required this.waterStatisticsList,
+    @required this.pollutionEnterStatisticsList,
+    @required this.onlineMonitorStatisticsList,
+    @required this.todoTaskStatisticsList,
+    @required this.comprehensiveStatisticsList,
+    @required this.rainEnterStatisticsList,
+  }) : super([
+          aqiStatistics,
+          aqiExamineList,
+          waterStatisticsList,
+          pollutionEnterStatisticsList,
+          onlineMonitorStatisticsList,
+          todoTaskStatisticsList,
+          comprehensiveStatisticsList,
+          rainEnterStatisticsList,
+        ]);
 
   @override
   String toString() => 'IndexLoaded';
