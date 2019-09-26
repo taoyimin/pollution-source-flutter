@@ -1,3 +1,21 @@
+class Constant{
+  static const String responseCodeKey = 'code';
+  static const String responseDataKey = 'data';
+  static const String aqiStatisticsKey = '10';
+  static const String pm25ExamineKey = '20';
+  static const String aqiExamineKey = '21';
+  static const String stateWaterKey = '30';
+  static const String provinceWaterKey = '31';
+  static const String countyWaterKey = '32';
+  static const String waterWaterKey = '33';
+  static const String metalWaterKey = '34';
+  static const String pollutionEnterStatisticsKey = '40';
+  static const String onlineMonitorStatisticsKey = '70';
+  static const String rainEnterStatisticsKey = '80';
+  static const String todoTaskStatisticsKey = '80';
+  static const String comprehensiveStatisticsKey = '80';
+}
+
 const Map<String, String> provincesData = {
   "110000": "北京市",
   "120000": "天津市",
