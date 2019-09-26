@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/res/colors.dart';
 
+//获取默认的阴影
 BoxShadow getBoxShadow() {
   return const BoxShadow(
     offset: const Offset(0, 12),
@@ -34,6 +36,7 @@ ClassicalFooter getLoadClassicalFooter() {
   );
 }
 
+//显示SnackBar
 void showSnackBar(GlobalKey<ScaffoldState> scaffoldKey, String message) {
   var snackBar = SnackBar(
     content: Text(message),
@@ -44,4 +47,34 @@ void showSnackBar(GlobalKey<ScaffoldState> scaffoldKey, String message) {
         }),
   );
   scaffoldKey.currentState.showSnackBar(snackBar);
+}
+
+//获取垂直分割线
+Widget getVerticalDivider({
+  double width: 0.6,
+  double height: double.infinity,
+  color: Colours.divider_color,
+}) {
+  return SizedBox(
+    height: height,
+    width: width,
+    child: DecoratedBox(
+      decoration: BoxDecoration(color: color),
+    ),
+  );
+}
+
+//获取水平分割线
+Widget getHorizontalDivider({
+  double width: double.infinity,
+  double height: 0.6,
+  color: Colours.divider_color,
+}) {
+  return SizedBox(
+    height: height,
+    width: width,
+    child: DecoratedBox(
+      decoration: BoxDecoration(color: color),
+    ),
+  );
 }
