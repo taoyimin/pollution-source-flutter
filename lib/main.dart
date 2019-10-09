@@ -1,9 +1,11 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pollution_source/page/login.dart';
 import 'package:pollution_source/res/colors.dart';
 
-void main() {
+void main() async {
+  await SpUtil.getInstance();
   runApp(MyApp());
   //状态栏白色字体
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
