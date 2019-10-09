@@ -15,86 +15,76 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
   Stream<IndexState> mapEventToState(IndexEvent event) async* {
     if (event is Load) {
       try {
-        if (event.isFirst) yield IndexLoading();
-        Response response = await Dio(httpOptions).get(HttpApi.index);
-        if (response.data[Constant.responseCodeKey] == 200) {
-          //空气质量统计
-          AqiStatistics aqiStatistics = await convertAqiStatistics(response
-              .data[Constant.responseDataKey][Constant.aqiStatisticsKey]);
-          //空气质量考核(过滤无效数据)
-          List<AqiExamine> aqiExamineList = await Future.wait([
-            convertAqiExamine(
-                Constant.pm25ExamineKey,
+        Response response = await DioUtils.instance.getDio().get(HttpApi.index);
+        //空气质量统计
+        AqiStatistics aqiStatistics = await convertAqiStatistics(
+            response.data[Constant.responseDataKey][Constant.aqiStatisticsKey]);
+        //空气质量考核(过滤无效数据)
+        List<AqiExamine> aqiExamineList = await Future.wait([
+          convertAqiExamine(Constant.pm25ExamineKey,
+              response.data[Constant.responseDataKey][Constant.pm25ExamineKey]),
+          convertAqiExamine(Constant.aqiExamineKey,
+              response.data[Constant.responseDataKey][Constant.aqiExamineKey]),
+        ]).then((aqiExamineList) =>
+            aqiExamineList.skipWhile((AqiExamine aqiExamine) {
+              return !aqiExamine.show;
+            }).toList());
+        //水环境质量情况(过滤无效数据)
+        //TODO 缺少两条数据
+        /*        convertSurfaceWater(Constant.countyWaterKey,
+            response.data[Constant.responseDataKey][Constant.countyWaterKey]),
+    convertSurfaceWater(Constant.waterWaterKey,
+    response.data[Constant.responseDataKey][Constant.waterWaterKey]),*/
+        List<WaterStatistics> waterStatisticsList = await Future.wait([
+          convertSurfaceWater(Constant.stateWaterKey,
+              response.data[Constant.responseDataKey][Constant.stateWaterKey]),
+          convertSurfaceWater(
+              Constant.provinceWaterKey,
+              response.data[Constant.responseDataKey]
+                  [Constant.provinceWaterKey]),
+          convertSurfaceWater(Constant.metalWaterKey,
+              response.data[Constant.responseDataKey][Constant.metalWaterKey]),
+        ]).then((waterStatisticsList) =>
+            waterStatisticsList.skipWhile((WaterStatistics waterStatistics) {
+              return !waterStatistics.show;
+            }).toList());
+        //污染源企业统计
+        List<PollutionEnterStatistics> pollutionEnterStatisticsList =
+            await convertPollutionEnterStatistics(
                 response.data[Constant.responseDataKey]
-                    [Constant.pm25ExamineKey]),
-            convertAqiExamine(
-                Constant.aqiExamineKey,
+                    [Constant.pollutionEnterStatisticsKey]);
+        //在线监控点统计
+        List<OnlineMonitorStatistics> onlineMonitorStatisticsList =
+            await convertOnlineMonitorStatistics(
                 response.data[Constant.responseDataKey]
-                    [Constant.aqiExamineKey]),
-          ]).then((aqiExamineList) =>
-              aqiExamineList.skipWhile((AqiExamine aqiExamine) {
-                return !aqiExamine.show;
-              }).toList());
-          //水环境质量情况(过滤无效数据)
-          //TODO 缺少两条数据
-          List<WaterStatistics> waterStatisticsList = await Future.wait([
-            convertSurfaceWater(
-                Constant.stateWaterKey,
+                    [Constant.onlineMonitorStatisticsKey]);
+        //代办任务统计
+        List<TodoTaskStatistics> todoTaskStatisticsList =
+            await convertTodoTaskStatistics(
                 response.data[Constant.responseDataKey]
-                    [Constant.stateWaterKey]),
-            convertSurfaceWater(
-                Constant.provinceWaterKey,
+                    [Constant.todoTaskStatisticsKey]);
+        //综合信息统计
+        List<ComprehensiveStatistics> comprehensiveStatisticsList =
+            await convertComprehensiveStatistics(
                 response.data[Constant.responseDataKey]
-                    [Constant.provinceWaterKey]),
-            convertSurfaceWater(
-                Constant.metalWaterKey,
+                    [Constant.comprehensiveStatisticsKey]);
+        //雨水企业统计
+        List<RainEnterStatistics> rainEnterStatisticsList =
+            await convertRainEnterStatistics(
                 response.data[Constant.responseDataKey]
-                    [Constant.metalWaterKey]),
-          ]).then((waterStatisticsList) =>
-              waterStatisticsList.skipWhile((WaterStatistics waterStatistics) {
-                return !waterStatistics.show;
-              }).toList());
-          //污染源企业统计
-          List<PollutionEnterStatistics> pollutionEnterStatisticsList =
-              await convertPollutionEnterStatistics(
-                  response.data[Constant.responseDataKey]
-                      [Constant.pollutionEnterStatisticsKey]);
-          //在线监控点统计
-          List<OnlineMonitorStatistics> onlineMonitorStatisticsList =
-              await convertOnlineMonitorStatistics(
-                  response.data[Constant.responseDataKey]
-                      [Constant.onlineMonitorStatisticsKey]);
-          //代办任务统计
-          List<TodoTaskStatistics> todoTaskStatisticsList =
-              await convertTodoTaskStatistics(
-                  response.data[Constant.responseDataKey]
-                      [Constant.todoTaskStatisticsKey]);
-          //综合信息统计
-          List<ComprehensiveStatistics> comprehensiveStatisticsList =
-              await convertComprehensiveStatistics(
-                  response.data[Constant.responseDataKey]
-                      [Constant.comprehensiveStatisticsKey]);
-          //雨水企业统计
-          List<RainEnterStatistics> rainEnterStatisticsList =
-              await convertRainEnterStatistics(
-                  response.data[Constant.responseDataKey]
-                      [Constant.rainEnterStatisticsKey]);
-          yield IndexLoaded(
-            aqiStatistics: aqiStatistics,
-            aqiExamineList: aqiExamineList,
-            waterStatisticsList: waterStatisticsList,
-            pollutionEnterStatisticsList: pollutionEnterStatisticsList,
-            onlineMonitorStatisticsList: onlineMonitorStatisticsList,
-            todoTaskStatisticsList: todoTaskStatisticsList,
-            comprehensiveStatisticsList: comprehensiveStatisticsList,
-            rainEnterStatisticsList: rainEnterStatisticsList,
-          );
-        } else {
-          yield IndexError();
-        }
+                    [Constant.rainEnterStatisticsKey]);
+        yield IndexLoaded(
+          aqiStatistics: aqiStatistics,
+          aqiExamineList: aqiExamineList,
+          waterStatisticsList: waterStatisticsList,
+          pollutionEnterStatisticsList: pollutionEnterStatisticsList,
+          onlineMonitorStatisticsList: onlineMonitorStatisticsList,
+          todoTaskStatisticsList: todoTaskStatisticsList,
+          comprehensiveStatisticsList: comprehensiveStatisticsList,
+          rainEnterStatisticsList: rainEnterStatisticsList,
+        );
       } catch (e) {
-        print('异常信息:$e');
-        yield IndexError();
+        yield IndexError(errorMessage: ExceptionHandle.handleException(e).msg);
       }
     }
   }

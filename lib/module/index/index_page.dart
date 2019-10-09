@@ -5,16 +5,18 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pollution_source/page/task_list.dart';
+import 'package:pollution_source/module/enter/enter_list_bloc.dart';
+import 'package:pollution_source/module/enter/enter_list_page.dart';
+import 'package:pollution_source/module/order/order_list.dart';
+import 'package:pollution_source/module/order/order_list_page.dart';
+import 'package:pollution_source/page/nested_scroll_view.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'dart:ui';
 import 'dart:math';
 import 'package:pollution_source/widget/space_header.dart';
 import 'dart:async';
-
-import 'package:pollution_source/page/enter_list.dart';
-import 'package:pollution_source/index/index.dart';
+import 'package:pollution_source/module/index/index.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
@@ -29,14 +31,13 @@ class _IndexPageState extends State<IndexPage>
   bool get wantKeepAlive => true;
 
   IndexBloc _indexBloc;
-
-  // 是否第一次加载(第一次加载显示提示框)
-  bool _isFirst = true;
+  Completer<void> _refreshCompleter;
 
   @override
   void initState() {
     super.initState();
     _indexBloc = BlocProvider.of<IndexBloc>(context);
+    _refreshCompleter = Completer<void>();
   }
 
   @override
@@ -53,125 +54,134 @@ class _IndexPageState extends State<IndexPage>
         firstRefresh: true,
         firstRefreshWidget: const SizedBox(),
         slivers: <Widget>[
-          BlocBuilder<IndexBloc, IndexState>(
-            builder: (context, state) {
-              if (state is IndexLoaded) {
-                return SliverToBoxAdapter(
-                  child: Column(
-                    children: <Widget>[
-                      state.aqiStatistics.show
-                          ? AqiStatisticsWidget(
-                              aqiStatistics: state.aqiStatistics)
-                          : const SizedBox(),
-                      state.todoTaskStatisticsList.length > 0
-                          ? TodoTaskStatisticsWidget(
-                              todoTaskStatisticsList:
-                                  state.todoTaskStatisticsList,
-                            )
-                          : const SizedBox(),
-                      state.aqiExamineList.length > 0
-                          ? AqiExamineWidget(
-                              aqiExamineList: state.aqiExamineList)
-                          : const SizedBox(),
-                      WeekTrendWidget(),
-                      AlarmListWidget(),
-                      state.onlineMonitorStatisticsList.length > 0
-                          ? OnlineMonitorStatisticsWidget(
-                              onlineMonitorStatisticsList:
-                                  state.onlineMonitorStatisticsList,
-                            )
-                          : const SizedBox(),
-                      state.waterStatisticsList.length > 0
-                          ? WaterStatisticsWidget(
-                              waterStatisticsList: state.waterStatisticsList,
-                            )
-                          : const SizedBox(),
-                      state.pollutionEnterStatisticsList.length > 0
-                          ? PollutionEnterStatisticsWidget(
-                              pollutionEnterStatisticsList:
-                                  state.pollutionEnterStatisticsList)
-                          : const SizedBox(),
-                      state.rainEnterStatisticsList.length > 0
-                          ? RainEnterStatisticsWidget(
-                              rainEnterStatisticsList:
-                                  state.rainEnterStatisticsList)
-                          : const SizedBox(),
-                      state.comprehensiveStatisticsList.length > 0
-                          ? ComprehensiveStatisticsWidget(
-                              comprehensiveStatisticsList:
-                                  state.comprehensiveStatisticsList,
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
-                );
-              }
-              if (state is IndexLoading) {
-                return SliverFillRemaining(
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: Colors.white,
-                    child: Center(
-                      child: SizedBox(
-                        height: 200.0,
-                        width: 300.0,
-                        child: Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                width: 50.0,
-                                height: 50.0,
-                                child: SpinKitFadingCube(
-                                  color: Theme.of(context).primaryColor,
-                                  size: 25.0,
+          BlocListener<IndexBloc, IndexState>(
+            listener: (context, state) {
+              _refreshCompleter?.complete();
+              _refreshCompleter = Completer();
+            },
+            child: BlocBuilder<IndexBloc, IndexState>(
+              builder: (context, state) {
+                if (state is IndexLoaded) {
+                  return SliverToBoxAdapter(
+                    child: Column(
+                      children: <Widget>[
+                        state.aqiStatistics.show
+                            ? AqiStatisticsWidget(
+                            aqiStatistics: state.aqiStatistics)
+                            : const SizedBox(),
+                        state.todoTaskStatisticsList.length > 0
+                            ? TodoTaskStatisticsWidget(
+                          todoTaskStatisticsList:
+                          state.todoTaskStatisticsList,
+                        )
+                            : const SizedBox(),
+                        state.aqiExamineList.length > 0
+                            ? AqiExamineWidget(
+                            aqiExamineList: state.aqiExamineList)
+                            : const SizedBox(),
+                        WeekTrendWidget(),
+                        AlarmListWidget(),
+                        state.onlineMonitorStatisticsList.length > 0
+                            ? OnlineMonitorStatisticsWidget(
+                          onlineMonitorStatisticsList:
+                          state.onlineMonitorStatisticsList,
+                        )
+                            : const SizedBox(),
+                        state.waterStatisticsList.length > 0
+                            ? WaterStatisticsWidget(
+                          waterStatisticsList: state.waterStatisticsList,
+                        )
+                            : const SizedBox(),
+                        state.pollutionEnterStatisticsList.length > 0
+                            ? PollutionEnterStatisticsWidget(
+                            pollutionEnterStatisticsList:
+                            state.pollutionEnterStatisticsList)
+                            : const SizedBox(),
+                        state.rainEnterStatisticsList.length > 0
+                            ? RainEnterStatisticsWidget(
+                            rainEnterStatisticsList:
+                            state.rainEnterStatisticsList)
+                            : const SizedBox(),
+                        state.comprehensiveStatisticsList.length > 0
+                            ? ComprehensiveStatisticsWidget(
+                          comprehensiveStatisticsList:
+                          state.comprehensiveStatisticsList,
+                        )
+                            : const SizedBox(),
+                      ],
+                    ),
+                  );
+                }
+                if (state is IndexLoading) {
+                  return SliverFillRemaining(
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.white,
+                      child: Center(
+                        child: SizedBox(
+                          height: 200.0,
+                          width: 300.0,
+                          child: Card(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: SpinKitFadingCube(
+                                    color: Theme.of(context).primaryColor,
+                                    size: 25.0,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                child: Text('加载中'),
-                              )
-                            ],
+                                Container(
+                                  child: Text('加载中'),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              }
-              if (state is IndexError) {
-                return SliverFillRemaining(
-                  child: Container(
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          width: 100.0,
-                          height: 100.0,
-                          child: Image.asset('assets/images/nodata.png'),
-                        ),
-                        const Text(
-                          '没有数据',
-                          style: const TextStyle(
-                              fontSize: 16.0, color: Colours.grey_color),
-                        ),
-                      ],
+                  );
+                }
+                if (state is IndexError) {
+                  return SliverFillRemaining(
+                    child: Container(
+                      height: double.infinity,
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 100.0,
+                            height: 100.0,
+                            child: Image.asset('assets/images/nodata.png'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            child: Text(
+                              '${state.errorMessage}',
+                              style: const TextStyle(
+                                  fontSize: 16.0, color: Colours.grey_color),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              } else {
-                return SliverFillRemaining();
-              }
-            },
+                  );
+                } else {
+                  return SliverFillRemaining();
+                }
+              },
+            ),
           ),
         ],
         onRefresh: () async {
-          _indexBloc.dispatch(Load(isFirst: _isFirst));
-          _isFirst = false;
+          _indexBloc.dispatch(Load());
+          return _refreshCompleter.future;
         },
       ),
     );
@@ -686,7 +696,10 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return TaskListPage();
+                    return BlocProvider(
+                      builder: (context) => OrderListBloc(),
+                      child: OrderListPage(),
+                    );
                   }));
                 },
               ),
@@ -731,58 +744,65 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
   OnlineMonitorStatisticsWidget({Key key, this.onlineMonitorStatisticsList})
       : super(key: key);
 
-  Widget _getOnlineMonitorStatisticsRowItem(
+  Widget _getOnlineMonitorStatisticsRowItem(BuildContext context,
       OnlineMonitorStatistics onlineMonitorStatistics) {
     return Expanded(
       flex: 1,
-      child: Container(
-        height: 70,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: onlineMonitorStatistics.color.withOpacity(0.3),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  onlineMonitorStatistics.imagePath,
-                  width: 16,
-                  height: 16,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      onlineMonitorStatistics.title,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: onlineMonitorStatistics.color,
-                      ),
-                    ),
-                    Text(
-                      onlineMonitorStatistics.count,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return NestedScrollViewPage();
+          }));
+        },
+        child: Container(
+          height: 70,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: onlineMonitorStatistics.color.withOpacity(0.3),
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    onlineMonitorStatistics.imagePath,
+                    width: 16,
+                    height: 16,
+                  ),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        onlineMonitorStatistics.title,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: onlineMonitorStatistics.color,
+                        ),
+                      ),
+                      Text(
+                        onlineMonitorStatistics.count,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -797,25 +817,25 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
           TitleWidget(title: "在线监控点概况"),
           Row(
             children: <Widget>[
-              _getOnlineMonitorStatisticsRowItem(
+              _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[0]),
               getVerticalDivider(height: 40),
-              _getOnlineMonitorStatisticsRowItem(
+              _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[1]),
               getVerticalDivider(height: 40),
-              _getOnlineMonitorStatisticsRowItem(
+              _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[2]),
             ],
           ),
           Row(
             children: <Widget>[
-              _getOnlineMonitorStatisticsRowItem(
+              _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[3]),
               getVerticalDivider(height: 40),
-              _getOnlineMonitorStatisticsRowItem(
+              _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[4]),
               getVerticalDivider(height: 40),
-              _getOnlineMonitorStatisticsRowItem(
+              _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[5]),
             ],
           ),
@@ -840,7 +860,10 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
         splashColor: pollutionEnterStatistics.color.withOpacity(0.3),
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return EnterListPage();
+            return BlocProvider(
+              builder: (context) => EnterListBloc(),
+              child: EnterListPage(),
+            );
           }));
         },
         child: Container(
@@ -962,7 +985,10 @@ class RainEnterStatisticsWidget extends StatelessWidget {
         splashColor: rainEnterStatistics.color.withOpacity(0.3),
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return EnterListPage();
+            return BlocProvider(
+              builder: (context) => EnterListBloc(),
+              child: EnterListPage(),
+            );
           }));
         },
         child: Container(
@@ -1031,10 +1057,14 @@ class RainEnterStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               _getRainEnterStatisticsRowItem(
                   context, rainEnterStatisticsList[0]),
-              getVerticalDivider(height: 30,),
+              getVerticalDivider(
+                height: 30,
+              ),
               _getRainEnterStatisticsRowItem(
                   context, rainEnterStatisticsList[1]),
-              getVerticalDivider(height: 30,),
+              getVerticalDivider(
+                height: 30,
+              ),
               _getRainEnterStatisticsRowItem(
                   context, rainEnterStatisticsList[2]),
             ],

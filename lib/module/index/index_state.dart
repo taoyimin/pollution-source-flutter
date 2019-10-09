@@ -1,8 +1,7 @@
-import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-abstract class IndexState extends Equatable {
-  IndexState([List props = const []]) : super(props);
+//不继承equatable，确保每次刷新都会触发状态改变的监听
+abstract class IndexState{
 }
 
 //首页首次进入的加载状态
@@ -31,23 +30,14 @@ class IndexLoaded extends IndexState {
     @required this.todoTaskStatisticsList,
     @required this.comprehensiveStatisticsList,
     @required this.rainEnterStatisticsList,
-  }) : super([
-          aqiStatistics,
-          aqiExamineList,
-          waterStatisticsList,
-          pollutionEnterStatisticsList,
-          onlineMonitorStatisticsList,
-          todoTaskStatisticsList,
-          comprehensiveStatisticsList,
-          rainEnterStatisticsList,
-        ]);
+  });
 
   @override
   String toString() => 'IndexLoaded';
 }
 
 //首页刷新完成状态
-class IndexRefreshed extends IndexState {
+/*class IndexRefreshed extends IndexState {
   final aqiStatistics;
 
   IndexRefreshed({
@@ -56,10 +46,14 @@ class IndexRefreshed extends IndexState {
 
   @override
   String toString() => 'IndexRefreshed';
-}
+}*/
 
 //首页发生错误的状态
 class IndexError extends IndexState {
+  final errorMessage;
+
+  IndexError({@required this.errorMessage});
+
   @override
   String toString() => 'IndexError';
 }
