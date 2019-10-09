@@ -32,13 +32,10 @@ class DioUtils {
     _dio = Dio(options);
     /// 统一添加身份验证请求头
     _dio.interceptors.add(AuthInterceptor());
-
     /// 刷新Token
     _dio.interceptors.add(TokenInterceptor());
-
     /// 处理异常
     _dio.interceptors.add(HandleErrorInterceptor());
-
     /// 打印Log(生产模式去除)
     if (!Constant.inProduction) {
       _dio.interceptors.add(LoggingInterceptor());

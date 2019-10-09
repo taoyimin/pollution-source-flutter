@@ -1,8 +1,5 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
-
-import 'http_error.dart';
 
 //统一处理异常
 class ExceptionHandle{
@@ -60,7 +57,7 @@ class ExceptionHandle{
         return NetError(unknown_error, "未知异常:$error");
       }
     } else {
-      return NetError(unknown_error, "$error");
+      return NetError(unknown_error, "未知错误:$error");
     }
   }
 }
@@ -70,4 +67,32 @@ class NetError {
   String msg;
 
   NetError(this.code, this.msg);
+}
+
+//not found异常
+class NotFoundException implements Exception{
+  final String message;
+
+  NotFoundException(this.message);
+}
+
+//服务器异常
+class ServerErrorException implements Exception{
+  final String message;
+
+  ServerErrorException(this.message);
+}
+
+//未知异常
+class UnKnownException implements Exception{
+  final String message;
+
+  UnKnownException(this.message);
+}
+
+//token异常
+class TokenException implements Exception{
+  final String message;
+
+  TokenException(this.message);
 }

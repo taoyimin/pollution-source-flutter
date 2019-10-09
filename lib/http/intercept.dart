@@ -3,10 +3,7 @@ import 'package:flustars/flustars.dart';
 import 'package:pollution_source/util/constant.dart';
 import 'package:pollution_source/util/log_utils.dart';
 
-import 'dio_utils.dart';
-import 'error_handle.dart';
 import 'http.dart';
-import 'http_error.dart';
 
 //给request添加身份验证
 class AuthInterceptor extends Interceptor {
@@ -55,6 +52,7 @@ class TokenInterceptor extends Interceptor {
       dio.interceptors.requestLock.lock();
       String accessToken = await getToken(); // 获取新的accessToken
       Log.e("----------- NewToken: $accessToken ------------");
+      //储存token
       SpUtil.putString(Constant.spToken, accessToken);
       dio.interceptors.requestLock.unlock();
       if (accessToken != null) {
@@ -101,7 +99,7 @@ class HandleErrorInterceptor extends Interceptor {
       //状态码500
       throw DioError(
           error: ServerErrorException(
-              '500错误,错误接口${response.request.uri.toString()}'));
+              '500错误,错误接口:${response.request.uri.toString()}\nresponse=${response.toString()}'));
     } else if (response != null &&
         response.statusCode == ExceptionHandle.success &&
         response.data[Constant.responseCodeKey] == ExceptionHandle.fail_code) {
