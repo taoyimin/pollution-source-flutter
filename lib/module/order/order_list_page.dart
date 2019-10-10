@@ -8,7 +8,7 @@ import 'package:pollution_source/res/dimens.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/widget/search.dart';
+import 'package:pollution_source/widget/sliver_appbar.dart';
 
 import 'order_list.dart';
 
@@ -20,11 +20,11 @@ class OrderListPage extends StatefulWidget {
 class _OrderListPageState extends State<OrderListPage>
     with TickerProviderStateMixin {
   ScrollController _scrollController;
-  TabController _tabController;
   OrderListBloc _orderListBloc;
   EasyRefreshController _refreshController;
   TextEditingController _editController;
   Completer<void> _refreshCompleter;
+  String areaCode = '';
 
   @override
   void initState() {
@@ -35,69 +35,14 @@ class _OrderListPageState extends State<OrderListPage>
     _orderListBloc.dispatch(OrderListLoad());
     _scrollController = ScrollController();
     _editController = TextEditingController();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(
-      () {
-        switch (_tabController.index) {
-          case 0:
-            setState(
-              () {
-                if (_actionIcon == Icons.close) {
-                  _actionIcon = Icons.search;
-                }
-              },
-            );
-            break;
-          case 1:
-            setState(
-              () {
-                if (_actionIcon == Icons.search) {
-                  _actionIcon = Icons.close;
-                }
-              },
-            );
-            break;
-        }
-      },
-    );
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
-    _tabController.dispose();
     _refreshController.dispose();
     _editController.dispose();
-  }
-
-  Widget _selectView(IconData icon, String text, String id) {
-    return new PopupMenuItem<String>(
-      value: id,
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Icon(icon, color: Colors.blue),
-          Text(text),
-        ],
-      ),
-    );
-  }
-
-  IconData _actionIcon = Icons.search;
-
-  _changePage() {
-    setState(
-      () {
-        if (_actionIcon == Icons.search) {
-          _actionIcon = Icons.close;
-          _tabController.index = 1;
-        } else {
-          _actionIcon = Icons.search;
-          _tabController.index = 0;
-        }
-      },
-    );
   }
 
   //根据报警类型model获取报警类型widget
@@ -276,139 +221,38 @@ class _OrderListPageState extends State<OrderListPage>
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            SliverAppBar(
-              title: const Text("报警管理单列表"),
-              expandedHeight: 150.0,
-              pinned: true,
-              floating: false,
-              snap: false,
-              flexibleSpace: FlexibleSpaceBar(
-                background: TabBarView(
-                  controller: _tabController,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                            "assets/images/button_bg_green.png",
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Stack(
-                        children: <Widget>[
-                          Positioned(
-                            right: -20,
-                            bottom: 0,
-                            child: Image.asset(
-                              "assets/images/task_list_bg_image.png",
-                              width: 300,
-                            ),
-                          ),
-                          Positioned(
-                            top: 80,
-                            left: 20,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  width: 110,
-                                  child: const Text(
-                                    "展示报警管理单列表，点击列表项查看该报警管理单的详细信息",
-                                    style: TextStyle(
-                                        fontSize: 10, color: Colors.white),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 3),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _scrollController.jumpTo(0);
-                                      _changePage();
-                                    },
-                                    child: const Text(
-                                      "点我筛选",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Color(0xFF29D0BF),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(16, 70, 16, 0),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                            "assets/images/button_bg_green.png",
-                          ),
-                        ),
-                      ),
-                      child: EnterSearchWidget(
-                        editController: _editController,
-                        onSearchPressed: () {
-                          _refreshController.callRefresh();
-                        },
-                        areaPickerListener: (areaCode) {
-                          print('areaPickerListener=$areaCode');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+            SliverAppbarWidget(
+              title: '报警管理单列表',
+              subtitle: '展示报警管理单列表，点击列表项查看该报警管理单的详细信息',
+              background: 'assets/images/button_bg_green.png',
+              image: 'assets/images/task_list_bg_image.png',
+              color: Color(0xFF29D0BF),
+              showSearch: true,
+              editController: _editController,
+              scrollController: _scrollController,
+              onSearchPressed: () => _refreshController.callRefresh(),
+              areaPickerListener: (areaId){
+                areaCode = areaId;
+                print('***$areaCode');
+              },
+              popupMenuButton: PopupMenuButton<String>(
+                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                  selectView(Icons.message, '发起群聊', 'A'),
+                  selectView(Icons.group_add, '添加服务', 'B'),
+                  selectView(Icons.cast_connected, '扫一扫码', 'C'),
+                ],
+                onSelected: (String action) {
+                  // 点击选项的时候
+                  switch (action) {
+                    case 'A':
+                      break;
+                    case 'B':
+                      break;
+                    case 'C':
+                      break;
+                  }
+                },
               ),
-              actions: <Widget>[
-                AnimatedSwitcher(
-                  transitionBuilder: (child, anim) {
-                    return ScaleTransition(child: child, scale: anim);
-                  },
-                  duration: Duration(milliseconds: 300),
-                  child: IconButton(
-                    key: ValueKey(_actionIcon),
-                    icon: Icon(_actionIcon),
-                    onPressed: () {
-                      _scrollController.jumpTo(0);
-                      _changePage();
-                    },
-                  ),
-                ),
-                // 隐藏的菜单
-                PopupMenuButton<String>(
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuItem<String>>[
-                    this._selectView(Icons.message, '发起群聊', 'A'),
-                    this._selectView(Icons.group_add, '添加服务', 'B'),
-                    this._selectView(Icons.cast_connected, '扫一扫码', 'C'),
-                  ],
-                  onSelected: (String action) {
-                    // 点击选项的时候
-                    switch (action) {
-                      case 'A':
-                        break;
-                      case 'B':
-                        break;
-                      case 'C':
-                        break;
-                    }
-                  },
-                ),
-              ],
             ),
           ];
         },
@@ -448,6 +292,7 @@ class _OrderListPageState extends State<OrderListPage>
               _orderListBloc.dispatch(OrderListLoad(
                 isRefresh: true,
                 enterName: _editController.text,
+                areaCode: areaCode,
                 status: '5',
               ));
               return _refreshCompleter.future;
@@ -455,6 +300,7 @@ class _OrderListPageState extends State<OrderListPage>
             onLoad: () async {
               _orderListBloc.dispatch(OrderListLoad(
                 enterName: _editController.text,
+                areaCode: areaCode,
                 status: '5',
               ));
               return _refreshCompleter.future;
