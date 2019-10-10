@@ -198,7 +198,7 @@ class _EnterListPageState extends State<EnterListPage>
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            SliverAppbarWidget(
+            ListSliverAppbarWidget(
               title: '企业列表',
               subtitle: '展示污染源企业列表，点击列表项查看该企业的详细信息',
               background: 'assets/images/button_bg_lightblue.png',

@@ -221,7 +221,7 @@ class _OrderListPageState extends State<OrderListPage>
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            SliverAppbarWidget(
+            ListSliverAppbarWidget(
               title: '报警管理单列表',
               subtitle: '展示报警管理单列表，点击列表项查看该报警管理单的详细信息',
               background: 'assets/images/button_bg_green.png',
