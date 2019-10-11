@@ -130,20 +130,20 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
       floating: false,
       snap: false,
       flexibleSpace: FlexibleSpaceBar(
-        background: TabBarView(
-          controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    widget.background,
-                  ),
-                  fit: BoxFit.cover,
-                ),
+        background: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                widget.background,
               ),
-              child: Stack(
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: TabBarView(
+            controller: _tabController,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              Stack(
                 children: <Widget>[
                   Positioned(
                     right: -20,
@@ -195,17 +195,8 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                   ),
                 ],
               ),
-            ),
-            Container(
+              Padding(
                 padding: const EdgeInsets.fromLTRB(16, 70, 16, 0),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      widget.background,
-                    ),
-                  ),
-                ),
                 child: Container(
                   width: double.infinity,
                   height: 100,
@@ -253,7 +244,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                   "搜索",
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                color: Color(0xFF8BC34A),
+                                color:const Color(0xFF8BC34A),
                               ),
                             ),
                           ],
@@ -283,7 +274,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                     ),
                                   ),
                                 ),
-                                decoration: BoxDecoration(color: Colors.white),
+                                decoration:const BoxDecoration(color: Colors.white),
                               ),
                             ),
                             SizedBox(
@@ -361,8 +352,10 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                       ),
                     ],
                   ),
-                )),
-          ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       actions: <Widget>[
