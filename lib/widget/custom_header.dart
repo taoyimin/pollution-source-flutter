@@ -2,7 +2,7 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/res/colors.dart';
 
-class ListSliverAppbarWidget extends StatefulWidget {
+class ListHeaderWidget extends StatefulWidget {
   final String title;
   final String subtitle;
   final String background;
@@ -17,7 +17,7 @@ class ListSliverAppbarWidget extends StatefulWidget {
   final VoidCallback onSearchPressed;
   final void Function(String areaCode) areaPickerListener;
 
-  ListSliverAppbarWidget(
+  ListHeaderWidget(
       {this.title = '标题',
       this.subtitle = '副标题',
       this.background = 'assets/images/button_bg_green.png',
@@ -31,10 +31,10 @@ class ListSliverAppbarWidget extends StatefulWidget {
       this.areaPickerListener});
 
   @override
-  _ListSliverAppbarWidgetState createState() => _ListSliverAppbarWidgetState();
+  _ListHeaderWidgetState createState() => _ListHeaderWidgetState();
 }
 
-class _ListSliverAppbarWidgetState extends State<ListSliverAppbarWidget>
+class _ListHeaderWidgetState extends State<ListHeaderWidget>
     with TickerProviderStateMixin {
   TabController _tabController;
   String provinceName = '选择省';

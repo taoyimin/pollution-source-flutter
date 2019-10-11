@@ -10,7 +10,7 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/widget/label.dart';
 import 'package:pollution_source/widget/search.dart';
-import 'package:pollution_source/widget/sliver_appbar.dart';
+import 'package:pollution_source/widget/custom_header.dart';
 
 import 'enter_list.dart';
 
@@ -198,7 +198,7 @@ class _EnterListPageState extends State<EnterListPage>
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            ListSliverAppbarWidget(
+            ListHeaderWidget(
               title: '企业列表',
               subtitle: '展示污染源企业列表，点击列表项查看该企业的详细信息',
               background: 'assets/images/button_bg_lightblue.png',

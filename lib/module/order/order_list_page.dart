@@ -8,7 +8,7 @@ import 'package:pollution_source/res/dimens.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/widget/sliver_appbar.dart';
+import 'package:pollution_source/widget/custom_header.dart';
 
 import 'order_list.dart';
 
@@ -221,7 +221,7 @@ class _OrderListPageState extends State<OrderListPage>
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            ListSliverAppbarWidget(
+            ListHeaderWidget(
               title: '报警管理单列表',
               subtitle: '展示报警管理单列表，点击列表项查看该报警管理单的详细信息',
               background: 'assets/images/button_bg_green.png',
@@ -233,7 +233,6 @@ class _OrderListPageState extends State<OrderListPage>
               onSearchPressed: () => _refreshController.callRefresh(),
               areaPickerListener: (areaId){
                 areaCode = areaId;
-                print('***$areaCode');
               },
               popupMenuButton: PopupMenuButton<String>(
                 itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
