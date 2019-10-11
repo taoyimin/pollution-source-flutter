@@ -10,9 +10,8 @@ import 'package:pollution_source/module/enter/enter_list_page.dart';
 import 'package:pollution_source/module/monitor/monitor_list.dart';
 import 'package:pollution_source/module/order/order_list.dart';
 import 'package:pollution_source/module/order/order_list_page.dart';
-import 'package:pollution_source/page/nested_scroll_view.dart';
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/util/ui_util.dart';
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'dart:ui';
 import 'dart:math';
 import 'package:pollution_source/widget/space_header.dart';
@@ -381,7 +380,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           "PM2.5",
                           aqiStatistics.pm25,
                         ),
-                        getVerticalDivider(
+                        VerticalDividerWidget(
                           height: 26,
                           width: 1,
                           color: Colors.white,
@@ -390,7 +389,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           "PM10",
                           aqiStatistics.pm10,
                         ),
-                        getVerticalDivider(
+                        VerticalDividerWidget(
                           height: 26,
                           width: 1,
                           color: Colors.white,
@@ -399,7 +398,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           "SO₂",
                           aqiStatistics.so2,
                         ),
-                        getVerticalDivider(
+                        VerticalDividerWidget(
                           height: 26,
                           width: 1,
                           color: Colors.white,
@@ -408,7 +407,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           "NO₂",
                           aqiStatistics.no2,
                         ),
-                        getVerticalDivider(
+                        VerticalDividerWidget(
                           height: 26,
                           width: 1,
                           color: Colors.white,
@@ -417,7 +416,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           "O₃",
                           aqiStatistics.o3,
                         ),
-                        getVerticalDivider(
+                        VerticalDividerWidget(
                           height: 26,
                           width: 1,
                           color: Colors.white,
@@ -493,7 +492,7 @@ class AqiExamineWidget extends StatelessWidget {
                 ],
               ),
             ),
-            getVerticalDivider(height: 40, width: 2, color: Colors.white),
+            VerticalDividerWidget(height: 40, width: 2, color: Colors.white),
             Expanded(
               flex: 7,
               child: Column(
@@ -510,7 +509,7 @@ class AqiExamineWidget extends StatelessWidget {
                 ],
               ),
             ),
-            getVerticalDivider(height: 40, width: 2, color: Colors.white),
+            VerticalDividerWidget(height: 40, width: 2, color: Colors.white),
             Expanded(
               flex: 7,
               child: Column(
@@ -604,7 +603,7 @@ class WaterStatisticsWidget extends StatelessWidget {
               ],
             ),
           ),
-          getVerticalDivider(height: 40, width: 2, color: Colors.white),
+          VerticalDividerWidget(height: 40, width: 2, color: Colors.white),
           Expanded(
             flex: 7,
             child: Column(
@@ -823,10 +822,10 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[0]),
-              getVerticalDivider(height: 40),
+              VerticalDividerWidget(height: 40),
               _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[1]),
-              getVerticalDivider(height: 40),
+              VerticalDividerWidget(height: 40),
               _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[2]),
             ],
@@ -835,10 +834,10 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[3]),
-              getVerticalDivider(height: 40),
+              VerticalDividerWidget(height: 40),
               _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[4]),
-              getVerticalDivider(height: 40),
+              VerticalDividerWidget(height: 40),
               _getOnlineMonitorStatisticsRowItem(context,
                   onlineMonitorStatisticsList[5]),
             ],
@@ -936,10 +935,10 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[0]),
-              getVerticalDivider(height: 30),
+              VerticalDividerWidget(height: 30),
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[1]),
-              getVerticalDivider(height: 30),
+              VerticalDividerWidget(height: 30),
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[2]),
             ],
@@ -948,10 +947,10 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[3]),
-              getVerticalDivider(height: 30),
+              VerticalDividerWidget(height: 30),
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[4]),
-              getVerticalDivider(height: 30),
+              VerticalDividerWidget(height: 30),
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[5]),
             ],
@@ -960,10 +959,10 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[6]),
-              getVerticalDivider(height: 30),
+              VerticalDividerWidget(height: 30),
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[7]),
-              getVerticalDivider(height: 30),
+              VerticalDividerWidget(height: 30),
               _getPollutionEnterStatisticsRowItem(
                   context, pollutionEnterStatisticsList[8]),
             ],
@@ -1061,12 +1060,12 @@ class RainEnterStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               _getRainEnterStatisticsRowItem(
                   context, rainEnterStatisticsList[0]),
-              getVerticalDivider(
+              VerticalDividerWidget(
                 height: 30,
               ),
               _getRainEnterStatisticsRowItem(
                   context, rainEnterStatisticsList[1]),
-              getVerticalDivider(
+              VerticalDividerWidget(
                 height: 30,
               ),
               _getRainEnterStatisticsRowItem(
