@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/module/enter/enter_list_bloc.dart';
 import 'package:pollution_source/module/enter/enter_list_page.dart';
+import 'package:pollution_source/module/monitor/monitor_list.dart';
 import 'package:pollution_source/module/order/order_list.dart';
 import 'package:pollution_source/module/order/order_list_page.dart';
 import 'package:pollution_source/page/nested_scroll_view.dart';
@@ -751,7 +752,10 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return NestedScrollViewPage();
+            return BlocProvider(
+              builder: (context) => MonitorListBloc(),
+              child: MonitorListPage(),
+            );
           }));
         },
         child: Container(

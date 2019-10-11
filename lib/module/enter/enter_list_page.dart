@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/page/enter_detail.dart';
-import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/dimens.dart';
+import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/widget/common_widget.dart';
 import 'package:pollution_source/widget/label.dart';
-import 'package:pollution_source/widget/search.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'enter_list.dart';
@@ -34,17 +33,17 @@ class _EnterListPageState extends State<EnterListPage>
     super.initState();
     _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
-    _enterListBloc = BlocProvider.of<EnterListBloc>(context);
-    _enterListBloc.dispatch(EnterListLoad());
     _scrollController = ScrollController();
     _editController = TextEditingController();
+    _enterListBloc = BlocProvider.of<EnterListBloc>(context);
+    _enterListBloc.dispatch(EnterListLoad());
   }
 
   @override
   void dispose() {
     super.dispose();
-    _scrollController.dispose();
     _refreshController.dispose();
+    _scrollController.dispose();
     _editController.dispose();
   }
 
@@ -82,11 +81,11 @@ class _EnterListPageState extends State<EnterListPage>
           //创建列表项
           return Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: Dimens.gap_dp8, vertical: Dimens.gap_dp5),
+                horizontal: 8, vertical: 5),
             child: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(Dimens.gap_dp12),
+                  padding:const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -97,16 +96,14 @@ class _EnterListPageState extends State<EnterListPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.all(3),
+                        padding:const EdgeInsets.all(3),
                         child: Image.asset(
                           enterList[index].imagePath,
                           width: 40,
                           height: 40,
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      Gaps.hGap10,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,32 +118,16 @@ class _EnterListPageState extends State<EnterListPage>
                                 ),
                               ),
                             ),
-                            SizedBox(height: 6,),
+                            Gaps.vGap6,
                             Wrap(
                               spacing: 6,
                               runSpacing: 3,
                               children: _getEnterLabelWidgetList(enterList[index].enterLabelList),
                             ),
-                            SizedBox(height: 6,),
-                            Text(
-                              "地址：${enterList[index].address}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colours.secondary_text,
-                                fontSize: 12,
-                              ),
-                            ),
-                            SizedBox(height: 6,),
-                            Text(
-                              "行业类别：${enterList[index].industryType}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colours.secondary_text,
-                                fontSize: 12,
-                              ),
-                            ),
+                            Gaps.vGap6,
+                            ListTileWidget('地址：${enterList[index].address}'),
+                            Gaps.vGap6,
+                            ListTileWidget('行业类别：${enterList[index].industryType}'),
                           ],
                         ),
                       )

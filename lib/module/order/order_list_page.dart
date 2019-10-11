@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/page/task_detail_old.dart';
-import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/dimens.dart';
+import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/widget/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'order_list.dart';
@@ -79,11 +79,11 @@ class _OrderListPageState extends State<OrderListPage>
           //创建列表项
           return Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: Dimens.gap_dp8, vertical: Dimens.gap_dp5),
+                horizontal: 8, vertical: 5),
             child: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(Dimens.gap_dp12),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -99,89 +99,41 @@ class _OrderListPageState extends State<OrderListPage>
                           fontSize: 15,
                         ),
                       ),
-                      SizedBox(
-                        height: 6,
-                      ),
+                      Gaps.vGap6,
                       Wrap(
                         spacing: 6,
                         runSpacing: 3,
                         children: _getAlarmTypeWidgetList(
                             orderList[index].alarmTypeList),
                       ),
-                      SizedBox(
-                        height: 6,
-                      ),
+                      Gaps.vGap6,
                       Row(
                         children: <Widget>[
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              "排口名称：${orderList[index].outletName}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colours.secondary_text,
-                                fontSize: 12,
-                              ),
-                            ),
+                            child: ListTileWidget('监控点名称：${orderList[index].outletName}'),
                           ),
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              "区域：${orderList[index].area}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colours.secondary_text,
-                                fontSize: 12,
-                              ),
-                            ),
+                            child: ListTileWidget('区域：${orderList[index].area}'),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 6,
-                      ),
+                      Gaps.vGap6,
                       Row(
                         children: <Widget>[
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              "报警时间：${orderList[index].alarmTime}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colours.secondary_text,
-                                fontSize: 12,
-                              ),
-                            ),
+                            child: ListTileWidget('报警时间：${orderList[index].alarmTime}'),
                           ),
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              "报警单状态：${orderList[index].statue}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colours.secondary_text,
-                                fontSize: 12,
-                              ),
-                            ),
+                            child: ListTileWidget('报警单状态：${orderList[index].statue}'),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                      Text(
-                        "报警描述：${orderList[index].alarmRemark}",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colours.secondary_text,
-                          fontSize: 12,
-                        ),
-                      ),
+                      Gaps.vGap6,
+                      ListTileWidget('报警描述：${orderList[index].alarmRemark}'),
                     ],
                   ),
                 ),
