@@ -45,7 +45,7 @@ class _OrderListPageState extends State<OrderListPage>
     _editController.dispose();
   }
 
-  Widget _getPageLoadedWidget(List<Order> orderList) {
+  Widget _getPageLoadedList(List<Order> orderList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -185,16 +185,16 @@ class _OrderListPageState extends State<OrderListPage>
                 child: BlocBuilder<OrderListBloc, OrderListState>(
                   builder: (context, state) {
                     if (state is OrderListLoading) {
-                      return getPageLoadingWidget(context);
+                      return PageLoadingWidget();
                     } else if (state is OrderListEmpty) {
-                      return getPageEmptyWidget();
+                      return PageEmptyWidget();
                     } else if (state is OrderListError) {
-                      return getPageErrorWidget(state.errorMessage);
+                      return PageErrorWidget(errorMessage:state.errorMessage);
                     } else if (state is OrderListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _getPageLoadedWidget(state.orderList);
+                      return _getPageLoadedList(state.orderList);
                     } else {
                       return SliverFillRemaining();
                     }

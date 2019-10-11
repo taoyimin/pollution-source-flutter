@@ -44,7 +44,7 @@ class _MonitorListPageState extends State<MonitorListPage>
     _editController.dispose();
   }
 
-  Widget _getPageLoadedWidget(List<Monitor> monitorList) {
+  Widget _getPageLoadedList(List<Monitor> monitorList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -179,16 +179,16 @@ class _MonitorListPageState extends State<MonitorListPage>
                 child: BlocBuilder<MonitorListBloc, MonitorListState>(
                   builder: (context, state) {
                     if (state is MonitorListLoading) {
-                      return getPageLoadingWidget(context);
+                      return PageLoadingWidget();
                     } else if (state is MonitorListEmpty) {
-                      return getPageEmptyWidget();
+                      return PageEmptyWidget();
                     } else if (state is MonitorListError) {
-                      return getPageErrorWidget(state.errorMessage);
+                      return PageErrorWidget(errorMessage:state.errorMessage);
                     } else if (state is MonitorListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _getPageLoadedWidget(state.monitorList);
+                      return _getPageLoadedList(state.monitorList);
                     } else {
                       return SliverFillRemaining();
                     }

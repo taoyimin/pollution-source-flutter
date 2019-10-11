@@ -5,7 +5,7 @@ class Monitor extends Equatable {
   final String enterName;
   final String monitorName;
   final String address;
-  final String number;
+  final String number;  //数采编码
   final int monitorType;
   final String monitorTypeName;
   final String imagePath;
@@ -44,7 +44,7 @@ class Monitor extends Equatable {
     );
   }
 
-  //将报警类型string转化成List
+  //根据监控点类型获取图片
   static String _getMonitorTypeImage(int monitorType) {
     switch (monitorType) {
       case 0:

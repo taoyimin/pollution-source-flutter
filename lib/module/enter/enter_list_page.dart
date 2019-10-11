@@ -8,7 +8,7 @@ import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/widget/label.dart';
+import 'package:pollution_source/widget/label_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'enter_list.dart';
@@ -47,7 +47,7 @@ class _EnterListPageState extends State<EnterListPage>
     _editController.dispose();
   }
 
-  Widget _getPageLoadedWidget(List<Enter> enterList) {
+  Widget _getPageLoadedList(List<Enter> enterList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -187,16 +187,16 @@ class _EnterListPageState extends State<EnterListPage>
                 child: BlocBuilder<EnterListBloc, EnterListState>(
                   builder: (context, state) {
                     if (state is EnterListLoading) {
-                      return getPageLoadingWidget(context);
+                      return PageLoadingWidget();
                     } else if (state is EnterListEmpty) {
-                      return getPageEmptyWidget();
+                      return PageEmptyWidget();
                     } else if (state is EnterListError) {
-                      return getPageErrorWidget(state.errorMessage);
+                      return PageErrorWidget(errorMessage: state.errorMessage);
                     } else if (state is EnterListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _getPageLoadedWidget(state.enterList);
+                      return _getPageLoadedList(state.enterList);
                     } else {
                       return SliverFillRemaining();
                     }
