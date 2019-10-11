@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 
 //报警管理单
 class Enter extends Equatable {
@@ -16,7 +15,7 @@ class Enter extends Equatable {
   //行业类别
   final String industryType;
   //企业标签
-  final List<EnterLabel> enterLabelList;
+  final List<Label> labelList;
 
   Enter({
     this.name,
@@ -24,14 +23,14 @@ class Enter extends Equatable {
     this.isImportant,
     this.imagePath,
     this.industryType,
-    this.enterLabelList,
+    this.labelList,
   }) : super([
           name,
           address,
           isImportant,
           imagePath,
           industryType,
-          enterLabelList,
+    labelList,
         ]);
 
   static Enter fromJson(dynamic json) {
@@ -41,52 +40,35 @@ class Enter extends Equatable {
       isImportant: json['isImportant'],
       imagePath: json['imagePath'],
       industryType: json['industryType'],
-      enterLabelList: _getEnterLabelList(json['enterLabel']),
+      labelList: _getLabelList(json['enterLabel']),
     );
   }
 
   //将报警类型string转化成List
-  static List<EnterLabel> _getEnterLabelList(String string) {
+  static List<Label> _getLabelList(String string) {
     return string.trimLeft().trimRight().split(' ').map((string) {
       switch (string) {
         case '废水排口':
-          return EnterLabel(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_pollution_water_outlet.png',
               color: Colors.blue);
         case '废气排口':
-          return EnterLabel(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_pollution_air_outlet.png',
               color: Colors.orange);
         case '雨水':
-          return EnterLabel(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_pollution_water_enter.png',
               color: Colors.green);
         default:
-          return EnterLabel(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_unknow.png',
               color: Colors.grey);
       }
     }).toList();
   }
-}
-
-//企业标签
-class EnterLabel extends Equatable {
-  final Color color;
-  final String name;
-  final String imagePath;
-
-  EnterLabel({
-    this.color,
-    this.name,
-    this.imagePath,
-  }) : super([
-          color,
-          name,
-          imagePath,
-        ]);
 }

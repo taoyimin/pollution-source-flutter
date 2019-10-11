@@ -7,7 +7,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/widget/common_widget.dart';
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'order_list.dart';
@@ -45,45 +45,27 @@ class _OrderListPageState extends State<OrderListPage>
     _editController.dispose();
   }
 
-  //根据报警类型model获取报警类型widget
-  List<Widget> _getAlarmTypeWidgetList(List<AlarmType> alarmTypeList) {
-    return alarmTypeList.map((alarmType) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-        decoration: BoxDecoration(
-          color: alarmType.color.withOpacity(0.2),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Image.asset(
-              alarmType.imagePath,
-              width: 8,
-              height: 8,
-              color: alarmType.color,
-            ),
-            Text(
-              alarmType.name,
-              style: TextStyle(color: alarmType.color, fontSize: 10),
-            ),
-          ],
-        ),
-      );
-    }).toList();
-  }
-
   Widget _getPageLoadedWidget(List<Order> orderList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 8, vertical: 5),
-            child: Stack(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            child: InkWellWidget(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return TaskDetailPage();
+                    },
+                  ),
+                );
+              },
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -100,18 +82,14 @@ class _OrderListPageState extends State<OrderListPage>
                         ),
                       ),
                       Gaps.vGap6,
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 3,
-                        children: _getAlarmTypeWidgetList(
-                            orderList[index].alarmTypeList),
-                      ),
+                      LabelWrapWidget(labelList: orderList[index].labelList),
                       Gaps.vGap6,
                       Row(
                         children: <Widget>[
                           Expanded(
                             flex: 1,
-                            child: ListTileWidget('监控点名称：${orderList[index].outletName}'),
+                            child: ListTileWidget(
+                                '监控点名称：${orderList[index].outletName}'),
                           ),
                           Expanded(
                             flex: 1,
@@ -124,34 +102,19 @@ class _OrderListPageState extends State<OrderListPage>
                         children: <Widget>[
                           Expanded(
                             flex: 1,
-                            child: ListTileWidget('报警时间：${orderList[index].alarmTime}'),
+                            child: ListTileWidget(
+                                '报警时间：${orderList[index].alarmTime}'),
                           ),
                           Expanded(
                             flex: 1,
-                            child: ListTileWidget('报警单状态：${orderList[index].statue}'),
+                            child: ListTileWidget(
+                                '报警单状态：${orderList[index].statue}'),
                           ),
                         ],
                       ),
                       Gaps.vGap6,
                       ListTileWidget('报警描述：${orderList[index].alarmRemark}'),
                     ],
-                  ),
-                ),
-                Positioned.fill(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return TaskDetailPage();
-                            },
-                          ),
-                        );
-                      },
-                    ),
                   ),
                 ),
               ],
@@ -183,7 +146,7 @@ class _OrderListPageState extends State<OrderListPage>
               editController: _editController,
               scrollController: _scrollController,
               onSearchPressed: () => _refreshController.callRefresh(),
-              areaPickerListener: (areaId){
+              areaPickerListener: (areaId) {
                 areaCode = areaId;
               },
               popupMenuButton: PopupMenuButton<String>(

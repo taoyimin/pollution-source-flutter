@@ -6,7 +6,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/widget/common_widget.dart';
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'monitor_list.dart';
@@ -47,15 +47,15 @@ class _MonitorListPageState extends State<MonitorListPage>
   Widget _getPageLoadedWidget(List<Monitor> monitorList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
+        (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding:const EdgeInsets.symmetric(
-                horizontal: 8, vertical: 5),
-            child: Stack(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            child: InkWellWidget(
+              onTap: () {},
               children: <Widget>[
                 Container(
-                  padding:const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -66,7 +66,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        padding:const EdgeInsets.all(3),
+                        padding: const EdgeInsets.all(3),
                         child: Image.asset(
                           monitorList[index].imagePath,
                           width: 40,
@@ -80,7 +80,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.only(right: 16),
+                              padding: const EdgeInsets.only(right: 16),
                               child: Text(
                                 monitorList[index].enterName,
                                 style: TextStyle(
@@ -93,11 +93,13 @@ class _MonitorListPageState extends State<MonitorListPage>
                               children: <Widget>[
                                 Expanded(
                                   flex: 5,
-                                  child: ListTileWidget('监控点名称：${monitorList[index].monitorName}'),
+                                  child: ListTileWidget(
+                                      '监控点名称：${monitorList[index].monitorName}'),
                                 ),
                                 Expanded(
                                   flex: 4,
-                                  child: ListTileWidget('区域：${monitorList[index].area}'),
+                                  child: ListTileWidget(
+                                      '区域：${monitorList[index].area}'),
                                 ),
                               ],
                             ),
@@ -107,23 +109,6 @@ class _MonitorListPageState extends State<MonitorListPage>
                         ),
                       )
                     ],
-                  ),
-                ),
-                Positioned.fill(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        /*Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return EnterDetailPage();
-                            },
-                          ),
-                        );*/
-                      },
-                    ),
                   ),
                 ),
               ],
@@ -155,7 +140,7 @@ class _MonitorListPageState extends State<MonitorListPage>
               editController: _editController,
               scrollController: _scrollController,
               onSearchPressed: () => _refreshController.callRefresh(),
-              areaPickerListener: (areaId){
+              areaPickerListener: (areaId) {
                 areaCode = areaId;
               },
               popupMenuButton: PopupMenuButton<String>(

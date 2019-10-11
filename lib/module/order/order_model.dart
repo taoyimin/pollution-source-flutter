@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 
 //报警管理单
 class Order extends Equatable {
@@ -10,7 +11,7 @@ class Order extends Equatable {
   final String alarmTime;
   final String area;
   final String statue;
-  final List<AlarmType> alarmTypeList;
+  final List<Label> labelList;
   final String alarmRemark;
 
   Order({
@@ -19,7 +20,7 @@ class Order extends Equatable {
     this.alarmTime,
     this.area,
     this.statue,
-    this.alarmTypeList,
+    this.labelList,
     this.alarmRemark,
   }) : super([
           name,
@@ -27,7 +28,7 @@ class Order extends Equatable {
           alarmTime,
           area,
           statue,
-          alarmTypeList,
+          labelList,
           alarmRemark
         ]);
 
@@ -39,62 +40,45 @@ class Order extends Equatable {
       area: json['areaName'],
       statue: json['orderstate'],
       alarmRemark: json['alarmdesc'],
-      alarmTypeList: _getAlarmTypeList(json['alarmtype']),
+      labelList: _getLabelList(json['alarmtype']),
     );
   }
 
   //将报警类型string转化成List
-  static List<AlarmType> _getAlarmTypeList(String string) {
+  static List<Label> _getLabelList(String string) {
     return string.trimLeft().trimRight().split(' ').map((string) {
       switch (string) {
         case '连续恒值':
-          return AlarmType(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_constant_value.png',
               color: Colors.green);
         case '超标异常':
-          return AlarmType(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_factor_outrange.png',
               color: Colors.blue);
         case '排放流量异常':
-          return AlarmType(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_discharge_abnormal.png',
               color: Colors.red);
         case '数采仪掉线':
-          return AlarmType(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_device_offline.png',
               color: Colors.teal);
         case '无数据上传':
-          return AlarmType(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_no_upload.png',
               color: Colors.orange);
         default:
-          return AlarmType(
+          return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_unknow.png',
               color: Colors.grey);
       }
     }).toList();
   }
-}
-
-//报警类型
-class AlarmType extends Equatable {
-  final Color color;
-  final String name;
-  final String imagePath;
-
-  AlarmType({
-    this.color,
-    this.name,
-    this.imagePath,
-  }) : super([
-          color,
-          name,
-          imagePath,
-        ]);
 }

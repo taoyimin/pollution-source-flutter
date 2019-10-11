@@ -7,7 +7,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_util.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/widget/common_widget.dart';
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/label.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -26,7 +26,7 @@ class _EnterListPageState extends State<EnterListPage>
   TextEditingController _editController;
   Completer<void> _refreshCompleter;
 
-  String areaCode='';
+  String areaCode = '';
 
   @override
   void initState() {
@@ -47,45 +47,27 @@ class _EnterListPageState extends State<EnterListPage>
     _editController.dispose();
   }
 
-  //根据企业标签model获取企业标签widget
-  List<Widget> _getEnterLabelWidgetList(List<EnterLabel> alarmTypeList) {
-    return alarmTypeList.map((alarmType) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-        decoration: BoxDecoration(
-          color: alarmType.color.withOpacity(0.2),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Image.asset(
-              alarmType.imagePath,
-              width: 8,
-              height: 8,
-              color: alarmType.color,
-            ),
-            Text(
-              alarmType.name,
-              style: TextStyle(color: alarmType.color, fontSize: 10),
-            ),
-          ],
-        ),
-      );
-    }).toList();
-  }
-
   Widget _getPageLoadedWidget(List<Enter> enterList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
+        (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 8, vertical: 5),
-            child: Stack(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            child: InkWellWidget(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return EnterDetailPage();
+                    },
+                  ),
+                );
+              },
               children: <Widget>[
                 Container(
-                  padding:const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -96,7 +78,7 @@ class _EnterListPageState extends State<EnterListPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        padding:const EdgeInsets.all(3),
+                        padding: const EdgeInsets.all(3),
                         child: Image.asset(
                           enterList[index].imagePath,
                           width: 40,
@@ -110,7 +92,7 @@ class _EnterListPageState extends State<EnterListPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.only(right: 16),
+                              padding: const EdgeInsets.only(right: 16),
                               child: Text(
                                 enterList[index].name,
                                 style: TextStyle(
@@ -119,15 +101,12 @@ class _EnterListPageState extends State<EnterListPage>
                               ),
                             ),
                             Gaps.vGap6,
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 3,
-                              children: _getEnterLabelWidgetList(enterList[index].enterLabelList),
-                            ),
+                            LabelWrapWidget(labelList: enterList[index].labelList),
                             Gaps.vGap6,
                             ListTileWidget('地址：${enterList[index].address}'),
                             Gaps.vGap6,
-                            ListTileWidget('行业类别：${enterList[index].industryType}'),
+                            ListTileWidget(
+                                '行业类别：${enterList[index].industryType}'),
                           ],
                         ),
                       )
@@ -141,23 +120,6 @@ class _EnterListPageState extends State<EnterListPage>
                     labelText: "重点",
                     labelColor: Theme.of(context).primaryColor,
                     labelAlignment: LabelAlignment.rightTop,
-                  ),
-                ),
-                Positioned.fill(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return EnterDetailPage();
-                            },
-                          ),
-                        );
-                      },
-                    ),
                   ),
                 ),
               ],
@@ -189,7 +151,7 @@ class _EnterListPageState extends State<EnterListPage>
               editController: _editController,
               scrollController: _scrollController,
               onSearchPressed: () => _refreshController.callRefresh(),
-              areaPickerListener: (areaId){
+              areaPickerListener: (areaId) {
                 areaCode = areaId;
               },
               popupMenuButton: PopupMenuButton<String>(
