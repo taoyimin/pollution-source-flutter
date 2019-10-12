@@ -10,6 +10,7 @@ import 'package:pollution_source/module/enter/enter_list_page.dart';
 import 'package:pollution_source/module/monitor/monitor_list.dart';
 import 'package:pollution_source/module/order/order_list.dart';
 import 'package:pollution_source/module/order/order_list_page.dart';
+import 'package:pollution_source/module/report/report_list.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -669,7 +670,7 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                       return BlocProvider(
                         builder: (context) => OrderListBloc(),
                         child: OrderListPage(
-                          state: '1',
+                          state: '5',
                         ),
                       );
                     }),
@@ -680,13 +681,33 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               //排口异常待审核
               BackgroundStatisticsWidget(
                 statistics: statisticsList[1],
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => ReportListBloc(),
+                        child: ReportListPage(),
+                      );
+                    }),
+                  );
+                },
               ),
               Gaps.hGap6,
               //因子异常待审核
               BackgroundStatisticsWidget(
                 statistics: statisticsList[2],
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => ReportListBloc(),
+                        child: ReportListPage(),
+                      );
+                    }),
+                  );
+                },
               ),
             ],
           ),
@@ -811,22 +832,57 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               ),
               VerticalDividerWidget(height: 30),
               //重点企业
-              IconStatisticsWidget(statistics: statisticsList[1], onTap: () {}),
+              IconStatisticsWidget(statistics: statisticsList[1], onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BlocProvider(
+                    builder: (context) => EnterListBloc(),
+                    child: EnterListPage(),
+                  );
+                }));
+              }),
               VerticalDividerWidget(height: 30),
               //在线企业
-              IconStatisticsWidget(statistics: statisticsList[2], onTap: () {}),
+              IconStatisticsWidget(statistics: statisticsList[2], onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BlocProvider(
+                    builder: (context) => EnterListBloc(),
+                    child: EnterListPage(),
+                  );
+                }));
+              }),
             ],
           ),
           Row(
             children: <Widget>[
               //废水企业
-              IconStatisticsWidget(statistics: statisticsList[3], onTap: () {}),
+              IconStatisticsWidget(statistics: statisticsList[3], onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BlocProvider(
+                    builder: (context) => EnterListBloc(),
+                    child: EnterListPage(),
+                  );
+                }));
+              }),
               VerticalDividerWidget(height: 30),
               //废气企业
-              IconStatisticsWidget(statistics: statisticsList[4], onTap: () {}),
+              IconStatisticsWidget(statistics: statisticsList[4], onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BlocProvider(
+                    builder: (context) => EnterListBloc(),
+                    child: EnterListPage(),
+                  );
+                }));
+              }),
               VerticalDividerWidget(height: 30),
               //水气企业
-              IconStatisticsWidget(statistics: statisticsList[5], onTap: () {}),
+              IconStatisticsWidget(statistics: statisticsList[5], onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BlocProvider(
+                    builder: (context) => EnterListBloc(),
+                    child: EnterListPage(),
+                  );
+                }));
+              }),
             ],
           ),
           Row(

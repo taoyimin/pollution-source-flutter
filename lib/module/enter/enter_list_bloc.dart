@@ -83,15 +83,6 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
   //格式化企业数据
   List<Enter> convertEnterList(List<dynamic> jsonArray) {
     return jsonArray.map((json) {
-      //TODO 自己造数据测试
-      Map<String, dynamic> temp = Map();
-      temp['enterprisename'] = '深圳市腾讯计算机系统有限公司';
-      temp['address'] = '深圳市南山区高新区高新南一路飞亚达大厦5-10楼';
-      temp['isImportant'] = true;
-      temp['imagePath'] = 'assets/images/logo_tencent.png';
-      temp['industryType'] = '计算机软、硬件的设计、技术开发、销售';
-      temp['enterLabel'] = '废水排口 废气排口 雨水';
-      json = temp;
       return Enter.fromJson(json);
     }).toList();
   }

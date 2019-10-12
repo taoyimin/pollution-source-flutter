@@ -1,12 +1,11 @@
-import 'dart:ui';
-
+import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
 //报警管理单
 class Order extends Equatable {
-  final String name;
+  final String enterName;
   final String outletName;
   final String alarmTime;
   final String area;
@@ -15,7 +14,7 @@ class Order extends Equatable {
   final String alarmRemark;
 
   Order({
-    this.name,
+    this.enterName,
     this.outletName,
     this.alarmTime,
     this.area,
@@ -23,7 +22,7 @@ class Order extends Equatable {
     this.labelList,
     this.alarmRemark,
   }) : super([
-          name,
+    enterName,
           outletName,
           alarmTime,
           area,
@@ -34,13 +33,15 @@ class Order extends Equatable {
 
   static Order fromJson(dynamic json) {
     return Order(
-      name: json['enterprisename'],
+      enterName: json['enterprisename'],
       outletName: json['disOutName'],
       alarmTime: json['createtime'],
       area: json['areaName'],
       statue: json['orderstate'],
       alarmRemark: json['alarmdesc'],
-      labelList: _getLabelList(json['alarmtype']),
+      labelList: TextUtil.isEmpty(json['alarmtype'])
+          ? []
+          : _getLabelList(json['alarmtype']),
     );
   }
 

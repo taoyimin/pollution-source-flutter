@@ -17,7 +17,7 @@ class EnterListLoad extends EnterListEvent {
   //在线状态 online:在线 空:全部
   final String state;
 
-  //企业类型 EnterType1:废气 EnterType2:废水 EnterType1,EnterType2 水气企业
+  //企业类型 outletType1:雨水 outletType2:废水 outletType3 废气
   final String enterType;
 
   //0:非重点源 1:重点源

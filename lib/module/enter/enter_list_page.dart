@@ -107,9 +107,9 @@ class _EnterListPageState extends State<EnterListPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.only(right: 16),
+                              padding: const EdgeInsets.only(right: 10),
                               child: Text(
-                                enterList[index].name,
+                                '${enterList[index].enterName}',
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
@@ -118,7 +118,9 @@ class _EnterListPageState extends State<EnterListPage>
                             Gaps.vGap6,
                             LabelWrapWidget(
                                 labelList: enterList[index].labelList),
-                            Gaps.vGap6,
+                            enterList[index].labelList.length == 0
+                                ? Gaps.empty
+                                : Gaps.vGap6,
                             ListTileWidget('地址：${enterList[index].address}'),
                             Gaps.vGap6,
                             ListTileWidget(
@@ -132,7 +134,7 @@ class _EnterListPageState extends State<EnterListPage>
                 Offstage(
                   offstage: !enterList[index].isImportant,
                   child: LabelView(
-                    Size.fromHeight(100),
+                    Size.fromHeight(80),
                     labelText: "重点",
                     labelColor: Theme.of(context).primaryColor,
                     labelAlignment: LabelAlignment.rightTop,

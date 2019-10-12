@@ -1,3 +1,5 @@
+
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -266,7 +268,7 @@ class ImageStatisticsWidget extends StatelessWidget {
           Container(
             width: double.infinity,
             color: this.statistics.color,
-            padding:const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Stack(
               children: <Widget>[
                 Positioned(
@@ -433,14 +435,16 @@ class LabelWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Image.asset(
-            this.label.imagePath,
-            width: 8,
-            height: 8,
-            color: this.label.color,
-          ),
+          TextUtil.isEmpty(this.label.imagePath)
+              ? Gaps.empty
+              : Image.asset(
+                  this.label.imagePath,
+                  width: 8,
+                  height: 8,
+                  color: this.label.color,
+                ),
           Text(
-            this.label.name,
+            '${this.label.name}',
             style: TextStyle(color: this.label.color, fontSize: 10),
           ),
         ],

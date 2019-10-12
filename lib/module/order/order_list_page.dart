@@ -81,14 +81,16 @@ class _OrderListPageState extends State<OrderListPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        orderList[index].name,
-                        style: TextStyle(
+                        '${orderList[index].enterName}',
+                        style:const TextStyle(
                           fontSize: 15,
                         ),
                       ),
                       Gaps.vGap6,
                       LabelWrapWidget(labelList: orderList[index].labelList),
-                      Gaps.vGap6,
+                      orderList[index].labelList.length == 0
+                          ? Gaps.empty
+                          :Gaps.vGap6,
                       Row(
                         children: <Widget>[
                           Expanded(
