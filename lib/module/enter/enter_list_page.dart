@@ -41,11 +41,11 @@ class _EnterListPageState extends State<EnterListPage>
   @override
   void initState() {
     super.initState();
+    _enterListBloc = BlocProvider.of<EnterListBloc>(context);
     _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
     _scrollController = ScrollController();
     _editController = TextEditingController();
-    _enterListBloc = BlocProvider.of<EnterListBloc>(context);
     //首次加载
     _enterListBloc.dispatch(EnterListLoad(
       state: widget.state,

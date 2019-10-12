@@ -15,18 +15,18 @@ class OrderListLoad extends OrderListEvent {
   final String areaCode;
 
   //督办单状态
-  final String status;
+  final String state;
 
   OrderListLoad({
     this.isRefresh = false,
     this.enterName = '',
     this.areaCode = '',
-    this.status = '1',
+    this.state = '',
   }) : super([
           isRefresh,
           enterName,
           areaCode,
-          status,
+          state,
         ]);
 
   @override

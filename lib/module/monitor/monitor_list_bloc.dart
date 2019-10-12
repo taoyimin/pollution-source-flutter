@@ -21,7 +21,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
             currentPage: (currentState as MonitorListLoaded).currentPage + 1,
             enterName: event.enterName,
             areaCode: event.areaCode,
-            status: event.status,
+            monitorType: event.monitorType,
           );
           yield MonitorListLoaded(
             monitorList: (currentState as MonitorListLoaded).monitorList + monitorList,
@@ -34,7 +34,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
           final monitorList = await getMonitorList(
             enterName: event.enterName,
             areaCode: event.areaCode,
-            status: event.status,
+            monitorType: event.monitorType,
           );
           if (monitorList.length == 0) {
             //没有数据
@@ -59,7 +59,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
-    status = '1',
+    monitorType = '',
   }) async {
     Response response = await DioUtils.instance
         .getDio()
@@ -68,7 +68,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
       'pageSize': pageSize,
       'enterpriseName': enterName,
       'areaCode': areaCode,
-      'status': status,
+      'outType': monitorType,
     });
     if (response.statusCode == ExceptionHandle.success &&
         response.data[Constant.responseCodeKey] ==
@@ -83,16 +83,6 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
   //格式化报警管理单数据
   List<Monitor> convertMonitorList(List<dynamic> jsonArray) {
     return jsonArray.map((json) {
-      //TODO 自己造数据测试
-      Map<String, dynamic> temp = Map();
-      temp['enterName'] = '江西洪城水业环保南昌县分公司';
-      temp['monitorName'] = '废水排放口';
-      temp['address'] = '南昌县莲塘镇莲塘村';
-      temp['number'] = '86377750110024';
-      temp['monitorType'] = Random().nextInt(3);
-      temp['monitorTypeName'] = '废水排口';
-      temp['areaName'] = '南昌市 市辖区';
-      json = temp;
       return Monitor.fromJson(json);
     }).toList();
   }

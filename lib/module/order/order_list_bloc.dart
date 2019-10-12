@@ -19,7 +19,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
             currentPage: (currentState as OrderListLoaded).currentPage + 1,
             enterName: event.enterName,
             areaCode: event.areaCode,
-            status: event.status,
+            state: event.state,
           );
           yield OrderListLoaded(
             orderList: (currentState as OrderListLoaded).orderList + orderList,
@@ -32,7 +32,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
           final orderList = await getOrderList(
             enterName: event.enterName,
             areaCode: event.areaCode,
-            status: event.status,
+            state: event.state,
           );
           if (orderList.length == 0) {
             //没有数据
@@ -57,7 +57,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
-    status = '1',
+    state = '1',
   }) async {
     Response response = await DioUtils.instance
         .getDio()
@@ -66,7 +66,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
       'pageSize': pageSize,
       'enterpriseName': enterName,
       'areaCode': areaCode,
-      'status': status,
+      'status': state,
     });
     if (response.statusCode == ExceptionHandle.success &&
         response.data[Constant.responseCodeKey] ==

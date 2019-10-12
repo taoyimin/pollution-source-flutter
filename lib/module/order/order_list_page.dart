@@ -13,6 +13,10 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'order_list.dart';
 
 class OrderListPage extends StatefulWidget {
+  final String state;
+
+  OrderListPage({this.state = ''});
+
   @override
   _OrderListPageState createState() => _OrderListPageState();
 }
@@ -29,12 +33,13 @@ class _OrderListPageState extends State<OrderListPage>
   @override
   void initState() {
     super.initState();
+    _orderListBloc = BlocProvider.of<OrderListBloc>(context);
     _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
-    _orderListBloc = BlocProvider.of<OrderListBloc>(context);
-    _orderListBloc.dispatch(OrderListLoad());
     _scrollController = ScrollController();
     _editController = TextEditingController();
+    //首次加载
+    _orderListBloc.dispatch(OrderListLoad(state: widget.state));
   }
 
   @override
@@ -93,7 +98,8 @@ class _OrderListPageState extends State<OrderListPage>
                           ),
                           Expanded(
                             flex: 1,
-                            child: ListTileWidget('区域：${orderList[index].area}'),
+                            child:
+                                ListTileWidget('区域：${orderList[index].area}'),
                           ),
                         ],
                       ),
@@ -189,7 +195,7 @@ class _OrderListPageState extends State<OrderListPage>
                     } else if (state is OrderListEmpty) {
                       return PageEmptyWidget();
                     } else if (state is OrderListError) {
-                      return PageErrorWidget(errorMessage:state.errorMessage);
+                      return PageErrorWidget(errorMessage: state.errorMessage);
                     } else if (state is OrderListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
@@ -207,7 +213,7 @@ class _OrderListPageState extends State<OrderListPage>
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
-                status: '5',
+                state: widget.state,
               ));
               return _refreshCompleter.future;
             },
@@ -215,7 +221,7 @@ class _OrderListPageState extends State<OrderListPage>
               _orderListBloc.dispatch(OrderListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
-                status: '5',
+                state: widget.state,
               ));
               return _refreshCompleter.future;
             },

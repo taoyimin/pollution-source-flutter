@@ -12,6 +12,10 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'monitor_list.dart';
 
 class MonitorListPage extends StatefulWidget {
+  final String monitorType;
+
+  MonitorListPage({this.monitorType = ''});
+
   @override
   _MonitorListPageState createState() => _MonitorListPageState();
 }
@@ -28,12 +32,13 @@ class _MonitorListPageState extends State<MonitorListPage>
   @override
   void initState() {
     super.initState();
+    _monitorListBloc = BlocProvider.of<MonitorListBloc>(context);
     _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
-    _monitorListBloc = BlocProvider.of<MonitorListBloc>(context);
-    _monitorListBloc.dispatch(MonitorListLoad());
     _scrollController = ScrollController();
     _editController = TextEditingController();
+    //首次加载
+    _monitorListBloc.dispatch(MonitorListLoad(monitorType:widget.monitorType));
   }
 
   @override
@@ -82,7 +87,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                             Padding(
                               padding: const EdgeInsets.only(right: 16),
                               child: Text(
-                                monitorList[index].enterName,
+                                '${monitorList[index].enterMonitorName}',
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
@@ -104,7 +109,8 @@ class _MonitorListPageState extends State<MonitorListPage>
                               ],
                             ),
                             Gaps.vGap6,
-                            ListTileWidget('监控点地址：${monitorList[index].address}'),
+                            ListTileWidget(
+                                '监控点地址：${monitorList[index].address}'),
                           ],
                         ),
                       )
@@ -183,7 +189,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                     } else if (state is MonitorListEmpty) {
                       return PageEmptyWidget();
                     } else if (state is MonitorListError) {
-                      return PageErrorWidget(errorMessage:state.errorMessage);
+                      return PageErrorWidget(errorMessage: state.errorMessage);
                     } else if (state is MonitorListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
@@ -201,6 +207,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
+                monitorType: widget.monitorType,
               ));
               return _refreshCompleter.future;
             },
@@ -208,6 +215,7 @@ class _MonitorListPageState extends State<MonitorListPage>
               _monitorListBloc.dispatch(MonitorListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
+                monitorType: widget.monitorType,
               ));
               return _refreshCompleter.future;
             },

@@ -14,19 +14,19 @@ class MonitorListLoad extends MonitorListEvent {
   //按区域搜索
   final String areaCode;
 
-  //督办单状态
-  final String status;
+  //监控点类型 outletType1:雨水 outletType2:废水 outletType3:废气
+  final String monitorType;
 
   MonitorListLoad({
     this.isRefresh = false,
     this.enterName = '',
     this.areaCode = '',
-    this.status = '1',
+    this.monitorType = '',
   }) : super([
           isRefresh,
           enterName,
           areaCode,
-          status,
+          monitorType,
         ]);
 
   @override

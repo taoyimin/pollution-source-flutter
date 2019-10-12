@@ -209,7 +209,7 @@ class TitleWidget extends StatelessWidget {
             color: color,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               title,
               style: TextStyle(
@@ -449,7 +449,7 @@ class AqiExamineWidget extends StatelessWidget {
       child: Container(
         height: 70,
         color: aqiExamine.color.withOpacity(0.3),
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -668,7 +668,9 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                     MaterialPageRoute(builder: (context) {
                       return BlocProvider(
                         builder: (context) => OrderListBloc(),
-                        child: OrderListPage(),
+                        child: OrderListPage(
+                          state: '1',
+                        ),
                       );
                     }),
                   );
@@ -704,7 +706,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
           TitleWidget(title: "在线监控点概况"),
@@ -712,11 +714,22 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
             children: <Widget>[
               //全部
               IconStatisticsWidget(
-                  height: 70,
-                  iconSize: 16,
-                  backgroundSize: 40,
-                  statistics: statisticsList[0],
-                  onTap: () {}),
+                height: 70,
+                iconSize: 16,
+                backgroundSize: 40,
+                statistics: statisticsList[0],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => MonitorListBloc(),
+                        child: MonitorListPage(),
+                      );
+                    }),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 40),
               //在线
               IconStatisticsWidget(
@@ -778,7 +791,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
           TitleWidget(title: "污染源企业概况"),
@@ -819,13 +832,46 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //废水排口
-              IconStatisticsWidget(statistics: statisticsList[6], onTap: () {}),
+              IconStatisticsWidget(
+                statistics: statisticsList[6],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => MonitorListBloc(),
+                        child: MonitorListPage(
+                          monitorType: 'outletType2',
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 30),
               //废气排口
-              IconStatisticsWidget(statistics: statisticsList[7], onTap: () {}),
+              IconStatisticsWidget(
+                statistics: statisticsList[7],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => MonitorListBloc(),
+                        child: MonitorListPage(
+                          monitorType: 'outletType3',
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 30),
               //许可证企业
-              IconStatisticsWidget(statistics: statisticsList[8], onTap: () {}),
+              IconStatisticsWidget(
+                statistics: statisticsList[8],
+                onTap: () {},
+              ),
             ],
           ),
         ],
@@ -875,7 +921,7 @@ class ComprehensiveStatisticsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
           TitleWidget(title: "综合统计信息"),
@@ -910,7 +956,7 @@ class WeekTrendWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Container(
         child: Column(
           children: <Widget>[
