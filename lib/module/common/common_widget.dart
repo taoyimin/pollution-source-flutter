@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/gaps.dart';
 
 import 'common_model.dart';
 
@@ -9,7 +10,7 @@ import 'common_model.dart';
 ///复杂自定义组件放widget包中
 
 //页面加载中的widget
-class PageLoadingWidget extends StatelessWidget{
+class PageLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
@@ -49,7 +50,7 @@ class PageLoadingWidget extends StatelessWidget{
 }
 
 //页面没有数据的widget
-class PageEmptyWidget extends StatelessWidget{
+class PageEmptyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
@@ -69,8 +70,8 @@ class PageEmptyWidget extends StatelessWidget{
               padding: const EdgeInsets.symmetric(horizontal: 60),
               child: Text(
                 '没有数据',
-                style: const TextStyle(
-                    fontSize: 16.0, color: Colours.grey_color),
+                style:
+                    const TextStyle(fontSize: 16.0, color: Colours.grey_color),
               ),
             ),
           ],
@@ -81,7 +82,7 @@ class PageEmptyWidget extends StatelessWidget{
 }
 
 //页面加载错误的widget
-class PageErrorWidget extends StatelessWidget{
+class PageErrorWidget extends StatelessWidget {
   final String errorMessage;
 
   PageErrorWidget({this.errorMessage});
@@ -105,12 +106,214 @@ class PageErrorWidget extends StatelessWidget{
               padding: const EdgeInsets.symmetric(horizontal: 60),
               child: Text(
                 '$errorMessage',
-                style: const TextStyle(
-                    fontSize: 16.0, color: Colours.grey_color),
+                style:
+                    const TextStyle(fontSize: 16.0, color: Colours.grey_color),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+//统计widget  图标加半透明背景
+class IconStatisticsWidget extends StatelessWidget {
+  final double height;
+  final double iconSize; //icon大小
+  final double backgroundSize; //背景圆圈大小
+  final Statistics statistics;
+  final GestureTapCallback onTap;
+
+  IconStatisticsWidget({
+    this.height = 60,
+    this.iconSize = 15,
+    this.backgroundSize = 36,
+    @required this.statistics,
+    @required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWell(
+        splashColor: this.statistics.color.withOpacity(0.3),
+        onTap: this.onTap,
+        child: Container(
+          height: this.height,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: this.backgroundSize,
+                  height: this.backgroundSize,
+                  decoration: BoxDecoration(
+                    color: this.statistics.color.withOpacity(0.3),
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    this.statistics.imagePath,
+                    width: this.iconSize,
+                    height: this.iconSize,
+                    color: this.statistics.color,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        this.statistics.title,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: this.statistics.color,
+                        ),
+                      ),
+                      Text(
+                        this.statistics.count,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//统计widget  背景图片型
+class BackgroundStatisticsWidget extends StatelessWidget {
+  final Statistics statistics;
+  final GestureTapCallback onTap;
+
+  BackgroundStatisticsWidget({@required this.statistics, @required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWellWidget(
+        onTap: onTap,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(6),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(statistics.imagePath),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  statistics.count,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gaps.vGap6,
+                Text(
+                  statistics.title,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//统计widget  图片型
+class ImageStatisticsWidget extends StatelessWidget {
+  final Statistics statistics;
+  final GestureTapCallback onTap;
+
+  ImageStatisticsWidget({this.statistics, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWellWidget(
+        onTap: onTap,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            color: this.statistics.color,
+            padding:const EdgeInsets.all(10),
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Image.asset(
+                    this.statistics.imagePath,
+                    width: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      this.statistics.count,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                      ),
+                    ),
+                    Text(
+                      this.statistics.title,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 2,
+                  right: 0,
+                  child: Container(
+                    width: 14,
+                    height: 14,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Icon(
+                      Icons.keyboard_arrow_right,
+                      size: 14,
+                      color: this.statistics.color,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -189,7 +392,7 @@ class InkWellWidget extends StatelessWidget {
   final GestureTapCallback onTap;
   final List<Widget> children;
 
-  const InkWellWidget({
+  InkWellWidget({
     @required this.onTap,
     @required this.children,
   });
@@ -215,7 +418,7 @@ class InkWellWidget extends StatelessWidget {
 }
 
 //标签widget
-class LabelWidget extends StatelessWidget{
+class LabelWidget extends StatelessWidget {
   final Label label;
 
   LabelWidget({@required this.label});
@@ -247,21 +450,23 @@ class LabelWidget extends StatelessWidget{
 }
 
 //标签集合widget
-class LabelWrapWidget extends StatelessWidget{
+class LabelWrapWidget extends StatelessWidget {
   final List<Label> labelList;
 
   LabelWrapWidget({@required this.labelList});
 
   @override
   Widget build(BuildContext context) {
-   return Wrap(
-     spacing: 6,
-     runSpacing: 3,
-     children: (){
-       return labelList.map((label) {
-         return LabelWidget(label: label,);
-       }).toList();
-     }(),
-   );
+    return Wrap(
+      spacing: 6,
+      runSpacing: 3,
+      children: () {
+        return labelList.map((label) {
+          return LabelWidget(
+            label: label,
+          );
+        }).toList();
+      }(),
+    );
   }
 }
