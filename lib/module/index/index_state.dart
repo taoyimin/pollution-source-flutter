@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 
 //不继承equatable，确保每次刷新都会触发状态改变的监听
 abstract class IndexState{

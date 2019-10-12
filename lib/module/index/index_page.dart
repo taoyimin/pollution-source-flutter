@@ -12,6 +12,7 @@ import 'package:pollution_source/module/order/order_list.dart';
 import 'package:pollution_source/module/order/order_list_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/res/gaps.dart';
 import 'dart:ui';
 import 'dart:math';
 import 'package:pollution_source/widget/space_header.dart';
@@ -52,7 +53,7 @@ class _IndexPageState extends State<IndexPage>
       body: EasyRefresh.custom(
         header: SpaceHeader(),
         firstRefresh: true,
-        firstRefreshWidget: const SizedBox(),
+        firstRefreshWidget: Gaps.empty,
         slivers: <Widget>[
           BlocListener<IndexBloc, IndexState>(
             listener: (context, state) {
@@ -67,47 +68,45 @@ class _IndexPageState extends State<IndexPage>
                       children: <Widget>[
                         state.aqiStatistics.show
                             ? AqiStatisticsWidget(
-                            aqiStatistics: state.aqiStatistics)
-                            : const SizedBox(),
+                                aqiStatistics: state.aqiStatistics)
+                            : Gaps.empty,
                         state.todoTaskStatisticsList.length > 0
                             ? TodoTaskStatisticsWidget(
-                          todoTaskStatisticsList:
-                          state.todoTaskStatisticsList,
-                        )
-                            : const SizedBox(),
+                                statisticsList: state.todoTaskStatisticsList,
+                              )
+                            : Gaps.empty,
                         state.aqiExamineList.length > 0
                             ? AqiExamineWidget(
-                            aqiExamineList: state.aqiExamineList)
-                            : const SizedBox(),
+                                aqiExamineList: state.aqiExamineList)
+                            : Gaps.empty,
                         WeekTrendWidget(),
                         AlarmListWidget(),
                         state.onlineMonitorStatisticsList.length > 0
                             ? OnlineMonitorStatisticsWidget(
-                          onlineMonitorStatisticsList:
-                          state.onlineMonitorStatisticsList,
-                        )
-                            : const SizedBox(),
+                                statisticsList:
+                                    state.onlineMonitorStatisticsList,
+                              )
+                            : Gaps.empty,
                         state.waterStatisticsList.length > 0
                             ? WaterStatisticsWidget(
-                          waterStatisticsList: state.waterStatisticsList,
-                        )
-                            : const SizedBox(),
+                                waterStatisticsList: state.waterStatisticsList,
+                              )
+                            : Gaps.empty,
                         state.pollutionEnterStatisticsList.length > 0
                             ? PollutionEnterStatisticsWidget(
-                            pollutionEnterStatisticsList:
-                            state.pollutionEnterStatisticsList)
-                            : const SizedBox(),
+                                statisticsList:
+                                    state.pollutionEnterStatisticsList)
+                            : Gaps.empty,
                         state.rainEnterStatisticsList.length > 0
                             ? RainEnterStatisticsWidget(
-                            rainEnterStatisticsList:
-                            state.rainEnterStatisticsList)
-                            : const SizedBox(),
+                                statisticsList: state.rainEnterStatisticsList)
+                            : Gaps.empty,
                         state.comprehensiveStatisticsList.length > 0
                             ? ComprehensiveStatisticsWidget(
-                          comprehensiveStatisticsList:
-                          state.comprehensiveStatisticsList,
-                        )
-                            : const SizedBox(),
+                                statisticsList:
+                                    state.comprehensiveStatisticsList,
+                              )
+                            : Gaps.empty,
                       ],
                     ),
                   );
@@ -646,69 +645,9 @@ class WaterStatisticsWidget extends StatelessWidget {
 
 //代办任务
 class TodoTaskStatisticsWidget extends StatelessWidget {
-  final List<TodoTaskStatistics> todoTaskStatisticsList;
+  final List<Statistics> statisticsList;
 
-  TodoTaskStatisticsWidget({Key key, this.todoTaskStatisticsList})
-      : super(key: key);
-
-  //返回代办任务row item
-  Widget _getTodoTaskStatisticsRowItem(
-      BuildContext context, TodoTaskStatistics todoTaskStatistics) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        height: 70,
-        child: Card(
-          elevation: 0,
-          margin: EdgeInsets.all(0),
-          child: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              Image.asset(
-                todoTaskStatistics.imagePath,
-                fit: BoxFit.cover,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    todoTaskStatistics.count,
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    todoTaskStatistics.title,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return BlocProvider(
-                      builder: (context) => OrderListBloc(),
-                      child: OrderListPage(),
-                    );
-                  }));
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  TodoTaskStatisticsWidget({Key key, this.statisticsList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -720,15 +659,33 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _getTodoTaskStatisticsRowItem(context, todoTaskStatisticsList[0]),
-              const SizedBox(
-                width: 6,
+              //报警单待处理
+              BackgroundStatisticsWidget(
+                statistics: statisticsList[0],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => OrderListBloc(),
+                        child: OrderListPage(),
+                      );
+                    }),
+                  );
+                },
               ),
-              _getTodoTaskStatisticsRowItem(context, todoTaskStatisticsList[1]),
-              const SizedBox(
-                width: 6,
+              Gaps.hGap6,
+              //排口异常待审核
+              BackgroundStatisticsWidget(
+                statistics: statisticsList[1],
+                onTap: () {},
               ),
-              _getTodoTaskStatisticsRowItem(context, todoTaskStatisticsList[2]),
+              Gaps.hGap6,
+              //因子异常待审核
+              BackgroundStatisticsWidget(
+                statistics: statisticsList[2],
+                onTap: () {},
+              ),
             ],
           ),
         ],
@@ -739,107 +696,70 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
 
 //在线监控点概况
 class OnlineMonitorStatisticsWidget extends StatelessWidget {
-  final List<OnlineMonitorStatistics> onlineMonitorStatisticsList;
+  final List<Statistics> statisticsList;
 
-  OnlineMonitorStatisticsWidget({Key key, this.onlineMonitorStatisticsList})
+  OnlineMonitorStatisticsWidget({Key key, this.statisticsList})
       : super(key: key);
-
-  Widget _getOnlineMonitorStatisticsRowItem(BuildContext context,
-      OnlineMonitorStatistics onlineMonitorStatistics) {
-    return Expanded(
-      flex: 1,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return BlocProvider(
-              builder: (context) => MonitorListBloc(),
-              child: MonitorListPage(),
-            );
-          }));
-        },
-        child: Container(
-          height: 70,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: onlineMonitorStatistics.color.withOpacity(0.3),
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    onlineMonitorStatistics.imagePath,
-                    width: 16,
-                    height: 16,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        onlineMonitorStatistics.title,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: onlineMonitorStatistics.color,
-                        ),
-                      ),
-                      Text(
-                        onlineMonitorStatistics.count,
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin:const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
           TitleWidget(title: "在线监控点概况"),
           Row(
             children: <Widget>[
-              _getOnlineMonitorStatisticsRowItem(context,
-                  onlineMonitorStatisticsList[0]),
+              //全部
+              IconStatisticsWidget(
+                  height: 70,
+                  iconSize: 16,
+                  backgroundSize: 40,
+                  statistics: statisticsList[0],
+                  onTap: () {}),
               VerticalDividerWidget(height: 40),
-              _getOnlineMonitorStatisticsRowItem(context,
-                  onlineMonitorStatisticsList[1]),
+              //在线
+              IconStatisticsWidget(
+                  height: 70,
+                  iconSize: 16,
+                  backgroundSize: 40,
+                  statistics: statisticsList[1],
+                  onTap: () {}),
               VerticalDividerWidget(height: 40),
-              _getOnlineMonitorStatisticsRowItem(context,
-                  onlineMonitorStatisticsList[2]),
+              //预警
+              IconStatisticsWidget(
+                  height: 70,
+                  iconSize: 16,
+                  backgroundSize: 40,
+                  statistics: statisticsList[2],
+                  onTap: () {}),
             ],
           ),
           Row(
             children: <Widget>[
-              _getOnlineMonitorStatisticsRowItem(context,
-                  onlineMonitorStatisticsList[3]),
+              //超标
+              IconStatisticsWidget(
+                  height: 70,
+                  iconSize: 16,
+                  backgroundSize: 40,
+                  statistics: statisticsList[3],
+                  onTap: () {}),
               VerticalDividerWidget(height: 40),
-              _getOnlineMonitorStatisticsRowItem(context,
-                  onlineMonitorStatisticsList[4]),
+              //脱机
+              IconStatisticsWidget(
+                  height: 70,
+                  iconSize: 16,
+                  backgroundSize: 40,
+                  statistics: statisticsList[4],
+                  onTap: () {}),
               VerticalDividerWidget(height: 40),
-              _getOnlineMonitorStatisticsRowItem(context,
-                  onlineMonitorStatisticsList[5]),
+              //停产
+              IconStatisticsWidget(
+                  height: 70,
+                  iconSize: 16,
+                  backgroundSize: 40,
+                  statistics: statisticsList[5],
+                  onTap: () {}),
             ],
           ),
         ],
@@ -850,121 +770,62 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
 
 //污染源企业概况
 class PollutionEnterStatisticsWidget extends StatelessWidget {
-  final List<PollutionEnterStatistics> pollutionEnterStatisticsList;
+  final List<Statistics> statisticsList;
 
-  PollutionEnterStatisticsWidget({Key key, this.pollutionEnterStatisticsList})
+  PollutionEnterStatisticsWidget({Key key, this.statisticsList})
       : super(key: key);
-
-  Widget _getPollutionEnterStatisticsRowItem(
-      BuildContext context, PollutionEnterStatistics pollutionEnterStatistics) {
-    return Expanded(
-      flex: 1,
-      child: InkWell(
-        splashColor: pollutionEnterStatistics.color.withOpacity(0.3),
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return BlocProvider(
-              builder: (context) => EnterListBloc(),
-              child: EnterListPage(),
-            );
-          }));
-        },
-        child: Container(
-          height: 60,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: pollutionEnterStatistics.color.withOpacity(0.3),
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    pollutionEnterStatistics.imagePath,
-                    width: 15,
-                    height: 15,
-                    color: pollutionEnterStatistics.color,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        pollutionEnterStatistics.title,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: pollutionEnterStatistics.color,
-                        ),
-                      ),
-                      Text(
-                        pollutionEnterStatistics.count.toString(),
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin:const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
           TitleWidget(title: "污染源企业概况"),
           Row(
             children: <Widget>[
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[0]),
+              //全部企业
+              IconStatisticsWidget(
+                statistics: statisticsList[0],
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return BlocProvider(
+                      builder: (context) => EnterListBloc(),
+                      child: EnterListPage(),
+                    );
+                  }));
+                },
+              ),
               VerticalDividerWidget(height: 30),
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[1]),
+              //重点企业
+              IconStatisticsWidget(statistics: statisticsList[1], onTap: () {}),
               VerticalDividerWidget(height: 30),
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[2]),
+              //在线企业
+              IconStatisticsWidget(statistics: statisticsList[2], onTap: () {}),
             ],
           ),
           Row(
             children: <Widget>[
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[3]),
+              //废水企业
+              IconStatisticsWidget(statistics: statisticsList[3], onTap: () {}),
               VerticalDividerWidget(height: 30),
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[4]),
+              //废气企业
+              IconStatisticsWidget(statistics: statisticsList[4], onTap: () {}),
               VerticalDividerWidget(height: 30),
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[5]),
+              //水气企业
+              IconStatisticsWidget(statistics: statisticsList[5], onTap: () {}),
             ],
           ),
           Row(
             children: <Widget>[
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[6]),
+              //废水排口
+              IconStatisticsWidget(statistics: statisticsList[6], onTap: () {}),
               VerticalDividerWidget(height: 30),
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[7]),
+              //废气排口
+              IconStatisticsWidget(statistics: statisticsList[7], onTap: () {}),
               VerticalDividerWidget(height: 30),
-              _getPollutionEnterStatisticsRowItem(
-                  context, pollutionEnterStatisticsList[8]),
+              //许可证企业
+              IconStatisticsWidget(statistics: statisticsList[8], onTap: () {}),
             ],
           ),
         ],
@@ -975,79 +836,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
 
 //雨水企业概况
 class RainEnterStatisticsWidget extends StatelessWidget {
-  final List<RainEnterStatistics> rainEnterStatisticsList;
+  final List<Statistics> statisticsList;
 
-  RainEnterStatisticsWidget({Key key, this.rainEnterStatisticsList})
-      : super(key: key);
-
-  Widget _getRainEnterStatisticsRowItem(
-      BuildContext context, RainEnterStatistics rainEnterStatistics) {
-    return Expanded(
-      flex: 1,
-      child: InkWell(
-        splashColor: rainEnterStatistics.color.withOpacity(0.3),
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return BlocProvider(
-              builder: (context) => EnterListBloc(),
-              child: EnterListPage(),
-            );
-          }));
-        },
-        child: Container(
-          height: 60,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: rainEnterStatistics.color.withOpacity(0.3),
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    rainEnterStatistics.imagePath,
-                    width: 15,
-                    height: 15,
-                    color: rainEnterStatistics.color,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        rainEnterStatistics.title,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: rainEnterStatistics.color,
-                        ),
-                      ),
-                      Text(
-                        rainEnterStatistics.count.toString(),
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  RainEnterStatisticsWidget({Key key, this.statisticsList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -1058,18 +849,14 @@ class RainEnterStatisticsWidget extends StatelessWidget {
           TitleWidget(title: "雨水企业概况"),
           Row(
             children: <Widget>[
-              _getRainEnterStatisticsRowItem(
-                  context, rainEnterStatisticsList[0]),
-              VerticalDividerWidget(
-                height: 30,
-              ),
-              _getRainEnterStatisticsRowItem(
-                  context, rainEnterStatisticsList[1]),
-              VerticalDividerWidget(
-                height: 30,
-              ),
-              _getRainEnterStatisticsRowItem(
-                  context, rainEnterStatisticsList[2]),
+              //全部企业
+              IconStatisticsWidget(statistics: statisticsList[0], onTap: () {}),
+              VerticalDividerWidget(height: 30),
+              //在线企业
+              IconStatisticsWidget(statistics: statisticsList[1], onTap: () {}),
+              VerticalDividerWidget(height: 30),
+              //排口总数
+              IconStatisticsWidget(statistics: statisticsList[2], onTap: () {}),
             ],
           ),
         ],
@@ -1080,88 +867,37 @@ class RainEnterStatisticsWidget extends StatelessWidget {
 
 //综合统计信息
 class ComprehensiveStatisticsWidget extends StatelessWidget {
-  final List<ComprehensiveStatistics> comprehensiveStatisticsList;
+  final List<Statistics> statisticsList;
 
-  ComprehensiveStatisticsWidget({Key key, this.comprehensiveStatisticsList})
+  ComprehensiveStatisticsWidget({Key key, this.statisticsList})
       : super(key: key);
-
-  Widget _getComprehensiveStatisticsRowItem(
-      ComprehensiveStatistics comprehensiveStatistics) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        color: comprehensiveStatistics.color,
-        padding: EdgeInsets.all(10),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Image.asset(
-                comprehensiveStatistics.imagePath,
-                width: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  comprehensiveStatistics.count.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                ),
-                Text(
-                  comprehensiveStatistics.title,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-            Positioned(
-              top: 2,
-              right: 0,
-              child: Container(
-                width: 14,
-                height: 14,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  size: 14,
-                  color: comprehensiveStatistics.color,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding:const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
           TitleWidget(title: "综合统计信息"),
           Row(
             children: <Widget>[
-              _getComprehensiveStatisticsRowItem(
-                  comprehensiveStatisticsList[0]),
-              SizedBox(
-                width: 10,
+              //监察执法
+              ImageStatisticsWidget(
+                statistics: statisticsList[0],
+                onTap: () {},
               ),
-              _getComprehensiveStatisticsRowItem(
-                  comprehensiveStatisticsList[1]),
-              SizedBox(
-                width: 10,
+              Gaps.hGap10,
+              //项目审批
+              ImageStatisticsWidget(
+                statistics: statisticsList[1],
+                onTap: () {},
               ),
-              _getComprehensiveStatisticsRowItem(
-                  comprehensiveStatisticsList[2]),
+              Gaps.hGap10,
+              //信访投诉
+              ImageStatisticsWidget(
+                statistics: statisticsList[2],
+                onTap: () {},
+              ),
             ],
           ),
         ],
@@ -1174,7 +910,7 @@ class WeekTrendWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding:const EdgeInsets.all(10),
       child: Container(
         child: Column(
           children: <Widget>[

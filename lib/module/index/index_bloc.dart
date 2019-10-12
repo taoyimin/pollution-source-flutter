@@ -49,27 +49,27 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
               return !waterStatistics.show;
             }).toList());
         //污染源企业统计
-        List<PollutionEnterStatistics> pollutionEnterStatisticsList =
+        List<Statistics> pollutionEnterStatisticsList =
             await convertPollutionEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.pollutionEnterStatisticsKey]);
         //在线监控点统计
-        List<OnlineMonitorStatistics> onlineMonitorStatisticsList =
+        List<Statistics> onlineMonitorStatisticsList =
             await convertOnlineMonitorStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.onlineMonitorStatisticsKey]);
         //代办任务统计
-        List<TodoTaskStatistics> todoTaskStatisticsList =
+        List<Statistics> todoTaskStatisticsList =
             await convertTodoTaskStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.todoTaskStatisticsKey]);
         //综合信息统计
-        List<ComprehensiveStatistics> comprehensiveStatisticsList =
+        List<Statistics> comprehensiveStatisticsList =
             await convertComprehensiveStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.comprehensiveStatisticsKey]);
         //雨水企业统计
-        List<RainEnterStatistics> rainEnterStatisticsList =
+        List<Statistics> rainEnterStatisticsList =
             await convertRainEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.rainEnterStatisticsKey]);
@@ -217,235 +217,207 @@ Future<WaterStatistics> convertSurfaceWater(String key, String string) async {
 }
 
 //格式化污染源企业统计
-Future<List<PollutionEnterStatistics>> convertPollutionEnterStatistics(
+Future<List<Statistics>> convertPollutionEnterStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  return [
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '企业总数',
-      imagePath: 'assets/images/icon_pollution_all_enter.png',
-      color: Color.fromRGBO(77, 167, 248, 1),
-      count: strings[1],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '重点企业',
-      imagePath: 'assets/images/icon_pollution_point_enter.png',
-      color: Color.fromRGBO(241, 190, 67, 1),
-      count: strings[2],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '在线企业',
-      imagePath: 'assets/images/icon_pollution_online_enter.png',
-      color: Color.fromRGBO(136, 191, 89, 1),
-      count: strings[3],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '废水企业',
-      imagePath: 'assets/images/icon_pollution_water_enter.png',
-      color: Color.fromRGBO(0, 188, 212, 1),
-      count: strings[4],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '废气企业',
-      imagePath: 'assets/images/icon_pollution_air_enter.png',
-      color: Color.fromRGBO(255, 87, 34, 1),
-      count: strings[5],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '水气企业',
-      imagePath: 'assets/images/icon_pollution_air_water.png',
-      color: Color.fromRGBO(137, 137, 137, 1),
-      count: strings[6],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '废水排口',
-      imagePath: 'assets/images/icon_pollution_water_outlet.png',
-      color: Color.fromRGBO(63, 81, 181, 1),
-      count: strings[7],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '废气排口',
-      imagePath: 'assets/images/icon_pollution_air_outlet.png',
-      color: Color.fromRGBO(233, 30, 99, 1),
-      count: strings[8],
-    ),
-    PollutionEnterStatistics(
-      key: Constant.pollutionEnterStatisticsKey,
-      show: show,
-      title: '许可证企业',
-      imagePath: 'assets/images/icon_pollution_licence_enter.png',
-      color: Color.fromRGBO(179, 129, 127, 1),
-      count: strings[9],
-    ),
-  ];
+  if(!show){
+    return [];
+  }else {
+    return [
+      Statistics(
+        title: '企业总数',
+        imagePath: 'assets/images/icon_pollution_all_enter.png',
+        color: Color.fromRGBO(77, 167, 248, 1),
+        count: strings[1],
+      ),
+      Statistics(
+        title: '重点企业',
+        imagePath: 'assets/images/icon_pollution_point_enter.png',
+        color: Color.fromRGBO(241, 190, 67, 1),
+        count: strings[2],
+      ),
+      Statistics(
+        title: '在线企业',
+        imagePath: 'assets/images/icon_pollution_online_enter.png',
+        color: Color.fromRGBO(136, 191, 89, 1),
+        count: strings[3],
+      ),
+      Statistics(
+        title: '废水企业',
+        imagePath: 'assets/images/icon_pollution_water_enter.png',
+        color: Color.fromRGBO(0, 188, 212, 1),
+        count: strings[4],
+      ),
+      Statistics(
+        title: '废气企业',
+        imagePath: 'assets/images/icon_pollution_air_enter.png',
+        color: Color.fromRGBO(255, 87, 34, 1),
+        count: strings[5],
+      ),
+      Statistics(
+        title: '水气企业',
+        imagePath: 'assets/images/icon_pollution_air_water.png',
+        color: Color.fromRGBO(137, 137, 137, 1),
+        count: strings[6],
+      ),
+      Statistics(
+        title: '废水排口',
+        imagePath: 'assets/images/icon_pollution_water_outlet.png',
+        color: Color.fromRGBO(63, 81, 181, 1),
+        count: strings[7],
+      ),
+      Statistics(
+        title: '废气排口',
+        imagePath: 'assets/images/icon_pollution_air_outlet.png',
+        color: Color.fromRGBO(233, 30, 99, 1),
+        count: strings[8],
+      ),
+      Statistics(
+        title: '许可证企业',
+        imagePath: 'assets/images/icon_pollution_licence_enter.png',
+        color: Color.fromRGBO(179, 129, 127, 1),
+        count: strings[9],
+      ),
+    ];
+  }
 }
 
 //格式化在线监控点概况
-Future<List<OnlineMonitorStatistics>> convertOnlineMonitorStatistics(
+Future<List<Statistics>> convertOnlineMonitorStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  return [
-    OnlineMonitorStatistics(
-      key: Constant.onlineMonitorStatisticsKey,
-      show: show,
-      title: '全部',
-      imagePath: 'assets/images/icon_monitor_all.png',
-      color: Color.fromRGBO(77, 167, 248, 1),
-      count: strings[1],
-    ),
-    OnlineMonitorStatistics(
-      key: Constant.onlineMonitorStatisticsKey,
-      show: show,
-      title: '在线',
-      imagePath: 'assets/images/icon_monitor_online.png',
-      color: Color.fromRGBO(136, 191, 89, 1),
-      count: strings[2],
-    ),
-    OnlineMonitorStatistics(
-      key: Constant.onlineMonitorStatisticsKey,
-      show: show,
-      title: '预警',
-      imagePath: 'assets/images/icon_monitor_alarm.png',
-      color: Color.fromRGBO(241, 190, 67, 1),
-      count: strings[3],
-    ),
-    OnlineMonitorStatistics(
-      key: Constant.onlineMonitorStatisticsKey,
-      show: show,
-      title: '超标',
-      imagePath: 'assets/images/icon_monitor_over.png',
-      color: Color.fromRGBO(233, 119, 111, 1),
-      count: strings[4],
-    ),
-    OnlineMonitorStatistics(
-      key: Constant.onlineMonitorStatisticsKey,
-      show: show,
-      title: '脱机',
-      imagePath: 'assets/images/icon_monitor_offline.png',
-      color: Color.fromRGBO(179, 129, 127, 1),
-      count: strings[5],
-    ),
-    OnlineMonitorStatistics(
-      key: Constant.onlineMonitorStatisticsKey,
-      show: show,
-      title: '停产',
-      imagePath: 'assets/images/icon_monitor_stop.png',
-      color: Color.fromRGBO(137, 137, 137, 1),
-      count: strings[6],
-    ),
-  ];
+  if(!show){
+    return [];
+  }else {
+    return [
+      Statistics(
+        title: '全部',
+        imagePath: 'assets/images/icon_monitor_all.png',
+        color: Color.fromRGBO(77, 167, 248, 1),
+        count: strings[1],
+      ),
+      Statistics(
+        title: '在线',
+        imagePath: 'assets/images/icon_monitor_online.png',
+        color: Color.fromRGBO(136, 191, 89, 1),
+        count: strings[2],
+      ),
+      Statistics(
+        title: '预警',
+        imagePath: 'assets/images/icon_monitor_alarm.png',
+        color: Color.fromRGBO(241, 190, 67, 1),
+        count: strings[3],
+      ),
+      Statistics(
+        title: '超标',
+        imagePath: 'assets/images/icon_monitor_over.png',
+        color: Color.fromRGBO(233, 119, 111, 1),
+        count: strings[4],
+      ),
+      Statistics(
+        title: '脱机',
+        imagePath: 'assets/images/icon_monitor_offline.png',
+        color: Color.fromRGBO(179, 129, 127, 1),
+        count: strings[5],
+      ),
+      Statistics(
+        title: '停产',
+        imagePath: 'assets/images/icon_monitor_stop.png',
+        color: Color.fromRGBO(137, 137, 137, 1),
+        count: strings[6],
+      ),
+    ];
+  }
 }
 
 //格式化代办任务统计
-Future<List<TodoTaskStatistics>> convertTodoTaskStatistics(
+Future<List<Statistics>> convertTodoTaskStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  return [
-    TodoTaskStatistics(
-      key: Constant.todoTaskStatisticsKey,
-      show: show,
-      title: '报警单待处理',
-      imagePath: 'assets/images/button_bg_blue.png',
-      count: strings[1],
-    ),
-    TodoTaskStatistics(
-      key: Constant.todoTaskStatisticsKey,
-      show: show,
-      title: '排口异常待审核',
-      imagePath: 'assets/images/button_bg_green.png',
-      count: strings[2],
-    ),
-    TodoTaskStatistics(
-      key: Constant.todoTaskStatisticsKey,
-      show: show,
-      title: '因子异常待审核',
-      imagePath: 'assets/images/button_bg_pink.png',
-      count: strings[3],
-    ),
-  ];
+  if(!show){
+    return [];
+  }else {
+    return [
+      Statistics(
+        title: '报警单待处理',
+        imagePath: 'assets/images/button_bg_blue.png',
+        count: strings[1],
+      ),
+      Statistics(
+        title: '排口异常待审核',
+        imagePath: 'assets/images/button_bg_green.png',
+        count: strings[2],
+      ),
+      Statistics(
+        title: '因子异常待审核',
+        imagePath: 'assets/images/button_bg_pink.png',
+        count: strings[3],
+      ),
+    ];
+  }
 }
 
 //综合统计信息
-Future<List<ComprehensiveStatistics>> convertComprehensiveStatistics(
+Future<List<Statistics>> convertComprehensiveStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  return [
-    ComprehensiveStatistics(
-      key: Constant.comprehensiveStatisticsKey,
-      show: show,
-      title: '监察执法',
-      color: Color.fromRGBO(77, 167, 248, 1),
-      imagePath: 'assets/images/button_image3.png',
-      count: strings[1],
-    ),
-    ComprehensiveStatistics(
-      key: Constant.comprehensiveStatisticsKey,
-      show: show,
-      title: '项目审批',
-      color: Color.fromRGBO(241, 190, 67, 1),
-      imagePath: 'assets/images/button_image2.png',
-      count: strings[2],
-    ),
-    ComprehensiveStatistics(
-      key: Constant.comprehensiveStatisticsKey,
-      show: show,
-      title: '信访投诉',
-      color: Color.fromRGBO(136, 191, 89, 1),
-      imagePath: 'assets/images/button_image1.png',
-      count: strings[3],
-    ),
-  ];
+  if(!show){
+    return [];
+  }else {
+    return [
+      Statistics(
+        title: '监察执法',
+        color: Color.fromRGBO(77, 167, 248, 1),
+        imagePath: 'assets/images/button_image3.png',
+        count: strings[1],
+      ),
+      Statistics(
+        title: '项目审批',
+        color: Color.fromRGBO(241, 190, 67, 1),
+        imagePath: 'assets/images/button_image2.png',
+        count: strings[2],
+      ),
+      Statistics(
+        title: '信访投诉',
+        color: Color.fromRGBO(136, 191, 89, 1),
+        imagePath: 'assets/images/button_image1.png',
+        count: strings[3],
+      ),
+    ];
+  }
 }
 
 //雨水企业统计
-Future<List<RainEnterStatistics>> convertRainEnterStatistics(
+Future<List<Statistics>> convertRainEnterStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  return [
-    RainEnterStatistics(
-      key: Constant.rainEnterStatisticsKey,
-      show: show,
-      title: '全部企业',
-      color: Color.fromRGBO(77, 167, 248, 1),
-      imagePath: 'assets/images/icon_pollution_all_enter.png',
-      count: strings[1],
-    ),
-    RainEnterStatistics(
-      key: Constant.rainEnterStatisticsKey,
-      show: show,
-      title: '在线企业',
-      color: Color.fromRGBO(241, 190, 67, 1),
-      imagePath: 'assets/images/icon_pollution_online_enter.png',
-      count: strings[2],
-    ),
-    RainEnterStatistics(
-      key: Constant.rainEnterStatisticsKey,
-      show: show,
-      title: '排口总数',
-      color: Color.fromRGBO(136, 191, 89, 1),
-      imagePath: 'assets/images/icon_pollution_water_outlet.png',
-      count: strings[3],
-    ),
-  ];
+  if(!show){
+    return [];
+  }else {
+    return [
+      Statistics(
+        title: '全部企业',
+        color: Color.fromRGBO(77, 167, 248, 1),
+        imagePath: 'assets/images/icon_pollution_all_enter.png',
+        count: strings[1],
+      ),
+      Statistics(
+        title: '在线企业',
+        color: Color.fromRGBO(241, 190, 67, 1),
+        imagePath: 'assets/images/icon_pollution_online_enter.png',
+        count: strings[2],
+      ),
+      Statistics(
+        title: '排口总数',
+        color: Color.fromRGBO(136, 191, 89, 1),
+        imagePath: 'assets/images/icon_pollution_water_outlet.png',
+        count: strings[3],
+      ),
+    ];
+  }
 }

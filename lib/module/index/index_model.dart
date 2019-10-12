@@ -143,70 +143,8 @@ class WaterStatistics extends IndexData {
   }
 }
 
-//污染源企业统计
-class PollutionEnterStatistics extends IndexData {
-  final String key;
-  final bool show;
-  final String title; //标题
-  final String count; //个数
-  final Color color; //图标颜色
-  final String imagePath; //图标路径
-
-  PollutionEnterStatistics({
-    this.key,
-    this.show,
-    this.title,
-    this.count,
-    this.color,
-    this.imagePath,
-  }) : super([
-          key,
-          show,
-          title,
-          count,
-          color,
-          imagePath,
-        ]);
-
-  @override
-  String toString() {
-    return 'PollutionEnterStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
-  }
-}
-
-//在线监控点统计
-class OnlineMonitorStatistics extends IndexData {
-  final String key;
-  final bool show;
-  final String title; //状态
-  final String count; //个数
-  final Color color; //图标颜色
-  final String imagePath; //图片路径
-
-  OnlineMonitorStatistics({
-    this.key,
-    this.show,
-    this.title,
-    this.count,
-    this.color,
-    this.imagePath,
-  }) : super([
-          key,
-          show,
-          title,
-          count,
-          color,
-          imagePath,
-        ]);
-
-  @override
-  String toString() {
-    return 'OnlineMonitorStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
-  }
-}
-
 //代办任务统计
-class TodoTaskStatistics extends IndexData {
+/*class TodoTaskStatistics extends IndexData {
   final String key;
   final bool show;
   final String title; //标题
@@ -231,10 +169,10 @@ class TodoTaskStatistics extends IndexData {
   String toString() {
     return 'TodoTaskStatistics{key: $key, show: $show, title: $title, count: $count, imagePath: $imagePath}';
   }
-}
+}*/
 
 //综合统计信息
-class ComprehensiveStatistics extends IndexData {
+/*class ComprehensiveStatistics extends IndexData {
   final String key;
   final bool show;
   final String title; //标题
@@ -262,35 +200,4 @@ class ComprehensiveStatistics extends IndexData {
   String toString() {
     return 'ComprehensiveStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
   }
-}
-
-//雨水企业统计
-class RainEnterStatistics extends IndexData {
-  final String key;
-  final bool show;
-  final String title; //标题
-  final String count; //个数
-  final Color color; //图标颜色
-  final String imagePath; //图片路径
-
-  RainEnterStatistics({
-    this.key,
-    this.show,
-    this.title,
-    this.count,
-    this.color,
-    this.imagePath,
-  }) : super([
-          key,
-          show,
-          title,
-          count,
-          color,
-          imagePath,
-        ]);
-
-  @override
-  String toString() {
-    return 'RainEnterStatistics{key: $key, show: $show, title: $title, count: $count, color: $color, imagePath: $imagePath}';
-  }
-}
+}*/
