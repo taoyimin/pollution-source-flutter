@@ -14,6 +14,16 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'enter_list.dart';
 
 class EnterListPage extends StatefulWidget {
+  final String state;
+  final String enterType;
+  final String attentionLevel;
+
+  EnterListPage({
+    this.state = '',
+    this.enterType = '',
+    this.attentionLevel = '',
+  });
+
   @override
   _EnterListPageState createState() => _EnterListPageState();
 }
@@ -36,7 +46,12 @@ class _EnterListPageState extends State<EnterListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     _enterListBloc = BlocProvider.of<EnterListBloc>(context);
-    _enterListBloc.dispatch(EnterListLoad());
+    //首次加载
+    _enterListBloc.dispatch(EnterListLoad(
+      state: widget.state,
+      enterType: widget.enterType,
+      attentionLevel: widget.attentionLevel,
+    ));
   }
 
   @override
@@ -101,7 +116,8 @@ class _EnterListPageState extends State<EnterListPage>
                               ),
                             ),
                             Gaps.vGap6,
-                            LabelWrapWidget(labelList: enterList[index].labelList),
+                            LabelWrapWidget(
+                                labelList: enterList[index].labelList),
                             Gaps.vGap6,
                             ListTileWidget('地址：${enterList[index].address}'),
                             Gaps.vGap6,
@@ -208,12 +224,20 @@ class _EnterListPageState extends State<EnterListPage>
               _enterListBloc.dispatch(EnterListLoad(
                 isRefresh: true,
                 enterName: _editController.text,
+                areaCode: areaCode,
+                state: widget.state,
+                enterType: widget.enterType,
+                attentionLevel: widget.attentionLevel,
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
               _enterListBloc.dispatch(EnterListLoad(
                 enterName: _editController.text,
+                areaCode: areaCode,
+                state: widget.state,
+                enterType: widget.enterType,
+                attentionLevel: widget.attentionLevel,
               ));
               return _refreshCompleter.future;
             },

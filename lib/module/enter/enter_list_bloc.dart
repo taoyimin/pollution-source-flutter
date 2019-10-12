@@ -19,6 +19,9 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
             currentPage: (currentState as EnterListLoaded).currentPage + 1,
             enterName: event.enterName,
             areaCode: event.areaCode,
+            state: event.state,
+            enterType: event.enterType,
+            attentionLevel: event.attentionLevel,
           );
           yield EnterListLoaded(
             enterList: (currentState as EnterListLoaded).enterList + enterList,
@@ -31,6 +34,9 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
           final enterList = await getEnterList(
             enterName: event.enterName,
             areaCode: event.areaCode,
+            state: event.state,
+            enterType: event.enterType,
+            attentionLevel: event.attentionLevel,
           );
           if (enterList.length == 0) {
             //没有数据
@@ -55,6 +61,9 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
+    state = '',
+    enterType = '',
+    attentionLevel = '',
   }) async {
     Response response = await DioUtils.instance
         .getDio()
@@ -63,6 +72,9 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
       'pageSize': pageSize,
       'enterpriseName': enterName,
       'areaCode': areaCode,
+      'state': state,
+      'enterpriseType': enterType,
+      'attenlevel': attentionLevel,
     });
     return convertEnterList(
         response.data[Constant.responseDataKey][Constant.responseListKey]);
