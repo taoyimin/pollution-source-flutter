@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-//报警管理单
+//监控点
 class Monitor extends Equatable {
   final String enterMonitorName;
   final String monitorName;
@@ -17,7 +17,7 @@ class Monitor extends Equatable {
     this.imagePath,
     this.area,
   }) : super([
-    enterMonitorName,
+          enterMonitorName,
           monitorName,
           address,
           monitorType,
@@ -43,7 +43,7 @@ class Monitor extends Equatable {
         //雨水
         return 'assets/images/icon_unknown_monitor.png';
       case 'outletType2':
-      //废水
+        //废水
         return 'assets/images/icon_water_monitor.png';
       case 'outletType3':
         //废气
