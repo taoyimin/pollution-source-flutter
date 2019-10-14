@@ -2,17 +2,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
-import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/ui_utils.dart';
+
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/label_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
+import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/enter/list/enter_list.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
 
 class EnterListPage extends StatefulWidget {
   final String state;
@@ -72,14 +73,6 @@ class _EnterListPageState extends State<EnterListPage>
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                /*Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return EnterDetailPage();
-                    },
-                  ),
-                );*/
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return BlocProvider(
                     builder: (context) => EnterDetailBloc(),
