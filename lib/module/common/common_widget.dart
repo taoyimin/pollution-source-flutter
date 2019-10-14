@@ -1,9 +1,10 @@
-
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/ui_utils.dart';
+import 'package:pollution_source/util/utils.dart';
 
 import 'common_model.dart';
 
@@ -119,19 +120,15 @@ class PageErrorWidget extends StatelessWidget {
   }
 }
 
-//统计widget  图标加半透明背景
-class IconStatisticsWidget extends StatelessWidget {
-  final double height;
-  final double iconSize; //icon大小
-  final double backgroundSize; //背景圆圈大小
-  final Statistics statistics;
+//左边图片加圆形半透明背景 右边上面标题下面内容 无背景图片 默认一行三个 污染源在线监控ratio=1.15
+class InkWellButton1 extends StatelessWidget {
+  final double ratio;
+  final Meta meta;
   final GestureTapCallback onTap;
 
-  IconStatisticsWidget({
-    this.height = 60,
-    this.iconSize = 15,
-    this.backgroundSize = 36,
-    @required this.statistics,
+  InkWellButton1({
+    this.ratio = 1,
+    @required this.meta,
     @required this.onTap,
   });
 
@@ -140,54 +137,51 @@ class IconStatisticsWidget extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWell(
-        splashColor: this.statistics.color.withOpacity(0.3),
+        splashColor: this.meta.color.withOpacity(0.3),
         onTap: this.onTap,
         child: Container(
-          height: this.height,
+          height: 60 * ratio,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
                 flex: 1,
                 child: Container(
-                  width: this.backgroundSize,
-                  height: this.backgroundSize,
+                  width: 36 * ratio,
+                  height: 36 * ratio,
                   decoration: BoxDecoration(
-                    color: this.statistics.color.withOpacity(0.3),
+                    color: this.meta.color.withOpacity(0.3),
                     shape: BoxShape.circle,
                   ),
                   alignment: Alignment.center,
                   child: Image.asset(
-                    this.statistics.imagePath,
-                    width: this.iconSize,
-                    height: this.iconSize,
-                    color: this.statistics.color,
+                    this.meta.imagePath,
+                    width: 15 * ratio,
+                    height: 15 * ratio,
+                    color: this.meta.color,
                   ),
                 ),
               ),
               Expanded(
                 flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        this.statistics.title,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: this.statistics.color,
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      this.meta.title,
+                      style: TextStyle(
+                        fontSize: 11 * ratio,
+                        color: this.meta.color,
                       ),
-                      Text(
-                        this.statistics.count,
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
+                    ),
+                    Text(
+                      this.meta.content,
+                      style: const TextStyle(
+                        fontSize: 18,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -198,18 +192,18 @@ class IconStatisticsWidget extends StatelessWidget {
   }
 }
 
-//统计widget  背景图片型
-class BackgroundStatisticsWidget extends StatelessWidget {
-  final Statistics statistics;
+//上面内容下面标题 有背景图片无图标 默认一行三个
+class InkWellButton2 extends StatelessWidget {
+  final Meta meta;
   final GestureTapCallback onTap;
 
-  BackgroundStatisticsWidget({@required this.statistics, @required this.onTap});
+  InkWellButton2({@required this.meta, @required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: InkWellWidget(
+      child: InkWellButton(
         onTap: onTap,
         children: <Widget>[
           Container(
@@ -217,7 +211,7 @@ class BackgroundStatisticsWidget extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(statistics.imagePath),
+                image: AssetImage(meta.imagePath),
                 fit: BoxFit.cover,
               ),
             ),
@@ -226,7 +220,7 @@ class BackgroundStatisticsWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  statistics.count,
+                  meta.content,
                   style: const TextStyle(
                     fontSize: 30,
                     color: Colors.white,
@@ -235,7 +229,7 @@ class BackgroundStatisticsWidget extends StatelessWidget {
                 ),
                 Gaps.vGap6,
                 Text(
-                  statistics.title,
+                  meta.title,
                   style: const TextStyle(
                     fontSize: 11,
                     color: Colors.white,
@@ -251,64 +245,302 @@ class BackgroundStatisticsWidget extends StatelessWidget {
   }
 }
 
-//统计widget  图片型
-class ImageStatisticsWidget extends StatelessWidget {
-  final Statistics statistics;
+//左上内容 左下标题 右边图标 有背景图片 默认一行三个 一行两个时建议ratio=1.3
+class InkWellButton3 extends StatelessWidget {
+  final Meta meta;
   final GestureTapCallback onTap;
+  final double ratio;
+  final double titleFontSize;
+  final double contentFontSize;
+  final double contentMarginRight;
 
-  ImageStatisticsWidget({this.statistics, this.onTap});
+  InkWellButton3({
+    @required this.meta,
+    @required this.onTap,
+    this.ratio = 1,
+    this.titleFontSize = 13,
+    this.contentFontSize = 23,
+    this.contentMarginRight = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: InkWellWidget(
+      child: InkWellButton(
         onTap: onTap,
         children: <Widget>[
           Container(
-            width: double.infinity,
-            color: this.statistics.color,
+            height: 48 * ratio + 20,
             padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(meta.backgroundPath),
+                fit: BoxFit.fill,
+              ),
+              boxShadow: [getBoxShadow()],
+            ),
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Image.asset(
+                    meta.imagePath,
+                    width: 40 * ratio,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        meta.content,
+                        style: TextStyle(
+                          fontSize: contentFontSize * ratio,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        meta.title,
+                        style: TextStyle(
+                          fontSize: titleFontSize * ratio,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//左上标题 左下内容 右边图标 有背景图片
+class InkWellButton4 extends StatelessWidget {
+  final Meta meta;
+  final GestureTapCallback onTap;
+  final double ratio;
+  final double titleFontSize;
+  final double contentFontSize;
+  final double contentMarginRight;
+
+  InkWellButton4({
+    @required this.meta,
+    @required this.onTap,
+    this.ratio = 1,
+    this.titleFontSize = 13,
+    this.contentFontSize = 23,
+    this.contentMarginRight = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWellButton(
+        onTap: onTap,
+        children: <Widget>[
+          Container(
+            height: 48 * ratio + 20,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(meta.backgroundPath),
+                fit: BoxFit.fill,
+              ),
+              boxShadow: [getBoxShadow()],
+            ),
             child: Stack(
               children: <Widget>[
                 Positioned(
                   bottom: 0,
                   right: 0,
                   child: Image.asset(
-                    this.statistics.imagePath,
-                    width: 50,
-                    fit: BoxFit.cover,
+                    meta.imagePath,
+                    width: 46 * ratio,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: contentMarginRight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        meta.title,
+                        style: TextStyle(
+                          fontSize: titleFontSize * ratio,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        meta.content,
+                        style: TextStyle(
+                          fontSize: contentFontSize * ratio,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//左边图标加圆形半透明背景 右边上面标题下面内容 顶部描边 默认一行三个 一行两个时建议ratio=1.2
+class InkWellButton5 extends StatelessWidget {
+  final Meta meta;
+  final GestureTapCallback onTap;
+  final double ratio;
+
+  InkWellButton5({
+    @required this.meta,
+    @required this.onTap,
+    this.ratio = 1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWellButton(
+        onTap: onTap,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10 * ratio),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [getBoxShadow()],
+              border: Border(
+                top: BorderSide(
+                  color: meta.color,
+                  width: 2 * ratio,
+                ),
+              ),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  width: 36 * ratio,
+                  height: 36 * ratio,
+                  padding: EdgeInsets.all(10 * ratio),
+                  decoration: BoxDecoration(
+                      color: meta.color.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(18 * ratio)),
+                  child: Image.asset(
+                    meta.imagePath,
                   ),
                 ),
                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      this.statistics.count,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                      ),
+                      meta.title,
+                      style: TextStyle(fontSize: 11 * ratio),
                     ),
                     Text(
-                      this.statistics.title,
-                      style: TextStyle(color: Colors.white),
+                      meta.content,
+                      style: TextStyle(fontSize: 14 * ratio),
                     ),
                   ],
                 ),
-                Positioned(
-                  top: 2,
-                  right: 0,
-                  child: Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Icon(
-                      Icons.keyboard_arrow_right,
-                      size: 14,
-                      color: this.statistics.color,
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//左上标题 左中内容 左下查看详情按钮 右边图标 有背景图片 默认一行一个
+class InkWellButton6 extends StatelessWidget {
+  final Meta meta;
+  final GestureTapCallback onTap;
+
+  InkWellButton6({
+    @required this.meta,
+    @required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(meta.backgroundPath),
+          fit: BoxFit.cover,
+        ),
+        boxShadow: [getBoxShadow()],
+      ),
+      child: InkWellButton(
+        onTap: onTap,
+        children: <Widget>[
+          Positioned(
+            bottom: -5,
+            right: -20,
+            child: Image.asset(
+              meta.imagePath,
+              height: 100,
+            ),
+          ),
+          Positioned(
+            top: 10,
+            left: 20,
+            bottom: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  child: Text(
+                    meta.title,
+                    style: const TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                ),
+                Container(
+                  width: 100,
+                  child: Text(
+                    meta.content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Text(
+                    "查看详情",
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: meta.color,
                     ),
                   ),
                 ),
@@ -321,7 +553,7 @@ class ImageStatisticsWidget extends StatelessWidget {
   }
 }
 
-//list展示信息
+//list展示信息 展示标题下方的信息
 class ListTileWidget extends StatelessWidget {
   final String content;
 
@@ -341,7 +573,7 @@ class ListTileWidget extends StatelessWidget {
   }
 }
 
-//水平分割线
+//水平分割线 自定义宽高颜色时使用 否则使用Gaps
 class HorizontalDividerWidget extends StatelessWidget {
   final double width;
   final double height;
@@ -365,7 +597,7 @@ class HorizontalDividerWidget extends StatelessWidget {
   }
 }
 
-//垂直分割线
+//垂直分割线 自定义宽高颜色时使用 否则使用Gaps
 class VerticalDividerWidget extends StatelessWidget {
   final double width;
   final double height;
@@ -390,11 +622,11 @@ class VerticalDividerWidget extends StatelessWidget {
 }
 
 //解决InkWell因为child设置了背景而显示不出涟漪的问题
-class InkWellWidget extends StatelessWidget {
+class InkWellButton extends StatelessWidget {
   final GestureTapCallback onTap;
   final List<Widget> children;
 
-  InkWellWidget({
+  InkWellButton({
     @required this.onTap,
     @required this.children,
   });
@@ -471,6 +703,158 @@ class LabelWrapWidget extends StatelessWidget {
           );
         }).toList();
       }(),
+    );
+  }
+}
+
+//详情页图片标题widget
+class ImageTitleWidget extends StatelessWidget {
+  final String title;
+  final String imagePath;
+
+  ImageTitleWidget({
+    @required this.title,
+    @required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Image.asset(
+          imagePath,
+          height: 18,
+          width: 18,
+        ),
+        Gaps.hGap6,
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+//详情页基本信息展示widget
+class IconBaseInfoWidget extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String content;
+  final int flex;
+  final TextAlign contentTextAlign;
+  final bool isTel;
+
+  IconBaseInfoWidget({
+    @required this.icon,
+    @required this.title,
+    @required this.content,
+    this.flex = 1,
+    this.contentTextAlign = TextAlign.right,
+    this.isTel = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: flex,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          //加一个padding使图标和后面内容对齐
+          Padding(
+            padding: EdgeInsets.only(top: 2),
+            child: Icon(
+              icon,
+              size: 14,
+            ),
+          ),
+          Gaps.hGap3,
+          Text(title, style: const TextStyle(fontSize: 13)),
+          Gaps.hGap10,
+          Expanded(
+            child: isTel
+                ? InkWell(
+                    onTap: () => Utils.launchTelURL("tel:$content"),
+                    child: Text(
+                      content,
+                      style: const TextStyle(fontSize: 13, color: Colors.blue),
+                      textAlign: contentTextAlign,
+                    ),
+                  )
+                : Text(
+                    content,
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
+                    textAlign: contentTextAlign,
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//详情页联系人信息widget
+class ContactsWidget extends StatelessWidget {
+  final String contactsName;
+  final String contactsTel;
+
+  ContactsWidget({
+    @required this.contactsName,
+    @required this.contactsTel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: 50,
+          width: 50,
+          child: CircleAvatar(
+            backgroundImage: AssetImage("assets/images/mine_user_header.png"),
+          ),
+        ),
+        Gaps.hGap10,
+        Container(
+          height: 50,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                contactsName,
+                style: const TextStyle(fontSize: 16),
+              ),
+              Text(contactsTel),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Gaps.empty,
+        ),
+        VerticalDividerWidget(
+          width: 0.5,
+          height: 26,
+          color: Colours.divider_color,
+        ),
+        Gaps.hGap10,
+        IconButton(
+          icon: const Icon(
+            Icons.phone,
+            color: Colours.primary_color,
+          ),
+          onPressed: () {
+            Utils.launchTelURL(contactsTel);
+          },
+        ),
+      ],
     );
   }
 }
