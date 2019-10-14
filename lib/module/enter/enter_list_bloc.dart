@@ -74,7 +74,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
       'areaCode': areaCode,
       'state': state,
       'enterpriseType': enterType,
-      'attenlevel': attentionLevel,
+      'attenLevel': attentionLevel,
     });
     return convertEnterList(
         response.data[Constant.responseDataKey][Constant.responseListKey]);

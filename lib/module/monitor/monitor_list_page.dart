@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/ui_util.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/common_widget.dart';
@@ -56,7 +56,7 @@ class _MonitorListPageState extends State<MonitorListPage>
           //创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            child: InkWellWidget(
+            child: InkWellButton(
               onTap: () {},
               children: <Widget>[
                 Container(

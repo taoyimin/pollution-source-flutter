@@ -73,7 +73,7 @@ class _IndexPageState extends State<IndexPage>
                             : Gaps.empty,
                         state.todoTaskStatisticsList.length > 0
                             ? TodoTaskStatisticsWidget(
-                                statisticsList: state.todoTaskStatisticsList,
+                                metaList: state.todoTaskStatisticsList,
                               )
                             : Gaps.empty,
                         state.aqiExamineList.length > 0
@@ -84,7 +84,7 @@ class _IndexPageState extends State<IndexPage>
                         AlarmListWidget(),
                         state.onlineMonitorStatisticsList.length > 0
                             ? OnlineMonitorStatisticsWidget(
-                                statisticsList:
+                                metaList:
                                     state.onlineMonitorStatisticsList,
                               )
                             : Gaps.empty,
@@ -95,16 +95,16 @@ class _IndexPageState extends State<IndexPage>
                             : Gaps.empty,
                         state.pollutionEnterStatisticsList.length > 0
                             ? PollutionEnterStatisticsWidget(
-                                statisticsList:
+                                metaList:
                                     state.pollutionEnterStatisticsList)
                             : Gaps.empty,
                         state.rainEnterStatisticsList.length > 0
                             ? RainEnterStatisticsWidget(
-                                statisticsList: state.rainEnterStatisticsList)
+                                metaList: state.rainEnterStatisticsList)
                             : Gaps.empty,
                         state.comprehensiveStatisticsList.length > 0
                             ? ComprehensiveStatisticsWidget(
-                                statisticsList:
+                                metaList:
                                     state.comprehensiveStatisticsList,
                               )
                             : Gaps.empty,
@@ -646,9 +646,9 @@ class WaterStatisticsWidget extends StatelessWidget {
 
 //代办任务
 class TodoTaskStatisticsWidget extends StatelessWidget {
-  final List<Statistics> statisticsList;
+  final List<Meta> metaList;
 
-  TodoTaskStatisticsWidget({Key key, this.statisticsList}) : super(key: key);
+  TodoTaskStatisticsWidget({Key key, this.metaList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -661,8 +661,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               //报警单待处理
-              BackgroundStatisticsWidget(
-                statistics: statisticsList[0],
+              InkWellButton2(
+                meta: metaList[0],
                 onTap: () {
                   Navigator.push(
                     context,
@@ -679,8 +679,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               ),
               Gaps.hGap6,
               //排口异常待审核
-              BackgroundStatisticsWidget(
-                statistics: statisticsList[1],
+              InkWellButton2(
+                meta: metaList[1],
                 onTap: () {
                   Navigator.push(
                     context,
@@ -695,8 +695,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               ),
               Gaps.hGap6,
               //因子异常待审核
-              BackgroundStatisticsWidget(
-                statistics: statisticsList[2],
+              InkWellButton2(
+                meta: metaList[2],
                 onTap: () {
                   Navigator.push(
                     context,
@@ -719,9 +719,9 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
 
 //在线监控点概况
 class OnlineMonitorStatisticsWidget extends StatelessWidget {
-  final List<Statistics> statisticsList;
+  final List<Meta> metaList;
 
-  OnlineMonitorStatisticsWidget({Key key, this.statisticsList})
+  OnlineMonitorStatisticsWidget({Key key, this.metaList})
       : super(key: key);
 
   @override
@@ -734,11 +734,9 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //全部
-              IconStatisticsWidget(
-                height: 70,
-                iconSize: 16,
-                backgroundSize: 40,
-                statistics: statisticsList[0],
+              InkWellButton1(
+                ratio: 1.15,
+                meta: metaList[0],
                 onTap: () {
                   Navigator.push(
                     context,
@@ -753,46 +751,36 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
               ),
               VerticalDividerWidget(height: 40),
               //在线
-              IconStatisticsWidget(
-                  height: 70,
-                  iconSize: 16,
-                  backgroundSize: 40,
-                  statistics: statisticsList[1],
+              InkWellButton1(
+                  ratio: 1.15,
+                  meta: metaList[1],
                   onTap: () {}),
               VerticalDividerWidget(height: 40),
               //预警
-              IconStatisticsWidget(
-                  height: 70,
-                  iconSize: 16,
-                  backgroundSize: 40,
-                  statistics: statisticsList[2],
+              InkWellButton1(
+                  ratio: 1.15,
+                  meta: metaList[2],
                   onTap: () {}),
             ],
           ),
           Row(
             children: <Widget>[
               //超标
-              IconStatisticsWidget(
-                  height: 70,
-                  iconSize: 16,
-                  backgroundSize: 40,
-                  statistics: statisticsList[3],
+              InkWellButton1(
+                  ratio: 1.15,
+                  meta: metaList[3],
                   onTap: () {}),
               VerticalDividerWidget(height: 40),
               //脱机
-              IconStatisticsWidget(
-                  height: 70,
-                  iconSize: 16,
-                  backgroundSize: 40,
-                  statistics: statisticsList[4],
+              InkWellButton1(
+                  ratio: 1.15,
+                  meta: metaList[4],
                   onTap: () {}),
               VerticalDividerWidget(height: 40),
               //停产
-              IconStatisticsWidget(
-                  height: 70,
-                  iconSize: 16,
-                  backgroundSize: 40,
-                  statistics: statisticsList[5],
+              InkWellButton1(
+                  ratio: 1.15,
+                  meta: metaList[5],
                   onTap: () {}),
             ],
           ),
@@ -804,9 +792,9 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
 
 //污染源企业概况
 class PollutionEnterStatisticsWidget extends StatelessWidget {
-  final List<Statistics> statisticsList;
+  final List<Meta> metaList;
 
-  PollutionEnterStatisticsWidget({Key key, this.statisticsList})
+  PollutionEnterStatisticsWidget({Key key, this.metaList})
       : super(key: key);
 
   @override
@@ -819,8 +807,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //全部企业
-              IconStatisticsWidget(
-                statistics: statisticsList[0],
+              InkWellButton1(
+                meta: metaList[0],
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return BlocProvider(
@@ -832,7 +820,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               ),
               VerticalDividerWidget(height: 30),
               //重点企业
-              IconStatisticsWidget(statistics: statisticsList[1], onTap: () {
+              InkWellButton1(meta: metaList[1], onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return BlocProvider(
                     builder: (context) => EnterListBloc(),
@@ -842,7 +830,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               }),
               VerticalDividerWidget(height: 30),
               //在线企业
-              IconStatisticsWidget(statistics: statisticsList[2], onTap: () {
+              InkWellButton1(meta: metaList[2], onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return BlocProvider(
                     builder: (context) => EnterListBloc(),
@@ -855,7 +843,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //废水企业
-              IconStatisticsWidget(statistics: statisticsList[3], onTap: () {
+              InkWellButton1(meta: metaList[3], onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return BlocProvider(
                     builder: (context) => EnterListBloc(),
@@ -865,7 +853,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               }),
               VerticalDividerWidget(height: 30),
               //废气企业
-              IconStatisticsWidget(statistics: statisticsList[4], onTap: () {
+              InkWellButton1(meta: metaList[4], onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return BlocProvider(
                     builder: (context) => EnterListBloc(),
@@ -875,7 +863,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               }),
               VerticalDividerWidget(height: 30),
               //水气企业
-              IconStatisticsWidget(statistics: statisticsList[5], onTap: () {
+              InkWellButton1(meta: metaList[5], onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return BlocProvider(
                     builder: (context) => EnterListBloc(),
@@ -888,8 +876,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //废水排口
-              IconStatisticsWidget(
-                statistics: statisticsList[6],
+              InkWellButton1(
+                meta: metaList[6],
                 onTap: () {
                   Navigator.push(
                     context,
@@ -906,8 +894,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               ),
               VerticalDividerWidget(height: 30),
               //废气排口
-              IconStatisticsWidget(
-                statistics: statisticsList[7],
+              InkWellButton1(
+                meta: metaList[7],
                 onTap: () {
                   Navigator.push(
                     context,
@@ -924,8 +912,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               ),
               VerticalDividerWidget(height: 30),
               //许可证企业
-              IconStatisticsWidget(
-                statistics: statisticsList[8],
+              InkWellButton1(
+                meta: metaList[8],
                 onTap: () {},
               ),
             ],
@@ -938,9 +926,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
 
 //雨水企业概况
 class RainEnterStatisticsWidget extends StatelessWidget {
-  final List<Statistics> statisticsList;
+  final List<Meta> metaList;
 
-  RainEnterStatisticsWidget({Key key, this.statisticsList}) : super(key: key);
+  RainEnterStatisticsWidget({Key key, this.metaList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -952,13 +940,13 @@ class RainEnterStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //全部企业
-              IconStatisticsWidget(statistics: statisticsList[0], onTap: () {}),
+              InkWellButton1(meta: metaList[0], onTap: () {}),
               VerticalDividerWidget(height: 30),
               //在线企业
-              IconStatisticsWidget(statistics: statisticsList[1], onTap: () {}),
+              InkWellButton1(meta: metaList[1], onTap: () {}),
               VerticalDividerWidget(height: 30),
               //排口总数
-              IconStatisticsWidget(statistics: statisticsList[2], onTap: () {}),
+              InkWellButton1(meta: metaList[2], onTap: () {}),
             ],
           ),
         ],
@@ -969,9 +957,9 @@ class RainEnterStatisticsWidget extends StatelessWidget {
 
 //综合统计信息
 class ComprehensiveStatisticsWidget extends StatelessWidget {
-  final List<Statistics> statisticsList;
+  final List<Meta> metaList;
 
-  ComprehensiveStatisticsWidget({Key key, this.statisticsList})
+  ComprehensiveStatisticsWidget({Key key, this.metaList})
       : super(key: key);
 
   @override
@@ -984,20 +972,20 @@ class ComprehensiveStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //监察执法
-              ImageStatisticsWidget(
-                statistics: statisticsList[0],
+              InkWellButton3(
+                meta: metaList[0],
                 onTap: () {},
               ),
               Gaps.hGap10,
               //项目审批
-              ImageStatisticsWidget(
-                statistics: statisticsList[1],
+              InkWellButton3(
+                meta: metaList[1],
                 onTap: () {},
               ),
               Gaps.hGap10,
               //信访投诉
-              ImageStatisticsWidget(
-                statistics: statisticsList[2],
+              InkWellButton3(
+                meta: metaList[2],
                 onTap: () {},
               ),
             ],

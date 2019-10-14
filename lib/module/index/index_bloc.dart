@@ -49,27 +49,27 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
               return !waterStatistics.show;
             }).toList());
         //污染源企业统计
-        List<Statistics> pollutionEnterStatisticsList =
+        List<Meta> pollutionEnterStatisticsList =
             await convertPollutionEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.pollutionEnterStatisticsKey]);
         //在线监控点统计
-        List<Statistics> onlineMonitorStatisticsList =
+        List<Meta> onlineMonitorStatisticsList =
             await convertOnlineMonitorStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.onlineMonitorStatisticsKey]);
         //代办任务统计
-        List<Statistics> todoTaskStatisticsList =
+        List<Meta> todoTaskStatisticsList =
             await convertTodoTaskStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.todoTaskStatisticsKey]);
         //综合信息统计
-        List<Statistics> comprehensiveStatisticsList =
+        List<Meta> comprehensiveStatisticsList =
             await convertComprehensiveStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.comprehensiveStatisticsKey]);
         //雨水企业统计
-        List<Statistics> rainEnterStatisticsList =
+        List<Meta> rainEnterStatisticsList =
             await convertRainEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.rainEnterStatisticsKey]);
@@ -217,7 +217,7 @@ Future<WaterStatistics> convertSurfaceWater(String key, String string) async {
 }
 
 //格式化污染源企业统计
-Future<List<Statistics>> convertPollutionEnterStatistics(
+Future<List<Meta>> convertPollutionEnterStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -225,66 +225,66 @@ Future<List<Statistics>> convertPollutionEnterStatistics(
     return [];
   }else {
     return [
-      Statistics(
+      Meta(
         title: '企业总数',
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         color: Color.fromRGBO(77, 167, 248, 1),
-        count: strings[1],
+        content: strings[1],
       ),
-      Statistics(
+      Meta(
         title: '重点企业',
         imagePath: 'assets/images/icon_pollution_point_enter.png',
         color: Color.fromRGBO(241, 190, 67, 1),
-        count: strings[2],
+        content: strings[2],
       ),
-      Statistics(
+      Meta(
         title: '在线企业',
         imagePath: 'assets/images/icon_pollution_online_enter.png',
         color: Color.fromRGBO(136, 191, 89, 1),
-        count: strings[3],
+        content: strings[3],
       ),
-      Statistics(
+      Meta(
         title: '废水企业',
         imagePath: 'assets/images/icon_pollution_water_enter.png',
         color: Color.fromRGBO(0, 188, 212, 1),
-        count: strings[4],
+        content: strings[4],
       ),
-      Statistics(
+      Meta(
         title: '废气企业',
         imagePath: 'assets/images/icon_pollution_air_enter.png',
         color: Color.fromRGBO(255, 87, 34, 1),
-        count: strings[5],
+        content: strings[5],
       ),
-      Statistics(
+      Meta(
         title: '水气企业',
         imagePath: 'assets/images/icon_pollution_air_water.png',
         color: Color.fromRGBO(137, 137, 137, 1),
-        count: strings[6],
+        content: strings[6],
       ),
-      Statistics(
+      Meta(
         title: '废水排口',
         imagePath: 'assets/images/icon_pollution_water_outlet.png',
         color: Color.fromRGBO(63, 81, 181, 1),
-        count: strings[7],
+        content: strings[7],
       ),
-      Statistics(
+      Meta(
         title: '废气排口',
         imagePath: 'assets/images/icon_pollution_air_outlet.png',
         color: Color.fromRGBO(233, 30, 99, 1),
-        count: strings[8],
+        content: strings[8],
       ),
-      Statistics(
+      Meta(
         title: '许可证企业',
         imagePath: 'assets/images/icon_pollution_licence_enter.png',
         color: Color.fromRGBO(179, 129, 127, 1),
-        count: strings[9],
+        content: strings[9],
       ),
     ];
   }
 }
 
 //格式化在线监控点概况
-Future<List<Statistics>> convertOnlineMonitorStatistics(
+Future<List<Meta>> convertOnlineMonitorStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -292,48 +292,48 @@ Future<List<Statistics>> convertOnlineMonitorStatistics(
     return [];
   }else {
     return [
-      Statistics(
+      Meta(
         title: '全部',
         imagePath: 'assets/images/icon_monitor_all.png',
         color: Color.fromRGBO(77, 167, 248, 1),
-        count: strings[1],
+        content: strings[1],
       ),
-      Statistics(
+      Meta(
         title: '在线',
         imagePath: 'assets/images/icon_monitor_online.png',
         color: Color.fromRGBO(136, 191, 89, 1),
-        count: strings[2],
+        content: strings[2],
       ),
-      Statistics(
+      Meta(
         title: '预警',
         imagePath: 'assets/images/icon_monitor_alarm.png',
         color: Color.fromRGBO(241, 190, 67, 1),
-        count: strings[3],
+        content: strings[3],
       ),
-      Statistics(
+      Meta(
         title: '超标',
         imagePath: 'assets/images/icon_monitor_over.png',
         color: Color.fromRGBO(233, 119, 111, 1),
-        count: strings[4],
+        content: strings[4],
       ),
-      Statistics(
+      Meta(
         title: '脱机',
         imagePath: 'assets/images/icon_monitor_offline.png',
         color: Color.fromRGBO(179, 129, 127, 1),
-        count: strings[5],
+        content: strings[5],
       ),
-      Statistics(
+      Meta(
         title: '停产',
         imagePath: 'assets/images/icon_monitor_stop.png',
         color: Color.fromRGBO(137, 137, 137, 1),
-        count: strings[6],
+        content: strings[6],
       ),
     ];
   }
 }
 
 //格式化代办任务统计
-Future<List<Statistics>> convertTodoTaskStatistics(
+Future<List<Meta>> convertTodoTaskStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -341,27 +341,27 @@ Future<List<Statistics>> convertTodoTaskStatistics(
     return [];
   }else {
     return [
-      Statistics(
+      Meta(
         title: '报警单待处理',
         imagePath: 'assets/images/button_bg_blue.png',
-        count: strings[1],
+        content: strings[1],
       ),
-      Statistics(
+      Meta(
         title: '排口异常待审核',
         imagePath: 'assets/images/button_bg_green.png',
-        count: strings[2],
+        content: strings[2],
       ),
-      Statistics(
+      Meta(
         title: '因子异常待审核',
         imagePath: 'assets/images/button_bg_pink.png',
-        count: strings[3],
+        content: strings[3],
       ),
     ];
   }
 }
 
 //综合统计信息
-Future<List<Statistics>> convertComprehensiveStatistics(
+Future<List<Meta>> convertComprehensiveStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -369,30 +369,30 @@ Future<List<Statistics>> convertComprehensiveStatistics(
     return [];
   }else {
     return [
-      Statistics(
+      Meta(
         title: '监察执法',
-        color: Color.fromRGBO(77, 167, 248, 1),
         imagePath: 'assets/images/button_image3.png',
-        count: strings[1],
+        backgroundPath: 'assets/images/button_bg_lightblue.png',
+        content: strings[1],
       ),
-      Statistics(
+      Meta(
         title: '项目审批',
-        color: Color.fromRGBO(241, 190, 67, 1),
         imagePath: 'assets/images/button_image2.png',
-        count: strings[2],
+        backgroundPath: 'assets/images/button_bg_green.png',
+        content: strings[2],
       ),
-      Statistics(
+      Meta(
         title: '信访投诉',
-        color: Color.fromRGBO(136, 191, 89, 1),
         imagePath: 'assets/images/button_image1.png',
-        count: strings[3],
+        backgroundPath: 'assets/images/button_bg_pink.png',
+        content: strings[3],
       ),
     ];
   }
 }
 
 //雨水企业统计
-Future<List<Statistics>> convertRainEnterStatistics(
+Future<List<Meta>> convertRainEnterStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -400,23 +400,23 @@ Future<List<Statistics>> convertRainEnterStatistics(
     return [];
   }else {
     return [
-      Statistics(
+      Meta(
         title: '全部企业',
         color: Color.fromRGBO(77, 167, 248, 1),
         imagePath: 'assets/images/icon_pollution_all_enter.png',
-        count: strings[1],
+        content: strings[1],
       ),
-      Statistics(
+      Meta(
         title: '在线企业',
         color: Color.fromRGBO(241, 190, 67, 1),
         imagePath: 'assets/images/icon_pollution_online_enter.png',
-        count: strings[2],
+        content: strings[2],
       ),
-      Statistics(
+      Meta(
         title: '排口总数',
         color: Color.fromRGBO(136, 191, 89, 1),
         imagePath: 'assets/images/icon_pollution_water_outlet.png',
-        count: strings[3],
+        content: strings[3],
       ),
     ];
   }

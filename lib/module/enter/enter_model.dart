@@ -31,7 +31,7 @@ class Enter extends Equatable {
     this.industryType,
     this.labelList,
   }) : super([
-    enterName,
+          enterName,
           address,
           isImportant,
           imagePath,
@@ -56,13 +56,13 @@ class Enter extends Equatable {
   static String _getEnterTypeImage(String enterType) {
     switch (enterType) {
       case 'EnterType1':
-      //废水
+        //废水
         return 'assets/images/icon_water_monitor.png';
       case 'EnterType2':
-      //废气
+        //废气
         return 'assets/images/icon_air_monitor.png';
       default:
-      //未知
+        //未知
         return 'assets/images/icon_unknown_monitor.png';
     }
   }
@@ -93,5 +93,114 @@ class Enter extends Equatable {
               color: Colors.grey);
       }
     }).toList();
+  }
+}
+
+//企业详情
+class EnterDetail extends Equatable {
+  final String contactPerson;
+  final String contactPersonTel;
+  final String legalPerson;
+  final String legalPersonTel;
+  final String attentionLevel;
+  final String area;
+  final String industryType;
+  final String creditCode;
+  final String orderComplete;
+  final String orderAll;
+  final String monitorReportValid;
+  final String monitorReportAll;
+  final String factorReportValid;
+  final String factorReportAll;
+  final String monitorAll;
+  final String monitorOnline;
+  final String monitorAlarm;
+  final String monitorOver;
+  final String monitorOffline;
+  final String monitorStop;
+  final String licenseNumber;
+  final String buildProject;
+  final String sceneLaw;
+  final String environmentVisit;
+
+  EnterDetail({
+    this.contactPerson,
+    this.contactPersonTel,
+    this.legalPerson,
+    this.legalPersonTel,
+    this.attentionLevel,
+    this.area,
+    this.industryType,
+    this.creditCode,
+    this.orderComplete,
+    this.orderAll,
+    this.monitorReportValid,
+    this.monitorReportAll,
+    this.factorReportValid,
+    this.factorReportAll,
+    this.monitorAll,
+    this.monitorOnline,
+    this.monitorAlarm,
+    this.monitorOver,
+    this.monitorOffline,
+    this.monitorStop,
+    this.licenseNumber,
+    this.buildProject,
+    this.sceneLaw,
+    this.environmentVisit,
+  }) : super([
+          contactPerson,
+          contactPersonTel,
+          legalPerson,
+          legalPersonTel,
+          attentionLevel,
+          area,
+          industryType,
+          creditCode,
+          orderComplete,
+          orderAll,
+          monitorReportValid,
+          monitorReportAll,
+          factorReportValid,
+          factorReportAll,
+          monitorAll,
+          monitorOnline,
+          monitorAlarm,
+          monitorOver,
+          monitorOffline,
+          monitorStop,
+          licenseNumber,
+          buildProject,
+          sceneLaw,
+          environmentVisit,
+        ]);
+
+  static EnterDetail fromJson(dynamic json) {
+    return EnterDetail(
+      contactPerson:'张三',
+      contactPersonTel:'15879085164',
+      legalPerson:'李四',
+      legalPersonTel:'15879085164',
+      attentionLevel:'重点源',
+      area:'赣州市章贡区',
+      industryType:'稀有稀土金属冶炼、常用有色金属冶炼',
+      creditCode:'G2125FD1GF51D5F5FSD545G2125FD',
+      orderComplete:'256',
+      orderAll:'1452',
+      monitorReportValid:'15',
+      monitorReportAll:'42',
+      factorReportValid:'5',
+      factorReportAll:'85',
+      monitorAll:'50',
+      monitorOnline:'21',
+      monitorAlarm:'25',
+      monitorOver:'14',
+      monitorOffline:'4',
+      monitorStop:'1',
+      licenseNumber:'546DSAFKSJDHKJHF546545DFHAJKH',
+      buildProject:'24',
+      sceneLaw:'1',
+      environmentVisit:'13',
+    );
   }
 }
