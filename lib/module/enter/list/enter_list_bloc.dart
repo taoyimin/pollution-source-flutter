@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
-import 'enter_list.dart';
+import 'package:pollution_source/module/enter/list/enter_list.dart';
 import 'package:pollution_source/util/constant.dart';
 
 class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
@@ -13,6 +13,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
   Stream<EnterListState> mapEventToState(EnterListEvent event) async* {
     try {
       if (event is EnterListLoad) {
+        //加载企业列表
         if (!event.isRefresh && currentState is EnterListLoaded) {
           //加载更多
           final enterList = await getEnterList(

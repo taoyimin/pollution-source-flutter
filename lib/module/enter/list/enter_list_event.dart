@@ -34,6 +34,9 @@ class EnterListLoad extends EnterListEvent {
           isRefresh,
           enterName,
           areaCode,
+          state,
+          attentionLevel,
+          enterType,
         ]);
 
   @override
