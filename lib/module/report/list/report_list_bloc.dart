@@ -2,57 +2,57 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
-import 'order_list.dart';
+import 'package:pollution_source/module/report/list/report_list.dart';
 import 'package:pollution_source/util/constant.dart';
 
-class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
+class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
   @override
-  OrderListState get initialState => OrderListLoading();
+  ReportListState get initialState => ReportListLoading();
 
   @override
-  Stream<OrderListState> mapEventToState(OrderListEvent event) async* {
+  Stream<ReportListState> mapEventToState(ReportListEvent event) async* {
     try {
-      if (event is OrderListLoad) {
-        if (!event.isRefresh && currentState is OrderListLoaded) {
+      if (event is ReportListLoad) {
+        if (!event.isRefresh && currentState is ReportListLoaded) {
           //加载更多
-          final orderList = await getOrderList(
-            currentPage: (currentState as OrderListLoaded).currentPage + 1,
+          final reportList = await getReportList(
+            currentPage: (currentState as ReportListLoaded).currentPage + 1,
             enterName: event.enterName,
             areaCode: event.areaCode,
             state: event.state,
           );
-          yield OrderListLoaded(
-            orderList: (currentState as OrderListLoaded).orderList + orderList,
-            currentPage: (currentState as OrderListLoaded).currentPage + 1,
+          yield ReportListLoaded(
+            reportList: (currentState as ReportListLoaded).reportList + reportList,
+            currentPage: (currentState as ReportListLoaded).currentPage + 1,
             hasNextPage:
-                (currentState as OrderListLoaded).pageSize == orderList.length,
+                (currentState as ReportListLoaded).pageSize == reportList.length,
           );
         } else {
           //首次加载或刷新
-          final orderList = await getOrderList(
+          final reportList = await getReportList(
             enterName: event.enterName,
             areaCode: event.areaCode,
             state: event.state,
           );
-          if (orderList.length == 0) {
+          if (reportList.length == 0) {
             //没有数据
-            yield OrderListEmpty();
+            yield ReportListEmpty();
           } else {
-            yield OrderListLoaded(
-              orderList: orderList,
-              hasNextPage: Constant.defaultPageSize == orderList.length,
+            yield ReportListLoaded(
+              reportList: reportList,
+              hasNextPage: Constant.defaultPageSize == reportList.length,
             );
           }
         }
       }
     } catch (e) {
-      yield OrderListError(
+      yield ReportListError(
           errorMessage: ExceptionHandle.handleException(e).msg);
     }
   }
 
-  //获取报警管理单列表数据
-  Future<List<Order>> getOrderList({
+  //获取异常申报单列表数据
+  Future<List<Report>> getReportList({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
@@ -61,7 +61,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   }) async {
     Response response = await DioUtils.instance
         .getDio()
-        .get(HttpApi.orderList, queryParameters: {
+        .get(HttpApi.reportList, queryParameters: {
       'currentPage': currentPage,
       'pageSize': pageSize,
       'enterpriseName': enterName,
@@ -71,17 +71,17 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     if (response.statusCode == ExceptionHandle.success &&
         response.data[Constant.responseCodeKey] ==
             ExceptionHandle.success_code) {
-      return convertOrderList(
+      return convertReportList(
           response.data[Constant.responseDataKey][Constant.responseListKey]);
     } else {
       throw Exception('${response.data[Constant.responseMessageKey]}');
     }
   }
 
-  //格式化报警管理单数据
-  List<Order> convertOrderList(List<dynamic> jsonArray) {
+  //格式化异常申报单数据
+  List<Report> convertReportList(List<dynamic> jsonArray) {
     return jsonArray.map((json) {
-      return Order.fromJson(json);
+      return Report.fromJson(json);
     }).toList();
   }
 }

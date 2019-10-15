@@ -2,83 +2,71 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/module/enter/enter_detail_page.dart';
+import 'package:pollution_source/module/order/detail/order_detail_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/widget/label_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
-import 'enter_list.dart';
+import 'package:pollution_source/module/report/list/report_list.dart';
 
-class EnterListPage extends StatefulWidget {
+class ReportListPage extends StatefulWidget {
   final String state;
-  final String enterType;
-  final String attentionLevel;
 
-  EnterListPage({
-    this.state = '',
-    this.enterType = '',
-    this.attentionLevel = '',
-  });
+  ReportListPage({this.state = ''});
 
   @override
-  _EnterListPageState createState() => _EnterListPageState();
+  _ReportListPageState createState() => _ReportListPageState();
 }
 
-class _EnterListPageState extends State<EnterListPage>
+class _ReportListPageState extends State<ReportListPage>
     with TickerProviderStateMixin {
   ScrollController _scrollController;
-  EnterListBloc _enterListBloc;
+  ReportListBloc _reportListBloc;
   EasyRefreshController _refreshController;
   TextEditingController _editController;
   Completer<void> _refreshCompleter;
-
   String areaCode = '';
 
   @override
   void initState() {
     super.initState();
-    _enterListBloc = BlocProvider.of<EnterListBloc>(context);
+    _reportListBloc = BlocProvider.of<ReportListBloc>(context);
     _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _enterListBloc.dispatch(EnterListLoad(
-      state: widget.state,
-      enterType: widget.enterType,
-      attentionLevel: widget.attentionLevel,
-    ));
+    _reportListBloc.dispatch(ReportListLoad(state: widget.state));
   }
 
   @override
   void dispose() {
     super.dispose();
-    _refreshController.dispose();
     _scrollController.dispose();
+    _refreshController.dispose();
     _editController.dispose();
   }
 
-  Widget _getPageLoadedList(List<Enter> enterList) {
+  Widget _getPageLoadedList(List<Report> reportList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                Navigator.push(
+                /*Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return EnterDetailPage();
+                      return OrderDetailPage(orderId: '100',);
                     },
                   ),
-                );
+                );*/
               },
               children: <Widget>[
                 Container(
@@ -89,62 +77,73 @@ class _EnterListPageState extends State<EnterListPage>
                       getBoxShadow(),
                     ],
                   ),
-                  child: Row(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(3),
-                        child: Image.asset(
-                          enterList[index].imagePath,
-                          width: 40,
-                          height: 40,
+                      Text(
+                        reportList[index].enterName,
+                        style: TextStyle(
+                          fontSize: 15,
                         ),
                       ),
-                      Gaps.hGap10,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Text(
-                                '${enterList[index].enterName}',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            Gaps.vGap6,
-                            LabelWrapWidget(
-                                labelList: enterList[index].labelList),
-                            enterList[index].labelList.length == 0
-                                ? Gaps.empty
-                                : Gaps.vGap6,
-                            ListTileWidget('地址：${enterList[index].address}'),
-                            Gaps.vGap6,
-                            ListTileWidget(
-                                '行业类别：${enterList[index].industryType}'),
-                          ],
-                        ),
-                      )
+                      Gaps.vGap6,
+                      LabelWrapWidget(
+                              labelList: reportList[index].labelList),
+                      reportList[index].labelList.length == 0
+                          ? Gaps.empty
+                          :Gaps.vGap6,
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '监控点名称：${reportList[index].outletName}'),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child:
+                                ListTileWidget('区域：${reportList[index].area}'),
+                          ),
+                        ],
+                      ),
+                      Gaps.vGap6,
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '异常类型：${reportList[index].abnormalType}'),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '申报时间：${reportList[index].reportTime}'),
+                          ),
+                        ],
+                      ),
+                      Gaps.vGap6,
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '开始时间：${reportList[index].startTime}'),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '结束时间：${reportList[index].endTime}'),
+                          ),
+                        ],
+                      ),
                     ],
-                  ),
-                ),
-                Offstage(
-                  offstage: !enterList[index].isImportant,
-                  child: LabelView(
-                    Size.fromHeight(80),
-                    labelText: "重点",
-                    labelColor: Theme.of(context).primaryColor,
-                    labelAlignment: LabelAlignment.rightTop,
                   ),
                 ),
               ],
             ),
           );
         },
-        childCount: enterList.length,
+        childCount: reportList.length,
       ),
     );
   }
@@ -160,11 +159,11 @@ class _EnterListPageState extends State<EnterListPage>
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
             ListHeaderWidget(
-              title: '企业列表',
-              subtitle: '展示污染源企业列表，点击列表项查看该企业的详细信息',
-              background: 'assets/images/button_bg_lightblue.png',
-              image: 'assets/images/enter_list_bg_image.png',
-              color: Colors.blue,
+              title: '异常申报单列表',
+              subtitle: '展示异常申报单列表，点击列表项查看该异常申报单的详细信息',
+              background: 'assets/images/button_bg_pink.png',
+              image: 'assets/images/report_list_bg_image.png',
+              color: Colors.pink,
               showSearch: true,
               editController: _editController,
               scrollController: _scrollController,
@@ -176,6 +175,7 @@ class _EnterListPageState extends State<EnterListPage>
                 itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
                   selectView(Icons.message, '发起群聊', 'A'),
                   selectView(Icons.group_add, '添加服务', 'B'),
+                  selectView(Icons.cast_connected, '扫一扫码', 'C'),
                 ],
                 onSelected: (String action) {
                   // 点击选项的时候
@@ -183,6 +183,8 @@ class _EnterListPageState extends State<EnterListPage>
                     case 'A':
                       break;
                     case 'B':
+                      break;
+                    case 'C':
                       break;
                   }
                 },
@@ -197,24 +199,24 @@ class _EnterListPageState extends State<EnterListPage>
             header: getRefreshClassicalHeader(),
             footer: getLoadClassicalFooter(),
             slivers: <Widget>[
-              BlocListener<EnterListBloc, EnterListState>(
+              BlocListener<ReportListBloc, ReportListState>(
                 listener: (context, state) {
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
-                child: BlocBuilder<EnterListBloc, EnterListState>(
+                child: BlocBuilder<ReportListBloc, ReportListState>(
                   builder: (context, state) {
-                    if (state is EnterListLoading) {
+                    if (state is ReportListLoading) {
                       return PageLoadingWidget();
-                    } else if (state is EnterListEmpty) {
+                    } else if (state is ReportListEmpty) {
                       return PageEmptyWidget();
-                    } else if (state is EnterListError) {
+                    } else if (state is ReportListError) {
                       return PageErrorWidget(errorMessage: state.errorMessage);
-                    } else if (state is EnterListLoaded) {
+                    } else if (state is ReportListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _getPageLoadedList(state.enterList);
+                      return _getPageLoadedList(state.reportList);
                     } else {
                       return SliverFillRemaining();
                     }
@@ -223,23 +225,21 @@ class _EnterListPageState extends State<EnterListPage>
               ),
             ],
             onRefresh: () async {
-              _enterListBloc.dispatch(EnterListLoad(
+              //刷新事件
+              _reportListBloc.dispatch(ReportListLoad(
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
                 state: widget.state,
-                enterType: widget.enterType,
-                attentionLevel: widget.attentionLevel,
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
-              _enterListBloc.dispatch(EnterListLoad(
+              //加载事件
+              _reportListBloc.dispatch(ReportListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
                 state: widget.state,
-                enterType: widget.enterType,
-                attentionLevel: widget.attentionLevel,
               ));
               return _refreshCompleter.future;
             },

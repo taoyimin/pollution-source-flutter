@@ -43,7 +43,7 @@ class Enter extends Equatable {
     return Enter(
       enterName: json['enterprise_name'],
       address: json['ent_address'],
-      isImportant: true,
+      isImportant: json['attention_level'] == '1' ? true : false,
       imagePath: _getEnterTypeImage(json['enterprise_type']),
       industryType: json['industryTypeStr'],
       labelList: TextUtil.isEmpty(json['enterprise_type_str'])
