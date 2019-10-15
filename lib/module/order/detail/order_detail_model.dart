@@ -5,6 +5,8 @@ import 'package:pollution_source/module/common/common_model.dart';
 
 //报警管理单
 class OrderDetail extends Equatable {
+  final String enterName;
+  final String enterAddress;
   final String area;
   final String monitorName;
   final String alarmTime;
@@ -16,6 +18,8 @@ class OrderDetail extends Equatable {
   final List<DealStep> stepList;
 
   OrderDetail({
+    this.enterName,
+    this.enterAddress,
     this.area,
     this.monitorName,
     this.alarmTime,
@@ -26,6 +30,8 @@ class OrderDetail extends Equatable {
     this.contactPersonTel,
     this.stepList,
   }) : super([
+          enterName,
+          enterAddress,
           area,
           monitorName,
           alarmTime,
@@ -39,6 +45,8 @@ class OrderDetail extends Equatable {
 
   static OrderDetail fromJson(dynamic json) {
     return OrderDetail(
+      enterName: '深圳市腾讯计算机系统有限公司',
+      enterAddress: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼',
       area: '南昌市',
       monitorName: '废气排放口',
       alarmTime: '10月25日',

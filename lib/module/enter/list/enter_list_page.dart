@@ -121,7 +121,7 @@ class _EnterListPageState extends State<EnterListPage>
                             enterList[index].labelList.length == 0
                                 ? Gaps.empty
                                 : Gaps.vGap6,
-                            ListTileWidget('地址：${enterList[index].address}'),
+                            ListTileWidget('地址：${enterList[index].enterAddress}'),
                             Gaps.vGap6,
                             ListTileWidget(
                                 '行业类别：${enterList[index].industryType}'),

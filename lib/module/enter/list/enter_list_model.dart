@@ -9,7 +9,7 @@ class Enter extends Equatable {
   final String enterName;
 
   //企业地址
-  final String address;
+  final String enterAddress;
 
   //是否是重点企业
   final bool isImportant;
@@ -25,14 +25,14 @@ class Enter extends Equatable {
 
   Enter({
     this.enterName,
-    this.address,
+    this.enterAddress,
     this.isImportant,
     this.imagePath,
     this.industryType,
     this.labelList,
   }) : super([
           enterName,
-          address,
+          enterAddress,
           isImportant,
           imagePath,
           industryType,
@@ -42,7 +42,7 @@ class Enter extends Equatable {
   static Enter fromJson(dynamic json) {
     return Enter(
       enterName: json['enterprise_name'],
-      address: json['ent_address'],
+      enterAddress: json['ent_address'],
       isImportant: json['attention_level'] == '1' ? true : false,
       imagePath: _getEnterTypeImage(json['enterprise_type']),
       industryType: json['industryTypeStr'],

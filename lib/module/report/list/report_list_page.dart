@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/order/detail/order_detail_page.dart';
+import 'package:pollution_source/module/report/detail/report_detail_bloc.dart';
+import 'package:pollution_source/module/report/detail/report_detail_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
@@ -59,14 +61,19 @@ class _ReportListPageState extends State<ReportListPage>
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return OrderDetailPage(orderId: '100',);
+                      return BlocProvider(
+                        builder: (context) => ReportDetailBloc(),
+                        child: ReportDetailPage(
+                          reportId: '110',
+                        ),
+                      );
                     },
                   ),
-                );*/
+                );
               },
               children: <Widget>[
                 Container(
@@ -82,16 +89,15 @@ class _ReportListPageState extends State<ReportListPage>
                     children: <Widget>[
                       Text(
                         reportList[index].enterName,
-                        style: TextStyle(
+                        style:const TextStyle(
                           fontSize: 15,
                         ),
                       ),
                       Gaps.vGap6,
-                      LabelWrapWidget(
-                              labelList: reportList[index].labelList),
+                      LabelWrapWidget(labelList: reportList[index].labelList),
                       reportList[index].labelList.length == 0
                           ? Gaps.empty
-                          :Gaps.vGap6,
+                          : Gaps.vGap6,
                       Row(
                         children: <Widget>[
                           Expanded(

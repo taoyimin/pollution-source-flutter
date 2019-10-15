@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -24,7 +25,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   @override
   void initState() {
     super.initState();
-    _orderDetailBloc = _orderDetailBloc = BlocProvider.of<OrderDetailBloc>(context);
+    _orderDetailBloc =
+        _orderDetailBloc = BlocProvider.of<OrderDetailBloc>(context);
     _orderDetailBloc.dispatch(OrderDetailLoad(orderId: widget.orderId));
   }
 
@@ -36,51 +38,28 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   //用来显示SnackBar
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<Widget> _getAttachmentWidgets(List<Attachment> attachmentList) {
-    return attachmentList.map((attachment) {
-      return InkWell(
-        onTap: () {},
-        child: Container(
-          height: 40,
-          padding: EdgeInsets.symmetric(vertical: 3),
-          child: Row(
-            children: <Widget>[
-              Image.asset(
-                attachment.imagePath,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    attachment.fileName,
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    attachment.size,
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          DetailHeaderWidget(
-            title: '督办单详情',
-            subTitle1: '深圳市腾讯计算机系统有限公司',
-            subTitle2: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼',
-            imagePath: 'assets/images/task_detail_bg_image.svg',
-            backgroundPath: 'assets/images/button_bg_green.png',
+          BlocBuilder<OrderDetailBloc, OrderDetailState>(
+            builder: (context, state) {
+              String enterName = '';
+              String enterAddress = '';
+              if (state is OrderDetailLoaded) {
+                enterName = state.orderDetail.enterName;
+                enterAddress = state.orderDetail.enterAddress;
+              }
+              return DetailHeaderWidget(
+                title: '督办单详情',
+                subTitle1: enterName,
+                subTitle2: enterAddress,
+                imagePath: 'assets/images/task_detail_bg_image.svg',
+                backgroundPath: 'assets/images/button_bg_green.png',
+              );
+            },
           ),
           BlocBuilder<OrderDetailBloc, OrderDetailState>(
             builder: (context, state) {
@@ -106,7 +85,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           children: <Widget>[
                             ImageTitleWidget(
                               title: '基本信息',
-                              imagePath: 'assets/images/icon_enter_baseinfo.png',
+                              imagePath:
+                                  'assets/images/icon_enter_baseinfo.png',
                             ),
                             Gaps.vGap10,
                             Row(
@@ -160,8 +140,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               children: <Widget>[
                                 IconBaseInfoWidget(
                                   title: '报警描述',
-                                  content:
-                                  '${state.orderDetail.alarmRemark}',
+                                  content: '${state.orderDetail.alarmRemark}',
                                   icon: Icons.receipt,
                                   contentTextAlign: TextAlign.left,
                                 ),
@@ -170,22 +149,30 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           ],
                         ),
                       ),
-                      //联系人
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                              title: '企业联系人',
-                              imagePath: 'assets/images/icon_enter_contacts.png',
-                            ),
-                            Gaps.vGap10,
-                            ContactsWidget(
-                              contactsName: '${state.orderDetail.contactPerson}',
-                              contactsTel: '${state.orderDetail.contactPersonTel}',
-                            ),
-                          ],
+                      //联系人 没有联系人则隐藏
+                      Offstage(
+                        offstage: TextUtil.isEmpty(
+                            state.orderDetail.contactPersonTel),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              ImageTitleWidget(
+                                title: '企业联系人',
+                                imagePath:
+                                    'assets/images/icon_enter_contacts.png',
+                              ),
+                              Gaps.vGap10,
+                              ContactsWidget(
+                                contactsName:
+                                    '${state.orderDetail.contactPerson}',
+                                contactsTel:
+                                    '${state.orderDetail.contactPersonTel}',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       //快速链接
@@ -206,7 +193,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             Container(
                               height: 150,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Expanded(
                                     flex: 1,
@@ -221,8 +209,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       ),
                                       child: Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                            MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
                                             "监控数据",
@@ -278,7 +267,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                 flex: 3,
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
                                                       "企业信息",
@@ -326,7 +315,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                 flex: 3,
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
                                                       "监控点列表",
@@ -365,7 +354,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       ),
                       //处理流程
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -391,7 +381,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               if (state is OrderDetailLoaded) {
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
@@ -405,22 +395,28 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                   height: 42,
                                   child: LeftLineWidget(
                                       index != 0,
-                                      index != state.orderDetail.stepList.length - 1,
-                                      index == state.orderDetail.stepList.length - 1),
+                                      index !=
+                                          state.orderDetail.stepList.length - 1,
+                                      index ==
+                                          state.orderDetail.stepList.length -
+                                              1),
                                 ),
                                 Expanded(
                                   child: Container(
                                     padding: EdgeInsets.only(top: 4),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          state.orderDetail.stepList[index].dealType,
+                                          state.orderDetail.stepList[index]
+                                              .dealType,
                                           style: TextStyle(fontSize: 15),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                          state.orderDetail.stepList[index].dealTime,
+                                          state.orderDetail.stepList[index]
+                                              .dealTime,
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Colours.secondary_text),
@@ -437,7 +433,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 border: Border(
                                   left: BorderSide(
                                     width: 2,
-                                    color: index == state.orderDetail.stepList.length - 1
+                                    color: index ==
+                                            state.orderDetail.stepList.length -
+                                                1
                                         ? Colors.transparent
                                         : Colours.divider_color,
                                   ),
@@ -456,13 +454,20 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     "操作描述：${state.orderDetail.stepList[index].dealRemark}；",
                                     style: TextStyle(fontSize: 12),
                                   ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
+                                  Gaps.vGap3,
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: _getAttachmentWidgets(
-                                        state.orderDetail.stepList[index].attachmentList),
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: () {
+                                      return state.orderDetail.stepList[index]
+                                          .attachmentList
+                                          .map((attachment) {
+                                        return AttachmentWidget(
+                                          attachment: attachment,
+                                          onTap: () {},
+                                        );
+                                      }).toList();
+                                    }(),
                                   ),
                                 ],
                               ),

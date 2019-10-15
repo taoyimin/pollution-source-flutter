@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -44,12 +45,22 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
       key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          DetailHeaderWidget(
-            title: '企业详情',
-            subTitle1: '深圳市腾讯计算机系统有限公司',
-            subTitle2: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼',
-            imagePath: 'assets/images/enter_detail_bg_image.svg',
-            backgroundPath: 'assets/images/button_bg_lightblue.png',
+          BlocBuilder<EnterDetailBloc, EnterDetailState>(
+            builder: (context, state) {
+              String enterName = '';
+              String enterAddress = '';
+              if (state is EnterDetailLoaded) {
+                enterName = state.enterDetail.enterName;
+                enterAddress = state.enterDetail.enterAddress;
+              }
+              return DetailHeaderWidget(
+                title: '企业详情',
+                subTitle1: enterName,
+                subTitle2: enterAddress,
+                imagePath: 'assets/images/enter_detail_bg_image.svg',
+                backgroundPath: 'assets/images/button_bg_lightblue.png',
+              );
+            },
           ),
           BlocBuilder<EnterDetailBloc, EnterDetailState>(
             builder: (context, state) {
@@ -82,55 +93,18 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                             Row(
                               children: <Widget>[
                                 IconBaseInfoWidget(
-                                  title: '联系人',
-                                  content: '${state.enterDetail.contactPerson}',
-                                  icon: Icons.person,
-                                  flex: 2,
-                                ),
-                                Gaps.hGap20,
-                                IconBaseInfoWidget(
-                                  title: '联系电话',
-                                  content: '${state.enterDetail.contactPersonTel}',
-                                  icon: Icons.phone,
-                                  flex: 3,
-                                  isTel: true,
-                                ),
-                              ],
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                IconBaseInfoWidget(
-                                  title: '法人姓名',
-                                  content: '${state.enterDetail.legalPerson}',
-                                  icon: Icons.person,
-                                  flex: 2,
-                                ),
-                                Gaps.hGap20,
-                                IconBaseInfoWidget(
-                                  title: '法人电话',
-                                  content: '${state.enterDetail.legalPersonTel}',
-                                  icon: Icons.phone,
-                                  flex: 3,
-                                  isTel: true,
-                                ),
-                              ],
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                IconBaseInfoWidget(
                                   title: '关注程度',
-                                  content: '${state.enterDetail.attentionLevel}',
+                                  content:
+                                      '${state.enterDetail.attentionLevel}',
                                   icon: Icons.star,
-                                  flex: 2,
+                                  flex: 4,
                                 ),
                                 Gaps.hGap20,
                                 IconBaseInfoWidget(
                                   title: '所属区域',
                                   content: '${state.enterDetail.area}',
                                   icon: Icons.location_on,
-                                  flex: 3,
+                                  flex: 5,
                                 ),
                               ],
                             ),
@@ -159,6 +133,48 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                           ],
                         ),
                       ),
+                      //联系人 没有联系人则隐藏
+                      Offstage(
+                        offstage: TextUtil.isEmpty(
+                                state.enterDetail.contactPersonTel) &&
+                            TextUtil.isEmpty(state.enterDetail.legalPersonTel),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              ImageTitleWidget(
+                                title: '企业联系人',
+                                imagePath:
+                                    'assets/images/icon_enter_contacts.png',
+                              ),
+                              Gaps.vGap10,
+                              Offstage(
+                                offstage: TextUtil.isEmpty(
+                                    state.enterDetail.contactPersonTel),
+                                child: ContactsWidget(
+                                  contactsName:
+                                      '${state.enterDetail.contactPerson}',
+                                  contactsTel:
+                                      '${state.enterDetail.contactPersonTel}',
+                                ),
+                              ),
+                              Gaps.vGap10,
+                              Offstage(
+                                offstage: TextUtil.isEmpty(
+                                    state.enterDetail.legalPersonTel),
+                                child: ContactsWidget(
+                                  contactsName:
+                                      '${state.enterDetail.legalPerson}(法人)',
+                                  contactsTel:
+                                      '${state.enterDetail.legalPersonTel}',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       //报警管理单
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -181,7 +197,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   meta: Meta(
                                     color: Color(0xFF45C4FF),
                                     title: '已办结',
-                                    content: '${state.enterDetail.orderComplete}',
+                                    content:
+                                        '${state.enterDetail.orderComplete}',
                                     imagePath:
                                         'assets/images/icon_alarm_manage_complete.png',
                                   ),
@@ -225,7 +242,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   onTap: () {},
                                   meta: Meta(
                                     title: '排口异常申报有效数',
-                                    content: '${state.enterDetail.monitorReportValid}',
+                                    content:
+                                        '${state.enterDetail.monitorReportValid}',
                                     imagePath:
                                         'assets/images/button_image2.png',
                                     backgroundPath:
@@ -241,7 +259,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   onTap: () {},
                                   meta: Meta(
                                     title: '排口异常申报总数',
-                                    content: '${state.enterDetail.monitorReportAll}',
+                                    content:
+                                        '${state.enterDetail.monitorReportAll}',
                                     imagePath:
                                         'assets/images/button_image1.png',
                                     backgroundPath:
@@ -261,7 +280,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   onTap: () {},
                                   meta: Meta(
                                     title: '因子异常申报有效数',
-                                    content: '${state.enterDetail.factorReportValid}',
+                                    content:
+                                        '${state.enterDetail.factorReportValid}',
                                     imagePath:
                                         'assets/images/button_image3.png',
                                     backgroundPath:
@@ -277,7 +297,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   onTap: () {},
                                   meta: Meta(
                                     title: '因子异常申报总数',
-                                    content: '${state.enterDetail.factorReportAll}',
+                                    content:
+                                        '${state.enterDetail.factorReportAll}',
                                     imagePath:
                                         'assets/images/button_image4.png',
                                     backgroundPath:
@@ -316,9 +337,12 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                       InkWellButton1(
                                         meta: Meta(
                                           title: '全部',
-                                          imagePath: 'assets/images/icon_monitor_all.png',
-                                          color: Color.fromRGBO(77, 167, 248, 1),
-                                          content: '${state.enterDetail.monitorAll}',
+                                          imagePath:
+                                              'assets/images/icon_monitor_all.png',
+                                          color:
+                                              Color.fromRGBO(77, 167, 248, 1),
+                                          content:
+                                              '${state.enterDetail.monitorAll}',
                                         ),
                                         onTap: () {
                                           Navigator.push(
@@ -339,9 +363,12 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                       InkWellButton1(
                                         meta: Meta(
                                           title: '在线',
-                                          imagePath: 'assets/images/icon_monitor_online.png',
-                                          color: Color.fromRGBO(136, 191, 89, 1),
-                                          content: '${state.enterDetail.monitorOnline}',
+                                          imagePath:
+                                              'assets/images/icon_monitor_online.png',
+                                          color:
+                                              Color.fromRGBO(136, 191, 89, 1),
+                                          content:
+                                              '${state.enterDetail.monitorOnline}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -350,9 +377,12 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                       InkWellButton1(
                                         meta: Meta(
                                           title: '预警',
-                                          imagePath: 'assets/images/icon_monitor_alarm.png',
-                                          color: Color.fromRGBO(241, 190, 67, 1),
-                                          content: '${state.enterDetail.monitorAlarm}',
+                                          imagePath:
+                                              'assets/images/icon_monitor_alarm.png',
+                                          color:
+                                              Color.fromRGBO(241, 190, 67, 1),
+                                          content:
+                                              '${state.enterDetail.monitorAlarm}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -364,20 +394,26 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                       InkWellButton1(
                                         meta: Meta(
                                           title: '超标',
-                                          imagePath: 'assets/images/icon_monitor_over.png',
-                                          color: Color.fromRGBO(233, 119, 111, 1),
-                                          content: '${state.enterDetail.monitorOver}',
+                                          imagePath:
+                                              'assets/images/icon_monitor_over.png',
+                                          color:
+                                              Color.fromRGBO(233, 119, 111, 1),
+                                          content:
+                                              '${state.enterDetail.monitorOver}',
                                         ),
                                         onTap: () {},
                                       ),
                                       VerticalDividerWidget(height: 30),
                                       //脱机
                                       InkWellButton1(
-                                        meta:  Meta(
+                                        meta: Meta(
                                           title: '脱机',
-                                          imagePath: 'assets/images/icon_monitor_offline.png',
-                                          color: Color.fromRGBO(179, 129, 127, 1),
-                                          content: '${state.enterDetail.monitorOffline}',
+                                          imagePath:
+                                              'assets/images/icon_monitor_offline.png',
+                                          color:
+                                              Color.fromRGBO(179, 129, 127, 1),
+                                          content:
+                                              '${state.enterDetail.monitorOffline}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -386,9 +422,12 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                       InkWellButton1(
                                         meta: Meta(
                                           title: '停产',
-                                          imagePath: 'assets/images/icon_monitor_stop.png',
-                                          color: Color.fromRGBO(137, 137, 137, 1),
-                                          content: '${state.enterDetail.monitorStop}',
+                                          imagePath:
+                                              'assets/images/icon_monitor_stop.png',
+                                          color:
+                                              Color.fromRGBO(137, 137, 137, 1),
+                                          content:
+                                              '${state.enterDetail.monitorStop}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -446,7 +485,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                 InkWellButton3(
                                   meta: Meta(
                                     title: "建设项目",
-                                    content: '${state.enterDetail.buildProject}',
+                                    content:
+                                        '${state.enterDetail.buildProject}',
                                     backgroundPath:
                                         "assets/images/button_bg_lightblue.png",
                                     imagePath:
@@ -472,7 +512,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                 InkWellButton3(
                                   meta: Meta(
                                     title: '环境信访',
-                                    content: '${state.enterDetail.environmentVisit}',
+                                    content:
+                                        '${state.enterDetail.environmentVisit}',
                                     backgroundPath:
                                         "assets/images/button_bg_yellow.png",
                                     imagePath:
