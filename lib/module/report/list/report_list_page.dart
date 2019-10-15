@@ -108,7 +108,7 @@ class _ReportListPageState extends State<ReportListPage>
                           Expanded(
                             flex: 1,
                             child:
-                                ListTileWidget('区域：${reportList[index].area}'),
+                                ListTileWidget('区域：${reportList[index].areaName}'),
                           ),
                         ],
                       ),

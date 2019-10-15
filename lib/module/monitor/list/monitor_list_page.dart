@@ -2,14 +2,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/ui_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
+import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
+
+import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'monitor_list.dart';
+import 'package:pollution_source/module/monitor/list/monitor_list.dart';
 
 class MonitorListPage extends StatefulWidget {
   final String monitorType;
@@ -57,7 +59,21 @@ class _MonitorListPageState extends State<MonitorListPage>
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => MonitorDetailBloc(),
+                        child: MonitorDetailPage(
+                          monitorId: '110',
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
               children: <Widget>[
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -94,6 +110,10 @@ class _MonitorListPageState extends State<MonitorListPage>
                               ),
                             ),
                             Gaps.vGap6,
+                            LabelWrapWidget(labelList: monitorList[index].labelList),
+                            monitorList[index].labelList.length == 0
+                                ? Gaps.empty
+                                : Gaps.vGap6,
                             Row(
                               children: <Widget>[
                                 Expanded(
@@ -104,13 +124,13 @@ class _MonitorListPageState extends State<MonitorListPage>
                                 Expanded(
                                   flex: 4,
                                   child: ListTileWidget(
-                                      '区域：${monitorList[index].area}'),
+                                      '区域：${monitorList[index].areaName}'),
                                 ),
                               ],
                             ),
                             Gaps.vGap6,
                             ListTileWidget(
-                                '监控点地址：${monitorList[index].address}'),
+                                '监控点地址：${monitorList[index].monitorAddress}'),
                           ],
                         ),
                       )

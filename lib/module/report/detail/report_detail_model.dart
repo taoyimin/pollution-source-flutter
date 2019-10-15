@@ -7,7 +7,7 @@ class ReportDetail extends Equatable {
   final String enterAddress;
   final String outletName;
   final String monitorName;
-  final String area;
+  final String areaName;
   final String reportTime;
   final String startTime;
   final String endTime;
@@ -20,27 +20,27 @@ class ReportDetail extends Equatable {
   final List<Attachment> attachmentList;
 
   ReportDetail({
-    this.enterName,
-    this.enterAddress,
-    this.outletName,
-    this.monitorName,
-    this.area,
-    this.reportTime,
-    this.startTime,
-    this.endTime,
-    this.abnormalFactor,
-    this.abnormalType,
-    this.contactPerson,
-    this.contactPersonTel,
-    this.reportReason,
-    this.reviewOpinion,
+    this.enterName = '',
+    this.enterAddress = '',
+    this.outletName = '',
+    this.monitorName = '',
+    this.areaName = '',
+    this.reportTime = '',
+    this.startTime = '',
+    this.endTime = '',
+    this.abnormalFactor = '',
+    this.abnormalType = '',
+    this.contactPerson = '',
+    this.contactPersonTel = '',
+    this.reportReason = '',
+    this.reviewOpinion = '',
     this.attachmentList,
   }) : super([
           enterName,
           enterAddress,
           outletName,
           monitorName,
-          area,
+          areaName,
           reportTime,
           startTime,
           endTime,
@@ -59,7 +59,7 @@ class ReportDetail extends Equatable {
       enterAddress: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼',
       outletName: '废水排放排放口',
       monitorName: '废水排放排放口',
-      area: '南昌市 市辖区',
+      areaName: '南昌市 市辖区',
       reportTime: '10月15日',
       startTime: '2019-10-14 10:10',
       endTime: '2019-10-16 12:22',

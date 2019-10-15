@@ -102,7 +102,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                 Gaps.hGap20,
                                 IconBaseInfoWidget(
                                   title: '所属区域',
-                                  content: '${state.enterDetail.area}',
+                                  content: '${state.enterDetail.areaName}',
                                   icon: Icons.location_on,
                                   flex: 5,
                                 ),

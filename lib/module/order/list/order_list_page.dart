@@ -102,7 +102,7 @@ class _OrderListPageState extends State<OrderListPage>
                           Expanded(
                             flex: 1,
                             child:
-                                ListTileWidget('区域：${orderList[index].area}'),
+                                ListTileWidget('区域：${orderList[index].areaName}'),
                           ),
                         ],
                       ),

@@ -24,11 +24,11 @@ class Enter extends Equatable {
   final List<Label> labelList;
 
   Enter({
-    this.enterName,
-    this.enterAddress,
-    this.isImportant,
-    this.imagePath,
-    this.industryType,
+    this.enterName = '',
+    this.enterAddress = '',
+    this.isImportant = false,
+    this.imagePath = '',
+    this.industryType = '',
     this.labelList,
   }) : super([
           enterName,

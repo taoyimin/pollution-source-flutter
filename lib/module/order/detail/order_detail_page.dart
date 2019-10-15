@@ -93,7 +93,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               children: <Widget>[
                                 IconBaseInfoWidget(
                                   title: '行政区划',
-                                  content: '${state.orderDetail.area}',
+                                  content: '${state.orderDetail.areaName}',
                                   icon: Icons.location_on,
                                   flex: 5,
                                 ),

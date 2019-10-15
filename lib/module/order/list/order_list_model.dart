@@ -8,27 +8,27 @@ class Order extends Equatable {
   final String enterName;
   final String monitorName;
   final String alarmTime;
-  final String area;
+  final String areaName;
   final String state;
-  final List<Label> labelList;
   final String alarmRemark;
+  final List<Label> labelList;
 
   Order({
-    this.enterName,
-    this.monitorName,
-    this.alarmTime,
-    this.area,
-    this.state,
+    this.enterName = '',
+    this.monitorName = '',
+    this.alarmTime = '',
+    this.areaName = '',
+    this.state = '',
+    this.alarmRemark = '',
     this.labelList,
-    this.alarmRemark,
   }) : super([
-    enterName,
+          enterName,
           monitorName,
           alarmTime,
-          area,
+          areaName,
           state,
+          alarmRemark,
           labelList,
-          alarmRemark
         ]);
 
   static Order fromJson(dynamic json) {
@@ -36,7 +36,7 @@ class Order extends Equatable {
       enterName: json['enterprisename'],
       monitorName: json['disOutName'],
       alarmTime: json['createtime'],
-      area: json['areaName'],
+      areaName: json['areaName'],
       state: json['orderstate'],
       alarmRemark: json['alarmdesc'],
       labelList: TextUtil.isEmpty(json['alarmtype'])

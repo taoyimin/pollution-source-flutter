@@ -119,7 +119,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                                 Gaps.hGap20,
                                 IconBaseInfoWidget(
                                   title: '区域',
-                                  content: '${state.reportDetail.area}',
+                                  content: '${state.reportDetail.areaName}',
                                   icon: Icons.location_on,
                                   flex: 5,
                                 ),

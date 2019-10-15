@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
-import 'monitor_list.dart';
 import 'package:pollution_source/util/constant.dart';
+
+import 'package:pollution_source/module/monitor/list/monitor_list.dart';
 
 class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
   @override
@@ -24,10 +23,11 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
             monitorType: event.monitorType,
           );
           yield MonitorListLoaded(
-            monitorList: (currentState as MonitorListLoaded).monitorList + monitorList,
+            monitorList:
+                (currentState as MonitorListLoaded).monitorList + monitorList,
             currentPage: (currentState as MonitorListLoaded).currentPage + 1,
-            hasNextPage:
-                (currentState as MonitorListLoaded).pageSize == monitorList.length,
+            hasNextPage: (currentState as MonitorListLoaded).pageSize ==
+                monitorList.length,
           );
         } else {
           //首次加载或刷新

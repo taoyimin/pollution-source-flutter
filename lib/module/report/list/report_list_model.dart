@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +15,7 @@ class Report extends Equatable {
   final String abnormalType;
 
   //区域
-  final String area;
+  final String areaName;
 
   //申报开始时间
   final String startTime;
@@ -44,7 +42,7 @@ class Report extends Equatable {
     this.enterName = '',
     this.outletName = '',
     this.abnormalType = '',
-    this.area = '',
+    this.areaName = '',
     this.startTime = '',
     this.endTime = '',
     this.reportTime = '',
@@ -56,7 +54,7 @@ class Report extends Equatable {
           enterName,
           outletName,
           abnormalType,
-          area,
+          areaName,
           startTime,
           endTime,
           reportTime,
@@ -71,7 +69,7 @@ class Report extends Equatable {
       enterName: '江西大唐国际新余发电有限责任公司',
       outletName: '1#机组',
       abnormalType: '其他原因',
-      area: '新余市 市辖区',
+      areaName: '新余市 市辖区',
       startTime: '2019-10-10 00:00',
       endTime: '2019-10-11 08:45',
       reportTime: '2019-10-11',
@@ -88,11 +86,12 @@ class Report extends Equatable {
     return string.trimLeft().trimRight().split(' ').map((string) {
       return Label(
         name: string,
-        color: () {
+        /*color: () {
           //获取随机颜色
           return Color.fromARGB(255, Random.secure().nextInt(255),
               Random.secure().nextInt(255), Random.secure().nextInt(255));
-        }(),
+        }(),*/
+        color: Colors.pink,
       );
     }).toList();
   }
