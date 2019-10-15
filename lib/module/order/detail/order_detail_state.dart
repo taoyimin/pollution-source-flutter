@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import 'order_detail_model.dart';
 
-//不继承equatable，确保每次刷新都会触发状态改变的监听
-abstract class OrderDetailState{
+abstract class OrderDetailState extends Equatable {
+  OrderDetailState([List props = const []]) : super(props);
 }
 
 class OrderDetailLoading extends OrderDetailState {
@@ -17,7 +18,9 @@ class OrderDetailLoaded extends OrderDetailState {
 
   OrderDetailLoaded({
     @required this.orderDetail,
-  });
+  }) : super([
+          orderDetail,
+        ]);
 }
 
 //报警管理单详情页没有数据的状态
@@ -30,7 +33,11 @@ class OrderDetailEmpty extends OrderDetailState {
 class OrderDetailError extends OrderDetailState {
   final errorMessage;
 
-  OrderDetailError({@required this.errorMessage});
+  OrderDetailError({
+    @required this.errorMessage,
+  }) : super([
+          errorMessage,
+        ]);
 
   @override
   String toString() => 'OrderDetailError';

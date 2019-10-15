@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import 'enter_detail_model.dart';
 
-//不继承equatable，确保每次刷新都会触发状态改变的监听
-abstract class EnterDetailState{
+abstract class EnterDetailState extends Equatable {
+  EnterDetailState([List props = const []]) : super(props);
 }
 
 //企业详情页初始的加载状态
@@ -19,7 +20,9 @@ class EnterDetailLoaded extends EnterDetailState {
 
   EnterDetailLoaded({
     @required this.enterDetail,
-  });
+  }) : super([
+          enterDetail,
+        ]);
 }
 
 //企业详情页没有数据的状态
@@ -32,7 +35,11 @@ class EnterDetailEmpty extends EnterDetailState {
 class EnterDetailError extends EnterDetailState {
   final errorMessage;
 
-  EnterDetailError({@required this.errorMessage});
+  EnterDetailError({
+    @required this.errorMessage,
+  }) : super([
+          errorMessage,
+        ]);
 
   @override
   String toString() => 'EnterDetailError';
