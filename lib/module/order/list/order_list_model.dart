@@ -6,27 +6,27 @@ import 'package:pollution_source/module/common/common_model.dart';
 //报警管理单
 class Order extends Equatable {
   final String enterName;
-  final String outletName;
+  final String monitorName;
   final String alarmTime;
   final String area;
-  final String statue;
+  final String state;
   final List<Label> labelList;
   final String alarmRemark;
 
   Order({
     this.enterName,
-    this.outletName,
+    this.monitorName,
     this.alarmTime,
     this.area,
-    this.statue,
+    this.state,
     this.labelList,
     this.alarmRemark,
   }) : super([
     enterName,
-          outletName,
+          monitorName,
           alarmTime,
           area,
-          statue,
+          state,
           labelList,
           alarmRemark
         ]);
@@ -34,10 +34,10 @@ class Order extends Equatable {
   static Order fromJson(dynamic json) {
     return Order(
       enterName: json['enterprisename'],
-      outletName: json['disOutName'],
+      monitorName: json['disOutName'],
       alarmTime: json['createtime'],
       area: json['areaName'],
-      statue: json['orderstate'],
+      state: json['orderstate'],
       alarmRemark: json['alarmdesc'],
       labelList: TextUtil.isEmpty(json['alarmtype'])
           ? []

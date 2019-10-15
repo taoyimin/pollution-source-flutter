@@ -97,7 +97,7 @@ class _OrderListPageState extends State<OrderListPage>
                           Expanded(
                             flex: 1,
                             child: ListTileWidget(
-                                '监控点名称：${orderList[index].outletName}'),
+                                '监控点名称：${orderList[index].monitorName}'),
                           ),
                           Expanded(
                             flex: 1,
@@ -117,7 +117,7 @@ class _OrderListPageState extends State<OrderListPage>
                           Expanded(
                             flex: 1,
                             child: ListTileWidget(
-                                '报警单状态：${orderList[index].statue}'),
+                                '报警单状态：${orderList[index].state}'),
                           ),
                         ],
                       ),
