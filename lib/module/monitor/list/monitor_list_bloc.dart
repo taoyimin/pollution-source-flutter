@@ -21,6 +21,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
             enterName: event.enterName,
             areaCode: event.areaCode,
             monitorType: event.monitorType,
+            state: event.state,
           );
           yield MonitorListLoaded(
             monitorList:
@@ -35,6 +36,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
             enterName: event.enterName,
             areaCode: event.areaCode,
             monitorType: event.monitorType,
+            state: event.state,
           );
           if (monitorList.length == 0) {
             //没有数据
@@ -53,13 +55,14 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
     }
   }
 
-  //获取报警管理单列表数据
+  //获取监控点列表数据
   Future<List<Monitor>> getMonitorList({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
     monitorType = '',
+    state = '',
   }) async {
     Response response = await DioUtils.instance
         .getDio()
@@ -68,7 +71,8 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
       'pageSize': pageSize,
       'enterpriseName': enterName,
       'areaCode': areaCode,
-      'outType': monitorType,
+      'monitorType': monitorType,
+      'state': state,
     });
     if (response.statusCode == ExceptionHandle.success &&
         response.data[Constant.responseCodeKey] ==
@@ -80,7 +84,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
     }
   }
 
-  //格式化报警管理单数据
+  //格式化监控点列表数据
   List<Monitor> convertMonitorList(List<dynamic> jsonArray) {
     return jsonArray.map((json) {
       return Monitor.fromJson(json);

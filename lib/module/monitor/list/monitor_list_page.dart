@@ -15,8 +15,12 @@ import 'package:pollution_source/module/monitor/list/monitor_list.dart';
 
 class MonitorListPage extends StatefulWidget {
   final String monitorType;
+  final String state;
 
-  MonitorListPage({this.monitorType = ''});
+  MonitorListPage({
+    this.monitorType = '',
+    this.state = '',
+  });
 
   @override
   _MonitorListPageState createState() => _MonitorListPageState();
@@ -40,14 +44,17 @@ class _MonitorListPageState extends State<MonitorListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _monitorListBloc.dispatch(MonitorListLoad(monitorType:widget.monitorType));
+    _monitorListBloc.dispatch(MonitorListLoad(
+      monitorType: widget.monitorType,
+      state: widget.state,
+    ));
   }
 
   @override
   void dispose() {
     super.dispose();
-    _scrollController.dispose();
     _refreshController.dispose();
+    _scrollController.dispose();
     _editController.dispose();
   }
 
@@ -110,7 +117,8 @@ class _MonitorListPageState extends State<MonitorListPage>
                               ),
                             ),
                             Gaps.vGap6,
-                            LabelWrapWidget(labelList: monitorList[index].labelList),
+                            LabelWrapWidget(
+                                labelList: monitorList[index].labelList),
                             monitorList[index].labelList.length == 0
                                 ? Gaps.empty
                                 : Gaps.vGap6,
@@ -228,6 +236,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 monitorType: widget.monitorType,
+                state: widget.state,
               ));
               return _refreshCompleter.future;
             },
@@ -236,6 +245,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 monitorType: widget.monitorType,
+                state: widget.state,
               ));
               return _refreshCompleter.future;
             },

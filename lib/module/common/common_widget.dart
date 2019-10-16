@@ -746,7 +746,9 @@ class IconBaseInfoWidget extends StatelessWidget {
   final String content;
   final int flex;
   final TextAlign contentTextAlign;
-  final bool isTel;
+  final double contentMarginTop;
+
+  //final bool isTel;
 
   IconBaseInfoWidget({
     @required this.icon,
@@ -754,7 +756,8 @@ class IconBaseInfoWidget extends StatelessWidget {
     @required this.content,
     this.flex = 1,
     this.contentTextAlign = TextAlign.right,
-    this.isTel = false,
+    this.contentMarginTop = 0,
+    //this.isTel = false,
   });
 
   @override
@@ -776,6 +779,19 @@ class IconBaseInfoWidget extends StatelessWidget {
           Text(title, style: const TextStyle(fontSize: 13)),
           Gaps.hGap10,
           Expanded(
+            //当content是纯数字或字母时无法和title对齐，所以加一个padding
+            child: Padding(
+              padding: EdgeInsets.only(top: contentMarginTop),
+              child: Text(
+                content,
+                style: const TextStyle(
+                  fontSize: 13,
+                ),
+                textAlign: contentTextAlign,
+              ),
+            ),
+          ),
+          /*Expanded(
             child: isTel
                 ? InkWell(
                     onTap: () => Utils.launchTelURL("tel:$content"),
@@ -792,7 +808,7 @@ class IconBaseInfoWidget extends StatelessWidget {
                     ),
                     textAlign: contentTextAlign,
                   ),
-          ),
+          ),*/
         ],
       ),
     );
@@ -855,6 +871,50 @@ class ContactsWidget extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+//展示附件widget
+class AttachmentWidget extends StatelessWidget {
+  final Attachment attachment;
+  final GestureTapCallback onTap;
+
+  AttachmentWidget({
+    @required this.attachment,
+    @required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 44,
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          children: <Widget>[
+            Image.asset(
+              attachment.imagePath,
+            ),
+            Gaps.hGap10,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  attachment.fileName,
+                  style: const TextStyle(fontSize: 12),
+                ),
+                Text(
+                  '附件大小:${attachment.size}',
+                  style: const TextStyle(fontSize: 13),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

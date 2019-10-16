@@ -5,20 +5,23 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pollution_source/module/enter/enter_list_bloc.dart';
-import 'package:pollution_source/module/enter/enter_list_page.dart';
-import 'package:pollution_source/module/monitor/monitor_list.dart';
-import 'package:pollution_source/module/order/order_list.dart';
-import 'package:pollution_source/module/order/order_list_page.dart';
-import 'package:pollution_source/module/report/report_list.dart';
-import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/res/gaps.dart';
 import 'dart:ui';
 import 'dart:math';
-import 'package:pollution_source/widget/space_header.dart';
 import 'dart:async';
+
+import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/widget/space_header.dart';
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/index/index.dart';
+import 'package:pollution_source/module/enter/list/enter_list_bloc.dart';
+import 'package:pollution_source/module/enter/list/enter_list_page.dart';
+import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
+import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
+import 'package:pollution_source/module/order/list/order_list_bloc.dart';
+import 'package:pollution_source/module/order/list/order_list_page.dart';
+import 'package:pollution_source/module/report/list/report_list_bloc.dart';
+import 'package:pollution_source/module/report/list/report_list_page.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
@@ -84,8 +87,7 @@ class _IndexPageState extends State<IndexPage>
                         AlarmListWidget(),
                         state.onlineMonitorStatisticsList.length > 0
                             ? OnlineMonitorStatisticsWidget(
-                                metaList:
-                                    state.onlineMonitorStatisticsList,
+                                metaList: state.onlineMonitorStatisticsList,
                               )
                             : Gaps.empty,
                         state.waterStatisticsList.length > 0
@@ -95,8 +97,7 @@ class _IndexPageState extends State<IndexPage>
                             : Gaps.empty,
                         state.pollutionEnterStatisticsList.length > 0
                             ? PollutionEnterStatisticsWidget(
-                                metaList:
-                                    state.pollutionEnterStatisticsList)
+                                metaList: state.pollutionEnterStatisticsList)
                             : Gaps.empty,
                         state.rainEnterStatisticsList.length > 0
                             ? RainEnterStatisticsWidget(
@@ -104,8 +105,7 @@ class _IndexPageState extends State<IndexPage>
                             : Gaps.empty,
                         state.comprehensiveStatisticsList.length > 0
                             ? ComprehensiveStatisticsWidget(
-                                metaList:
-                                    state.comprehensiveStatisticsList,
+                                metaList: state.comprehensiveStatisticsList,
                               )
                             : Gaps.empty,
                       ],
@@ -666,14 +666,16 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => OrderListBloc(),
-                        child: OrderListPage(
-                          state: '5',
-                        ),
-                      );
-                    }),
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => OrderListBloc(),
+                          child: OrderListPage(
+                            state: '1',
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -684,12 +686,14 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => ReportListBloc(),
-                        child: ReportListPage(),
-                      );
-                    }),
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => ReportListBloc(),
+                          child: ReportListPage(),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -700,12 +704,14 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => ReportListBloc(),
-                        child: ReportListPage(),
-                      );
-                    }),
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => ReportListBloc(),
+                          child: ReportListPage(),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -721,8 +727,7 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
 class OnlineMonitorStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
 
-  OnlineMonitorStatisticsWidget({Key key, this.metaList})
-      : super(key: key);
+  OnlineMonitorStatisticsWidget({Key key, this.metaList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -740,48 +745,125 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => MonitorListBloc(),
-                        child: MonitorListPage(),
-                      );
-                    }),
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
               VerticalDividerWidget(height: 40),
               //在线
               InkWellButton1(
-                  ratio: 1.15,
-                  meta: metaList[1],
-                  onTap: () {}),
+                ratio: 1.15,
+                meta: metaList[1],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            state: 'online',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 40),
               //预警
               InkWellButton1(
-                  ratio: 1.15,
-                  meta: metaList[2],
-                  onTap: () {}),
+                ratio: 1.15,
+                meta: metaList[2],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            state: 'warn',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ],
           ),
           Row(
             children: <Widget>[
               //超标
               InkWellButton1(
-                  ratio: 1.15,
-                  meta: metaList[3],
-                  onTap: () {}),
+                ratio: 1.15,
+                meta: metaList[3],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            state: 'outrange',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 40),
               //脱机
               InkWellButton1(
-                  ratio: 1.15,
-                  meta: metaList[4],
-                  onTap: () {}),
+                ratio: 1.15,
+                meta: metaList[4],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            state: 'offline',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 40),
               //停产
               InkWellButton1(
-                  ratio: 1.15,
-                  meta: metaList[5],
-                  onTap: () {}),
+                ratio: 1.15,
+                meta: metaList[5],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            state: 'stopline',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ],
@@ -794,8 +876,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
 class PollutionEnterStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
 
-  PollutionEnterStatisticsWidget({Key key, this.metaList})
-      : super(key: key);
+  PollutionEnterStatisticsWidget({Key key, this.metaList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -810,67 +891,122 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[0],
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return BlocProvider(
-                      builder: (context) => EnterListBloc(),
-                      child: EnterListPage(),
-                    );
-                  }));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(),
+                        );
+                      },
+                    ),
+                  );
                 },
               ),
               VerticalDividerWidget(height: 30),
               //重点企业
-              InkWellButton1(meta: metaList[1], onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider(
-                    builder: (context) => EnterListBloc(),
-                    child: EnterListPage(),
+              InkWellButton1(
+                meta: metaList[1],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            attentionLevel: '1',
+                          ),
+                        );
+                      },
+                    ),
                   );
-                }));
-              }),
+                },
+              ),
               VerticalDividerWidget(height: 30),
               //在线企业
-              InkWellButton1(meta: metaList[2], onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider(
-                    builder: (context) => EnterListBloc(),
-                    child: EnterListPage(),
+              InkWellButton1(
+                meta: metaList[2],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            state: 'online',
+                          ),
+                        );
+                      },
+                    ),
                   );
-                }));
-              }),
+                },
+              ),
             ],
           ),
           Row(
             children: <Widget>[
               //废水企业
-              InkWellButton1(meta: metaList[3], onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider(
-                    builder: (context) => EnterListBloc(),
-                    child: EnterListPage(),
+              InkWellButton1(
+                meta: metaList[3],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            enterType: 'outletType2',
+                          ),
+                        );
+                      },
+                    ),
                   );
-                }));
-              }),
+                },
+              ),
               VerticalDividerWidget(height: 30),
               //废气企业
-              InkWellButton1(meta: metaList[4], onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider(
-                    builder: (context) => EnterListBloc(),
-                    child: EnterListPage(),
+              InkWellButton1(
+                meta: metaList[4],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            enterType: 'outletType3',
+                          ),
+                        );
+                      },
+                    ),
                   );
-                }));
-              }),
+                },
+              ),
               VerticalDividerWidget(height: 30),
               //水气企业
-              InkWellButton1(meta: metaList[5], onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider(
-                    builder: (context) => EnterListBloc(),
-                    child: EnterListPage(),
+              InkWellButton1(
+                meta: metaList[5],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            enterType: 'outletType2,outletType3',
+                          ),
+                        );
+                      },
+                    ),
                   );
-                }));
-              }),
+                },
+              ),
             ],
           ),
           Row(
@@ -881,14 +1017,16 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => MonitorListBloc(),
-                        child: MonitorListPage(
-                          monitorType: 'outletType2',
-                        ),
-                      );
-                    }),
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            monitorType: 'outletType2',
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -899,14 +1037,16 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => MonitorListBloc(),
-                        child: MonitorListPage(
-                          monitorType: 'outletType3',
-                        ),
-                      );
-                    }),
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            monitorType: 'outletType3',
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -914,7 +1054,21 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               //许可证企业
               InkWellButton1(
                 meta: metaList[8],
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            enterType: 'licence',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -940,13 +1094,65 @@ class RainEnterStatisticsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //全部企业
-              InkWellButton1(meta: metaList[0], onTap: () {}),
+              InkWellButton1(
+                meta: metaList[0],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            enterType: 'outletType1',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 30),
               //在线企业
-              InkWellButton1(meta: metaList[1], onTap: () {}),
+              InkWellButton1(
+                meta: metaList[1],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => EnterListBloc(),
+                          child: EnterListPage(
+                            enterType: 'outletType1',
+                            state: 'online',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
               VerticalDividerWidget(height: 30),
               //排口总数
-              InkWellButton1(meta: metaList[2], onTap: () {}),
+              InkWellButton1(
+                meta: metaList[2],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider(
+                          builder: (context) => MonitorListBloc(),
+                          child: MonitorListPage(
+                            monitorType: 'outletType1',
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ],
@@ -959,8 +1165,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
 class ComprehensiveStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
 
-  ComprehensiveStatisticsWidget({Key key, this.metaList})
-      : super(key: key);
+  ComprehensiveStatisticsWidget({Key key, this.metaList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -1018,9 +1223,7 @@ class WeekTrendWidget extends StatelessWidget {
                         imagePath:
                             "assets/images/icon_aqi_examine_quality.png"),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  Gaps.hGap10,
                   Expanded(
                     flex: 1,
                     child: BarChartWidget(
@@ -1150,19 +1353,15 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                   fontSize: 18,
                 ),
               ),
-              SizedBox(
-                height: 4,
-              ),
+              Gaps.vGap4,
               Text(
                 widget.subTitle,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colours.secondary_text,
                   fontSize: 12,
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              Gaps.vGap10,
               Expanded(
                 child: FlChart(
                   chart: BarChart(BarChartData(
@@ -1207,30 +1406,31 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                     titlesData: FlTitlesData(
                       show: true,
                       bottomTitles: SideTitles(
-                          showTitles: true,
-                          textStyle: TextStyle(
-                              color: Colours.primary_text, fontSize: 11),
-                          margin: 8,
-                          getTitles: (double value) {
-                            switch (value.toInt()) {
-                              case 0:
-                                return '一';
-                              case 1:
-                                return '二';
-                              case 2:
-                                return '三';
-                              case 3:
-                                return '四';
-                              case 4:
-                                return '五';
-                              case 5:
-                                return '六';
-                              case 6:
-                                return '日';
-                              default:
-                                return '未知';
-                            }
-                          }),
+                        showTitles: true,
+                        textStyle: TextStyle(
+                            color: Colours.primary_text, fontSize: 11),
+                        margin: 8,
+                        getTitles: (double value) {
+                          switch (value.toInt()) {
+                            case 0:
+                              return '一';
+                            case 1:
+                              return '二';
+                            case 2:
+                              return '三';
+                            case 3:
+                              return '四';
+                            case 4:
+                              return '五';
+                            case 5:
+                              return '六';
+                            case 6:
+                              return '日';
+                            default:
+                              return '未知';
+                          }
+                        },
+                      ),
                       leftTitles: SideTitles(
                         showTitles: false,
                       ),

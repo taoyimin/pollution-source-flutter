@@ -127,6 +127,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   content: '${state.enterDetail.creditCode}',
                                   icon: Icons.mail,
                                   contentTextAlign: TextAlign.left,
+                                  contentMarginTop: 2,
                                 ),
                               ],
                             ),

@@ -44,12 +44,12 @@ class Monitor extends Equatable {
       labelList: TextUtil.isEmpty('流量 PH 化学需氧量 氨氮 总磷 总氮') ? [] : _getLabelList('流量 PH 化学需氧量 氨氮 总磷 总氮'),
     );*/
     return Monitor(
-      enterMonitorName: '江西大唐国际新余发电有限责任公司',
-      monitorName: '废水排放口',
-      monitorAddress: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼',
-      monitorType: '废水排口',
-      areaName: '南昌市 市辖区',
-      imagePath: _getMonitorTypeImage('outletType2'),
+      enterMonitorName: json['disoutshortname'],
+      monitorName: json['disoutname'],
+      monitorAddress: json['disoutaddress'],
+      monitorType: json['disOutMonitorTypeStr'],
+      areaName: '没有该字段',
+      imagePath: _getMonitorTypeImage(json['disouttype']),
       labelList: TextUtil.isEmpty('流量 PH 化学需氧量 氨氮 总磷 总氮')
           ? []
           : _getLabelList('流量 PH 化学需氧量 氨氮 总磷 总氮'),

@@ -127,6 +127,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                                       '${state.monitorDetail.dataCollectionNumber} ',
                                   icon: Icons.insert_drive_file,
                                   contentTextAlign: TextAlign.left,
+                                  contentMarginTop: 2,
                                 ),
                               ],
                             ),
@@ -134,7 +135,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                         ),
                       ),
                       //联系人 没有联系人则隐藏
-                      Offstage(
+                      /*Offstage(
                         offstage: TextUtil.isEmpty(
                             state.monitorDetail.contactPersonTel),
                         child: Container(
@@ -158,7 +159,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             ],
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 );
