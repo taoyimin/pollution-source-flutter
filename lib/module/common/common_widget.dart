@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:common_utils/common_utils.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -245,7 +248,7 @@ class InkWellButton2 extends StatelessWidget {
   }
 }
 
-//左上内容 左下标题 右边图标 有背景图片 默认一行三个 一行两个时建议ratio=1.3
+//左上内容 左下标题 右上图标 有背景图片 默认一行三个 一行两个时建议ratio=1.3
 class InkWellButton3 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -325,7 +328,7 @@ class InkWellButton3 extends StatelessWidget {
   }
 }
 
-//左上标题 左下内容 右边图标 有背景图片
+//左上标题 左下内容 右下图标 有背景图片
 class InkWellButton4 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -549,6 +552,74 @@ class InkWellButton6 extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+//左上标题 左下内容 右边图标 有背景图片 默认一行两个
+class InkWellButton7 extends StatelessWidget {
+  final Meta meta;
+  final GestureTapCallback onTap;
+  final double titleFontSize;
+  final double contentFontSize;
+
+  InkWellButton7({
+    @required this.meta,
+    @required this.onTap,
+    this.titleFontSize = 16,
+    this.contentFontSize = 11,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWellButton(onTap: onTap, children: <Widget>[
+        Container(
+          height: 72,
+          padding: const EdgeInsets.all(10),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(meta.backgroundPath),
+              fit: BoxFit.cover,
+            ),
+            boxShadow: [getBoxShadow()],
+          ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '${meta.title}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: titleFontSize,
+                      ),
+                    ),
+                    Text(
+                      '${meta.content}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: contentFontSize,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Image.asset(
+                  meta.imagePath,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],),
     );
   }
 }
@@ -916,5 +987,174 @@ class AttachmentWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+//监测因子图标数据
+class LineChartWidget extends StatefulWidget {
+  //图标数据集合
+  final List<ChartData> chartDataList;
+  final int xAxisCount;
+  final int yAxisCount;
+  final bool showDotData;
+  final bool isCurved;
+
+  LineChartWidget({
+    @required this.chartDataList,
+    this.xAxisCount = 7,
+    this.yAxisCount = 5,
+    this.showDotData = false,
+    this.isCurved = true,
+  });
+
+  @override
+  State<StatefulWidget> createState() => LineChartWidgetState();
+}
+
+class LineChartWidgetState extends State<LineChartWidget> {
+  StreamController<LineTouchResponse> controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = StreamController();
+    controller.stream.distinct().listen((LineTouchResponse response) {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.close();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.9,
+      child: Container(
+        child: Stack(
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20, left: 0),
+                    child: FlChart(
+                      swapAnimationDuration: Duration(milliseconds: 250),
+                      chart: LineChart(
+                        _getLineChartData(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  LineChartData _getLineChartData() {
+    return LineChartData(
+      lineTouchData: LineTouchData(
+        touchResponseSink: controller.sink,
+        touchTooltipData: TouchTooltipData(
+          tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
+          getTooltipItems: (touchedSpots) {
+            return touchedSpots.map(
+              (touchedSpot) {
+                return TooltipItem(
+                  '${DateUtil.formatDateMs(touchedSpot.spot.x.toInt(), format: 'HH:mm:ss')}    ${touchedSpot.spot.y.toString()}',
+                  TextStyle(
+                    color: touchedSpot.getColor(),
+                  ),
+                );
+              },
+            ).toList();
+          },
+        ),
+      ),
+      gridData: const FlGridData(
+        show: false,
+      ),
+      titlesData: FlTitlesData(
+        bottomTitles: SideTitles(
+          showTitles: true,
+          interval: _getXAxisInterval(),
+          reservedSize: 22,
+          textStyle: TextStyle(
+            color: const Color(0xff72719b),
+            fontSize: 12,
+          ),
+          margin: 20,
+          getTitles: (value) {
+            return DateUtil.formatDateMs(value.toInt(), format: 'mm分');
+          },
+        ),
+        leftTitles: SideTitles(
+          showTitles: true,
+          interval: _getYAxisInterval(),
+          textStyle: TextStyle(
+            color: const Color(0xff75729e),
+            fontSize: 14,
+          ),
+          getTitles: (value) {
+            return '$value';
+          },
+          margin: 20,
+          reservedSize: 30,
+        ),
+      ),
+      borderData: FlBorderData(
+        show: false,
+      ),
+      lineBarsData: _getLineChartBarDataList(widget.chartDataList),
+    );
+  }
+
+  List<LineChartBarData> _getLineChartBarDataList(
+      List<ChartData> chartDataList) {
+    return chartDataList.map((chartData) {
+      return LineChartBarData(
+        spots: chartData.points.map((point) {
+          return FlSpot(point.x, point.y);
+        }).toList(),
+        isCurved: widget.isCurved,
+        colors: [
+          chartData.color,
+        ],
+        barWidth: widget.isCurved ? 6 : 3,
+        isStrokeCapRound: true,
+        dotData: FlDotData(
+          show: widget.showDotData,
+          dotColor: chartData.color,
+        ),
+        belowBarData: BarAreaData(
+          show: false,
+        ),
+      );
+    }).toList();
+  }
+
+  double _getYAxisInterval() {
+    double maxY = Utils.getMax(widget.chartDataList.map((chartData) {
+      return chartData.maxY;
+    }).toList());
+    double minY = Utils.getMin(widget.chartDataList.map((chartData) {
+      return chartData.minY;
+    }).toList());
+    return (maxY - minY) / (widget.yAxisCount - 1);
+  }
+
+  double _getXAxisInterval() {
+    double maxX = Utils.getMax(widget.chartDataList.map((chartData) {
+      return chartData.maxX;
+    }).toList());
+    double minX = Utils.getMin(widget.chartDataList.map((chartData) {
+      return chartData.minX;
+    }).toList());
+    return (maxX - minX) / (widget.xAxisCount - 1);
   }
 }
