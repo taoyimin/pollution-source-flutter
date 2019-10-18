@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:bezier_chart/bezier_chart.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -281,7 +285,7 @@ class InkWellButton3 extends StatelessWidget {
                 image: AssetImage(meta.backgroundPath),
                 fit: BoxFit.fill,
               ),
-              boxShadow: [getBoxShadow()],
+              boxShadow: [UIUtils.getBoxShadow()],
             ),
             child: Stack(
               children: <Widget>[
@@ -361,7 +365,7 @@ class InkWellButton4 extends StatelessWidget {
                 image: AssetImage(meta.backgroundPath),
                 fit: BoxFit.fill,
               ),
-              boxShadow: [getBoxShadow()],
+              boxShadow: [UIUtils.getBoxShadow()],
             ),
             child: Stack(
               children: <Widget>[
@@ -431,7 +435,7 @@ class InkWellButton5 extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10 * ratio),
             decoration: BoxDecoration(
               color: Colors.white,
-              boxShadow: [getBoxShadow()],
+              boxShadow: [UIUtils.getBoxShadow()],
               border: Border(
                 top: BorderSide(
                   color: meta.color,
@@ -452,6 +456,7 @@ class InkWellButton5 extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18 * ratio)),
                   child: Image.asset(
                     meta.imagePath,
+                    color: meta.color,
                   ),
                 ),
                 Column(
@@ -496,7 +501,7 @@ class InkWellButton6 extends StatelessWidget {
           image: AssetImage(meta.backgroundPath),
           fit: BoxFit.cover,
         ),
-        boxShadow: [getBoxShadow()],
+        boxShadow: [UIUtils.getBoxShadow()],
       ),
       child: InkWellButton(
         onTap: onTap,
@@ -574,52 +579,55 @@ class InkWellButton7 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: InkWellButton(onTap: onTap, children: <Widget>[
-        Container(
-          height: 72,
-          padding: const EdgeInsets.all(10),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(meta.backgroundPath),
-              fit: BoxFit.cover,
+      child: InkWellButton(
+        onTap: onTap,
+        children: <Widget>[
+          Container(
+            height: 72,
+            padding: const EdgeInsets.all(10),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(meta.backgroundPath),
+                fit: BoxFit.cover,
+              ),
+              boxShadow: [UIUtils.getBoxShadow()],
             ),
-            boxShadow: [getBoxShadow()],
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '${meta.title}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: titleFontSize,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${meta.title}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: titleFontSize,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${meta.content}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentFontSize,
+                      Text(
+                        '${meta.content}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentFontSize,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Image.asset(
-                  meta.imagePath,
+                Expanded(
+                  flex: 2,
+                  child: Image.asset(
+                    meta.imagePath,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],),
+        ],
+      ),
     );
   }
 }
@@ -990,6 +998,68 @@ class AttachmentWidget extends StatelessWidget {
   }
 }
 
+//展示因子监测数据radio button
+class FactorValueWidget extends StatelessWidget {
+  final ChartData chartData;
+  final GestureTapCallback onTap;
+
+  FactorValueWidget({
+    @required this.chartData,
+    @required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWellButton(
+      onTap: onTap,
+      children: <Widget>[
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [UIUtils.getBoxShadow()],
+            border: Border(
+              top: BorderSide(
+                color: chartData.color,
+                width: 2,
+              ),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '${chartData.factorName}',
+                style: TextStyle(fontSize: 11),
+              ),
+              Text(
+                '${chartData.lastValue}',
+                style: TextStyle(fontSize: 12),
+              ),
+              Text(
+                '${chartData.unit}',
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: Offstage(
+            offstage: !chartData.checked,
+            child: Image.asset(
+              'assets/images/icon_bottom_right_label.png',
+              height: 20,
+              color: chartData.color,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 //监测因子图标数据
 class LineChartWidget extends StatefulWidget {
   //图标数据集合
@@ -1030,25 +1100,24 @@ class LineChartWidgetState extends State<LineChartWidget> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.9,
+      aspectRatio: 1.8,
       child: Container(
-        child: Stack(
+        padding: EdgeInsets.only(top: 30, left: 6, bottom: 10, right: 26),
+        decoration: BoxDecoration(
+          color: Color(0xFF203857),
+          boxShadow: [UIUtils.getBoxShadow()],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 0),
-                    child: FlChart(
-                      swapAnimationDuration: Duration(milliseconds: 250),
-                      chart: LineChart(
-                        _getLineChartData(),
-                      ),
-                    ),
+            Expanded(
+              child: FlChart(
+                  swapAnimationDuration: Duration(milliseconds: 250),
+                  chart: LineChart(
+                    _getLineChartData(),
                   ),
                 ),
-              ],
             ),
           ],
         ),
@@ -1056,7 +1125,32 @@ class LineChartWidgetState extends State<LineChartWidget> {
     );
   }
 
+  //获取图表样式
   LineChartData _getLineChartData() {
+    double yInterval;
+    double maxY = Utils.getMax(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+      return chartData.maxY;
+    }).toList());
+    double minY = Utils.getMin(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+      return chartData.minY;
+    }).toList());
+    if(maxY == minY){
+      //数据是一条直线时，手动设定最大值和最小值
+      maxY = maxY +10;
+      minY = minY -10;
+    }
+    //最大值减最小值，除以间隔数（坐标数减1）
+    yInterval = (maxY - minY) / (widget.yAxisCount - 1);
+
+    double xInterval;
+    double maxX = Utils.getMax(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+      return chartData.maxX;
+    }).toList());
+    double minX = Utils.getMin(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+      return chartData.minX;
+    })?.toList());
+    xInterval = (maxX - minX) / (widget.xAxisCount - 1);
+
     return LineChartData(
       lineTouchData: LineTouchData(
         touchResponseSink: controller.sink,
@@ -1082,7 +1176,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
       titlesData: FlTitlesData(
         bottomTitles: SideTitles(
           showTitles: true,
-          interval: _getXAxisInterval(),
+          interval: xInterval,
           reservedSize: 22,
           textStyle: TextStyle(
             color: const Color(0xff72719b),
@@ -1095,13 +1189,13 @@ class LineChartWidgetState extends State<LineChartWidget> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          interval: _getYAxisInterval(),
+          interval: yInterval,
           textStyle: TextStyle(
             color: const Color(0xff75729e),
             fontSize: 14,
           ),
           getTitles: (value) {
-            return '$value';
+            return yInterval >= 1 ? value.toStringAsFixed(0) : value.toStringAsFixed(1);
           },
           margin: 20,
           reservedSize: 30,
@@ -1110,51 +1204,41 @@ class LineChartWidgetState extends State<LineChartWidget> {
       borderData: FlBorderData(
         show: false,
       ),
+      maxX: maxX,
+      maxY: maxY,
+      minX: minX,
+      minY: minY,
       lineBarsData: _getLineChartBarDataList(widget.chartDataList),
     );
   }
 
+  //获取图表数据
   List<LineChartBarData> _getLineChartBarDataList(
       List<ChartData> chartDataList) {
-    return chartDataList.map((chartData) {
-      return LineChartBarData(
-        spots: chartData.points.map((point) {
-          return FlSpot(point.x, point.y);
-        }).toList(),
-        isCurved: widget.isCurved,
-        colors: [
-          chartData.color,
-        ],
-        barWidth: widget.isCurved ? 6 : 3,
-        isStrokeCapRound: true,
-        dotData: FlDotData(
-          show: widget.showDotData,
-          dotColor: chartData.color,
-        ),
-        belowBarData: BarAreaData(
-          show: false,
-        ),
-      );
-    }).toList();
-  }
-
-  double _getYAxisInterval() {
-    double maxY = Utils.getMax(widget.chartDataList.map((chartData) {
-      return chartData.maxY;
-    }).toList());
-    double minY = Utils.getMin(widget.chartDataList.map((chartData) {
-      return chartData.minY;
-    }).toList());
-    return (maxY - minY) / (widget.yAxisCount - 1);
-  }
-
-  double _getXAxisInterval() {
-    double maxX = Utils.getMax(widget.chartDataList.map((chartData) {
-      return chartData.maxX;
-    }).toList());
-    double minX = Utils.getMin(widget.chartDataList.map((chartData) {
-      return chartData.minX;
-    }).toList());
-    return (maxX - minX) / (widget.xAxisCount - 1);
+    //只取选中的因子
+    return chartDataList.where((chartData) => chartData.checked).map(
+      (chartData) {
+        return LineChartBarData(
+          spots: chartData.points.map(
+            (point) {
+              return FlSpot(point.x, point.y);
+            },
+          ).toList(),
+          isCurved: widget.isCurved,
+          colors: [
+            chartData.color,
+          ],
+          barWidth: widget.isCurved ? 6 : 3,
+          isStrokeCapRound: true,
+          dotData: FlDotData(
+            show: widget.showDotData,
+            dotColor: chartData.color,
+          ),
+          belowBarData: BarAreaData(
+            show: false,
+          ),
+        );
+      },
+    ).toList();
   }
 }
