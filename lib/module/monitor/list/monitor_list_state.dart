@@ -1,14 +1,16 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/util/constant.dart';
 
-//不继承equatable，确保每次刷新都会触发状态改变的监听
-abstract class MonitorListState{
+//传入时间戳，使得每次都触发状态改变
+abstract class MonitorListState extends Equatable{
+  const MonitorListState();
+
+  @override
+  List<Object> get props => [DateTime.now()];
 }
 
-class MonitorListLoading extends MonitorListState {
-  @override
-  String toString() => 'MonitorListLoading';
-}
+class MonitorListLoading extends MonitorListState {}
 
 class MonitorListLoaded extends MonitorListState {
   //监控点列表
@@ -21,7 +23,7 @@ class MonitorListLoaded extends MonitorListState {
 
   final int currentPage;
 
-  MonitorListLoaded({
+  const MonitorListLoaded({
     @required this.monitorList,
     @required this.hasNextPage,
     this.currentPage = Constant.defaultCurrentPage,
@@ -30,17 +32,11 @@ class MonitorListLoaded extends MonitorListState {
 }
 
 //监控点列表页没有数据的状态
-class MonitorListEmpty extends MonitorListState {
-  @override
-  String toString() => 'MonitorListEmpty';
-}
+class MonitorListEmpty extends MonitorListState {}
 
 //监控点列表页发生错误的状态
 class MonitorListError extends MonitorListState {
-  final errorMessage;
+  final String errorMessage;
 
-  MonitorListError({@required this.errorMessage});
-
-  @override
-  String toString() => 'MonitorListError';
+  const MonitorListError({@required this.errorMessage});
 }

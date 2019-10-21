@@ -13,45 +13,49 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
   @override
   Stream<MonitorListState> mapEventToState(MonitorListEvent event) async* {
     try {
-      if (event is MonitorListLoad) {
-        if (!event.isRefresh && currentState is MonitorListLoaded) {
-          //加载更多
-          final monitorList = await getMonitorList(
-            currentPage: (currentState as MonitorListLoaded).currentPage + 1,
-            enterName: event.enterName,
-            areaCode: event.areaCode,
-            monitorType: event.monitorType,
-            state: event.state,
-          );
-          yield MonitorListLoaded(
-            monitorList:
-                (currentState as MonitorListLoaded).monitorList + monitorList,
-            currentPage: (currentState as MonitorListLoaded).currentPage + 1,
-            hasNextPage: (currentState as MonitorListLoaded).pageSize ==
-                monitorList.length,
-          );
-        } else {
-          //首次加载或刷新
-          final monitorList = await getMonitorList(
-            enterName: event.enterName,
-            areaCode: event.areaCode,
-            monitorType: event.monitorType,
-            state: event.state,
-          );
-          if (monitorList.length == 0) {
-            //没有数据
-            yield MonitorListEmpty();
-          } else {
-            yield MonitorListLoaded(
-              monitorList: monitorList,
-              hasNextPage: Constant.defaultPageSize == monitorList.length,
-            );
-          }
-        }
-      }
+      yield* _mapMonitorListLoadToState(event);
     } catch (e) {
       yield MonitorListError(
           errorMessage: ExceptionHandle.handleException(e).msg);
+    }
+  }
+
+  Stream<MonitorListState> _mapMonitorListLoadToState(
+      MonitorListLoad event) async* {
+    final currentState = state;
+    if (event is MonitorListLoad) {
+      if (!event.isRefresh && currentState is MonitorListLoaded) {
+        //加载更多
+        final monitorList = await getMonitorList(
+          currentPage: currentState.currentPage + 1,
+          enterName: event.enterName,
+          areaCode: event.areaCode,
+          monitorType: event.monitorType,
+          state: event.state,
+        );
+        yield MonitorListLoaded(
+          monitorList: currentState.monitorList + monitorList,
+          currentPage: currentState.currentPage + 1,
+          hasNextPage: currentState.pageSize == monitorList.length,
+        );
+      } else {
+        //首次加载或刷新
+        final monitorList = await getMonitorList(
+          enterName: event.enterName,
+          areaCode: event.areaCode,
+          monitorType: event.monitorType,
+          state: event.state,
+        );
+        if (monitorList.length == 0) {
+          //没有数据
+          yield MonitorListEmpty();
+        } else {
+          yield MonitorListLoaded(
+            monitorList: monitorList,
+            hasNextPage: Constant.defaultPageSize == monitorList.length,
+          );
+        }
+      }
     }
   }
 

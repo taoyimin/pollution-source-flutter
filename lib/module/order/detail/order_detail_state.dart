@@ -4,41 +4,33 @@ import 'package:meta/meta.dart';
 import 'order_detail_model.dart';
 
 abstract class OrderDetailState extends Equatable {
-  OrderDetailState([List props = const []]) : super(props);
+  const OrderDetailState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class OrderDetailLoading extends OrderDetailState {
-  @override
-  String toString() => 'OrderDetailLoading';
-}
+class OrderDetailLoading extends OrderDetailState {}
 
 class OrderDetailLoaded extends OrderDetailState {
   //报警管理单详情
   final OrderDetail orderDetail;
 
-  OrderDetailLoaded({
-    @required this.orderDetail,
-  }) : super([
-          orderDetail,
-        ]);
+  const OrderDetailLoaded({@required this.orderDetail});
+
+  @override
+  List<Object> get props => [orderDetail];
 }
 
 //报警管理单详情页没有数据的状态
-class OrderDetailEmpty extends OrderDetailState {
-  @override
-  String toString() => 'OrderDetailEmpty';
-}
+class OrderDetailEmpty extends OrderDetailState {}
 
 //报警管理单详情页发生错误的状态
 class OrderDetailError extends OrderDetailState {
-  final errorMessage;
+  final String errorMessage;
 
-  OrderDetailError({
-    @required this.errorMessage,
-  }) : super([
-          errorMessage,
-        ]);
+  const OrderDetailError({@required this.errorMessage});
 
   @override
-  String toString() => 'OrderDetailError';
+  List<Object> get props => [errorMessage];
 }

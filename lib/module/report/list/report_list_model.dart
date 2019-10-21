@@ -38,7 +38,7 @@ class Report extends Equatable {
   //标签集合
   final List<Label> labelList;
 
-  Report({
+  const Report({
     this.enterName = '',
     this.outletName = '',
     this.abnormalType = '',
@@ -49,20 +49,23 @@ class Report extends Equatable {
     this.state = '',
     this.reason = '',
     this.abnormalFactor = '',
-    this.labelList,
-  }) : super([
-          enterName,
-          outletName,
-          abnormalType,
-          areaName,
-          startTime,
-          endTime,
-          reportTime,
-          state,
-          reason,
-          abnormalFactor,
-          labelList,
-        ]);
+    this.labelList = const [],
+  });
+
+  @override
+  List<Object> get props => [
+    enterName,
+    outletName,
+    abnormalType,
+    areaName,
+    startTime,
+    endTime,
+    reportTime,
+    state,
+    reason,
+    abnormalFactor,
+    labelList,
+  ];
 
   static Report fromJson(dynamic json) {
     return Report(

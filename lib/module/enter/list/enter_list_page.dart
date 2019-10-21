@@ -86,7 +86,7 @@ class _EnterListPageState extends State<EnterListPage>
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
-                      getBoxShadow(),
+                      UIUtils.getBoxShadow(),
                     ],
                   ),
                   child: Row(
@@ -174,8 +174,8 @@ class _EnterListPageState extends State<EnterListPage>
               },
               popupMenuButton: PopupMenuButton<String>(
                 itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  selectView(Icons.message, '发起群聊', 'A'),
-                  selectView(Icons.group_add, '添加服务', 'B'),
+                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
+                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
                 ],
                 onSelected: (String action) {
                   // 点击选项的时候
@@ -194,8 +194,8 @@ class _EnterListPageState extends State<EnterListPage>
           Key('list'),
           EasyRefresh.custom(
             controller: _refreshController,
-            header: getRefreshClassicalHeader(),
-            footer: getLoadClassicalFooter(),
+            header: UIUtils.getRefreshClassicalHeader(),
+            footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocListener<EnterListBloc, EnterListState>(
                 listener: (context, state) {

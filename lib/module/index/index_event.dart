@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-abstract class IndexEvent extends Equatable {}
+abstract class IndexEvent extends Equatable {
+  const IndexEvent();
 
-class Load extends IndexEvent {
   @override
-  String toString() => 'Load';
+  List<Object> get props => [];
 }
+
+class Load extends IndexEvent {}

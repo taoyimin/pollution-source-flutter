@@ -1,6 +1,4 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
 //报警管理单
@@ -17,7 +15,7 @@ class OrderDetail extends Equatable {
   final String contactPersonTel;
   final List<DealStep> stepList;
 
-  OrderDetail({
+  const OrderDetail({
     this.enterName = '',
     this.enterAddress = '',
     this.areaName = '',
@@ -28,20 +26,23 @@ class OrderDetail extends Equatable {
     this.alarmRemark = '',
     this.contactPerson = '',
     this.contactPersonTel = '',
-    this.stepList,
-  }) : super([
-          enterName,
-          enterAddress,
-          areaName,
-          monitorName,
-          alarmTime,
-          state,
-          alarmType,
-          alarmRemark,
-          contactPerson,
-          contactPersonTel,
-          stepList,
-        ]);
+    this.stepList = const [],
+  });
+
+  @override
+  List<Object> get props => [
+        enterName,
+        enterAddress,
+        areaName,
+        monitorName,
+        alarmTime,
+        state,
+        alarmType,
+        alarmRemark,
+        contactPerson,
+        contactPersonTel,
+        stepList,
+      ];
 
   static OrderDetail fromJson(dynamic json) {
     return OrderDetail(

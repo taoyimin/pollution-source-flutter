@@ -23,21 +23,24 @@ class Enter extends Equatable {
   //企业标签
   final List<Label> labelList;
 
-  Enter({
-    this.enterName = '',
-    this.enterAddress = '',
+  const Enter({
+    this.enterName = '企业名称',
+    this.enterAddress = '企业地址',
     this.isImportant = false,
-    this.imagePath = '',
-    this.industryType = '',
-    this.labelList,
-  }) : super([
-          enterName,
-          enterAddress,
-          isImportant,
-          imagePath,
-          industryType,
-          labelList,
-        ]);
+    this.imagePath = '企业logo',
+    this.industryType = '行业类别',
+    this.labelList = const [],
+  });
+
+  @override
+  List<Object> get props => [
+    enterName,
+    enterAddress,
+    isImportant,
+    imagePath,
+    industryType,
+    labelList,
+  ];
 
   static Enter fromJson(dynamic json) {
     return Enter(

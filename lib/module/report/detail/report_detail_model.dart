@@ -19,7 +19,7 @@ class ReportDetail extends Equatable {
   final String reviewOpinion;
   final List<Attachment> attachmentList;
 
-  ReportDetail({
+  const ReportDetail({
     this.enterName = '',
     this.enterAddress = '',
     this.outletName = '',
@@ -34,24 +34,27 @@ class ReportDetail extends Equatable {
     this.contactPersonTel = '',
     this.reportReason = '',
     this.reviewOpinion = '',
-    this.attachmentList,
-  }) : super([
-          enterName,
-          enterAddress,
-          outletName,
-          monitorName,
-          areaName,
-          reportTime,
-          startTime,
-          endTime,
-          abnormalFactor,
-          abnormalType,
-          contactPerson,
-          contactPersonTel,
-          reportReason,
-          reviewOpinion,
-          attachmentList,
-        ]);
+    this.attachmentList = const [],
+  });
+
+  @override
+  List<Object> get props => [
+        enterName,
+        enterAddress,
+        outletName,
+        monitorName,
+        areaName,
+        reportTime,
+        startTime,
+        endTime,
+        abnormalFactor,
+        abnormalType,
+        contactPerson,
+        contactPersonTel,
+        reportReason,
+        reviewOpinion,
+        attachmentList,
+      ];
 
   static ReportDetail fromJson(dynamic json) {
     return ReportDetail(

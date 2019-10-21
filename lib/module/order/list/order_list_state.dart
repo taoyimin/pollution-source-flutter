@@ -1,14 +1,16 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/util/constant.dart';
 
-//不继承equatable，确保每次刷新都会触发状态改变的监听
-abstract class OrderListState{
+//传入时间戳，使得每次都触发状态改变
+abstract class OrderListState extends Equatable{
+  const OrderListState();
+
+  @override
+  List<Object> get props => [DateTime.now()];
 }
 
-class OrderListLoading extends OrderListState {
-  @override
-  String toString() => 'OrderListLoading';
-}
+class OrderListLoading extends OrderListState {}
 
 class OrderListLoaded extends OrderListState {
   //报警管理单列表
@@ -21,7 +23,7 @@ class OrderListLoaded extends OrderListState {
 
   final int currentPage;
 
-  OrderListLoaded({
+  const OrderListLoaded({
     @required this.orderList,
     @required this.hasNextPage,
     this.currentPage = Constant.defaultCurrentPage,
@@ -30,17 +32,11 @@ class OrderListLoaded extends OrderListState {
 }
 
 //报警管理单列表页没有数据的状态
-class OrderListEmpty extends OrderListState {
-  @override
-  String toString() => 'OrderListEmpty';
-}
+class OrderListEmpty extends OrderListState {}
 
 //报警管理单列表页发生错误的状态
 class OrderListError extends OrderListState {
-  final errorMessage;
+  final String errorMessage;
 
-  OrderListError({@required this.errorMessage});
-
-  @override
-  String toString() => 'OrderListError';
+  const OrderListError({@required this.errorMessage});
 }

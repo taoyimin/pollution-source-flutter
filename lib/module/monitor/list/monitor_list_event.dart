@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 abstract class MonitorListEvent extends Equatable {
-  MonitorListEvent([List props = const []]) : super(props);
+  const MonitorListEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class MonitorListLoad extends MonitorListEvent {
@@ -20,20 +23,20 @@ class MonitorListLoad extends MonitorListEvent {
   //监控点状态 online:在线 warn:预警 outrange:超标 offline:脱机 stopline:停产
   final String state;
 
-  MonitorListLoad({
+  const MonitorListLoad({
     this.isRefresh = false,
     this.enterName = '',
     this.areaCode = '',
     this.monitorType = '',
     this.state = '',
-  }) : super([
-          isRefresh,
-          enterName,
-          areaCode,
-          monitorType,
-          state,
-        ]);
+  });
 
   @override
-  String toString() => 'MonitorListLoad';
+  List<Object> get props => [
+        isRefresh,
+        enterName,
+        areaCode,
+        monitorType,
+        state,
+      ];
 }

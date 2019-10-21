@@ -15,34 +15,28 @@ class Monitor extends Equatable {
   //标签集合
   final List<Label> labelList;
 
-  Monitor({
+  const Monitor({
     this.enterMonitorName = '',
     this.monitorName = '',
     this.monitorAddress = '',
     this.monitorType = '',
     this.imagePath = '',
     this.areaName = '',
-    this.labelList,
-  }) : super([
-          enterMonitorName,
-          monitorName,
-          monitorAddress,
-          monitorType,
-          imagePath,
-          areaName,
-          labelList,
-        ]);
+    this.labelList = const [],
+  });
+
+  @override
+  List<Object> get props => [
+        enterMonitorName,
+        monitorName,
+        monitorAddress,
+        monitorType,
+        imagePath,
+        areaName,
+        labelList,
+      ];
 
   static Monitor fromJson(dynamic json) {
-    /*return Monitor(
-      enterMonitorName: json['disoutshortname'],
-      monitorName: json['disoutname'],
-      monitorAddress: json['disoutaddress'],
-      monitorType: json['disouttype'],
-      area: '没有该字段',
-      imagePath: _getMonitorTypeImage(json['disouttype']),
-      labelList: TextUtil.isEmpty('流量 PH 化学需氧量 氨氮 总磷 总氮') ? [] : _getLabelList('流量 PH 化学需氧量 氨氮 总磷 总氮'),
-    );*/
     return Monitor(
       enterMonitorName: json['disoutshortname'],
       monitorName: json['disoutname'],
@@ -79,11 +73,6 @@ class Monitor extends Equatable {
     return string.trimLeft().trimRight().split(' ').map((string) {
       return Label(
         name: string,
-        /*color: () {
-          //获取随机颜色
-          return Color.fromARGB(255, Random.secure().nextInt(255),
-              Random.secure().nextInt(255), Random.secure().nextInt(255));
-        }(),*/
         color: Colors.green,
       );
     }).toList();

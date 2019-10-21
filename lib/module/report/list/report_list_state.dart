@@ -1,14 +1,16 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/util/constant.dart';
 
-//不继承equatable，确保每次刷新都会触发状态改变的监听
-abstract class ReportListState{
+//传入时间戳，使得每次都触发状态改变
+abstract class ReportListState extends Equatable{
+  const ReportListState();
+
+  @override
+  List<Object> get props => [DateTime.now()];
 }
 
-class ReportListLoading extends ReportListState {
-  @override
-  String toString() => 'ReportListLoading';
-}
+class ReportListLoading extends ReportListState {}
 
 class ReportListLoaded extends ReportListState {
   //异常申报单列表
@@ -21,7 +23,7 @@ class ReportListLoaded extends ReportListState {
 
   final int currentPage;
 
-  ReportListLoaded({
+  const ReportListLoaded({
     @required this.reportList,
     @required this.hasNextPage,
     this.currentPage = Constant.defaultCurrentPage,
@@ -30,17 +32,11 @@ class ReportListLoaded extends ReportListState {
 }
 
 //异常申报单列表页没有数据的状态
-class ReportListEmpty extends ReportListState {
-  @override
-  String toString() => 'ReportListEmpty';
-}
+class ReportListEmpty extends ReportListState {}
 
 //异常申报单列表页发生错误的状态
 class ReportListError extends ReportListState {
-  final errorMessage;
+  final String errorMessage;
 
-  ReportListError({@required this.errorMessage});
-
-  @override
-  String toString() => 'ReportListError';
+  const ReportListError({@required this.errorMessage});
 }

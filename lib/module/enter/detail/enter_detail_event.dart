@@ -2,19 +2,18 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 abstract class EnterDetailEvent extends Equatable {
-  EnterDetailEvent([List props = const []]) : super(props);
+  const EnterDetailEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EnterDetailLoad extends EnterDetailEvent {
   //企业ID
   final String enterId;
 
-  EnterDetailLoad({
-    @required this.enterId,
-  }) : super([
-          enterId,
-        ]);
+  const EnterDetailLoad({@required this.enterId});
 
   @override
-  String toString() => 'EnterDetailLoad';
+  List<Object> get props => [enterId];
 }

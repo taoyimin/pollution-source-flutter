@@ -13,23 +13,26 @@ class Order extends Equatable {
   final String alarmRemark;
   final List<Label> labelList;
 
-  Order({
+  const Order({
     this.enterName = '',
     this.monitorName = '',
     this.alarmTime = '',
     this.areaName = '',
     this.state = '',
     this.alarmRemark = '',
-    this.labelList,
-  }) : super([
-          enterName,
-          monitorName,
-          alarmTime,
-          areaName,
-          state,
-          alarmRemark,
-          labelList,
-        ]);
+    this.labelList = const [],
+  });
+
+  @override
+  List<Object> get props => [
+        enterName,
+        monitorName,
+        alarmTime,
+        areaName,
+        state,
+        alarmRemark,
+        labelList,
+      ];
 
   static Order fromJson(dynamic json) {
     return Order(

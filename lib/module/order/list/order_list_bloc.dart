@@ -13,41 +13,46 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   Stream<OrderListState> mapEventToState(OrderListEvent event) async* {
     try {
       if (event is OrderListLoad) {
-        if (!event.isRefresh && currentState is OrderListLoaded) {
-          //加载更多
-          final orderList = await getOrderList(
-            currentPage: (currentState as OrderListLoaded).currentPage + 1,
-            enterName: event.enterName,
-            areaCode: event.areaCode,
-            state: event.state,
-          );
-          yield OrderListLoaded(
-            orderList: (currentState as OrderListLoaded).orderList + orderList,
-            currentPage: (currentState as OrderListLoaded).currentPage + 1,
-            hasNextPage:
-                (currentState as OrderListLoaded).pageSize == orderList.length,
-          );
-        } else {
-          //首次加载或刷新
-          final orderList = await getOrderList(
-            enterName: event.enterName,
-            areaCode: event.areaCode,
-            state: event.state,
-          );
-          if (orderList.length == 0) {
-            //没有数据
-            yield OrderListEmpty();
-          } else {
-            yield OrderListLoaded(
-              orderList: orderList,
-              hasNextPage: Constant.defaultPageSize == orderList.length,
-            );
-          }
-        }
+        yield* _mapOrderListLoadToState(event);
       }
     } catch (e) {
       yield OrderListError(
           errorMessage: ExceptionHandle.handleException(e).msg);
+    }
+  }
+
+  Stream<OrderListState> _mapOrderListLoadToState(OrderListLoad event) async* {
+    final currentState = state;
+    if (!event.isRefresh && currentState is OrderListLoaded) {
+      //加载更多
+      final orderList = await getOrderList(
+        currentPage: currentState.currentPage + 1,
+        enterName: event.enterName,
+        areaCode: event.areaCode,
+        state: event.state,
+      );
+      yield OrderListLoaded(
+        orderList: currentState.orderList + orderList,
+        currentPage: currentState.currentPage + 1,
+        hasNextPage:
+            currentState.pageSize == orderList.length,
+      );
+    } else {
+      //首次加载或刷新
+      final orderList = await getOrderList(
+        enterName: event.enterName,
+        areaCode: event.areaCode,
+        state: event.state,
+      );
+      if (orderList.length == 0) {
+        //没有数据
+        yield OrderListEmpty();
+      } else {
+        yield OrderListLoaded(
+          orderList: orderList,
+          hasNextPage: Constant.defaultPageSize == orderList.length,
+        );
+      }
     }
   }
 

@@ -1,15 +1,16 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 
-//不继承equatable，确保每次刷新都会触发状态改变的监听
-abstract class IndexState{
+//传入时间戳，使得每次都触发状态改变
+abstract class IndexState extends Equatable{
+  const IndexState();
+
+  @override
+  List<Object> get props => [DateTime.now()];
 }
 
 //首页首次进入的加载状态
-class IndexLoading extends IndexState {
-  @override
-  String toString() => 'IndexLoading';
-}
+class IndexLoading extends IndexState {}
 
 //首页加载完成状态
 class IndexLoaded extends IndexState {
@@ -22,7 +23,7 @@ class IndexLoaded extends IndexState {
   final comprehensiveStatisticsList;
   final rainEnterStatisticsList;
 
-  IndexLoaded({
+  const IndexLoaded({
     @required this.aqiStatistics,
     @required this.aqiExamineList,
     @required this.waterStatisticsList,
@@ -32,29 +33,11 @@ class IndexLoaded extends IndexState {
     @required this.comprehensiveStatisticsList,
     @required this.rainEnterStatisticsList,
   });
-
-  @override
-  String toString() => 'IndexLoaded';
 }
-
-//首页刷新完成状态
-/*class IndexRefreshed extends IndexState {
-  final aqiStatistics;
-
-  IndexRefreshed({
-    @required this.aqiStatistics,
-  }) : super([aqiStatistics]);
-
-  @override
-  String toString() => 'IndexRefreshed';
-}*/
 
 //首页发生错误的状态
 class IndexError extends IndexState {
-  final errorMessage;
+  final String errorMessage;
 
-  IndexError({@required this.errorMessage});
-
-  @override
-  String toString() => 'IndexError';
+  const IndexError({@required this.errorMessage});
 }

@@ -13,41 +13,46 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
   Stream<ReportListState> mapEventToState(ReportListEvent event) async* {
     try {
       if (event is ReportListLoad) {
-        if (!event.isRefresh && currentState is ReportListLoaded) {
-          //加载更多
-          final reportList = await getReportList(
-            currentPage: (currentState as ReportListLoaded).currentPage + 1,
-            enterName: event.enterName,
-            areaCode: event.areaCode,
-            state: event.state,
-          );
-          yield ReportListLoaded(
-            reportList: (currentState as ReportListLoaded).reportList + reportList,
-            currentPage: (currentState as ReportListLoaded).currentPage + 1,
-            hasNextPage:
-                (currentState as ReportListLoaded).pageSize == reportList.length,
-          );
-        } else {
-          //首次加载或刷新
-          final reportList = await getReportList(
-            enterName: event.enterName,
-            areaCode: event.areaCode,
-            state: event.state,
-          );
-          if (reportList.length == 0) {
-            //没有数据
-            yield ReportListEmpty();
-          } else {
-            yield ReportListLoaded(
-              reportList: reportList,
-              hasNextPage: Constant.defaultPageSize == reportList.length,
-            );
-          }
-        }
+        yield* _mapReportListLoadToState(event);
       }
     } catch (e) {
       yield ReportListError(
           errorMessage: ExceptionHandle.handleException(e).msg);
+    }
+  }
+
+  Stream<ReportListState> _mapReportListLoadToState(
+      ReportListLoad event) async* {
+    final currentState = state;
+    if (!event.isRefresh && currentState is ReportListLoaded) {
+      //加载更多
+      final reportList = await getReportList(
+        currentPage: currentState.currentPage + 1,
+        enterName: event.enterName,
+        areaCode: event.areaCode,
+        state: event.state,
+      );
+      yield ReportListLoaded(
+        reportList: currentState.reportList + reportList,
+        currentPage: currentState.currentPage + 1,
+        hasNextPage: currentState.pageSize == reportList.length,
+      );
+    } else {
+      //首次加载或刷新
+      final reportList = await getReportList(
+        enterName: event.enterName,
+        areaCode: event.areaCode,
+        state: event.state,
+      );
+      if (reportList.length == 0) {
+        //没有数据
+        yield ReportListEmpty();
+      } else {
+        yield ReportListLoaded(
+          reportList: reportList,
+          hasNextPage: Constant.defaultPageSize == reportList.length,
+        );
+      }
     }
   }
 

@@ -327,7 +327,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 boxShadow: [
-                                  getBoxShadow(),
+                                  UIUtils.getBoxShadow(),
                                 ],
                               ),
                               child: Column(

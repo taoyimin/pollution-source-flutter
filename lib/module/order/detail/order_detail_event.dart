@@ -2,19 +2,18 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 abstract class OrderDetailEvent extends Equatable {
-  OrderDetailEvent([List props = const []]) : super(props);
+  const OrderDetailEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class OrderDetailLoad extends OrderDetailEvent {
   //督办单ID
   final String orderId;
 
-  OrderDetailLoad({
-    @required this.orderId,
-  }) : super([
-          orderId,
-        ]);
+  const OrderDetailLoad({@required this.orderId});
 
   @override
-  String toString() => 'OrderDetailLoad';
+  List<Object> get props => [orderId];
 }

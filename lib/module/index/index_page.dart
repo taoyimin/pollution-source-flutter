@@ -1367,9 +1367,10 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                   chart: BarChart(BarChartData(
                     barTouchData: BarTouchData(
                       touchTooltipData: TouchTooltipData(
-                          tooltipBgColor: Colors.blueGrey,
-                          getTooltipItems: (touchedSpots) {
-                            return touchedSpots.map((touchedSpot) {
+                        tooltipBgColor: Colors.blueGrey,
+                        getTooltipItems: (touchedSpots) {
+                          return touchedSpots.map(
+                            (touchedSpot) {
                               String weekDay;
                               switch (touchedSpot.spot.x.toInt()) {
                                 case 0:
@@ -1395,12 +1396,15 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                                   break;
                               }
                               return TooltipItem(
-                                  weekDay +
-                                      '\n' +
-                                      touchedSpot.spot.y.toString(),
-                                  TextStyle(color: Colors.yellow));
-                            }).toList();
-                          }),
+                                weekDay + '\n' + touchedSpot.spot.y.toString(),
+                                TextStyle(
+                                  color: Colors.yellow,
+                                ),
+                              );
+                            },
+                          ).toList();
+                        },
+                      ),
                       touchResponseSink: barTouchedResultStreamController.sink,
                     ),
                     titlesData: FlTitlesData(

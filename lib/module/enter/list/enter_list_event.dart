@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 abstract class EnterListEvent extends Equatable {
-  EnterListEvent([List props = const []]) : super(props);
+  const EnterListEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EnterListLoad extends EnterListEvent {
@@ -23,22 +26,22 @@ class EnterListLoad extends EnterListEvent {
   //0:非重点源 1:重点源
   final String attentionLevel;
 
-  EnterListLoad({
+  const EnterListLoad({
     this.isRefresh = false,
     this.enterName = '',
     this.areaCode = '',
     this.state = '',
     this.attentionLevel = '',
     this.enterType = '',
-  }) : super([
-          isRefresh,
-          enterName,
-          areaCode,
-          state,
-          attentionLevel,
-          enterType,
-        ]);
+  });
 
   @override
-  String toString() => 'EnterListLoad';
+  List<Object> get props => [
+    isRefresh,
+    enterName,
+    areaCode,
+    state,
+    attentionLevel,
+    enterType,
+  ];
 }

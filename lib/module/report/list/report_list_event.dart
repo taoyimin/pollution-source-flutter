@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 abstract class ReportListEvent extends Equatable {
-  ReportListEvent([List props = const []]) : super(props);
+  const ReportListEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class ReportListLoad extends ReportListEvent {
@@ -17,18 +20,18 @@ class ReportListLoad extends ReportListEvent {
   //异常申报单状态
   final String state;
 
-  ReportListLoad({
+  const ReportListLoad({
     this.isRefresh = false,
     this.enterName = '',
     this.areaCode = '',
     this.state = '',
-  }) : super([
-          isRefresh,
-          enterName,
-          areaCode,
-          state,
-        ]);
+  });
 
   @override
-  String toString() => 'ReportListLoad';
+  List<Object> get props => [
+        isRefresh,
+        enterName,
+        areaCode,
+        state,
+      ];
 }

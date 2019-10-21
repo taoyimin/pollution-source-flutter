@@ -81,7 +81,7 @@ class _ReportListPageState extends State<ReportListPage>
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
-                      getBoxShadow(),
+                      UIUtils.getBoxShadow(),
                     ],
                   ),
                   child: Column(
@@ -179,9 +179,9 @@ class _ReportListPageState extends State<ReportListPage>
               },
               popupMenuButton: PopupMenuButton<String>(
                 itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  selectView(Icons.message, '发起群聊', 'A'),
-                  selectView(Icons.group_add, '添加服务', 'B'),
-                  selectView(Icons.cast_connected, '扫一扫码', 'C'),
+                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
+                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
+                  UIUtils.getSelectView(Icons.cast_connected, '扫一扫码', 'C'),
                 ],
                 onSelected: (String action) {
                   // 点击选项的时候
@@ -202,8 +202,8 @@ class _ReportListPageState extends State<ReportListPage>
           Key('list'),
           EasyRefresh.custom(
             controller: _refreshController,
-            header: getRefreshClassicalHeader(),
-            footer: getLoadClassicalFooter(),
+            header: UIUtils.getRefreshClassicalHeader(),
+            footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocListener<ReportListBloc, ReportListState>(
                 listener: (context, state) {
