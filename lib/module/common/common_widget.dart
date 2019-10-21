@@ -1088,7 +1088,8 @@ class LineChartWidgetState extends State<LineChartWidget> {
   void initState() {
     super.initState();
     controller = StreamController();
-    controller.stream.distinct().listen((LineTouchResponse response) {});
+    controller.stream.distinct().listen((LineTouchResponse response) {
+    });
   }
 
   @override
@@ -1159,8 +1160,10 @@ class LineChartWidgetState extends State<LineChartWidget> {
           getTooltipItems: (touchedSpots) {
             return touchedSpots.map(
               (touchedSpot) {
+                int index = touchedSpots.indexOf(touchedSpot);
                 return TooltipItem(
-                  '${DateUtil.formatDateMs(touchedSpot.spot.x.toInt(), format: 'HH:mm:ss')}    ${touchedSpot.spot.y.toString()}',
+                  //'${DateUtil.formatDateMs(touchedSpot.spot.x.toInt(), format: 'HH时mm分ss秒')}  \n  ${touchedSpot.spot.y.toString()}',
+                  '${widget.chartDataList[index].factorName} ${touchedSpot.spot.y.toString()}',
                   TextStyle(
                     color: touchedSpot.getColor(),
                   ),
@@ -1178,8 +1181,8 @@ class LineChartWidgetState extends State<LineChartWidget> {
           showTitles: true,
           interval: xInterval,
           reservedSize: 22,
-          textStyle: TextStyle(
-            color: const Color(0xff72719b),
+          textStyle:const TextStyle(
+            color: Color(0xff72719b),
             fontSize: 12,
           ),
           margin: 20,
@@ -1190,11 +1193,12 @@ class LineChartWidgetState extends State<LineChartWidget> {
         leftTitles: SideTitles(
           showTitles: true,
           interval: yInterval,
-          textStyle: TextStyle(
-            color: const Color(0xff75729e),
+          textStyle:const TextStyle(
+            color: Color(0xff75729e),
             fontSize: 14,
           ),
           getTitles: (value) {
+            //间隔大于等于1时，Y轴坐标不保留小数位，小于1时，保留一位小数
             return yInterval >= 1 ? value.toStringAsFixed(0) : value.toStringAsFixed(1);
           },
           margin: 20,
@@ -1228,7 +1232,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
           colors: [
             chartData.color,
           ],
-          barWidth: widget.isCurved ? 6 : 3,
+          barWidth: 3,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: widget.showDotData,
