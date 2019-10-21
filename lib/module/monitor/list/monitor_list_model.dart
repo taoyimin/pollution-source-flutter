@@ -3,26 +3,24 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
-//监控点
+//监控点列表
 class Monitor extends Equatable {
-  final String enterMonitorName;
-  final String monitorName;
-  final String monitorAddress;
-  final String monitorType;
-  final String imagePath;
-  final String areaName;
-
-  //标签集合
-  final List<Label> labelList;
+  final String enterMonitorName;  //企业监控点名称
+  final String monitorName; //监控点名称
+  final String monitorAddress;  //监控点地址
+  final String monitorType; //监控点类型
+  final String imagePath; //监控点logo
+  final String areaName;  //区域
+  final List<Label> labelList;  //标签集合
 
   const Monitor({
-    this.enterMonitorName = '',
-    this.monitorName = '',
-    this.monitorAddress = '',
-    this.monitorType = '',
-    this.imagePath = '',
-    this.areaName = '',
-    this.labelList = const [],
+    this.enterMonitorName,
+    this.monitorName,
+    this.monitorAddress,
+    this.monitorType,
+    this.imagePath,
+    this.areaName,
+    this.labelList,
   });
 
   @override
@@ -45,7 +43,7 @@ class Monitor extends Equatable {
       areaName: '没有该字段',
       imagePath: _getMonitorTypeImage(json['disouttype']),
       labelList: TextUtil.isEmpty('流量 PH 化学需氧量 氨氮 总磷 总氮')
-          ? []
+          ? const []
           : _getLabelList('流量 PH 化学需氧量 氨氮 总磷 总氮'),
     );
   }

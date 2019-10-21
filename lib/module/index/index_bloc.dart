@@ -17,13 +17,13 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
       try {
         Response response = await DioUtils.instance.getDio().get(HttpApi.index);
         //空气质量统计
-        AqiStatistics aqiStatistics = await convertAqiStatistics(
+        AqiStatistics aqiStatistics = await _convertAqiStatistics(
             response.data[Constant.responseDataKey][Constant.aqiStatisticsKey]);
         //空气质量考核(过滤无效数据)
         List<AqiExamine> aqiExamineList = await Future.wait([
-          convertAqiExamine(Constant.pm25ExamineKey,
+          _convertAqiExamine(Constant.pm25ExamineKey,
               response.data[Constant.responseDataKey][Constant.pm25ExamineKey]),
-          convertAqiExamine(Constant.aqiExamineKey,
+          _convertAqiExamine(Constant.aqiExamineKey,
               response.data[Constant.responseDataKey][Constant.aqiExamineKey]),
         ]).then((aqiExamineList) =>
             aqiExamineList.skipWhile((AqiExamine aqiExamine) {
@@ -31,18 +31,18 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             }).toList());
         //水环境质量情况(过滤无效数据)
         //TODO 缺少两条数据
-        /*        convertSurfaceWater(Constant.countyWaterKey,
+        /*        _convertSurfaceWater(Constant.countyWaterKey,
             response.data[Constant.responseDataKey][Constant.countyWaterKey]),
-    convertSurfaceWater(Constant.waterWaterKey,
+    _convertSurfaceWater(Constant.waterWaterKey,
     response.data[Constant.responseDataKey][Constant.waterWaterKey]),*/
         List<WaterStatistics> waterStatisticsList = await Future.wait([
-          convertSurfaceWater(Constant.stateWaterKey,
+          _convertSurfaceWater(Constant.stateWaterKey,
               response.data[Constant.responseDataKey][Constant.stateWaterKey]),
-          convertSurfaceWater(
+          _convertSurfaceWater(
               Constant.provinceWaterKey,
               response.data[Constant.responseDataKey]
                   [Constant.provinceWaterKey]),
-          convertSurfaceWater(Constant.metalWaterKey,
+          _convertSurfaceWater(Constant.metalWaterKey,
               response.data[Constant.responseDataKey][Constant.metalWaterKey]),
         ]).then((waterStatisticsList) =>
             waterStatisticsList.skipWhile((WaterStatistics waterStatistics) {
@@ -50,27 +50,27 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             }).toList());
         //污染源企业统计
         List<Meta> pollutionEnterStatisticsList =
-            await convertPollutionEnterStatistics(
+            await _convertPollutionEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.pollutionEnterStatisticsKey]);
         //在线监控点统计
         List<Meta> onlineMonitorStatisticsList =
-            await convertOnlineMonitorStatistics(
+            await _convertOnlineMonitorStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.onlineMonitorStatisticsKey]);
         //代办任务统计
         List<Meta> todoTaskStatisticsList =
-            await convertTodoTaskStatistics(
+            await _convertTodoTaskStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.todoTaskStatisticsKey]);
         //综合信息统计
         List<Meta> comprehensiveStatisticsList =
-            await convertComprehensiveStatistics(
+            await _convertComprehensiveStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.comprehensiveStatisticsKey]);
         //雨水企业统计
         List<Meta> rainEnterStatisticsList =
-            await convertRainEnterStatistics(
+            await _convertRainEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.rainEnterStatisticsKey]);
         yield IndexLoaded(
@@ -91,7 +91,7 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
 }
 
 //格式化空气质量统计
-Future<AqiStatistics> convertAqiStatistics(String string) async {
+Future<AqiStatistics> _convertAqiStatistics(String string) async {
   List<String> strings = string.split(',');
   return AqiStatistics(
     key: Constant.aqiStatisticsKey,
@@ -111,7 +111,7 @@ Future<AqiStatistics> convertAqiStatistics(String string) async {
 }
 
 //格式化空气质量考核
-Future<AqiExamine> convertAqiExamine(String key, String string) async {
+Future<AqiExamine> _convertAqiExamine(String key, String string) async {
   List<String> strings = string.split(',');
   switch (key) {
     case Constant.pm25ExamineKey:
@@ -148,7 +148,7 @@ Future<AqiExamine> convertAqiExamine(String key, String string) async {
 }
 
 //格式化水环境质量情况
-Future<WaterStatistics> convertSurfaceWater(String key, String string) async {
+Future<WaterStatistics> _convertSurfaceWater(String key, String string) async {
   List<String> strings = string.split(',');
   switch (key) {
     case Constant.stateWaterKey:
@@ -217,7 +217,7 @@ Future<WaterStatistics> convertSurfaceWater(String key, String string) async {
 }
 
 //格式化污染源企业统计
-Future<List<Meta>> convertPollutionEnterStatistics(
+Future<List<Meta>> _convertPollutionEnterStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -284,7 +284,7 @@ Future<List<Meta>> convertPollutionEnterStatistics(
 }
 
 //格式化在线监控点概况
-Future<List<Meta>> convertOnlineMonitorStatistics(
+Future<List<Meta>> _convertOnlineMonitorStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -333,7 +333,7 @@ Future<List<Meta>> convertOnlineMonitorStatistics(
 }
 
 //格式化代办任务统计
-Future<List<Meta>> convertTodoTaskStatistics(
+Future<List<Meta>> _convertTodoTaskStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -361,7 +361,7 @@ Future<List<Meta>> convertTodoTaskStatistics(
 }
 
 //综合统计信息
-Future<List<Meta>> convertComprehensiveStatistics(
+Future<List<Meta>> _convertComprehensiveStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -392,7 +392,7 @@ Future<List<Meta>> convertComprehensiveStatistics(
 }
 
 //雨水企业统计
-Future<List<Meta>> convertRainEnterStatistics(
+Future<List<Meta>> _convertRainEnterStatistics(
     String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;

@@ -14,24 +14,27 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
 
   @override
   Stream<MonitorDetailState> mapEventToState(MonitorDetailEvent event) async* {
-    try {
-      if (event is MonitorDetailLoad) {
-        //加载监控点详情
-        yield* _mapMonitorDetailLoadToState(event);
-      } else if (event is UpdateChartData) {
-        //更新监测数据
-        yield* _mapUpdateChartDataToState(event);
-      }
-    } catch (e) {
-      yield MonitorDetailError(
-          errorMessage: ExceptionHandle.handleException(e).msg);
+    if (event is MonitorDetailLoad) {
+      //加载监控点详情
+      yield* _mapMonitorDetailLoadToState(event);
+    } else if (event is UpdateChartData) {
+      //更新监测数据
+      yield* _mapUpdateChartDataToState(event);
+    } else if (event is UpdateChartConfig) {
+      //更新图表配置
+      yield* _mapUpdateChartConfigToState(event);
     }
   }
 
   Stream<MonitorDetailState> _mapMonitorDetailLoadToState(
       MonitorDetailLoad event) async* {
-    final monitorDetail = await getMonitorDetail(monitorId: event.monitorId);
-    yield MonitorDetailLoaded(monitorDetail: monitorDetail);
+    try {
+      final monitorDetail = await _getMonitorDetail(monitorId: event.monitorId);
+      yield MonitorDetailLoaded(monitorDetail: monitorDetail);
+    } catch (e) {
+      yield MonitorDetailError(
+          errorMessage: ExceptionHandle.handleException(e).msg);
+    }
   }
 
   Stream<MonitorDetailState> _mapUpdateChartDataToState(
@@ -53,13 +56,22 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
     }
   }
 
+  Stream<MonitorDetailState> _mapUpdateChartConfigToState(
+      UpdateChartConfig event) async* {
+    final currentState = state;
+    if (currentState is MonitorDetailLoaded) {
+      yield MonitorDetailLoaded(
+        monitorDetail: currentState.monitorDetail
+            .copyWith(isCurved: event.isCurved, showDotData: event.showDotData),
+      );
+    }
+  }
+
   //获取监控点详情
-  Future<MonitorDetail> getMonitorDetail({@required monitorId}) async {
+  Future<MonitorDetail> _getMonitorDetail({@required monitorId}) async {
     Response response = await DioUtils.instance.getDio().get(
       HttpApi.monitorDetail,
-      queryParameters: {
-        'monitorId': monitorId,
-      },
+      queryParameters: {'monitorId': monitorId},
     );
     return MonitorDetail.fromJson(response.data[Constant.responseDataKey]);
   }

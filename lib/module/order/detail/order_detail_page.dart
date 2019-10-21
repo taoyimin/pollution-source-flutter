@@ -149,32 +149,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           ],
                         ),
                       ),
-                      //联系人 没有联系人则隐藏
-                      Offstage(
-                        offstage: TextUtil.isEmpty(
-                            state.orderDetail.contactPersonTel),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              ImageTitleWidget(
-                                title: '企业联系人',
-                                imagePath:
-                                    'assets/images/icon_enter_contacts.png',
-                              ),
-                              Gaps.vGap10,
-                              ContactsWidget(
-                                contactsName:
-                                    '${state.orderDetail.contactPerson}',
-                                contactsTel:
-                                    '${state.orderDetail.contactPersonTel}',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                       //快速链接
                       Container(
                         width: double.infinity,

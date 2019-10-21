@@ -13,30 +13,29 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
 
   @override
   Stream<OrderDetailState> mapEventToState(OrderDetailEvent event) async* {
+    if (event is OrderDetailLoad) {
+      //加载报警管理单详情
+      _mapOrderDetailLoadToState(event);
+    }
+  }
+
+  Stream<OrderDetailState> _mapOrderDetailLoadToState(
+      OrderDetailLoad event) async* {
     try {
-      if (event is OrderDetailLoad) {
-        //加载报警管理单详情
-        final orderDetail = await getOrderDetail(
-          orderId: event.orderId,
-        );
-        yield OrderDetailLoaded(
-          orderDetail: orderDetail,
-        );
-      }
+      final orderDetail = await _getOrderDetail(orderId: event.orderId);
+      yield OrderDetailLoaded(orderDetail: orderDetail);
     } catch (e) {
       yield OrderDetailError(
           errorMessage: ExceptionHandle.handleException(e).msg);
     }
   }
+
   //获取报警管理单详情
-  Future<OrderDetail> getOrderDetail({
-    @required orderId,
-  }) async {
-    Response response = await DioUtils.instance
-        .getDio()
-        .get(HttpApi.orderDetail, queryParameters: {
-      'orderId': orderId,
-    });
+  Future<OrderDetail> _getOrderDetail({@required orderId}) async {
+    Response response = await DioUtils.instance.getDio().get(
+      HttpApi.orderDetail,
+      queryParameters: {'orderId': orderId},
+    );
     return OrderDetail.fromJson(response.data[Constant.responseDataKey]);
   }
 }

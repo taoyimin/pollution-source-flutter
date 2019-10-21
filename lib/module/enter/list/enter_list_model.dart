@@ -3,33 +3,22 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
-//企业
+//企业列表
 class Enter extends Equatable {
-  //企业名
-  final String enterName;
-
-  //企业地址
-  final String enterAddress;
-
-  //是否是重点企业
-  final bool isImportant;
-
-  //企业logo
-  final String imagePath;
-
-  //行业类别
-  final String industryType;
-
-  //企业标签
-  final List<Label> labelList;
+  final String enterName; //企业名
+  final String enterAddress;  //企业地址
+  final bool isImportant; //是否是重点企业
+  final String imagePath; //企业logo
+  final String industryType;  //行业类别
+  final List<Label> labelList;  //企业标签集合
 
   const Enter({
-    this.enterName = '企业名称',
-    this.enterAddress = '企业地址',
-    this.isImportant = false,
-    this.imagePath = '企业logo',
-    this.industryType = '行业类别',
-    this.labelList = const [],
+    this.enterName,
+    this.enterAddress,
+    this.isImportant,
+    this.imagePath,
+    this.industryType,
+    this.labelList,
   });
 
   @override
@@ -50,7 +39,7 @@ class Enter extends Equatable {
       imagePath: _getEnterTypeImage(json['enterprise_type']),
       industryType: json['industryTypeStr'],
       labelList: TextUtil.isEmpty(json['enterprise_type_str'])
-          ? []
+          ? const []
           : _getLabelList(json['enterprise_type_str']),
     );
   }

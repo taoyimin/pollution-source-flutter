@@ -3,24 +3,24 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
-//报警管理单
+//报警管理单列表
 class Order extends Equatable {
-  final String enterName;
-  final String monitorName;
-  final String alarmTime;
-  final String areaName;
-  final String state;
-  final String alarmRemark;
-  final List<Label> labelList;
+  final String enterName; //企业名称
+  final String monitorName; //监控点名称
+  final String alarmTime; //报警时间
+  final String areaName;  //区域
+  final String state; //状态
+  final String alarmRemark; //报警描述
+  final List<Label> labelList;  //标签集合
 
   const Order({
-    this.enterName = '',
-    this.monitorName = '',
-    this.alarmTime = '',
-    this.areaName = '',
-    this.state = '',
-    this.alarmRemark = '',
-    this.labelList = const [],
+    this.enterName,
+    this.monitorName,
+    this.alarmTime,
+    this.areaName,
+    this.state,
+    this.alarmRemark,
+    this.labelList,
   });
 
   @override
@@ -43,7 +43,7 @@ class Order extends Equatable {
       state: json['orderstate'],
       alarmRemark: json['alarmdesc'],
       labelList: TextUtil.isEmpty(json['alarmtype'])
-          ? []
+          ? const []
           : _getLabelList(json['alarmtype']),
     );
   }

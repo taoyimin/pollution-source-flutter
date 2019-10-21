@@ -2,60 +2,60 @@ import 'package:equatable/equatable.dart';
 
 //企业详情
 class EnterDetail extends Equatable {
-  final String enterName;
-  final String enterAddress;
-  final String contactPerson;
-  final String contactPersonTel;
-  final String legalPerson;
-  final String legalPersonTel;
-  final String attentionLevel;
-  final String areaName;
-  final String industryType;
-  final String creditCode;
-  final String orderComplete;
-  final String orderAll;
-  final String monitorReportValid;
-  final String monitorReportAll;
-  final String factorReportValid;
-  final String factorReportAll;
-  final String monitorAll;
-  final String monitorOnline;
-  final String monitorAlarm;
-  final String monitorOver;
-  final String monitorOffline;
-  final String monitorStop;
-  final String licenseNumber;
-  final String buildProject;
-  final String sceneLaw;
-  final String environmentVisit;
+  final String enterName; //企业名称
+  final String enterAddress;  //企业地址
+  final String contactPerson; //企业联系人
+  final String contactPersonTel;  //联系人电话
+  final String legalPerson; //法人
+  final String legalPersonTel;  //法人电话
+  final String attentionLevel;  //关注程度
+  final String areaName;  //区域
+  final String industryType;  //行业类别
+  final String creditCode;  //信用代码
+  final String orderComplete; //报警管理单已办结个数
+  final String orderAll;  //报警管理单总数
+  final String monitorReportValid;  //排口异常申报有效数
+  final String monitorReportAll;  //排口异常申报总数
+  final String factorReportValid; //因子异常申报有效数
+  final String factorReportAll; //因子异常申报总数
+  final String monitorAll;  //监控点总数
+  final String monitorOnline; //监控点在线数
+  final String monitorAlarm;  //监控点预警数
+  final String monitorOver; //监控点超标数
+  final String monitorOffline;  //监控点离线数
+  final String monitorStop; //监控点停产数
+  final String licenseNumber; //排污许可证编码
+  final String buildProject;  //建设项目总数
+  final String sceneLaw;  //现场执法总数
+  final String environmentVisit;  //环境信访总数
 
   EnterDetail({
-    this.enterName = '',
-    this.enterAddress = '',
-    this.contactPerson = '',
-    this.contactPersonTel = '',
-    this.legalPerson = '',
-    this.legalPersonTel = '',
-    this.attentionLevel = '',
-    this.areaName = '',
-    this.industryType = '',
-    this.creditCode = '',
-    this.orderComplete = '',
-    this.orderAll = '',
-    this.monitorReportValid = '',
-    this.monitorReportAll = '',
-    this.factorReportValid = '',
-    this.factorReportAll = '',
-    this.monitorAll = '',
-    this.monitorOnline = '',
-    this.monitorAlarm = '',
-    this.monitorOver = '',
-    this.monitorOffline = '',
-    this.monitorStop = '',
-    this.licenseNumber = '',
-    this.buildProject = '',
-    this.sceneLaw = '',
-    this.environmentVisit = '',
+    this.enterName,
+    this.enterAddress,
+    this.contactPerson,
+    this.contactPersonTel,
+    this.legalPerson,
+    this.legalPersonTel,
+    this.attentionLevel,
+    this.areaName,
+    this.industryType,
+    this.creditCode,
+    this.orderComplete,
+    this.orderAll,
+    this.monitorReportValid,
+    this.monitorReportAll,
+    this.factorReportValid,
+    this.factorReportAll,
+    this.monitorAll,
+    this.monitorOnline,
+    this.monitorAlarm,
+    this.monitorOver,
+    this.monitorOffline,
+    this.monitorStop,
+    this.licenseNumber,
+    this.buildProject,
+    this.sceneLaw,
+    this.environmentVisit,
   });
 
   @override

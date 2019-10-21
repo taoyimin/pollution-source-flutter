@@ -2,12 +2,8 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'report_detail.dart';
@@ -171,32 +167,6 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                               ],
                             ),
                           ],
-                        ),
-                      ),
-                      //联系人 没有联系人则隐藏
-                      Offstage(
-                        offstage: TextUtil.isEmpty(
-                            state.reportDetail.contactPersonTel),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              ImageTitleWidget(
-                                title: '企业联系人',
-                                imagePath:
-                                    'assets/images/icon_enter_contacts.png',
-                              ),
-                              Gaps.vGap10,
-                              ContactsWidget(
-                                contactsName:
-                                    '${state.reportDetail.contactPerson}',
-                                contactsTel:
-                                    '${state.reportDetail.contactPersonTel}',
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                       //证明材料

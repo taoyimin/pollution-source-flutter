@@ -11,9 +11,45 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
 
   @override
   Stream<ReportListState> mapEventToState(ReportListEvent event) async* {
+    if (event is ReportListLoad) {
+      //加载异常申报单列表
+      yield* _mapReportListLoadToState(event);
+    }
+  }
+
+  Stream<ReportListState> _mapReportListLoadToState(
+      ReportListLoad event) async* {
     try {
-      if (event is ReportListLoad) {
-        yield* _mapReportListLoadToState(event);
+      final currentState = state;
+      if (!event.isRefresh && currentState is ReportListLoaded) {
+        //加载更多
+        final reportList = await _getReportList(
+          currentPage: currentState.currentPage + 1,
+          enterName: event.enterName,
+          areaCode: event.areaCode,
+          state: event.state,
+        );
+        yield ReportListLoaded(
+          reportList: currentState.reportList + reportList,
+          currentPage: currentState.currentPage + 1,
+          hasNextPage: currentState.pageSize == reportList.length,
+        );
+      } else {
+        //首次加载或刷新
+        final reportList = await _getReportList(
+          enterName: event.enterName,
+          areaCode: event.areaCode,
+          state: event.state,
+        );
+        if (reportList.length == 0) {
+          //没有数据
+          yield ReportListEmpty();
+        } else {
+          yield ReportListLoaded(
+            reportList: reportList,
+            hasNextPage: Constant.defaultPageSize == reportList.length,
+          );
+        }
       }
     } catch (e) {
       yield ReportListError(
@@ -21,71 +57,26 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
     }
   }
 
-  Stream<ReportListState> _mapReportListLoadToState(
-      ReportListLoad event) async* {
-    final currentState = state;
-    if (!event.isRefresh && currentState is ReportListLoaded) {
-      //加载更多
-      final reportList = await getReportList(
-        currentPage: currentState.currentPage + 1,
-        enterName: event.enterName,
-        areaCode: event.areaCode,
-        state: event.state,
-      );
-      yield ReportListLoaded(
-        reportList: currentState.reportList + reportList,
-        currentPage: currentState.currentPage + 1,
-        hasNextPage: currentState.pageSize == reportList.length,
-      );
-    } else {
-      //首次加载或刷新
-      final reportList = await getReportList(
-        enterName: event.enterName,
-        areaCode: event.areaCode,
-        state: event.state,
-      );
-      if (reportList.length == 0) {
-        //没有数据
-        yield ReportListEmpty();
-      } else {
-        yield ReportListLoaded(
-          reportList: reportList,
-          hasNextPage: Constant.defaultPageSize == reportList.length,
-        );
-      }
-    }
-  }
-
   //获取异常申报单列表数据
-  Future<List<Report>> getReportList({
+  Future<List<Report>> _getReportList({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
     state = '1',
   }) async {
-    Response response = await DioUtils.instance
-        .getDio()
-        .get(HttpApi.reportList, queryParameters: {
-      'currentPage': currentPage,
-      'pageSize': pageSize,
-      'enterpriseName': enterName,
-      'areaCode': areaCode,
-      'status': state,
-    });
-    if (response.statusCode == ExceptionHandle.success &&
-        response.data[Constant.responseCodeKey] ==
-            ExceptionHandle.success_code) {
-      return convertReportList(
-          response.data[Constant.responseDataKey][Constant.responseListKey]);
-    } else {
-      throw Exception('${response.data[Constant.responseMessageKey]}');
-    }
-  }
-
-  //格式化异常申报单数据
-  List<Report> convertReportList(List<dynamic> jsonArray) {
-    return jsonArray.map((json) {
+    Response response = await DioUtils.instance.getDio().get(
+      HttpApi.reportList,
+      queryParameters: {
+        'currentPage': currentPage,
+        'pageSize': pageSize,
+        'enterpriseName': enterName,
+        'areaCode': areaCode,
+        'status': state,
+      },
+    );
+    return response.data[Constant.responseDataKey][Constant.responseListKey]
+        .map<Report>((json) {
       return Report.fromJson(json);
     }).toList();
   }

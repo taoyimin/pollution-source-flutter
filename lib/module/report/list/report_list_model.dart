@@ -3,69 +3,48 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
-//异常申报
+//异常申报列表
 class Report extends Equatable {
-  //企业名称
-  final String enterName;
-
-  //监控点名称
-  final String outletName;
-
-  //异常类型
-  final String abnormalType;
-
-  //区域
-  final String areaName;
-
-  //申报开始时间
-  final String startTime;
-
-  //申报结束时间
-  final String endTime;
-
-  //申报时间
-  final String reportTime;
-
-  //审核状态
-  final String state;
-
-  //停产原因
-  final String reason;
-
-  //异常因子 只有因子异常申报才有值
-  final String abnormalFactor;
-
-  //标签集合
-  final List<Label> labelList;
+  final String enterName; //企业名称
+  final String outletName; //监控点名称
+  final String abnormalType; //异常类型
+  final String areaName; //区域
+  final String startTime; //开始时间
+  final String endTime; //结束时间
+  final String reportTime; //申报时间
+  final String state; //审核状态
+  final String reason; //停产原因
+  final String abnormalFactor; //异常因子 只有因子异常申报才有值
+  final List<Label> labelList; //标签集合
 
   const Report({
-    this.enterName = '',
-    this.outletName = '',
-    this.abnormalType = '',
-    this.areaName = '',
-    this.startTime = '',
-    this.endTime = '',
-    this.reportTime = '',
-    this.state = '',
-    this.reason = '',
-    this.abnormalFactor = '',
-    this.labelList = const [],
+    this.enterName,
+    this.outletName,
+    this.abnormalType,
+    this.areaName,
+    this.startTime,
+    this.endTime,
+    this.reportTime,
+    this.state,
+    this.reason,
+    this.abnormalFactor,
+    this.labelList,
   });
 
   @override
   List<Object> get props => [
-    enterName,
-    outletName,
-    abnormalType,
-    areaName,
-    startTime,
-    endTime,
-    reportTime,
-    state,
-    reason,
-    abnormalFactor,
-    labelList,
-  ];
+        enterName,
+        outletName,
+        abnormalType,
+        areaName,
+        startTime,
+        endTime,
+        reportTime,
+        state,
+        reason,
+        abnormalFactor,
+        labelList,
+      ];
 
   static Report fromJson(dynamic json) {
     return Report(
@@ -80,7 +59,7 @@ class Report extends Equatable {
       reason:
           '2号机组7:02并网发电，2号脱硫、除尘系统随机组启动运行，8:45达到脱硝投运条件，投入脱硝系统运行，2号机组启机期间氮氧化物超标2小时。',
       abnormalFactor: '二氧化硫 臭氧',
-      labelList: TextUtil.isEmpty('二氧化硫 臭氧') ? [] : _getLabelList('二氧化硫 臭氧'),
+      labelList: TextUtil.isEmpty('二氧化硫 臭氧') ? const [] : _getLabelList('二氧化硫 臭氧'),
     );
   }
 
@@ -89,11 +68,6 @@ class Report extends Equatable {
     return string.trimLeft().trimRight().split(' ').map((string) {
       return Label(
         name: string,
-        /*color: () {
-          //获取随机颜色
-          return Color.fromARGB(255, Random.secure().nextInt(255),
-              Random.secure().nextInt(255), Random.secure().nextInt(255));
-        }(),*/
         color: Colors.pink,
       );
     }).toList();

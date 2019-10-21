@@ -12,21 +12,19 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
 
   @override
   Stream<MonitorListState> mapEventToState(MonitorListEvent event) async* {
-    try {
+    if (event is MonitorListLoad) {
+      //加载监控点列表
       yield* _mapMonitorListLoadToState(event);
-    } catch (e) {
-      yield MonitorListError(
-          errorMessage: ExceptionHandle.handleException(e).msg);
     }
   }
 
   Stream<MonitorListState> _mapMonitorListLoadToState(
       MonitorListLoad event) async* {
-    final currentState = state;
-    if (event is MonitorListLoad) {
+    try {
+      final currentState = state;
       if (!event.isRefresh && currentState is MonitorListLoaded) {
         //加载更多
-        final monitorList = await getMonitorList(
+        final monitorList = await _getMonitorList(
           currentPage: currentState.currentPage + 1,
           enterName: event.enterName,
           areaCode: event.areaCode,
@@ -40,7 +38,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
         );
       } else {
         //首次加载或刷新
-        final monitorList = await getMonitorList(
+        final monitorList = await _getMonitorList(
           enterName: event.enterName,
           areaCode: event.areaCode,
           monitorType: event.monitorType,
@@ -56,11 +54,14 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
           );
         }
       }
+    } catch (e) {
+      yield MonitorListError(
+          errorMessage: ExceptionHandle.handleException(e).msg);
     }
   }
 
   //获取监控点列表数据
-  Future<List<Monitor>> getMonitorList({
+  Future<List<Monitor>> _getMonitorList({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
@@ -68,29 +69,19 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
     monitorType = '',
     state = '',
   }) async {
-    Response response = await DioUtils.instance
-        .getDio()
-        .get(HttpApi.monitorList, queryParameters: {
-      'currentPage': currentPage,
-      'pageSize': pageSize,
-      'enterpriseName': enterName,
-      'areaCode': areaCode,
-      'monitorType': monitorType,
-      'state': state,
-    });
-    if (response.statusCode == ExceptionHandle.success &&
-        response.data[Constant.responseCodeKey] ==
-            ExceptionHandle.success_code) {
-      return convertMonitorList(
-          response.data[Constant.responseDataKey][Constant.responseListKey]);
-    } else {
-      throw Exception('${response.data[Constant.responseMessageKey]}');
-    }
-  }
-
-  //格式化监控点列表数据
-  List<Monitor> convertMonitorList(List<dynamic> jsonArray) {
-    return jsonArray.map((json) {
+    Response response = await DioUtils.instance.getDio().get(
+      HttpApi.monitorList,
+      queryParameters: {
+        'currentPage': currentPage,
+        'pageSize': pageSize,
+        'enterpriseName': enterName,
+        'areaCode': areaCode,
+        'monitorType': monitorType,
+        'state': state,
+      },
+    );
+    return response.data[Constant.responseDataKey][Constant.responseListKey]
+        .map<Monitor>((json) {
       return Monitor.fromJson(json);
     }).toList();
   }

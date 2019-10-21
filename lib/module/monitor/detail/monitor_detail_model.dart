@@ -1,36 +1,38 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/util/constant.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/util/utils.dart';
 
 //监控点详情
 class MonitorDetail extends Equatable {
-  final String enterName;
-  final String enterAddress;
-  final String monitorName;
-  final String monitorType;
-  final String monitorTime;
-  final String areaName;
-  final String monitorAddress;
-  final String dataCollectionNumber;
-  final bool isCurved;
-  final bool showDotData;
-  final List<ChartData> chartDataList;
+  final String enterName; //企业名称
+  final String enterAddress;  //企业地址
+  final String monitorName; //监控点名称
+  final String monitorType; //监控点类型
+  final String monitorTime; //监控时间
+  final String areaName;  //区域
+  final String monitorAddress;  //监控点地址
+  final String dataCollectionNumber;  //数采仪编码
+  final bool isCurved; //图表是否为曲线
+  final bool showDotData; //图表是否显示点
+  final List<ChartData> chartDataList;  //图表数据
 
   const MonitorDetail({
-    this.enterName = '',
-    this.enterAddress = '',
-    this.monitorName = '',
-    this.monitorType = '',
-    this.monitorTime = '',
-    this.areaName = '',
-    this.monitorAddress = '',
-    this.dataCollectionNumber = '',
-    this.isCurved = true,
-    this.showDotData = false,
-    this.chartDataList = const [],
+    this.enterName,
+    this.enterAddress,
+    this.monitorName,
+    this.monitorType,
+    this.monitorTime,
+    this.areaName,
+    this.monitorAddress,
+    this.dataCollectionNumber,
+    this.isCurved,
+    this.showDotData,
+    this.chartDataList,
   });
 
   @override
@@ -48,7 +50,8 @@ class MonitorDetail extends Equatable {
         chartDataList,
       ];
 
-  MonitorDetail copyWith({List<ChartData> chartDataList}) {
+  MonitorDetail copyWith(
+      {bool isCurved, bool showDotData, List<ChartData> chartDataList}) {
     return MonitorDetail(
       enterName: this.enterName,
       enterAddress: this.enterAddress,
@@ -58,8 +61,8 @@ class MonitorDetail extends Equatable {
       areaName: this.areaName,
       monitorAddress: this.monitorAddress,
       dataCollectionNumber: this.dataCollectionNumber,
-      isCurved: this.isCurved,
-      showDotData: this.showDotData,
+      isCurved: isCurved ?? this.isCurved,
+      showDotData: showDotData ?? this.showDotData,
       chartDataList: chartDataList ?? this.chartDataList,
     );
   }
@@ -81,10 +84,12 @@ class MonitorDetail extends Equatable {
       areaName: '南昌市 市辖区',
       monitorAddress: '江西省安义东阳镇',
       dataCollectionNumber: '86377750110022',
+      isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
+      showDotData: SpUtil.getBool(Constant.spShowDotData, defValue: true),
       chartDataList: [
         ChartData(
           factorName: 'PH',
-          checked: false,
+          checked: true,
           lastValue: '13.11',
           unit: 'μg/cm3',
           color: UIUtils.getRandomColor(),

@@ -13,30 +13,29 @@ class EnterDetailBloc extends Bloc<EnterDetailEvent, EnterDetailState> {
 
   @override
   Stream<EnterDetailState> mapEventToState(EnterDetailEvent event) async* {
+    if (event is EnterDetailLoad) {
+      _mapEnterDetailLoadToState(event);
+    }
+  }
+
+  Stream<EnterDetailState> _mapEnterDetailLoadToState(
+      EnterDetailLoad event) async* {
     try {
-      if (event is EnterDetailLoad) {
-        //加载企业详情
-        final enterDetail = await getEnterDetail(
-          enterId: event.enterId,
-        );
-        yield EnterDetailLoaded(
-          enterDetail: enterDetail,
-        );
-      }
+      //加载企业详情
+      final enterDetail = await _getEnterDetail(enterId: event.enterId);
+      yield EnterDetailLoaded(enterDetail: enterDetail);
     } catch (e) {
       yield EnterDetailError(
           errorMessage: ExceptionHandle.handleException(e).msg);
     }
   }
+
   //获取企业详情
-  Future<EnterDetail> getEnterDetail({
-    @required enterId,
-  }) async {
-    Response response = await DioUtils.instance
-        .getDio()
-        .get(HttpApi.enterDetail, queryParameters: {
-      'enterId': enterId,
-    });
+  Future<EnterDetail> _getEnterDetail({@required enterId}) async {
+    Response response = await DioUtils.instance.getDio().get(
+      HttpApi.enterDetail,
+      queryParameters: {'enterId': enterId},
+    );
     return EnterDetail.fromJson(response.data[Constant.responseDataKey]);
   }
 }

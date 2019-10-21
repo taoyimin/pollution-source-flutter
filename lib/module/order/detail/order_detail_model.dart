@@ -1,32 +1,28 @@
 import 'package:equatable/equatable.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
-//报警管理单
+//报警管理单详情
 class OrderDetail extends Equatable {
-  final String enterName;
-  final String enterAddress;
-  final String areaName;
-  final String monitorName;
-  final String alarmTime;
-  final String state;
-  final String alarmType;
-  final String alarmRemark;
-  final String contactPerson;
-  final String contactPersonTel;
-  final List<DealStep> stepList;
+  final String enterName; //企业名称
+  final String enterAddress;  //企业地址
+  final String areaName;  //区域
+  final String monitorName; //监控点名称
+  final String alarmTime; //报警时间
+  final String state; //状态
+  final String alarmType; //报警类型
+  final String alarmRemark; //报警描述
+  final List<DealStep> stepList;  //处理流程集合
 
   const OrderDetail({
-    this.enterName = '',
-    this.enterAddress = '',
-    this.areaName = '',
-    this.monitorName = '',
-    this.alarmTime = '',
-    this.state = '',
-    this.alarmType = '',
-    this.alarmRemark = '',
-    this.contactPerson = '',
-    this.contactPersonTel = '',
-    this.stepList = const [],
+    this.enterName,
+    this.enterAddress,
+    this.areaName,
+    this.monitorName,
+    this.alarmTime,
+    this.state,
+    this.alarmType,
+    this.alarmRemark,
+    this.stepList,
   });
 
   @override
@@ -39,8 +35,6 @@ class OrderDetail extends Equatable {
         state,
         alarmType,
         alarmRemark,
-        contactPerson,
-        contactPersonTel,
         stepList,
       ];
 
@@ -54,8 +48,6 @@ class OrderDetail extends Equatable {
       state: '县局待审核',
       alarmType: '连续恒值 污染物超标 数采仪掉线',
       alarmRemark: '报警描述报警描述报警描述报警描述报警描述报警描述报警描述',
-      contactPerson: '李四',
-      contactPersonTel: '15879085164',
       stepList: [
         DealStep(
           dealType: "县局督办",

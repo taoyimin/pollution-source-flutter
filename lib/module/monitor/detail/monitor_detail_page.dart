@@ -1,9 +1,11 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/constant.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -12,7 +14,7 @@ import 'monitor_detail.dart';
 class MonitorDetailPage extends StatefulWidget {
   final String monitorId;
 
-  MonitorDetailPage({@required this.monitorId});
+  MonitorDetailPage({@required this.monitorId}) : assert(monitorId != null);
 
   @override
   _MonitorDetailPageState createState() => _MonitorDetailPageState();
@@ -25,7 +27,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
   void initState() {
     super.initState();
     _monitorDetailBloc = BlocProvider.of<MonitorDetailBloc>(context);
-    _monitorDetailBloc.dispatch(MonitorDetailLoad(monitorId: widget.monitorId));
+    _monitorDetailBloc.add(MonitorDetailLoad(monitorId: widget.monitorId));
   }
 
   @override
@@ -46,13 +48,36 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
-              bool isCurved = true;
-              bool showDotData = false;
+              Widget popupMenuButton = Gaps.empty;
               if (state is MonitorDetailLoaded) {
                 enterName = state.monitorDetail.enterName;
                 enterAddress = state.monitorDetail.enterAddress;
-                isCurved = state.monitorDetail.isCurved;
-                showDotData = state.monitorDetail.showDotData;
+                final bool isCurved = state.monitorDetail.isCurved;
+                final bool showDotData = state.monitorDetail.showDotData;
+                popupMenuButton = PopupMenuButton<String>(
+                  itemBuilder: (BuildContext context) =>
+                  <PopupMenuItem<String>>[
+                    UIUtils.getSelectView(
+                        Icons.message, isCurved ? '折线图' : '曲线图', '1'),
+                    UIUtils.getSelectView(
+                        Icons.group_add, showDotData ? '隐藏点' : '显示点', '2'),
+                  ],
+                  onSelected: (String action) {
+                    // 点击选项的时候 持久化储存并更新配置
+                    switch (action) {
+                      case '1':
+                        SpUtil.putBool(Constant.spIsCurved, !isCurved);
+                        _monitorDetailBloc.add(UpdateChartConfig(
+                            isCurved: !isCurved, showDotData: showDotData));
+                        break;
+                      case '2':
+                        SpUtil.putBool(Constant.spShowDotData, !showDotData);
+                        _monitorDetailBloc.add(UpdateChartConfig(
+                            isCurved: isCurved, showDotData: !showDotData));
+                        break;
+                    }
+                  },
+                );
               }
               return DetailHeaderWidget(
                 title: '监控点详情',
@@ -60,24 +85,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 subTitle2: enterAddress,
                 imagePath: 'assets/images/monitor_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_red.png',
-                popupMenuButton: PopupMenuButton<String>(
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuItem<String>>[
-                    UIUtils.getSelectView(
-                        Icons.message, isCurved ? '折线图' : '曲线图', '1'),
-                    UIUtils.getSelectView(
-                        Icons.group_add, showDotData ? '隐藏点' : '显示点', '2'),
-                  ],
-                  onSelected: (String action) {
-                    // 点击选项的时候
-                    switch (action) {
-                      case '1':
-                        break;
-                      case '2':
-                        break;
-                    }
-                  },
-                ),
+                popupMenuButton: popupMenuButton,
               );
             },
           ),
@@ -209,8 +217,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       ),
                       //历史数据
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -235,7 +243,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                                 return FactorValueWidget(
                                   chartData: chartData,
                                   onTap: () {
-                                    _monitorDetailBloc.dispatch(
+                                    _monitorDetailBloc.add(
                                       UpdateChartData(
                                         chartData: chartData.copyWith(
                                           checked: !chartData.checked,
@@ -248,8 +256,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             ),
                             LineChartWidget(
                               chartDataList: state.monitorDetail.chartDataList,
-                              isCurved: false,
-                              showDotData: true,
+                              isCurved: state.monitorDetail.isCurved,
+                              showDotData: state.monitorDetail.showDotData,
                             ),
                           ],
                         ),
