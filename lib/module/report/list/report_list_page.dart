@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/module/order/detail/order_detail_page.dart';
 import 'package:pollution_source/module/report/detail/report_detail_bloc.dart';
 import 'package:pollution_source/module/report/detail/report_detail_page.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -41,7 +40,7 @@ class _ReportListPageState extends State<ReportListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _reportListBloc.dispatch(ReportListLoad(state: widget.state));
+    _reportListBloc.add(ReportListLoad(state: widget.state));
   }
 
   @override
@@ -232,7 +231,7 @@ class _ReportListPageState extends State<ReportListPage>
             ],
             onRefresh: () async {
               //刷新事件
-              _reportListBloc.dispatch(ReportListLoad(
+              _reportListBloc.add(ReportListLoad(
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
@@ -242,7 +241,7 @@ class _ReportListPageState extends State<ReportListPage>
             },
             onLoad: () async {
               //加载事件
-              _reportListBloc.dispatch(ReportListLoad(
+              _reportListBloc.add(ReportListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
                 state: widget.state,

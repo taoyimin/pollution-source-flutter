@@ -14,7 +14,7 @@ class EnterDetailBloc extends Bloc<EnterDetailEvent, EnterDetailState> {
   @override
   Stream<EnterDetailState> mapEventToState(EnterDetailEvent event) async* {
     if (event is EnterDetailLoad) {
-      _mapEnterDetailLoadToState(event);
+      yield* _mapEnterDetailLoadToState(event);
     }
   }
 

@@ -44,7 +44,7 @@ class _MonitorListPageState extends State<MonitorListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _monitorListBloc.dispatch(MonitorListLoad(
+    _monitorListBloc.add(MonitorListLoad(
       monitorType: widget.monitorType,
       state: widget.state,
     ));
@@ -231,7 +231,7 @@ class _MonitorListPageState extends State<MonitorListPage>
               ),
             ],
             onRefresh: () async {
-              _monitorListBloc.dispatch(MonitorListLoad(
+              _monitorListBloc.add(MonitorListLoad(
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
@@ -241,7 +241,7 @@ class _MonitorListPageState extends State<MonitorListPage>
               return _refreshCompleter.future;
             },
             onLoad: () async {
-              _monitorListBloc.dispatch(MonitorListLoad(
+              _monitorListBloc.add(MonitorListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
                 monitorType: widget.monitorType,

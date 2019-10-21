@@ -28,7 +28,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
   void initState() {
     super.initState();
     _enterDetailBloc = BlocProvider.of<EnterDetailBloc>(context);
-    _enterDetailBloc.dispatch(EnterDetailLoad(enterId: widget.enterId));
+    _enterDetailBloc.add(EnterDetailLoad(enterId: widget.enterId));
   }
 
   @override

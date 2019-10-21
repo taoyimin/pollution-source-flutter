@@ -40,7 +40,7 @@ class _OrderListPageState extends State<OrderListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _orderListBloc.dispatch(OrderListLoad(state: widget.state));
+    _orderListBloc.add(OrderListLoad(state: widget.state));
   }
 
   @override
@@ -212,7 +212,7 @@ class _OrderListPageState extends State<OrderListPage>
               ),
             ],
             onRefresh: () async {
-              _orderListBloc.dispatch(OrderListLoad(
+              _orderListBloc.add(OrderListLoad(
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
@@ -221,7 +221,7 @@ class _OrderListPageState extends State<OrderListPage>
               return _refreshCompleter.future;
             },
             onLoad: () async {
-              _orderListBloc.dispatch(OrderListLoad(
+              _orderListBloc.add(OrderListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
                 state: widget.state,

@@ -24,7 +24,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
   void initState() {
     super.initState();
     _reportDetailBloc = BlocProvider.of<ReportDetailBloc>(context);
-    _reportDetailBloc.dispatch(ReportDetailLoad(reportId: widget.reportId));
+    _reportDetailBloc.add(ReportDetailLoad(reportId: widget.reportId));
   }
 
   @override

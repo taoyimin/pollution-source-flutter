@@ -15,7 +15,7 @@ class ReportDetailBloc extends Bloc<ReportDetailEvent, ReportDetailState> {
   Stream<ReportDetailState> mapEventToState(ReportDetailEvent event) async* {
     if (event is ReportDetailLoad) {
       //加载异常申报单详情
-      _mapReportDetailLoadToState(event);
+      yield* _mapReportDetailLoadToState(event);
     }
   }
 

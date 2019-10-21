@@ -49,7 +49,7 @@ class _EnterListPageState extends State<EnterListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _enterListBloc.dispatch(EnterListLoad(
+    _enterListBloc.add(EnterListLoad(
       state: widget.state,
       enterType: widget.enterType,
       attentionLevel: widget.attentionLevel,
@@ -223,7 +223,7 @@ class _EnterListPageState extends State<EnterListPage>
               ),
             ],
             onRefresh: () async {
-              _enterListBloc.dispatch(EnterListLoad(
+              _enterListBloc.add(EnterListLoad(
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
@@ -234,7 +234,7 @@ class _EnterListPageState extends State<EnterListPage>
               return _refreshCompleter.future;
             },
             onLoad: () async {
-              _enterListBloc.dispatch(EnterListLoad(
+              _enterListBloc.add(EnterListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
                 state: widget.state,

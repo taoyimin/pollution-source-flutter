@@ -15,7 +15,7 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
   Stream<OrderDetailState> mapEventToState(OrderDetailEvent event) async* {
     if (event is OrderDetailLoad) {
       //加载报警管理单详情
-      _mapOrderDetailLoadToState(event);
+      yield* _mapOrderDetailLoadToState(event);
     }
   }
 

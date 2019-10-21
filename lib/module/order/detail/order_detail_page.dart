@@ -27,7 +27,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     super.initState();
     _orderDetailBloc =
         _orderDetailBloc = BlocProvider.of<OrderDetailBloc>(context);
-    _orderDetailBloc.dispatch(OrderDetailLoad(orderId: widget.orderId));
+    _orderDetailBloc.add(OrderDetailLoad(orderId: widget.orderId));
   }
 
   @override

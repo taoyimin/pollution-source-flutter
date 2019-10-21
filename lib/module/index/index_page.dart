@@ -180,7 +180,7 @@ class _IndexPageState extends State<IndexPage>
           ),
         ],
         onRefresh: () async {
-          _indexBloc.dispatch(Load());
+          _indexBloc.add(Load());
           return _refreshCompleter.future;
         },
       ),
