@@ -1,6 +1,24 @@
 class Constant{
+  /// debug开关，上线需要关闭
+  /// App运行在Release环境时，inProduction为true；当App运行在Debug和Profile环境时，inProduction为false
+  static const bool inProduction  = const bool.fromEnvironment("dart.vm.product");
+
+  static const String requestHeaderTokenKey = 'token';
   static const String responseCodeKey = 'code';
+  static const String responseMessageKey = 'message';
   static const String responseDataKey = 'data';
+  static const String responseListKey = 'list';
+  static const String responseTokenKey = 'token';
+
+  static const int defaultCurrentPage = 1;
+  static const int defaultPageSize = 20;
+
+  static const String spUsername = 'username';
+  static const String spPassword = 'password';
+  static const String spToken = 'token';
+  static const String spIsCurved = 'isCurved';
+  static const String spShowDotData = 'showDotData';
+
   static const String aqiStatisticsKey = '10';
   static const String pm25ExamineKey = '20';
   static const String aqiExamineKey = '21';
