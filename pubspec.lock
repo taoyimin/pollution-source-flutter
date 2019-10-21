@@ -17,13 +17,20 @@ packages:
       url: "https://github.com/simplezhli/flutter_barcode_reader.git"
     source: git
     version: "1.0.0"
+  bezier_chart:
+    dependency: "direct main"
+    description:
+      name: bezier_chart
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.15"
   bloc:
     dependency: transitive
     description:
       name: bloc
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.15.0"
+    version: "0.16.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -128,7 +135,7 @@ packages:
       name: equatable
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.1"
+    version: "0.6.1"
   extended_nested_scroll_view:
     dependency: "direct main"
     description:
@@ -142,7 +149,7 @@ packages:
       name: fl_chart
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.0"
+    version: "0.3.4"
   flare_dart:
     dependency: transitive
     description:
@@ -175,7 +182,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.21.0"
+    version: "0.22.1"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -229,7 +236,7 @@ packages:
       name: intl
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.15.8"
+    version: "0.16.0"
   keyboard_actions:
     dependency: "direct main"
     description:

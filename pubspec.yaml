@@ -33,8 +33,10 @@ dependencies:
   # flutter_swiper : ^1.1.6
   # Google 图表库 https://github.com/google/charts
   charts_flutter: ^0.8.1
-  # 图标库(首页最近一周变化趋势使用了) https://github.com/imaNNeoFighT/fl_chart
-  fl_chart: ^0.2.0
+  # 图表库 https://github.com/aeyrium/bezier-chart
+  bezier_chart: ^1.0.15
+  # 图表库(首页最近一周变化趋势使用了) https://github.com/imaNNeoFighT/fl_chart
+  fl_chart: ^0.3.4
   # 常用加载动画库 https://github.com/jogboms/flutter_spinkit
   flutter_spinkit: ^4.0.0
   # 动画库 https://github.com/2d-inc/Flare-Flutter
@@ -47,15 +49,13 @@ dependencies:
   # 启动URL的插件 https://github.com/flutter/plugins/tree/master/packages/url_launcher
   # url_launcher: ^5.1.2
   url_launcher: ^5.1.4
-  # 轻量级存储插件 https://github.com/flutter/plugins/tree/master/packages/shared_preferences
-  # shared_preferences: ^0.5.3
   # 城市选择控件 https://github.com/hanxu317317/city_pickers
   city_pickers: ^0.1.25
-  # bloc: ^0.15.0
   # 业务逻辑与界面分离 https://github.com/felangel/bloc
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^0.22.0
   # 简化实例比较 https://github.com/felangel/equatable
-  equatable: ^0.5.0
+  equatable: ^0.6.0
+  # 此包定义了可由dart sdk附带的工具使用的注释 https://github.com/dart-lang/sdk
   meta: ^1.1.6
   # 处理键盘事件 https://github.com/diegoveloper/flutter_keyboard_actions
   keyboard_actions: ^2.1.2
