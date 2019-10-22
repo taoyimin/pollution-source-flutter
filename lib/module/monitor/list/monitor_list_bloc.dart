@@ -28,6 +28,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
           currentPage: currentState.currentPage + 1,
           enterName: event.enterName,
           areaCode: event.areaCode,
+          enterId: event.enterId,
           monitorType: event.monitorType,
           state: event.state,
         );
@@ -41,6 +42,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
         final monitorList = await _getMonitorList(
           enterName: event.enterName,
           areaCode: event.areaCode,
+          enterId: event.enterId,
           monitorType: event.monitorType,
           state: event.state,
         );
@@ -66,6 +68,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
+    enterId = '',
     monitorType = '',
     state = '',
   }) async {
@@ -76,6 +79,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
         'pageSize': pageSize,
         'enterpriseName': enterName,
         'areaCode': areaCode,
+        'enterId' : enterId,
         'monitorType': monitorType,
         'state': state,
       },

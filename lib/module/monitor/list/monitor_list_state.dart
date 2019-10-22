@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:pollution_source/util/constant.dart';
 
 //传入时间戳，使得每次都触发状态改变
-abstract class MonitorListState extends Equatable{
+abstract class MonitorListState extends Equatable {
   const MonitorListState();
 
   @override
@@ -13,14 +13,9 @@ abstract class MonitorListState extends Equatable{
 class MonitorListLoading extends MonitorListState {}
 
 class MonitorListLoaded extends MonitorListState {
-  //监控点列表
-  final monitorList;
-
-  //能否加载更多
-  final bool hasNextPage;
-
+  final monitorList; //监控点列表
+  final bool hasNextPage; //能否加载更多
   final int pageSize;
-
   final int currentPage;
 
   const MonitorListLoaded({

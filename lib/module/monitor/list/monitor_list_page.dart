@@ -14,10 +14,12 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list.dart';
 
 class MonitorListPage extends StatefulWidget {
+  final String enterId;
   final String monitorType;
   final String state;
 
   MonitorListPage({
+    this.enterId = '',
     this.monitorType = '',
     this.state = '',
   });
@@ -45,6 +47,7 @@ class _MonitorListPageState extends State<MonitorListPage>
     _editController = TextEditingController();
     //首次加载
     _monitorListBloc.add(MonitorListLoad(
+      enterId: widget.enterId,
       monitorType: widget.monitorType,
       state: widget.state,
     ));
@@ -235,6 +238,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
+                enterId: widget.enterId,
                 monitorType: widget.monitorType,
                 state: widget.state,
               ));
@@ -244,6 +248,7 @@ class _MonitorListPageState extends State<MonitorListPage>
               _monitorListBloc.add(MonitorListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
+                enterId: widget.enterId,
                 monitorType: widget.monitorType,
                 state: widget.state,
               ));
