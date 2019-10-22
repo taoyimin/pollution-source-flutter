@@ -13,9 +13,14 @@ abstract class MonitorListState extends Equatable {
 class MonitorListLoading extends MonitorListState {}
 
 class MonitorListLoaded extends MonitorListState {
-  final monitorList; //监控点列表
-  final bool hasNextPage; //能否加载更多
+  //监控点列表
+  final monitorList;
+
+  //能否加载更多
+  final bool hasNextPage;
+
   final int pageSize;
+
   final int currentPage;
 
   const MonitorListLoaded({

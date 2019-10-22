@@ -35,6 +35,7 @@ class UpdateChartData extends MonitorDetailEvent {
 class UpdateChartConfig extends MonitorDetailEvent {
   //是否曲线
   final bool isCurved;
+
   //是否显示点
   final bool showDotData;
 
