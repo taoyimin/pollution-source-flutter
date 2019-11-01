@@ -8,6 +8,7 @@ class ExceptionHandle{
 
   static const int success = 200;
   static const int success_not_content = 204;
+  static const int bad_request = 400;
   static const int unauthorized = 401;
   static const int forbidden = 403;
   static const int not_found = 404;
@@ -23,7 +24,6 @@ class ExceptionHandle{
   static const int unknown_error = 9999;
 
   static NetError handleException(dynamic error) {
-    print(error);
     if (error is DioError) {
       if (error.type == DioErrorType.DEFAULT ||
           error.type == DioErrorType.RESPONSE) {
@@ -33,6 +33,9 @@ class ExceptionHandle{
         }
         if (e is HttpException) {
           return NetError(http_error, "服务器异常！");
+        }
+        if (e is BadRequestException) {
+          return NetError(bad_request, e.message);
         }
         if (e is NotFoundException) {
           return NetError(not_found, e.message);
@@ -46,7 +49,7 @@ class ExceptionHandle{
         if (e is UnKnownException) {
           return NetError(unknown_error, e.message);
         }
-        return NetError(net_error, "未知网络异常，请检查你的网络！");
+        return NetError(net_error, "未知网络异常:$error");
       } else if (error.type == DioErrorType.CONNECT_TIMEOUT ||
           error.type == DioErrorType.SEND_TIMEOUT ||
           error.type == DioErrorType.RECEIVE_TIMEOUT) {
@@ -67,6 +70,13 @@ class NetError {
   String msg;
 
   NetError(this.code, this.msg);
+}
+
+//bad request异常
+class BadRequestException implements Exception{
+  final String message;
+
+  BadRequestException(this.message);
 }
 
 //not found异常

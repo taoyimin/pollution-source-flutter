@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:flustars/flustars.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'intercept.dart';
 
 //Dio工具类，使用单例模式
@@ -27,7 +28,7 @@ class DioUtils {
         // http响应状态码被dio视为请求成功
         return true;
       },
-      baseUrl: "http://182.106.189.190:9999/",
+      baseUrl: SpUtil.getBool(Constant.spJavaApi, defValue: true) ? 'http://182.106.189.190:9999/' : 'http://taoyimin.iok.la:58213/api/',
     );
     _dio = Dio(options);
     /// 统一添加身份验证请求头
