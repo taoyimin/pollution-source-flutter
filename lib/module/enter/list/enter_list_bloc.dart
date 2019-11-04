@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/enter/list/enter_list.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 
 class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
   @override
@@ -70,20 +71,38 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
     enterType = '',
     attentionLevel = '',
   }) async {
-    Response response = await DioUtils.instance
-        .getDio()
-        .get(HttpApi.enterList, queryParameters: {
-      'currentPage': currentPage,
-      'pageSize': pageSize,
-      'enterpriseName': enterName,
-      'areaCode': areaCode,
-      'state': state,
-      'enterpriseType': enterType,
-      'attenLevel': attentionLevel,
-    });
-    return response.data[Constant.responseDataKey][Constant.responseListKey]
-        .map<Enter>((json) {
-      return Enter.fromJson(json);
-    }).toList();
+    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+      Response response = await DioUtils.instance
+          .getDio()
+          .get(HttpApi.enterList, queryParameters: {
+        'currentPage': currentPage,
+        'pageSize': pageSize,
+        'enterpriseName': enterName,
+        'areaCode': areaCode,
+        'state': state,
+        'enterpriseType': enterType,
+        'attenLevel': attentionLevel,
+      });
+      return response.data[Constant.responseDataKey][Constant.responseListKey]
+          .map<Enter>((json) {
+        return Enter.fromJson(json);
+      }).toList();
+    }else{
+      Response response = await DioUtils.instance
+          .getDio()
+          .get('enters', queryParameters: {
+        'currentPage': currentPage,
+        'pageSize': pageSize,
+        'enterName': enterName,
+        'areaCode': areaCode,
+        'state': state,
+        'enterType': enterType,
+        'attentionLevel': attentionLevel,
+      });
+      return response.data[Constant.responseListKey]
+          .map<Enter>((json) {
+        return Enter.fromJson(json);
+      }).toList();
+    }
   }
 }

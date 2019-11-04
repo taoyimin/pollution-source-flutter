@@ -64,7 +64,7 @@ class _EnterListPageState extends State<EnterListPage>
     _editController.dispose();
   }
 
-  Widget _getPageLoadedList(List<Enter> enterList) {
+  Widget _buildPageLoadedList(List<Enter> enterList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -76,7 +76,7 @@ class _EnterListPageState extends State<EnterListPage>
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return BlocProvider(
                     builder: (context) => EnterDetailBloc(),
-                    child: EnterDetailPage(enterId: '10000',),
+                    child: EnterDetailPage(enterId: enterList[index].enterId,),
                   );
                 }));
               },
@@ -124,7 +124,7 @@ class _EnterListPageState extends State<EnterListPage>
                             ListTileWidget('地址：${enterList[index].enterAddress}'),
                             Gaps.vGap6,
                             ListTileWidget(
-                                '行业类别：${enterList[index].industryType}'),
+                                '行业类别：${enterList[index].industryTypeStr}'),
                           ],
                         ),
                       )
@@ -214,7 +214,7 @@ class _EnterListPageState extends State<EnterListPage>
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _getPageLoadedList(state.enterList);
+                      return _buildPageLoadedList(state.enterList);
                     } else {
                       return SliverFillRemaining();
                     }

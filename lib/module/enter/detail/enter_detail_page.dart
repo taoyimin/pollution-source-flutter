@@ -13,7 +13,7 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'enter_detail.dart';
 
 class EnterDetailPage extends StatefulWidget {
-  final String enterId;
+  final int enterId;
 
   EnterDetailPage({@required this.enterId});
 
@@ -95,7 +95,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                 IconBaseInfoWidget(
                                   title: '关注程度',
                                   content:
-                                      '${state.enterDetail.attentionLevel}',
+                                      '${state.enterDetail.attentionLevelStr}',
                                   icon: Icons.star,
                                   flex: 4,
                                 ),
@@ -113,7 +113,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               children: <Widget>[
                                 IconBaseInfoWidget(
                                   title: '行业类别',
-                                  content: '${state.enterDetail.industryType}',
+                                  content:
+                                      '${state.enterDetail.industryTypeStr}',
                                   icon: Icons.work,
                                   contentTextAlign: TextAlign.left,
                                 ),
@@ -137,6 +138,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       //联系人 没有联系人则隐藏
                       Offstage(
                         offstage: TextUtil.isEmpty(
+                                state.enterDetail.enterTel) &&
+                            TextUtil.isEmpty(
                                 state.enterDetail.contactPersonTel) &&
                             TextUtil.isEmpty(state.enterDetail.legalPersonTel),
                         child: Container(
@@ -153,10 +156,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               Gaps.vGap10,
                               Offstage(
                                 offstage: TextUtil.isEmpty(
+                                    state.enterDetail.enterTel),
+                                child: ContactsWidget(
+                                  contactsName: '企业电话',
+                                  contactsTel: '${state.enterDetail.enterTel}',
+                                ),
+                              ),
+                              Gaps.vGap10,
+                              Offstage(
+                                offstage: TextUtil.isEmpty(
                                     state.enterDetail.contactPersonTel),
                                 child: ContactsWidget(
                                   contactsName:
-                                      '${state.enterDetail.contactPerson}',
+                                      '${state.enterDetail.contactPerson}(联系人)',
                                   contactsTel:
                                       '${state.enterDetail.contactPersonTel}',
                                 ),
@@ -199,7 +211,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                     color: Color(0xFF45C4FF),
                                     title: '已办结',
                                     content:
-                                        '${state.enterDetail.orderComplete}',
+                                        '${state.enterDetail.orderCompleteCount}',
                                     imagePath:
                                         'assets/images/icon_alarm_manage_complete.png',
                                   ),
@@ -211,7 +223,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   meta: Meta(
                                     color: Color(0xFFFFB709),
                                     title: '全部',
-                                    content: '${state.enterDetail.orderAll}',
+                                    content: '${state.enterDetail.orderTotalCount}',
                                     imagePath:
                                         'assets/images/icon_alarm_manage_all.png',
                                   ),
@@ -235,7 +247,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                             Gaps.vGap10,
                             Row(
                               children: <Widget>[
-                                InkWellButton4(
+                                /*InkWellButton4(
                                   ratio: 1.3,
                                   titleFontSize: 9.5,
                                   contentFontSize: 19,
@@ -250,8 +262,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                     backgroundPath:
                                         'assets/images/button_bg_blue.png',
                                   ),
-                                ),
-                                Gaps.hGap10,
+                                ),*/
                                 InkWellButton4(
                                   ratio: 1.3,
                                   titleFontSize: 9.5,
@@ -261,16 +272,33 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   meta: Meta(
                                     title: '排口异常申报总数',
                                     content:
-                                        '${state.enterDetail.monitorReportAll}',
+                                        '${state.enterDetail.monitorReportTotalCount}',
                                     imagePath:
                                         'assets/images/button_image1.png',
                                     backgroundPath:
                                         'assets/images/button_bg_pink.png',
                                   ),
                                 ),
+                                Gaps.hGap10,
+                                InkWellButton4(
+                                  ratio: 1.3,
+                                  titleFontSize: 9.5,
+                                  contentFontSize: 19,
+                                  contentMarginRight: 50,
+                                  onTap: () {},
+                                  meta: Meta(
+                                    title: '因子异常申报总数',
+                                    content:
+                                    '${state.enterDetail.factorReportTotalCount}',
+                                    imagePath:
+                                    'assets/images/button_image4.png',
+                                    backgroundPath:
+                                    'assets/images/button_bg_yellow.png',
+                                  ),
+                                ),
                               ],
                             ),
-                            Gaps.vGap10,
+                            /*Gaps.vGap10,
                             Row(
                               children: <Widget>[
                                 InkWellButton4(
@@ -307,7 +335,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   ),
                                 ),
                               ],
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
@@ -343,7 +371,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                           color:
                                               Color.fromRGBO(77, 167, 248, 1),
                                           content:
-                                              '${state.enterDetail.monitorAll}',
+                                              '${state.enterDetail.monitorTotalCount}',
                                         ),
                                         onTap: () {
                                           Navigator.push(
@@ -369,7 +397,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                           color:
                                               Color.fromRGBO(136, 191, 89, 1),
                                           content:
-                                              '${state.enterDetail.monitorOnline}',
+                                              '${state.enterDetail.monitorOnlineCount}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -383,7 +411,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                           color:
                                               Color.fromRGBO(241, 190, 67, 1),
                                           content:
-                                              '${state.enterDetail.monitorAlarm}',
+                                              '${state.enterDetail.monitorAlarmCount}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -400,7 +428,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                           color:
                                               Color.fromRGBO(233, 119, 111, 1),
                                           content:
-                                              '${state.enterDetail.monitorOver}',
+                                              '${state.enterDetail.monitorOverCount}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -414,7 +442,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                           color:
                                               Color.fromRGBO(179, 129, 127, 1),
                                           content:
-                                              '${state.enterDetail.monitorOffline}',
+                                              '${state.enterDetail.monitorOfflineCount}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -428,7 +456,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                           color:
                                               Color.fromRGBO(137, 137, 137, 1),
                                           content:
-                                              '${state.enterDetail.monitorStop}',
+                                              '${state.enterDetail.monitorStopCount}',
                                         ),
                                         onTap: () {},
                                       ),
@@ -456,7 +484,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                             InkWellButton6(
                               meta: Meta(
                                 title: '许可证编号',
-                                content: '${state.enterDetail.creditCode}',
+                                content: '${state.enterDetail.licenseNumber}',
                                 color: Colors.pink,
                                 imagePath: 'assets/images/discharge_permit.png',
                                 backgroundPath:
@@ -487,7 +515,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   meta: Meta(
                                     title: "建设项目",
                                     content:
-                                        '${state.enterDetail.buildProject}',
+                                        '${state.enterDetail.buildProjectCount}',
                                     backgroundPath:
                                         "assets/images/button_bg_lightblue.png",
                                     imagePath:
@@ -500,7 +528,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                 InkWellButton3(
                                   meta: Meta(
                                     title: "现场执法",
-                                    content: '${state.enterDetail.sceneLaw}',
+                                    content: '${state.enterDetail.sceneLawCount}',
                                     backgroundPath:
                                         "assets/images/button_bg_red.png",
                                     imagePath:
@@ -514,7 +542,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                                   meta: Meta(
                                     title: '环境信访',
                                     content:
-                                        '${state.enterDetail.environmentVisit}',
+                                        '${state.enterDetail.environmentVisitCount}',
                                     backgroundPath:
                                         "assets/images/button_bg_yellow.png",
                                     imagePath:

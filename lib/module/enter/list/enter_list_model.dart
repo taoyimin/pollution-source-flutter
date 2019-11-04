@@ -1,47 +1,67 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/res/constant.dart';
 
 //企业列表
 class Enter extends Equatable {
+  final int enterId;  //企业id
   final String enterName; //企业名
   final String enterAddress;  //企业地址
   final bool isImportant; //是否是重点企业
   final String imagePath; //企业logo
-  final String industryType;  //行业类别
+  final String industryTypeStr;  //行业类别
   final List<Label> labelList;  //企业标签集合
 
   const Enter({
+    this.enterId,
     this.enterName,
     this.enterAddress,
     this.isImportant,
     this.imagePath,
-    this.industryType,
+    this.industryTypeStr,
     this.labelList,
   });
 
   @override
   List<Object> get props => [
+    enterId,
     enterName,
     enterAddress,
     isImportant,
     imagePath,
-    industryType,
+    industryTypeStr,
     labelList,
   ];
 
   static Enter fromJson(dynamic json) {
-    return Enter(
-      enterName: json['enterprise_name'],
-      enterAddress: json['ent_address'],
-      isImportant: json['attention_level'] == '1' ? true : false,
-      imagePath: _getEnterTypeImage(json['enterprise_type']),
-      industryType: json['industryTypeStr'],
-      labelList: TextUtil.isEmpty(json['enterprise_type_str'])
-          ? const []
-          : _getLabelList(json['enterprise_type_str']),
-    );
+    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+      return Enter(
+        enterId: json['enter_id'],
+        enterName: json['enterprise_name'],
+        enterAddress: json['ent_address'],
+        isImportant: json['attention_level'] == '1' ? true : false,
+        imagePath: _getEnterTypeImage(json['enterprise_type']),
+        industryTypeStr: json['industryTypeStr'],
+        labelList: TextUtil.isEmpty(json['enterprise_type_str'])
+            ? const []
+            : _getLabelList(json['enterprise_type_str']),
+      );
+    }else{
+      return Enter(
+        enterId: json['enterId'],
+        enterName: json['enterName'],
+        enterAddress: json['enterAddress'],
+        isImportant: json['attentionLevel'] == '1' ? true : false,
+        imagePath: _getEnterTypeImage(json['enterType']),
+        industryTypeStr: json['industryTypeStr'],
+        labelList: TextUtil.isEmpty(json['enterType'])
+            ? const []
+            : _getLabelList2(json['enterType']),
+      );
+    }
   }
 
   //根据企业类型获取图片
@@ -54,7 +74,7 @@ class Enter extends Equatable {
         //废气
         return 'assets/images/icon_air_monitor.png';
       default:
-        //未知
+        //雨水、水气、未知
         return 'assets/images/icon_unknown_monitor.png';
     }
   }
@@ -81,6 +101,34 @@ class Enter extends Equatable {
         default:
           return Label(
               name: string,
+              imagePath: 'assets/images/icon_alarm_type_unknow.png',
+              color: Colors.grey);
+      }
+    }).toList();
+  }
+
+  //将企业类型string转化成List
+  static List<Label> _getLabelList2(String string) {
+    return string.split(',').map((string) {
+      switch (string) {
+        case 'EnterType1':
+          return Label(
+              name: '废水企业',
+              imagePath: 'assets/images/icon_pollution_water_outlet.png',
+              color: Colors.blue);
+        case 'EnterType2':
+          return Label(
+              name: '废气企业',
+              imagePath: 'assets/images/icon_pollution_air_outlet.png',
+              color: Colors.orange);
+        case 'EnterType3':
+          return Label(
+              name: '雨水企业',
+              imagePath: 'assets/images/icon_pollution_water_enter.png',
+              color: Colors.green);
+        default:
+          return Label(
+              name: '未知',
               imagePath: 'assets/images/icon_alarm_type_unknow.png',
               color: Colors.grey);
       }

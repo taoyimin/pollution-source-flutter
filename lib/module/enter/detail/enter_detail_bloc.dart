@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:meta/meta.dart';
 
 import 'enter_detail.dart';
@@ -32,10 +33,17 @@ class EnterDetailBloc extends Bloc<EnterDetailEvent, EnterDetailState> {
 
   //获取企业详情
   Future<EnterDetail> _getEnterDetail({@required enterId}) async {
-    Response response = await DioUtils.instance.getDio().get(
-      HttpApi.enterDetail,
-      queryParameters: {'enterId': enterId},
-    );
-    return EnterDetail.fromJson(response.data[Constant.responseDataKey]);
+    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+      Response response = await DioUtils.instance.getDio().get(
+        HttpApi.enterDetail,
+        queryParameters: {'enterId': enterId},
+      );
+      return EnterDetail.fromJson(response.data[Constant.responseDataKey]);
+    }else{
+      Response response = await DioUtils.instance.getDio().get(
+        'enters/$enterId',
+      );
+      return EnterDetail.fromJson(response.data);
+    }
   }
 }

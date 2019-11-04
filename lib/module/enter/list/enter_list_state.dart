@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 
 //传入时间戳，使得每次都触发状态改变
 abstract class EnterListState extends Equatable{
