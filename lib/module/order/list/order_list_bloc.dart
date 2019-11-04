@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/order/list/order_list.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 
 class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   @override

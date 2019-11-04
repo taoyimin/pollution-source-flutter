@@ -1,4 +1,3 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -11,7 +10,7 @@ import 'report_detail.dart';
 class ReportDetailPage extends StatefulWidget {
   final String reportId;
 
-  ReportDetailPage({@required this.reportId});
+  ReportDetailPage({@required this.reportId}) : assert(reportId != null);
 
   @override
   _ReportDetailPageState createState() => _ReportDetailPageState();
@@ -51,8 +50,8 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
               }
               return DetailHeaderWidget(
                 title: '异常申报单详情',
-                subTitle1: enterName,
-                subTitle2: enterAddress,
+                subTitle1: '$enterName',
+                subTitle2: '$enterAddress',
                 imagePath: 'assets/images/report_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_pink.png',
               );

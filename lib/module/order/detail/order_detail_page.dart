@@ -1,8 +1,6 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -13,7 +11,7 @@ import 'order_detail.dart';
 class OrderDetailPage extends StatefulWidget {
   final String orderId;
 
-  OrderDetailPage({@required this.orderId});
+  OrderDetailPage({@required this.orderId}) : assert(orderId != null);
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -54,8 +52,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               }
               return DetailHeaderWidget(
                 title: '督办单详情',
-                subTitle1: enterName,
-                subTitle2: enterAddress,
+                subTitle1: '$enterName',
+                subTitle2: '$enterAddress',
                 imagePath: 'assets/images/task_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_green.png',
               );

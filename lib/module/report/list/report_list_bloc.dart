@@ -3,7 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/report/list/report_list.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
+import 'package:meta/meta.dart';
 
 class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
   @override
@@ -27,6 +28,8 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
           currentPage: currentState.currentPage + 1,
           enterName: event.enterName,
           areaCode: event.areaCode,
+          enterId: event.enterId,
+          type: event.type,
           state: event.state,
         );
         yield ReportListLoaded(
@@ -39,6 +42,8 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
         final reportList = await _getReportList(
           enterName: event.enterName,
           areaCode: event.areaCode,
+          enterId: event.enterId,
+          type: event.type,
           state: event.state,
         );
         if (reportList.length == 0) {
@@ -63,7 +68,9 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
-    state = '1',
+    enterId = '',
+    @required type,
+    state = '',
   }) async {
     Response response = await DioUtils.instance.getDio().get(
       HttpApi.reportList,
@@ -72,7 +79,9 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
         'pageSize': pageSize,
         'enterpriseName': enterName,
         'areaCode': areaCode,
-        'status': state,
+        'enterId': enterId,
+        'hasFactorCode': type,
+        'QIsReview': state,
       },
     );
     return response.data[Constant.responseDataKey][Constant.responseListKey]

@@ -14,9 +14,11 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/module/report/list/report_list.dart';
 
 class ReportListPage extends StatefulWidget {
+  final String enterId;
+  final String type;
   final String state;
 
-  ReportListPage({this.state = ''});
+  ReportListPage({this.enterId = '', @required this.type, this.state = ''});
 
   @override
   _ReportListPageState createState() => _ReportListPageState();
@@ -40,7 +42,11 @@ class _ReportListPageState extends State<ReportListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _reportListBloc.add(ReportListLoad(state: widget.state));
+    _reportListBloc.add(ReportListLoad(
+      enterId: widget.enterId,
+      type: widget.type,
+      state: widget.state,
+    ));
   }
 
   @override
@@ -51,7 +57,7 @@ class _ReportListPageState extends State<ReportListPage>
     _editController.dispose();
   }
 
-  Widget _getPageLoadedList(List<Report> reportList) {
+  Widget _buildPageLoadedList(List<Report> reportList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -67,7 +73,7 @@ class _ReportListPageState extends State<ReportListPage>
                       return BlocProvider(
                         builder: (context) => ReportDetailBloc(),
                         child: ReportDetailPage(
-                          reportId: '110',
+                          reportId: reportList[index].reportId,
                         ),
                       );
                     },
@@ -88,7 +94,7 @@ class _ReportListPageState extends State<ReportListPage>
                     children: <Widget>[
                       Text(
                         reportList[index].enterName,
-                        style:const TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                         ),
                       ),
@@ -106,8 +112,8 @@ class _ReportListPageState extends State<ReportListPage>
                           ),
                           Expanded(
                             flex: 1,
-                            child:
-                                ListTileWidget('区域：${reportList[index].areaName}'),
+                            child: ListTileWidget(
+                                '区域：${reportList[index].areaName}'),
                           ),
                         ],
                       ),
@@ -221,7 +227,7 @@ class _ReportListPageState extends State<ReportListPage>
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _getPageLoadedList(state.reportList);
+                      return _buildPageLoadedList(state.reportList);
                     } else {
                       return SliverFillRemaining();
                     }
@@ -235,6 +241,8 @@ class _ReportListPageState extends State<ReportListPage>
                 isRefresh: true,
                 enterName: _editController.text,
                 areaCode: areaCode,
+                enterId: widget.enterId,
+                type: widget.type,
                 state: widget.state,
               ));
               return _refreshCompleter.future;
@@ -244,6 +252,8 @@ class _ReportListPageState extends State<ReportListPage>
               _reportListBloc.add(ReportListLoad(
                 enterName: _editController.text,
                 areaCode: areaCode,
+                enterId: widget.enterId,
+                type: widget.type,
                 state: widget.state,
               ));
               return _refreshCompleter.future;
