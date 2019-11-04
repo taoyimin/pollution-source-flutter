@@ -71,7 +71,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
     enterType = '',
     attentionLevel = '',
   }) async {
-    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       Response response = await DioUtils.instance
           .getDio()
           .get(HttpApi.enterList, queryParameters: {
@@ -79,7 +79,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
         'pageSize': pageSize,
         'enterpriseName': enterName,
         'areaCode': areaCode,
-        'state': state,
+        'state': state == '1' ? 'online' : '',
         'enterpriseType': enterType,
         'attenLevel': attentionLevel,
       });
@@ -87,10 +87,9 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
           .map<Enter>((json) {
         return Enter.fromJson(json);
       }).toList();
-    }else{
-      Response response = await DioUtils.instance
-          .getDio()
-          .get('enters', queryParameters: {
+    } else {
+      Response response =
+          await DioUtils.instance.getDio().get('enters', queryParameters: {
         'currentPage': currentPage,
         'pageSize': pageSize,
         'enterName': enterName,
@@ -99,8 +98,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
         'enterType': enterType,
         'attentionLevel': attentionLevel,
       });
-      return response.data[Constant.responseListKey]
-          .map<Enter>((json) {
+      return response.data[Constant.responseListKey].map<Enter>((json) {
         return Enter.fromJson(json);
       }).toList();
     }
