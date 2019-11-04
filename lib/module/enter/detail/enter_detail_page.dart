@@ -55,8 +55,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               }
               return DetailHeaderWidget(
                 title: '企业详情',
-                subTitle1: enterName,
-                subTitle2: enterAddress,
+                subTitle1: '$enterName',
+                subTitle2: '$enterAddress',
                 imagePath: 'assets/images/enter_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_lightblue.png',
               );
