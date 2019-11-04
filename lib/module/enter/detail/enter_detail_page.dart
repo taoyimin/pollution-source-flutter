@@ -15,7 +15,7 @@ import 'enter_detail.dart';
 class EnterDetailPage extends StatefulWidget {
   final int enterId;
 
-  EnterDetailPage({@required this.enterId});
+  EnterDetailPage({@required this.enterId}) : assert(enterId != null);
 
   @override
   _EnterDetailPageState createState() => _EnterDetailPageState();
