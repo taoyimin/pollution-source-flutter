@@ -12,7 +12,7 @@ abstract class MonitorDetailEvent extends Equatable {
 //加载监控点详情事件
 class MonitorDetailLoad extends MonitorDetailEvent {
   //监控点ID
-  final String monitorId;
+  final int monitorId;
 
   const MonitorDetailLoad({@required this.monitorId});
 

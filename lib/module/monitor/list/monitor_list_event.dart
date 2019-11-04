@@ -20,10 +20,13 @@ class MonitorListLoad extends MonitorListEvent {
   //企业ID
   final String enterId;
 
+  //排口ID
+  final String dischargeId;
+
   //监控点类型 outletType1:雨水 outletType2:废水 outletType3:废气
   final String monitorType;
 
-  //监控点状态 online:在线 warn:预警 outrange:超标 offline:脱机 stopline:停产
+  //监控点状态 0:全部 1:在线 2:预警 3:超标 4:脱机 5:停产
   final String state;
 
   const MonitorListLoad({
@@ -31,6 +34,7 @@ class MonitorListLoad extends MonitorListEvent {
     this.enterName = '',
     this.areaCode = '',
     this.enterId = '',
+    this.dischargeId = '',
     this.monitorType = '',
     this.state = '',
   });
@@ -41,6 +45,7 @@ class MonitorListLoad extends MonitorListEvent {
         enterName,
         areaCode,
         enterId,
+        dischargeId,
         monitorType,
         state,
       ];

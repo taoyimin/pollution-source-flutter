@@ -5,14 +5,14 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'monitor_detail.dart';
 
 class MonitorDetailPage extends StatefulWidget {
-  final String monitorId;
+  final int monitorId;
 
   MonitorDetailPage({@required this.monitorId}) : assert(monitorId != null);
 
@@ -81,8 +81,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               }
               return DetailHeaderWidget(
                 title: '监控点详情',
-                subTitle1: enterName,
-                subTitle2: enterAddress,
+                subTitle1: '$enterName',
+                subTitle2: '$enterAddress',
                 imagePath: 'assets/images/monitor_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_red.png',
                 popupMenuButton: popupMenuButton,
@@ -120,15 +120,15 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             Row(
                               children: <Widget>[
                                 IconBaseInfoWidget(
-                                  title: '监控点',
+                                  title: '监控点名',
                                   content: '${state.monitorDetail.monitorName}',
                                   icon: Icons.linked_camera,
                                   flex: 6,
                                 ),
                                 Gaps.hGap20,
                                 IconBaseInfoWidget(
-                                  title: '监测类型',
-                                  content: '${state.monitorDetail.monitorType}',
+                                  title: '监控类型',
+                                  content: '${state.monitorDetail.monitorTypeStr}',
                                   icon: Icons.videocam,
                                   flex: 5,
                                 ),
@@ -138,7 +138,25 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             Row(
                               children: <Widget>[
                                 IconBaseInfoWidget(
-                                  title: '监测位置',
+                                  title: '监控类别',
+                                  content: '${state.monitorDetail.outletTypeStr}',
+                                  icon: Icons.nature,
+                                  flex: 6,
+                                ),
+                                Gaps.hGap20,
+                                IconBaseInfoWidget(
+                                  title: '网络类型',
+                                  content: '${state.monitorDetail.networkTypeStr}',
+                                  icon: Icons.network_wifi,
+                                  flex: 5,
+                                ),
+                              ],
+                            ),
+                            Gaps.vGap10,
+                            Row(
+                              children: <Widget>[
+                                IconBaseInfoWidget(
+                                  title: '监控位置',
                                   content:
                                       '${state.monitorDetail.monitorAddress}',
                                   icon: Icons.location_on,
@@ -152,7 +170,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                                 IconBaseInfoWidget(
                                   title: '数采编号',
                                   content:
-                                      '${state.monitorDetail.dataCollectionNumber} ',
+                                      '${state.monitorDetail.mnCode} ',
                                   icon: Icons.insert_drive_file,
                                   contentTextAlign: TextAlign.left,
                                   contentMarginTop: 2,

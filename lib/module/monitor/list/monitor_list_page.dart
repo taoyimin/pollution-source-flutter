@@ -61,7 +61,7 @@ class _MonitorListPageState extends State<MonitorListPage>
     _editController.dispose();
   }
 
-  Widget _getPageLoadedList(List<Monitor> monitorList) {
+  Widget _buildPageLoadedList(List<Monitor> monitorList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -77,7 +77,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                       return BlocProvider(
                         builder: (context) => MonitorDetailBloc(),
                         child: MonitorDetailPage(
-                          monitorId: '110',
+                          monitorId: monitorList[index].monitorId,
                         ),
                       );
                     },
@@ -113,7 +113,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                             Padding(
                               padding: const EdgeInsets.only(right: 16),
                               child: Text(
-                                '${monitorList[index].enterMonitorName}',
+                                '${monitorList[index].dischargeShortName}',
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
@@ -128,14 +128,14 @@ class _MonitorListPageState extends State<MonitorListPage>
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 5,
+                                  flex: 1,
                                   child: ListTileWidget(
                                       '监控点名称：${monitorList[index].monitorName}'),
                                 ),
                                 Expanded(
-                                  flex: 4,
+                                  flex: 1,
                                   child: ListTileWidget(
-                                      '区域：${monitorList[index].areaName}'),
+                                      '监控点类别：${monitorList[index].outletTypeStr}'),
                                 ),
                               ],
                             ),
@@ -225,7 +225,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _getPageLoadedList(state.monitorList);
+                      return _buildPageLoadedList(state.monitorList);
                     } else {
                       return SliverFillRemaining();
                     }

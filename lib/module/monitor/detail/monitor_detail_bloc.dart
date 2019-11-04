@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:meta/meta.dart';
 
 import 'monitor_detail.dart';
@@ -69,10 +70,17 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
 
   //获取监控点详情
   Future<MonitorDetail> _getMonitorDetail({@required monitorId}) async {
-    Response response = await DioUtils.instance.getDio().get(
-      HttpApi.monitorDetail,
-      queryParameters: {'monitorId': monitorId},
-    );
-    return MonitorDetail.fromJson(response.data[Constant.responseDataKey]);
+    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+      Response response = await DioUtils.instance.getDio().get(
+        HttpApi.monitorDetail,
+        queryParameters: {'monitorId': monitorId},
+      );
+      return MonitorDetail.fromJson(response.data[Constant.responseDataKey]);
+    }else{
+      Response response = await DioUtils.instance.getDio().get(
+        'monitors/$monitorId',
+      );
+      return MonitorDetail.fromJson(response.data);
+    }
   }
 }

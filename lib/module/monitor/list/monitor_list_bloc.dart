@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 
 import 'package:pollution_source/module/monitor/list/monitor_list.dart';
 
@@ -29,6 +30,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
           enterName: event.enterName,
           areaCode: event.areaCode,
           enterId: event.enterId,
+          dischargeId: event.dischargeId,
           monitorType: event.monitorType,
           state: event.state,
         );
@@ -43,6 +45,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
           enterName: event.enterName,
           areaCode: event.areaCode,
           enterId: event.enterId,
+          dischargeId: event.dischargeId,
           monitorType: event.monitorType,
           state: event.state,
         );
@@ -69,24 +72,64 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
     enterName = '',
     areaCode = '',
     enterId = '',
+    dischargeId = '',
     monitorType = '',
     state = '',
   }) async {
-    Response response = await DioUtils.instance.getDio().get(
-      HttpApi.monitorList,
-      queryParameters: {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterpriseName': enterName,
-        'areaCode': areaCode,
-        'enterId' : enterId,
-        'monitorType': monitorType,
-        'state': state,
-      },
-    );
-    return response.data[Constant.responseDataKey][Constant.responseListKey]
-        .map<Monitor>((json) {
-      return Monitor.fromJson(json);
-    }).toList();
+    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+      switch (state) {
+        case '0':
+          state = '';
+          break;
+        case '1':
+          state = 'online';
+          break;
+        case '2':
+          state = 'warn';
+          break;
+        case '3':
+          state = 'outrange';
+          break;
+        case '4':
+          state = 'offline';
+          break;
+        case '5':
+          state = 'stopline';
+          break;
+      }
+      Response response = await DioUtils.instance.getDio().get(
+        HttpApi.monitorList,
+        queryParameters: {
+          'currentPage': currentPage,
+          'pageSize': pageSize,
+          'enterpriseName': enterName,
+          'areaCode': areaCode,
+          'enterId': enterId,
+          'monitorType': monitorType,
+          'state': state,
+        },
+      );
+      return response.data[Constant.responseDataKey][Constant.responseListKey]
+          .map<Monitor>((json) {
+        return Monitor.fromJson(json);
+      }).toList();
+    } else {
+      Response response = await DioUtils.instance.getDio().get(
+        'monitors',
+        queryParameters: {
+          'currentPage': currentPage,
+          'pageSize': pageSize,
+          'enterName': enterName,
+          'areaCode': areaCode,
+          'enterId': enterId,
+          'dischargeId': dischargeId,
+          'monitorType': monitorType,
+          'state': state,
+        },
+      );
+      return response.data[Constant.responseListKey].map<Monitor>((json) {
+        return Monitor.fromJson(json);
+      }).toList();
+    }
   }
 }
