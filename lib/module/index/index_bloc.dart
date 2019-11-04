@@ -1,11 +1,12 @@
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 
 import 'index.dart';
 import 'package:bloc/bloc.dart';
 import 'package:pollution_source/http/http.dart';
-import 'package:pollution_source/util/constant.dart';
+import 'package:pollution_source/res/constant.dart';
 
 class IndexBloc extends Bloc<IndexEvent, IndexState> {
   @override
@@ -15,7 +16,12 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
   Stream<IndexState> mapEventToState(IndexEvent event) async* {
     if (event is Load) {
       try {
-        Response response = await DioUtils.instance.getDio().get(HttpApi.index);
+        Response response;
+        if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+          response = await DioUtils.instance.getDio().get(HttpApi.index);
+        } else {
+          response = await DioUtils.instance.getDio().get('index');
+        }
         //空气质量统计
         AqiStatistics aqiStatistics = await _convertAqiStatistics(
             response.data[Constant.responseDataKey][Constant.aqiStatisticsKey]);
@@ -59,20 +65,18 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
                 response.data[Constant.responseDataKey]
                     [Constant.onlineMonitorStatisticsKey]);
         //代办任务统计
-        List<Meta> todoTaskStatisticsList =
-            await _convertTodoTaskStatistics(
-                response.data[Constant.responseDataKey]
-                    [Constant.todoTaskStatisticsKey]);
+        List<Meta> todoTaskStatisticsList = await _convertTodoTaskStatistics(
+            response.data[Constant.responseDataKey]
+                [Constant.todoTaskStatisticsKey]);
         //综合信息统计
         List<Meta> comprehensiveStatisticsList =
             await _convertComprehensiveStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.comprehensiveStatisticsKey]);
         //雨水企业统计
-        List<Meta> rainEnterStatisticsList =
-            await _convertRainEnterStatistics(
-                response.data[Constant.responseDataKey]
-                    [Constant.rainEnterStatisticsKey]);
+        List<Meta> rainEnterStatisticsList = await _convertRainEnterStatistics(
+            response.data[Constant.responseDataKey]
+                [Constant.rainEnterStatisticsKey]);
         yield IndexLoaded(
           aqiStatistics: aqiStatistics,
           aqiExamineList: aqiExamineList,
@@ -217,13 +221,12 @@ Future<WaterStatistics> _convertSurfaceWater(String key, String string) async {
 }
 
 //格式化污染源企业统计
-Future<List<Meta>> _convertPollutionEnterStatistics(
-    String string) async {
+Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  if(!show){
+  if (!show) {
     return [];
-  }else {
+  } else {
     return [
       Meta(
         title: '企业总数',
@@ -284,13 +287,12 @@ Future<List<Meta>> _convertPollutionEnterStatistics(
 }
 
 //格式化在线监控点概况
-Future<List<Meta>> _convertOnlineMonitorStatistics(
-    String string) async {
+Future<List<Meta>> _convertOnlineMonitorStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  if(!show){
+  if (!show) {
     return [];
-  }else {
+  } else {
     return [
       Meta(
         title: '全部',
@@ -333,13 +335,12 @@ Future<List<Meta>> _convertOnlineMonitorStatistics(
 }
 
 //格式化代办任务统计
-Future<List<Meta>> _convertTodoTaskStatistics(
-    String string) async {
+Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  if(!show){
+  if (!show) {
     return [];
-  }else {
+  } else {
     return [
       Meta(
         title: '报警单待处理',
@@ -361,13 +362,12 @@ Future<List<Meta>> _convertTodoTaskStatistics(
 }
 
 //综合统计信息
-Future<List<Meta>> _convertComprehensiveStatistics(
-    String string) async {
+Future<List<Meta>> _convertComprehensiveStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  if(!show){
+  if (!show) {
     return [];
-  }else {
+  } else {
     return [
       Meta(
         title: '监察执法',
@@ -392,13 +392,12 @@ Future<List<Meta>> _convertComprehensiveStatistics(
 }
 
 //雨水企业统计
-Future<List<Meta>> _convertRainEnterStatistics(
-    String string) async {
+Future<List<Meta>> _convertRainEnterStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
-  if(!show){
+  if (!show) {
     return [];
-  }else {
+  } else {
     return [
       Meta(
         title: '全部企业',

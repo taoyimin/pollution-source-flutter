@@ -1,4 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -10,6 +11,7 @@ import 'dart:math';
 import 'dart:async';
 
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/widget/space_header.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
@@ -690,7 +692,10 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => ReportListBloc(),
-                          child: ReportListPage(),
+                          child: ReportListPage(
+                            type: '0',
+                            state: '0',
+                          ),
                         );
                       },
                     ),
@@ -708,7 +713,10 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => ReportListBloc(),
-                          child: ReportListPage(),
+                          child: ReportListPage(
+                            type: '0',
+                            state: '0',
+                          ),
                         );
                       },
                     ),
@@ -749,7 +757,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(),
+                          child: MonitorListPage(state: '0'),
                         );
                       },
                     ),
@@ -768,9 +776,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            state: 'online',
-                          ),
+                          child: MonitorListPage(state: '1'),
                         );
                       },
                     ),
@@ -789,9 +795,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            state: 'warn',
-                          ),
+                          child: MonitorListPage(state: '2'),
                         );
                       },
                     ),
@@ -813,9 +817,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            state: 'outrange',
-                          ),
+                          child: MonitorListPage(state: '3'),
                         );
                       },
                     ),
@@ -834,9 +836,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            state: 'offline',
-                          ),
+                          child: MonitorListPage(state: '4'),
                         );
                       },
                     ),
@@ -855,9 +855,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            state: 'stopline',
-                          ),
+                          child: MonitorListPage(state: '5'),
                         );
                       },
                     ),
@@ -915,9 +913,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            attentionLevel: '1',
-                          ),
+                          child: EnterListPage(attentionLevel: '1'),
                         );
                       },
                     ),
@@ -935,9 +931,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            state: 'online',
-                          ),
+                          child: EnterListPage(state: '1'),
                         );
                       },
                     ),
@@ -959,7 +953,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                         return BlocProvider(
                           builder: (context) => EnterListBloc(),
                           child: EnterListPage(
-                            enterType: 'outletType2',
+                            enterType: SpUtil.getBool(Constant.spJavaApi)
+                                ? 'outletType2'
+                                : 'EnterType1',
                           ),
                         );
                       },
@@ -979,7 +975,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                         return BlocProvider(
                           builder: (context) => EnterListBloc(),
                           child: EnterListPage(
-                            enterType: 'outletType3',
+                            enterType: SpUtil.getBool(Constant.spJavaApi)
+                                ? 'outletType3'
+                                : 'EnterType2',
                           ),
                         );
                       },
@@ -999,7 +997,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                         return BlocProvider(
                           builder: (context) => EnterListBloc(),
                           child: EnterListPage(
-                            enterType: 'outletType2,outletType3',
+                            enterType: SpUtil.getBool(Constant.spJavaApi)
+                                ? 'outletType2,outletType3'
+                                : 'EnterType1,EnterType2',
                           ),
                         );
                       },
@@ -1021,9 +1021,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            monitorType: 'outletType2',
-                          ),
+                          child: MonitorListPage(monitorType: 'outletType2'),
                         );
                       },
                     ),
@@ -1041,9 +1039,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            monitorType: 'outletType3',
-                          ),
+                          child: MonitorListPage(monitorType: 'outletType3'),
                         );
                       },
                     ),
@@ -1061,9 +1057,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            enterType: 'licence',
-                          ),
+                          child: EnterListPage(enterType: 'licence'),
                         );
                       },
                     ),
@@ -1125,7 +1119,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
                           builder: (context) => EnterListBloc(),
                           child: EnterListPage(
                             enterType: 'outletType1',
-                            state: 'online',
+                            state: '1',
                           ),
                         );
                       },
