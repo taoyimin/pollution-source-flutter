@@ -9,9 +9,9 @@ import 'package:pollution_source/util/utils.dart';
 
 //监控点详情
 class MonitorDetail extends Equatable {
-  final int enterId; //企业ID
-  final int dischargeId; //排口ID
-  final int monitorId; //监控点ID
+  final String enterId; //企业ID
+  final String dischargeId; //排口ID
+  final String monitorId; //监控点ID
   final String enterName; //企业名称
   final String enterAddress; //企业地址
   final String monitorName; //监控点名称
@@ -20,6 +20,9 @@ class MonitorDetail extends Equatable {
   final String networkTypeStr; //网络类型
   final String monitorAddress; //监控点地址
   final String mnCode; //数采仪编码
+  final String orderCompleteCount; //报警管理单已办结数量
+  final String orderVerifyCount; //报警管理单待审核数量
+  final String orderTotalCount; //报警管理单全部数量
   final bool isCurved; //图表是否为曲线
   final bool showDotData; //图表是否显示点
   final List<ChartData> chartDataList; //图表数据
@@ -36,6 +39,9 @@ class MonitorDetail extends Equatable {
     this.networkTypeStr,
     this.monitorAddress,
     this.mnCode,
+    this.orderCompleteCount,
+    this.orderVerifyCount,
+    this.orderTotalCount,
     this.isCurved,
     this.showDotData,
     this.chartDataList,
@@ -54,6 +60,9 @@ class MonitorDetail extends Equatable {
         networkTypeStr,
         monitorAddress,
         mnCode,
+        orderCompleteCount,
+        orderVerifyCount,
+        orderTotalCount,
         isCurved,
         showDotData,
         chartDataList,
@@ -76,6 +85,9 @@ class MonitorDetail extends Equatable {
       networkTypeStr: this.networkTypeStr,
       monitorAddress: this.monitorAddress,
       mnCode: this.mnCode,
+      orderCompleteCount: this.orderCompleteCount,
+      orderVerifyCount: this.orderVerifyCount,
+      orderTotalCount: this.orderTotalCount,
       isCurved: isCurved ?? this.isCurved,
       showDotData: showDotData ?? this.showDotData,
       chartDataList: chartDataList ?? this.chartDataList,
@@ -92,9 +104,9 @@ class MonitorDetail extends Equatable {
 
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return MonitorDetail(
-        enterId: 0,
-        dischargeId: 0,
-        monitorId: 0,
+        enterId: '0',
+        dischargeId: '0',
+        monitorId: '0',
         enterName: '-',
         enterAddress: '-',
         monitorName: '-',
@@ -103,6 +115,9 @@ class MonitorDetail extends Equatable {
         networkTypeStr: '-',
         monitorAddress: '-',
         mnCode: '-',
+        orderCompleteCount: '-',
+        orderVerifyCount: '-',
+        orderTotalCount: '-',
         isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
         showDotData: SpUtil.getBool(Constant.spShowDotData, defValue: true),
         chartDataList: [
@@ -241,6 +256,9 @@ class MonitorDetail extends Equatable {
         networkTypeStr: json['networkTypeStr'],
         monitorAddress: json['monitorAddress'],
         mnCode: json['mnCode'],
+        orderCompleteCount: json['orderCompleteCount'],
+        orderVerifyCount: json['orderVerifyCount'],
+        orderTotalCount: json['orderTotalCount'],
         isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
         showDotData: SpUtil.getBool(Constant.spShowDotData, defValue: true),
         chartDataList: [

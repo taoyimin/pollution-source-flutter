@@ -7,7 +7,7 @@ import 'package:pollution_source/res/constant.dart';
 
 //监控点列表
 class Monitor extends Equatable {
-  final int monitorId; //监控点ID
+  final String monitorId; //监控点ID
   final String dischargeShortName; //排口简称
   final String monitorName; //监控点名称
   final String monitorAddress; //监控点地址
@@ -42,7 +42,7 @@ class Monitor extends Equatable {
   static Monitor fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Monitor(
-        monitorId: 0,
+        monitorId: '0',
         dischargeShortName: '-',
         monitorName: json['disMonitorName'],
         monitorAddress: json['disMonitorAddress'],

@@ -12,7 +12,7 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'monitor_detail.dart';
 
 class MonitorDetailPage extends StatefulWidget {
-  final int monitorId;
+  final String monitorId;
 
   MonitorDetailPage({@required this.monitorId}) : assert(monitorId != null);
 
@@ -201,7 +201,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                                   meta: Meta(
                                     color: Color(0xFF45C4FF),
                                     title: '已办结',
-                                    content: '25',
+                                    content: '${state.monitorDetail.orderCompleteCount} ',
                                     imagePath:
                                         'assets/images/icon_alarm_manage_complete.png',
                                   ),
@@ -212,7 +212,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                                   meta: Meta(
                                     color: Color(0xFFFFB709),
                                     title: '待审核',
-                                    content: '1',
+                                    content: '${state.monitorDetail.orderVerifyCount} ',
                                     imagePath:
                                         'assets/images/icon_alarm_manage_review.png',
                                   ),
@@ -223,7 +223,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                                   meta: Meta(
                                     color: Colors.green,
                                     title: '全部',
-                                    content: '55',
+                                    content: '${state.monitorDetail.orderTotalCount} ',
                                     imagePath:
                                         'assets/images/icon_alarm_manage_all.png',
                                   ),
