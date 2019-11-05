@@ -4,7 +4,7 @@ import 'package:pollution_source/res/constant.dart';
 
 //企业详情
 class EnterDetail extends Equatable {
-  final int enterId; //企业id
+  final String enterId; //企业id
   final String enterName; //企业名称
   final String enterAddress; //企业地址
   final String enterTel; //企业电话
@@ -99,7 +99,7 @@ class EnterDetail extends Equatable {
   static EnterDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return EnterDetail(
-        enterId: 10000,
+        enterId: '0',
         enterName: '深圳市腾讯计算机系统有限公司',
         enterAddress: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼',
         enterTel: '123456789',

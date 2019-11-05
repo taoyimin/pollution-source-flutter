@@ -7,7 +7,7 @@ import 'package:pollution_source/res/constant.dart';
 
 //企业列表
 class Enter extends Equatable {
-  final int enterId;  //企业id
+  final String enterId;  //企业id
   final String enterName; //企业名
   final String enterAddress;  //企业地址
   final bool isImportant; //是否是重点企业

@@ -13,7 +13,7 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'enter_detail.dart';
 
 class EnterDetailPage extends StatefulWidget {
-  final int enterId;
+  final String enterId;
 
   EnterDetailPage({@required this.enterId}) : assert(enterId != null);
 

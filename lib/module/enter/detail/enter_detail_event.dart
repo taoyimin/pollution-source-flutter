@@ -10,7 +10,7 @@ abstract class EnterDetailEvent extends Equatable {
 
 class EnterDetailLoad extends EnterDetailEvent {
   //企业ID
-  final int enterId;
+  final String enterId;
 
   const EnterDetailLoad({@required this.enterId});
 
