@@ -3,16 +3,16 @@ import 'package:meta/meta.dart';
 import 'package:pollution_source/res/constant.dart';
 
 //传入时间戳，使得每次都触发状态改变
-abstract class ReportListState extends Equatable{
-  const ReportListState();
+abstract class DischargeReportListState extends Equatable{
+  const DischargeReportListState();
 
   @override
   List<Object> get props => [DateTime.now()];
 }
 
-class ReportListLoading extends ReportListState {}
+class DischargeReportListLoading extends DischargeReportListState {}
 
-class ReportListLoaded extends ReportListState {
+class DischargeReportListLoaded extends DischargeReportListState {
   //异常申报单列表
   final reportList;
 
@@ -23,7 +23,7 @@ class ReportListLoaded extends ReportListState {
 
   final int currentPage;
 
-  const ReportListLoaded({
+  const DischargeReportListLoaded({
     @required this.reportList,
     @required this.hasNextPage,
     this.currentPage = Constant.defaultCurrentPage,
@@ -32,11 +32,11 @@ class ReportListLoaded extends ReportListState {
 }
 
 //异常申报单列表页没有数据的状态
-class ReportListEmpty extends ReportListState {}
+class DischargeReportListEmpty extends DischargeReportListState {}
 
 //异常申报单列表页发生错误的状态
-class ReportListError extends ReportListState {
+class DischargeReportListError extends DischargeReportListState {
   final String errorMessage;
 
-  const ReportListError({@required this.errorMessage});
+  const DischargeReportListError({@required this.errorMessage});
 }
