@@ -56,7 +56,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 final bool showDotData = state.monitorDetail.showDotData;
                 popupMenuButton = PopupMenuButton<String>(
                   itemBuilder: (BuildContext context) =>
-                  <PopupMenuItem<String>>[
+                      <PopupMenuItem<String>>[
                     UIUtils.getSelectView(
                         Icons.message, isCurved ? '折线图' : '曲线图', '1'),
                     UIUtils.getSelectView(
@@ -98,264 +98,258 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               } else if (state is MonitorDetailError) {
                 return PageErrorWidget(errorMessage: state.errorMessage);
               } else if (state is MonitorDetailLoaded) {
-                return SliverToBoxAdapter(
-                  child: Column(
-                    children: <Widget>[
-                      //基本信息
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                              title: '基本信息',
-                              imagePath:
-                                  'assets/images/icon_enter_baseinfo.png',
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                IconBaseInfoWidget(
-                                  title: '监控点名',
-                                  content: '${state.monitorDetail.monitorName}',
-                                  icon: Icons.linked_camera,
-                                  flex: 6,
-                                ),
-                                Gaps.hGap20,
-                                IconBaseInfoWidget(
-                                  title: '监控类型',
-                                  content: '${state.monitorDetail.monitorTypeStr}',
-                                  icon: Icons.videocam,
-                                  flex: 5,
-                                ),
-                              ],
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                IconBaseInfoWidget(
-                                  title: '监控类别',
-                                  content: '${state.monitorDetail.outletTypeStr}',
-                                  icon: Icons.nature,
-                                  flex: 6,
-                                ),
-                                Gaps.hGap20,
-                                IconBaseInfoWidget(
-                                  title: '网络类型',
-                                  content: '${state.monitorDetail.networkTypeStr}',
-                                  icon: Icons.network_wifi,
-                                  flex: 5,
-                                ),
-                              ],
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                IconBaseInfoWidget(
-                                  title: '监控位置',
-                                  content:
-                                      '${state.monitorDetail.monitorAddress}',
-                                  icon: Icons.location_on,
-                                  contentTextAlign: TextAlign.left,
-                                ),
-                              ],
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                IconBaseInfoWidget(
-                                  title: '数采编号',
-                                  content:
-                                      '${state.monitorDetail.mnCode} ',
-                                  icon: Icons.insert_drive_file,
-                                  contentTextAlign: TextAlign.left,
-                                  contentMarginTop: 2,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      //报警管理单
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                              title: '报警管理单',
-                              imagePath: 'assets/images/icon_alarm_manage.png',
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                InkWellButton5(
-                                  onTap: () {},
-                                  meta: Meta(
-                                    color: Color(0xFF45C4FF),
-                                    title: '已办结',
-                                    content: '${state.monitorDetail.orderCompleteCount} ',
-                                    imagePath:
-                                        'assets/images/icon_alarm_manage_complete.png',
-                                  ),
-                                ),
-                                Gaps.hGap10,
-                                InkWellButton5(
-                                  onTap: () {},
-                                  meta: Meta(
-                                    color: Color(0xFFFFB709),
-                                    title: '待审核',
-                                    content: '${state.monitorDetail.orderVerifyCount} ',
-                                    imagePath:
-                                        'assets/images/icon_alarm_manage_review.png',
-                                  ),
-                                ),
-                                Gaps.hGap10,
-                                InkWellButton5(
-                                  onTap: () {},
-                                  meta: Meta(
-                                    color: Colors.green,
-                                    title: '全部',
-                                    content: '${state.monitorDetail.orderTotalCount} ',
-                                    imagePath:
-                                        'assets/images/icon_alarm_manage_all.png',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      //历史数据
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                              title: '监测数据',
-                              imagePath:
-                                  'assets/images/icon_monitor_statistics.png',
-                            ),
-                            GridView.count(
-                              //设置padding 防止item阴影被裁剪
-                              padding: const EdgeInsets.only(
-                                bottom: 20,
-                                top: 10,
-                              ),
-                              primary: false,
-                              shrinkWrap: true,
-                              mainAxisSpacing: 10.0,
-                              crossAxisCount: 4,
-                              crossAxisSpacing: 10.0,
-                              children: state.monitorDetail.chartDataList
-                                  .map((chartData) {
-                                return FactorValueWidget(
-                                  chartData: chartData,
-                                  onTap: () {
-                                    _monitorDetailBloc.add(
-                                      UpdateChartData(
-                                        chartData: chartData.copyWith(
-                                          checked: !chartData.checked,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }).toList(),
-                            ),
-                            LineChartWidget(
-                              chartDataList: state.monitorDetail.chartDataList,
-                              isCurved: state.monitorDetail.isCurved,
-                              showDotData: state.monitorDetail.showDotData,
-                            ),
-                          ],
-                        ),
-                      ),
-                      //快速链接
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                              title: '快速链接',
-                              imagePath: 'assets/images/icon_fast_link.png',
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                InkWellButton7(
-                                  meta: Meta(
-                                      title: '企业信息',
-                                      content: '查看监控点所属的企业信息',
-                                      backgroundPath:
-                                          'assets/images/button_bg_lightblue.png',
-                                      imagePath:
-                                          'assets/images/image_enter_statistics1.png'),
-                                  onTap: () {},
-                                ),
-                                Gaps.hGap10,
-                                InkWellButton7(
-                                  meta: Meta(
-                                      title: '报警管理单',
-                                      content: '查看该监控点的报警管理单',
-                                      backgroundPath:
-                                          'assets/images/button_bg_pink.png',
-                                      imagePath:
-                                          'assets/images/image_enter_statistics2.png'),
-                                  onTap: () {},
-                                ),
-                              ],
-                            ),
-                            Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                InkWellButton7(
-                                  meta: Meta(
-                                      title: '排口申报单',
-                                      content: '查看该监控点的排口异常申报单',
-                                      backgroundPath:
-                                          'assets/images/button_bg_yellow.png',
-                                      imagePath:
-                                          'assets/images/image_enter_statistics3.png'),
-                                  onTap: () {},
-                                ),
-                                Gaps.hGap10,
-                                InkWellButton7(
-                                  meta: Meta(
-                                      title: '因子申报单',
-                                      content: '查看该监控点的因子异常申报单',
-                                      backgroundPath:
-                                          'assets/images/button_bg_red.png',
-                                      imagePath:
-                                          'assets/images/image_enter_statistics4.png'),
-                                  onTap: () {},
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return _buildPageLoadedDetail(state.monitorDetail);
               } else {
-                return SliverFillRemaining();
+                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
               }
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPageLoadedDetail(MonitorDetail monitorDetail) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: <Widget>[
+          //基本信息
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '基本信息',
+                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
+                      title: '监控点名',
+                      content: '${monitorDetail.monitorName}',
+                      icon: Icons.linked_camera,
+                      flex: 6,
+                    ),
+                    Gaps.hGap20,
+                    IconBaseInfoWidget(
+                      title: '监控类型',
+                      content: '${monitorDetail.monitorTypeStr}',
+                      icon: Icons.videocam,
+                      flex: 5,
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
+                      title: '监控类别',
+                      content: '${monitorDetail.outletTypeStr}',
+                      icon: Icons.nature,
+                      flex: 6,
+                    ),
+                    Gaps.hGap20,
+                    IconBaseInfoWidget(
+                      title: '网络类型',
+                      content: '${monitorDetail.networkTypeStr}',
+                      icon: Icons.network_wifi,
+                      flex: 5,
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
+                      title: '监控位置',
+                      content: '${monitorDetail.monitorAddress}',
+                      icon: Icons.location_on,
+                      contentTextAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
+                      title: '数采编号',
+                      content: '${monitorDetail.mnCode} ',
+                      icon: Icons.insert_drive_file,
+                      contentTextAlign: TextAlign.left,
+                      contentMarginTop: 2,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          //报警管理单
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '报警管理单',
+                  imagePath: 'assets/images/icon_alarm_manage.png',
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    InkWellButton5(
+                      onTap: () {},
+                      meta: Meta(
+                        color: Color(0xFF45C4FF),
+                        title: '已办结',
+                        content: '${monitorDetail.orderCompleteCount} ',
+                        imagePath:
+                            'assets/images/icon_alarm_manage_complete.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton5(
+                      onTap: () {},
+                      meta: Meta(
+                        color: Color(0xFFFFB709),
+                        title: '待审核',
+                        content: '${monitorDetail.orderVerifyCount} ',
+                        imagePath: 'assets/images/icon_alarm_manage_review.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton5(
+                      onTap: () {},
+                      meta: Meta(
+                        color: Colors.green,
+                        title: '全部',
+                        content: '${monitorDetail.orderTotalCount} ',
+                        imagePath: 'assets/images/icon_alarm_manage_all.png',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          //历史数据
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '监测数据',
+                  imagePath: 'assets/images/icon_monitor_statistics.png',
+                ),
+                GridView.count(
+                  //设置padding 防止item阴影被裁剪
+                  padding: const EdgeInsets.only(
+                    bottom: 20,
+                    top: 10,
+                  ),
+                  primary: false,
+                  shrinkWrap: true,
+                  mainAxisSpacing: 10.0,
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 10.0,
+                  children: monitorDetail.chartDataList.map((chartData) {
+                    return FactorValueWidget(
+                      chartData: chartData,
+                      onTap: () {
+                        _monitorDetailBloc.add(
+                          UpdateChartData(
+                            chartData: chartData.copyWith(
+                              checked: !chartData.checked,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
+                LineChartWidget(
+                  chartDataList: monitorDetail.chartDataList,
+                  isCurved: monitorDetail.isCurved,
+                  showDotData: monitorDetail.showDotData,
+                ),
+              ],
+            ),
+          ),
+          //快速链接
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '快速链接',
+                  imagePath: 'assets/images/icon_fast_link.png',
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    InkWellButton7(
+                      meta: Meta(
+                          title: '企业信息',
+                          content: '查看监控点所属的企业信息',
+                          backgroundPath:
+                              'assets/images/button_bg_lightblue.png',
+                          imagePath:
+                              'assets/images/image_enter_statistics1.png'),
+                      onTap: () {},
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton7(
+                      meta: Meta(
+                          title: '报警管理单',
+                          content: '查看该监控点的报警管理单',
+                          backgroundPath: 'assets/images/button_bg_pink.png',
+                          imagePath:
+                              'assets/images/image_enter_statistics2.png'),
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    InkWellButton7(
+                      meta: Meta(
+                          title: '排口申报单',
+                          content: '查看该监控点的排口异常申报单',
+                          backgroundPath: 'assets/images/button_bg_yellow.png',
+                          imagePath:
+                              'assets/images/image_enter_statistics3.png'),
+                      onTap: () {},
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton7(
+                      meta: Meta(
+                          title: '因子申报单',
+                          content: '查看该监控点的因子异常申报单',
+                          backgroundPath: 'assets/images/button_bg_red.png',
+                          imagePath:
+                              'assets/images/image_enter_statistics4.png'),
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

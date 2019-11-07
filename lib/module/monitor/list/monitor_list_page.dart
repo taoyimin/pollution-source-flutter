@@ -61,10 +61,113 @@ class _MonitorListPageState extends State<MonitorListPage>
     _editController.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: extended.NestedScrollView(
+        controller: _scrollController,
+        pinnedHeaderSliverHeightBuilder: () {
+          return MediaQuery.of(context).padding.top + kToolbarHeight;
+        },
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            ListHeaderWidget(
+              title: '监控点列表',
+              subtitle: '展示监控点列表，点击列表项查看该监控点的详细信息',
+              background: 'assets/images/button_bg_red.png',
+              image: 'assets/images/monitor_list_bg_image.png',
+              color: Colors.red,
+              showSearch: true,
+              editController: _editController,
+              scrollController: _scrollController,
+              onSearchPressed: () => _refreshController.callRefresh(),
+              areaPickerListener: (areaId) {
+                areaCode = areaId;
+              },
+              popupMenuButton: PopupMenuButton<String>(
+                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
+                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
+                  UIUtils.getSelectView(Icons.cast_connected, '扫一扫码', 'C'),
+                ],
+                onSelected: (String action) {
+                  // 点击选项的时候
+                  switch (action) {
+                    case 'A':
+                      break;
+                    case 'B':
+                      break;
+                    case 'C':
+                      break;
+                  }
+                },
+              ),
+            ),
+          ];
+        },
+        body: extended.NestedScrollViewInnerScrollPositionKeyWidget(
+          Key('list'),
+          EasyRefresh.custom(
+            controller: _refreshController,
+            header: UIUtils.getRefreshClassicalHeader(),
+            footer: UIUtils.getLoadClassicalFooter(),
+            slivers: <Widget>[
+              BlocListener<MonitorListBloc, MonitorListState>(
+                listener: (context, state) {
+                  _refreshCompleter?.complete();
+                  _refreshCompleter = Completer();
+                },
+                child: BlocBuilder<MonitorListBloc, MonitorListState>(
+                  builder: (context, state) {
+                    if (state is MonitorListLoading) {
+                      return PageLoadingWidget();
+                    } else if (state is MonitorListEmpty) {
+                      return PageEmptyWidget();
+                    } else if (state is MonitorListError) {
+                      return PageErrorWidget(errorMessage: state.errorMessage);
+                    } else if (state is MonitorListLoaded) {
+                      if (!state.hasNextPage)
+                        _refreshController.finishLoad(
+                            noMore: !state.hasNextPage, success: true);
+                      return _buildPageLoadedList(state.monitorList);
+                    } else {
+                      return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                    }
+                  },
+                ),
+              ),
+            ],
+            onRefresh: () async {
+              _monitorListBloc.add(MonitorListLoad(
+                isRefresh: true,
+                enterName: _editController.text,
+                areaCode: areaCode,
+                enterId: widget.enterId,
+                monitorType: widget.monitorType,
+                state: widget.state,
+              ));
+              return _refreshCompleter.future;
+            },
+            onLoad: () async {
+              _monitorListBloc.add(MonitorListLoad(
+                enterName: _editController.text,
+                areaCode: areaCode,
+                enterId: widget.enterId,
+                monitorType: widget.monitorType,
+                state: widget.state,
+              ));
+              return _refreshCompleter.future;
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildPageLoadedList(List<Monitor> monitorList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
+            (BuildContext context, int index) {
           //创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -153,109 +256,6 @@ class _MonitorListPageState extends State<MonitorListPage>
           );
         },
         childCount: monitorList.length,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: extended.NestedScrollView(
-        controller: _scrollController,
-        pinnedHeaderSliverHeightBuilder: () {
-          return MediaQuery.of(context).padding.top + kToolbarHeight;
-        },
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return <Widget>[
-            ListHeaderWidget(
-              title: '监控点列表',
-              subtitle: '展示监控点列表，点击列表项查看该监控点的详细信息',
-              background: 'assets/images/button_bg_red.png',
-              image: 'assets/images/monitor_list_bg_image.png',
-              color: Colors.red,
-              showSearch: true,
-              editController: _editController,
-              scrollController: _scrollController,
-              onSearchPressed: () => _refreshController.callRefresh(),
-              areaPickerListener: (areaId) {
-                areaCode = areaId;
-              },
-              popupMenuButton: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
-                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
-                  UIUtils.getSelectView(Icons.cast_connected, '扫一扫码', 'C'),
-                ],
-                onSelected: (String action) {
-                  // 点击选项的时候
-                  switch (action) {
-                    case 'A':
-                      break;
-                    case 'B':
-                      break;
-                    case 'C':
-                      break;
-                  }
-                },
-              ),
-            ),
-          ];
-        },
-        body: extended.NestedScrollViewInnerScrollPositionKeyWidget(
-          Key('list'),
-          EasyRefresh.custom(
-            controller: _refreshController,
-            header: UIUtils.getRefreshClassicalHeader(),
-            footer: UIUtils.getLoadClassicalFooter(),
-            slivers: <Widget>[
-              BlocListener<MonitorListBloc, MonitorListState>(
-                listener: (context, state) {
-                  _refreshCompleter?.complete();
-                  _refreshCompleter = Completer();
-                },
-                child: BlocBuilder<MonitorListBloc, MonitorListState>(
-                  builder: (context, state) {
-                    if (state is MonitorListLoading) {
-                      return PageLoadingWidget();
-                    } else if (state is MonitorListEmpty) {
-                      return PageEmptyWidget();
-                    } else if (state is MonitorListError) {
-                      return PageErrorWidget(errorMessage: state.errorMessage);
-                    } else if (state is MonitorListLoaded) {
-                      if (!state.hasNextPage)
-                        _refreshController.finishLoad(
-                            noMore: !state.hasNextPage, success: true);
-                      return _buildPageLoadedList(state.monitorList);
-                    } else {
-                      return SliverFillRemaining();
-                    }
-                  },
-                ),
-              ),
-            ],
-            onRefresh: () async {
-              _monitorListBloc.add(MonitorListLoad(
-                isRefresh: true,
-                enterName: _editController.text,
-                areaCode: areaCode,
-                enterId: widget.enterId,
-                monitorType: widget.monitorType,
-                state: widget.state,
-              ));
-              return _refreshCompleter.future;
-            },
-            onLoad: () async {
-              _monitorListBloc.add(MonitorListLoad(
-                enterName: _editController.text,
-                areaCode: areaCode,
-                enterId: widget.enterId,
-                monitorType: widget.monitorType,
-                state: widget.state,
-              ));
-              return _refreshCompleter.future;
-            },
-          ),
-        ),
       ),
     );
   }
