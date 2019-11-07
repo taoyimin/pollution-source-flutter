@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/res/constant.dart';
@@ -32,10 +33,17 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
 
   //获取报警管理单详情
   Future<OrderDetail> _getOrderDetail({@required orderId}) async {
-    Response response = await DioUtils.instance.getDio().get(
-      HttpApi.orderDetail,
-      queryParameters: {'orderId': orderId},
-    );
-    return OrderDetail.fromJson(response.data[Constant.responseDataKey]);
+    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+      Response response = await DioUtils.instance.getDio().get(
+        HttpApi.orderDetail,
+        queryParameters: {'orderId': orderId},
+      );
+      return OrderDetail.fromJson(response.data[Constant.responseDataKey]);
+    }else{
+      Response response = await DioUtils.instance.getDio().get(
+        'orders/$orderId',
+      );
+      return OrderDetail.fromJson(response.data);
+    }
   }
 }

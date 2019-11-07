@@ -1,51 +1,72 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/res/constant.dart';
 
 //报警管理单列表
 class Order extends Equatable {
+  final String orderId; //报警管理单ID
   final String enterName; //企业名称
   final String monitorName; //监控点名称
-  final String alarmTime; //报警时间
-  final String areaName;  //区域
-  final String state; //状态
+  final String alarmDateStr; //报警时间
+  final String districtName; //区域
+  final String orderStateStr; //状态
   final String alarmRemark; //报警描述
-  final List<Label> labelList;  //标签集合
+  final List<Label> labelList; //标签集合
 
   const Order({
+    this.orderId,
     this.enterName,
     this.monitorName,
-    this.alarmTime,
-    this.areaName,
-    this.state,
+    this.alarmDateStr,
+    this.districtName,
+    this.orderStateStr,
     this.alarmRemark,
     this.labelList,
   });
 
   @override
   List<Object> get props => [
+    orderId,
         enterName,
         monitorName,
-        alarmTime,
-        areaName,
-        state,
+        alarmDateStr,
+        districtName,
+        orderStateStr,
         alarmRemark,
         labelList,
       ];
 
   static Order fromJson(dynamic json) {
-    return Order(
-      enterName: json['enterprisename'],
-      monitorName: json['disOutName'],
-      alarmTime: json['createtime'],
-      areaName: json['areaName'],
-      state: json['orderstate'],
-      alarmRemark: json['alarmdesc'],
-      labelList: TextUtil.isEmpty(json['alarmtype'])
-          ? const []
-          : _getLabelList(json['alarmtype']),
-    );
+    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+      return Order(
+        orderId: json['id'],
+        enterName: json['enterprisename'],
+        monitorName: json['disOutName'],
+        alarmDateStr: json['createtime'],
+        districtName: json['areaName'],
+        orderStateStr: json['orderstate'],
+        alarmRemark: json['alarmdesc'],
+        labelList: TextUtil.isEmpty(json['alarmtype'])
+            ? const []
+            : _getLabelList(json['alarmtype']),
+      );
+    } else {
+      return Order(
+        orderId: json['orderId'],
+        enterName: json['enterName'],
+        monitorName: json['monitorName'],
+        alarmDateStr: json['alarmDateStr'],
+        districtName: json['districtName'],
+        orderStateStr: json['orderStateStr'],
+        alarmRemark: json['alarmRemark'],
+        labelList: TextUtil.isEmpty(json['alarmTypeStr'])
+            ? const []
+            : _getLabelList(json['alarmTypeStr']),
+      );
+    }
   }
 
   //将报警类型string转化成List

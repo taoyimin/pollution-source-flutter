@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/order/list/order_list.dart';
@@ -64,19 +65,36 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     areaCode = '',
     state = '1',
   }) async {
-    Response response = await DioUtils.instance.getDio().get(
-      HttpApi.orderList,
-      queryParameters: {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterpriseName': enterName,
-        'areaCode': areaCode,
-        'status': state,
-      },
-    );
-    return response.data[Constant.responseDataKey][Constant.responseListKey]
-        .map<Order>((json) {
-      return Order.fromJson(json);
-    }).toList();
+    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+      Response response = await DioUtils.instance.getDio().get(
+        HttpApi.orderList,
+        queryParameters: {
+          'currentPage': currentPage,
+          'pageSize': pageSize,
+          'enterpriseName': enterName,
+          'areaCode': areaCode,
+          'status': state,
+        },
+      );
+      return response.data[Constant.responseDataKey][Constant.responseListKey]
+          .map<Order>((json) {
+        return Order.fromJson(json);
+      }).toList();
+    }else{
+      Response response = await DioUtils.instance.getDio().get(
+        'orders',
+        queryParameters: {
+          'currentPage': currentPage,
+          'pageSize': pageSize,
+          'enterName': enterName,
+          'areaCode': areaCode,
+          'state': state,
+        },
+      );
+      return response.data[Constant.responseListKey]
+          .map<Order>((json) {
+        return Order.fromJson(json);
+      }).toList();
+    }
   }
 }

@@ -51,90 +51,6 @@ class _OrderListPageState extends State<OrderListPage>
     _editController.dispose();
   }
 
-  Widget _buildPageLoadedList(List<Order> orderList) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          //创建列表项
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            child: InkWellButton(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider(
-                    builder: (context) => OrderDetailBloc(),
-                    child: OrderDetailPage(
-                      orderId: '100',
-                    ),
-                  );
-                }));
-              },
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      UIUtils.getBoxShadow(),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '${orderList[index].enterName}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Gaps.vGap6,
-                      LabelWrapWidget(labelList: orderList[index].labelList),
-                      orderList[index].labelList.length == 0
-                          ? Gaps.empty
-                          : Gaps.vGap6,
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '监控点名称：${orderList[index].monitorName}'),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child:
-                                ListTileWidget('区域：${orderList[index].areaName}'),
-                          ),
-                        ],
-                      ),
-                      Gaps.vGap6,
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '报警时间：${orderList[index].alarmTime}'),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '报警单状态：${orderList[index].state}'),
-                          ),
-                        ],
-                      ),
-                      Gaps.vGap6,
-                      ListTileWidget('报警描述：${orderList[index].alarmRemark}'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-        childCount: orderList.length,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,9 +64,9 @@ class _OrderListPageState extends State<OrderListPage>
             ListHeaderWidget(
               title: '报警管理单列表',
               subtitle: '展示报警管理单列表，点击列表项查看该报警管理单的详细信息',
-              background: 'assets/images/button_bg_green.png',
-              image: 'assets/images/task_list_bg_image.png',
-              color: Color(0xFF29D0BF),
+              background: 'assets/images/button_bg_lightblue.png',
+              image: 'assets/images/order_list_bg_image.png',
+              color: Colors.lightBlue,
               showSearch: true,
               editController: _editController,
               scrollController: _scrollController,
@@ -205,7 +121,7 @@ class _OrderListPageState extends State<OrderListPage>
                             noMore: !state.hasNextPage, success: true);
                       return _buildPageLoadedList(state.orderList);
                     } else {
-                      return SliverFillRemaining();
+                      return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
                     }
                   },
                 ),
@@ -230,6 +146,90 @@ class _OrderListPageState extends State<OrderListPage>
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildPageLoadedList(List<Order> orderList) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          //创建列表项
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            child: InkWellButton(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BlocProvider(
+                    builder: (context) => OrderDetailBloc(),
+                    child: OrderDetailPage(
+                      orderId: orderList[index].orderId,
+                    ),
+                  );
+                }));
+              },
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      UIUtils.getBoxShadow(),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${orderList[index].enterName}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Gaps.vGap6,
+                      LabelWrapWidget(labelList: orderList[index].labelList),
+                      orderList[index].labelList.length == 0
+                          ? Gaps.empty
+                          : Gaps.vGap6,
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '监控点名称：${orderList[index].monitorName}'),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child:
+                            ListTileWidget('区域：${orderList[index].districtName}'),
+                          ),
+                        ],
+                      ),
+                      Gaps.vGap6,
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '报警时间：${orderList[index].alarmDateStr}'),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: ListTileWidget(
+                                '报警单状态：${orderList[index].orderStateStr}'),
+                          ),
+                        ],
+                      ),
+                      Gaps.vGap6,
+                      ListTileWidget('报警描述：${orderList[index].alarmRemark}'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        childCount: orderList.length,
       ),
     );
   }
