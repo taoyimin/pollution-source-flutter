@@ -986,7 +986,7 @@ class AttachmentWidget extends StatelessWidget {
                   style: const TextStyle(fontSize: 12),
                 ),
                 Text(
-                  '附件大小:${attachment.size}',
+                  '附件大小:${attachment.fileSize}',
                   style: const TextStyle(fontSize: 13),
                 ),
               ],
