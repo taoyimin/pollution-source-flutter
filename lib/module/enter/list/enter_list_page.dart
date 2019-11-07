@@ -64,10 +64,110 @@ class _EnterListPageState extends State<EnterListPage>
     _editController.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: extended.NestedScrollView(
+        controller: _scrollController,
+        pinnedHeaderSliverHeightBuilder: () {
+          return MediaQuery.of(context).padding.top + kToolbarHeight;
+        },
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            ListHeaderWidget(
+              title: '企业列表',
+              subtitle: '展示污染源企业列表，点击列表项查看该企业的详细信息',
+              background: 'assets/images/button_bg_lightblue.png',
+              image: 'assets/images/enter_list_bg_image.png',
+              color: Colors.blue,
+              showSearch: true,
+              editController: _editController,
+              scrollController: _scrollController,
+              onSearchPressed: () => _refreshController.callRefresh(),
+              areaPickerListener: (areaId) {
+                areaCode = areaId;
+              },
+              popupMenuButton: PopupMenuButton<String>(
+                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
+                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
+                ],
+                onSelected: (String action) {
+                  // 点击选项的时候
+                  switch (action) {
+                    case 'A':
+                      break;
+                    case 'B':
+                      break;
+                  }
+                },
+              ),
+            ),
+          ];
+        },
+        body: extended.NestedScrollViewInnerScrollPositionKeyWidget(
+          Key('list'),
+          EasyRefresh.custom(
+            controller: _refreshController,
+            header: UIUtils.getRefreshClassicalHeader(),
+            footer: UIUtils.getLoadClassicalFooter(),
+            slivers: <Widget>[
+              BlocListener<EnterListBloc, EnterListState>(
+                listener: (context, state) {
+                  _refreshCompleter?.complete();
+                  _refreshCompleter = Completer();
+                },
+                child: BlocBuilder<EnterListBloc, EnterListState>(
+                  builder: (context, state) {
+                    if (state is EnterListLoading) {
+                      return PageLoadingWidget();
+                    } else if (state is EnterListEmpty) {
+                      return PageEmptyWidget();
+                    } else if (state is EnterListError) {
+                      return PageErrorWidget(errorMessage: state.errorMessage);
+                    } else if (state is EnterListLoaded) {
+                      if (!state.hasNextPage)
+                        _refreshController.finishLoad(
+                            noMore: !state.hasNextPage, success: true);
+                      return _buildPageLoadedList(state.enterList);
+                    } else {
+                      return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                    }
+                  },
+                ),
+              ),
+            ],
+            onRefresh: () async {
+              _enterListBloc.add(EnterListLoad(
+                isRefresh: true,
+                enterName: _editController.text,
+                areaCode: areaCode,
+                state: widget.state,
+                enterType: widget.enterType,
+                attentionLevel: widget.attentionLevel,
+              ));
+              return _refreshCompleter.future;
+            },
+            onLoad: () async {
+              _enterListBloc.add(EnterListLoad(
+                enterName: _editController.text,
+                areaCode: areaCode,
+                state: widget.state,
+                enterType: widget.enterType,
+                attentionLevel: widget.attentionLevel,
+              ));
+              return _refreshCompleter.future;
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildPageLoadedList(List<Enter> enterList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
+            (BuildContext context, int index) {
           //创建列表项
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -145,106 +245,6 @@ class _EnterListPageState extends State<EnterListPage>
           );
         },
         childCount: enterList.length,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: extended.NestedScrollView(
-        controller: _scrollController,
-        pinnedHeaderSliverHeightBuilder: () {
-          return MediaQuery.of(context).padding.top + kToolbarHeight;
-        },
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return <Widget>[
-            ListHeaderWidget(
-              title: '企业列表',
-              subtitle: '展示污染源企业列表，点击列表项查看该企业的详细信息',
-              background: 'assets/images/button_bg_lightblue.png',
-              image: 'assets/images/enter_list_bg_image.png',
-              color: Colors.blue,
-              showSearch: true,
-              editController: _editController,
-              scrollController: _scrollController,
-              onSearchPressed: () => _refreshController.callRefresh(),
-              areaPickerListener: (areaId) {
-                areaCode = areaId;
-              },
-              popupMenuButton: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
-                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
-                ],
-                onSelected: (String action) {
-                  // 点击选项的时候
-                  switch (action) {
-                    case 'A':
-                      break;
-                    case 'B':
-                      break;
-                  }
-                },
-              ),
-            ),
-          ];
-        },
-        body: extended.NestedScrollViewInnerScrollPositionKeyWidget(
-          Key('list'),
-          EasyRefresh.custom(
-            controller: _refreshController,
-            header: UIUtils.getRefreshClassicalHeader(),
-            footer: UIUtils.getLoadClassicalFooter(),
-            slivers: <Widget>[
-              BlocListener<EnterListBloc, EnterListState>(
-                listener: (context, state) {
-                  _refreshCompleter?.complete();
-                  _refreshCompleter = Completer();
-                },
-                child: BlocBuilder<EnterListBloc, EnterListState>(
-                  builder: (context, state) {
-                    if (state is EnterListLoading) {
-                      return PageLoadingWidget();
-                    } else if (state is EnterListEmpty) {
-                      return PageEmptyWidget();
-                    } else if (state is EnterListError) {
-                      return PageErrorWidget(errorMessage: state.errorMessage);
-                    } else if (state is EnterListLoaded) {
-                      if (!state.hasNextPage)
-                        _refreshController.finishLoad(
-                            noMore: !state.hasNextPage, success: true);
-                      return _buildPageLoadedList(state.enterList);
-                    } else {
-                      return SliverFillRemaining();
-                    }
-                  },
-                ),
-              ),
-            ],
-            onRefresh: () async {
-              _enterListBloc.add(EnterListLoad(
-                isRefresh: true,
-                enterName: _editController.text,
-                areaCode: areaCode,
-                state: widget.state,
-                enterType: widget.enterType,
-                attentionLevel: widget.attentionLevel,
-              ));
-              return _refreshCompleter.future;
-            },
-            onLoad: () async {
-              _enterListBloc.add(EnterListLoad(
-                enterName: _editController.text,
-                areaCode: areaCode,
-                state: widget.state,
-                enterType: widget.enterType,
-                attentionLevel: widget.attentionLevel,
-              ));
-              return _refreshCompleter.future;
-            },
-          ),
-        ),
       ),
     );
   }
