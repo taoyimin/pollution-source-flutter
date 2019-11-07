@@ -13,13 +13,13 @@ class EnterDetail extends Equatable {
   final String legalPerson; //法人
   final String legalPersonTel; //法人电话
   final String attentionLevelStr; //关注程度
-  final String areaName; //区域
+  final String districtName; //区域
   final String industryTypeStr; //行业类别
   final String creditCode; //信用代码
   final String orderCompleteCount; //报警管理单已办结个数
   final String orderTotalCount; //报警管理单总数
   //final String monitorReportValid; //排口异常申报有效数
-  final String monitorReportTotalCount; //排口异常申报总数
+  final String dischargeReportTotalCount; //排口异常申报总数
   //final String factorReportValid; //因子异常申报有效数
   final String factorReportTotalCount; //因子异常申报总数
   final String monitorTotalCount; //监控点总数
@@ -43,13 +43,13 @@ class EnterDetail extends Equatable {
     this.legalPerson,
     this.legalPersonTel,
     this.attentionLevelStr,
-    this.areaName,
+    this.districtName,
     this.industryTypeStr,
     this.creditCode,
     this.orderCompleteCount,
     this.orderTotalCount,
     //this.monitorReportValid,
-    this.monitorReportTotalCount,
+    this.dischargeReportTotalCount,
     //this.factorReportValid,
     this.factorReportTotalCount,
     this.monitorTotalCount,
@@ -75,13 +75,13 @@ class EnterDetail extends Equatable {
         legalPerson,
         legalPersonTel,
         attentionLevelStr,
-        areaName,
+        districtName,
         industryTypeStr,
         creditCode,
         orderCompleteCount,
         orderTotalCount,
         //monitorReportValid,
-        monitorReportTotalCount,
+        dischargeReportTotalCount,
         //factorReportValid,
         factorReportTotalCount,
         monitorTotalCount,
@@ -108,13 +108,13 @@ class EnterDetail extends Equatable {
         legalPerson: '李四',
         legalPersonTel: '15879085164',
         attentionLevelStr: '重点源',
-        areaName: '赣州市章贡区',
+        districtName: '赣州市章贡区',
         industryTypeStr: '稀有稀土金属冶炼、常用有色金属冶炼',
         creditCode: 'G2125FD1GF51D5F5FSD545G2125FD',
         orderCompleteCount: '-',
         orderTotalCount: '-',
         //monitorReportValid: '15',
-        monitorReportTotalCount: '-',
+        dischargeReportTotalCount: '-',
         //factorReportValid: '5',
         factorReportTotalCount: '-',
         monitorTotalCount: '-',
@@ -139,13 +139,13 @@ class EnterDetail extends Equatable {
         legalPerson: json['legalPerson'],
         legalPersonTel: json['legalPersonTel'],
         attentionLevelStr: json['attentionLevelStr'],
-        areaName: json['cityName'] + json['areaName'],
+        districtName: json['districtName'],
         industryTypeStr: json['industryTypeStr'],
         creditCode: json['creditCode'],
         orderCompleteCount: json['orderCompleteCount'],
         orderTotalCount: json['orderTotalCount'],
         //monitorReportValid: '15',
-        monitorReportTotalCount: json['monitorReportTotalCount'],
+        dischargeReportTotalCount: json['dischargeReportTotalCount'],
         //factorReportValid: '5',
         factorReportTotalCount: json['factorReportTotalCount'],
         monitorTotalCount: json['monitorTotalCount'],
