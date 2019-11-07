@@ -344,7 +344,7 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
     return [
       Meta(
         title: '报警单待处理',
-        imagePath: 'assets/images/button_bg_blue.png',
+        imagePath: 'assets/images/button_bg_lightblue.png',
         content: strings[1],
       ),
       Meta(

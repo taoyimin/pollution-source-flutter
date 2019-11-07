@@ -6,6 +6,10 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
+import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
+import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
 import 'dart:ui';
 import 'dart:math';
 import 'dart:async';
@@ -22,8 +26,6 @@ import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/module/order/list/order_list_bloc.dart';
 import 'package:pollution_source/module/order/list/order_list_page.dart';
-import 'package:pollution_source/module/report/list/report_list_bloc.dart';
-import 'package:pollution_source/module/report/list/report_list_page.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
@@ -113,8 +115,7 @@ class _IndexPageState extends State<IndexPage>
                       ],
                     ),
                   );
-                }
-                if (state is IndexLoading) {
+                }else if (state is IndexLoading) {
                   return SliverFillRemaining(
                     child: Container(
                       width: double.infinity,
@@ -147,8 +148,7 @@ class _IndexPageState extends State<IndexPage>
                       ),
                     ),
                   );
-                }
-                if (state is IndexError) {
+                }else if (state is IndexError) {
                   return SliverFillRemaining(
                     child: Container(
                       height: double.infinity,
@@ -175,7 +175,7 @@ class _IndexPageState extends State<IndexPage>
                     ),
                   );
                 } else {
-                  return SliverFillRemaining();
+                  return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
                 }
               },
             ),
@@ -673,7 +673,7 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                         return BlocProvider(
                           builder: (context) => OrderListBloc(),
                           child: OrderListPage(
-                            state: '1',
+                            state: '',
                           ),
                         );
                       },
@@ -691,11 +691,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         return BlocProvider(
-                          builder: (context) => ReportListBloc(),
-                          child: ReportListPage(
-                            type: '0',
-                            state: '0',
-                          ),
+                          builder: (context) => DischargeReportListBloc(),
+                          child: DischargeReportListPage(state: '0'),
                         );
                       },
                     ),
@@ -712,11 +709,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         return BlocProvider(
-                          builder: (context) => ReportListBloc(),
-                          child: ReportListPage(
-                            type: '0',
-                            state: '0',
-                          ),
+                          builder: (context) => FactorReportListBloc(),
+                          child: FactorReportListPage(state: '0'),
                         );
                       },
                     ),
