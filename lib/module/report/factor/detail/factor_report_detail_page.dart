@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/discharge/detail/discharge_detail_bloc.dart';
+import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
+import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
+import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -203,6 +210,110 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                           }).toList();
                         }(),
                       )
+              ],
+            ),
+          ),
+          //快速链接
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '快速链接',
+                  imagePath: 'assets/images/icon_fast_link.png',
+                ),
+                Gaps.vGap10,
+                Container(
+                  height: 152,
+                  child: Row(
+                    children: <Widget>[
+                      InkWellButton8(
+                        meta: Meta(
+                            title: '企业信息',
+                            content: '查看该申报单所属的企业信息',
+                            backgroundPath:
+                            'assets/images/button_bg_lightblue.png',
+                            imagePath:
+                            'assets/images/image_enter_statistics1.png'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return BlocProvider(
+                                  builder: (context) => EnterDetailBloc(),
+                                  child: EnterDetailPage(
+                                    enterId: reportDetail.enterId,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      Gaps.hGap10,
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: <Widget>[
+                            InkWellButton7(
+                              meta: Meta(
+                                  title: '排口信息',
+                                  content: '查看该申报单所属的排口信息',
+                                  backgroundPath: 'assets/images/button_bg_yellow.png',
+                                  imagePath:
+                                  'assets/images/image_enter_statistics3.png'),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return BlocProvider(
+                                        builder: (context) => DischargeDetailBloc(),
+                                        child: DischargeDetailPage(
+                                          dischargeId: reportDetail.dischargeId,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            Gaps.vGap10,
+                            InkWellButton7(
+                              meta: Meta(
+                                  title: '监控点信息',
+                                  content: '查看该申报单所属的监控点信息',
+                                  backgroundPath:
+                                  'assets/images/button_bg_red.png',
+                                  imagePath:
+                                  'assets/images/image_enter_statistics2.png'),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return BlocProvider(
+                                        builder: (context) => MonitorDetailBloc(),
+                                        child: MonitorDetailPage(
+                                          monitorId: reportDetail.monitorId,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

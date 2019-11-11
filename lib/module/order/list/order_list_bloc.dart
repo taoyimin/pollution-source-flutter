@@ -28,6 +28,8 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
           enterName: event.enterName,
           areaCode: event.areaCode,
           state: event.state,
+          enterId: event.enterId,
+          monitorId: event.monitorId,
         );
         yield OrderListLoaded(
           orderList: currentState.orderList + orderList,
@@ -40,6 +42,8 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
           enterName: event.enterName,
           areaCode: event.areaCode,
           state: event.state,
+          enterId: event.enterId,
+          monitorId: event.monitorId,
         );
         if (orderList.length == 0) {
           //没有数据
@@ -63,7 +67,9 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
-    state = '1',
+    state = '',
+    enterId = '',
+    monitorId = '',
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
@@ -89,6 +95,8 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
           'enterName': enterName,
           'areaCode': areaCode,
           'state': state,
+          'enterId': enterId,
+          'monitorId': monitorId,
         },
       );
       return response.data[Constant.responseListKey]

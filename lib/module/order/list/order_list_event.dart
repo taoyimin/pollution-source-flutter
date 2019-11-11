@@ -20,11 +20,17 @@ class OrderListLoad extends OrderListEvent {
   //督办单状态
   final String state;
 
+  final String enterId;
+
+  final String monitorId;
+
   const OrderListLoad({
     this.isRefresh = false,
     this.enterName = '',
     this.areaCode = '',
     this.state = '',
+    this.enterId = '',
+    this.monitorId = '',
   });
 
   @override
@@ -33,5 +39,7 @@ class OrderListLoad extends OrderListEvent {
         enterName,
         areaCode,
         state,
+        enterId,
+        monitorId,
       ];
 }

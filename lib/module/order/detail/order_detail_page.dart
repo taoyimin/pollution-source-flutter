@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
+import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
+import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/widget/custom_header.dart';
@@ -51,7 +56,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 enterAddress = state.orderDetail.enterAddress;
               }
               return DetailHeaderWidget(
-                title: '督办单详情',
+                title: '报警管理单详情',
                 subTitle1: '$enterName',
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/order_detail_bg_image.svg',
@@ -154,179 +159,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       contentTextAlign: TextAlign.left,
                     ),
                   ],
-                ),
-              ],
-            ),
-          ),
-          //快速链接
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ImageTitleWidget(
-                  title: '快速链接',
-                  imagePath: 'assets/images/icon_fast_link.png',
-                ),
-                Gaps.vGap10,
-                Container(
-                  height: 150,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/button_bg_green.png"),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "监控数据",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 23,
-                                ),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 4,
-                                    child: Text(
-                                      "查看该企业在报警发生时间段的监控数据",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 5,
-                                    child: Image.asset(
-                                        "assets/images/image_task_monitor_data.png"),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: 72,
-                              padding: EdgeInsets.all(10),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/button_bg_lightblue.png"),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 3,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          "企业信息",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Text(
-                                          "查看该企业的详细信息",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Image.asset(
-                                      "assets/images/image_task_enter_info.png",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Container(
-                              height: 72,
-                              padding: EdgeInsets.all(10),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/button_bg_yellow.png"),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 3,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          "监控点列表",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Text(
-                                          "查看该企业监控点列表",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Image.asset(
-                                      "assets/images/image_task_monitor_list.png",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -454,6 +286,75 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             );
                         },
                       ),
+              ],
+            ),
+          ),
+          //快速链接
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '快速链接',
+                  imagePath: 'assets/images/icon_fast_link.png',
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    InkWellButton7(
+                      meta: Meta(
+                          title: '企业信息',
+                          content: '查看报警单所属的企业信息',
+                          backgroundPath:
+                          'assets/images/button_bg_lightblue.png',
+                          imagePath:
+                          'assets/images/image_enter_statistics1.png'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => EnterDetailBloc(),
+                                child: EnterDetailPage(
+                                  enterId: orderDetail.enterId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton7(
+                      meta: Meta(
+                          title: '监控点信息',
+                          content: '查看报警单所属的监控点信息',
+                          backgroundPath: 'assets/images/button_bg_yellow.png',
+                          imagePath:
+                          'assets/images/image_enter_statistics2.png'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => MonitorDetailBloc(),
+                                child: MonitorDetailPage(
+                                  monitorId: orderDetail.monitorId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

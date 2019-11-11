@@ -16,13 +16,15 @@ class MonitorDetail extends Equatable {
   final String enterAddress; //企业地址
   final String monitorName; //监控点名称
   final String monitorTypeStr; //监控点类型
-  final String outletTypeStr; //监控点类别
+  final String monitorCategoryStr; //监控点类别
   final String networkTypeStr; //网络类型
   final String monitorAddress; //监控点地址
   final String mnCode; //数采仪编码
   final String orderCompleteCount; //报警管理单已办结数量
   final String orderVerifyCount; //报警管理单待审核数量
   final String orderTotalCount; //报警管理单全部数量
+  final String dischargeReportTotalCount; //排口异常申报单全部数量
+  final String factorReportTotalCount; //因子异常申报单全部数量
   final bool isCurved; //图表是否为曲线
   final bool showDotData; //图表是否显示点
   final List<ChartData> chartDataList; //图表数据
@@ -35,13 +37,15 @@ class MonitorDetail extends Equatable {
     this.enterAddress,
     this.monitorName,
     this.monitorTypeStr,
-    this.outletTypeStr,
+    this.monitorCategoryStr,
     this.networkTypeStr,
     this.monitorAddress,
     this.mnCode,
     this.orderCompleteCount,
     this.orderVerifyCount,
     this.orderTotalCount,
+    this.dischargeReportTotalCount,
+    this.factorReportTotalCount,
     this.isCurved,
     this.showDotData,
     this.chartDataList,
@@ -56,13 +60,15 @@ class MonitorDetail extends Equatable {
         enterAddress,
         monitorName,
         monitorTypeStr,
-        outletTypeStr,
+        monitorCategoryStr,
         networkTypeStr,
         monitorAddress,
         mnCode,
         orderCompleteCount,
         orderVerifyCount,
         orderTotalCount,
+        dischargeReportTotalCount,
+        factorReportTotalCount,
         isCurved,
         showDotData,
         chartDataList,
@@ -81,13 +87,15 @@ class MonitorDetail extends Equatable {
       enterAddress: this.enterAddress,
       monitorName: this.monitorName,
       monitorTypeStr: this.monitorTypeStr,
-      outletTypeStr: this.outletTypeStr,
+      monitorCategoryStr: this.monitorCategoryStr,
       networkTypeStr: this.networkTypeStr,
       monitorAddress: this.monitorAddress,
       mnCode: this.mnCode,
       orderCompleteCount: this.orderCompleteCount,
       orderVerifyCount: this.orderVerifyCount,
       orderTotalCount: this.orderTotalCount,
+      dischargeReportTotalCount: this.dischargeReportTotalCount,
+      factorReportTotalCount: this.factorReportTotalCount,
       isCurved: isCurved ?? this.isCurved,
       showDotData: showDotData ?? this.showDotData,
       chartDataList: chartDataList ?? this.chartDataList,
@@ -111,13 +119,15 @@ class MonitorDetail extends Equatable {
         enterAddress: '-',
         monitorName: '-',
         monitorTypeStr: '-',
-        outletTypeStr: '-',
+        monitorCategoryStr: '-',
         networkTypeStr: '-',
         monitorAddress: '-',
         mnCode: '-',
         orderCompleteCount: '-',
         orderVerifyCount: '-',
         orderTotalCount: '-',
+        dischargeReportTotalCount: '-',
+        factorReportTotalCount: '-',
         isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
         showDotData: SpUtil.getBool(Constant.spShowDotData, defValue: true),
         chartDataList: [
@@ -252,13 +262,15 @@ class MonitorDetail extends Equatable {
         enterAddress: json['enterAddress'],
         monitorName: json['monitorName'],
         monitorTypeStr: json['monitorTypeStr'],
-        outletTypeStr: json['outletTypeStr'],
+        monitorCategoryStr: json['monitorCategoryStr'],
         networkTypeStr: json['networkTypeStr'],
         monitorAddress: json['monitorAddress'],
         mnCode: json['mnCode'],
         orderCompleteCount: json['orderCompleteCount'],
         orderVerifyCount: json['orderVerifyCount'],
         orderTotalCount: json['orderTotalCount'],
+        dischargeReportTotalCount: json['dischargeReportTotalCount'],
+        factorReportTotalCount: json['factorReportTotalCount'],
         isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
         showDotData: SpUtil.getBool(Constant.spShowDotData, defValue: true),
         chartDataList: [

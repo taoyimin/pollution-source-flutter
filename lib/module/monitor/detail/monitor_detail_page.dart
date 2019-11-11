@@ -4,6 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/discharge/detail/discharge_detail_bloc.dart';
+import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
+import 'package:pollution_source/module/order/list/order_list_bloc.dart';
+import 'package:pollution_source/module/order/list/order_list_page.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
+import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
+import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/ui_utils.dart';
@@ -149,7 +159,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                   children: <Widget>[
                     IconBaseInfoWidget(
                       title: '监控类别',
-                      content: '${monitorDetail.outletTypeStr}',
+                      content: '${monitorDetail.monitorCategoryStr}',
                       icon: Icons.nature,
                       flex: 6,
                     ),
@@ -182,57 +192,6 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       icon: Icons.insert_drive_file,
                       contentTextAlign: TextAlign.left,
                       contentMarginTop: 2,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          //报警管理单
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ImageTitleWidget(
-                  title: '报警管理单',
-                  imagePath: 'assets/images/icon_alarm_manage.png',
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    InkWellButton5(
-                      onTap: () {},
-                      meta: Meta(
-                        color: Color(0xFF45C4FF),
-                        title: '已办结',
-                        content: '${monitorDetail.orderCompleteCount} ',
-                        imagePath:
-                            'assets/images/icon_alarm_manage_complete.png',
-                      ),
-                    ),
-                    Gaps.hGap10,
-                    InkWellButton5(
-                      onTap: () {},
-                      meta: Meta(
-                        color: Color(0xFFFFB709),
-                        title: '待审核',
-                        content: '${monitorDetail.orderVerifyCount} ',
-                        imagePath: 'assets/images/icon_alarm_manage_review.png',
-                      ),
-                    ),
-                    Gaps.hGap10,
-                    InkWellButton5(
-                      onTap: () {},
-                      meta: Meta(
-                        color: Colors.green,
-                        title: '全部',
-                        content: '${monitorDetail.orderTotalCount} ',
-                        imagePath: 'assets/images/icon_alarm_manage_all.png',
-                      ),
                     ),
                   ],
                 ),
@@ -286,6 +245,170 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               ],
             ),
           ),
+          //报警管理单
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '报警管理单',
+                  imagePath: 'assets/images/icon_alarm_manage.png',
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    InkWellButton5(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => OrderListBloc(),
+                                child: OrderListPage(
+                                  state: '5',
+                                  monitorId: monitorDetail.monitorId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        color: Color(0xFF45C4FF),
+                        title: '已办结',
+                        content: '${monitorDetail.orderCompleteCount} ',
+                        imagePath:
+                            'assets/images/icon_alarm_manage_complete.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton5(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => OrderListBloc(),
+                                child: OrderListPage(
+                                  state: '3',
+                                  monitorId: monitorDetail.monitorId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        color: Color(0xFFFFB709),
+                        title: '待审核',
+                        content: '${monitorDetail.orderVerifyCount} ',
+                        imagePath: 'assets/images/icon_alarm_manage_review.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton5(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => OrderListBloc(),
+                                child: OrderListPage(
+                                  monitorId: monitorDetail.monitorId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        color: Colors.green,
+                        title: '全部',
+                        content: '${monitorDetail.orderTotalCount} ',
+                        imagePath: 'assets/images/icon_alarm_manage_all.png',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          //异常申报信息
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '异常申报信息',
+                  imagePath: 'assets/images/icon_outlet_report.png',
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    InkWellButton7(
+                      titleFontSize: 13,
+                      contentFontSize: 19,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => DischargeReportListBloc(),
+                                child: DischargeReportListPage(
+                                  monitorId: monitorDetail.monitorId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        title: '排口异常申报总数',
+                        content: '${monitorDetail.dischargeReportTotalCount}',
+                        imagePath: 'assets/images/button_image1.png',
+                        backgroundPath: 'assets/images/button_bg_green.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton7(
+                      titleFontSize: 13,
+                      contentFontSize: 19,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => FactorReportListBloc(),
+                                child: FactorReportListPage(
+                                  monitorId: monitorDetail.monitorId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        title: '因子异常申报总数',
+                        content: '${monitorDetail.factorReportTotalCount}',
+                        imagePath: 'assets/images/button_image4.png',
+                        backgroundPath: 'assets/images/button_bg_pink.png',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
           //快速链接
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -310,41 +433,45 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                               'assets/images/button_bg_lightblue.png',
                           imagePath:
                               'assets/images/image_enter_statistics1.png'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => EnterDetailBloc(),
+                                child: EnterDetailPage(
+                                  enterId: monitorDetail.enterId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                     Gaps.hGap10,
                     InkWellButton7(
                       meta: Meta(
-                          title: '报警管理单',
-                          content: '查看该监控点的报警管理单',
-                          backgroundPath: 'assets/images/button_bg_pink.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics2.png'),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    InkWellButton7(
-                      meta: Meta(
-                          title: '排口申报单',
-                          content: '查看该监控点的排口异常申报单',
+                          title: '排口信息',
+                          content: '查看该监控点所属的排口信息',
                           backgroundPath: 'assets/images/button_bg_yellow.png',
                           imagePath:
-                              'assets/images/image_enter_statistics3.png'),
-                      onTap: () {},
-                    ),
-                    Gaps.hGap10,
-                    InkWellButton7(
-                      meta: Meta(
-                          title: '因子申报单',
-                          content: '查看该监控点的因子异常申报单',
-                          backgroundPath: 'assets/images/button_bg_red.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics4.png'),
-                      onTap: () {},
+                              'assets/images/image_enter_statistics2.png'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => DischargeDetailBloc(),
+                                child: DischargeDetailPage(
+                                  dischargeId: monitorDetail.dischargeId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

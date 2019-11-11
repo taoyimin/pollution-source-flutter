@@ -15,11 +15,13 @@ import 'package:pollution_source/module/monitor/list/monitor_list.dart';
 
 class MonitorListPage extends StatefulWidget {
   final String enterId;
+  final String dischargeId;
   final String monitorType;
   final String state;
 
   MonitorListPage({
     this.enterId = '',
+    this.dischargeId = '',
     this.monitorType = '',
     this.state = '',
   });
@@ -48,6 +50,7 @@ class _MonitorListPageState extends State<MonitorListPage>
     //首次加载
     _monitorListBloc.add(MonitorListLoad(
       enterId: widget.enterId,
+      dischargeId: widget.dischargeId,
       monitorType: widget.monitorType,
       state: widget.state,
     ));
@@ -143,6 +146,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 enterId: widget.enterId,
+                dischargeId: widget.dischargeId,
                 monitorType: widget.monitorType,
                 state: widget.state,
               ));
@@ -153,6 +157,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 enterId: widget.enterId,
+                dischargeId: widget.dischargeId,
                 monitorType: widget.monitorType,
                 state: widget.state,
               ));
@@ -216,7 +221,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                             Padding(
                               padding: const EdgeInsets.only(right: 16),
                               child: Text(
-                                '${monitorList[index].dischargeShortName}',
+                                '${monitorList[index].enterName}',
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
@@ -238,7 +243,7 @@ class _MonitorListPageState extends State<MonitorListPage>
                                 Expanded(
                                   flex: 1,
                                   child: ListTileWidget(
-                                      '监控点类别：${monitorList[index].outletTypeStr}'),
+                                      '监控点类别：${monitorList[index].monitorCategoryStr}'),
                                 ),
                               ],
                             ),

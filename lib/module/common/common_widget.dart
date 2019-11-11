@@ -143,57 +143,59 @@ class InkWellButton1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: InkWell(
-        splashColor: this.meta.color.withOpacity(0.3),
+      child: InkWellButton(
+        //splashColor: this.meta.color.withOpacity(0.3),
         onTap: this.onTap,
-        child: Container(
-          height: 60 * ratio,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: 36 * ratio,
-                  height: 36 * ratio,
-                  decoration: BoxDecoration(
-                    color: this.meta.color.withOpacity(0.3),
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    this.meta.imagePath,
-                    width: 15 * ratio,
-                    height: 15 * ratio,
-                    color: this.meta.color,
+        children: <Widget>[
+          Container(
+            height: 60 * ratio,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: 36 * ratio,
+                    height: 36 * ratio,
+                    decoration: BoxDecoration(
+                      color: this.meta.color.withOpacity(0.3),
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      this.meta.imagePath,
+                      width: 15 * ratio,
+                      height: 15 * ratio,
+                      color: this.meta.color,
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      this.meta.title,
-                      style: TextStyle(
-                        fontSize: 11 * ratio,
-                        color: this.meta.color,
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        this.meta.title,
+                        style: TextStyle(
+                          fontSize: 11 * ratio,
+                          color: this.meta.color,
+                        ),
                       ),
-                    ),
-                    Text(
-                      this.meta.content,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      Text(
+                        this.meta.content,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -583,7 +585,7 @@ class InkWellButton7 extends StatelessWidget {
         onTap: onTap,
         children: <Widget>[
           Container(
-            height: 72,
+            //height: 72,
             padding: const EdgeInsets.all(10),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -621,6 +623,84 @@ class InkWellButton7 extends StatelessWidget {
                   flex: 2,
                   child: Image.asset(
                     meta.imagePath,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//配合InkWellButton7使用，组成两行两列布局，其中两行合并成一个
+class InkWellButton8 extends StatelessWidget {
+  final Meta meta;
+  final GestureTapCallback onTap;
+  final double titleFontSize;
+  final double contentFontSize;
+
+  InkWellButton8({
+    @required this.meta,
+    @required this.onTap,
+    this.titleFontSize = 20,
+    this.contentFontSize = 14,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWellButton(
+        onTap: onTap,
+        children: <Widget>[
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(meta.backgroundPath),
+                  fit: BoxFit.cover,
+                ),
+                boxShadow: [UIUtils.getBoxShadow()],
+              ),
+            ),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 10,
+            child: Image.asset(
+              meta.imagePath,
+              width: 80,
+              height: 80,
+            ),
+          ),
+          Positioned(
+            left: 10,
+            top: 10,
+            right: 50,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '${meta.title}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: titleFontSize,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, right: 24),
+                  child: Text(
+                    '${meta.content}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: contentFontSize,
+                    ),
                   ),
                 ),
               ],
@@ -1088,8 +1168,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
   void initState() {
     super.initState();
     controller = StreamController();
-    controller.stream.distinct().listen((LineTouchResponse response) {
-    });
+    controller.stream.distinct().listen((LineTouchResponse response) {});
   }
 
   @override
@@ -1114,11 +1193,11 @@ class LineChartWidgetState extends State<LineChartWidget> {
           children: <Widget>[
             Expanded(
               child: FlChart(
-                  swapAnimationDuration: Duration(milliseconds: 250),
-                  chart: LineChart(
-                    _getLineChartData(),
-                  ),
+                swapAnimationDuration: Duration(milliseconds: 250),
+                chart: LineChart(
+                  _getLineChartData(),
                 ),
+              ),
             ),
           ],
         ),
@@ -1129,25 +1208,33 @@ class LineChartWidgetState extends State<LineChartWidget> {
   //获取图表样式
   LineChartData _getLineChartData() {
     double yInterval;
-    double maxY = Utils.getMax(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double maxY = Utils.getMax(widget.chartDataList
+        .where((chartData) => chartData.checked)
+        .map((chartData) {
       return chartData.maxY;
     }).toList());
-    double minY = Utils.getMin(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double minY = Utils.getMin(widget.chartDataList
+        .where((chartData) => chartData.checked)
+        .map((chartData) {
       return chartData.minY;
     }).toList());
-    if(maxY == minY){
+    if (maxY == minY) {
       //数据是一条直线时，手动设定最大值和最小值
-      maxY = maxY +10;
-      minY = minY -10;
+      maxY = maxY + 10;
+      minY = minY - 10;
     }
     //最大值减最小值，除以间隔数（坐标数减1）
     yInterval = (maxY - minY) / (widget.yAxisCount - 1);
 
     double xInterval;
-    double maxX = Utils.getMax(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double maxX = Utils.getMax(widget.chartDataList
+        .where((chartData) => chartData.checked)
+        .map((chartData) {
       return chartData.maxX;
     }).toList());
-    double minX = Utils.getMin(widget.chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double minX = Utils.getMin(widget.chartDataList
+        .where((chartData) => chartData.checked)
+        .map((chartData) {
       return chartData.minX;
     })?.toList());
     xInterval = (maxX - minX) / (widget.xAxisCount - 1);
@@ -1181,7 +1268,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
           showTitles: true,
           interval: xInterval,
           reservedSize: 22,
-          textStyle:const TextStyle(
+          textStyle: const TextStyle(
             color: Color(0xff72719b),
             fontSize: 12,
           ),
@@ -1193,13 +1280,15 @@ class LineChartWidgetState extends State<LineChartWidget> {
         leftTitles: SideTitles(
           showTitles: true,
           interval: yInterval,
-          textStyle:const TextStyle(
+          textStyle: const TextStyle(
             color: Color(0xff75729e),
             fontSize: 14,
           ),
           getTitles: (value) {
             //间隔大于等于1时，Y轴坐标不保留小数位，小于1时，保留一位小数
-            return yInterval >= 1 ? value.toStringAsFixed(0) : value.toStringAsFixed(1);
+            return yInterval >= 1
+                ? value.toStringAsFixed(0)
+                : value.toStringAsFixed(1);
           },
           margin: 20,
           reservedSize: 30,

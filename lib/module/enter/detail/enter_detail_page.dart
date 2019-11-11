@@ -6,6 +6,8 @@ import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
+import 'package:pollution_source/module/order/list/order_list_bloc.dart';
+import 'package:pollution_source/module/order/list/order_list_page.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
 import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
@@ -153,7 +155,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 TextUtil.isEmpty(enterDetail.contactPersonTel) &&
                 TextUtil.isEmpty(enterDetail.legalPersonTel),
             child: Padding(
-              padding:const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -207,7 +209,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   children: <Widget>[
                     InkWellButton5(
                       ratio: 1.2,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => OrderListBloc(),
+                                child: OrderListPage(state: '5',enterId: enterDetail.enterId,),
+                              );
+                            },
+                          ),
+                        );
+                      },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '已办结',
@@ -219,7 +233,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     Gaps.hGap10,
                     InkWellButton5(
                       ratio: 1.2,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => OrderListBloc(),
+                                child: OrderListPage(enterId: enterDetail.enterId,),
+                              );
+                            },
+                          ),
+                        );
+                      },
                       meta: Meta(
                         color: Color(0xFFFFB709),
                         title: '全部',
@@ -245,27 +271,9 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Gaps.vGap10,
                 Row(
                   children: <Widget>[
-                    /*InkWellButton4(
-                                  ratio: 1.3,
-                                  titleFontSize: 9.5,
-                                  contentFontSize: 19,
-                                  contentMarginRight: 50,
-                                  onTap: () {},
-                                  meta: Meta(
-                                    title: '排口异常申报有效数',
-                                    content:
-                                        '${enterDetail.monitorReportValid}',
-                                    imagePath:
-                                        'assets/images/button_image2.png',
-                                    backgroundPath:
-                                        'assets/images/button_bg_blue.png',
-                                  ),
-                                ),*/
-                    InkWellButton4(
-                      ratio: 1.3,
-                      titleFontSize: 9.5,
+                    InkWellButton7(
+                      titleFontSize: 13,
                       contentFontSize: 19,
-                      contentMarginRight: 50,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -285,15 +293,13 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         title: '排口异常申报总数',
                         content: '${enterDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
-                        backgroundPath: 'assets/images/button_bg_pink.png',
+                        backgroundPath: 'assets/images/button_bg_green.png',
                       ),
                     ),
                     Gaps.hGap10,
-                    InkWellButton4(
-                      ratio: 1.3,
-                      titleFontSize: 9.5,
+                    InkWellButton7(
+                      titleFontSize: 13,
                       contentFontSize: 19,
-                      contentMarginRight: 50,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -313,55 +319,17 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         title: '因子异常申报总数',
                         content: '${enterDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
-                        backgroundPath: 'assets/images/button_bg_yellow.png',
+                        backgroundPath: 'assets/images/button_bg_pink.png',
                       ),
                     ),
                   ],
                 ),
-                /*Gaps.vGap10,
-                            Row(
-                              children: <Widget>[
-                                InkWellButton4(
-                                  ratio: 1.3,
-                                  titleFontSize: 9.5,
-                                  contentFontSize: 19,
-                                  contentMarginRight: 50,
-                                  onTap: () {},
-                                  meta: Meta(
-                                    title: '因子异常申报有效数',
-                                    content:
-                                        '${enterDetail.factorReportValid}',
-                                    imagePath:
-                                        'assets/images/button_image3.png',
-                                    backgroundPath:
-                                        'assets/images/button_bg_green.png',
-                                  ),
-                                ),
-                                Gaps.hGap10,
-                                InkWellButton4(
-                                  ratio: 1.3,
-                                  titleFontSize: 9.5,
-                                  contentFontSize: 19,
-                                  contentMarginRight: 50,
-                                  onTap: () {},
-                                  meta: Meta(
-                                    title: '因子异常申报总数',
-                                    content:
-                                        '${enterDetail.factorReportAll}',
-                                    imagePath:
-                                        'assets/images/button_image4.png',
-                                    backgroundPath:
-                                        'assets/images/button_bg_yellow.png',
-                                  ),
-                                ),
-                              ],
-                            ),*/
               ],
             ),
           ),
           //监控点信息
           Padding(
-            padding:const EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 10,
             ),
@@ -395,12 +363,14 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) {
-                                  return BlocProvider(
-                                    builder: (context) => MonitorListBloc(),
-                                    child: MonitorListPage(),
-                                  );
-                                }),
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return BlocProvider(
+                                      builder: (context) => MonitorListBloc(),
+                                      child: MonitorListPage(enterId: enterDetail.enterId,),
+                                    );
+                                  },
+                                ),
                               );
                             },
                           ),
@@ -414,7 +384,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               color: Color.fromRGBO(136, 191, 89, 1),
                               content: '${enterDetail.monitorOnlineCount}',
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return BlocProvider(
+                                      builder: (context) => MonitorListBloc(),
+                                      child: MonitorListPage(state: '1',enterId: enterDetail.enterId,),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                           VerticalDividerWidget(height: 30),
                           //预警
@@ -425,7 +407,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               color: Color.fromRGBO(241, 190, 67, 1),
                               content: '${enterDetail.monitorAlarmCount}',
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return BlocProvider(
+                                      builder: (context) => MonitorListBloc(),
+                                      child: MonitorListPage(state: '2',enterId: enterDetail.enterId,),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -439,7 +433,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               color: Color.fromRGBO(233, 119, 111, 1),
                               content: '${enterDetail.monitorOverCount}',
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return BlocProvider(
+                                      builder: (context) => MonitorListBloc(),
+                                      child: MonitorListPage(state: '3',enterId: enterDetail.enterId,),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                           VerticalDividerWidget(height: 30),
                           //脱机
@@ -451,7 +457,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               color: Color.fromRGBO(179, 129, 127, 1),
                               content: '${enterDetail.monitorOfflineCount}',
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return BlocProvider(
+                                      builder: (context) => MonitorListBloc(),
+                                      child: MonitorListPage(state: '4',enterId: enterDetail.enterId,),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                           VerticalDividerWidget(height: 30),
                           //停产
@@ -462,7 +480,19 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               color: Color.fromRGBO(137, 137, 137, 1),
                               content: '${enterDetail.monitorStopCount}',
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return BlocProvider(
+                                      builder: (context) => MonitorListBloc(),
+                                      child: MonitorListPage(state: '5',enterId: enterDetail.enterId,),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -474,7 +504,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
           ),
           //排污许可证信息
           Padding(
-            padding:const EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 10,
             ),
@@ -501,7 +531,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
           ),
           //其他信息
           Padding(
-            padding:const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

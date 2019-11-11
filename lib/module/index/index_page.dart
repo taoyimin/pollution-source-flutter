@@ -115,7 +115,7 @@ class _IndexPageState extends State<IndexPage>
                       ],
                     ),
                   );
-                }else if (state is IndexLoading) {
+                } else if (state is IndexLoading) {
                   return SliverFillRemaining(
                     child: Container(
                       width: double.infinity,
@@ -148,7 +148,7 @@ class _IndexPageState extends State<IndexPage>
                       ),
                     ),
                   );
-                }else if (state is IndexError) {
+                } else if (state is IndexError) {
                   return SliverFillRemaining(
                     child: Container(
                       height: double.infinity,
@@ -672,9 +672,7 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                       builder: (context) {
                         return BlocProvider(
                           builder: (context) => OrderListBloc(),
-                          child: OrderListPage(
-                            state: '',
-                          ),
+                          child: OrderListPage(state: '2'),
                         );
                       },
                     ),

@@ -8,6 +8,7 @@ abstract class EnterDetailEvent extends Equatable {
   List<Object> get props => [];
 }
 
+//加载企业详情事件
 class EnterDetailLoad extends EnterDetailEvent {
   //企业ID
   final String enterId;

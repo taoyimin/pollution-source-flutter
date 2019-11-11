@@ -15,8 +15,10 @@ import 'package:pollution_source/module/order/list/order_list.dart';
 
 class OrderListPage extends StatefulWidget {
   final String state;
+  final String enterId;
+  final String monitorId;
 
-  OrderListPage({this.state = ''});
+  OrderListPage({this.state = '', this.enterId = '', this.monitorId = ''});
 
   @override
   _OrderListPageState createState() => _OrderListPageState();
@@ -40,7 +42,11 @@ class _OrderListPageState extends State<OrderListPage>
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _orderListBloc.add(OrderListLoad(state: widget.state));
+    _orderListBloc.add(OrderListLoad(
+      state: widget.state,
+      enterId: widget.enterId,
+      monitorId: widget.monitorId,
+    ));
   }
 
   @override
@@ -133,6 +139,8 @@ class _OrderListPageState extends State<OrderListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 state: widget.state,
+                enterId: widget.enterId,
+                monitorId: widget.monitorId,
               ));
               return _refreshCompleter.future;
             },
@@ -141,6 +149,8 @@ class _OrderListPageState extends State<OrderListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 state: widget.state,
+                enterId: widget.enterId,
+                monitorId: widget.monitorId,
               ));
               return _refreshCompleter.future;
             },

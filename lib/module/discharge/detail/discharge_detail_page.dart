@@ -3,6 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
+import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
+import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
+import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
+import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -207,6 +215,75 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
               ],
             ),
           ),
+          //异常申报信息
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '异常申报信息',
+                  imagePath: 'assets/images/icon_outlet_report.png',
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    InkWellButton7(
+                      titleFontSize: 13,
+                      contentFontSize: 19,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => DischargeReportListBloc(),
+                                child: DischargeReportListPage(
+                                  dischargeId: dischargeDetail.dischargeId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        title: '排口异常申报总数',
+                        content: '${dischargeDetail.dischargeReportTotalCount}',
+                        imagePath: 'assets/images/button_image1.png',
+                        backgroundPath: 'assets/images/button_bg_green.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton7(
+                      titleFontSize: 13,
+                      contentFontSize: 19,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => FactorReportListBloc(),
+                                child: FactorReportListPage(
+                                  dischargeId: dischargeDetail.dischargeId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        title: '因子异常申报总数',
+                        content: '${dischargeDetail.factorReportTotalCount}',
+                        imagePath: 'assets/images/button_image4.png',
+                        backgroundPath: 'assets/images/button_bg_pink.png',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
           //快速链接
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -231,41 +308,45 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                               'assets/images/button_bg_lightblue.png',
                           imagePath:
                               'assets/images/image_enter_statistics1.png'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => EnterDetailBloc(),
+                                child: EnterDetailPage(
+                                  enterId: dischargeDetail.enterId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                     Gaps.hGap10,
                     InkWellButton7(
                       meta: Meta(
-                          title: '报警管理单',
-                          content: '查看该排口的报警管理单',
-                          backgroundPath: 'assets/images/button_bg_pink.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics2.png'),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    InkWellButton7(
-                      meta: Meta(
-                          title: '排口申报单',
-                          content: '查看该排口的排口异常申报单',
-                          backgroundPath: 'assets/images/button_bg_yellow.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics3.png'),
-                      onTap: () {},
-                    ),
-                    Gaps.hGap10,
-                    InkWellButton7(
-                      meta: Meta(
-                          title: '因子申报单',
-                          content: '查看该排口的因子异常申报单',
+                          title: '监控点列表',
+                          content: '查看该排口的监控点列表',
                           backgroundPath: 'assets/images/button_bg_red.png',
                           imagePath:
-                              'assets/images/image_enter_statistics4.png'),
-                      onTap: () {},
+                              'assets/images/image_enter_statistics2.png'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => MonitorListBloc(),
+                                child: MonitorListPage(
+                                  dischargeId: dischargeDetail.dischargeId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

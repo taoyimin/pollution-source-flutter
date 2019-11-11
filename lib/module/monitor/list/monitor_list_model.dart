@@ -8,63 +8,63 @@ import 'package:pollution_source/res/constant.dart';
 //监控点列表
 class Monitor extends Equatable {
   final String monitorId; //监控点ID
-  final String dischargeShortName; //排口简称
+  final String enterName; //企业名称
   final String monitorName; //监控点名称
   final String monitorAddress; //监控点地址
   final String monitorType; //监控点类型
   final String imagePath; //监控点logo
-  final String outletTypeStr; //监控点类别
+  final String monitorCategoryStr; //监控点类别
   final List<Label> labelList; //标签集合
 
   const Monitor({
     this.monitorId,
-    this.dischargeShortName,
+    this.enterName,
     this.monitorName,
     this.monitorAddress,
     this.monitorType,
     this.imagePath,
-    this.outletTypeStr,
+    this.monitorCategoryStr,
     this.labelList,
   });
 
   @override
   List<Object> get props => [
         monitorId,
-        dischargeShortName,
+    enterName,
         monitorName,
         monitorAddress,
         monitorType,
         imagePath,
-        outletTypeStr,
+    monitorCategoryStr,
         labelList,
       ];
 
   static Monitor fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Monitor(
-        monitorId: '0',
-        dischargeShortName: '-',
+        monitorId: '0*',
+        enterName: json['disoutshortname'],
         monitorName: json['disMonitorName'],
         monitorAddress: json['disMonitorAddress'],
         monitorType: json['disMonitorType'],
-        outletTypeStr: '-',
+        monitorCategoryStr: '烟气*',
         imagePath: _getMonitorTypeImage(json['disMonitorType']),
-        labelList: TextUtil.isEmpty('流量 PH 化学需氧量 氨氮 总磷 总氮')
+        labelList: TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
             ? const []
-            : _getLabelList('流量 PH 化学需氧量 氨氮 总磷 总氮'),
+            : _getLabelList('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*'),
       );
     } else {
       return Monitor(
         monitorId: json['monitorId'],
-        dischargeShortName: json['dischargeShortName'],
+        enterName: json['dischargeShortName'],
         monitorName: json['monitorName'],
         monitorAddress: json['monitorAddress'],
         monitorType: json['monitorType'],
-        outletTypeStr: json['outletTypeStr'],
+        monitorCategoryStr: json['monitorCategoryStr'],
         imagePath: _getMonitorTypeImage(json['monitorType']),
-        labelList: TextUtil.isEmpty('流量 PH 化学需氧量 氨氮 总磷 总氮')
+        labelList: TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
             ? const []
-            : _getLabelList('流量 PH 化学需氧量 氨氮 总磷 总氮'),
+            : _getLabelList('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*'),
       );
     }
   }

@@ -19,6 +19,8 @@ class DischargeDetail extends Equatable {
   final String outTypeStr; //排放类别
   final String longitude; //经度
   final String latitude; //纬度
+  final String dischargeReportTotalCount; //排口异常申报个数
+  final String factorReportTotalCount; //因子异常申报个数
 
   const DischargeDetail({
     this.dischargeId,
@@ -36,6 +38,8 @@ class DischargeDetail extends Equatable {
     this.denoterInstallTypeStr,
     this.longitude,
     this.latitude,
+    this.dischargeReportTotalCount,
+    this.factorReportTotalCount,
   });
 
   @override
@@ -55,6 +59,8 @@ class DischargeDetail extends Equatable {
         denoterInstallTypeStr,
         longitude,
         latitude,
+        dischargeReportTotalCount,
+        factorReportTotalCount,
       ];
 
   static DischargeDetail fromJson(dynamic json) {
@@ -75,6 +81,8 @@ class DischargeDetail extends Equatable {
         denoterInstallTypeStr: '-',
         longitude: '-',
         latitude: '-',
+        dischargeReportTotalCount: '-',
+        factorReportTotalCount: '-',
       );
     } else {
       return DischargeDetail(
@@ -93,6 +101,8 @@ class DischargeDetail extends Equatable {
         denoterInstallTypeStr: json['denoterInstallTypeStr'],
         longitude: json['longitude'],
         latitude: json['latitude'],
+        dischargeReportTotalCount: json['dischargeReportTotalCount'],
+        factorReportTotalCount: json['factorReportTotalCount'],
       );
     }
   }

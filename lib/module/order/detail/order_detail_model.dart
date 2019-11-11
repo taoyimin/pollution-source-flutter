@@ -5,6 +5,9 @@ import 'package:pollution_source/res/constant.dart';
 
 //报警管理单详情
 class OrderDetail extends Equatable {
+  final String orderId; //报警管理单ID
+  final String enterId; //企业ID
+  final String monitorId; //监控点ID
   final String enterName; //企业名称
   final String enterAddress; //企业地址
   final String districtName; //区域
@@ -16,6 +19,9 @@ class OrderDetail extends Equatable {
   final List<Process> processList; //处理流程集合
 
   const OrderDetail({
+    this.orderId,
+    this.enterId,
+    this.monitorId,
     this.enterName,
     this.enterAddress,
     this.districtName,
@@ -29,6 +35,9 @@ class OrderDetail extends Equatable {
 
   @override
   List<Object> get props => [
+        orderId,
+        enterId,
+        monitorId,
         enterName,
         enterAddress,
         districtName,
@@ -37,12 +46,15 @@ class OrderDetail extends Equatable {
         orderStateStr,
         alarmTypeStr,
         alarmRemark,
-    processList,
+        processList,
       ];
 
   static OrderDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return OrderDetail(
+        orderId: '0*',
+        enterId: '0*',
+        monitorId: '0*',
         enterName: '深圳市腾讯计算机系统有限公司*',
         enterAddress: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼*',
         districtName: '南昌市*',
@@ -78,8 +90,7 @@ class OrderDetail extends Equatable {
             operateTimeStr: "2019-09-19 11:13*",
             operateDesc: "操作描述操作描述操作描述操作描述操作描述操作描述操作描述*",
             attachmentList: [
-              Attachment(
-                  fileName: "文件文件名文件文件文件名.pdf*", url: "*", size: 434534),
+              Attachment(fileName: "文件文件名文件文件文件名.pdf*", url: "*", size: 434534),
               Attachment(fileName: "文件文件名文件文件名.psd*", url: "*", size: 43453),
             ],
           ),
@@ -87,6 +98,9 @@ class OrderDetail extends Equatable {
       );
     } else {
       return OrderDetail(
+        orderId: json['orderId'],
+        enterId: json['enterId'],
+        monitorId: json['monitorId'],
         enterName: json['enterName'],
         enterAddress: json['enterAddress'],
         districtName: json['districtName'],
