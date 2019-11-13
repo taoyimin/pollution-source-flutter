@@ -78,7 +78,7 @@ class FactorReportListBloc extends Bloc<FactorReportListEvent, FactorReportListS
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.reportList,
+        HttpApiJava.reportList,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,
@@ -95,7 +95,7 @@ class FactorReportListBloc extends Bloc<FactorReportListEvent, FactorReportListS
       }).toList();
     }else{
       Response response = await DioUtils.instance.getDio().get(
-        'factorReports',
+        HttpApiPython.factorReports,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,

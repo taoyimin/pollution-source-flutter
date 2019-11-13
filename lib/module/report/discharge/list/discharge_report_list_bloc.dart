@@ -78,7 +78,7 @@ class DischargeReportListBloc extends Bloc<DischargeReportListEvent, DischargeRe
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.reportList,
+        HttpApiJava.reportList,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,
@@ -95,7 +95,7 @@ class DischargeReportListBloc extends Bloc<DischargeReportListEvent, DischargeRe
       }).toList();
     }else{
       Response response = await DioUtils.instance.getDio().get(
-        'dischargeReports',
+        HttpApiPython.dischargeReports,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,

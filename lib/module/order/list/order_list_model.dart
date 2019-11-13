@@ -45,7 +45,7 @@ class Order extends Equatable {
         orderId: json['id'],
         enterName: json['enterprisename'],
         monitorName: json['disOutName'],
-        alarmDateStr: json['createtime'],
+        alarmDateStr: '-',
         districtName: json['areaName'],
         orderStateStr: json['orderstate'],
         alarmRemark: json['alarmdesc'],

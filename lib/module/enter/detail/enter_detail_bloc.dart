@@ -35,13 +35,13 @@ class EnterDetailBloc extends Bloc<EnterDetailEvent, EnterDetailState> {
   Future<EnterDetail> _getEnterDetail({@required enterId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.enterDetail,
-        queryParameters: {'enterId': enterId},
+        HttpApiJava.enterDetail,
+        queryParameters: {'enter_id': enterId},
       );
       return EnterDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
       Response response = await DioUtils.instance.getDio().get(
-        'enters/$enterId',
+        '${HttpApiPython.enters}/$enterId',
       );
       return EnterDetail.fromJson(response.data);
     }

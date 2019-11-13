@@ -42,12 +42,12 @@ class Monitor extends Equatable {
   static Monitor fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Monitor(
-        monitorId: '0*',
+        monitorId: json['monitorId'].toString(),
         enterName: json['disoutshortname'],
         monitorName: json['disMonitorName'],
         monitorAddress: json['disMonitorAddress'],
         monitorType: json['disMonitorType'],
-        monitorCategoryStr: '烟气*',
+        monitorCategoryStr: '-',
         imagePath: _getMonitorTypeImage(json['disMonitorType']),
         labelList: TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
             ? const []

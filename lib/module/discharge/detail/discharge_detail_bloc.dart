@@ -36,13 +36,13 @@ class DischargeDetailBloc extends Bloc<DischargeDetailEvent, DischargeDetailStat
   Future<DischargeDetail> _getDischargeDetail({@required dischargeId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.dischargeDetail,
+        HttpApiJava.dischargeDetail,
         queryParameters: {'dischargeId': dischargeId},
       );
       return DischargeDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
       Response response = await DioUtils.instance.getDio().get(
-        'discharges/$dischargeId',
+        '${HttpApiPython.discharges}/$dischargeId',
       );
       return DischargeDetail.fromJson(response.data);
     }

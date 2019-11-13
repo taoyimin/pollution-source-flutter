@@ -18,9 +18,9 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
       try {
         Response response;
         if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-          response = await DioUtils.instance.getDio().get(HttpApi.index);
+          response = await DioUtils.instance.getDio().get(HttpApiJava.index);
         } else {
-          response = await DioUtils.instance.getDio().get('index');
+          response = await DioUtils.instance.getDio().get(HttpApiPython.index);
         }
         //空气质量统计
         AqiStatistics aqiStatistics = await _convertAqiStatistics(
@@ -344,7 +344,7 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
     return [
       Meta(
         title: '报警单待处理',
-        imagePath: 'assets/images/button_bg_lightblue.png',
+        imagePath: 'assets/images/button_bg_blue.png',
         content: strings[1],
       ),
       Meta(

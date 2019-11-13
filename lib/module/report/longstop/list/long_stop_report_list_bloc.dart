@@ -69,7 +69,7 @@ class LongStopReportListBloc extends Bloc<LongStopReportListEvent, LongStopRepor
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.reportList,
+        HttpApiJava.reportList,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,
@@ -86,7 +86,7 @@ class LongStopReportListBloc extends Bloc<LongStopReportListEvent, LongStopRepor
       }).toList();
     }else{
       Response response = await DioUtils.instance.getDio().get(
-        'longStopReports',
+        HttpApiPython.longStopReports,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,

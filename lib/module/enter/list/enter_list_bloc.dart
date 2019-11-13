@@ -74,7 +74,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       Response response = await DioUtils.instance
           .getDio()
-          .get(HttpApi.enterList, queryParameters: {
+          .get(HttpApiJava.enterList, queryParameters: {
         'currentPage': currentPage,
         'pageSize': pageSize,
         'enterpriseName': enterName,
@@ -89,7 +89,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
       }).toList();
     } else {
       Response response =
-          await DioUtils.instance.getDio().get('enters', queryParameters: {
+          await DioUtils.instance.getDio().get(HttpApiPython.enters, queryParameters: {
         'currentPage': currentPage,
         'pageSize': pageSize,
         'enterName': enterName,

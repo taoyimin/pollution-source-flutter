@@ -18,6 +18,7 @@ class EnterDetail extends Equatable {
   final String creditCode; //信用代码
   final String orderCompleteCount; //报警管理单已办结个数
   final String orderTotalCount; //报警管理单总数
+  final String longStopReportTotalCount; //长期停产申报总数
   //final String monitorReportValid; //排口异常申报有效数
   final String dischargeReportTotalCount; //排口异常申报总数
   //final String factorReportValid; //因子异常申报有效数
@@ -48,6 +49,7 @@ class EnterDetail extends Equatable {
     this.creditCode,
     this.orderCompleteCount,
     this.orderTotalCount,
+    this.longStopReportTotalCount,
     //this.monitorReportValid,
     this.dischargeReportTotalCount,
     //this.factorReportValid,
@@ -80,6 +82,7 @@ class EnterDetail extends Equatable {
         creditCode,
         orderCompleteCount,
         orderTotalCount,
+        longStopReportTotalCount,
         //monitorReportValid,
         dischargeReportTotalCount,
         //factorReportValid,
@@ -113,6 +116,7 @@ class EnterDetail extends Equatable {
         creditCode: 'G2125FD1GF51D5F5FSD545G2125FD',
         orderCompleteCount: '-',
         orderTotalCount: '-',
+        longStopReportTotalCount: '-',
         //monitorReportValid: '15',
         dischargeReportTotalCount: '-',
         //factorReportValid: '5',
@@ -144,6 +148,7 @@ class EnterDetail extends Equatable {
         creditCode: json['creditCode'],
         orderCompleteCount: json['orderCompleteCount'],
         orderTotalCount: json['orderTotalCount'],
+        longStopReportTotalCount: json['longStopReportTotalCount'],
         //monitorReportValid: '15',
         dischargeReportTotalCount: json['dischargeReportTotalCount'],
         //factorReportValid: '5',

@@ -12,6 +12,8 @@ import 'package:pollution_source/module/report/discharge/list/discharge_report_l
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
 import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
 import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
+import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_bloc.dart';
+import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
@@ -271,9 +273,31 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Gaps.vGap10,
                 Row(
                   children: <Widget>[
-                    InkWellButton7(
-                      titleFontSize: 13,
-                      contentFontSize: 19,
+                    InkWellButton3(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider(
+                                builder: (context) => LongStopReportListBloc(),
+                                child: LongStopReportListPage(
+                                  enterId: enterDetail.enterId,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      meta: Meta(
+                        title: '长期停产申报',
+                        content: '${enterDetail.longStopReportTotalCount}',
+                        imagePath: 'assets/images/button_image2.png',
+                        backgroundPath: 'assets/images/button_bg_lightblue.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton3(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -290,16 +314,14 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         );
                       },
                       meta: Meta(
-                        title: '排口异常申报总数',
+                        title: '排口异常申报',
                         content: '${enterDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
                       ),
                     ),
                     Gaps.hGap10,
-                    InkWellButton7(
-                      titleFontSize: 13,
-                      contentFontSize: 19,
+                    InkWellButton3(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -316,7 +338,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         );
                       },
                       meta: Meta(
-                        title: '因子异常申报总数',
+                        title: '因子异常申报',
                         content: '${enterDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',

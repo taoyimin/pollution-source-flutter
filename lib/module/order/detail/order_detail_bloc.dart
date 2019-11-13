@@ -35,13 +35,13 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
   Future<OrderDetail> _getOrderDetail({@required orderId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.orderDetail,
-        queryParameters: {'orderId': orderId},
+        HttpApiJava.orderDetail,
+        queryParameters: {'id': orderId},
       );
       return OrderDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
       Response response = await DioUtils.instance.getDio().get(
-        'orders/$orderId',
+        '${HttpApiPython.orders}/$orderId',
       );
       return OrderDetail.fromJson(response.data);
     }

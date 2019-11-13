@@ -52,17 +52,17 @@ class OrderDetail extends Equatable {
   static OrderDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return OrderDetail(
-        orderId: '0*',
-        enterId: '0*',
-        monitorId: '0*',
-        enterName: '深圳市腾讯计算机系统有限公司*',
-        enterAddress: '深圳市南山区高新区高新南一路飞亚达大厦5-10楼*',
-        districtName: '南昌市*',
-        monitorName: '废气排放口*',
-        alarmDateStr: '10月25日*',
-        orderStateStr: '县局待审核*',
-        alarmTypeStr: '连续恒值 污染物超标 数采仪掉线*',
-        alarmRemark: '报警描述报警描述报警描述报警描述报警描述报警描述报警描述*',
+        orderId: '-',
+        enterId: '-',
+        monitorId: '-',
+        enterName: '-',
+        enterAddress: '-',
+        districtName: '-',
+        monitorName: '-',
+        alarmDateStr: '-',
+        orderStateStr: '-',
+        alarmTypeStr: '-',
+        alarmRemark: '-',
         processList: [
           Process(
             operateTypeStr: "县局督办*",

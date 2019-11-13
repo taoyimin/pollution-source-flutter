@@ -60,7 +60,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 subTitle1: '$enterName',
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/order_detail_bg_image.svg',
-                backgroundPath: 'assets/images/button_bg_lightblue.png',
+                backgroundPath: 'assets/images/button_bg_blue.png',
               );
             },
           ),

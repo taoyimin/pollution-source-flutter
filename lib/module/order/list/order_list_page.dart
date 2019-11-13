@@ -70,7 +70,7 @@ class _OrderListPageState extends State<OrderListPage>
             ListHeaderWidget(
               title: '报警管理单列表',
               subtitle: '展示报警管理单列表，点击列表项查看该报警管理单的详细信息',
-              background: 'assets/images/button_bg_lightblue.png',
+              background: 'assets/images/button_bg_blue.png',
               image: 'assets/images/order_list_bg_image.png',
               color: Colors.lightBlue,
               showSearch: true,

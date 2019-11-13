@@ -35,13 +35,13 @@ class FactorReportDetailBloc extends Bloc<FactorReportDetailEvent, FactorReportD
   Future<FactorReportDetail> _getReportDetail({@required reportId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.reportDetail,
+        HttpApiJava.reportDetail,
         queryParameters: {'reportId': reportId},
       );
       return FactorReportDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
       Response response = await DioUtils.instance.getDio().get(
-        'factorReports/$reportId',
+        '${HttpApiPython.factorReports}/$reportId',
       );
       return FactorReportDetail.fromJson(response.data);
     }

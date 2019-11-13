@@ -98,7 +98,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
           break;
       }
       Response response = await DioUtils.instance.getDio().get(
-        HttpApi.monitorList,
+        HttpApiJava.monitorList,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,
@@ -115,7 +115,7 @@ class MonitorListBloc extends Bloc<MonitorListEvent, MonitorListState> {
       }).toList();
     } else {
       Response response = await DioUtils.instance.getDio().get(
-        'monitors',
+        HttpApiPython.monitors,
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,
