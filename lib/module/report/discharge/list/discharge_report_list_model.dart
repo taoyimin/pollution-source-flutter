@@ -39,14 +39,14 @@ class DischargeReport extends Equatable {
   static DischargeReport fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return DischargeReport(
-        reportId: '-',
-        enterName: '-',
-        monitorName: '-',
-        stopTypeStr: '-',
+        reportId: json['stopApplyId'].toString(),
+        enterName: json['enterpriseName'],
+        monitorName: json['disMonitorName'],
+        stopTypeStr: json['stopTypeStr'],
         districtName: '-',
-        startTimeStr: '-',
-        endTimeStr: '-',
-        reportTimeStr: '-',
+        startTimeStr: json['startTimeStr'],
+        endTimeStr: json['endTimeStr'],
+        reportTimeStr: json['applayTimeStr'],
       );
     } else {
       return DischargeReport(

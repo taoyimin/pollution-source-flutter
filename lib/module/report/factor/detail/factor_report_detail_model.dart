@@ -64,9 +64,9 @@ class FactorReportDetail extends Equatable {
   static FactorReportDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return FactorReportDetail(
-        reportId: '-',
+        reportId: json['stopApply']['stopApplyId'],
         enterId: json['stopApply']['enterId'],
-        dischargeId: '-',
+        dischargeId: json['stopApply']['outId'],
         monitorId: json['stopApply']['monitorId'],
         enterName: json['stopApply']['enterpriseName'],
         enterAddress: '-',
@@ -78,12 +78,12 @@ class FactorReportDetail extends Equatable {
         endTimeStr: json['stopApply']['endTimeStr'],
         alarmTypeStr: json['stopApply']['stopTypeStr'],
         exceptionReason: json['stopApply']['stopReason'],
-        reviewOpinion: json['stopApply']['remark'],
+        reviewOpinion: '-',
         attachmentList: [
-          Attachment(fileName: "文件名文件名.png*", url: "*", size: 354354),
-          Attachment(fileName: "文件名文件名文件名.doc*", url: "*", size: 543453),
-          Attachment(fileName: "文件文件名文件文件文件名.pdf*", url: "*", size: 35433),
-          Attachment(fileName: "文件文件名文件文件名.psd*", url: "*", size: 54354),
+          Attachment(fileName: "文件名文件名.png*", url: "*", size: 534345),
+          Attachment(fileName: "文件名文件名文件名.doc*", url: "*", size: 5454),
+          Attachment(fileName: "文件文件名文件文件文件名.pdf*", url: "*", size: 34534),
+          Attachment(fileName: "文件文件名文件文件名.psd*", url: "*", size: 5354),
         ],
       );
     } else {

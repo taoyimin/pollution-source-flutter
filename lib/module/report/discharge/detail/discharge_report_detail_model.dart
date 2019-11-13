@@ -64,10 +64,10 @@ class DischargeReportDetail extends Equatable {
   static DischargeReportDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return DischargeReportDetail(
-        reportId: '-',
-        enterId: json['stopApply']['enterId'],
-        dischargeId: '-',
-        monitorId: json['stopApply']['monitorId'],
+        reportId: json['stopApply']['stopApplyId'].toString(),
+        enterId: json['stopApply']['enterId'].toString(),
+        dischargeId: json['stopApply']['outId'].toString(),
+        monitorId: json['stopApply']['monitorId'].toString(),
         enterName: json['stopApply']['enterpriseName'],
         enterAddress: '-',
         dischargeName: json['stopApply']['disOutName'],
@@ -78,12 +78,12 @@ class DischargeReportDetail extends Equatable {
         endTimeStr: json['stopApply']['endTimeStr'],
         stopTypeStr: json['stopApply']['stopTypeStr'],
         stopReason: json['stopApply']['stopReason'],
-        reviewOpinion: json['stopApply']['remark'],
+        reviewOpinion: '-',
         attachmentList: [
-          Attachment(fileName: "文件名文件名.png", url: "", size: 534345),
-          Attachment(fileName: "文件名文件名文件名.doc", url: "", size: 5454),
-          Attachment(fileName: "文件文件名文件文件文件名.pdf", url: "", size: 34534),
-          Attachment(fileName: "文件文件名文件文件名.psd", url: "", size: 5354),
+          Attachment(fileName: "*文件名文件名.png", url: "*", size: 534345),
+          Attachment(fileName: "*文件名文件名文件名.doc", url: "*", size: 5454),
+          Attachment(fileName: "*文件文件名文件文件文件名.pdf", url: "*", size: 34534),
+          Attachment(fileName: "*文件文件名文件文件名.psd", url: "*", size: 5354),
         ],
       );
     } else {
