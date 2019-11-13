@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pollution_source/page/index.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollution_source/module/index/index.dart';
 
 import 'mine.dart';
 
@@ -15,7 +16,11 @@ class _HomePageState extends State<HomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    IndexPage(),
+    //IndexPage(),
+    BlocProvider(
+      builder: (context) => IndexBloc(),
+      child: IndexPage(),
+    ),
     Text(
       'Index 1: Business',
       style: optionStyle,

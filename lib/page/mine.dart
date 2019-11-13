@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:pollution_source/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/util/ui_util.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 
 /// 个人中心页面
 class MinePage extends StatefulWidget {
@@ -88,7 +88,7 @@ class _MinePageState extends State<MinePage> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
-                                getBoxShadow(),
+                                UIUtils.getBoxShadow(),
                               ],
                             ),
                           ),
@@ -215,7 +215,7 @@ class _MinePageState extends State<MinePage> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
-                              getBoxShadow(),
+                              UIUtils.getBoxShadow(),
                             ],
                           ),
                           child: Column(
