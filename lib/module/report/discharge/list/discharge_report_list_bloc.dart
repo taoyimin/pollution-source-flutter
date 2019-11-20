@@ -77,7 +77,7 @@ class DischargeReportListBloc extends Bloc<DischargeReportListEvent, DischargeRe
     state = '',
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.reportList,
         queryParameters: {
           'currentPage': currentPage,
@@ -85,7 +85,7 @@ class DischargeReportListBloc extends Bloc<DischargeReportListEvent, DischargeRe
           'enterpriseName': enterName,
           'areaCode': areaCode,
           'enterId': enterId,
-          'hasFactorCode': '0',
+          'dataType': 'S',
           'QIsReview': state,
         },
       );
@@ -94,7 +94,7 @@ class DischargeReportListBloc extends Bloc<DischargeReportListEvent, DischargeRe
         return DischargeReport.fromJson(json);
       }).toList();
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         HttpApiPython.dischargeReports,
         queryParameters: {
           'currentPage': currentPage,

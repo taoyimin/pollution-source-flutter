@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/license/list/license_list_bloc.dart';
+import 'package:pollution_source/module/license/list/license_list_page.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/module/order/list/order_list_bloc.dart';
@@ -546,7 +548,16 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        builder: (context) => LicenseListBloc(),
+                        child: LicenseListPage(
+                          enterId: enterDetail.enterId,
+                        ),
+                      );
+                    }));
+                  },
                 ),
               ],
             ),

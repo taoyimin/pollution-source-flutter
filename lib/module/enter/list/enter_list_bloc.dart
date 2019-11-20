@@ -72,7 +72,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
     attentionLevel = '',
   }) async {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await DioUtils.instance
+      Response response = await JavaDioUtils.instance
           .getDio()
           .get(HttpApiJava.enterList, queryParameters: {
         'currentPage': currentPage,
@@ -89,7 +89,7 @@ class EnterListBloc extends Bloc<EnterListEvent, EnterListState> {
       }).toList();
     } else {
       Response response =
-          await DioUtils.instance.getDio().get(HttpApiPython.enters, queryParameters: {
+          await PythonDioUtils.instance.getDio().get(HttpApiPython.enters, queryParameters: {
         'currentPage': currentPage,
         'pageSize': pageSize,
         'enterName': enterName,

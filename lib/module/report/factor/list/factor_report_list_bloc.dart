@@ -77,7 +77,7 @@ class FactorReportListBloc extends Bloc<FactorReportListEvent, FactorReportListS
     state = '',
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.reportList,
         queryParameters: {
           'currentPage': currentPage,
@@ -85,7 +85,7 @@ class FactorReportListBloc extends Bloc<FactorReportListEvent, FactorReportListS
           'enterpriseName': enterName,
           'areaCode': areaCode,
           'enterId': enterId,
-          'hasFactorCode': '1',
+          'dataType': 'A',
           'QIsReview': state,
         },
       );
@@ -94,7 +94,7 @@ class FactorReportListBloc extends Bloc<FactorReportListEvent, FactorReportListS
         return FactorReport.fromJson(json);
       }).toList();
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         HttpApiPython.factorReports,
         queryParameters: {
           'currentPage': currentPage,

@@ -34,13 +34,13 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
   //获取报警管理单详情
   Future<OrderDetail> _getOrderDetail({@required orderId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.orderDetail,
         queryParameters: {'id': orderId},
       );
       return OrderDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         '${HttpApiPython.orders}/$orderId',
       );
       return OrderDetail.fromJson(response.data);

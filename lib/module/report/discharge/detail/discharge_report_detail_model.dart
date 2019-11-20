@@ -79,12 +79,13 @@ class DischargeReportDetail extends Equatable {
         stopTypeStr: json['stopApply']['stopTypeStr'],
         stopReason: json['stopApply']['stopReason'],
         reviewOpinion: '-',
-        attachmentList: [
+        attachmentList: Attachment.fromJsonArray(json['attach']),
+        /*attachmentList: [
           Attachment(fileName: "*文件名文件名.png", url: "*", size: 534345),
           Attachment(fileName: "*文件名文件名文件名.doc", url: "*", size: 5454),
           Attachment(fileName: "*文件文件名文件文件文件名.pdf", url: "*", size: 34534),
           Attachment(fileName: "*文件文件名文件文件名.psd", url: "*", size: 5354),
-        ],
+        ],*/
       );
     } else {
       return DischargeReportDetail(

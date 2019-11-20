@@ -72,7 +72,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     monitorId = '',
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.orderList,
         queryParameters: {
           'currentPage': currentPage,
@@ -87,7 +87,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
         return Order.fromJson(json);
       }).toList();
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         HttpApiPython.orders,
         queryParameters: {
           'currentPage': currentPage,

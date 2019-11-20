@@ -43,11 +43,11 @@ class Monitor extends Equatable {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Monitor(
         monitorId: json['monitorId'].toString(),
-        enterName: json['disoutshortname'],
+        enterName: json['enterpriseName'],
         monitorName: json['disMonitorName'],
         monitorAddress: json['disMonitorAddress'],
         monitorType: json['disMonitorType'],
-        monitorCategoryStr: '-',
+        monitorCategoryStr: json['monitorCategoryStr'],
         imagePath: _getMonitorTypeImage(json['disMonitorType']),
         labelList: TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
             ? const []
@@ -56,7 +56,7 @@ class Monitor extends Equatable {
     } else {
       return Monitor(
         monitorId: json['monitorId'],
-        enterName: json['dischargeShortName'],
+        enterName: json['enterName'],
         monitorName: json['monitorName'],
         monitorAddress: json['monitorAddress'],
         monitorType: json['monitorType'],

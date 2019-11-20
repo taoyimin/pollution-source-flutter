@@ -71,13 +71,13 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
   //获取监控点详情
   Future<MonitorDetail> _getMonitorDetail({@required monitorId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.monitorDetail,
-        queryParameters: {'monitorId': monitorId},
+        queryParameters: {'monitor_id': monitorId},
       );
       return MonitorDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         '${HttpApiPython.monitors}/$monitorId',
       );
       return MonitorDetail.fromJson(response.data);

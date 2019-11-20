@@ -39,7 +39,7 @@ class Enter extends Equatable {
   static Enter fromJson(dynamic json) {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       return Enter(
-        enterId: json['enter_id'],
+        enterId: '${json['enter_id']}',
         enterName: json['enterprise_name'],
         enterAddress: json['ent_address'],
         isImportant: json['attention_level'] == '1' ? true : false,

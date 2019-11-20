@@ -34,13 +34,13 @@ class LongStopReportDetailBloc extends Bloc<LongStopReportDetailEvent, LongStopR
   //获取异常申报单详情
   Future<LongStopReportDetail> _getReportDetail({@required reportId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.reportDetail,
-        queryParameters: {'reportId': reportId},
+        queryParameters: {'stopApplyId': reportId},
       );
       return LongStopReportDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         '${HttpApiPython.longStopReports}/$reportId',
       );
       return LongStopReportDetail.fromJson(response.data);

@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:flustars/flustars.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 
 //标签
 class Label extends Equatable {
@@ -96,11 +98,19 @@ class Attachment extends Equatable {
   }
 
   static Attachment fromJson(dynamic json) {
-    return Attachment(
-      fileName: json['fileName'],
-      url: json['url'],
-      size: json['size'],
-    );
+    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+      return Attachment(
+        fileName: json['File_Name'],
+        url: json['Url'],
+        size: int.parse(json['Size']),
+      );
+    }else{
+      return Attachment(
+        fileName: json['fileName'],
+        url: json['url'],
+        size: json['size'],
+      );
+    }
   }
 
   static List<Attachment> fromJsonArray(dynamic jsonArray) {

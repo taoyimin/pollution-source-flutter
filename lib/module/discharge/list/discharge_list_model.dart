@@ -39,14 +39,14 @@ class Discharge extends Equatable {
   static Discharge fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Discharge(
-        dischargeId: '0*',
-        enterName: '-',
-        dischargeName: '-',
-        dischargeAddress: '-',
-        dischargeTypeStr: '-',
-        dischargeCategoryStr: '-',
+        dischargeId: json['outId']+'',
+        enterName: json['enterpriseName'],
+        dischargeName: json['disMonitorName'],
+        dischargeAddress: json['disMonitorAddress'],
+        dischargeTypeStr: json['disOutMonitorTypeStr'],
+        dischargeCategoryStr: json['monitorCategoryStr'],
         dischargeRuleStr: '-',
-        imagePath: _getMonitorTypeImage('-'),
+        imagePath: _getMonitorTypeImage(json['disMonitorType']),
       );
     } else {
       return Discharge(

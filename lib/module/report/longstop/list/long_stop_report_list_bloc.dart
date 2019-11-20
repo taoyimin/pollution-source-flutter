@@ -68,7 +68,7 @@ class LongStopReportListBloc extends Bloc<LongStopReportListEvent, LongStopRepor
     enterId = '',
   }) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.reportList,
         queryParameters: {
           'currentPage': currentPage,
@@ -76,7 +76,7 @@ class LongStopReportListBloc extends Bloc<LongStopReportListEvent, LongStopRepor
           'enterpriseName': enterName,
           'areaCode': areaCode,
           'enterId': enterId,
-          'hasLongStopCode': '1',
+          'dataType': 'L',
           'QIsReview': state,
         },
       );
@@ -85,7 +85,7 @@ class LongStopReportListBloc extends Bloc<LongStopReportListEvent, LongStopRepor
         return LongStopReport.fromJson(json);
       }).toList();
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         HttpApiPython.longStopReports,
         queryParameters: {
           'currentPage': currentPage,

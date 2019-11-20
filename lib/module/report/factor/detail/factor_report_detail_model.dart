@@ -64,10 +64,10 @@ class FactorReportDetail extends Equatable {
   static FactorReportDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return FactorReportDetail(
-        reportId: json['stopApply']['stopApplyId'],
-        enterId: json['stopApply']['enterId'],
-        dischargeId: json['stopApply']['outId'],
-        monitorId: json['stopApply']['monitorId'],
+        reportId: json['stopApply']['stopApplyId'].toString(),
+        enterId: json['stopApply']['enterId'].toString(),
+        dischargeId: json['stopApply']['outId'].toString(),
+        monitorId: json['stopApply']['monitorId'].toString(),
         enterName: json['stopApply']['enterpriseName'],
         enterAddress: '-',
         dischargeName: json['stopApply']['disOutName'],

@@ -69,7 +69,7 @@ class DischargeListBloc extends Bloc<DischargeListEvent, DischargeListState> {
     enterId = '',
   }) async {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.dischargeList,
         queryParameters: {
           'currentPage': currentPage,
@@ -84,7 +84,7 @@ class DischargeListBloc extends Bloc<DischargeListEvent, DischargeListState> {
         return Discharge.fromJson(json);
       }).toList();
     } else {
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         HttpApiPython.discharges,
         queryParameters: {
           'currentPage': currentPage,

@@ -34,13 +34,13 @@ class FactorReportDetailBloc extends Bloc<FactorReportDetailEvent, FactorReportD
   //获取异常申报单详情
   Future<FactorReportDetail> _getReportDetail({@required reportId}) async {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.reportDetail,
-        queryParameters: {'reportId': reportId},
+        queryParameters: {'stopApplyId': reportId},
       );
       return FactorReportDetail.fromJson(response.data[Constant.responseDataKey]);
     }else{
-      Response response = await DioUtils.instance.getDio().get(
+      Response response = await PythonDioUtils.instance.getDio().get(
         '${HttpApiPython.factorReports}/$reportId',
       );
       return FactorReportDetail.fromJson(response.data);

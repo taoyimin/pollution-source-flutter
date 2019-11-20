@@ -44,15 +44,15 @@ class FactorReport extends Equatable {
   static FactorReport fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return FactorReport(
-        reportId: '-',
-        enterName: '-',
-        monitorName: '-',
-        alarmTypeStr: '-',
+        reportId: json['stopApplyId'].toString(),
+        enterName: json['enterpriseName'],
+        monitorName: json['disMonitorName'],
+        alarmTypeStr: json['stopTypeStr'],
         districtName: '-',
-        startTimeStr: '-',
-        endTimeStr: '-',
-        reportTimeStr: '-',
-        labelList: TextUtil.isEmpty('- -') ? const [] : _getLabelList('- -'),
+        startTimeStr: json['startTimeStr'],
+        endTimeStr: json['endTimeStr'],
+        reportTimeStr: json['applayTimeStr'],
+        labelList: TextUtil.isEmpty(json['factorName']) ? const [] : _getLabelList(json['factorName']),
       );
     } else {
       return FactorReport(

@@ -33,12 +33,12 @@ class LongStopReport extends Equatable {
   static LongStopReport fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return LongStopReport(
-        reportId: '-',
-        enterName: '-',
+        reportId: json['stopApplyId'].toString(),
+        enterName: json['enterpriseName'],
         districtName: '-',
-        startTimeStr: '-',
-        endTimeStr: '-',
-        reportTimeStr: '-',
+        startTimeStr: json['startTimeStr'],
+        endTimeStr: json['endTimeStr'],
+        reportTimeStr: json['applayTimeStr'],
       );
     } else {
       return LongStopReport(

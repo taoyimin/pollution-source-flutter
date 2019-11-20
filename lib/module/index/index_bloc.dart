@@ -18,9 +18,9 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
       try {
         Response response;
         if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-          response = await DioUtils.instance.getDio().get(HttpApiJava.index);
+          response = await JavaDioUtils.instance.getDio().get(HttpApiJava.index);
         } else {
-          response = await DioUtils.instance.getDio().get(HttpApiPython.index);
+          response = await PythonDioUtils.instance.getDio().get(HttpApiPython.index);
         }
         //空气质量统计
         AqiStatistics aqiStatistics = await _convertAqiStatistics(

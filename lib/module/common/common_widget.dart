@@ -65,7 +65,6 @@ class PageEmptyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverFillRemaining(
       child: Container(
-        height: double.infinity,
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
