@@ -31,8 +31,8 @@ class TokenInterceptor extends Interceptor {
   Future<String> getToken() async {
     try {
       if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-        _tokenDio.options = DioUtils.instance.getDio().options;
-        var response = await _tokenDio.get(HttpApi.login, queryParameters: {
+        _tokenDio.options = JavaDioUtils.instance.getDio().options;
+        var response = await _tokenDio.get(HttpApiJava.login, queryParameters: {
           'userName': SpUtil.getString(Constant.spUsername),
           'password': SpUtil.getString(Constant.spPassword)
         });
@@ -47,8 +47,8 @@ class TokenInterceptor extends Interceptor {
                   TokenException('刷新Token失败！response=${response.toString()}'));
         }
       } else {
-        _tokenDio.options = DioUtils.instance.getDio().options;
-        var response = await _tokenDio.post('token', data: {
+        _tokenDio.options = PythonDioUtils.instance.getDio().options;
+        var response = await _tokenDio.post(HttpApiPython.token, data: {
           'userName': SpUtil.getString(Constant.spUsername),
           'passWord': SpUtil.getString(Constant.spPassword)
         });
@@ -71,7 +71,7 @@ class TokenInterceptor extends Interceptor {
     if (response != null &&
         response.statusCode == ExceptionHandle.unauthorized) {
       Log.d("----------- 自动刷新Token ------------");
-      Dio dio = DioUtils.instance.getDio();
+      Dio dio = SpUtil.getBool(Constant.spJavaApi, defValue: true) ? JavaDioUtils.instance.getDio():PythonDioUtils.instance.getDio();
       dio.interceptors.requestLock.lock();
       String accessToken = await getToken(); // 获取新的accessToken
       Log.e("----------- NewToken: $accessToken ------------");
@@ -211,6 +211,7 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   onError(DioError err) {
+    Log.d(err.toString());
     Log.d("----------Error-----------");
     return super.onError(err);
   }
