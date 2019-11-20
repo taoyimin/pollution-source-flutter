@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     try {
       if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-        Response response = await DioUtils.instance.getDio().get(HttpApi.login,
+        Response response = await JavaDioUtils.instance.getDio().get(HttpApiJava.login,
             queryParameters: {
               'userName': _nameController.text,
               'password': _passwordController.text
@@ -170,8 +170,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       } else {
-        Response response = await DioUtils.instance.getDio().post(
-          'token',
+        Response response = await PythonDioUtils.instance.getDio().post(
+          HttpApiPython.token,
           data: {
             'userName': _nameController.text,
             'passWord': _passwordController.text
