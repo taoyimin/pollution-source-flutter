@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollution_source/module/application/application_page.dart';
 import 'package:pollution_source/module/index/index.dart';
 
 import 'mine.dart';
@@ -21,10 +22,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context) => IndexBloc(),
       child: IndexPage(),
     ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
+    ApplicationPage(),
     MinePage(),
   ];
 
@@ -56,8 +54,8 @@ class _HomePageState extends State<HomePage> {
             title: Text('首页'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            title: Text('Business'),
+            icon: Icon(Icons.apps),
+            title: Text('应用'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
