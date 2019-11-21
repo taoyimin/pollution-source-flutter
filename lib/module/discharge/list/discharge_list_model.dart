@@ -1,27 +1,29 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
-import 'package:pollution_source/res/constant.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'discharge_list_model.g.dart';
 
 //排口列表
+@JsonSerializable()
 class Discharge extends Equatable {
   final String dischargeId; //排口ID
   final String enterName; //企业名称
   final String dischargeName; //排口名称
   final String dischargeAddress; //排口地址
+  final String dischargeType; //排口类型
   final String dischargeTypeStr; //排口类型
   final String dischargeCategoryStr; //排口类别
   final String dischargeRuleStr; //排放规律
-  final String imagePath; //排口logo
 
   const Discharge({
     this.dischargeId,
     this.enterName,
     this.dischargeName,
     this.dischargeAddress,
+    this.dischargeType,
     this.dischargeTypeStr,
     this.dischargeCategoryStr,
     this.dischargeRuleStr,
-    this.imagePath,
   });
 
   @override
@@ -30,13 +32,22 @@ class Discharge extends Equatable {
         enterName,
         dischargeName,
         dischargeAddress,
+        dischargeType,
         dischargeTypeStr,
         dischargeCategoryStr,
         dischargeRuleStr,
-        imagePath,
       ];
 
-  static Discharge fromJson(dynamic json) {
+  String get imagePath {
+    return _getMonitorTypeImage(dischargeType);
+  }
+
+  factory Discharge.fromJson(Map<String, dynamic> json) =>
+      _$DischargeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DischargeToJson(this);
+
+  /*static Discharge fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Discharge(
         dischargeId: json['outId']+'',
@@ -60,7 +71,7 @@ class Discharge extends Equatable {
         imagePath: _getMonitorTypeImage(json['dischargeType']),
       );
     }
-  }
+  }*/
 
   //根据排口类型获取图片
   static String _getMonitorTypeImage(String monitorType) {

@@ -49,6 +49,8 @@ class _DischargeListPageState extends State<DischargeListPage>
     //首次加载
     _dischargeListBloc.add(DischargeListLoad(
       enterId: widget.enterId,
+      dischargeType: widget.dischargeType,
+      state: widget.state,
     ));
   }
 
@@ -142,6 +144,8 @@ class _DischargeListPageState extends State<DischargeListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 enterId: widget.enterId,
+                dischargeType: widget.dischargeType,
+                state: widget.state,
               ));
               return _refreshCompleter.future;
             },
@@ -150,6 +154,8 @@ class _DischargeListPageState extends State<DischargeListPage>
                 enterName: _editController.text,
                 areaCode: areaCode,
                 enterId: widget.enterId,
+                dischargeType: widget.dischargeType,
+                state: widget.state,
               ));
               return _refreshCompleter.future;
             },

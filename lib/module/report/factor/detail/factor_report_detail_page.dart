@@ -197,14 +197,14 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                   imagePath: 'assets/images/icon_enter_baseinfo.png',
                 ),
                 Gaps.vGap10,
-                reportDetail.attachmentList.length == 0
+                reportDetail.attachments.length == 0
                     ? const Text(
                         '没有上传证明材料',
                         style: TextStyle(fontSize: 13),
                       )
                     : Column(
                         children: () {
-                          return reportDetail.attachmentList.map((attachment) {
+                          return reportDetail.attachments.map((attachment) {
                             return AttachmentWidget(
                                 attachment: attachment, onTap: () {});
                           }).toList();

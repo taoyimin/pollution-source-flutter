@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
-import 'package:pollution_source/res/constant.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'enter_detail_model.g.dart';
 
 //企业详情
+@JsonSerializable()
 class EnterDetail extends Equatable {
   final String enterId; //企业id
   final String enterName; //企业名称
@@ -99,7 +101,12 @@ class EnterDetail extends Equatable {
         environmentVisitCount,
       ];
 
-  static EnterDetail fromJson(dynamic json) {
+  factory EnterDetail.fromJson(Map<String, dynamic> json) =>
+      _$EnterDetailFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EnterDetailToJson(this);
+
+  /*static EnterDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return EnterDetail(
         enterId: '${json['enter_id']}',
@@ -165,5 +172,5 @@ class EnterDetail extends Equatable {
         environmentVisitCount: '-',
       );
     }
-  }
+  }*/
 }

@@ -2,19 +2,22 @@ import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'monitor_list_model.g.dart';
 
 //监控点列表
+@JsonSerializable()
 class Monitor extends Equatable {
   final String monitorId; //监控点ID
   final String enterName; //企业名称
   final String monitorName; //监控点名称
   final String monitorAddress; //监控点地址
   final String monitorType; //监控点类型
-  final String imagePath; //监控点logo
+  //final String imagePath; //监控点logo
   final String monitorCategoryStr; //监控点类别
-  final List<Label> labelList; //标签集合
+  //final List<Label> labelList; //标签集合
 
   const Monitor({
     this.monitorId,
@@ -22,24 +25,39 @@ class Monitor extends Equatable {
     this.monitorName,
     this.monitorAddress,
     this.monitorType,
-    this.imagePath,
+    //this.imagePath,
     this.monitorCategoryStr,
-    this.labelList,
+    //this.labelList,
   });
 
   @override
   List<Object> get props => [
         monitorId,
-    enterName,
+        enterName,
         monitorName,
         monitorAddress,
         monitorType,
-        imagePath,
-    monitorCategoryStr,
-        labelList,
+        //imagePath,
+        monitorCategoryStr,
+        //labelList,
       ];
 
-  static Monitor fromJson(dynamic json) {
+  String get imagePath {
+    return _getMonitorTypeImage(monitorType);
+  }
+
+  List<Label> get labelList {
+    return TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
+        ? const []
+        : _getLabelList('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*');
+  }
+
+  factory Monitor.fromJson(Map<String, dynamic> json) =>
+      _$MonitorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MonitorToJson(this);
+
+  /*static Monitor fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Monitor(
         monitorId: json['monitorId'].toString(),
@@ -67,7 +85,7 @@ class Monitor extends Equatable {
             : _getLabelList('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*'),
       );
     }
-  }
+  }*/
 
   //根据监控点类型获取图片
   static String _getMonitorTypeImage(String monitorType) {

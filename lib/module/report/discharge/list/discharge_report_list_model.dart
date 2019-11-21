@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
-import 'package:pollution_source/res/constant.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'discharge_report_list_model.g.dart';
 
 //排口异常申报列表
+@JsonSerializable()
 class DischargeReport extends Equatable {
   final String reportId; //申报单ID
   final String enterName; //企业名称
@@ -36,14 +38,18 @@ class DischargeReport extends Equatable {
         reportTimeStr,
       ];
 
-  static DischargeReport fromJson(dynamic json) {
+  factory DischargeReport.fromJson(Map<String, dynamic> json) => _$DischargeReportFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DischargeReportToJson(this);
+
+  /*static DischargeReport fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return DischargeReport(
         reportId: json['stopApplyId'].toString(),
         enterName: json['enterpriseName'],
         monitorName: json['disMonitorName'],
         stopTypeStr: json['stopTypeStr'],
-        districtName: '-',
+        districtName: json['cityName']+json['areaName'],
         startTimeStr: json['startTimeStr'],
         endTimeStr: json['endTimeStr'],
         reportTimeStr: json['applayTimeStr'],
@@ -60,5 +66,5 @@ class DischargeReport extends Equatable {
         reportTimeStr: json['reportTimeStr'],
       );
     }
-  }
+  }*/
 }

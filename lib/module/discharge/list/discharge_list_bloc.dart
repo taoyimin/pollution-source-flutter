@@ -31,6 +31,8 @@ class DischargeListBloc extends Bloc<DischargeListEvent, DischargeListState> {
           enterName: event.enterName,
           areaCode: event.areaCode,
           enterId: event.enterId,
+          dischargeType: event.dischargeType,
+          state: event.state,
         );
         yield DischargeListLoaded(
           dischargeList: currentState.dischargeList + dischargeList,
@@ -43,6 +45,8 @@ class DischargeListBloc extends Bloc<DischargeListEvent, DischargeListState> {
           enterName: event.enterName,
           areaCode: event.areaCode,
           enterId: event.enterId,
+          dischargeType: event.dischargeType,
+          state: event.state,
         );
         if (dischargeList.length == 0) {
           //没有数据
@@ -67,6 +71,8 @@ class DischargeListBloc extends Bloc<DischargeListEvent, DischargeListState> {
     enterName = '',
     areaCode = '',
     enterId = '',
+    dischargeType = '',
+    state = '',
   }) async {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       Response response = await JavaDioUtils.instance.getDio().get(
@@ -77,6 +83,8 @@ class DischargeListBloc extends Bloc<DischargeListEvent, DischargeListState> {
           'enterpriseName': enterName,
           'areaCode': areaCode,
           'enterId': enterId,
+          'dischargeType': dischargeType,
+          'state': state,
         },
       );
       return response.data[Constant.responseDataKey][Constant.responseListKey]
@@ -92,6 +100,8 @@ class DischargeListBloc extends Bloc<DischargeListEvent, DischargeListState> {
           'enterName': enterName,
           'areaCode': areaCode,
           'enterId': enterId,
+          'dischargeType': dischargeType,
+          'state': state,
         },
       );
       return response.data[Constant.responseListKey].map<Discharge>((json) {

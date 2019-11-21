@@ -169,10 +169,9 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 ),
                 Gaps.vGap10,
                 Container(
-                  height: 152,
                   child: Row(
                     children: <Widget>[
-                      InkWellButton8(
+                      InkWellButton7(
                         meta: Meta(
                             title: '企业信息',
                             content: '查看该申报单所属的企业信息',
@@ -196,6 +195,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                           );
                         },
                       ),
+                      Gaps.hGap10,
+                      Expanded(child: Gaps.empty),
                     ],
                   ),
                 ),

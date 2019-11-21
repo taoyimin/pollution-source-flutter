@@ -1,10 +1,11 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'common_model.g.dart';
 
 //标签
 class Label extends Equatable {
@@ -55,6 +56,7 @@ class Meta extends Equatable {
 }
 
 //附件类
+@JsonSerializable()
 class Attachment extends Equatable {
   final String fileName;
   final String url;
@@ -97,7 +99,10 @@ class Attachment extends Equatable {
     }
   }
 
-  static Attachment fromJson(dynamic json) {
+  factory Attachment.fromJson(Map<String, dynamic> json) => _$AttachmentFromJson(json);
+  Map<String, dynamic> toJson() => _$AttachmentToJson(this);
+
+  /*static Attachment fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Attachment(
         fileName: json['File_Name'],
@@ -117,23 +122,24 @@ class Attachment extends Equatable {
     return jsonArray.map<Attachment>((json) {
       return Attachment.fromJson(json);
     }).toList();
-  }
+  }*/
 }
 
 //处理流程
+@JsonSerializable()
 class Process extends Equatable {
   final String operateTypeStr;
   final String operatePerson;
   final String operateTimeStr;
   final String operateDesc;
-  final List<Attachment> attachmentList;
+  final List<Attachment> attachments;
 
   const Process({
     @required this.operateTypeStr,
     @required this.operatePerson,
     @required this.operateTimeStr,
     @required this.operateDesc,
-    @required this.attachmentList,
+    @required this.attachments,
   });
 
   @override
@@ -143,10 +149,13 @@ class Process extends Equatable {
         operatePerson,
         operateTimeStr,
         operateDesc,
-        attachmentList,
+        attachments,
       ];
 
-  static Process fromJson(dynamic json) {
+  factory Process.fromJson(Map<String, dynamic> json) => _$ProcessFromJson(json);
+  Map<String, dynamic> toJson() => _$ProcessToJson(this);
+
+/*  static Process fromJson(dynamic json) {
     return Process(
       operateTypeStr: json['operateTypeStr'],
       operatePerson: json['operatePerson'],
@@ -160,7 +169,7 @@ class Process extends Equatable {
     return jsonArray.map<Process>((json) {
       return Process.fromJson(json);
     }).toList();
-  }
+  }*/
 }
 
 //坐标点信息 用于记录因子在某个时间的监测值

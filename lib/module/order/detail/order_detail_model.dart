@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'order_detail_model.g.dart';
 
 //报警管理单详情
+@JsonSerializable()
 class OrderDetail extends Equatable {
   final String orderId; //报警管理单ID
   final String enterId; //企业ID
@@ -16,7 +18,7 @@ class OrderDetail extends Equatable {
   final String orderStateStr; //状态
   final String alarmTypeStr; //报警类型
   final String alarmRemark; //报警描述
-  final List<Process> processList; //处理流程集合
+  final List<Process> processes; //处理流程集合
 
   const OrderDetail({
     this.orderId,
@@ -30,7 +32,7 @@ class OrderDetail extends Equatable {
     this.orderStateStr,
     this.alarmTypeStr,
     this.alarmRemark,
-    this.processList,
+    this.processes,
   });
 
   @override
@@ -46,10 +48,15 @@ class OrderDetail extends Equatable {
         orderStateStr,
         alarmTypeStr,
         alarmRemark,
-        processList,
+        processes,
       ];
 
-  static OrderDetail fromJson(dynamic json) {
+  factory OrderDetail.fromJson(Map<String, dynamic> json) =>
+      _$OrderDetailFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OrderDetailToJson(this);
+
+/*  static OrderDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return OrderDetail(
         orderId: '-',
@@ -112,5 +119,5 @@ class OrderDetail extends Equatable {
         processList: Process.fromJsonArray(json['processes']),
       );
     }
-  }
+  }*/
 }

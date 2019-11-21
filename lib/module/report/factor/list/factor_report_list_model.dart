@@ -1,10 +1,13 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'factor_report_list_model.g.dart';
 
 //因子异常申报列表
+@JsonSerializable()
 class FactorReport extends Equatable {
   final String reportId; //申报单ID
   final String enterName; //企业名称
@@ -14,7 +17,8 @@ class FactorReport extends Equatable {
   final String startTimeStr; //开始时间
   final String endTimeStr; //结束时间
   final String reportTimeStr; //申报时间
-  final List<Label> labelList; //标签集合
+  final String factorCodeStr; //异常因子
+  //final List<Label> labelList; //标签集合
 
   const FactorReport({
     this.reportId,
@@ -25,7 +29,8 @@ class FactorReport extends Equatable {
     this.startTimeStr,
     this.endTimeStr,
     this.reportTimeStr,
-    this.labelList,
+    this.factorCodeStr,
+    //this.labelList,
   });
 
   @override
@@ -38,17 +43,29 @@ class FactorReport extends Equatable {
         startTimeStr,
         endTimeStr,
         reportTimeStr,
-        labelList,
+        factorCodeStr,
+        //labelList,
       ];
 
-  static FactorReport fromJson(dynamic json) {
+  List<Label> get labelList{
+    return TextUtil.isEmpty(factorCodeStr)
+        ? const []
+        : _getLabelList(factorCodeStr);
+  }
+
+  factory FactorReport.fromJson(Map<String, dynamic> json) =>
+      _$FactorReportFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FactorReportToJson(this);
+
+  /*static FactorReport fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return FactorReport(
         reportId: json['stopApplyId'].toString(),
         enterName: json['enterpriseName'],
         monitorName: json['disMonitorName'],
         alarmTypeStr: json['stopTypeStr'],
-        districtName: '-',
+        districtName: json['cityName']+json['areaName'],
         startTimeStr: json['startTimeStr'],
         endTimeStr: json['endTimeStr'],
         reportTimeStr: json['applayTimeStr'],
@@ -69,7 +86,7 @@ class FactorReport extends Equatable {
             : _getLabelList(json['factorCodeStr']),
       );
     }
-  }
+  }*/
 
   //将异常因子string转化成List
   static List<Label> _getLabelList(String string) {

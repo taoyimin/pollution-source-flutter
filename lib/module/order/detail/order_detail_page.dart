@@ -177,13 +177,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   imagePath: 'assets/images/icon_order_process.png',
                 ),
                 Gaps.vGap10,
-                orderDetail.processList.length == 0
+                orderDetail.processes.length == 0
                     ? const Text(
                         '没有相关流程信息',
                         style: TextStyle(fontSize: 13),
                       )
                     : ListView.builder(
-                        itemCount: orderDetail.processList.length,
+                        itemCount: orderDetail.processes.length,
                         shrinkWrap: true,
                         primary: false,
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -200,10 +200,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       child: LeftLineWidget(
                                           index != 0,
                                           index !=
-                                              orderDetail.processList.length -
+                                              orderDetail.processes.length -
                                                   1,
                                           index ==
-                                              orderDetail.processList.length -
+                                              orderDetail.processes.length -
                                                   1),
                                     ),
                                     Expanded(
@@ -215,14 +215,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              orderDetail.processList[index]
+                                              orderDetail.processes[index]
                                                   .operateTypeStr,
                                               style:
                                                   const TextStyle(fontSize: 15),
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             Text(
-                                              orderDetail.processList[index]
+                                              orderDetail.processes[index]
                                                   .operateTimeStr,
                                               style: const TextStyle(
                                                   fontSize: 12,
@@ -242,7 +242,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       left: BorderSide(
                                         width: 2,
                                         color: index ==
-                                                orderDetail.processList.length -
+                                                orderDetail.processes.length -
                                                     1
                                             ? Colors.transparent
                                             : Colours.divider_color,
@@ -257,11 +257,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        "操作人：${orderDetail.processList[index].operatePerson}",
+                                        "操作人：${orderDetail.processes[index].operatePerson}",
                                         style:const TextStyle(fontSize: 12),
                                       ),
                                       Text(
-                                        "操作描述：${orderDetail.processList[index].operateDesc}",
+                                        "操作描述：${orderDetail.processes[index].operateDesc}",
                                         style:const TextStyle(fontSize: 12),
                                       ),
                                       Gaps.vGap3,
@@ -270,7 +270,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             CrossAxisAlignment.start,
                                         children: () {
                                           return orderDetail
-                                              .processList[index].attachmentList
+                                              .processes[index].attachments
                                               .map((attachment) {
                                             return AttachmentWidget(
                                               attachment: attachment,

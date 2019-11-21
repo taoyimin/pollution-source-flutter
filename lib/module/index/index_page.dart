@@ -6,6 +6,8 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pollution_source/module/discharge/list/discharge_list_bloc.dart';
+import 'package:pollution_source/module/discharge/list/discharge_list_page.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
 import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
@@ -1012,8 +1014,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(monitorType: 'outletType2'),
+                          builder: (context) => DischargeListBloc(),
+                          child:
+                              DischargeListPage(dischargeType: 'outletType2'),
                         );
                       },
                     ),
@@ -1030,8 +1033,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(monitorType: 'outletType3'),
+                          builder: (context) => DischargeListBloc(),
+                          child:
+                              DischargeListPage(dischargeType: 'outletType3'),
                         );
                       },
                     ),
@@ -1129,9 +1133,9 @@ class RainEnterStatisticsWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(
-                            monitorType: 'outletType1',
+                          builder: (context) => DischargeListBloc(),
+                          child: DischargeListPage(
+                            dischargeType: 'outletType1',
                           ),
                         );
                       },
@@ -1605,13 +1609,13 @@ class SimplePieChart extends StatelessWidget {
   static List<charts.Series<LinearAlarms, String>> _createSampleData() {
     final data = [
       new LinearAlarms(
-          "待处理            92个", 92, charts.Color.fromHex(code: "#4DA7F8")),
+          "待处理            92*个", 92, charts.Color.fromHex(code: "#4DA7F8")),
       new LinearAlarms(
-          "待审核            123个", 123, charts.Color.fromHex(code: "#F1BE43")),
+          "待审核            123*个", 123, charts.Color.fromHex(code: "#F1BE43")),
       new LinearAlarms(
-          "审核不通过    42个", 42, charts.Color.fromHex(code: "#E9776F")),
+          "审核不通过    42*个", 42, charts.Color.fromHex(code: "#E9776F")),
       new LinearAlarms(
-          "已办结            14个", 14, charts.Color.fromHex(code: "#88BF59")),
+          "已办结            14*个", 14, charts.Color.fromHex(code: "#88BF59")),
     ];
 
     return [

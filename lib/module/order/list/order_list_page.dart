@@ -81,7 +81,8 @@ class _OrderListPageState extends State<OrderListPage>
                 areaCode = areaId;
               },
               popupMenuButton: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                itemBuilder: (BuildContext context) =>
+                <PopupMenuItem<String>>[
                   UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
                   UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
                   UIUtils.getSelectView(Icons.cast_connected, '扫一扫码', 'C'),

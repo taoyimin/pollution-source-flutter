@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
-import 'package:pollution_source/res/constant.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'discharge_detail_model.g.dart';
 
 //排口详情
+@JsonSerializable()
 class DischargeDetail extends Equatable {
   final String dischargeId; //排口ID
   final String enterId; //企业ID
@@ -63,7 +65,12 @@ class DischargeDetail extends Equatable {
         factorReportTotalCount,
       ];
 
-  static DischargeDetail fromJson(dynamic json) {
+  factory DischargeDetail.fromJson(Map<String, dynamic> json) =>
+      _$DischargeDetailFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DischargeDetailToJson(this);
+
+  /*static DischargeDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return DischargeDetail(
         dischargeId: '-',
@@ -105,5 +112,5 @@ class DischargeDetail extends Equatable {
         factorReportTotalCount: json['factorReportTotalCount'],
       );
     }
-  }
+  }*/
 }

@@ -101,7 +101,7 @@ class _LicenseListPageState extends State<LicenseListPage>
         (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: InkWellButton(
               onTap: () {
                 /*Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -117,18 +117,20 @@ class _LicenseListPageState extends State<LicenseListPage>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    image: DecorationImage(image: AssetImage('assets/images/button_bg_lightblue.png'), fit: BoxFit.fill),
                     boxShadow: [
                       UIUtils.getBoxShadow(),
                     ],
+                    borderRadius: BorderRadius.circular(5)
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '${licenseList[index].enterName}',
+                        '${licenseList[index].issueUnitStr}',
                         style: const TextStyle(
                           fontSize: 15,
+                          color: Colors.white,
                         ),
                       ),
                       Gaps.vGap6,

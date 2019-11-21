@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'factor_report_detail_model.g.dart';
 
 //异常申报单详情
+@JsonSerializable()
 class FactorReportDetail extends Equatable {
   final String reportId; //排口异常申报ID
   final String enterId; //企业ID
@@ -20,7 +22,7 @@ class FactorReportDetail extends Equatable {
   final String alarmTypeStr; //报警类型
   final String exceptionReason; //异常原因
   final String reviewOpinion; //审核意见
-  final List<Attachment> attachmentList; //证明材料
+  final List<Attachment> attachments; //证明材料
 
   const FactorReportDetail({
     this.reportId,
@@ -38,7 +40,7 @@ class FactorReportDetail extends Equatable {
     this.alarmTypeStr,
     this.exceptionReason,
     this.reviewOpinion,
-    this.attachmentList,
+    this.attachments,
   });
 
   @override
@@ -58,10 +60,14 @@ class FactorReportDetail extends Equatable {
         alarmTypeStr,
         exceptionReason,
         reviewOpinion,
-        attachmentList,
+        attachments,
       ];
 
-  static FactorReportDetail fromJson(dynamic json) {
+  factory FactorReportDetail.fromJson(Map<String, dynamic> json) => _$FactorReportDetailFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FactorReportDetailToJson(this);
+
+/*  static FactorReportDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return FactorReportDetail(
         reportId: json['stopApply']['stopApplyId'].toString(),
@@ -72,7 +78,7 @@ class FactorReportDetail extends Equatable {
         enterAddress: '-',
         dischargeName: json['stopApply']['disOutName'],
         monitorName: json['stopApply']['disMonitorName'],
-        districtName: '-',
+        districtName: json['cityName']+json['areaName'],
         reportTimeStr: json['stopApply']['applayTimeStr'],
         startTimeStr: json['stopApply']['startTimeStr'],
         endTimeStr: json['stopApply']['endTimeStr'],
@@ -106,5 +112,5 @@ class FactorReportDetail extends Equatable {
         attachmentList: Attachment.fromJsonArray(json['attachments']),
       );
     }
-  }
+  }*/
 }

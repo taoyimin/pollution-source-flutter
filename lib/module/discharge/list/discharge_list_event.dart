@@ -20,11 +20,19 @@ class DischargeListLoad extends DischargeListEvent {
   //企业ID
   final String enterId;
 
+  //排口类型
+  final String dischargeType;
+
+  //状态
+  final String state;
+
   const DischargeListLoad({
     this.isRefresh = false,
     this.enterName = '',
     this.areaCode = '',
     this.enterId = '',
+    this.dischargeType = '',
+    this.state = '',
   });
 
   @override
@@ -33,5 +41,7 @@ class DischargeListLoad extends DischargeListEvent {
         enterName,
         areaCode,
         enterId,
+        dischargeType,
+        state,
       ];
 }

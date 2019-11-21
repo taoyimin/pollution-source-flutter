@@ -62,8 +62,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               if (state is MonitorDetailLoaded) {
                 enterName = state.monitorDetail.enterName;
                 enterAddress = state.monitorDetail.enterAddress;
-                final bool isCurved = state.monitorDetail.isCurved;
-                final bool showDotData = state.monitorDetail.showDotData;
+                final bool isCurved = state.isCurved;
+                final bool showDotData = state.showDotData;
                 popupMenuButton = PopupMenuButton<String>(
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuItem<String>>[
@@ -108,7 +108,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               } else if (state is MonitorDetailError) {
                 return PageErrorWidget(errorMessage: state.errorMessage);
               } else if (state is MonitorDetailLoaded) {
-                return _buildPageLoadedDetail(state.monitorDetail);
+                return _buildPageLoadedDetail(state.monitorDetail, state.isCurved, state.showDotData);
               } else {
                 return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
               }
@@ -119,7 +119,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(MonitorDetail monitorDetail) {
+  Widget _buildPageLoadedDetail(MonitorDetail monitorDetail, bool isCurved, bool showDotData) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -239,8 +239,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 ),
                 LineChartWidget(
                   chartDataList: monitorDetail.chartDataList,
-                  isCurved: monitorDetail.isCurved,
-                  showDotData: monitorDetail.showDotData,
+                  isCurved: isCurved,
+                  showDotData: showDotData,
                 ),
               ],
             ),
@@ -262,6 +262,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     InkWellButton5(
+                      ratio: 1.2,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -269,10 +270,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             builder: (context) {
                               return BlocProvider(
                                 builder: (context) => OrderListBloc(),
-                                child: OrderListPage(
-                                  state: '5',
-                                  monitorId: monitorDetail.monitorId,
-                                ),
+                                child: OrderListPage(state: '5', monitorId: monitorDetail.monitorId,),
                               );
                             },
                           ),
@@ -281,13 +279,14 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '已办结',
-                        content: '${monitorDetail.orderCompleteCount} ',
+                        content: '${monitorDetail.orderCompleteCount}',
                         imagePath:
-                            'assets/images/icon_alarm_manage_complete.png',
+                        'assets/images/icon_alarm_manage_complete.png',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
+                      ratio: 1.2,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -295,10 +294,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             builder: (context) {
                               return BlocProvider(
                                 builder: (context) => OrderListBloc(),
-                                child: OrderListPage(
-                                  state: '3',
-                                  monitorId: monitorDetail.monitorId,
-                                ),
+                                child: OrderListPage(monitorId: monitorDetail.monitorId,),
                               );
                             },
                           ),
@@ -306,32 +302,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       },
                       meta: Meta(
                         color: Color(0xFFFFB709),
-                        title: '待审核',
-                        content: '${monitorDetail.orderVerifyCount} ',
-                        imagePath: 'assets/images/icon_alarm_manage_review.png',
-                      ),
-                    ),
-                    Gaps.hGap10,
-                    InkWellButton5(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => OrderListBloc(),
-                                child: OrderListPage(
-                                  monitorId: monitorDetail.monitorId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      meta: Meta(
-                        color: Colors.green,
                         title: '全部',
-                        content: '${monitorDetail.orderTotalCount} ',
+                        content: '${monitorDetail.orderTotalCount}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
                       ),
                     ),

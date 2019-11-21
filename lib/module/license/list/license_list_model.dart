@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
-import 'package:pollution_source/res/constant.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'license_list_model.g.dart';
 
 //排污许可证列表
+@JsonSerializable()
 class License extends Equatable {
   final String licenseId; //排污许可证ID
   final String enterName; //企业名称
@@ -36,7 +38,12 @@ class License extends Equatable {
         licenseNumber,
       ];
 
-  static License fromJson(dynamic json) {
+  factory License.fromJson(Map<String, dynamic> json) =>
+      _$LicenseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LicenseToJson(this);
+
+  /*static License fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return License(
         licenseId: '-',
@@ -60,5 +67,5 @@ class License extends Equatable {
         licenseNumber: json['licenseNumber'],
       );
     }
-  }
+  }*/
 }

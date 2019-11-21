@@ -15,13 +15,25 @@ class MonitorDetailLoading extends MonitorDetailState {}
 
 //监控点详情加载完成的状态
 class MonitorDetailLoaded extends MonitorDetailState {
-  //监控点列表
+  //监控点详情
   final MonitorDetail monitorDetail;
 
-  const MonitorDetailLoaded({@required this.monitorDetail});
+  final bool isCurved;
+
+  final bool showDotData;
+
+  const MonitorDetailLoaded({
+    @required this.monitorDetail,
+    @required this.isCurved,
+    @required this.showDotData,
+  });
 
   @override
-  List<Object> get props => [monitorDetail];
+  List<Object> get props => [
+        monitorDetail,
+        isCurved,
+        showDotData,
+      ];
 }
 
 //监控点详情页没有数据的状态

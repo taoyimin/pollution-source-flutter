@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
-import 'package:pollution_source/res/constant.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'long_stop_report_list_model.g.dart';
 
 //长期停产异常申报列表
+@JsonSerializable()
 class LongStopReport extends Equatable {
   final String reportId; //申报单ID
   final String enterName; //企业名称
@@ -30,12 +32,17 @@ class LongStopReport extends Equatable {
         reportTimeStr,
       ];
 
-  static LongStopReport fromJson(dynamic json) {
+  factory LongStopReport.fromJson(Map<String, dynamic> json) =>
+      _$LongStopReportFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LongStopReportToJson(this);
+
+  /*static LongStopReport fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return LongStopReport(
         reportId: json['stopApplyId'].toString(),
         enterName: json['enterpriseName'],
-        districtName: '-',
+        districtName: json['cityName']+json['areaName'],
         startTimeStr: json['startTimeStr'],
         endTimeStr: json['endTimeStr'],
         reportTimeStr: json['applayTimeStr'],
@@ -50,5 +57,5 @@ class LongStopReport extends Equatable {
         reportTimeStr: json['reportTimeStr'],
       );
     }
-  }
+  }*/
 }

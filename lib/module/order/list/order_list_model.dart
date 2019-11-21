@@ -2,10 +2,13 @@ import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'order_list_model.g.dart';
 
 //报警管理单列表
+@JsonSerializable()
 class Order extends Equatable {
   final String orderId; //报警管理单ID
   final String enterName; //企业名称
@@ -14,7 +17,9 @@ class Order extends Equatable {
   final String districtName; //区域
   final String orderStateStr; //状态
   final String alarmRemark; //报警描述
-  final List<Label> labelList; //标签集合
+  final String alarmTypeStr; //报警类型
+
+  //final List<Label> labelList; //标签集合
 
   const Order({
     this.orderId,
@@ -24,34 +29,47 @@ class Order extends Equatable {
     this.districtName,
     this.orderStateStr,
     this.alarmRemark,
-    this.labelList,
+    this.alarmTypeStr,
+    //this.labelList,
   });
 
   @override
   List<Object> get props => [
-    orderId,
+        orderId,
         enterName,
         monitorName,
         alarmDateStr,
         districtName,
         orderStateStr,
         alarmRemark,
-        labelList,
+        alarmTypeStr,
+        //labelList,
       ];
 
-  static Order fromJson(dynamic json) {
+  List<Label> get labelList {
+    return TextUtil.isEmpty(alarmTypeStr)
+        ? const []
+        : _getLabelList(alarmTypeStr);
+  }
+
+  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OrderToJson(this);
+
+/*  static Order fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return Order(
         orderId: json['id'],
-        enterName: json['enterprisename'],
+        enterName: json['enterpriseName'],
         monitorName: json['disOutName'],
         alarmDateStr: '-',
         districtName: json['areaName'],
         orderStateStr: json['orderstate'],
         alarmRemark: json['alarmdesc'],
-        labelList: TextUtil.isEmpty(json['alarmtype'])
+        alarmTypeStr: json['alarmTypeStr'],
+        labelList: TextUtil.isEmpty(json['alarmType'])
             ? const []
-            : _getLabelList(json['alarmtype']),
+            : _getLabelList(json['alarmType']),
       );
     } else {
       return Order(
@@ -62,12 +80,13 @@ class Order extends Equatable {
         districtName: json['districtName'],
         orderStateStr: json['orderStateStr'],
         alarmRemark: json['alarmRemark'],
+        alarmTypeStr: json['alarmTypeStr'],
         labelList: TextUtil.isEmpty(json['alarmTypeStr'])
             ? const []
             : _getLabelList(json['alarmTypeStr']),
       );
     }
-  }
+  }*/
 
   //将报警类型string转化成List
   static List<Label> _getLabelList(String string) {
@@ -94,6 +113,11 @@ class Order extends Equatable {
               imagePath: 'assets/images/icon_alarm_type_device_offline.png',
               color: Colors.teal);
         case '无数据上传':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_type_no_upload.png',
+              color: Colors.orange);
+        case '联网异常':
           return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_no_upload.png',

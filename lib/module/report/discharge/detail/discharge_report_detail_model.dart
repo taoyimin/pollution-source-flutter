@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'discharge_report_detail_model.g.dart';
 
 //异常申报单详情
+@JsonSerializable()
 class DischargeReportDetail extends Equatable {
   final String reportId; //排口异常申报ID
   final String enterId; //企业ID
@@ -20,7 +22,7 @@ class DischargeReportDetail extends Equatable {
   final String stopTypeStr; //异常类型
   final String stopReason; //停产原因
   final String reviewOpinion; //审核意见
-  final List<Attachment> attachmentList; //证明材料
+  final List<Attachment> attachments; //证明材料
 
   const DischargeReportDetail({
     this.reportId,
@@ -38,7 +40,7 @@ class DischargeReportDetail extends Equatable {
     this.stopTypeStr,
     this.stopReason,
     this.reviewOpinion,
-    this.attachmentList,
+    this.attachments,
   });
 
   @override
@@ -58,10 +60,14 @@ class DischargeReportDetail extends Equatable {
         stopTypeStr,
         stopReason,
         reviewOpinion,
-        attachmentList,
+        attachments,
       ];
 
-  static DischargeReportDetail fromJson(dynamic json) {
+  factory DischargeReportDetail.fromJson(Map<String, dynamic> json) => _$DischargeReportDetailFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DischargeReportDetailToJson(this);
+
+/*  static DischargeReportDetail fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return DischargeReportDetail(
         reportId: json['stopApply']['stopApplyId'].toString(),
@@ -72,7 +78,7 @@ class DischargeReportDetail extends Equatable {
         enterAddress: '-',
         dischargeName: json['stopApply']['disOutName'],
         monitorName: json['stopApply']['disMonitorName'],
-        districtName: '-',
+        districtName: json['cityName']+json['areaName'],
         reportTimeStr: json['stopApply']['applayTimeStr'],
         startTimeStr: json['stopApply']['startTimeStr'],
         endTimeStr: json['stopApply']['endTimeStr'],
@@ -80,12 +86,12 @@ class DischargeReportDetail extends Equatable {
         stopReason: json['stopApply']['stopReason'],
         reviewOpinion: '-',
         attachmentList: Attachment.fromJsonArray(json['attach']),
-        /*attachmentList: [
+        */ /*attachmentList: [
           Attachment(fileName: "*文件名文件名.png", url: "*", size: 534345),
           Attachment(fileName: "*文件名文件名文件名.doc", url: "*", size: 5454),
           Attachment(fileName: "*文件文件名文件文件文件名.pdf", url: "*", size: 34534),
           Attachment(fileName: "*文件文件名文件文件名.psd", url: "*", size: 5354),
-        ],*/
+        ],*/ /*
       );
     } else {
       return DischargeReportDetail(
@@ -107,5 +113,5 @@ class DischargeReportDetail extends Equatable {
         attachmentList: Attachment.fromJsonArray(json['attachments']),
       );
     }
-  }
+  }*/
 }

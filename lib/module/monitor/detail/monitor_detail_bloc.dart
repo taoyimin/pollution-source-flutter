@@ -31,7 +31,11 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
       MonitorDetailLoad event) async* {
     try {
       final monitorDetail = await _getMonitorDetail(monitorId: event.monitorId);
-      yield MonitorDetailLoaded(monitorDetail: monitorDetail);
+      yield MonitorDetailLoaded(
+        monitorDetail: monitorDetail,
+        isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
+        showDotData: SpUtil.getBool(Constant.spShowDotData, defValue: true),
+      );
     } catch (e) {
       yield MonitorDetailError(
           errorMessage: ExceptionHandle.handleException(e).msg);
@@ -53,6 +57,8 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
       yield MonitorDetailLoaded(
         monitorDetail:
             currentState.monitorDetail.copyWith(chartDataList: chartDataList),
+        isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
+        showDotData: SpUtil.getBool(Constant.spShowDotData, defValue: true),
       );
     }
   }
@@ -62,24 +68,25 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
     final currentState = state;
     if (currentState is MonitorDetailLoaded) {
       yield MonitorDetailLoaded(
-        monitorDetail: currentState.monitorDetail
-            .copyWith(isCurved: event.isCurved, showDotData: event.showDotData),
+        monitorDetail: currentState.monitorDetail,
+        isCurved: event.isCurved,
+        showDotData: event.showDotData,
       );
     }
   }
 
   //获取监控点详情
   Future<MonitorDetail> _getMonitorDetail({@required monitorId}) async {
-    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
+    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.monitorDetail,
         queryParameters: {'monitor_id': monitorId},
       );
       return MonitorDetail.fromJson(response.data[Constant.responseDataKey]);
-    }else{
+    } else {
       Response response = await PythonDioUtils.instance.getDio().get(
-        '${HttpApiPython.monitors}/$monitorId',
-      );
+            '${HttpApiPython.monitors}/$monitorId',
+          );
       return MonitorDetail.fromJson(response.data);
     }
   }

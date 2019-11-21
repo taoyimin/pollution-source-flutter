@@ -2,27 +2,30 @@ import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/res/constant.dart';
+
+part 'enter_list_model.g.dart';
 
 //企业列表
+@JsonSerializable()
 class Enter extends Equatable {
   final String enterId;  //企业id
   final String enterName; //企业名
   final String enterAddress;  //企业地址
-  final bool isImportant; //是否是重点企业
-  final String imagePath; //企业logo
+  final String attentionLevel; //是否是重点企业 0:非重点 1:重点
   final String industryTypeStr;  //行业类别
-  final List<Label> labelList;  //企业标签集合
+  final String enterType;  //企业类型
+  //final List<Label> labelList;  //企业标签集合
 
   const Enter({
     this.enterId,
     this.enterName,
     this.enterAddress,
-    this.isImportant,
-    this.imagePath,
+    this.attentionLevel,
     this.industryTypeStr,
-    this.labelList,
+    this.enterType,
+    //this.labelList,
   });
 
   @override
@@ -30,13 +33,34 @@ class Enter extends Equatable {
     enterId,
     enterName,
     enterAddress,
-    isImportant,
-    imagePath,
+    attentionLevel,
     industryTypeStr,
-    labelList,
+    enterType,
+    //labelList,
   ];
 
-  static Enter fromJson(dynamic json) {
+  //企业图标
+  String get imagePath{
+    return _getEnterTypeImage(enterType);
+  }
+
+  //是否是重点企业
+  bool get isImportant{
+    return attentionLevel == '1' ? true : false;
+  }
+
+  List<Label> get labelList{
+    return TextUtil.isEmpty(enterType)
+        ? const []
+        : _getLabelList2(enterType);
+  }
+
+  factory Enter.fromJson(Map<String, dynamic> json) =>
+      _$EnterFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EnterToJson(this);
+
+  /*static Enter fromJson(dynamic json) {
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       return Enter(
         enterId: '${json['enter_id']}',
@@ -62,7 +86,7 @@ class Enter extends Equatable {
             : _getLabelList2(json['enterType']),
       );
     }
-  }
+  }*/
 
   //根据企业类型获取图片
   static String _getEnterTypeImage(String enterType) {
