@@ -249,8 +249,8 @@ class _LoginPageState extends State<LoginPage> {
               SpUtil.putBool(Constant.spJavaApi,
                   !SpUtil.getBool(Constant.spJavaApi, defValue: true));
               SpUtil.getBool(Constant.spJavaApi)
-                  ? Toast.show('使用Java后台，重启后生效')
-                  : Toast.show('使用Python后台，重启后生效');
+                  ? Toast.show('使用Java后台')
+                  : Toast.show('使用Python后台');
             },
             child: Image.asset(
               "assets/images/login_logo.png",
