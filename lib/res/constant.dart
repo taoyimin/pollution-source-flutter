@@ -30,9 +30,9 @@ class Constant {
   static const String waterWaterKey = '33';
   static const String metalWaterKey = '34';
   static const String pollutionEnterStatisticsKey = '40';
+  static const String rainEnterStatisticsKey = '50';
+  static const String todoTaskStatisticsKey = '60';
   static const String onlineMonitorStatisticsKey = '70';
-  static const String rainEnterStatisticsKey = '80';
-  static const String todoTaskStatisticsKey = '80';
   static const String comprehensiveStatisticsKey = '80';
 }
 
