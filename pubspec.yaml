@@ -68,6 +68,12 @@ dependencies:
   flustars: 0.2.6+1
   # Toast插件 https://github.com/OpenFlutter/flutter_oktoast
   oktoast: ^2.2.0
+  # 选择时间插件 https://github.com/Realank/flutter_datetime_picker
+  # flutter_datetime_picker: ^1.2.8
+  # 选择时间插件 https://github.com/dylanwuzh/flutter-cupertino-date-picker/blob/master/README_zh-cn.md
+  flutter_cupertino_date_picker: ^1.0.12
+  # 下拉筛选菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
+  gzx_dropdown_menu : ^1.0.1
   # 扫码 https://github.com/apptreesoftware/flutter_barcode_reader
   barcode_scan:
     git:
