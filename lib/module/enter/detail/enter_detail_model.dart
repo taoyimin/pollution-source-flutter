@@ -21,9 +21,7 @@ class EnterDetail extends Equatable {
   final String orderCompleteCount; //报警管理单已办结个数
   final String orderTotalCount; //报警管理单总数
   final String longStopReportTotalCount; //长期停产申报总数
-  //final String monitorReportValid; //排口异常申报有效数
   final String dischargeReportTotalCount; //排口异常申报总数
-  //final String factorReportValid; //因子异常申报有效数
   final String factorReportTotalCount; //因子异常申报总数
   final String monitorTotalCount; //监控点总数
   final String monitorOnlineCount; //监控点在线数

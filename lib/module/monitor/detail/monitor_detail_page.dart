@@ -90,7 +90,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 );
               }
               return DetailHeaderWidget(
-                title: '监控点详情',
+                title: '监测数据详情',
                 subTitle1: '$enterName',
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/monitor_detail_bg_image.svg',

@@ -15,9 +15,7 @@ class Monitor extends Equatable {
   final String monitorName; //监控点名称
   final String monitorAddress; //监控点地址
   final String monitorType; //监控点类型
-  //final String imagePath; //监控点logo
   final String monitorCategoryStr; //监控点类别
-  //final List<Label> labelList; //标签集合
 
   const Monitor({
     this.monitorId,

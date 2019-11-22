@@ -27,8 +27,6 @@ class MonitorDetail extends Equatable {
   final String orderTotalCount; //报警管理单全部数量
   final String dischargeReportTotalCount; //排口异常申报单全部数量
   final String factorReportTotalCount; //因子异常申报单全部数量
-  //final bool isCurved; //图表是否为曲线
-  //final bool showDotData; //图表是否显示点
   final List<ChartData> chartDataList; //图表数据
 
   const MonitorDetail({

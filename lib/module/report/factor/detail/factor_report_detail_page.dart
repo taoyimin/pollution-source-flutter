@@ -52,7 +52,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 enterAddress = state.reportDetail.enterAddress;
               }
               return DetailHeaderWidget(
-                title: '排口异常申报详情',
+                title: '因子异常申报详情',
                 subTitle1: '$enterName',
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/report_detail_bg_image.svg',

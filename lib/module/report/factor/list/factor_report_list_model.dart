@@ -18,7 +18,6 @@ class FactorReport extends Equatable {
   final String endTimeStr; //结束时间
   final String reportTimeStr; //申报时间
   final String factorCodeStr; //异常因子
-  //final List<Label> labelList; //标签集合
 
   const FactorReport({
     this.reportId,

@@ -19,8 +19,6 @@ class Order extends Equatable {
   final String alarmRemark; //报警描述
   final String alarmTypeStr; //报警类型
 
-  //final List<Label> labelList; //标签集合
-
   const Order({
     this.orderId,
     this.enterName,

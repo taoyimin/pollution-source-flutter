@@ -58,9 +58,9 @@ class Meta extends Equatable {
 //附件类
 @JsonSerializable()
 class Attachment extends Equatable {
-  final String fileName;
-  final String url;
-  final int size;
+  final String fileName;  //文件名
+  final String url;   //完整路径
+  final int size;   //附件大小
 
   const Attachment({
     @required this.fileName,
@@ -128,11 +128,11 @@ class Attachment extends Equatable {
 //处理流程
 @JsonSerializable()
 class Process extends Equatable {
-  final String operateTypeStr;
-  final String operatePerson;
-  final String operateTimeStr;
-  final String operateDesc;
-  final List<Attachment> attachments;
+  final String operateTypeStr;  //操作类型
+  final String operatePerson;   //操作人
+  final String operateTimeStr;  //操作时间
+  final String operateDesc;   //操作描述
+  final List<Attachment> attachments; //附件
 
   const Process({
     @required this.operateTypeStr,
@@ -174,8 +174,8 @@ class Process extends Equatable {
 
 //坐标点信息 用于记录因子在某个时间的监测值
 class PointData extends Equatable {
-  final double x;
-  final double y;
+  final double x; //时间戳
+  final double y; //监测值
 
   const PointData({
     @required this.x,

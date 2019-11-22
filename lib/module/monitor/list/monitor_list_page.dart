@@ -75,7 +75,7 @@ class _MonitorListPageState extends State<MonitorListPage>
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
             ListHeaderWidget(
-              title: '监控点列表',
+              title: '监测数据列表',
               subtitle: '展示监控点列表，点击列表项查看该监控点的详细信息',
               background: 'assets/images/button_bg_red.png',
               image: 'assets/images/monitor_list_bg_image.png',
