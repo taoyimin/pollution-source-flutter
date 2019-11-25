@@ -487,16 +487,18 @@ class InkWellButton5 extends StatelessWidget {
 class InkWellButton6 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
+  final double height;
 
   InkWellButton6({
     @required this.meta,
     @required this.onTap,
+    this.height = 100,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: height,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(meta.backgroundPath),
@@ -512,7 +514,7 @@ class InkWellButton6 extends StatelessWidget {
             right: -20,
             child: Image.asset(
               meta.imagePath,
-              height: 100,
+              height: height,
             ),
           ),
           Positioned(
@@ -711,6 +713,57 @@ class InkWellButton8 extends StatelessWidget {
   }
 }
 
+//应用页功能按钮 左上标题 左下内容 右边图标 默认一行两个
+class InkWellButton9 extends StatelessWidget {
+  final Meta meta;
+  final GestureTapCallback onTap;
+
+  InkWellButton9({
+    @required this.meta,
+    @required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWellButton(
+        onTap: onTap,
+        children: <Widget>[
+          Padding(
+            padding:const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${meta.title}',
+                        style: const TextStyle(
+                            fontSize: 16, color: Colours.primary_text),
+                      ),
+                      Text(
+                        '${meta.content}',
+                        style: const TextStyle(
+                            fontSize: 13, color: Colours.secondary_text),
+                      ),
+                    ],
+                  ),
+                ),
+                Image.asset(
+                  '${meta.imagePath}',
+                  height: 40,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 //list展示信息 展示标题下方的信息
 class ListTileWidget extends StatelessWidget {
   final String content;
@@ -868,10 +921,12 @@ class LabelWrapWidget extends StatelessWidget {
 //详情页图片标题widget
 class ImageTitleWidget extends StatelessWidget {
   final String title;
+  final String content;
   final String imagePath;
 
   ImageTitleWidget({
     @required this.title,
+    this.content = '',
     @required this.imagePath,
   });
 
@@ -892,6 +947,14 @@ class ImageTitleWidget extends StatelessWidget {
             fontSize: 16,
           ),
         ),
+        Expanded(
+          flex: 1,
+          child: Text(
+            content,
+            textAlign: TextAlign.right,
+            style: TextStyle(fontSize: 13),
+          ),
+        ),
       ],
     );
   }
@@ -900,22 +963,13 @@ class ImageTitleWidget extends StatelessWidget {
 //详情页基本信息展示widget
 class IconBaseInfoWidget extends StatelessWidget {
   final IconData icon;
-  final String title;
   final String content;
   final int flex;
-  final TextAlign contentTextAlign;
-  final double contentMarginTop;
-
-  //final bool isTel;
 
   IconBaseInfoWidget({
     @required this.icon,
-    @required this.title,
     @required this.content,
     this.flex = 1,
-    this.contentTextAlign = TextAlign.right,
-    this.contentMarginTop = 0,
-    //this.isTel = false,
   });
 
   @override
@@ -927,7 +981,47 @@ class IconBaseInfoWidget extends StatelessWidget {
         children: <Widget>[
           //加一个padding使图标和后面内容对齐
           Padding(
-            padding: EdgeInsets.only(top: 2),
+            padding:const EdgeInsets.only(top: 2),
+            child: Icon(
+              icon,
+              size: 14,
+            ),
+          ),
+          Gaps.hGap3,
+          Text(content, style: const TextStyle(fontSize: 13)),
+        ],
+      ),
+    );
+  }
+}
+
+/*class IconBaseInfoWidget extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String content;
+  final int flex;
+  final TextAlign contentTextAlign;
+  final double contentMarginTop;
+
+  IconBaseInfoWidget({
+    @required this.icon,
+    @required this.title,
+    @required this.content,
+    this.flex = 1,
+    this.contentTextAlign = TextAlign.left,
+    this.contentMarginTop = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: flex,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          //加一个padding使图标和后面内容对齐
+          Padding(
+            padding:const EdgeInsets.only(top: 2),
             child: Icon(
               icon,
               size: 14,
@@ -935,13 +1029,13 @@ class IconBaseInfoWidget extends StatelessWidget {
           ),
           Gaps.hGap3,
           Text(title, style: const TextStyle(fontSize: 13)),
-          Gaps.hGap10,
+          //Gaps.hGap10,
           Expanded(
             //当content是纯数字或字母时无法和title对齐，所以加一个padding
             child: Padding(
               padding: EdgeInsets.only(top: contentMarginTop),
               child: Text(
-                content,
+                '：$content',
                 style: const TextStyle(
                   fontSize: 13,
                 ),
@@ -949,38 +1043,22 @@ class IconBaseInfoWidget extends StatelessWidget {
               ),
             ),
           ),
-          /*Expanded(
-            child: isTel
-                ? InkWell(
-                    onTap: () => Utils.launchTelURL("tel:$content"),
-                    child: Text(
-                      content,
-                      style: const TextStyle(fontSize: 13, color: Colors.blue),
-                      textAlign: contentTextAlign,
-                    ),
-                  )
-                : Text(
-                    content,
-                    style: const TextStyle(
-                      fontSize: 13,
-                    ),
-                    textAlign: contentTextAlign,
-                  ),
-          ),*/
         ],
       ),
     );
   }
-}
+}*/
 
 //详情页联系人信息widget
 class ContactsWidget extends StatelessWidget {
   final String contactsName;
   final String contactsTel;
+  final String imagePath;
 
   ContactsWidget({
     @required this.contactsName,
     @required this.contactsTel,
+    @required this.imagePath,
   });
 
   @override
@@ -989,22 +1067,22 @@ class ContactsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 50,
-          width: 50,
+          height: 43,
+          width: 43,
           child: CircleAvatar(
-            backgroundImage: AssetImage("assets/images/mine_user_header.png"),
+            backgroundImage: AssetImage(imagePath),
           ),
         ),
         Gaps.hGap10,
         Container(
-          height: 50,
+          height: 43,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 contactsName,
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 15),
               ),
               Text(contactsTel),
             ],
