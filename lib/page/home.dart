@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pollution_source/module/application/application_page.dart';
+import 'package:pollution_source/module/application/admin_application_page.dart';
+import 'package:pollution_source/module/enter/list/enter_list_bloc.dart';
+import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/index/index.dart';
 
 import 'mine.dart';
@@ -22,7 +24,11 @@ class _HomePageState extends State<HomePage> {
       builder: (context) => IndexBloc(),
       child: IndexPage(),
     ),
-    ApplicationPage(),
+    AdminApplicationPage(),
+    BlocProvider(
+      builder: (context) => EnterListBloc(),
+      child: EnterListPage(automaticallyImplyLeading: false,),
+    ),
     MinePage(),
   ];
 
@@ -48,6 +54,7 @@ class _HomePageState extends State<HomePage> {
         physics: NeverScrollableScrollPhysics(), // 禁止滑动
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -56,6 +63,10 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.apps),
             title: Text('应用'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            title: Text('企业'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
