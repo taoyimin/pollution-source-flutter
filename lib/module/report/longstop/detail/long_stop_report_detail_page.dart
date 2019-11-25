@@ -97,10 +97,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '所属区域',
-                      content: '${reportDetail.districtName}',
+                      content: '所属区域：${reportDetail.districtName}',
                       icon: Icons.location_on,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -108,11 +106,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '申报时间',
-                      content: '${reportDetail.reportTimeStr}',
+                      content: '申报时间：${reportDetail.reportTimeStr}',
                       icon: Icons.date_range,
-                      contentTextAlign: TextAlign.left,
-                      contentMarginTop: 2,
                     ),
                   ],
                 ),
@@ -120,11 +115,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '开始时间',
-                      content: '${reportDetail.startTimeStr}',
+                      content: '开始时间：${reportDetail.startTimeStr}',
                       icon: Icons.date_range,
-                      contentTextAlign: TextAlign.left,
-                      contentMarginTop: 2,
                     ),
                   ],
                 ),
@@ -132,11 +124,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '结束时间',
-                      content: '${reportDetail.endTimeStr}',
+                      content: '结束时间：${reportDetail.endTimeStr}',
                       icon: Icons.date_range,
-                      contentTextAlign: TextAlign.left,
-                      contentMarginTop: 2,
                     ),
                   ],
                 ),
@@ -144,10 +133,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '备注',
-                      content: '${reportDetail.remark}',
+                      content: '备注：${reportDetail.remark}',
                       icon: Icons.receipt,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),

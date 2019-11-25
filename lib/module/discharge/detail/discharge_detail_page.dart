@@ -107,15 +107,13 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排口名称',
-                      content: '${dischargeDetail.dischargeName}',
+                      content: '排口名称：${dischargeDetail.dischargeName}',
                       icon: Icons.linked_camera,
                       flex: 6,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      title: '排口类型',
-                      content: '${dischargeDetail.dischargeTypeStr}',
+                      content: '排口类型：${dischargeDetail.dischargeTypeStr}',
                       icon: Icons.videocam,
                       flex: 5,
                     ),
@@ -125,15 +123,13 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排放规律',
-                      content: '${dischargeDetail.dischargeRuleStr}',
+                      content: '排放规律：${dischargeDetail.dischargeRuleStr}',
                       icon: Icons.insert_comment,
                       flex: 6,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      title: '排口类别',
-                      content: '${dischargeDetail.dischargeCategoryStr}',
+                      content: '排口类别：${dischargeDetail.dischargeCategoryStr}',
                       icon: Icons.category,
                       flex: 5,
                     ),
@@ -143,15 +139,13 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排口编号',
-                      content: '${dischargeDetail.dischargeNumber}',
+                      content: '排口编号：${dischargeDetail.dischargeNumber}',
                       icon: Icons.format_list_numbered,
                       flex: 6,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      title: '排放类型',
-                      content: '${dischargeDetail.outTypeStr}',
+                      content: '排放类型：${dischargeDetail.outTypeStr}',
                       icon: Icons.nature,
                       flex: 5,
                     ),
@@ -161,10 +155,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '标志牌安装形式',
-                      content: '${dischargeDetail.denoterInstallTypeStr}',
+                      content: '标志牌安装形式：${dischargeDetail.denoterInstallTypeStr}',
                       icon: Icons.business_center,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -172,10 +164,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排口简称',
-                      content: '${dischargeDetail.dischargeShortName}',
+                      content: '排口简称：${dischargeDetail.dischargeShortName}',
                       icon: Icons.view_compact,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -183,10 +173,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排口位置',
-                      content: '${dischargeDetail.dischargeAddress}',
+                      content: '排口位置：${dischargeDetail.dischargeAddress}',
                       icon: Icons.location_on,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -194,10 +182,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排口经度',
-                      content: '${dischargeDetail.longitude}',
+                      content: '排口经度：${dischargeDetail.longitude}',
                       icon: Icons.location_on,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -205,10 +191,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排口纬度',
-                      content: '${dischargeDetail.latitude}',
+                      content: '排口纬度：${dischargeDetail.latitude}',
                       icon: Icons.location_on,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),

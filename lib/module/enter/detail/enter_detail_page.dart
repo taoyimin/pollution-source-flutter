@@ -113,15 +113,13 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '关注程度',
-                      content: '${enterDetail.attentionLevelStr}',
+                      content: '关注程度：${enterDetail.attentionLevelStr}',
                       icon: Icons.star,
                       flex: 4,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      title: '所属区域',
-                      content: '${enterDetail.districtName}',
+                      content: '所属区域：${enterDetail.districtName}',
                       icon: Icons.location_on,
                       flex: 5,
                     ),
@@ -131,10 +129,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '行业类别',
-                      content: '${enterDetail.industryTypeStr}',
+                      content: '行业类别：${enterDetail.industryTypeStr}',
                       icon: Icons.work,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -142,11 +138,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '信用代码',
-                      content: '${enterDetail.creditCode}',
+                      content: '信用代码：${enterDetail.creditCode}',
                       icon: Icons.mail,
-                      contentTextAlign: TextAlign.left,
-                      contentMarginTop: 2,
                     ),
                   ],
                 ),
@@ -173,6 +166,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     child: ContactsWidget(
                       contactsName: '企业电话',
                       contactsTel: '${enterDetail.enterTel}',
+                      imagePath: 'assets/images/enter_enter_tel_header.png',
                     ),
                   ),
                   Gaps.vGap10,
@@ -181,6 +175,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     child: ContactsWidget(
                       contactsName: '${enterDetail.contactPerson}(联系人)',
                       contactsTel: '${enterDetail.contactPersonTel}',
+                      imagePath: 'assets/images/enter_contacts_tel_header.png',
                     ),
                   ),
                   Gaps.vGap10,
@@ -189,6 +184,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     child: ContactsWidget(
                       contactsName: '${enterDetail.legalPerson}(法人)',
                       contactsTel: '${enterDetail.legalPersonTel}',
+                      imagePath: 'assets/images/enter_legal_tel_header.png',
                     ),
                   ),
                 ],
@@ -563,7 +559,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
             ),
           ),
           //其他信息
-          Padding(
+          /*Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -611,7 +607,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 ),
               ],
             ),
-          ),
+          ),*/
         ],
       ),
     );

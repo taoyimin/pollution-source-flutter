@@ -108,17 +108,15 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '排口名称',
                       content:
-                      '${reportDetail.dischargeName}',
+                      '排口名称：${reportDetail.dischargeName}',
                       icon: Icons.nature,
                       flex: 9,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      title: '申报时间',
                       content:
-                      '${reportDetail.reportTimeStr}',
+                      '申报时间：${reportDetail.reportTimeStr}',
                       icon: Icons.date_range,
                       flex: 10,
                     ),
@@ -128,15 +126,13 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '监控点名',
-                      content: '${reportDetail.monitorName}',
+                      content: '监控点名：${reportDetail.monitorName}',
                       icon: Icons.linked_camera,
                       flex: 9,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      title: '所属区域',
-                      content: '${reportDetail.districtName}',
+                      content: '所属区域：${reportDetail.districtName}',
                       icon: Icons.location_on,
                       flex: 10,
                     ),
@@ -146,10 +142,8 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '开始时间',
-                      content: '${reportDetail.startTimeStr}',
+                      content: '开始时间：${reportDetail.startTimeStr}',
                       icon: Icons.date_range,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -157,10 +151,8 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '结束时间',
-                      content: '${reportDetail.endTimeStr}',
+                      content: '结束时间：${reportDetail.endTimeStr}',
                       icon: Icons.date_range,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -168,10 +160,8 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '异常类型',
-                      content: '${reportDetail.stopTypeStr}',
+                      content: '异常类型：${reportDetail.stopTypeStr}',
                       icon: Icons.alarm,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -179,10 +169,8 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '停产原因',
-                      content: '${reportDetail.stopReason}',
+                      content: '停产原因：${reportDetail.stopReason}',
                       icon: Icons.receipt,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),

@@ -19,11 +19,13 @@ class EnterListPage extends StatefulWidget {
   final String state;
   final String enterType;
   final String attentionLevel;
+  final bool automaticallyImplyLeading;
 
   EnterListPage({
     this.state = '',
     this.enterType = '',
     this.attentionLevel = '',
+    this.automaticallyImplyLeading = true,
   });
 
   @override
@@ -81,6 +83,7 @@ class _EnterListPageState extends State<EnterListPage>
               image: 'assets/images/enter_list_bg_image.png',
               color: Colors.blue,
               showSearch: true,
+              automaticallyImplyLeading: widget.automaticallyImplyLeading,
               editController: _editController,
               scrollController: _scrollController,
               onSearchPressed: () => _refreshController.callRefresh(),

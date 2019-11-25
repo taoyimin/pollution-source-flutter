@@ -105,15 +105,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '监控名称',
-                      content: '${orderDetail.monitorName}',
+                      content: '监控名称：${orderDetail.monitorName}',
                       icon: Icons.linked_camera,
                       flex: 1,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      title: '区域',
-                      content: '${orderDetail.districtName}',
+                      content: '区域：${orderDetail.districtName}',
                       icon: Icons.location_on,
                       flex: 1,
                     ),
@@ -123,16 +121,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '报警时间',
-                      content: '${orderDetail.alarmDateStr}',
+                      content: '报警时间：${orderDetail.alarmDateStr}',
                       icon: Icons.date_range,
                       flex: 1,
-                      contentMarginTop: 2,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      title: '状态',
-                      content: '${orderDetail.orderStateStr}',
+                      content: '状态：${orderDetail.orderStateStr}',
                       icon: Icons.assignment_late,
                       flex: 1,
                     ),
@@ -142,10 +137,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '报警类型',
-                      content: '${orderDetail.alarmTypeStr}',
+                      content: '报警类型：${orderDetail.alarmTypeStr}',
                       icon: Icons.alarm,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -153,10 +146,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '报警描述',
-                      content: '${orderDetail.alarmRemark}',
+                      content: '报警描述：${orderDetail.alarmRemark}',
                       icon: Icons.receipt,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),

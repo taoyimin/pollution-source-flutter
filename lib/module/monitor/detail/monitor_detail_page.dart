@@ -8,6 +8,7 @@ import 'package:pollution_source/module/discharge/detail/discharge_detail_bloc.d
 import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
+import 'package:pollution_source/module/monitor/table/monitor_table_page.dart';
 import 'package:pollution_source/module/order/list/order_list_bloc.dart';
 import 'package:pollution_source/module/order/list/order_list_page.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
@@ -140,15 +141,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '监控点名',
-                      content: '${monitorDetail.monitorName}',
+                      content: '监控点名：${monitorDetail.monitorName}',
                       icon: Icons.linked_camera,
                       flex: 6,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      title: '监控类型',
-                      content: '${monitorDetail.monitorTypeStr}',
+                      content: '监控类型：${monitorDetail.monitorTypeStr}',
                       icon: Icons.videocam,
                       flex: 5,
                     ),
@@ -158,15 +157,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '监控类别',
-                      content: '${monitorDetail.monitorCategoryStr}',
+                      content: '监控类别：${monitorDetail.monitorCategoryStr}',
                       icon: Icons.nature,
                       flex: 6,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      title: '网络类型',
-                      content: '${monitorDetail.networkTypeStr}',
+                      content: '网络类型：${monitorDetail.networkTypeStr}',
                       icon: Icons.network_wifi,
                       flex: 5,
                     ),
@@ -176,10 +173,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '监控位置',
-                      content: '${monitorDetail.monitorAddress}',
+                      content: '监控位置：${monitorDetail.monitorAddress}',
                       icon: Icons.location_on,
-                      contentTextAlign: TextAlign.left,
                     ),
                   ],
                 ),
@@ -187,11 +182,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      title: '数采编号',
-                      content: '${monitorDetail.mnCode} ',
+                      content: '数采编号：${monitorDetail.mnCode}',
                       icon: Icons.insert_drive_file,
-                      contentTextAlign: TextAlign.left,
-                      contentMarginTop: 2,
                     ),
                   ],
                 ),
@@ -209,12 +201,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '监测数据',
+                  content: DateUtil.formatDateMs(monitorDetail.chartDataList[0].maxX.toInt(), format: 'yyyy-MM-dd HH:mm:ss'),
                   imagePath: 'assets/images/icon_monitor_statistics.png',
                 ),
                 GridView.count(
                   //设置padding 防止item阴影被裁剪
                   padding: const EdgeInsets.only(
-                    bottom: 20,
+                    bottom: 10,
                     top: 10,
                   ),
                   primary: false,
@@ -241,6 +234,26 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                   chartDataList: monitorDetail.chartDataList,
                   isCurved: isCurved,
                   showDotData: showDotData,
+                ),
+                Gaps.vGap10,
+                InkWellButton6(
+                  meta: Meta(
+                    title: '历史监测数据',
+                    content: '展示监测数据详细列表',
+                    color: Colors.pink,
+                    imagePath: 'assets/images/monitor_list_bg_image.png',
+                    backgroundPath: 'assets/images/button_bg_red.png',
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return MonitorTablePage();
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
