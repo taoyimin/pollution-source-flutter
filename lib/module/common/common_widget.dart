@@ -988,7 +988,7 @@ class IconBaseInfoWidget extends StatelessWidget {
             ),
           ),
           Gaps.hGap3,
-          Text(content, style: const TextStyle(fontSize: 13)),
+          Expanded(flex: 1, child: Text(content, style: const TextStyle(fontSize: 13)),)
         ],
       ),
     );

@@ -279,7 +279,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                       title: '报警管理单',
                                       content: '报警管理单列表',
                                       imagePath:
-                                          'assets/images/application_icon_alarm.png'),
+                                          'assets/images/application_icon_order.png'),
                                   onTap: () {
                                     Navigator.push(
                                       context,
