@@ -74,6 +74,8 @@ dependencies:
   flutter_cupertino_date_picker: ^1.0.12
   # 下拉筛选菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
   gzx_dropdown_menu : ^1.0.1
+  # 图片选择器 https://github.com/Sh1d0w/multi_image_picker
+  multi_image_picker: ^4.5.9
   # 扫码 https://github.com/apptreesoftware/flutter_barcode_reader
   barcode_scan:
     git:
