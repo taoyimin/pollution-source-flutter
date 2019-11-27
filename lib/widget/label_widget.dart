@@ -79,7 +79,7 @@ class LabelViewState extends State<LabelView> {
                   child: Text(
                       widget.labelText,
                       style: widget.textStyle == null
-                          ? TextStyle(color: Colors.white)
+                          ? const TextStyle(fontSize: 13, color: Colors.white)
                           : widget.textStyle,
                     ),
                   origin: offset,
@@ -110,7 +110,8 @@ class LabelViewPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var drawSize = size.height > size.width ? size.width / 2 : size.height / 2;
+    //修改label大小
+    var drawSize = size.height > size.width ? size.width / 1.5 : size.height / 1.5;
     Path path = new Path();
 
     switch (labelAlignment) {
