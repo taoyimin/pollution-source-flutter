@@ -1,6 +1,8 @@
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/gaps.dart';
 
 class ListHeaderWidget extends StatefulWidget {
   final String title;
@@ -10,6 +12,7 @@ class ListHeaderWidget extends StatefulWidget {
   final Color color;
   final Widget popupMenuButton;
   final bool showSearch;
+  final bool automaticallyImplyLeading;
 
   //外部传入，用于回到顶部
   final ScrollController scrollController;
@@ -21,14 +24,15 @@ class ListHeaderWidget extends StatefulWidget {
       {this.title = '标题',
       this.subtitle = '副标题',
       this.background = 'assets/images/button_bg_green.png',
-      this.image = 'assets/images/task_list_bg_image.png',
+      this.image = 'assets/images/order_list_bg_image.png',
       this.color = Colours.primary_color,
       this.showSearch = false,
+      this.automaticallyImplyLeading = true,
       this.popupMenuButton,
       this.scrollController,
       this.editController,
       this.onSearchPressed,
-      this.areaPickerListener});
+      this.areaPickerListener,});
 
   @override
   _ListHeaderWidgetState createState() => _ListHeaderWidgetState();
@@ -129,6 +133,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
       pinned: true,
       floating: false,
       snap: false,
+      automaticallyImplyLeading: widget.automaticallyImplyLeading,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: BoxDecoration(
@@ -167,9 +172,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                             style: TextStyle(fontSize: 10, color: Colors.white),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        Gaps.vGap10,
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -198,7 +201,8 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 70, 16, 0),
                 child: Container(
-                  width: double.infinity,
+                  //width: double.infinity,
+                  width: MediaQuery.of(context).size.width,
                   height: 100,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -229,9 +233,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
+                            Gaps.hGap10,
                             Container(
                               height: 36,
                               width: 70,
@@ -244,7 +246,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                   "搜索",
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                color:const Color(0xFF8BC34A),
+                                color: const Color(0xFF8BC34A),
                               ),
                             ),
                           ],
@@ -274,12 +276,11 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                     ),
                                   ),
                                 ),
-                                decoration:const BoxDecoration(color: Colors.white),
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
+                            Gaps.hGap10,
                             Expanded(
                               flex: 1,
                               child: Container(
@@ -304,9 +305,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
+                            Gaps.hGap10,
                             Expanded(
                               flex: 1,
                               child: Container(
@@ -331,9 +330,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
+                            Gaps.hGap10,
                             Container(
                               height: 36,
                               width: 70,
@@ -374,9 +371,90 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                   },
                 ),
               )
-            : SizedBox(),
+            : Gaps.empty,
         // 隐藏的菜单
-        widget.popupMenuButton != null ? widget.popupMenuButton : SizedBox(),
+        widget.popupMenuButton != null ? widget.popupMenuButton : Gaps.empty,
+      ],
+    );
+  }
+}
+
+class DetailHeaderWidget extends StatelessWidget {
+  final String title;
+  final String backgroundPath;
+  final String imagePath;
+  final String subTitle1;
+  final String subTitle2;
+  final Widget popupMenuButton;
+
+  DetailHeaderWidget({
+    this.title = '主标题',
+    this.subTitle1 = '副标题1',
+    this.subTitle2 = '副标题2',
+    this.imagePath = '',
+    this.backgroundPath = '',
+    this.popupMenuButton,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      title: Text(title),
+      expandedHeight: 150.0,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          padding:const EdgeInsets.fromLTRB(10, 75, 10, 10),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                backgroundPath,
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        subTitle1,
+                        style:const TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Text(
+                        subTitle2,
+                        style:const TextStyle(
+                          fontSize: 10,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: SvgPicture.asset(
+                  imagePath,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        // 隐藏的菜单
+        popupMenuButton != null ? popupMenuButton : Gaps.empty,
       ],
     );
   }
