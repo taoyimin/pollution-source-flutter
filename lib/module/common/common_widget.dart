@@ -731,7 +731,7 @@ class InkWellButton9 extends StatelessWidget {
         onTap: onTap,
         children: <Widget>[
           Padding(
-            padding:const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -981,14 +981,17 @@ class IconBaseInfoWidget extends StatelessWidget {
         children: <Widget>[
           //加一个padding使图标和后面内容对齐
           Padding(
-            padding:const EdgeInsets.only(top: 2),
+            padding: const EdgeInsets.only(top: 2),
             child: Icon(
               icon,
               size: 14,
             ),
           ),
           Gaps.hGap3,
-          Expanded(flex: 1, child: Text(content, style: const TextStyle(fontSize: 13)),)
+          Expanded(
+            flex: 1,
+            child: Text(content, style: const TextStyle(fontSize: 13)),
+          )
         ],
       ),
     );
@@ -1411,4 +1414,91 @@ class LineChartWidgetState extends State<LineChartWidget> {
       },
     ).toList();
   }
+}
+
+class ClipButton extends StatelessWidget {
+  final double height;
+  final String text;
+  final IconData icon;
+  final Color color;
+  final GestureTapCallback onTap;
+
+  ClipButton({
+    this.height = 46,
+    @required this.text,
+    @required this.icon,
+    @required this.onTap,
+    this.color = Colors.black,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: RaisedButton(
+        padding: const EdgeInsets.all(0),
+        color: Colors.white,
+        onPressed: onTap,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding:const EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(
+                icon,
+                color: color,
+              ),
+            ),
+            Expanded(
+              child: ClipPath(
+                clipper: TipClipper(),
+                child: Container(
+                  height: height,
+                  color: color,
+                  child: Center(
+                    child: Text(
+                      '$text',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TipClipper extends CustomClipper<Path> {
+  double clipHeightRatio; //裁剪的尖头高度占控件总高度的比率
+  double clipWidthRatio; //裁剪的尖头宽度占控件总高度的比率
+
+  TipClipper({this.clipHeightRatio = 0.5, this.clipWidthRatio = 0.25});
+
+  @override
+  Path getClip(Size size) {
+    double clipHeight = size.height * clipHeightRatio;
+    double clipWidth = size.height * clipWidthRatio;
+    double leftHeight = size.height * (1 - clipHeightRatio) / 2;
+
+    final path = Path();
+    path.lineTo(0, leftHeight);
+    path.conicTo(clipWidth / 4, leftHeight + clipHeight * 3 / 8, clipWidth,
+        size.height / 2, 1);
+    path.conicTo(clipWidth / 4, leftHeight + clipHeight * 5 / 8, 0,
+        clipHeight + leftHeight, 1);
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(TipClipper oldClipper) => false;
 }
