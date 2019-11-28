@@ -17,6 +17,7 @@ import 'package:pollution_source/module/report/factor/list/factor_report_list_bl
 import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -236,6 +237,35 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                   showDotData: showDotData,
                 ),
                 Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '排放标准',
+                      icon: Icons.business_center,
+                      color: Colors.lightBlueAccent,
+                      onTap: () {
+                        Toast.show('点击了排放标准');
+                      },
+                    ),
+                    Gaps.hGap20,
+                    ClipButton(
+                      text: '历史数据',
+                      icon: Icons.table_chart,
+                      color: Colors.orange,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return MonitorTablePage();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                /*Gaps.vGap10,
                 InkWellButton6(
                   meta: Meta(
                     title: '历史监测数据',
@@ -254,7 +284,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       ),
                     );
                   },
-                ),
+                ),*/
               ],
             ),
           ),
