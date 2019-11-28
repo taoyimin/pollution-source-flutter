@@ -70,7 +70,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                               right: 20,
                               bottom: 10,
                               child: Image.asset(
-                                'assets/images/application_image_header.png',
+                                'assets/images/admin_application_image_header.png',
                                 height: 105,
                               ),
                             ),
@@ -329,7 +329,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                 right: 20,
                 bottom: 10,
                 child: Image.asset(
-                  'assets/images/application_image_header.png',
+                  'assets/images/admin_application_image_header.png',
                   height: 105,
                 ),
               ),
