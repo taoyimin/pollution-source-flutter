@@ -20,19 +20,20 @@ class ListHeaderWidget extends StatefulWidget {
   final VoidCallback onSearchPressed;
   final void Function(String areaCode) areaPickerListener;
 
-  ListHeaderWidget(
-      {this.title = '标题',
-      this.subtitle = '副标题',
-      this.background = 'assets/images/button_bg_green.png',
-      this.image = 'assets/images/order_list_bg_image.png',
-      this.color = Colours.primary_color,
-      this.showSearch = false,
-      this.automaticallyImplyLeading = true,
-      this.popupMenuButton,
-      this.scrollController,
-      this.editController,
-      this.onSearchPressed,
-      this.areaPickerListener,});
+  ListHeaderWidget({
+    this.title = '标题',
+    this.subtitle = '副标题',
+    this.background = 'assets/images/button_bg_green.png',
+    this.image = 'assets/images/order_list_bg_image.png',
+    this.color = Colours.primary_color,
+    this.showSearch = false,
+    this.automaticallyImplyLeading = true,
+    this.popupMenuButton,
+    this.scrollController,
+    this.editController,
+    this.onSearchPressed,
+    this.areaPickerListener,
+  });
 
   @override
   _ListHeaderWidgetState createState() => _ListHeaderWidgetState();
@@ -404,7 +405,7 @@ class DetailHeaderWidget extends StatelessWidget {
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          padding:const EdgeInsets.fromLTRB(10, 75, 10, 10),
+          padding: const EdgeInsets.fromLTRB(10, 75, 10, 10),
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
@@ -424,7 +425,7 @@ class DetailHeaderWidget extends StatelessWidget {
                     Container(
                       child: Text(
                         subTitle1,
-                        style:const TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           color: Colors.white,
                         ),
@@ -433,7 +434,7 @@ class DetailHeaderWidget extends StatelessWidget {
                     Container(
                       child: Text(
                         subTitle2,
-                        style:const TextStyle(
+                        style: const TextStyle(
                           fontSize: 10,
                           color: Colors.white,
                         ),
@@ -448,6 +449,67 @@ class DetailHeaderWidget extends StatelessWidget {
                   imagePath,
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        // 隐藏的菜单
+        popupMenuButton != null ? popupMenuButton : Gaps.empty,
+      ],
+    );
+  }
+}
+
+class UploadHeaderWidget extends StatelessWidget {
+  final String title;
+  final Color backgroundColor;
+  final String imagePath;
+  final String subTitle;
+  final Widget popupMenuButton;
+
+  UploadHeaderWidget({
+    this.title = '主标题',
+    this.subTitle = '副标题',
+    this.imagePath = '',
+    this.backgroundColor = Colours.primary_color,
+    this.popupMenuButton,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      title: Text(title),
+      expandedHeight: 150.0,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          height: 150,
+          color: backgroundColor,
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                top: 70,
+                right: 16,
+                bottom: 10,
+                child: Image.asset(
+                  imagePath,
+                ),
+              ),
+              Positioned(
+                  top: 70,
+                  left: 20,
+                  bottom: 10,
+                  right: 150,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      child: Text(
+                        '$subTitle',
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                    ),
+                  )),
             ],
           ),
         ),
