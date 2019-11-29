@@ -1,11 +1,6 @@
 import 'dart:async';
-import 'dart:math';
-
-import 'package:bezier_chart/bezier_chart.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -1443,7 +1438,7 @@ class ClipButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding:const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Icon(
                 icon,
                 color: color,
@@ -1501,4 +1496,149 @@ class TipClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(TipClipper oldClipper) => false;
+}
+
+class EditRowWidget extends StatelessWidget {
+  final String title;
+  final String hintText;
+  final bool readOnly;
+  final TextEditingController controller;
+  final GestureTapCallback onTap;
+  final PopupMenuButton popupMenuButton;
+
+  EditRowWidget({
+    Key key,
+    @required this.title,
+    this.hintText = '请输入',
+    this.readOnly = false,
+    @required this.controller,
+    this.onTap,
+    this.popupMenuButton,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 46,
+      child: Row(
+        children: <Widget>[
+          Text(
+            '$title',
+            style: TextStyle(fontSize: 15),
+          ),
+          Gaps.hGap20,
+          Flexible(
+            child: Stack(
+              children: <Widget>[
+                TextField(
+                  onTap: onTap ?? () {},
+                  controller: controller,
+                  readOnly: readOnly,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(fontSize: 15),
+                  decoration: InputDecoration(
+                    hintText: '$hintText',
+                    hintStyle: TextStyle(fontSize: 15),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  child: popupMenuButton ?? Gaps.empty,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TextAreaWidget extends StatelessWidget {
+  final String title;
+  final String hintText;
+  final TextEditingController controller;
+  final GestureTapCallback onTap;
+
+  TextAreaWidget({
+    Key key,
+    @required this.title,
+    this.hintText = '请输入',
+    @required this.controller,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          height: 46,
+          child: Row(
+            children: <Widget>[
+              Text(
+                '$title',
+                style: TextStyle(fontSize: 15),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          child: TextField(
+            onTap: onTap ?? () {},
+            controller: controller,
+            textAlign: TextAlign.start,
+            maxLines: 4,
+            style: TextStyle(fontSize: 15),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(top: 0, bottom: 16),
+              hintText: '$hintText',
+              hintStyle: TextStyle(fontSize: 15),
+              border: UnderlineInputBorder(
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class MapInfoRowWidget extends StatelessWidget {
+  final String title;
+  final String content;
+
+  MapInfoRowWidget({
+    @required this.title,
+    @required this.content,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56,
+      child: Row(
+        children: <Widget>[
+          Gaps.hGap16,
+          Text(
+            '$title',
+            style: TextStyle(fontSize: 15),
+          ),
+          Expanded(child: Gaps.empty),
+          Text(
+            '$content',
+            textAlign: TextAlign.right,
+            style: TextStyle(fontSize: 15),
+          ),
+          Gaps.hGap16,
+        ],
+      ),
+    );
+  }
 }
