@@ -27,7 +27,9 @@ class _HomePageState extends State<HomePage> {
     AdminApplicationPage(),
     BlocProvider(
       builder: (context) => EnterListBloc(),
-      child: EnterListPage(automaticallyImplyLeading: false,),
+      child: EnterListPage(
+        automaticallyImplyLeading: false,
+      ),
     ),
     MinePage(),
   ];
