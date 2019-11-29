@@ -323,6 +323,11 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.3"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -399,7 +404,7 @@ packages:
     source: hosted
     version: "3.1.3"
   intl:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: intl
       url: "https://pub.flutter-io.cn"
