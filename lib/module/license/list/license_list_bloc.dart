@@ -79,7 +79,7 @@ class LicenseListBloc extends Bloc<LicenseListEvent, LicenseListState> {
         queryParameters: {
           'currentPage': currentPage,
           'pageSize': pageSize,
-          'enterId': '10113',
+          'enterId': enterId,
         },
       );
       return response.data[Constant.responseListKey]

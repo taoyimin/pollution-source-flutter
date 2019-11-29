@@ -43,7 +43,18 @@ class License extends Equatable {
 
   Map<String, dynamic> toJson() => _$LicenseToJson(this);
 
-  /*static License fromJson(dynamic json) {
+  Map<String, dynamic> getMapInfo() => <String, dynamic>{
+        '企业名称': this.enterName,
+        '发证单位': this.issueUnitStr,
+        '发证时间': this.issueTimeStr,
+        '领证时间': this.licenseTimeStr,
+        '有效期': this.validTimeStr,
+        '许可证管理类别': this.licenseManagerTypeStr,
+        '许可证编号': this.licenseNumber,
+      };
+}
+
+/*static License fromJson(dynamic json) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return License(
         licenseId: '-',
@@ -68,4 +79,3 @@ class License extends Equatable {
       );
     }
   }*/
-}

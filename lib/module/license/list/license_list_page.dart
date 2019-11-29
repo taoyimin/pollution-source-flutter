@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/module/common/map_info_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
@@ -46,7 +47,10 @@ class _LicenseListPageState extends State<LicenseListPage>
       body: EasyRefresh.custom(
         slivers: <Widget>[
           SliverAppBar(
-            title: Text('排污许可证列表'),
+            title: Text('排污许可证列表', style: TextStyle(color: Colours.primary_text),),
+            centerTitle: true,
+            iconTheme: IconThemeData(color: Colours.primary_text),
+            backgroundColor: Colors.transparent,
           ),
           BlocBuilder<LicenseListBloc, LicenseListState>(
             builder: (context, state) {
@@ -65,33 +69,6 @@ class _LicenseListPageState extends State<LicenseListPage>
           ),
         ],
       ),
-      /*appBar: AppBar(
-        title: const Text('排污许可证列表'),
-      ),
-      body: Center(
-        child: EasyRefresh.custom(
-          slivers: <Widget>[
-            BlocBuilder<LicenseListBloc, LicenseListState>(
-              builder: (context, state) {
-                if (state is LicenseListLoading) {
-                  return PageLoadingWidget();
-                } else if (state is LicenseListEmpty) {
-                  return PageEmptyWidget();
-                } else if (state is LicenseListError) {
-                  return PageErrorWidget(errorMessage: state.errorMessage);
-                } else if (state is LicenseListLoaded) {
-                  if (!state.hasNextPage)
-                    _refreshController.finishLoad(
-                        noMore: !state.hasNextPage, success: true);
-                  return _buildPageLoadedList(state.licenseList);
-                } else {
-                  return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
-                }
-              },
-            ),
-          ],
-        ),
-      ),*/
     );
   }
 
@@ -101,53 +78,51 @@ class _LicenseListPageState extends State<LicenseListPage>
         (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: InkWellButton(
               onTap: () {
-                /*Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider(
-                    builder: (context) => LicenseDetailBloc(),
-                    child: LicenseDetailPage(
-                      licenseId: licenseList[index].licenseId,
-                    ),
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return MapInfoPage(
+                    title: '排污许可证详情',
+                    mapInfo: licenseList[index].getMapInfo(),
                   );
-                }));*/
+                }));
               },
               children: <Widget>[
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage('assets/images/button_bg_lightblue.png'), fit: BoxFit.fill),
+                    gradient: LinearGradient(colors: [Color(0xFF589FFF), Color(0xFF5865FF)]),
+                    //image: DecorationImage(image: AssetImage('assets/images/button_bg_lightblue.png'), fit: BoxFit.fill),
                     boxShadow: [
                       UIUtils.getBoxShadow(),
                     ],
                     borderRadius: BorderRadius.circular(5)
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        '${licenseList[index].issueUnitStr}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Gaps.vGap6,
                       Row(
                         children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '发证单位：${licenseList[index].issueUnitStr}'),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '发证时间：${licenseList[index].issueTimeStr}'),
+                          Gaps.hGap6,
+                          Image.asset('assets/images/test3.png', width: 40),
+                          /*CircleAvatar(
+                            backgroundImage: AssetImage('assets/images/license_list_logo.png'),
+                          ),*/
+                          Gaps.hGap10,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text('发证单位：${licenseList[index].issueUnitStr}', style: TextStyle(color: Colors.white),),
+                              Text('发证时间：${licenseList[index].issueTimeStr}', style: TextStyle(color: Colors.white, fontSize: 12),),
+                            ],
                           ),
                         ],
                       ),
+                      Gaps.vGap6,
+                      Text('${licenseList[index].licenseNumber}',style: TextStyle(color: Colors.white, fontSize: 18),),
+                      Gaps.vGap6,
+                      Text('有效期：${licenseList[index].validTimeStr}', style: TextStyle(color: Colors.white, fontSize: 12),),
                     ],
                   ),
                 ),
