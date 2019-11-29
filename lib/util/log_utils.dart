@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:common_utils/common_utils.dart';
 
-import 'constant.dart';
+import 'package:pollution_source/res/constant.dart';
 
 /// 输出Log工具类
 class Log{
