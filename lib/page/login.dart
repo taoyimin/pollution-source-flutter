@@ -93,6 +93,7 @@ import 'package:pollution_source/widget/text_field.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:pollution_source/res/colors.dart';
 
+import 'enter_home.dart';
 import 'home.dart';
 
 /// design/1注册登录/module.index.html
@@ -207,6 +208,17 @@ class _LoginPageState extends State<LoginPage> {
     );*/
   }
 
+  void _enterLogin() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return EnterHomePage();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -232,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
           fit: BoxFit.cover,
         ),
       ),
-      padding: EdgeInsets.only(left: 26.0, right: 26.0, top: 50.0),
+      padding:const EdgeInsets.only(left: 26.0, right: 26.0, top: 50.0),
       child: Column(
         children: <Widget>[
           GestureDetector(
@@ -302,7 +314,16 @@ class _LoginPageState extends State<LoginPage> {
           MyButton(
             key: const Key('login'),
             onPressed: _isClick ? _login : null,
-            text: "登录",
+            color: Colors.lightGreen,
+            text: "环保登录",
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          MyButton(
+            key: const Key('enterLogin'),
+            onPressed: _isClick ? _enterLogin : null,
+            text: "企业登录",
           ),
           Container(
             height: 40.0,
