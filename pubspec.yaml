@@ -17,8 +17,8 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 # 解决多语言依赖冲突问题
-dependency_overrides:
-  intl: ^0.16.0
+#dependency_overrides:
+  #intl: ^0.16.0
 
 dependencies:
   flutter:
@@ -26,6 +26,7 @@ dependencies:
   # 多语言支持
   flutter_localizations:
     sdk: flutter
+  flutter_cupertino_localizations: ^1.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -40,16 +41,18 @@ dependencies:
   # Google 图表库 https://github.com/google/charts
   charts_flutter: ^0.8.1
   # 图表库 https://github.com/aeyrium/bezier-chart
-  bezier_chart: ^1.0.15
-  # 图表库(首页最近一周变化趋势使用了) https://github.com/imaNNeoFighT/fl_chart
-  fl_chart: ^0.3.4
+  # bezier_chart: ^1.0.15
+  # 图表库(首页最近一周变化趋势和监测数据详情使用了) https://github.com/imaNNeoFighT/fl_chart
+  # fl_chart: ^0.3.4
+  fl_chart: ^0.5.0
   # 常用加载动画库 https://github.com/jogboms/flutter_spinkit
   flutter_spinkit: ^4.0.0
   # 动画库 https://github.com/2d-inc/Flare-Flutter
   flare_flutter: ^1.2.0
   # flutter_lottie: ^0.2.0
   # 网络请求库 https://github.com/flutterchina/dio
-  dio: ^2.1.16
+  # dio: ^2.1.16
+  dio: ^3.0.7
   # 矢量图控件 https://github.com/dnfield/flutter_svg
   flutter_svg: ^0.14.1
   # 启动URL的插件 https://github.com/flutter/plugins/tree/master/packages/url_launcher
