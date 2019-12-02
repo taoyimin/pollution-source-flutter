@@ -49,7 +49,7 @@ class Enter extends Equatable {
   List<Label> get labelList{
     return TextUtil.isEmpty(enterType)
         ? const []
-        : _getLabelList2(enterType);
+        : _getLabelList(enterType);
   }
 
   factory Enter.fromJson(Map<String, dynamic> json) =>
@@ -101,7 +101,7 @@ class Enter extends Equatable {
   }
 
   //将企业类型string转化成List
-  static List<Label> _getLabelList(String string) {
+  /*static List<Label> _getLabelList(String string) {
     return string.trimLeft().trimRight().split(' ').map((string) {
       switch (string) {
         case '废水':
@@ -126,10 +126,10 @@ class Enter extends Equatable {
               color: Colors.grey);
       }
     }).toList();
-  }
+  }*/
 
   //将企业类型string转化成List
-  static List<Label> _getLabelList2(String string) {
+  static List<Label> _getLabelList(String string) {
     return string.split(',').map((string) {
       switch (string) {
         case 'EnterType1':

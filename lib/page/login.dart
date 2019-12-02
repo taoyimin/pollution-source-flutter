@@ -96,7 +96,6 @@ import 'package:pollution_source/res/colors.dart';
 import 'enter_home.dart';
 import 'home.dart';
 
-/// design/1注册登录/module.index.html
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();

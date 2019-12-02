@@ -729,6 +729,11 @@ class InkWellButton9 extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               children: <Widget>[
+                Image.asset(
+                  '${meta.imagePath}',
+                  height: 36,
+                ),
+                Gaps.hGap16,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -736,19 +741,15 @@ class InkWellButton9 extends StatelessWidget {
                       Text(
                         '${meta.title}',
                         style: const TextStyle(
-                            fontSize: 16, color: Colours.primary_text),
+                            fontSize: 14, color: Colours.primary_text),
                       ),
                       Text(
                         '${meta.content}',
                         style: const TextStyle(
-                            fontSize: 13, color: Colours.secondary_text),
+                            fontSize: 12, color: Colours.secondary_text),
                       ),
                     ],
                   ),
-                ),
-                Image.asset(
-                  '${meta.imagePath}',
-                  height: 40,
                 ),
               ],
             ),
@@ -932,14 +933,14 @@ class ImageTitleWidget extends StatelessWidget {
       children: <Widget>[
         Image.asset(
           imagePath,
-          height: 18,
-          width: 18,
+          height: 20,
+          width: 20,
         ),
         Gaps.hGap6,
         Text(
           title,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 17,
           ),
         ),
         Expanded(
@@ -1065,24 +1066,26 @@ class ContactsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 43,
-          width: 43,
+          height: 34,
+          width: 34,
           child: CircleAvatar(
             backgroundImage: AssetImage(imagePath),
           ),
         ),
         Gaps.hGap10,
         Container(
-          height: 43,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 contactsName,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
               ),
-              Text(contactsTel),
+              Text(
+                contactsTel,
+                style: const TextStyle(fontSize: 12),
+              ),
             ],
           ),
         ),
@@ -1091,7 +1094,7 @@ class ContactsWidget extends StatelessWidget {
         ),
         VerticalDividerWidget(
           width: 0.5,
-          height: 26,
+          height: 20,
           color: Colours.divider_color,
         ),
         Gaps.hGap10,
@@ -1099,6 +1102,7 @@ class ContactsWidget extends StatelessWidget {
           icon: const Icon(
             Icons.phone,
             color: Colours.primary_color,
+            size: 20,
           ),
           onPressed: () {
             Utils.launchTelURL(contactsTel);
@@ -1267,12 +1271,16 @@ class LineChartWidgetState extends State<LineChartWidget> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-              child: FlChart(
+              child: LineChart(
+                _getLineChartData(),
+                swapAnimationDuration: Duration(milliseconds: 250),
+              ),
+              /*child: FlChart(
                 swapAnimationDuration: Duration(milliseconds: 250),
                 chart: LineChart(
                   _getLineChartData(),
                 ),
-              ),
+              ),*/
             ),
           ],
         ),
@@ -1315,7 +1323,8 @@ class LineChartWidgetState extends State<LineChartWidget> {
     xInterval = (maxX - minX) / (widget.xAxisCount - 1);
 
     return LineChartData(
-      lineTouchData: LineTouchData(
+      //fl_charts 0.3.4版本写法
+      /*lineTouchData: LineTouchData(
         touchResponseSink: controller.sink,
         touchTooltipData: TouchTooltipData(
           tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
@@ -1334,6 +1343,44 @@ class LineChartWidgetState extends State<LineChartWidget> {
             ).toList();
           },
         ),
+      ),*/
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
+          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+            if (touchedSpots == null) {
+              return null;
+            }
+
+            //List<LineTooltipItem> tooltipItems =
+            return touchedSpots.map((LineBarSpot touchedSpot) {
+              if (touchedSpot == null) {
+                return null;
+              }
+              final TextStyle textStyle = TextStyle(
+                color: touchedSpot.bar.colors[0],
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              );
+              return LineTooltipItem(
+                  '${widget.chartDataList[touchedSpot.barIndex].factorName} ${touchedSpot.y}',
+                  textStyle);
+            }).toList();
+            /*tooltipItems.insert(
+              0,
+              LineTooltipItem(
+                'title',
+                const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            );*/
+            //return tooltipItems;
+          },
+        ),
+        handleBuiltInTouches: true,
       ),
       gridData: const FlGridData(
         show: false,

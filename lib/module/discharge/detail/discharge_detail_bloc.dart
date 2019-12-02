@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:meta/meta.dart';
 

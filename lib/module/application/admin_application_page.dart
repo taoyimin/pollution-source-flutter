@@ -67,11 +67,13 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                         child: Stack(
                           children: <Widget>[
                             Positioned(
-                              right: 20,
+                              right: 10,
                               bottom: 10,
+                              top: 36,
+                              left: 130,
                               child: Image.asset(
-                                'assets/images/admin_application_image_header.png',
-                                height: 105,
+                                'assets/images/application_image_header.png',
+                                fit: BoxFit.fill,
                               ),
                             ),
                             Positioned(
@@ -145,8 +147,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '监测数据',
-                                      content: '查询监测数据',
+                                      title: '在线数据',
+                                      content: '查询在线数据',
                                       imagePath:
                                           'assets/images/application_icon_monitor.png'),
                                   onTap: () {
@@ -329,7 +331,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                 right: 20,
                 bottom: 10,
                 child: Image.asset(
-                  'assets/images/admin_application_image_header.png',
+                  'assets/images/test2.png',
                   height: 105,
                 ),
               ),

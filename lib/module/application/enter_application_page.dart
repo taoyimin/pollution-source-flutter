@@ -9,12 +9,12 @@ import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/module/order/list/order_list_bloc.dart';
 import 'package:pollution_source/module/order/list/order_list_page.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
-import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_bloc.dart';
-import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_page.dart';
+import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_bloc.dart';
+import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_page.dart';
+import 'package:pollution_source/module/report/factor/upload/factor_report_upload_bloc.dart';
+import 'package:pollution_source/module/report/factor/upload/factor_report_upload_page.dart';
+import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_bloc.dart';
+import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 
 class EnterApplicationPage extends StatefulWidget {
@@ -46,7 +46,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                 Expanded(
                   flex: 1,
                   child: Container(
-                    color: Colors.deepPurpleAccent,
+                    color: Color(0xFF19CABA),
                   ),
                 ),
                 Expanded(
@@ -67,15 +67,17 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                     children: <Widget>[
                       Container(
                         height: 150,
-                        color: Colors.deepPurpleAccent,
+                        color: Color(0xFF19CABA),
                         child: Stack(
                           children: <Widget>[
                             Positioned(
-                              right: 20,
+                              right: 10,
                               bottom: 10,
+                              top: 36,
+                              left: 130,
                               child: Image.asset(
-                                'assets/images/enter_application_image_header.png',
-                                height: 105,
+                                'assets/images/application_image_header.png',
+                                fit: BoxFit.fill,
                               ),
                             ),
                             Positioned(
@@ -151,8 +153,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '监测数据',
-                                      content: '查询监测数据',
+                                      title: '在线数据',
+                                      content: '查询在线数据',
                                       imagePath:
                                           'assets/images/application_icon_monitor.png'),
                                   onTap: () {
@@ -178,6 +180,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                           ],
                         ),
                       ),
+                      Gaps.vGap16,
                       //异常申报上报
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -206,8 +209,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                         builder: (context) {
                                           return BlocProvider(
                                             builder: (context) =>
-                                                DischargeReportListBloc(),
-                                            child: DischargeReportListPage(),
+                                                DischargeReportUploadBloc(),
+                                            child: DischargeReportUploadPage(enterId: widget.enterId),
                                           );
                                         },
                                       ),
@@ -228,8 +231,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                         builder: (context) {
                                           return BlocProvider(
                                             builder: (context) =>
-                                                FactorReportListBloc(),
-                                            child: FactorReportListPage(),
+                                                FactorReportUploadBloc(),
+                                            child: FactorReportUploadPage(enterId: widget.enterId),
                                           );
                                         },
                                       ),
@@ -253,8 +256,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                         builder: (context) {
                                           return BlocProvider(
                                             builder: (context) =>
-                                                LongStopReportListBloc(),
-                                            child: LongStopReportListPage(),
+                                                LongStopReportUploadBloc(),
+                                            child: LongStopReportUploadPage(enterId: widget.enterId),
                                           );
                                         },
                                       ),
@@ -268,6 +271,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                           ],
                         ),
                       ),
+                      Gaps.vGap16,
                       //报警管理单查询
                       Padding(
                         padding: const EdgeInsets.symmetric(

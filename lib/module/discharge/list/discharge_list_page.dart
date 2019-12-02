@@ -8,6 +8,7 @@ import 'package:pollution_source/module/discharge/detail/discharge_detail_bloc.d
 import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
 
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
@@ -18,11 +19,13 @@ class DischargeListPage extends StatefulWidget {
   final String enterId;
   final String dischargeType;
   final String state;
+  final int type; //启用页面的类型 0：点击列表项查看详情 1：点击列表项返回上一层与排口信息
 
   DischargeListPage({
     this.enterId = '',
     this.dischargeType = '',
     this.state = '',
+    this.type = 0,
   });
 
   @override
@@ -174,19 +177,29 @@ class _DischargeListPageState extends State<DischargeListPage>
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => DischargeDetailBloc(),
-                        child: DischargeDetailPage(
-                          dischargeId: dischargeList[index].dischargeId,
-                        ),
-                      );
-                    },
-                  ),
-                );
+                switch(widget.type){
+                  case 0:
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return BlocProvider(
+                            builder: (context) => DischargeDetailBloc(),
+                            child: DischargeDetailPage(
+                              dischargeId: dischargeList[index].dischargeId,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                    break;
+                  case 1:
+                    Navigator.pop(context, dischargeList[index]);
+                    break;
+                  default:
+                    Toast.show('未知的页面类型，type=${widget.type}');
+                    break;
+                }
               },
               children: <Widget>[
                 Container(

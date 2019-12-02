@@ -4,17 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/discharge/detail/discharge_detail_bloc.dart';
-import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_bloc.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_page.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
@@ -22,7 +15,6 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/log_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-import 'package:pollution_source/widget/my_text_field.dart';
 
 import 'discharge_report_upload.dart';
 

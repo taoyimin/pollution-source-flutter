@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:pollution_source/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';

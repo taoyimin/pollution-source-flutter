@@ -5,7 +5,6 @@ import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:meta/meta.dart';
-import 'package:pollution_source/res/constant.dart';
 
 import 'discharge_report_detail.dart';
 

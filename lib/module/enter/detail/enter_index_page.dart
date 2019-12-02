@@ -610,14 +610,14 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     backgroundPath: 'assets/images/button_bg_red.png',
                   ),
                   onTap: () {
-                    /*Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return BlocProvider(
                         builder: (context) => LicenseListBloc(),
                         child: LicenseListPage(
                           enterId: enterDetail.enterId,
                         ),
                       );
-                    }));*/
+                    }));
                   },
                 ),
               ],
