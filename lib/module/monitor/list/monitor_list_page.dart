@@ -8,6 +8,7 @@ import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart'
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
 
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
@@ -18,12 +19,14 @@ class MonitorListPage extends StatefulWidget {
   final String dischargeId;
   final String monitorType;
   final String state;
+  final int type; //页面启动类型 0：点击列表项查看详情 1：点击列表项携带数据返回上一层
 
   MonitorListPage({
     this.enterId = '',
     this.dischargeId = '',
     this.monitorType = '',
     this.state = '',
+    this.type = 0,
   });
 
   @override
@@ -75,8 +78,8 @@ class _MonitorListPageState extends State<MonitorListPage>
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
             ListHeaderWidget(
-              title: '监测数据列表',
-              subtitle: '展示监测数据列表，点击列表项查看该监测数据的详细信息',
+              title: '在线数据列表',
+              subtitle: '展示在线数据列表，点击列表项查看该在线数据的详细信息',
               background: 'assets/images/button_bg_red.png',
               image: 'assets/images/monitor_list_bg_image.png',
               color: Colors.red,
@@ -178,19 +181,29 @@ class _MonitorListPageState extends State<MonitorListPage>
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => MonitorDetailBloc(),
-                        child: MonitorDetailPage(
-                          monitorId: monitorList[index].monitorId,
-                        ),
-                      );
-                    },
-                  ),
-                );
+                switch(widget.type){
+                  case 0:
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return BlocProvider(
+                            builder: (context) => MonitorDetailBloc(),
+                            child: MonitorDetailPage(
+                              monitorId: monitorList[index].monitorId,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                    break;
+                  case 1:
+                    Navigator.pop(context, monitorList[index]);
+                    break;
+                  default:
+                    Toast.show('未知的页面类型，type=${widget.type}');
+                    break;
+                }
               },
               children: <Widget>[
                 Container(

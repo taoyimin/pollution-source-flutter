@@ -7,7 +7,6 @@ import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
-import 'package:pollution_source/page/image_picker.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/log_utils.dart';
@@ -437,8 +436,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     Gaps.hGap10,
                     InkWellButton7(
                       meta: Meta(
-                          title: '监测数据',
-                          content: '查看报警管理单对应的监测数据',
+                          title: '在线数据',
+                          content: '查看报警管理单对应的在线数据',
                           backgroundPath: 'assets/images/button_bg_yellow.png',
                           imagePath:
                               'assets/images/image_enter_statistics2.png'),
@@ -447,13 +446,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return ImagePicker();
-                              /*return BlocProvider(
+                              return BlocProvider(
                                 builder: (context) => MonitorDetailBloc(),
                                 child: MonitorDetailPage(
                                   monitorId: orderDetail.monitorId,
                                 ),
-                              );*/
+                              );
                             },
                           ),
                         );
@@ -568,39 +566,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ],
                           ),
                         ),
-                        /*GridView.count(
-                          shrinkWrap: true,
-                          crossAxisCount: 4,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          padding: const EdgeInsets.all(16),
-                          children: List.generate(
-                            images == null ? 1 : images.length + 1,
-                                (index) {
-                              if (index ==
-                                  (images == null ? 1 : images.length)) {
-                                return InkWell(
-                                  onTap: () {
-                                    loadAssets(setState);
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/attachment_image_add.png',
-                                    width: 300,
-                                    height: 300,
-                                  ),
-                                );
-                              } else {
-                                Asset asset = images[index];
-                                return AssetThumb(
-                                  asset: asset,
-                                  width: 300,
-                                  height: 300,
-                                );
-                              }
-                            },
-                          ),
-                        ),*/
                         Gaps.vGap5,
                         Offstage(
                           offstage: images == null || images.length == 0,
@@ -642,11 +607,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               ),
                               Gaps.hGap20,
                               ClipButton(
-                                text: '上传',
+                                text: '提交',
                                 icon: Icons.file_upload,
                                 color: Colors.lightBlue,
                                 onTap: () {
-                                  Toast.show('点击了上传按钮');
+                                  Toast.show('点击了提交按钮');
                                 },
                               ),
                             ],

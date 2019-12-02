@@ -35,7 +35,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('历史监测数据'),
+        title: Text('历史在线数据'),
       ),
       body: Stack(
         key: _stackKey,

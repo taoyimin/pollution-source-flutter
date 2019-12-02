@@ -271,8 +271,8 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                             Gaps.vGap10,
                             InkWellButton7(
                               meta: Meta(
-                                  title: '监控点信息',
-                                  content: '查看该申报单所属的监控点信息',
+                                  title: '在线数据',
+                                  content: '查看该申报单对应的在线数据',
                                   backgroundPath:
                                   'assets/images/button_bg_red.png',
                                   imagePath:

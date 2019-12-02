@@ -160,7 +160,6 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     title: '企业联系人',
                     imagePath: 'assets/images/icon_enter_contacts.png',
                   ),
-                  Gaps.vGap10,
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.enterTel),
                     child: ContactsWidget(
@@ -169,7 +168,6 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       imagePath: 'assets/images/enter_enter_tel_header.png',
                     ),
                   ),
-                  Gaps.vGap10,
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.contactPersonTel),
                     child: ContactsWidget(
@@ -178,7 +176,6 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       imagePath: 'assets/images/enter_contacts_tel_header.png',
                     ),
                   ),
-                  Gaps.vGap10,
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.legalPersonTel),
                     child: ContactsWidget(
@@ -545,20 +542,20 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     backgroundPath: 'assets/images/button_bg_red.png',
                   ),
                   onTap: () {
-                    /*Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return BlocProvider(
                         builder: (context) => LicenseListBloc(),
                         child: LicenseListPage(
                           enterId: enterDetail.enterId,
                         ),
                       );
-                    }));*/
+                    }));
                   },
                 ),
               ],
             ),
           ),
-          //其他信息
+          //其他信息 赣州才有
           /*Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(

@@ -1325,6 +1325,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     });
   }
 
+  int touchedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1353,7 +1355,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               ),
               Gaps.vGap10,
               Expanded(
-                child: FlChart(
+                //fl_charts 0.3.4版本写法
+                /*child: FlChart(
                   chart: BarChart(BarChartData(
                     barTouchData: BarTouchData(
                       touchTooltipData: TouchTooltipData(
@@ -1434,7 +1437,93 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                     ),
                     barGroups: showingBarGroups,
                   )),
-                ),
+                ),*/
+                child: BarChart(BarChartData(
+                  barTouchData: BarTouchData(
+                      touchTooltipData: BarTouchTooltipData(
+                        tooltipBgColor: Colors.blueGrey,
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          String weekDay;
+                          switch (group.x.toInt()) {
+                            case 0:
+                              weekDay = '周一';
+                              break;
+                            case 1:
+                              weekDay = '周二';
+                              break;
+                            case 2:
+                              weekDay = '周三';
+                              break;
+                            case 3:
+                              weekDay = '周四';
+                              break;
+                            case 4:
+                              weekDay = '周五';
+                              break;
+                            case 5:
+                              weekDay = '周六';
+                              break;
+                            case 6:
+                              weekDay = '周日';
+                              break;
+                          }
+                          return BarTooltipItem(
+                            weekDay + '\n' + rod.y.toString(),
+                            TextStyle(
+                              color: Colors.yellow,
+                            ),
+                          );
+                        },
+                      ),
+                      touchCallback: (BarTouchResponse barTouchResponse) {
+                        setState(() {
+                          if (barTouchResponse.spot != null &&
+                              barTouchResponse.touchInput is! FlPanEnd &&
+                              barTouchResponse.touchInput is! FlLongPressEnd) {
+                            touchedIndex =
+                                barTouchResponse.spot.touchedBarGroupIndex;
+                          } else {
+                            touchedIndex = -1;
+                          }
+                        });
+                      }),
+                  titlesData: FlTitlesData(
+                    show: true,
+                    bottomTitles: SideTitles(
+                      showTitles: true,
+                      textStyle:
+                          TextStyle(color: Colours.primary_text, fontSize: 11),
+                      margin: 8,
+                      getTitles: (double value) {
+                        switch (value.toInt()) {
+                          case 0:
+                            return '一';
+                          case 1:
+                            return '二';
+                          case 2:
+                            return '三';
+                          case 3:
+                            return '四';
+                          case 4:
+                            return '五';
+                          case 5:
+                            return '六';
+                          case 6:
+                            return '日';
+                          default:
+                            return '未知';
+                        }
+                      },
+                    ),
+                    leftTitles: SideTitles(
+                      showTitles: false,
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  barGroups: showingBarGroups,
+                )),
               ),
             ],
           ),

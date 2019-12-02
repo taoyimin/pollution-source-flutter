@@ -329,11 +329,11 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                 ),
                 Gaps.hGap20,
                 ClipButton(
-                  text: '上传',
+                  text: '提交',
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    Toast.show('点击了上传按钮');
+                    Toast.show('点击了提交按钮');
                   },
                 ),
               ],

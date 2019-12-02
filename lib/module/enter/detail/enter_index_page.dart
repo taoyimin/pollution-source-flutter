@@ -56,45 +56,6 @@ class _EnterIndexPageState extends State<EnterIndexPage>
 
   @override
   Widget build(BuildContext context) {
-    /*return Scaffold(
-      key: _scaffoldKey,
-      body: EasyRefresh.custom(
-        slivers: <Widget>[
-          BlocBuilder<EnterDetailBloc, EnterDetailState>(
-            builder: (context, state) {
-              String enterName = '';
-              String enterAddress = '';
-              if (state is EnterDetailLoaded) {
-                enterName = state.enterDetail.enterName;
-                enterAddress = state.enterDetail.enterAddress;
-              }
-              return DetailHeaderWidget(
-                title: '企业详情',
-                subTitle1: '$enterName',
-                subTitle2: '$enterAddress',
-                imagePath: 'assets/images/enter_detail_bg_image.svg',
-                backgroundPath: 'assets/images/button_bg_lightblue.png',
-              );
-            },
-          ),
-          BlocBuilder<EnterDetailBloc, EnterDetailState>(
-            builder: (context, state) {
-              if (state is EnterDetailLoading) {
-                return PageLoadingWidget();
-              } else if (state is EnterDetailEmpty) {
-                return PageEmptyWidget();
-              } else if (state is EnterDetailError) {
-                return PageErrorWidget(errorMessage: state.errorMessage);
-              } else if (state is EnterDetailLoaded) {
-                return _buildPageLoadedDetail(state.enterDetail);
-              } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
-              }
-            },
-          ),
-        ],
-      ),
-    );*/
     super.build(context);
     return Scaffold(
       body: EasyRefresh.custom(
@@ -104,7 +65,6 @@ class _EnterIndexPageState extends State<EnterIndexPage>
         slivers: <Widget>[
           BlocListener<EnterDetailBloc, EnterDetailState>(
             listener: (context, state) {
-              print('监听到了');
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
@@ -246,7 +206,6 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     title: '企业联系人',
                     imagePath: 'assets/images/icon_enter_contacts.png',
                   ),
-                  Gaps.vGap10,
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.enterTel),
                     child: ContactsWidget(
@@ -255,7 +214,6 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                       imagePath: 'assets/images/enter_enter_tel_header.png',
                     ),
                   ),
-                  Gaps.vGap10,
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.contactPersonTel),
                     child: ContactsWidget(
@@ -264,7 +222,6 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                       imagePath: 'assets/images/enter_contacts_tel_header.png',
                     ),
                   ),
-                  Gaps.vGap10,
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.legalPersonTel),
                     child: ContactsWidget(
