@@ -87,6 +87,8 @@ dependencies:
   multi_image_picker: ^4.5.9
   # 获取系统文件路径 https://github.com/flutter/plugins/tree/master/packages/path_provider
   path_provider: ^1.4.5
+  # 打开文件 https://github.com/crazecoder/open_file
+  open_file: ^2.1.1
   # 扫码 https://github.com/apptreesoftware/flutter_barcode_reader
   # barcode_scan:
     # git:
