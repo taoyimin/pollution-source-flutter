@@ -84,3 +84,38 @@ class JavaDioUtils {
     }
   }
 }
+
+class FileDioUtils {
+  static final FileDioUtils _singleton = FileDioUtils._internal();
+
+  static FileDioUtils get instance => FileDioUtils();
+
+  factory FileDioUtils() {
+    return _singleton;
+  }
+
+  static Dio _dio;
+
+  Dio getDio() {
+    return _dio;
+  }
+
+  FileDioUtils._internal() {
+    var options = BaseOptions(
+      connectTimeout: 15000,
+      receiveTimeout: 15000,
+      responseType: ResponseType.json,
+      validateStatus: (status) {
+        // http响应状态码被dio视为请求成功
+        return true;
+      },
+    );
+    _dio = Dio(options);
+    /// 处理异常
+    _dio.interceptors.add(HandleErrorInterceptor());
+    /// 打印Log(生产模式去除)
+    if (!Constant.inProduction) {
+      _dio.interceptors.add(LoggingInterceptor());
+    }
+  }
+}
