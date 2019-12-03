@@ -85,10 +85,12 @@ dependencies:
   gzx_dropdown_menu : ^1.0.1
   # 图片选择器 https://github.com/Sh1d0w/multi_image_picker
   multi_image_picker: ^4.5.9
+  # 获取系统文件路径 https://github.com/flutter/plugins/tree/master/packages/path_provider
+  path_provider: ^1.4.5
   # 扫码 https://github.com/apptreesoftware/flutter_barcode_reader
-  barcode_scan:
-    git:
-      url: https://github.com/simplezhli/flutter_barcode_reader.git
+  # barcode_scan:
+    # git:
+      # url: https://github.com/simplezhli/flutter_barcode_reader.git
 
 dev_dependencies:
   flutter_test:

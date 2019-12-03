@@ -29,15 +29,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.3.0"
-  barcode_scan:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "7229aeb7b5cd5c58db705237f23af0baa2a61cca"
-      url: "https://github.com/simplezhli/flutter_barcode_reader.git"
-    source: git
-    version: "1.0.0"
   bloc:
     dependency: transitive
     description:
@@ -544,12 +535,12 @@ packages:
     source: hosted
     version: "0.1.4"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.5"
   pedantic:
     dependency: transitive
     description:
@@ -781,4 +772,4 @@ packages:
     version: "2.2.0"
 sdks:
   dart: ">2.4.0 <3.0.0"
-  flutter: ">=1.7.8 <2.0.0"
+  flutter: ">=1.9.1+hotfix.5 <2.0.0"
