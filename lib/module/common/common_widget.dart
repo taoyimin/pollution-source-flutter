@@ -1,12 +1,21 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:common_utils/common_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/file_utils.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/util/utils.dart';
+import 'package:pollution_source/widget/liquid_linear_progress_indicator.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import 'common_model.dart';
 
@@ -1126,7 +1135,68 @@ class AttachmentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () async {
+        ProgressDialog pr;
+        try {
+          String localPath =
+              await FileUtils.getAttachmentLocalPathByAttachment(attachment);
+          if (await File(localPath).exists()) {
+            //附件已经存在
+            OpenFile.open(localPath);
+          } else {
+            //附件不存在
+            pr = ProgressDialog(context,
+                type: ProgressDialogType.Download,
+                isDismissible: true,
+                showLogs: true);
+            pr.style(
+                message: '正在下载附件...',
+                borderRadius: 10.0,
+                backgroundColor: Colors.white,
+                elevation: 10.0,
+                insetAnimCurve: Curves.easeInOut,
+                progress: 0.0,
+                maxProgress: 100.0,
+                progressTextStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w400),
+                messageTextStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.w600));
+            pr.show();
+            await FileDioUtils.instance.getDio().download(
+                "http://59.63.215.113:8090/FileServer/file?timestamp=20191202163054&access_token=009ab1b60c3cbc32ff1b61582b5862dc4816317852d9a0a803b499a673ee6ff1016e6b9ffb168030af557b6cb0ce38cc79dc947f6faad207c2f94d9d91bc03bf83259b0c032a3aa7b49aa240b24caadc8ed3dfe1ee2d7fa91a495c59681e91831780294fe51ab60d4776fd5e77b0077d345909f912c0204a956cb1f82dcdb29a&filename=${attachment.url}",
+                localPath, onReceiveProgress: (int count, int total) {
+              print('count=$count***total$total');
+              pr.update(
+                progress:
+                    double.parse((count * 100 / total).toStringAsFixed(2)),
+                message: "正在下载附件...",
+                maxProgress: 100.0,
+                progressTextStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w400),
+                messageTextStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.w600),
+              );
+            });
+            OpenFile.open(localPath);
+          }
+        } catch (e) {
+          print(e.toString());
+          Toast.show(e.toString());
+        }
+        if (pr?.isShowing() ?? false) {
+          pr.hide().then((isHidden) {
+            print(isHidden);
+          });
+        }
+      },
       child: Container(
         height: 44,
         padding: const EdgeInsets.symmetric(vertical: 5),

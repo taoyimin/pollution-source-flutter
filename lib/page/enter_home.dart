@@ -7,7 +7,11 @@ import 'package:pollution_source/module/enter/detail/enter_index_page.dart';
 import 'mine.dart';
 
 class EnterHomePage extends StatefulWidget {
-  EnterHomePage({Key key}) : super(key: key);
+  final String enterId;
+
+  EnterHomePage({Key key, this.enterId})
+      : assert(enterId != null),
+        super(key: key);
 
   @override
   _EnterHomePageState createState() => _EnterHomePageState();
@@ -17,17 +21,27 @@ class _EnterHomePageState extends State<EnterHomePage> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static List<Widget> _widgetOptions = <Widget>[
-    //IndexPage(),
-    BlocProvider(
-      builder: (context) => EnterDetailBloc(),
-      child: EnterIndexPage(enterId: '10000',),
-    ),
-    EnterApplicationPage(enterId: '10000',),
-    MinePage(),
-  ];
+  static List<Widget> _widgetOptions;
 
   final pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+      //IndexPage(),
+      BlocProvider(
+        builder: (context) => EnterDetailBloc(),
+        child: EnterIndexPage(
+          enterId: '${widget.enterId}',
+        ),
+      ),
+      EnterApplicationPage(
+        enterId: '${widget.enterId}',
+      ),
+      MinePage(),
+    ];
+  }
 
   void onPageChanged(int index) {
     setState(() {

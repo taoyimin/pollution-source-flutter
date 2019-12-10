@@ -19,10 +19,12 @@ class Gaps {
   static const Widget vGap4 = const SizedBox(height: Dimens.gap_dp4);
   static const Widget vGap5 = const SizedBox(height: Dimens.gap_dp5);
   static const Widget vGap6 = const SizedBox(height: Dimens.gap_dp6);
+  static const Widget vGap8 = const SizedBox(height: Dimens.gap_dp8);
   static const Widget vGap10 = const SizedBox(height: Dimens.gap_dp10);
   static const Widget vGap15 = const SizedBox(height: Dimens.gap_dp15);
   static const Widget vGap16 = const SizedBox(height: Dimens.gap_dp16);
   static const Widget vGap20 = const SizedBox(height: Dimens.gap_dp20);
+  static const Widget vGap25 = const SizedBox(height: Dimens.gap_dp25);
   static const Widget vGap30 = const SizedBox(height: Dimens.gap_dp30);
 
   //水平分割线

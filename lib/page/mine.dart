@@ -1,6 +1,9 @@
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/util/file_utils.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
 /// 个人中心页面
@@ -69,7 +72,9 @@ class _MinePageState extends State<MinePage> {
                           child: new Text(
                             '环境保护厅',
                             style: new TextStyle(
-                                fontSize: 25.0, color: Colors.white,),
+                              fontSize: 25.0,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -189,7 +194,10 @@ class _MinePageState extends State<MinePage> {
                       Positioned(
                         top: 36,
                         left: 16,
-                        child: Icon(Icons.notifications_none,color: Colors.white,),
+                        child: Icon(
+                          Icons.notifications_none,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
@@ -311,19 +319,50 @@ class _MinePageState extends State<MinePage> {
                                       ),
                                     ],
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  InkWellButton(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title:const Text("清理缓存"),
+                                              content:const Text("是否确定清理缓存？"),
+                                              actions: <Widget>[
+                                                 FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child:const Text("取消"),
+                                                ),
+                                                 FlatButton(
+                                                  onPressed: () async {
+                                                    await FileUtils.clearApplicationDirectory();
+                                                    Toast.show('清理附件成功！');
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child:const Text("确认"),
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    },
                                     children: <Widget>[
-                                      Image.asset(
-                                        "assets/images/icon_clear_cache.png",
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                      Text(
-                                        "清理缓存",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.asset(
+                                            "assets/images/icon_clear_cache.png",
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          Text(
+                                            "清理缓存",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colours.secondary_text),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),

@@ -1,6 +1,4 @@
-import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -18,7 +16,7 @@ class Utils {
   }
 
   /// 调起二维码扫描页
-  static Future<String> scan() async {
+  /*static Future<String> scan() async {
     try {
       return await BarcodeScanner.scan();
     } catch (e) {
@@ -29,7 +27,7 @@ class Utils {
       }
     }
     return null;
-  }
+  }*/
 
   static KeyboardActionsConfig getKeyboardActionsConfig(List<FocusNode> list) {
     return KeyboardActionsConfig(

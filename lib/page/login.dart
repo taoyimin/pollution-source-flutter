@@ -86,10 +86,11 @@ import 'package:flutter/services.dart';
 import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/utils.dart';
-import 'package:pollution_source/widget/my_button.dart';
-import 'package:pollution_source/widget/text_field.dart';
+import 'package:pollution_source/widget/login_button.dart';
+import 'package:pollution_source/widget/login_text_field.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:pollution_source/res/colors.dart';
 
@@ -148,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _login() async {
+  void _adminLogin() async {
     try {
       if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
         Response response = await JavaDioUtils.instance.getDio().get(HttpApiJava.login,
@@ -171,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       } else {
         Response response = await PythonDioUtils.instance.getDio().post(
-          HttpApiPython.token,
+          'admin/${HttpApiPython.token}',
           data: {
             'userName': _nameController.text,
             'passWord': _passwordController.text
@@ -208,14 +209,60 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _enterLogin() async {
-    Navigator.push(
+    try {
+      if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+        Response response = await JavaDioUtils.instance.getDio().get(HttpApiJava.login,
+            queryParameters: {
+              'userName': _nameController.text,
+              'password': _passwordController.text
+            });
+        //登录成功
+        SpUtil.putString(Constant.spUsername, _nameController.text);
+        SpUtil.putString(Constant.spPassword, _passwordController.text);
+        SpUtil.putString(Constant.spToken,
+            response.data[Constant.responseDataKey][Constant.responseTokenKey]);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return HomePage();
+            },
+          ),
+        );
+      } else {
+        Response response = await PythonDioUtils.instance.getDio().post(
+          'enter/${HttpApiPython.token}',
+          data: {
+            'userName': _nameController.text,
+            'passWord': _passwordController.text
+          },
+        );
+        //登录成功
+        SpUtil.putString(Constant.spUsername, _nameController.text);
+        SpUtil.putString(Constant.spPassword, _passwordController.text);
+        SpUtil.putString(Constant.spToken,
+            'Bearer ${response.data[Constant.responseTokenKey]}');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return EnterHomePage(enterId: '${response.data['enterId']}',);
+            },
+          ),
+        );
+      }
+    } catch (e) {
+      Toast.show(ExceptionHandle.handleException(e).msg);
+    }
+
+    /*Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
           return EnterHomePage();
         },
       ),
-    );
+    );*/
   }
 
   @override
@@ -279,11 +326,8 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          //Gaps.vGap16,
-          SizedBox(
-            height: 16,
-          ),
-          MyTextField(
+          Gaps.vGap16,
+          LoginTextField(
             key: const Key('username'),
             focusNode: _nodeText1,
             controller: _nameController,
@@ -291,10 +335,8 @@ class _LoginPageState extends State<LoginPage> {
             keyboardType: TextInputType.text,
             hintText: "请输入账号",
           ),
-          SizedBox(
-            height: 8,
-          ),
-          MyTextField(
+          Gaps.vGap10,
+          LoginTextField(
             key: const Key('password'),
             keyName: 'password',
             focusNode: _nodeText2,
@@ -304,49 +346,19 @@ class _LoginPageState extends State<LoginPage> {
             maxLength: 16,
             hintText: "请输入密码",
           ),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          MyButton(
+          Gaps.vGap25,
+          LoginButton(
             key: const Key('login'),
-            onPressed: _isClick ? _login : null,
+            onPressed: _isClick ? _adminLogin : null,
             color: Colors.lightGreen,
             text: "环保登录",
           ),
-          SizedBox(
-            height: 15,
-          ),
-          MyButton(
+          Gaps.vGap15,
+          LoginButton(
             key: const Key('enterLogin'),
             onPressed: _isClick ? _enterLogin : null,
             text: "企业登录",
           ),
-          Container(
-            height: 40.0,
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              child: Text(
-                '忘记密码',
-                style: TextStyle(
-                    fontSize: 12, color: Colors.white.withOpacity(0.7)),
-              ),
-              onTap: () {},
-            ),
-          ),
-          //Gaps.vGap16,
-          Container(
-            alignment: Alignment.center,
-            child: GestureDetector(
-              child: const Text(
-                '还没账号？快去注册',
-                style: TextStyle(color: Colours.primary_color),
-              ),
-              onTap: () {},
-            ),
-          )
         ],
       ),
     );

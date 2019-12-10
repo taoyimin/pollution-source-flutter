@@ -39,6 +39,7 @@ class FileUtils {
     return getFileNameByUrl(attachment.url);
   }
 
+  //清空缓存文件
   static Future<void> clearApplicationDirectory() async {
     String appDocDir = await getApplicationDirectory();
     File(appDocDir).deleteSync(recursive: true);

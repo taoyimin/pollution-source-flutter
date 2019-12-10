@@ -105,7 +105,7 @@ class _LicenseListPageState extends State<LicenseListPage>
                       Row(
                         children: <Widget>[
                           Gaps.hGap6,
-                          Image.asset('assets/images/test3.png', width: 40),
+                          Image.asset('assets/images/license_list_item_logo.png', width: 40),
                           /*CircleAvatar(
                             backgroundImage: AssetImage('assets/images/license_list_logo.png'),
                           ),*/

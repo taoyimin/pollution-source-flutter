@@ -5,9 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class MonitorTable extends Equatable {
-  final List<MonitorTableCell> fixedColCells;
-  final List<MonitorTableCell> fixedRowCells;
-  final List<List<MonitorTableCell>> rowsCells;
+  final List<MonitorTableCell> fixedColCells; //头部固定行
+  final List<MonitorTableCell> fixedRowCells; //左边固定列
+  final List<List<MonitorTableCell>> rowsCells; //数据行
 
   const MonitorTable({
     this.fixedColCells,
