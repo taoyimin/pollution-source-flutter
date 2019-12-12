@@ -260,6 +260,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.4"
+  fluro:
+    dependency: "direct main"
+    description:
+      name: fluro
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.5.1"
   flustars:
     dependency: "direct main"
     description:
@@ -278,7 +285,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.1"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -589,7 +596,7 @@ packages:
       name: provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.0"
+    version: "3.2.0"
   pub_semver:
     dependency: transitive
     description:
