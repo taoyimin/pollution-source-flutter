@@ -1150,26 +1150,28 @@ class AttachmentWidget extends StatelessWidget {
                 isDismissible: true,
                 showLogs: true);
             pr.style(
-                message: '正在下载附件...',
-                borderRadius: 10.0,
-                backgroundColor: Colors.white,
-                elevation: 10.0,
-                insetAnimCurve: Curves.easeInOut,
-                progress: 0.0,
-                maxProgress: 100.0,
-                progressTextStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w400),
-                messageTextStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 19.0,
-                    fontWeight: FontWeight.w600));
+              message: '正在下载附件...',
+              borderRadius: 10.0,
+              backgroundColor: Colors.white,
+              elevation: 10.0,
+              insetAnimCurve: Curves.easeInOut,
+              progress: 0.0,
+              maxProgress: 100.0,
+              progressTextStyle: TextStyle(
+                color: Colors.black,
+                fontSize: 13.0,
+                fontWeight: FontWeight.w400,
+              ),
+              messageTextStyle: TextStyle(
+                color: Colors.black,
+                fontSize: 19.0,
+                fontWeight: FontWeight.w600,
+              ),
+            );
             pr.show();
             await FileDioUtils.instance.getDio().download(
                 "http://59.63.215.113:8090/FileServer/file?timestamp=20191202163054&access_token=009ab1b60c3cbc32ff1b61582b5862dc4816317852d9a0a803b499a673ee6ff1016e6b9ffb168030af557b6cb0ce38cc79dc947f6faad207c2f94d9d91bc03bf83259b0c032a3aa7b49aa240b24caadc8ed3dfe1ee2d7fa91a495c59681e91831780294fe51ab60d4776fd5e77b0077d345909f912c0204a956cb1f82dcdb29a&filename=${attachment.url}",
                 localPath, onReceiveProgress: (int count, int total) {
-              print('count=$count***total$total');
               pr.update(
                 progress:
                     double.parse((count * 100 / total).toStringAsFixed(2)),
@@ -1188,12 +1190,11 @@ class AttachmentWidget extends StatelessWidget {
             OpenFile.open(localPath);
           }
         } catch (e) {
-          print(e.toString());
           Toast.show(e.toString());
         }
         if (pr?.isShowing() ?? false) {
           pr.hide().then((isHidden) {
-            print(isHidden);
+
           });
         }
       },
@@ -1212,6 +1213,8 @@ class AttachmentWidget extends StatelessWidget {
               children: <Widget>[
                 Text(
                   attachment.fileName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 12),
                 ),
                 Text(
@@ -1528,6 +1531,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
   }
 }
 
+//自定义裁剪按钮
 class ClipButton extends StatelessWidget {
   final double height;
   final String text;
@@ -1586,6 +1590,7 @@ class ClipButton extends StatelessWidget {
   }
 }
 
+//自定义尖头裁剪器
 class TipClipper extends CustomClipper<Path> {
   double clipHeightRatio; //裁剪的尖头高度占控件总高度的比率
   double clipWidthRatio; //裁剪的尖头宽度占控件总高度的比率
@@ -1615,6 +1620,7 @@ class TipClipper extends CustomClipper<Path> {
   bool shouldReclip(TipClipper oldClipper) => false;
 }
 
+//单行文本输入控件
 class EditRowWidget extends StatelessWidget {
   final String title;
   final String hintText;
@@ -1675,6 +1681,7 @@ class EditRowWidget extends StatelessWidget {
   }
 }
 
+//多行文本输入控件
 class TextAreaWidget extends StatelessWidget {
   final String title;
   final String hintText;
@@ -1755,6 +1762,54 @@ class MapInfoRowWidget extends StatelessWidget {
           ),
           Gaps.hGap16,
         ],
+      ),
+    );
+  }
+}
+
+//登录页选择用户类型按钮 左边图片右边文字 可改透明度
+class IconCheckButton extends StatelessWidget {
+  final String text;
+  final String imagePath;
+  final Color color;
+  final bool checked;
+  final GestureTapCallback onTap;
+
+  IconCheckButton({
+    this.text,
+    this.imagePath,
+    this.color,
+    this.checked = true,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: Opacity(
+        opacity: checked ? 1 : 0.5,
+        child: FlatButton(
+          onPressed: onTap ?? () {},
+          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+          color: color,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Image.asset(
+                imagePath,
+                height: 30,
+                width: 30,
+                color: null,
+              ),
+              Text(
+                text,
+                style: TextStyle(color: Colors.white, fontSize: 13),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
