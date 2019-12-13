@@ -8,6 +8,7 @@ class ExceptionHandle{
 
   static const int success = 200;
   static const int success_not_content = 204;
+  static const int invalid_param = 300;
   static const int bad_request = 400;
   static const int unauthorized = 401;
   static const int forbidden = 403;
@@ -33,6 +34,9 @@ class ExceptionHandle{
         }
         if (e is HttpException) {
           return NetError(http_error, "服务器异常！");
+        }
+        if (e is InvalidParamException) {
+          return NetError(invalid_param, e.message);
         }
         if (e is BadRequestException) {
           return NetError(bad_request, e.message);
@@ -105,4 +109,11 @@ class TokenException implements Exception{
   final String message;
 
   TokenException(this.message);
+}
+
+//请求参数不合法
+class InvalidParamException implements Exception{
+  final String message;
+
+  InvalidParamException(this.message);
 }
