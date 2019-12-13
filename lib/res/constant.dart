@@ -16,6 +16,7 @@ class Constant {
 
   static const String spUsername = 'username';
   static const String spPassword = 'password';
+  static const String spUserType = 'userType';
   static const String spToken = 'token';
   static const String spIsCurved = 'isCurved';
   static const String spShowDotData = 'showDotData';
