@@ -4,6 +4,7 @@ import 'package:pollution_source/route/route_handlers.dart';
 
 class Routes {
   static String root = "/";
+  static String orderDetail = "/orderDetail";
   static String dischargeReportUpload = "/dischargeReportUpload";
 
   static void configureRoutes(Router router) {
@@ -13,6 +14,7 @@ class Routes {
           print("ROUTE WAS NOT FOUND !!!");
         });
     router.define(root, handler: rootHandler);
+    router.define(orderDetail, handler: orderDetailHandler);
     router.define(dischargeReportUpload, handler: dischargeReportUploadHandler);
   }
 }
