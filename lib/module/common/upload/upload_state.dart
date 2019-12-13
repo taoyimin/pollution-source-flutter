@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -10,9 +11,14 @@ abstract class UploadState extends Equatable {
 
 class UploadInitial extends UploadState {}
 
-class Uploading extends UploadState {}
+class Uploading extends UploadState {
+  final CancelToken token;
 
-class UploadCancel extends UploadState {}
+  const Uploading({@required this.token});
+
+  @override
+  List<Object> get props => [token];
+}
 
 class UploadSuccess extends UploadState {
   final String message;
