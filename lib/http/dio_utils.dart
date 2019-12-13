@@ -27,9 +27,9 @@ class PythonDioUtils {
         // http响应状态码被dio视为请求成功
         return true;
       },
+      //debug
       //baseUrl: 'http://taoyimin.iok.la:58213/api/',
       baseUrl: 'http://118.89.20.44:80/api/',
-      //baseUrl: SpUtil.getBool(Constant.spJavaApi, defValue: true) ? 'http://182.106.189.190:9999/' : 'http://182.106.189.190:5000/api/',
     );
     _dio = Dio(options);
     /// 统一添加身份验证请求头
