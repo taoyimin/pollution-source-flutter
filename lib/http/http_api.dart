@@ -42,6 +42,8 @@ class HttpApiPython{
   static const String monitors = 'monitors';
   //报警管理单
   static const String orders = 'orders';
+  //报警管理单处理流程
+  static const String processes = 'processes';
   //异常申报单
   static const String reports = 'reports';
   //排口异常申报
