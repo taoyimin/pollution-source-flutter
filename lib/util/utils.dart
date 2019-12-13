@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -28,6 +29,36 @@ class Utils {
     }
     return null;
   }*/
+
+  //调用图片选择器
+  static Future<List<Asset>> loadAssets(List<Asset> selectedAssets) async {
+    List<Asset> resultAssets;
+    try {
+      resultAssets = await MultiImagePicker.pickImages(
+        enableCamera: true,
+        maxImages: 10,
+        selectedAssets: selectedAssets ?? List<Asset>(),
+        materialOptions: MaterialOptions(
+          actionBarTitle: '选取图片',
+          allViewTitle: '全部图片',
+          actionBarColor: '#03A9F4',
+          actionBarTitleColor: '#FFFFFF',
+          lightStatusBar: false,
+          statusBarColor: '#0288D1',
+          startInAllView: false,
+          useDetailsView: true,
+          selectCircleStrokeColor: '#FFFFFF',
+          selectionLimitReachedText: '已达到可选图片最大数',
+        ),
+      );
+    } on NoImagesSelectedException {
+      Toast.show('没有选择任何图片');
+      return selectedAssets;
+    } on Exception catch (e) {
+      Toast.show('选择图片错误！错误信息：$e');
+    }
+    return resultAssets ?? List<Asset>();
+  }
 
   static KeyboardActionsConfig getKeyboardActionsConfig(List<FocusNode> list) {
     return KeyboardActionsConfig(
@@ -71,20 +102,24 @@ class Utils {
   }
 
   static double getYAxisInterval(List<ChartData> chartDataList) {
-    double maxY = Utils.getMax(chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double maxY = Utils.getMax(
+        chartDataList.where((chartData) => chartData.checked).map((chartData) {
       return chartData.maxY;
     }).toList());
-    double minY = Utils.getMin(chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double minY = Utils.getMin(
+        chartDataList.where((chartData) => chartData.checked).map((chartData) {
       return chartData.minY;
     }).toList());
     return (maxY - minY) / (4);
   }
 
   static double getXAxisInterval(List<ChartData> chartDataList) {
-    double maxX = Utils.getMax(chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double maxX = Utils.getMax(
+        chartDataList.where((chartData) => chartData.checked).map((chartData) {
       return chartData.maxX;
     }).toList());
-    double minX = Utils.getMin(chartDataList.where((chartData)=>chartData.checked).map((chartData) {
+    double minX = Utils.getMin(
+        chartDataList.where((chartData) => chartData.checked).map((chartData) {
       return chartData.minX;
     })?.toList());
     return (maxX - minX) / (6);
