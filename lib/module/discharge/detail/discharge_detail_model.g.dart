@@ -8,23 +8,23 @@ part of 'discharge_detail_model.dart';
 
 DischargeDetail _$DischargeDetailFromJson(Map<String, dynamic> json) {
   return DischargeDetail(
-      dischargeId: json['dischargeId'] as String,
-      enterId: json['enterId'] as String,
-      enterName: json['enterName'] as String,
-      enterAddress: json['enterAddress'] as String,
-      dischargeName: json['dischargeName'] as String,
-      dischargeShortName: json['dischargeShortName'] as String,
-      dischargeAddress: json['dischargeAddress'] as String,
-      dischargeNumber: json['dischargeNumber'] as String,
-      dischargeTypeStr: json['dischargeTypeStr'] as String,
-      dischargeCategoryStr: json['dischargeCategoryStr'] as String,
-      dischargeRuleStr: json['dischargeRuleStr'] as String,
-      outTypeStr: json['outTypeStr'] as String,
-      denoterInstallTypeStr: json['denoterInstallTypeStr'] as String,
-      longitude: json['longitude'] as String,
-      latitude: json['latitude'] as String,
-      dischargeReportTotalCount: json['dischargeReportTotalCount'] as String,
-      factorReportTotalCount: json['factorReportTotalCount'] as String);
+      dischargeId: json['dischargeId'].toString(),
+      enterId: json['enterId'].toString(),
+      enterName: json['enterName'].toString(),
+      enterAddress: json['enterAddress'].toString(),
+      dischargeName: json['dischargeName'].toString(),
+      dischargeShortName: json['dischargeShortName'].toString(),
+      dischargeAddress: json['dischargeAddress'].toString(),
+      dischargeNumber: json['dischargeNumber'].toString(),
+      dischargeTypeStr: json['dischargeTypeStr'].toString(),
+      dischargeCategoryStr: json['dischargeCategoryStr'].toString(),
+      dischargeRuleStr: json['dischargeRuleStr'].toString(),
+      outTypeStr: json['outTypeStr'].toString(),
+      denoterInstallTypeStr: json['denoterInstallTypeStr'].toString(),
+      longitude: json['longitude'].toString(),
+      latitude: json['latitude'].toString(),
+      dischargeReportTotalCount: json['dischargeReportTotalCount'].toString(),
+      factorReportTotalCount: json['factorReportTotalCount'].toString());
 }
 
 Map<String, dynamic> _$DischargeDetailToJson(DischargeDetail instance) =>

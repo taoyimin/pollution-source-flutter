@@ -69,48 +69,4 @@ class DischargeDetail extends Equatable {
       _$DischargeDetailFromJson(json);
 
   Map<String, dynamic> toJson() => _$DischargeDetailToJson(this);
-
-  /*static DischargeDetail fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      return DischargeDetail(
-        dischargeId: '-',
-        enterId: '-',
-        enterName: '-',
-        enterAddress: '-',
-        dischargeName: '-',
-        dischargeShortName: '-',
-        dischargeAddress: '-',
-        dischargeNumber: '-',
-        dischargeTypeStr: '-',
-        dischargeCategoryStr: '-',
-        dischargeRuleStr: '-',
-        outTypeStr: '-',
-        denoterInstallTypeStr: '-',
-        longitude: '-',
-        latitude: '-',
-        dischargeReportTotalCount: '-',
-        factorReportTotalCount: '-',
-      );
-    } else {
-      return DischargeDetail(
-        dischargeId: json['dischargeId'],
-        enterId: json['enterId'],
-        enterName: json['enterName'],
-        enterAddress: json['enterAddress'],
-        dischargeName: json['dischargeName'],
-        dischargeShortName: json['dischargeShortName'],
-        dischargeAddress: json['dischargeAddress'],
-        dischargeNumber: json['dischargeNumber'],
-        dischargeTypeStr: json['dischargeTypeStr'],
-        dischargeCategoryStr: json['dischargeCategoryStr'],
-        dischargeRuleStr: json['dischargeRuleStr'],
-        outTypeStr: json['outTypeStr'],
-        denoterInstallTypeStr: json['denoterInstallTypeStr'],
-        longitude: json['longitude'],
-        latitude: json['latitude'],
-        dischargeReportTotalCount: json['dischargeReportTotalCount'],
-        factorReportTotalCount: json['factorReportTotalCount'],
-      );
-    }
-  }*/
 }

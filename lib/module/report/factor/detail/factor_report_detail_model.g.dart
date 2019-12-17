@@ -8,21 +8,21 @@ part of 'factor_report_detail_model.dart';
 
 FactorReportDetail _$FactorReportDetailFromJson(Map<String, dynamic> json) {
   return FactorReportDetail(
-      reportId: json['reportId'] as String,
-      enterId: json['enterId'] as String,
-      dischargeId: json['dischargeId'] as String,
-      monitorId: json['monitorId'] as String,
-      enterName: json['enterName'] as String,
-      enterAddress: json['enterAddress'] as String,
-      dischargeName: json['dischargeName'] as String,
-      monitorName: json['monitorName'] as String,
-      districtName: json['districtName'] as String,
-      reportTimeStr: json['reportTimeStr'] as String,
-      startTimeStr: json['startTimeStr'] as String,
-      endTimeStr: json['endTimeStr'] as String,
-      alarmTypeStr: json['alarmTypeStr'] as String,
-      exceptionReason: json['exceptionReason'] as String,
-      reviewOpinion: json['reviewOpinion'] as String,
+      reportId: json['reportId'].toString(),
+      enterId: json['enterId'].toString(),
+      dischargeId: json['dischargeId'].toString(),
+      monitorId: json['monitorId'].toString(),
+      enterName: json['enterName'].toString(),
+      enterAddress: json['enterAddress'].toString(),
+      dischargeName: json['dischargeName'].toString(),
+      monitorName: json['monitorName'].toString(),
+      districtName: json['districtName'].toString(),
+      reportTimeStr: json['reportTimeStr'].toString(),
+      startTimeStr: json['startTimeStr'].toString(),
+      endTimeStr: json['endTimeStr'].toString(),
+      alarmTypeStr: json['alarmTypeStr'].toString(),
+      exceptionReason: json['exceptionReason'].toString(),
+      reviewOpinion: json['reviewOpinion'].toString(),
       attachments: (json['attachments'] as List)
           ?.map((e) =>
               e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))

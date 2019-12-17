@@ -8,8 +8,8 @@ part of 'common_model.dart';
 
 Attachment _$AttachmentFromJson(Map<String, dynamic> json) {
   return Attachment(
-      fileName: json['fileName'] as String,
-      url: json['url'] as String,
+      fileName: json['fileName'].toString(),
+      url: json['url'].toString(),
       size: json['size'] as int);
 }
 
@@ -22,10 +22,10 @@ Map<String, dynamic> _$AttachmentToJson(Attachment instance) =>
 
 Process _$ProcessFromJson(Map<String, dynamic> json) {
   return Process(
-      operateTypeStr: json['operateTypeStr'] as String,
-      operatePerson: json['operatePerson'] as String,
-      operateTimeStr: json['operateTimeStr'] as String,
-      operateDesc: json['operateDesc'] as String,
+      operateTypeStr: json['operateTypeStr'].toString(),
+      operatePerson: json['operatePerson'].toString(),
+      operateTimeStr: json['operateTimeStr'].toString(),
+      operateDesc: json['operateDesc'].toString(),
       attachments: (json['attachments'] as List)
           ?.map((e) =>
               e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))

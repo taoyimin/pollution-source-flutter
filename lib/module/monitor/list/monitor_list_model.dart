@@ -23,9 +23,7 @@ class Monitor extends Equatable {
     this.monitorName,
     this.monitorAddress,
     this.monitorType,
-    //this.imagePath,
     this.monitorCategoryStr,
-    //this.labelList,
   });
 
   @override
@@ -35,9 +33,7 @@ class Monitor extends Equatable {
         monitorName,
         monitorAddress,
         monitorType,
-        //imagePath,
         monitorCategoryStr,
-        //labelList,
       ];
 
   String get imagePath {
@@ -54,36 +50,6 @@ class Monitor extends Equatable {
       _$MonitorFromJson(json);
 
   Map<String, dynamic> toJson() => _$MonitorToJson(this);
-
-  /*static Monitor fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      return Monitor(
-        monitorId: json['monitorId'].toString(),
-        enterName: json['enterpriseName'],
-        monitorName: json['disMonitorName'],
-        monitorAddress: json['disMonitorAddress'],
-        monitorType: json['disMonitorType'],
-        monitorCategoryStr: json['monitorCategoryStr'],
-        imagePath: _getMonitorTypeImage(json['disMonitorType']),
-        labelList: TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
-            ? const []
-            : _getLabelList('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*'),
-      );
-    } else {
-      return Monitor(
-        monitorId: json['monitorId'],
-        enterName: json['enterName'],
-        monitorName: json['monitorName'],
-        monitorAddress: json['monitorAddress'],
-        monitorType: json['monitorType'],
-        monitorCategoryStr: json['monitorCategoryStr'],
-        imagePath: _getMonitorTypeImage(json['monitorType']),
-        labelList: TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
-            ? const []
-            : _getLabelList('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*'),
-      );
-    }
-  }*/
 
   //根据监控点类型获取图片
   static String _getMonitorTypeImage(String monitorType) {

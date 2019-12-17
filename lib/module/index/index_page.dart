@@ -652,12 +652,12 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //报警单待处理
+              //报警管理单总数
               InkWellButton2(
                 meta: metaList[0],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.orderList}?state=2');
+                      context, '${Routes.orderList}');
                 },
               ),
               Gaps.hGap6,

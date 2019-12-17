@@ -47,32 +47,6 @@ class Discharge extends Equatable {
 
   Map<String, dynamic> toJson() => _$DischargeToJson(this);
 
-  /*static Discharge fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      return Discharge(
-        dischargeId: json['outId']+'',
-        enterName: json['enterpriseName'],
-        dischargeName: json['disMonitorName'],
-        dischargeAddress: json['disMonitorAddress'],
-        dischargeTypeStr: json['disOutMonitorTypeStr'],
-        dischargeCategoryStr: json['monitorCategoryStr'],
-        dischargeRuleStr: '-',
-        imagePath: _getMonitorTypeImage(json['disMonitorType']),
-      );
-    } else {
-      return Discharge(
-        dischargeId: json['dischargeId'],
-        enterName: json['enterName'],
-        dischargeName: json['dischargeName'],
-        dischargeAddress: json['dischargeAddress'],
-        dischargeTypeStr: json['dischargeTypeStr'],
-        dischargeCategoryStr: json['dischargeCategoryStr'],
-        dischargeRuleStr: json['dischargeRuleStr'],
-        imagePath: _getMonitorTypeImage(json['dischargeType']),
-      );
-    }
-  }*/
-
   //根据排口类型获取图片
   static String _getMonitorTypeImage(String monitorType) {
     switch (monitorType) {

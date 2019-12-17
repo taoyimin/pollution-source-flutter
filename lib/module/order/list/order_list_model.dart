@@ -28,7 +28,6 @@ class Order extends Equatable {
     this.orderStateStr,
     this.alarmRemark,
     this.alarmTypeStr,
-    //this.labelList,
   });
 
   @override
@@ -41,7 +40,6 @@ class Order extends Equatable {
         orderStateStr,
         alarmRemark,
         alarmTypeStr,
-        //labelList,
       ];
 
   List<Label> get labelList {
@@ -53,38 +51,6 @@ class Order extends Equatable {
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderToJson(this);
-
-/*  static Order fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      return Order(
-        orderId: json['id'],
-        enterName: json['enterpriseName'],
-        monitorName: json['disOutName'],
-        alarmDateStr: '-',
-        districtName: json['areaName'],
-        orderStateStr: json['orderstate'],
-        alarmRemark: json['alarmdesc'],
-        alarmTypeStr: json['alarmTypeStr'],
-        labelList: TextUtil.isEmpty(json['alarmType'])
-            ? const []
-            : _getLabelList(json['alarmType']),
-      );
-    } else {
-      return Order(
-        orderId: json['orderId'],
-        enterName: json['enterName'],
-        monitorName: json['monitorName'],
-        alarmDateStr: json['alarmDateStr'],
-        districtName: json['districtName'],
-        orderStateStr: json['orderStateStr'],
-        alarmRemark: json['alarmRemark'],
-        alarmTypeStr: json['alarmTypeStr'],
-        labelList: TextUtil.isEmpty(json['alarmTypeStr'])
-            ? const []
-            : _getLabelList(json['alarmTypeStr']),
-      );
-    }
-  }*/
 
   //将报警类型string转化成List
   static List<Label> _getLabelList(String string) {

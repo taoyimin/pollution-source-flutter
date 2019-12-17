@@ -8,14 +8,14 @@ part of 'discharge_list_model.dart';
 
 Discharge _$DischargeFromJson(Map<String, dynamic> json) {
   return Discharge(
-      dischargeId: json['dischargeId'] as String,
-      enterName: json['enterName'] as String,
-      dischargeName: json['dischargeName'] as String,
-      dischargeAddress: json['dischargeAddress'] as String,
-      dischargeType: json['dischargeType'] as String,
-      dischargeTypeStr: json['dischargeTypeStr'] as String,
-      dischargeCategoryStr: json['dischargeCategoryStr'] as String,
-      dischargeRuleStr: json['dischargeRuleStr'] as String);
+      dischargeId: json['dischargeId'].toString(),
+      enterName: json['enterName'].toString(),
+      dischargeName: json['dischargeName'].toString(),
+      dischargeAddress: json['dischargeAddress'].toString(),
+      dischargeType: json['dischargeType'].toString(),
+      dischargeTypeStr: json['dischargeTypeStr'].toString(),
+      dischargeCategoryStr: json['dischargeCategoryStr'].toString(),
+      dischargeRuleStr: json['dischargeRuleStr'].toString());
 }
 
 Map<String, dynamic> _$DischargeToJson(Discharge instance) => <String, dynamic>{

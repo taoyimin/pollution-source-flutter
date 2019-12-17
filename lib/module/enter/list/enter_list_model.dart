@@ -57,34 +57,6 @@ class Enter extends Equatable {
 
   Map<String, dynamic> toJson() => _$EnterToJson(this);
 
-  /*static Enter fromJson(dynamic json) {
-    if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
-      return Enter(
-        enterId: '${json['enter_id']}',
-        enterName: json['enterprise_name'],
-        enterAddress: json['ent_address'],
-        isImportant: json['attention_level'] == '1' ? true : false,
-        imagePath: _getEnterTypeImage(json['enterprise_type']),
-        industryTypeStr: json['industryTypeStr'],
-        labelList: TextUtil.isEmpty(json['enterprise_type_str'])
-            ? const []
-            : _getLabelList(json['enterprise_type_str']),
-      );
-    }else{
-      return Enter(
-        enterId: json['enterId'],
-        enterName: json['enterName'],
-        enterAddress: json['enterAddress'],
-        isImportant: json['attentionLevel'] == '1' ? true : false,
-        imagePath: _getEnterTypeImage(json['enterType']),
-        industryTypeStr: json['industryTypeStr'],
-        labelList: TextUtil.isEmpty(json['enterType'])
-            ? const []
-            : _getLabelList2(json['enterType']),
-      );
-    }
-  }*/
-
   //根据企业类型获取图片
   static String _getEnterTypeImage(String enterType) {
     switch (enterType) {
@@ -101,36 +73,8 @@ class Enter extends Equatable {
   }
 
   //将企业类型string转化成List
-  /*static List<Label> _getLabelList(String string) {
-    return string.trimLeft().trimRight().split(' ').map((string) {
-      switch (string) {
-        case '废水':
-          return Label(
-              name: '$string企业',
-              imagePath: 'assets/images/icon_pollution_water_outlet.png',
-              color: Colors.blue);
-        case '废气':
-          return Label(
-              name: '$string企业',
-              imagePath: 'assets/images/icon_pollution_air_outlet.png',
-              color: Colors.orange);
-        case '雨水':
-          return Label(
-              name: '$string企业',
-              imagePath: 'assets/images/icon_pollution_water_enter.png',
-              color: Colors.green);
-        default:
-          return Label(
-              name: string,
-              imagePath: 'assets/images/icon_alarm_type_unknow.png',
-              color: Colors.grey);
-      }
-    }).toList();
-  }*/
-
-  //将企业类型string转化成List
-  static List<Label> _getLabelList(String string) {
-    return string.split(',').map((string) {
+  static List<Label> _getLabelList(String enterType) {
+    return enterType.split(',').map((string) {
       switch (string) {
         case 'EnterType1':
           return Label(

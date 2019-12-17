@@ -8,12 +8,12 @@ part of 'monitor_list_model.dart';
 
 Monitor _$MonitorFromJson(Map<String, dynamic> json) {
   return Monitor(
-      monitorId: json['monitorId'] as String,
-      enterName: json['enterName'] as String,
-      monitorName: json['monitorName'] as String,
-      monitorAddress: json['monitorAddress'] as String,
-      monitorType: json['monitorType'] as String,
-      monitorCategoryStr: json['monitorCategoryStr'] as String);
+      monitorId: json['monitorId'].toString(),
+      enterName: json['enterName'].toString(),
+      monitorName: json['monitorName'].toString(),
+      monitorAddress: json['monitorAddress'].toString(),
+      monitorType: json['monitorType'].toString(),
+      monitorCategoryStr: json['monitorCategoryStr'].toString());
 }
 
 Map<String, dynamic> _$MonitorToJson(Monitor instance) => <String, dynamic>{

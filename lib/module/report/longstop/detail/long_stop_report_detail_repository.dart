@@ -17,7 +17,7 @@ class LongStopReportDetailRepository
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       Response response = await JavaDioUtils.instance.getDio().get(
             HttpApiJava.reportDetail,
-            queryParameters: {'stopApplyId': detailId},
+            queryParameters: {'reportId': detailId, 'dataType': 'L'},
             cancelToken: cancelToken,
           );
       return LongStopReportDetail.fromJson(

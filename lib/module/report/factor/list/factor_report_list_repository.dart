@@ -59,6 +59,8 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
         'enterpriseName': enterName,
         'areaCode': areaCode,
         'enterId': enterId,
+        'dischargeId': dischargeId,
+        'monitorId': monitorId,
         'dataType': 'A',
         'QIsReview': state,
       };

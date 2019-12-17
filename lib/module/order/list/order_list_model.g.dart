@@ -8,14 +8,14 @@ part of 'order_list_model.dart';
 
 Order _$OrderFromJson(Map<String, dynamic> json) {
   return Order(
-      orderId: json['orderId'] as String,
-      enterName: json['enterName'] as String,
-      monitorName: json['monitorName'] as String,
-      alarmDateStr: json['alarmDateStr'] as String,
-      districtName: json['districtName'] as String,
-      orderStateStr: json['orderStateStr'] as String,
-      alarmRemark: json['alarmRemark'] as String,
-      alarmTypeStr: json['alarmTypeStr'] as String);
+      orderId: json['orderId'].toString(),
+      enterName: json['enterName'].toString(),
+      monitorName: json['monitorName'].toString(),
+      alarmDateStr: json['alarmDateStr'].toString(),
+      districtName: json['districtName'].toString(),
+      orderStateStr: json['orderStateStr'].toString(),
+      alarmRemark: json['alarmRemark'].toString(),
+      alarmTypeStr: json['alarmTypeStr'].toString());
 }
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{

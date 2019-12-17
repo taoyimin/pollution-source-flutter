@@ -8,15 +8,15 @@ part of 'factor_report_list_model.dart';
 
 FactorReport _$FactorReportFromJson(Map<String, dynamic> json) {
   return FactorReport(
-      reportId: json['reportId'] as String,
-      enterName: json['enterName'] as String,
-      monitorName: json['monitorName'] as String,
-      alarmTypeStr: json['alarmTypeStr'] as String,
-      districtName: json['districtName'] as String,
-      startTimeStr: json['startTimeStr'] as String,
-      endTimeStr: json['endTimeStr'] as String,
-      reportTimeStr: json['reportTimeStr'] as String,
-      factorCodeStr: json['factorCodeStr'] as String);
+      reportId: json['reportId'].toString(),
+      enterName: json['enterName'].toString(),
+      monitorName: json['monitorName'].toString(),
+      alarmTypeStr: json['alarmTypeStr'].toString(),
+      districtName: json['districtName'].toString(),
+      startTimeStr: json['startTimeStr'].toString(),
+      endTimeStr: json['endTimeStr'].toString(),
+      reportTimeStr: json['reportTimeStr'].toString(),
+      factorCodeStr: json['factorCodeStr'].toString());
 }
 
 Map<String, dynamic> _$FactorReportToJson(FactorReport instance) =>

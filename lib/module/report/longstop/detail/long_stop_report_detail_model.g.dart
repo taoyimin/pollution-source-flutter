@@ -8,15 +8,15 @@ part of 'long_stop_report_detail_model.dart';
 
 LongStopReportDetail _$LongStopReportDetailFromJson(Map<String, dynamic> json) {
   return LongStopReportDetail(
-      reportId: json['reportId'] as String,
-      enterId: json['enterId'] as String,
-      enterName: json['enterName'] as String,
-      enterAddress: json['enterAddress'] as String,
-      districtName: json['districtName'] as String,
-      reportTimeStr: json['reportTimeStr'] as String,
-      startTimeStr: json['startTimeStr'] as String,
-      endTimeStr: json['endTimeStr'] as String,
-      remark: json['remark'] as String);
+      reportId: json['reportId'].toString(),
+      enterId: json['enterId'].toString(),
+      enterName: json['enterName'].toString(),
+      enterAddress: json['enterAddress'].toString(),
+      districtName: json['districtName'].toString(),
+      reportTimeStr: json['reportTimeStr'].toString(),
+      startTimeStr: json['startTimeStr'].toString(),
+      endTimeStr: json['endTimeStr'].toString(),
+      remark: json['remark'].toString());
 }
 
 Map<String, dynamic> _$LongStopReportDetailToJson(

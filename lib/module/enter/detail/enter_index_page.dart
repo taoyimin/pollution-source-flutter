@@ -488,7 +488,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                       return BlocProvider(
                         create: (context) => LicenseListBloc(),
                         child: LicenseListPage(
-                          enterId: enterDetail.enterId,
+                          enterId: '${enterDetail.enterId}',
                         ),
                       );
                     }));

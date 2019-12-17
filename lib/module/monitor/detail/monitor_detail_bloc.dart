@@ -80,7 +80,7 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.monitorDetail,
-        queryParameters: {'monitor_id': monitorId},
+        queryParameters: {'monitorId': monitorId},
       );
       return MonitorDetail.fromJson(response.data[Constant.responseDataKey]);
     } else {

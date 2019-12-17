@@ -17,7 +17,7 @@ class FactorReportDetailRepository
     if(SpUtil.getBool(Constant.spJavaApi, defValue: true)){
       Response response = await JavaDioUtils.instance.getDio().get(
         HttpApiJava.reportDetail,
-        queryParameters: {'stopApplyId': detailId},
+        queryParameters: {'reportId': detailId, 'dataType': 'A'},
         cancelToken: cancelToken,
       );
       return FactorReportDetail.fromJson(response.data[Constant.responseDataKey]);

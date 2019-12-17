@@ -8,14 +8,14 @@ part of 'discharge_report_list_model.dart';
 
 DischargeReport _$DischargeReportFromJson(Map<String, dynamic> json) {
   return DischargeReport(
-      reportId: json['reportId'] as String,
-      enterName: json['enterName'] as String,
-      monitorName: json['monitorName'] as String,
-      stopTypeStr: json['stopTypeStr'] as String,
-      districtName: json['districtName'] as String,
-      startTimeStr: json['startTimeStr'] as String,
-      endTimeStr: json['endTimeStr'] as String,
-      reportTimeStr: json['reportTimeStr'] as String);
+      reportId: json['reportId'].toString(),
+      enterName: json['enterName'].toString(),
+      monitorName: json['monitorName'].toString(),
+      stopTypeStr: json['stopTypeStr'].toString(),
+      districtName: json['districtName'].toString(),
+      startTimeStr: json['startTimeStr'].toString(),
+      endTimeStr: json['endTimeStr'].toString(),
+      reportTimeStr: json['reportTimeStr'].toString());
 }
 
 Map<String, dynamic> _$DischargeReportToJson(DischargeReport instance) =>

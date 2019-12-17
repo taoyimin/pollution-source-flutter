@@ -45,8 +45,8 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
-    state = '',
     enterId = '',
+    state = '',
   }) {
     if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
       return {

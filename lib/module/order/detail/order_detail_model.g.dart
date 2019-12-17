@@ -8,17 +8,17 @@ part of 'order_detail_model.dart';
 
 OrderDetail _$OrderDetailFromJson(Map<String, dynamic> json) {
   return OrderDetail(
-      orderId: json['orderId'] as String,
-      enterId: json['enterId'] as String,
-      monitorId: json['monitorId'] as String,
-      enterName: json['enterName'] as String,
-      enterAddress: json['enterAddress'] as String,
-      districtName: json['districtName'] as String,
-      monitorName: json['monitorName'] as String,
-      alarmDateStr: json['alarmDateStr'] as String,
-      orderStateStr: json['orderStateStr'] as String,
-      alarmTypeStr: json['alarmTypeStr'] as String,
-      alarmRemark: json['alarmRemark'] as String,
+      orderId: json['orderId'].toString(),
+      enterId: json['enterId'].toString(),
+      monitorId: json['monitorId'].toString(),
+      enterName: json['enterName'].toString(),
+      enterAddress: json['enterAddress'].toString(),
+      districtName: json['districtName'].toString(),
+      monitorName: json['monitorName'].toString(),
+      alarmDateStr: json['alarmDateStr'].toString(),
+      orderStateStr: json['orderStateStr'].toString(),
+      alarmTypeStr: json['alarmTypeStr'].toString(),
+      alarmRemark: json['alarmRemark'].toString(),
       processes: (json['processes'] as List)
           ?.map((e) =>
               e == null ? null : Process.fromJson(e as Map<String, dynamic>))
