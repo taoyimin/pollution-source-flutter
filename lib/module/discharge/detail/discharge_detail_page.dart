@@ -3,18 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_event.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
+import 'package:pollution_source/module/discharge/detail/discharge_detail_model.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'discharge_detail.dart';
 
 class DischargeDetailPage extends StatefulWidget {
   final String dischargeId;
@@ -26,13 +22,13 @@ class DischargeDetailPage extends StatefulWidget {
 }
 
 class _DischargeDetailPageState extends State<DischargeDetailPage> {
-  DischargeDetailBloc _dischargeDetailBloc;
+  DetailBloc _detailBloc;
 
   @override
   void initState() {
     super.initState();
-    _dischargeDetailBloc = BlocProvider.of<DischargeDetailBloc>(context);
-    _dischargeDetailBloc.add(DischargeDetailLoad(dischargeId: widget.dischargeId));
+    _detailBloc = BlocProvider.of<DetailBloc>(context);
+    _detailBloc.add(DetailLoad(detailId: widget.dischargeId));
   }
 
   @override
@@ -49,13 +45,13 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
       key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<DischargeDetailBloc, DischargeDetailState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
-              if (state is DischargeDetailLoaded) {
-                enterName = state.dischargeDetail.enterName;
-                enterAddress = state.dischargeDetail.enterAddress;
+              if (state is DetailLoaded) {
+                enterName = state.detail.enterName;
+                enterAddress = state.detail.enterAddress;
               }
               return DetailHeaderWidget(
                 title: '排口详情',
@@ -66,18 +62,16 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
               );
             },
           ),
-          BlocBuilder<DischargeDetailBloc, DischargeDetailState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
-              if (state is DischargeDetailLoading) {
-                return PageLoadingWidget();
-              } else if (state is DischargeDetailEmpty) {
-                return PageEmptyWidget();
-              } else if (state is DischargeDetailError) {
-                return PageErrorWidget(errorMessage: state.errorMessage);
-              } else if (state is DischargeDetailLoaded) {
-                return _buildPageLoadedDetail(state.dischargeDetail);
+              if (state is DetailLoading) {
+                return LoadingSliver();
+              } else if (state is DetailError) {
+                return ErrorSliver(errorMessage: state.message);
+              } else if (state is DetailLoaded) {
+                return _buildPageLoadedDetail(state.detail);
               } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
               }
             },
           ),
@@ -216,19 +210,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                       titleFontSize: 13,
                       contentFontSize: 19,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => DischargeReportListBloc(),
-                                child: DischargeReportListPage(
-                                  dischargeId: dischargeDetail.dischargeId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.dischargeReportList}?dischargeId=${dischargeDetail.dischargeId}');
                       },
                       meta: Meta(
                         title: '排口异常申报总数',
@@ -242,19 +225,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                       titleFontSize: 13,
                       contentFontSize: 19,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => FactorReportListBloc(),
-                                child: FactorReportListPage(
-                                  dischargeId: dischargeDetail.dischargeId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.factorReportList}?dischargeId=${dischargeDetail.dischargeId}');
                       },
                       meta: Meta(
                         title: '因子异常申报总数',
@@ -293,19 +265,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                           imagePath:
                               'assets/images/image_enter_statistics1.png'),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => EnterDetailBloc(),
-                                child: EnterDetailPage(
-                                  enterId: dischargeDetail.enterId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.enterDetail}/${dischargeDetail.enterId}');
                       },
                     ),
                     Gaps.hGap10,
@@ -317,19 +278,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                           imagePath:
                               'assets/images/image_enter_statistics2.png'),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => MonitorListBloc(),
-                                child: MonitorListPage(
-                                  dischargeId: dischargeDetail.dischargeId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(
+                            context, '${Routes.monitorList}?dischargeId=${dischargeDetail.dischargeId}');
                       },
                     ),
                   ],

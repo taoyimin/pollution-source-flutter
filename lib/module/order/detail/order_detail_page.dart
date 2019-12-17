@@ -3,73 +3,109 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_event.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
+import 'package:pollution_source/module/common/page/page_bloc.dart';
+import 'package:pollution_source/module/common/page/page_event.dart';
+import 'package:pollution_source/module/common/page/page_state.dart';
+import 'package:pollution_source/module/common/upload/upload_bloc.dart';
+import 'package:pollution_source/module/common/upload/upload_event.dart';
+import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
+import 'package:pollution_source/module/order/detail/order_detail_model.dart';
+import 'package:pollution_source/module/process/upload/process_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/log_utils.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/toast_utils.dart';
+import 'package:pollution_source/util/utils.dart';
+import 'package:pollution_source/widget/git_dialog.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/widget/left_line_widget.dart';
 
-import 'order_detail.dart';
-
-class OrderDetailPage extends StatefulWidget {
+///报警管理单详情界面
+///
+///[orderId]是要查询的报警管理单Id，必传
+class OrderDetailPage2 extends StatefulWidget {
   final String orderId;
 
-  OrderDetailPage({@required this.orderId}) : assert(orderId != null);
+  OrderDetailPage2({@required this.orderId}) : assert(orderId != null);
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
 }
 
-class _OrderDetailPageState extends State<OrderDetailPage> {
-  OrderDetailBloc _orderDetailBloc;
+///报警管理单详情状态管理
+///
+/// [_detailBloc]处理报警管理单详情界面业务
+/// [_pageBloc]处理流程上报界面业务
+/// [_uploadBloc]处理流程上报业务
+/// [_operatePersonController]控制上报界面操作人输入框
+/// [_operateDescController]控制上报界面操作描述输入框
+class _OrderDetailPageState extends State<OrderDetailPage2>
+    with SingleTickerProviderStateMixin {
+  DetailBloc _detailBloc;
+  PageBloc _pageBloc;
+  UploadBloc _uploadBloc;
   TextEditingController _operatePersonController;
   TextEditingController _operateDescController;
-
-  //PersistentBottomSheetController  _bottomSheetController;
+  AnimationController controller;
+  Animation animation;
+  PersistentBottomSheetController _bottomSheetController;
+  IconData _actionIcon = Icons.add;
 
   @override
   void initState() {
     super.initState();
-    _orderDetailBloc =
-        _orderDetailBloc = BlocProvider.of<OrderDetailBloc>(context);
-    _orderDetailBloc.add(OrderDetailLoad(orderId: widget.orderId));
+    _detailBloc = BlocProvider.of<DetailBloc>(context);
+    //首次加载
+    _detailBloc.add(DetailLoad(detailId: widget.orderId));
+    _uploadBloc = BlocProvider.of<UploadBloc>(context);
+    _pageBloc = PageBloc();
+    //首次加载
+    _pageBloc.add(PageLoad(model: ProcessUpload()));
+    //初始化编辑框控制器
     _operatePersonController = TextEditingController();
     _operateDescController = TextEditingController();
+    //初始化fab颜色渐变动画
+    controller = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+    animation = ColorTween(begin: Colors.lightBlue, end: Colors.redAccent)
+        .animate(controller);
+    controller.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   void dispose() {
-    super.dispose();
+    //释放资源
     _operatePersonController.dispose();
     _operateDescController.dispose();
+    controller.dispose();
+    super.dispose();
   }
-
-  //用来显示SnackBar
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
-  IconData _actionIcon = Icons.add;
-
-  //List<Asset> images = List<Asset>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<OrderDetailBloc, OrderDetailState>(
+          //生成header
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
-              if (state is OrderDetailLoaded) {
-                enterName = state.orderDetail.enterName;
-                enterAddress = state.orderDetail.enterAddress;
+              if (state is DetailLoaded) {
+                enterName = state.detail.enterName;
+                enterAddress = state.detail.enterAddress;
               }
               return DetailHeaderWidget(
                 title: '报警管理单详情',
@@ -80,107 +116,67 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               );
             },
           ),
-          BlocBuilder<OrderDetailBloc, OrderDetailState>(
-            builder: (context, state) {
-              if (state is OrderDetailLoading) {
-                return PageLoadingWidget();
-              } else if (state is OrderDetailEmpty) {
-                return PageEmptyWidget();
-              } else if (state is OrderDetailError) {
-                return PageErrorWidget(errorMessage: state.errorMessage);
-              } else if (state is OrderDetailLoaded) {
-                return _buildPageLoadedDetail(state.orderDetail);
-              } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+          //监听上传业务状态
+          BlocListener<UploadBloc, UploadState>(
+            listener: (context, state) {
+              if (state is Uploading) {
+                showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => GifDialog(
+                    onCancelTap: () {
+                      state.cancelToken.cancel('取消上传');
+                    },
+                  ),
+                );
+              } else if (state is UploadSuccess) {
+                Toast.show('${state.message}');
+                Application.router.pop(context);
+                //关闭BottomSheet
+                _bottomSheetController?.close();
+                //刷新详情页面
+                _detailBloc.add(DetailLoad(detailId: widget.orderId));
+                //刷新上报界面
+                _pageBloc.add(PageLoad(model: ProcessUpload()));
+                //只清空操作描述输入框，不清空操作人输入框
+                _operateDescController.text = '';
+              } else if (state is UploadFail) {
+                Toast.show('${state.message}');
+                Application.router.pop(context);
               }
             },
+            //生成body
+            child: BlocBuilder<DetailBloc, DetailState>(
+              builder: (context, state) {
+                if (state is DetailLoading) {
+                  return LoadingSliver();
+                } else if (state is DetailError) {
+                  return ErrorSliver(errorMessage: state.message);
+                } else if (state is DetailLoaded) {
+                  return _buildPageLoadedDetail(state.detail);
+                } else {
+                  return ErrorSliver(
+                      errorMessage: 'BlocBuilder监听到未知的的状态!state=$state');
+                }
+              },
+            ),
           ),
         ],
       ),
-      floatingActionButton: BlocBuilder<OrderDetailBloc, OrderDetailState>(
+      //生成fab
+      floatingActionButton: BlocBuilder<DetailBloc, DetailState>(
         builder: (context, state) {
-          if (state is OrderDetailLoading) {
+          if (state is DetailLoading) {
             return Gaps.empty;
-          } else if (state is OrderDetailEmpty) {
+          } else if (state is DetailError) {
             return Gaps.empty;
-          } else if (state is OrderDetailError) {
-            return Gaps.empty;
-          } else if (state is OrderDetailLoaded) {
+          } else if (state is DetailLoaded) {
             return _buildFloatingActionButton();
           } else {
             return Gaps.empty;
           }
         },
       ),
-      /*floatingActionButton: Builder(builder: (context) {
-        return FloatingActionButton(
-          child: AnimatedSwitcher(
-            transitionBuilder: (child, anim) {
-              return ScaleTransition(child: child, scale: anim);
-            },
-            duration: Duration(milliseconds: 300),
-            child: Icon(
-              _actionIcon,
-              key: ValueKey(_actionIcon),
-              color: Colors.white,
-            ),
-          ),
-          backgroundColor: Colours.primary_color,
-          onPressed: () {
-            setState(() {
-              _actionIcon = Icons.close;
-            });
-            var bottomSheetController = showBottomSheet(
-              context: context,
-              elevation: 20,
-              builder: (BuildContext context) {
-                return Container(
-                  width: double.infinity,
-                  height: 300.0,
-                  child: GridView.count(
-                    crossAxisCount: 4,
-                    childAspectRatio: 1,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    padding: const EdgeInsets.all(16),
-                    children: List.generate(
-                        images == null ? 1 : images.length + 1, (index) {
-                      if (index == (images == null ? 1 : images.length)) {
-                        return InkWell(onTap: loadAssets, child: Image.asset('assets/images/attachment_image_add.png',
-                          width: 300,
-                          height: 300,
-                        ),);
-                      } else {
-                        Asset asset = images[index];
-                        return AssetThumb(
-                          asset: asset,
-                          width: 300,
-                          height: 300,
-                        );
-                      }
-                    }),
-                  ),
-                );
-              },
-            );
-            bottomSheetController.closed.then((value) {
-              setState(() {
-                _actionIcon = Icons.add;
-              });
-            });
-          },
-        );
-      }),*/
-      /*floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 5,
-        color: Colors.green,
-        clipBehavior: Clip.antiAlias,
-        child: Container(
-          height: myheight,
-        ),
-      ),*/
     );
   }
 
@@ -376,23 +372,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ],
             ),
           ),
-          //处理上报
-          /*Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ImageTitleWidget(
-                    title: '处理上报',
-                    imagePath: 'assets/images/icon_fast_link.png',
-                  ),
-                  Gaps.vGap10,
-                ],
-              ),
-            ),*/
           //快速链接
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -418,19 +397,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           imagePath:
                               'assets/images/image_enter_statistics1.png'),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => EnterDetailBloc(),
-                                child: EnterDetailPage(
-                                  enterId: orderDetail.enterId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.enterDetail}/${orderDetail.enterId}');
                       },
                     ),
                     Gaps.hGap10,
@@ -447,7 +415,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           MaterialPageRoute(
                             builder: (context) {
                               return BlocProvider(
-                                builder: (context) => MonitorDetailBloc(),
+                                create: (context) => MonitorDetailBloc(),
                                 child: MonitorDetailPage(
                                   monitorId: orderDetail.monitorId,
                                 ),
@@ -467,8 +435,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  PersistentBottomSheetController _bottomSheetController;
-
   Widget _buildFloatingActionButton() {
     return Builder(builder: (context) {
       return FloatingActionButton(
@@ -483,149 +449,42 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colours.primary_color,
+        backgroundColor: animation.value,
         onPressed: () {
           if (_bottomSheetController != null) {
             //已经处于打开状态
             _bottomSheetController.close();
-            //_bottomSheetController = null;
             return;
           }
+          //fab由蓝变红
+          controller.forward();
           setState(() {
             _actionIcon = Icons.close;
           });
+          //打开BottomSheet
           _bottomSheetController = showBottomSheet(
             context: context,
             elevation: 20,
             backgroundColor: Colors.white,
             builder: (BuildContext context) {
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return Container(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Gaps.vGap20,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: ImageTitleWidget(
-                            title: '处理督办单',
-                            imagePath: 'assets/images/icon_alarm_manage.png',
-                          ),
-                        ),
-                        Gaps.vGap16,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Flexible(
-                                child: TextField(
-                                  controller: _operatePersonController,
-                                  decoration: const InputDecoration(
-                                    fillColor: Color(0xFFDFDFDF),
-                                    filled: true,
-                                    hintText: "请输入操作人",
-                                    hintStyle: TextStyle(
-                                      color: Colours.secondary_text,
-                                    ),
-                                    prefixIcon: Icon(Icons.person),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Gaps.vGap10,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Flexible(
-                                child: TextField(
-                                  controller: _operateDescController,
-                                  decoration: const InputDecoration(
-                                    fillColor: Color(0xFFDFDFDF),
-                                    filled: true,
-                                    hintText: "请输入操作描述",
-                                    hintStyle: TextStyle(
-                                      color: Colours.secondary_text,
-                                    ),
-                                    prefixIcon: Icon(Icons.event_note),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Gaps.vGap5,
-                        Offstage(
-                          offstage: images == null || images.length == 0,
-                          child: GridView.count(
-                            shrinkWrap: true,
-                            crossAxisCount: 4,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 5,
-                            ),
-                            children: List.generate(
-                              images == null ? 0 : images.length,
-                              (index) {
-                                Asset asset = images[index];
-                                return AssetThumb(
-                                  asset: asset,
-                                  width: 300,
-                                  height: 300,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        Gaps.vGap5,
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            children: <Widget>[
-                              ClipButton(
-                                text: '选择图片',
-                                icon: Icons.image,
-                                color: Colors.green,
-                                onTap: () {
-                                  loadAssets(setState);
-                                },
-                              ),
-                              Gaps.hGap20,
-                              ClipButton(
-                                text: '提交',
-                                icon: Icons.file_upload,
-                                color: Colors.lightBlue,
-                                onTap: () {
-                                  Toast.show('点击了提交按钮');
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        Gaps.vGap20,
-                      ],
-                    ),
-                  );
+              //生成流程上报界面
+              return BlocBuilder<PageBloc, PageState>(
+                bloc: _pageBloc,
+                builder: (context, state) {
+                  if (state is PageLoaded) {
+                    return _buildBottomSheet(state.model);
+                  } else {
+                    return MessageWidget(
+                        message: 'BlocBuilder监听到未知的的状态！state=$state');
+                  }
                 },
               );
             },
           );
+          //监听BottomSheet关闭
           _bottomSheetController.closed.then((value) {
+            //fab由红变蓝
+            controller.reverse();
             setState(() {
               _bottomSheetController = null;
               _actionIcon = Icons.add;
@@ -636,38 +495,142 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     });
   }
 
-  //上报时选中的图片附件
-  List<Asset> images = List<Asset>();
-
-  Future<void> loadAssets(StateSetter updateState) async {
-    List<Asset> resultList;
-
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        enableCamera: true,
-        maxImages: 10,
-        selectedAssets: images,
-        materialOptions: MaterialOptions(
-          actionBarTitle: "选取图片",
-          allViewTitle: "全部图片",
-          actionBarColor: '#03A9F4',
-          actionBarTitleColor: "#FFFFFF",
-          lightStatusBar: false,
-          statusBarColor: '#0288D1',
-          startInAllView: false,
-          useDetailsView: true,
-          selectCircleStrokeColor: "#FFFFFF",
-          selectionLimitReachedText: "已达到可选图片最大数",
-        ),
-      );
-    } on NoImagesSelectedException {
-      Log.i('没有图片被选择,resultList.length=${resultList?.length}');
-      return;
-    } on Exception catch (e) {
-      Toast.show('选择图片错误！错误信息：$e');
-    }
-    updateState(() {
-      images = resultList ?? List<Asset>();
-    });
+  Widget _buildBottomSheet(ProcessUpload processUpload) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Gaps.vGap20,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ImageTitleWidget(
+              title: '处理督办单',
+              imagePath: 'assets/images/icon_alarm_manage.png',
+            ),
+          ),
+          Gaps.vGap16,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                    controller: _operatePersonController,
+                    decoration: const InputDecoration(
+                      fillColor: Color(0xFFDFDFDF),
+                      filled: true,
+                      hintText: "请输入操作人",
+                      hintStyle: TextStyle(
+                        color: Colours.secondary_text,
+                      ),
+                      prefixIcon: Icon(Icons.person),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Gaps.vGap10,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                    controller: _operateDescController,
+                    decoration: const InputDecoration(
+                      fillColor: Color(0xFFDFDFDF),
+                      filled: true,
+                      hintText: "请输入操作描述",
+                      hintStyle: TextStyle(
+                        color: Colours.secondary_text,
+                      ),
+                      prefixIcon: Icon(Icons.event_note),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Gaps.vGap5,
+          //没有选取附件则隐藏GridView
+          Offstage(
+            offstage: processUpload.attachments == null ||
+                processUpload.attachments.length == 0,
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              childAspectRatio: 1,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 5,
+              ),
+              children: List.generate(
+                processUpload.attachments == null
+                    ? 0
+                    : processUpload.attachments.length,
+                (index) {
+                  Asset asset = processUpload.attachments[index];
+                  return AssetThumb(
+                    asset: asset,
+                    width: 300,
+                    height: 300,
+                  );
+                },
+              ),
+            ),
+          ),
+          Gaps.vGap5,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: <Widget>[
+                ClipButton(
+                  text: '选择图片',
+                  icon: Icons.image,
+                  color: Colors.green,
+                  onTap: () async {
+                    //选取图片后重新加载界面
+                    _pageBloc.add(PageLoad(
+                        model: processUpload.copyWith(
+                            attachments: await Utils.loadAssets(
+                                processUpload.attachments))));
+                  },
+                ),
+                Gaps.hGap20,
+                ClipButton(
+                  text: '提交',
+                  icon: Icons.file_upload,
+                  color: Colors.lightBlue,
+                  onTap: () {
+                    //发送上传事件
+                    _uploadBloc.add(Upload(
+                        data: ProcessUpload(
+                      orderId: widget.orderId,
+                      operatePerson: _operatePersonController.text,
+                      operateType: '2',
+                      operateDesc: _operateDescController.text,
+                      attachments: processUpload.attachments,
+                    )));
+                  },
+                ),
+              ],
+            ),
+          ),
+          Gaps.vGap20,
+        ],
+      ),
+    );
   }
 }

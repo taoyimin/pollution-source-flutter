@@ -1,21 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/enter/list/enter_list_bloc.dart';
-import 'package:pollution_source/module/enter/list/enter_list_page.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
-import 'package:pollution_source/module/order/list/order_list_bloc.dart';
-import 'package:pollution_source/module/order/list/order_list_page.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
-import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_bloc.dart';
-import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 
 class AdminApplicationPage extends StatefulWidget {
   AdminApplicationPage({Key key}) : super(key: key);
@@ -130,18 +119,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_enter.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                EnterListBloc(),
-                                            child: EnterListPage(),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(
+                                        context, '${Routes.enterList}');
                                   },
                                 ),
                                 Gaps.hGap20,
@@ -152,18 +131,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_monitor.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                MonitorListBloc(),
-                                            child: MonitorListPage(state: '0'),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(
+                                        context, '${Routes.monitorList}');
                                   },
                                 ),
                               ],
@@ -193,18 +162,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_discharge_report.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                DischargeReportListBloc(),
-                                            child: DischargeReportListPage(),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(context,
+                                        '${Routes.dischargeReportList}');
                                   },
                                 ),
                                 Gaps.hGap20,
@@ -215,18 +174,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_factor_report.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                FactorReportListBloc(),
-                                            child: FactorReportListPage(),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(
+                                        context, '${Routes.factorReportList}');
                                   },
                                 ),
                               ],
@@ -240,18 +189,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_longStop_report.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                LongStopReportListBloc(),
-                                            child: LongStopReportListPage(),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(context,
+                                        '${Routes.longStopReportList}');
                                   },
                                 ),
                                 Gaps.hGap20,
@@ -283,18 +222,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_order.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                OrderListBloc(),
-                                            child: OrderListPage(),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(
+                                        context, '${Routes.orderList}');
                                   },
                                 ),
                                 Gaps.hGap20,

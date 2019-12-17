@@ -4,12 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/common/page/page_bloc.dart';
+import 'package:pollution_source/module/common/page/page_event.dart';
+import 'package:pollution_source/module/common/page/page_state.dart';
+import 'package:pollution_source/module/common/upload/upload_bloc.dart';
+import 'package:pollution_source/module/common/upload/upload_event.dart';
+import 'package:pollution_source/module/common/upload/upload_state.dart';
+import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'long_stop_report_upload.dart';
 
 class LongStopReportUploadPage extends StatefulWidget {
   final String enterId;
@@ -22,29 +26,29 @@ class LongStopReportUploadPage extends StatefulWidget {
 }
 
 class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
-  LongStopReportUploadBloc _reportUploadBloc;
+  PageBloc _pageBloc;
+  UploadBloc _uploadBloc;
   TextEditingController _remarkController;
 
   @override
   void initState() {
     super.initState();
-    _reportUploadBloc = BlocProvider.of<LongStopReportUploadBloc>(context);
+    _pageBloc = BlocProvider.of<PageBloc>(context);
+    //首次加载
+    _pageBloc.add(PageLoad(model: LongStopReportUpload()));
+    _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _remarkController = TextEditingController();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _remarkController.dispose();
+    super.dispose();
   }
-
-  //用来显示SnackBar
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           UploadHeaderWidget(
@@ -55,19 +59,31 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
             imagePath: 'assets/images/long_stop_report_upload_header_image.png',
             backgroundColor: Colours.primary_color,
           ),
-          BlocBuilder<LongStopReportUploadBloc, LongStopReportUploadState>(
-            // ignore: missing_return
-            builder: (context, state) {
-              if (state is LongStopReportUploadLoaded) {
-                return _buildPageLoadedDetail(state.reportUpload);
-              } else if (state is LongStopReportUploadSuccess) {
-                Toast.show('上报成功');
-                Navigator.pop(context);
-                //return _buildPageLoadedDetail(state.reportUpload);
-              } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
-              }
-            },
+          MultiBlocListener(
+            listeners: [
+              BlocListener<UploadBloc, UploadState>(
+                listener: uploadListener,
+              ),
+              BlocListener<UploadBloc, UploadState>(
+                listener: (context, state) {
+                  if (state is UploadSuccess) {
+                    //提交成功后重置界面
+                    _remarkController.text = '';
+                    _pageBloc.add(PageLoad(model: LongStopReportUpload()));
+                  }
+                },
+              ),
+            ],
+            child: BlocBuilder<PageBloc, PageState>(
+              builder: (context, state) {
+                if (state is PageLoaded) {
+                  return _buildPageLoadedDetail(state.model);
+                } else {
+                  return ErrorSliver(
+                      errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -99,10 +115,9 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                         locale: DateTimePickerLocale.zh_cn,
                         pickerMode: DateTimePickerMode.datetime,
                         onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _reportUploadBloc.add(
-                        LongStopReportUploadLoad(
-                          reportUpload:
-                              reportUpload.copyWith(startTime: dateTime),
+                      _pageBloc.add(
+                        PageLoad(
+                          model: reportUpload.copyWith(startTime: dateTime),
                         ),
                       );
                     });
@@ -125,10 +140,9 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                         locale: DateTimePickerLocale.zh_cn,
                         pickerMode: DateTimePickerMode.datetime,
                         onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _reportUploadBloc.add(
-                        LongStopReportUploadLoad(
-                          reportUpload:
-                              reportUpload.copyWith(endTime: dateTime),
+                      _pageBloc.add(
+                        PageLoad(
+                          model: reportUpload.copyWith(endTime: dateTime),
                         ),
                       );
                     });
@@ -153,7 +167,12 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    Toast.show('点击了提交按钮');
+                    _uploadBloc.add(Upload(
+                      data: reportUpload.copyWith(
+                        enterId: widget.enterId,
+                        remark: _remarkController.text,
+                      ),
+                    ));
                   },
                 ),
               ],

@@ -1,21 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_bloc.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_page.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
-import 'package:pollution_source/module/order/list/order_list_bloc.dart';
-import 'package:pollution_source/module/order/list/order_list_page.dart';
-import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_bloc.dart';
-import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_page.dart';
-import 'package:pollution_source/module/report/factor/upload/factor_report_upload_bloc.dart';
-import 'package:pollution_source/module/report/factor/upload/factor_report_upload_page.dart';
-import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_bloc.dart';
-import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_page.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 
 class EnterApplicationPage extends StatefulWidget {
   final String enterId;
@@ -134,20 +123,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_enter.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                DischargeListBloc(),
-                                            child: DischargeListPage(
-                                              enterId: widget.enterId,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(
+                                        context, '${Routes.dischargeList}?enterId=${widget.enterId}');
                                   },
                                 ),
                                 Gaps.hGap20,
@@ -158,21 +135,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_monitor.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                MonitorListBloc(),
-                                            child: MonitorListPage(
-                                              state: '0',
-                                              enterId: widget.enterId,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(
+                                        context, '${Routes.monitorList}?enterId=${widget.enterId}');
                                   },
                                 ),
                               ],
@@ -193,7 +157,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                             ImageTitleWidget(
                                 title: '异常申报上报',
                                 imagePath:
-                                'assets/images/icon_alarm_manage.png'),
+                                    'assets/images/icon_alarm_manage.png'),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
@@ -201,20 +165,10 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                       title: '排口异常',
                                       content: '排口异常上报',
                                       imagePath:
-                                      'assets/images/application_icon_discharge_report.png'),
+                                          'assets/images/application_icon_discharge_report.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                DischargeReportUploadBloc(),
-                                            child: DischargeReportUploadPage(enterId: widget.enterId),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(context,
+                                        '${Routes.dischargeReportUpload}/${widget.enterId}');
                                   },
                                 ),
                                 Gaps.hGap20,
@@ -223,20 +177,10 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                       title: '因子异常',
                                       content: '因子异常上报',
                                       imagePath:
-                                      'assets/images/application_icon_factor_report.png'),
+                                          'assets/images/application_icon_factor_report.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                FactorReportUploadBloc(),
-                                            child: FactorReportUploadPage(enterId: widget.enterId),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(context,
+                                        '${Routes.factorReportUpload}/${widget.enterId}');
                                   },
                                 ),
                               ],
@@ -248,20 +192,10 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                       title: '长期停产',
                                       content: '长期停产上报',
                                       imagePath:
-                                      'assets/images/application_icon_longStop_report.png'),
+                                          'assets/images/application_icon_longStop_report.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                LongStopReportUploadBloc(),
-                                            child: LongStopReportUploadPage(enterId: widget.enterId),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(context,
+                                        '${Routes.longStopReportUpload}/${widget.enterId}');
                                   },
                                 ),
                                 Gaps.hGap20,
@@ -294,20 +228,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                       imagePath:
                                           'assets/images/application_icon_order.png'),
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return BlocProvider(
-                                            builder: (context) =>
-                                                OrderListBloc(),
-                                            child: OrderListPage(
-                                              enterId: widget.enterId,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    Application.router.navigateTo(
+                                        context, '${Routes.orderList}?enterId=${widget.enterId}');
                                   },
                                 ),
                                 Gaps.hGap20,

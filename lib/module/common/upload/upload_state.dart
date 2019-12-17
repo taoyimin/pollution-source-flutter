@@ -12,12 +12,12 @@ abstract class UploadState extends Equatable {
 class UploadInitial extends UploadState {}
 
 class Uploading extends UploadState {
-  final CancelToken token;
+  final CancelToken cancelToken;
 
-  const Uploading({@required this.token});
+  const Uploading({@required this.cancelToken});
 
   @override
-  List<Object> get props => [token];
+  List<Object> get props => [cancelToken];
 }
 
 class UploadSuccess extends UploadState {

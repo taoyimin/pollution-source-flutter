@@ -5,6 +5,7 @@ import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 
 //异常申报单详情
 class FactorReportUpload extends Equatable {
+  final String enterId; //企业Id
   final Discharge discharge; //排口
   final Monitor monitor; //监控点
   final String factorCode; //异常因子
@@ -24,6 +25,7 @@ class FactorReportUpload extends Equatable {
   ];
 
   const FactorReportUpload({
+    this.enterId,
     this.discharge,
     this.monitor,
     this.factorCode,
@@ -36,6 +38,7 @@ class FactorReportUpload extends Equatable {
 
   @override
   List<Object> get props => [
+        enterId,
         discharge,
         monitor,
         factorCode,
@@ -47,6 +50,7 @@ class FactorReportUpload extends Equatable {
       ];
 
   FactorReportUpload copyWith({
+    String enterId,
     Discharge discharge,
     Monitor monitor,
     String factorCode,
@@ -57,6 +61,7 @@ class FactorReportUpload extends Equatable {
     List<Asset> attachments,
   }) {
     return FactorReportUpload(
+      enterId: enterId ?? this.enterId,
       discharge: discharge ?? this.discharge,
       monitor: monitor ?? this.monitor,
       factorCode: factorCode ?? this.factorCode,

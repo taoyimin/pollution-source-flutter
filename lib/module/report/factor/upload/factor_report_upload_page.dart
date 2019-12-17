@@ -5,18 +5,20 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_bloc.dart';
+import 'package:pollution_source/module/common/page/page_bloc.dart';
+import 'package:pollution_source/module/common/page/page_event.dart';
+import 'package:pollution_source/module/common/page/page_state.dart';
+import 'package:pollution_source/module/common/upload/upload_bloc.dart';
+import 'package:pollution_source/module/common/upload/upload_event.dart';
+import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_page.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
+import 'package:pollution_source/module/report/factor/upload/factor_report_upload_model.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/util/log_utils.dart';
-import 'package:pollution_source/util/toast_utils.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'factor_report_upload.dart';
 
 class FactorReportUploadPage extends StatefulWidget {
   final String enterId;
@@ -24,26 +26,28 @@ class FactorReportUploadPage extends StatefulWidget {
   FactorReportUploadPage({@required this.enterId}) : assert(enterId != null);
 
   @override
-  _FactorReportUploadPageState createState() =>
-      _FactorReportUploadPageState();
+  _FactorReportUploadPageState createState() => _FactorReportUploadPageState();
 }
 
 class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
-  FactorReportUploadBloc _reportUploadBloc;
+  PageBloc _pageBloc;
+  UploadBloc _uploadBloc;
   TextEditingController _exceptionReasonController;
 
   @override
   void initState() {
     super.initState();
-    _reportUploadBloc = BlocProvider.of<FactorReportUploadBloc>(context);
-    //_reportUploadBloc.add(FactorReportUploadLoad(enterId: widget.enterId));
+    _pageBloc = BlocProvider.of<PageBloc>(context);
+    //首次加载
+    _pageBloc.add(PageLoad(model: FactorReportUpload()));
+    _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _exceptionReasonController = TextEditingController();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _exceptionReasonController.dispose();
+    super.dispose();
   }
 
   //用来显示SnackBar
@@ -65,19 +69,31 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             imagePath: 'assets/images/factor_report_upload_header_image.png',
             backgroundColor: Colors.deepOrangeAccent,
           ),
-          BlocBuilder<FactorReportUploadBloc, FactorReportUploadState>(
-            // ignore: missing_return
-            builder: (context, state) {
-              if (state is FactorReportUploadLoaded) {
-                return _buildPageLoadedDetail(state.reportUpload);
-              } else if (state is FactorReportUploadSuccess) {
-                Toast.show('上报成功');
-                Navigator.pop(context);
-                //return _buildPageLoadedDetail(state.reportUpload);
-              } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
-              }
-            },
+          MultiBlocListener(
+            listeners: [
+              BlocListener<UploadBloc, UploadState>(
+                listener: uploadListener,
+              ),
+              BlocListener<UploadBloc, UploadState>(
+                listener: (context, state) {
+                  if (state is UploadSuccess) {
+                    //提交成功后重置界面
+                    _exceptionReasonController.text = '';
+                    _pageBloc.add(PageLoad(model: FactorReportUpload()));
+                  }
+                },
+              ),
+            ],
+            child: BlocBuilder<PageBloc, PageState>(
+              builder: (context, state) {
+                if (state is PageLoaded) {
+                  return _buildPageLoadedDetail(state.model);
+                } else {
+                  return ErrorSliver(
+                      errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -103,24 +119,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                     ),
                   ),
                   onTap: () async {
-                    Discharge discharge = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return BlocProvider(
-                            builder: (context) => DischargeListBloc(),
-                            child: DischargeListPage(
-                              enterId: widget.enterId,
-                              type: 1,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                    _reportUploadBloc.add(
-                      FactorReportUploadLoad(
-                        reportUpload:
-                            reportUpload.copyWith(discharge: discharge),
+                    Discharge discharge = await Application.router.navigateTo(
+                        context, '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
+                    _pageBloc.add(
+                      PageLoad(
+                        model: reportUpload.copyWith(discharge: discharge),
                       ),
                     );
                   },
@@ -137,23 +140,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                     ),
                   ),
                   onTap: () async {
-                    Monitor monitor = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return BlocProvider(
-                            builder: (context) => MonitorListBloc(),
-                            child: MonitorListPage(
-                              enterId: widget.enterId,
-                              type: 1,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                    _reportUploadBloc.add(
-                      FactorReportUploadLoad(
-                        reportUpload: reportUpload.copyWith(monitor: monitor),
+                    Monitor monitor = await Application.router.navigateTo(
+                        context, '${Routes.monitorList}?enterId=${widget.enterId}&type=1');
+                    _pageBloc.add(
+                      PageLoad(
+                        model: reportUpload.copyWith(monitor: monitor),
                       ),
                     );
                   },
@@ -166,7 +157,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   controller: TextEditingController.fromValue(
                     TextEditingValue(
                       text:
-                      '${reportUpload?.alarmType != null ? FactorReportUpload.alarmTypeList[reportUpload.alarmType] : ''}',
+                          '${reportUpload?.alarmType != null ? FactorReportUpload.alarmTypeList[reportUpload.alarmType] : ''}',
                     ),
                   ),
                   popupMenuButton: PopupMenuButton<AlarmType>(
@@ -175,10 +166,10 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                         color: Colors.transparent,
                       ),
                       onSelected: (AlarmType result) {
-                        _reportUploadBloc.add(
-                          FactorReportUploadLoad(
-                            reportUpload:
-                            reportUpload.copyWith(alarmType: result.index),
+                        _pageBloc.add(
+                          PageLoad(
+                            model:
+                                reportUpload.copyWith(alarmType: result.index),
                           ),
                         );
                       },
@@ -208,10 +199,9 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                         locale: DateTimePickerLocale.zh_cn,
                         pickerMode: DateTimePickerMode.datetime,
                         onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _reportUploadBloc.add(
-                        FactorReportUploadLoad(
-                          reportUpload:
-                              reportUpload.copyWith(startTime: dateTime),
+                      _pageBloc.add(
+                        PageLoad(
+                          model: reportUpload.copyWith(startTime: dateTime),
                         ),
                       );
                     });
@@ -234,10 +224,9 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                         locale: DateTimePickerLocale.zh_cn,
                         pickerMode: DateTimePickerMode.datetime,
                         onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _reportUploadBloc.add(
-                        FactorReportUploadLoad(
-                          reportUpload:
-                              reportUpload.copyWith(endTime: dateTime),
+                      _pageBloc.add(
+                        PageLoad(
+                          model: reportUpload.copyWith(endTime: dateTime),
                         ),
                       );
                     });
@@ -254,7 +243,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
           ),
           Gaps.vGap5,
           Offstage(
-            offstage: reportUpload.attachments == null ||
+            offstage: reportUpload?.attachments == null ||
                 reportUpload.attachments.length == 0,
             child: GridView.count(
               shrinkWrap: true,
@@ -267,7 +256,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                 vertical: 5,
               ),
               children: List.generate(
-                reportUpload.attachments == null
+                reportUpload?.attachments == null
                     ? 0
                     : reportUpload.attachments.length,
                 (index) {
@@ -290,8 +279,15 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   text: '选择图片',
                   icon: Icons.image,
                   color: Colors.green,
-                  onTap: () {
-                    loadAssets(reportUpload);
+                  onTap: () async {
+                    _pageBloc.add(
+                      PageLoad(
+                        model: reportUpload.copyWith(
+                          attachments:
+                              await Utils.loadAssets(reportUpload.attachments),
+                        ),
+                      ),
+                    );
                   },
                 ),
                 Gaps.hGap20,
@@ -300,7 +296,12 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    Toast.show('点击了提交按钮');
+                    _uploadBloc.add(Upload(
+                        data: reportUpload.copyWith(
+                      factorCode: '110',
+                      enterId: widget.enterId,
+                      exceptionReason: _exceptionReasonController.text,
+                    )));
                   },
                 ),
               ],
@@ -308,41 +309,6 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
           ),
           Gaps.vGap20,
         ],
-      ),
-    );
-  }
-
-  Future<void> loadAssets(FactorReportUpload reportUpload) async {
-    List<Asset> resultList;
-
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        enableCamera: true,
-        maxImages: 10,
-        selectedAssets: reportUpload.attachments ?? List<Asset>(),
-        materialOptions: MaterialOptions(
-          actionBarTitle: "选取图片",
-          allViewTitle: "全部图片",
-          actionBarColor: '#03A9F4',
-          actionBarTitleColor: "#FFFFFF",
-          lightStatusBar: false,
-          statusBarColor: '#0288D1',
-          startInAllView: false,
-          useDetailsView: true,
-          selectCircleStrokeColor: "#FFFFFF",
-          selectionLimitReachedText: "已达到可选图片最大数",
-        ),
-      );
-    } on NoImagesSelectedException {
-      Log.i('没有图片被选择,resultList.length=${resultList?.length}');
-      return;
-    } on Exception catch (e) {
-      Toast.show('选择图片错误！错误信息：$e');
-    }
-    _reportUploadBloc.add(
-      FactorReportUploadLoad(
-        reportUpload:
-            reportUpload.copyWith(attachments: resultList ?? List<Asset>()),
       ),
     );
   }

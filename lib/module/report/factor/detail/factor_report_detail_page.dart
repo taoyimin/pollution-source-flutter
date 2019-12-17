@@ -3,16 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/discharge/detail/discharge_detail_bloc.dart';
-import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_event.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
+import 'package:pollution_source/module/report/factor/detail/factor_report_detail_model.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'factor_report_detail.dart';
 
 class FactorReportDetailPage extends StatefulWidget {
   final String reportId;
@@ -24,13 +22,13 @@ class FactorReportDetailPage extends StatefulWidget {
 }
 
 class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
-  FactorReportDetailBloc _reportDetailBloc;
+  DetailBloc _detailBloc;
 
   @override
   void initState() {
     super.initState();
-    _reportDetailBloc = BlocProvider.of<FactorReportDetailBloc>(context);
-    _reportDetailBloc.add(FactorReportDetailLoad(reportId: widget.reportId));
+    _detailBloc = BlocProvider.of<DetailBloc>(context);
+    _detailBloc.add(DetailLoad(detailId: widget.reportId));
   }
 
   @override
@@ -43,13 +41,13 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
     return Scaffold(
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<FactorReportDetailBloc, FactorReportDetailState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
-              if (state is FactorReportDetailLoaded) {
-                enterName = state.reportDetail.enterName;
-                enterAddress = state.reportDetail.enterAddress;
+              if (state is DetailLoaded) {
+                enterName = state.detail.enterName;
+                enterAddress = state.detail.enterAddress;
               }
               return DetailHeaderWidget(
                 title: '因子异常申报详情',
@@ -60,18 +58,16 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
               );
             },
           ),
-          BlocBuilder<FactorReportDetailBloc, FactorReportDetailState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
-              if (state is FactorReportDetailLoading) {
-                return PageLoadingWidget();
-              } else if (state is FactorReportDetailEmpty) {
-                return PageEmptyWidget();
-              } else if (state is FactorReportDetailError) {
-                return PageErrorWidget(errorMessage: state.errorMessage);
-              } else if (state is FactorReportDetailLoaded) {
-                return _buildPageLoadedDetail(state.reportDetail);
+              if (state is DetailLoading) {
+                return LoadingSliver();
+              } else if (state is DetailError) {
+                return ErrorSliver(errorMessage: state.message);
+              } else if (state is DetailLoaded) {
+                return _buildPageLoadedDetail(state.detail);
               } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
               }
             },
           ),
@@ -225,19 +221,8 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                             imagePath:
                             'assets/images/image_enter_statistics1.png'),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return BlocProvider(
-                                  builder: (context) => EnterDetailBloc(),
-                                  child: EnterDetailPage(
-                                    enterId: reportDetail.enterId,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
+                          Application.router.navigateTo(context,
+                              '${Routes.enterDetail}/${reportDetail.enterId}');
                         },
                       ),
                       Gaps.hGap10,
@@ -253,19 +238,8 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                                   imagePath:
                                   'assets/images/image_enter_statistics3.png'),
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return BlocProvider(
-                                        builder: (context) => DischargeDetailBloc(),
-                                        child: DischargeDetailPage(
-                                          dischargeId: reportDetail.dischargeId,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
+                                Application.router.navigateTo(context,
+                                    '${Routes.dischargeDetail}/${reportDetail.dischargeId}');
                               },
                             ),
                             Gaps.vGap10,
@@ -278,19 +252,8 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                                   imagePath:
                                   'assets/images/image_enter_statistics2.png'),
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return BlocProvider(
-                                        builder: (context) => MonitorDetailBloc(),
-                                        child: MonitorDetailPage(
-                                          monitorId: reportDetail.monitorId,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
+                                Application.router.navigateTo(context,
+                                    '${Routes.monitorDetail}/${reportDetail.monitorId}');
                               },
                             ),
                           ],

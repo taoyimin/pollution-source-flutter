@@ -2,16 +2,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/module/report/discharge/detail/discharge_report_detail_bloc.dart';
-import 'package:pollution_source/module/report/discharge/detail/discharge_report_detail_page.dart';
+import 'package:pollution_source/module/common/list/list_bloc.dart';
+import 'package:pollution_source/module/common/list/list_event.dart';
+import 'package:pollution_source/module/common/list/list_state.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_model.dart';
+import 'package:pollution_source/module/report/discharge/list/discharge_report_list_repository.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'discharge_report_list.dart';
 
 class DischargeReportListPage extends StatefulWidget {
   final String enterId;
@@ -34,7 +38,7 @@ class DischargeReportListPage extends StatefulWidget {
 class _DischargeReportListPageState extends State<DischargeReportListPage>
     with TickerProviderStateMixin {
   ScrollController _scrollController;
-  DischargeReportListBloc _reportListBloc;
+  ListBloc _listBloc;
   EasyRefreshController _refreshController;
   TextEditingController _editController;
   Completer<void> _refreshCompleter;
@@ -43,26 +47,34 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
   @override
   void initState() {
     super.initState();
-    _reportListBloc = BlocProvider.of<DischargeReportListBloc>(context);
+    _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _reportListBloc.add(DischargeReportListLoad(
-      enterId: widget.enterId,
-      dischargeId: widget.dischargeId,
-      monitorId: widget.monitorId,
-      state: widget.state,
+    _listBloc.add(ListLoad(
+      isRefresh: true,
+      params: DischargeReportListRepository.createParams(
+        currentPage: Constant.defaultCurrentPage,
+        pageSize: Constant.defaultPageSize,
+        enterId: widget.enterId,
+        dischargeId: widget.dischargeId,
+        monitorId: widget.monitorId,
+        state: widget.state,
+      ),
     ));
   }
 
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
     _refreshController.dispose();
     _editController.dispose();
+    //取消正在进行的请求
+    final currentState = _listBloc?.state;
+    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    super.dispose();
   }
 
   @override
@@ -75,37 +87,48 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            ListHeaderWidget(
-              title: '排口异常申报列表',
-              subtitle: '展示排口异常申报列表，点击列表项查看该排口异常申报的详细信息',
-              background: 'assets/images/button_bg_green.png',
-              image: 'assets/images/report_list_bg_image.png',
-              color: Color(0xFF29D0BF),
-              showSearch: true,
-              editController: _editController,
-              scrollController: _scrollController,
-              onSearchPressed: () => _refreshController.callRefresh(),
-              areaPickerListener: (areaId) {
-                areaCode = areaId;
+            BlocBuilder<ListBloc, ListState>(
+              builder: (context, state) {
+                String subtitle2 = '';
+                if (state is ListLoading)
+                  subtitle2 = '数据加载中';
+                else if (state is ListLoaded)
+                  subtitle2 = '共${state.total}条数据';
+                else if (state is ListEmpty)
+                  subtitle2 = '共0条数据';
+                else if (state is ListError) subtitle2 = '数据加载错误';
+                return ListHeaderWidget(
+                  title: '排口异常申报列表',
+                  subtitle: '展示排口异常申报列表，点击列表项查看该排口异常申报的详细信息',
+                  subtitle2: subtitle2,
+                  background: 'assets/images/button_bg_green.png',
+                  image: 'assets/images/report_list_bg_image.png',
+                  color: Color(0xFF29D0BF),
+                  showSearch: true,
+                  editController: _editController,
+                  scrollController: _scrollController,
+                  onSearchPressed: () => _refreshController.callRefresh(),
+                  areaPickerListener: (areaId) {
+                    areaCode = areaId;
+                  },
+                  popupMenuButton: PopupMenuButton<String>(
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuItem<String>>[
+                      UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
+                      UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
+                    ],
+                    onSelected: (String action) {
+                      // 点击选项的时候
+                      switch (action) {
+                        case 'A':
+                          break;
+                        case 'B':
+                          break;
+                      }
+                    },
+                  ),
+                );
               },
-              popupMenuButton: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
-                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
-                  UIUtils.getSelectView(Icons.cast_connected, '扫一扫码', 'C'),
-                ],
-                onSelected: (String action) {
-                  // 点击选项的时候
-                  switch (action) {
-                    case 'A':
-                      break;
-                    case 'B':
-                      break;
-                    case 'C':
-                      break;
-                  }
-                },
-              ),
             ),
           ];
         },
@@ -116,26 +139,36 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
             header: UIUtils.getRefreshClassicalHeader(),
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
-              BlocListener<DischargeReportListBloc, DischargeReportListState>(
+              BlocListener<ListBloc, ListState>(
                 listener: (context, state) {
+                  //刷新状态不触发_refreshCompleter
+                  if (state is ListLoading) return;
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
-                child: BlocBuilder<DischargeReportListBloc, DischargeReportListState>(
+                child: BlocBuilder<ListBloc, ListState>(
+                  condition: (previousState, state) {
+                    //刷新状态不重构Widget
+                    if (state is ListLoading)
+                      return false;
+                    else
+                      return true;
+                  },
                   builder: (context, state) {
-                    if (state is DischargeReportListLoading) {
-                      return PageLoadingWidget();
-                    } else if (state is DischargeReportListEmpty) {
-                      return PageEmptyWidget();
-                    } else if (state is DischargeReportListError) {
-                      return PageErrorWidget(errorMessage: state.errorMessage);
-                    } else if (state is DischargeReportListLoaded) {
+                    if (state is ListInitial) {
+                      return LoadingSliver();
+                    } else if (state is ListEmpty) {
+                      return EmptySliver();
+                    } else if (state is ListError) {
+                      return ErrorSliver(errorMessage: state.message);
+                    } else if (state is ListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _buildPageLoadedList(state.reportList);
+                      return _buildPageLoadedList(state.list);
                     } else {
-                      return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                      return ErrorSliver(
+                          errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
                     }
                   },
                 ),
@@ -143,26 +176,41 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
             ],
             onRefresh: () async {
               //刷新事件
-              _reportListBloc.add(DischargeReportListLoad(
+              _listBloc.add(ListLoad(
                 isRefresh: true,
-                enterName: _editController.text,
-                areaCode: areaCode,
-                enterId: widget.enterId,
-                dischargeId: widget.dischargeId,
-                monitorId: widget.monitorId,
-                state: widget.state,
+                params: DischargeReportListRepository.createParams(
+                  currentPage: Constant.defaultCurrentPage,
+                  pageSize: Constant.defaultPageSize,
+                  enterName: _editController.text,
+                  areaCode: areaCode,
+                  enterId: widget.enterId,
+                  dischargeId: widget.dischargeId,
+                  monitorId: widget.monitorId,
+                  state: widget.state,
+                ),
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
+              final currentState = _listBloc.state;
+              int currentPage;
+              if (currentState is ListLoaded)
+                currentPage = currentState.currentPage + 1;
+              else
+                currentPage = Constant.defaultCurrentPage;
               //加载事件
-              _reportListBloc.add(DischargeReportListLoad(
-                enterName: _editController.text,
-                areaCode: areaCode,
-                enterId: widget.enterId,
-                dischargeId: widget.dischargeId,
-                monitorId: widget.monitorId,
-                state: widget.state,
+              _listBloc.add(ListLoad(
+                isRefresh: false,
+                params: DischargeReportListRepository.createParams(
+                  currentPage: currentPage,
+                  pageSize: Constant.defaultPageSize,
+                  enterName: _editController.text,
+                  areaCode: areaCode,
+                  enterId: widget.enterId,
+                  dischargeId: widget.dischargeId,
+                  monitorId: widget.monitorId,
+                  state: widget.state,
+                ),
               ));
               return _refreshCompleter.future;
             },
@@ -175,25 +223,14 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
   Widget _buildPageLoadedList(List<DischargeReport> reportList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
+        (BuildContext context, int index) {
           //创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return BlocProvider(
-                        builder: (context) => DischargeReportDetailBloc(),
-                        child: DischargeReportDetailPage(
-                          reportId: reportList[index].reportId,
-                        ),
-                      );
-                    },
-                  ),
-                );
+                Application.router.navigateTo(context,
+                    '${Routes.dischargeReportDetail}/${reportList[index].reportId}');
               },
               children: <Widget>[
                 Container(
@@ -241,7 +278,6 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
                             child: ListTileWidget(
                                 '开始时间：${reportList[index].startTimeStr}'),
                           ),
-
                         ],
                       ),
                       Gaps.vGap6,

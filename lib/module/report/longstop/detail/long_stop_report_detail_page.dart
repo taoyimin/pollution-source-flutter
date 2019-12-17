@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_event.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
+import 'package:pollution_source/module/report/longstop/detail/long_stop_report_detail_model.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'long_stop_report_detail.dart';
 
 class LongStopReportDetailPage extends StatefulWidget {
   final String reportId;
@@ -20,13 +22,13 @@ class LongStopReportDetailPage extends StatefulWidget {
 }
 
 class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
-  LongStopReportDetailBloc _reportDetailBloc;
+  DetailBloc _detailBloc;
 
   @override
   void initState() {
     super.initState();
-    _reportDetailBloc = BlocProvider.of<LongStopReportDetailBloc>(context);
-    _reportDetailBloc.add(LongStopReportDetailLoad(reportId: widget.reportId));
+    _detailBloc = BlocProvider.of<DetailBloc>(context);
+    _detailBloc.add(DetailLoad(detailId: widget.reportId));
   }
 
   @override
@@ -39,13 +41,13 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
     return Scaffold(
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<LongStopReportDetailBloc, LongStopReportDetailState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
-              if (state is LongStopReportDetailLoaded) {
-                enterName = state.reportDetail.enterName;
-                enterAddress = state.reportDetail.enterAddress;
+              if (state is DetailLoaded) {
+                enterName = state.detail.enterName;
+                enterAddress = state.detail.enterAddress;
               }
               return DetailHeaderWidget(
                 title: '长期停产申报详情',
@@ -56,18 +58,16 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
               );
             },
           ),
-          BlocBuilder<LongStopReportDetailBloc, LongStopReportDetailState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
-              if (state is LongStopReportDetailLoading) {
-                return PageLoadingWidget();
-              } else if (state is LongStopReportDetailEmpty) {
-                return PageEmptyWidget();
-              } else if (state is LongStopReportDetailError) {
-                return PageErrorWidget(errorMessage: state.errorMessage);
-              } else if (state is LongStopReportDetailLoaded) {
-                return _buildPageLoadedDetail(state.reportDetail);
+              if (state is DetailLoading) {
+                return LoadingSliver();
+              } else if (state is DetailError) {
+                return ErrorSliver(errorMessage: state.message);
+              } else if (state is DetailLoaded) {
+                return _buildPageLoadedDetail(state.detail);
               } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
               }
             },
           ),
@@ -167,19 +167,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                             imagePath:
                             'assets/images/image_enter_statistics1.png'),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return BlocProvider(
-                                  builder: (context) => EnterDetailBloc(),
-                                  child: EnterDetailPage(
-                                    enterId: reportDetail.enterId,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
+                          Application.router.navigateTo(context,
+                              '${Routes.enterDetail}/${reportDetail.enterId}');
                         },
                       ),
                       Gaps.hGap10,

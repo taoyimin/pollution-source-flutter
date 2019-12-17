@@ -343,17 +343,17 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
   } else {
     return [
       Meta(
-        title: '报警单待处理',
+        title: '报警管理单总数',
         imagePath: 'assets/images/button_bg_blue.png',
         content: strings[1],
       ),
       Meta(
-        title: '排口异常待审核',
+        title: '排口异常申报总数',
         imagePath: 'assets/images/button_bg_green.png',
         content: strings[2],
       ),
       Meta(
-        title: '因子异常待审核',
+        title: '因子异常申报总数',
         imagePath: 'assets/images/button_bg_pink.png',
         content: strings[3],
       ),

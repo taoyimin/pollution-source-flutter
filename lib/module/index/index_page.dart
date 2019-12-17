@@ -1,33 +1,21 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_bloc.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_page.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
 import 'dart:ui';
 import 'dart:math';
 import 'dart:async';
 
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/space_header.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/index/index.dart';
-import 'package:pollution_source/module/enter/list/enter_list_bloc.dart';
-import 'package:pollution_source/module/enter/list/enter_list_page.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
-import 'package:pollution_source/module/order/list/order_list_bloc.dart';
-import 'package:pollution_source/module/order/list/order_list_page.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
@@ -177,7 +165,7 @@ class _IndexPageState extends State<IndexPage>
                     ),
                   );
                 } else {
-                  return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                  return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
                 }
               },
             ),
@@ -668,53 +656,26 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               InkWellButton2(
                 meta: metaList[0],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => OrderListBloc(),
-                          child: OrderListPage(state: '2'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.orderList}?state=2');
                 },
               ),
               Gaps.hGap6,
-              //排口异常待审核
+              //排口异常申报单总数
               InkWellButton2(
                 meta: metaList[1],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => DischargeReportListBloc(),
-                          child: DischargeReportListPage(state: '0'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(context,
+                      '${Routes.dischargeReportList}');
                 },
               ),
               Gaps.hGap6,
-              //因子异常待审核
+              //因子异常申报单总数
               InkWellButton2(
                 meta: metaList[2],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => FactorReportListBloc(),
-                          child: FactorReportListPage(state: '0'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(context,
+                      '${Routes.factorReportList}');
                 },
               ),
             ],
@@ -745,17 +706,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[0],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(state: '0'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.monitorList}?state=0');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -764,17 +716,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[1],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(state: '1'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.monitorList}?state=1');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -783,17 +726,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[2],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(state: '2'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.monitorList}?state=2');
                 },
               ),
             ],
@@ -805,17 +739,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[3],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(state: '3'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.monitorList}?state=3');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -824,17 +749,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[4],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(state: '4'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.monitorList}?state=4');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -843,17 +759,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[5],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => MonitorListBloc(),
-                          child: MonitorListPage(state: '5'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.monitorList}?state=5');
                 },
               ),
             ],
@@ -883,17 +790,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[0],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(context, '${Routes.enterList}');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -901,17 +798,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[1],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(attentionLevel: '1'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?attentionLevel=1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -919,17 +807,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[2],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(state: '1'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?state=1');
                 },
               ),
             ],
@@ -940,21 +819,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[3],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            enterType: SpUtil.getBool(Constant.spJavaApi)
-                                ? 'outletType2'
-                                : 'EnterType1',
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?enterType=EnterType1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -962,21 +828,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[4],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            enterType: SpUtil.getBool(Constant.spJavaApi)
-                                ? 'outletType3'
-                                : 'EnterType2',
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?enterType=EnterType2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -984,21 +837,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[5],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            enterType: SpUtil.getBool(Constant.spJavaApi)
-                                ? 'outletType2,outletType3'
-                                : 'EnterType1,EnterType2',
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?enterType=EnterType1,EnterType2');
                 },
               ),
             ],
@@ -1009,18 +849,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[6],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => DischargeListBloc(),
-                          child:
-                              DischargeListPage(dischargeType: 'outletType2'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=outletType2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -1028,18 +858,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[7],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => DischargeListBloc(),
-                          child:
-                              DischargeListPage(dischargeType: 'outletType3'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=outletType3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -1047,17 +867,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[8],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(enterType: 'licence'),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?enterType=licence');
                 },
               ),
             ],
@@ -1087,19 +898,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[0],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            enterType: 'outletType1',
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?enterType=outletType1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -1107,20 +907,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[1],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => EnterListBloc(),
-                          child: EnterListPage(
-                            enterType: 'outletType1',
-                            state: '1',
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?enterType=outletType1&state=1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -1128,19 +916,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[2],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return BlocProvider(
-                          builder: (context) => DischargeListBloc(),
-                          child: DischargeListPage(
-                            dischargeType: 'outletType1',
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=outletType1');
                 },
               ),
             ],

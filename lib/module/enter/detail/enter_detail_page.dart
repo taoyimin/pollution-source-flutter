@@ -4,23 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_event.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
 import 'package:pollution_source/module/license/list/license_list_bloc.dart';
 import 'package:pollution_source/module/license/list/license_list_page.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_bloc.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
-import 'package:pollution_source/module/order/list/order_list_bloc.dart';
-import 'package:pollution_source/module/order/list/order_list_page.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_bloc.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_bloc.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
-import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_bloc.dart';
-import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-
-import 'enter_detail.dart';
 
 class EnterDetailPage extends StatefulWidget {
   final String enterId;
@@ -32,13 +26,13 @@ class EnterDetailPage extends StatefulWidget {
 }
 
 class _EnterDetailPageState extends State<EnterDetailPage> {
-  EnterDetailBloc _enterDetailBloc;
+  DetailBloc _detailBloc;
 
   @override
   void initState() {
     super.initState();
-    _enterDetailBloc = BlocProvider.of<EnterDetailBloc>(context);
-    _enterDetailBloc.add(EnterDetailLoad(enterId: widget.enterId));
+    _detailBloc = BlocProvider.of<DetailBloc>(context);
+    _detailBloc.add(DetailLoad(detailId: widget.enterId));
   }
 
   @override
@@ -47,21 +41,21 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
   }
 
   //用来显示SnackBar
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  //var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
+      //key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<EnterDetailBloc, EnterDetailState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
-              if (state is EnterDetailLoaded) {
-                enterName = state.enterDetail.enterName;
-                enterAddress = state.enterDetail.enterAddress;
+              if (state is DetailLoaded) {
+                enterName = state.detail.enterName;
+                enterAddress = state.detail.enterAddress;
               }
               return DetailHeaderWidget(
                 title: '企业详情',
@@ -72,18 +66,18 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               );
             },
           ),
-          BlocBuilder<EnterDetailBloc, EnterDetailState>(
+          //生成body
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
-              if (state is EnterDetailLoading) {
-                return PageLoadingWidget();
-              } else if (state is EnterDetailEmpty) {
-                return PageEmptyWidget();
-              } else if (state is EnterDetailError) {
-                return PageErrorWidget(errorMessage: state.errorMessage);
-              } else if (state is EnterDetailLoaded) {
-                return _buildPageLoadedDetail(state.enterDetail);
+              if (state is DetailLoading) {
+                return LoadingSliver();
+              } else if (state is DetailError) {
+                return ErrorSliver(errorMessage: state.message);
+              } else if (state is DetailLoaded) {
+                return _buildPageLoadedDetail(state.detail);
               } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(
+                    errorMessage: 'BlocBuilder监听到未知的的状态!state=$state');
               }
             },
           ),
@@ -207,17 +201,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     InkWellButton5(
                       ratio: 1.2,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => OrderListBloc(),
-                                child: OrderListPage(state: '5',enterId: enterDetail.enterId,),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(
+                            context, '${Routes.orderList}?enterId=${widget.enterId}&state=5');
                       },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
@@ -231,17 +216,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     InkWellButton5(
                       ratio: 1.2,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => OrderListBloc(),
-                                child: OrderListPage(enterId: enterDetail.enterId,),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(
+                            context, '${Routes.orderList}?enterId=${widget.enterId}');
                       },
                       meta: Meta(
                         color: Color(0xFFFFB709),
@@ -270,19 +246,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   children: <Widget>[
                     InkWellButton3(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => LongStopReportListBloc(),
-                                child: LongStopReportListPage(
-                                  enterId: enterDetail.enterId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.longStopReportList}?enterId=${enterDetail.enterId}');
                       },
                       meta: Meta(
                         title: '长期停产申报',
@@ -294,19 +259,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     Gaps.hGap10,
                     InkWellButton3(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => DischargeReportListBloc(),
-                                child: DischargeReportListPage(
-                                  enterId: enterDetail.enterId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}');
                       },
                       meta: Meta(
                         title: '排口异常申报',
@@ -318,19 +272,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     Gaps.hGap10,
                     InkWellButton3(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                builder: (context) => FactorReportListBloc(),
-                                child: FactorReportListPage(
-                                  enterId: enterDetail.enterId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.factorReportList}?enterId=${enterDetail.enterId}');
                       },
                       meta: Meta(
                         title: '因子异常申报',
@@ -378,17 +321,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorTotalCount}',
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BlocProvider(
-                                      builder: (context) => MonitorListBloc(),
-                                      child: MonitorListPage(enterId: enterDetail.enterId,),
-                                    );
-                                  },
-                                ),
-                              );
+                              Application.router.navigateTo(
+                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -402,17 +336,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorOnlineCount}',
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BlocProvider(
-                                      builder: (context) => MonitorListBloc(),
-                                      child: MonitorListPage(state: '1',enterId: enterDetail.enterId,),
-                                    );
-                                  },
-                                ),
-                              );
+                              Application.router.navigateTo(
+                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -425,17 +350,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorAlarmCount}',
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BlocProvider(
-                                      builder: (context) => MonitorListBloc(),
-                                      child: MonitorListPage(state: '2',enterId: enterDetail.enterId,),
-                                    );
-                                  },
-                                ),
-                              );
+                              Application.router.navigateTo(
+                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2');
                             },
                           ),
                         ],
@@ -451,17 +367,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorOverCount}',
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BlocProvider(
-                                      builder: (context) => MonitorListBloc(),
-                                      child: MonitorListPage(state: '3',enterId: enterDetail.enterId,),
-                                    );
-                                  },
-                                ),
-                              );
+                              Application.router.navigateTo(
+                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -475,17 +382,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorOfflineCount}',
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BlocProvider(
-                                      builder: (context) => MonitorListBloc(),
-                                      child: MonitorListPage(state: '4',enterId: enterDetail.enterId,),
-                                    );
-                                  },
-                                ),
-                              );
+                              Application.router.navigateTo(
+                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -498,17 +396,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorStopCount}',
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BlocProvider(
-                                      builder: (context) => MonitorListBloc(),
-                                      child: MonitorListPage(state: '5',enterId: enterDetail.enterId,),
-                                    );
-                                  },
-                                ),
-                              );
+                              Application.router.navigateTo(
+                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5');
                             },
                           ),
                         ],
@@ -544,7 +433,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return BlocProvider(
-                        builder: (context) => LicenseListBloc(),
+                        create: (context) => LicenseListBloc(),
                         child: LicenseListPage(
                           enterId: enterDetail.enterId,
                         ),

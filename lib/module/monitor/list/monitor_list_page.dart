@@ -4,15 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
+import 'package:pollution_source/module/common/list/list_bloc.dart';
+import 'package:pollution_source/module/common/list/list_event.dart';
+import 'package:pollution_source/module/common/list/list_state.dart';
+import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
+import 'package:pollution_source/module/monitor/list/monitor_list_repository.dart';
+import 'package:pollution_source/res/constant.dart';
 
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list.dart';
 
 class MonitorListPage extends StatefulWidget {
   final String enterId;
@@ -36,7 +41,7 @@ class MonitorListPage extends StatefulWidget {
 class _MonitorListPageState extends State<MonitorListPage>
     with TickerProviderStateMixin {
   ScrollController _scrollController;
-  MonitorListBloc _monitorListBloc;
+  ListBloc _listBloc;
   EasyRefreshController _refreshController;
   TextEditingController _editController;
   Completer<void> _refreshCompleter;
@@ -45,26 +50,34 @@ class _MonitorListPageState extends State<MonitorListPage>
   @override
   void initState() {
     super.initState();
-    _monitorListBloc = BlocProvider.of<MonitorListBloc>(context);
+    _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
     _scrollController = ScrollController();
     _editController = TextEditingController();
     //首次加载
-    _monitorListBloc.add(MonitorListLoad(
-      enterId: widget.enterId,
-      dischargeId: widget.dischargeId,
-      monitorType: widget.monitorType,
-      state: widget.state,
+    _listBloc.add(ListLoad(
+      isRefresh: true,
+      params: MonitorListRepository.createParams(
+        currentPage: Constant.defaultCurrentPage,
+        pageSize: Constant.defaultPageSize,
+        enterId: widget.enterId,
+        dischargeId: widget.dischargeId,
+        monitorType: widget.monitorType,
+        state: widget.state,
+      ),
     ));
   }
 
   @override
   void dispose() {
-    super.dispose();
     _refreshController.dispose();
     _scrollController.dispose();
     _editController.dispose();
+    //取消正在进行的请求
+    final currentState = _listBloc?.state;
+    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    super.dispose();
   }
 
   @override
@@ -77,37 +90,49 @@ class _MonitorListPageState extends State<MonitorListPage>
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            ListHeaderWidget(
-              title: '在线数据列表',
-              subtitle: '展示在线数据列表，点击列表项查看该在线数据的详细信息',
-              background: 'assets/images/button_bg_red.png',
-              image: 'assets/images/monitor_list_bg_image.png',
-              color: Colors.red,
-              showSearch: true,
-              editController: _editController,
-              scrollController: _scrollController,
-              onSearchPressed: () => _refreshController.callRefresh(),
-              areaPickerListener: (areaId) {
-                areaCode = areaId;
+            BlocBuilder<ListBloc, ListState>(
+              builder: (context, state) {
+                String subtitle2 = '';
+                if(state is ListLoading)
+                  subtitle2 = '数据加载中';
+                else if (state is ListLoaded)
+                  subtitle2 = '共${state.total}条数据';
+                else if (state is ListEmpty)
+                  subtitle2 = '共0条数据';
+                else if(state is ListError)
+                  subtitle2 = '数据加载错误';
+                return ListHeaderWidget(
+                  title: '在线数据列表',
+                  subtitle: '展示在线数据列表，点击列表项查看该在线数据的详细信息',
+                  subtitle2: subtitle2,
+                  background: 'assets/images/button_bg_red.png',
+                  image: 'assets/images/monitor_list_bg_image.png',
+                  color: Colors.red,
+                  showSearch: true,
+                  editController: _editController,
+                  scrollController: _scrollController,
+                  onSearchPressed: () => _refreshController.callRefresh(),
+                  areaPickerListener: (areaId) {
+                    areaCode = areaId;
+                  },
+                  popupMenuButton: PopupMenuButton<String>(
+                    itemBuilder: (BuildContext context) =>
+                    <PopupMenuItem<String>>[
+                      UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
+                      UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
+                    ],
+                    onSelected: (String action) {
+                      // 点击选项的时候
+                      switch (action) {
+                        case 'A':
+                          break;
+                        case 'B':
+                          break;
+                      }
+                    },
+                  ),
+                );
               },
-              popupMenuButton: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
-                  UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
-                  UIUtils.getSelectView(Icons.cast_connected, '扫一扫码', 'C'),
-                ],
-                onSelected: (String action) {
-                  // 点击选项的时候
-                  switch (action) {
-                    case 'A':
-                      break;
-                    case 'B':
-                      break;
-                    case 'C':
-                      break;
-                  }
-                },
-              ),
             ),
           ];
         },
@@ -118,51 +143,76 @@ class _MonitorListPageState extends State<MonitorListPage>
             header: UIUtils.getRefreshClassicalHeader(),
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
-              BlocListener<MonitorListBloc, MonitorListState>(
+              BlocListener<ListBloc, ListState>(
                 listener: (context, state) {
+                  //刷新状态不触发_refreshCompleter
+                  if (state is ListLoading) return;
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
-                child: BlocBuilder<MonitorListBloc, MonitorListState>(
+                child: BlocBuilder<ListBloc, ListState>(
+                  condition: (previousState, state) {
+                    //刷新状态不重构Widget
+                    if (state is ListLoading)
+                      return false;
+                    else
+                      return true;
+                  },
                   builder: (context, state) {
-                    if (state is MonitorListLoading) {
-                      return PageLoadingWidget();
-                    } else if (state is MonitorListEmpty) {
-                      return PageEmptyWidget();
-                    } else if (state is MonitorListError) {
-                      return PageErrorWidget(errorMessage: state.errorMessage);
-                    } else if (state is MonitorListLoaded) {
+                    if (state is ListInitial) {
+                      return LoadingSliver();
+                    } else if (state is ListEmpty) {
+                      return EmptySliver();
+                    } else if (state is ListError) {
+                      return ErrorSliver(errorMessage: state.message);
+                    } else if (state is ListLoaded) {
                       if (!state.hasNextPage)
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
-                      return _buildPageLoadedList(state.monitorList);
+                      return _buildPageLoadedList(state.list);
                     } else {
-                      return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                      return ErrorSliver(
+                          errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
                     }
                   },
                 ),
               ),
             ],
             onRefresh: () async {
-              _monitorListBloc.add(MonitorListLoad(
+              _listBloc.add(ListLoad(
                 isRefresh: true,
-                enterName: _editController.text,
-                areaCode: areaCode,
-                enterId: widget.enterId,
-                dischargeId: widget.dischargeId,
-                monitorType: widget.monitorType,
-                state: widget.state,
+                params: MonitorListRepository.createParams(
+                  currentPage: Constant.defaultCurrentPage,
+                  pageSize: Constant.defaultPageSize,
+                  enterName: _editController.text,
+                  areaCode: areaCode,
+                  enterId: widget.enterId,
+                  dischargeId: widget.dischargeId,
+                  monitorType: widget.monitorType,
+                  state: widget.state,
+                ),
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
-              _monitorListBloc.add(MonitorListLoad(
-                enterName: _editController.text,
-                areaCode: areaCode,
-                enterId: widget.enterId,
-                dischargeId: widget.dischargeId,
-                monitorType: widget.monitorType,
-                state: widget.state,
+              final currentState = _listBloc.state;
+              int currentPage;
+              if (currentState is ListLoaded)
+                currentPage = currentState.currentPage + 1;
+              else
+                currentPage = Constant.defaultCurrentPage;
+              _listBloc.add(ListLoad(
+                isRefresh: false,
+                params: MonitorListRepository.createParams(
+                  currentPage: currentPage,
+                  pageSize: Constant.defaultPageSize,
+                  enterName: _editController.text,
+                  areaCode: areaCode,
+                  enterId: widget.enterId,
+                  dischargeId: widget.dischargeId,
+                  monitorType: widget.monitorType,
+                  state: widget.state,
+                ),
               ));
               return _refreshCompleter.future;
             },
@@ -183,19 +233,8 @@ class _MonitorListPageState extends State<MonitorListPage>
               onTap: () {
                 switch(widget.type){
                   case 0:
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return BlocProvider(
-                            builder: (context) => MonitorDetailBloc(),
-                            child: MonitorDetailPage(
-                              monitorId: monitorList[index].monitorId,
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                    Application.router.navigateTo(
+                        context, '${Routes.monitorDetail}/${monitorList[index].monitorId}');
                     break;
                   case 1:
                     Navigator.pop(context, monitorList[index]);

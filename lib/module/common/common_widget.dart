@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:common_utils/common_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -14,7 +12,6 @@ import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/util/utils.dart';
-import 'package:pollution_source/widget/liquid_linear_progress_indicator.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'common_model.dart';
@@ -24,7 +21,7 @@ import 'common_model.dart';
 ///复杂自定义组件放widget包中
 
 //页面加载中的widget
-class PageLoadingWidget extends StatelessWidget {
+class LoadingSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
@@ -64,7 +61,7 @@ class PageLoadingWidget extends StatelessWidget {
 }
 
 //页面没有数据的widget
-class PageEmptyWidget extends StatelessWidget {
+class EmptySliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
@@ -95,10 +92,10 @@ class PageEmptyWidget extends StatelessWidget {
 }
 
 //页面加载错误的widget
-class PageErrorWidget extends StatelessWidget {
+class ErrorSliver extends StatelessWidget {
   final String errorMessage;
 
-  PageErrorWidget({this.errorMessage});
+  ErrorSliver({this.errorMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +122,40 @@ class PageErrorWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+//BottomSheet展示错误信息用的widget
+class MessageWidget extends StatelessWidget {
+  final String message;
+
+  MessageWidget({this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: 100.0,
+            height: 100.0,
+            child: Image.asset('assets/images/nodata.png'),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: Text(
+              '$message',
+              style:
+              const TextStyle(fontSize: 16.0, color: Colours.grey_color),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1193,9 +1224,7 @@ class AttachmentWidget extends StatelessWidget {
           Toast.show(e.toString());
         }
         if (pr?.isShowing() ?? false) {
-          pr.hide().then((isHidden) {
-
-          });
+          pr.hide().then((isHidden) {});
         }
       },
       child: Container(
@@ -1207,21 +1236,23 @@ class AttachmentWidget extends StatelessWidget {
               attachment.imagePath,
             ),
             Gaps.hGap10,
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  attachment.fileName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
-                ),
-                Text(
-                  '附件大小:${attachment.fileSize}',
-                  style: const TextStyle(fontSize: 13),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '${attachment.fileName}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    '附件大小:${attachment.fileSize}',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

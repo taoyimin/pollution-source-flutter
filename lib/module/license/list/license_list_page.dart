@@ -55,15 +55,15 @@ class _LicenseListPageState extends State<LicenseListPage>
           BlocBuilder<LicenseListBloc, LicenseListState>(
             builder: (context, state) {
               if (state is LicenseListLoading) {
-                return PageLoadingWidget();
+                return LoadingSliver();
               } else if (state is LicenseListEmpty) {
-                return PageEmptyWidget();
+                return EmptySliver();
               } else if (state is LicenseListError) {
-                return PageErrorWidget(errorMessage: state.errorMessage);
+                return ErrorSliver(errorMessage: state.errorMessage);
               } else if (state is LicenseListLoaded) {
                 return _buildPageLoadedList(state.licenseList);
               } else {
-                return PageErrorWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
               }
             },
           ),
