@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/application/admin_application_page.dart';
-import 'package:pollution_source/module/enter/list/enter_list_bloc.dart';
+import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
+import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/index/index.dart';
 
 import 'mine.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+class AdminHomePage extends StatefulWidget {
+  AdminHomePage({Key key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _AdminHomePageState createState() => _AdminHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AdminHomePageState extends State<AdminHomePage> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
     //IndexPage(),
     BlocProvider(
-      builder: (context) => IndexBloc(),
+      create: (context) => IndexBloc(),
       child: IndexPage(),
     ),
     AdminApplicationPage(),
-    BlocProvider(
-      builder: (context) => EnterListBloc(),
+    BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: EnterListRepository()),
       child: EnterListPage(
         automaticallyImplyLeading: false,
       ),
