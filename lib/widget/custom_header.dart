@@ -7,6 +7,7 @@ import 'package:pollution_source/res/gaps.dart';
 class ListHeaderWidget extends StatefulWidget {
   final String title;
   final String subtitle;
+  final String subtitle2;
   final String background;
   final String image;
   final Color color;
@@ -23,6 +24,7 @@ class ListHeaderWidget extends StatefulWidget {
   ListHeaderWidget({
     this.title = '标题',
     this.subtitle = '副标题',
+    this.subtitle2 = '副标题2',
     this.background = 'assets/images/button_bg_green.png',
     this.image = 'assets/images/order_list_bg_image.png',
     this.color = Colours.primary_color,
@@ -169,7 +171,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                         Container(
                           width: 110,
                           child: Text(
-                            widget.subtitle,
+                            '${widget.subtitle}',
                             style: TextStyle(fontSize: 10, color: Colors.white),
                           ),
                         ),
@@ -180,17 +182,11 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                           decoration: BoxDecoration(
                             color: Colors.white,
                           ),
-                          child: GestureDetector(
-                            onTap: () {
-                              widget.scrollController.jumpTo(0);
-                              _changePage();
-                            },
-                            child: Text(
-                              "点我筛选",
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: widget.color,
-                              ),
+                          child: Text(
+                            '${widget.subtitle2}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: widget.color,
                             ),
                           ),
                         ),
