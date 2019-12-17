@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:pollution_source/module/common/upload/upload_bloc.dart';
-import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/res/gaps.dart';
 
-class UploadDialog extends Dialog {
-  final UploadBloc uploadBloc;
+/// 可以播放gif动画的对话框
+///
+/// 传入[text]设置要显示的文字
+/// 传入[onCancelTap]设置取消按钮的点击事件
+/// 因为包裹了一层[WillPopScope]，并且重写了[onWillPop]方法
+/// 所以点击手机的返回键无法关闭[Dialog]
+class GifDialog extends Dialog {
+  final String text;
+  final GestureTapCallback onCancelTap;
 
-  UploadDialog({Key key, @required this.uploadBloc}) : super(key: key);
+  GifDialog({Key key, this.text = '上传中，请耐心等待...', @required this.onCancelTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,36 +48,17 @@ class UploadDialog extends Dialog {
                   ),
                 ),
                 Gaps.vGap10,
-                const Text(
-                  '上传中，请耐心等待...',
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  text,
+                  style: const TextStyle(fontSize: 16),
                 ),
-                /*Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: BlocBuilder<UploadBloc, UploadState>(
-                      bloc: uploadBloc,
-                      builder: (context, state) {
-                        if (state is UploadSuccess) {
-                          return Text('上传成功');
-                        } else if (state is ProgressUpdate) {
-                          return Text('${state.progress}');
-                        }else{
-                          return Text('未知状态');
-                        }
-                      },
-                    ),
-                ),*/
                 Gaps.vGap10,
                 SizedBox(
                   width: 100,
                   child: FlatButton(
-                    onPressed: () {
-                      final currentState = uploadBloc.state;
-                      if(currentState is Uploading){
-                        currentState.token.cancel('取消上传');
-                      }
-                    },
-                    padding:const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    onPressed: onCancelTap ?? () {},
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     color: Colors.redAccent,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
