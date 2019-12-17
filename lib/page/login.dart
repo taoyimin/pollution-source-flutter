@@ -1,90 +1,10 @@
-/*
-import 'package:flutter/material.dart';
-
-import 'home.dart';
-
-class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/background_login.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 70,
-              ),
-              Image.asset(
-                "assets/images/login_logo.png",
-                height: 200,
-              ),
-              Container(
-                width: 270,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.4),
-                ),
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                  decoration: InputDecoration.collapsed(
-                    hintText: '用户名',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: 270,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.4),
-                ),
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                  decoration: InputDecoration.collapsed(
-                    hintText: '密码',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http.dart';
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/toast_utils.dart';
@@ -95,7 +15,7 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:pollution_source/res/colors.dart';
 
 import 'enter_home.dart';
-import 'home.dart';
+import 'admin_home.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -103,13 +23,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //定义一个controller
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
   KeyboardActionsConfig _config;
   bool _isClick = false;
+  //当前选中用户类型 0：环保 1：企业 2：运维
+  int _userType;
 
   @override
   void initState() {
@@ -121,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     //初始化输入框
     _nameController.text = SpUtil.getString(Constant.spUsername);
     _passwordController.text = SpUtil.getString(Constant.spPassword);
+    _userType = SpUtil.getInt(Constant.spUserType, defValue: 0);
   }
 
   @override
@@ -149,15 +71,31 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void _login(){
+    switch(_userType){
+      case 0:
+        _adminLogin();
+        break;
+      case 1:
+        _enterLogin();
+        break;
+      case 0:
+        _maintainLogin();
+        break;
+    }
+  }
+
   void _adminLogin() async {
     try {
       if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-        Response response = await JavaDioUtils.instance.getDio().get(HttpApiJava.login,
-            queryParameters: {
-              'userName': _nameController.text,
-              'password': _passwordController.text
-            });
+        Response response = await JavaDioUtils.instance
+            .getDio()
+            .get(HttpApiJava.login, queryParameters: {
+          'userName': _nameController.text,
+          'password': _passwordController.text
+        });
         //登录成功
+        SpUtil.putInt(Constant.spUserType, _userType);
         SpUtil.putString(Constant.spUsername, _nameController.text);
         SpUtil.putString(Constant.spPassword, _passwordController.text);
         SpUtil.putString(Constant.spToken,
@@ -166,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return HomePage();
+              return AdminHomePage();
             },
           ),
         );
@@ -179,6 +117,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
         //登录成功
+        SpUtil.putInt(Constant.spUserType, _userType);
         SpUtil.putString(Constant.spUsername, _nameController.text);
         SpUtil.putString(Constant.spPassword, _passwordController.text);
         SpUtil.putString(Constant.spToken,
@@ -187,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return HomePage();
+              return AdminHomePage();
             },
           ),
         );
@@ -195,28 +134,19 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       Toast.show(ExceptionHandle.handleException(e).msg);
     }
-
-    /*FlutterStars.SpUtil.putString('username', _nameController.text);
-    FlutterStars.SpUtil.putString('password', _passwordController.text);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return HomePage();
-        },
-      ),
-    );*/
   }
 
   void _enterLogin() async {
     try {
       if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-        Response response = await JavaDioUtils.instance.getDio().get(HttpApiJava.login,
-            queryParameters: {
-              'userName': _nameController.text,
-              'password': _passwordController.text
-            });
+        Response response = await JavaDioUtils.instance
+            .getDio()
+            .get(HttpApiJava.login, queryParameters: {
+          'userName': _nameController.text,
+          'password': _passwordController.text
+        });
         //登录成功
+        SpUtil.putInt(Constant.spUserType, _userType);
         SpUtil.putString(Constant.spUsername, _nameController.text);
         SpUtil.putString(Constant.spPassword, _passwordController.text);
         SpUtil.putString(Constant.spToken,
@@ -225,7 +155,9 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return HomePage();
+              return EnterHomePage(
+                enterId: '${response.data['enterId']}',
+              );
             },
           ),
         );
@@ -238,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
         //登录成功
+        SpUtil.putInt(Constant.spUserType, _userType);
         SpUtil.putString(Constant.spUsername, _nameController.text);
         SpUtil.putString(Constant.spPassword, _passwordController.text);
         SpUtil.putString(Constant.spToken,
@@ -246,7 +179,9 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return EnterHomePage(enterId: '${response.data['enterId']}',);
+              return EnterHomePage(
+                enterId: '${response.data['enterId']}',
+              );
             },
           ),
         );
@@ -254,15 +189,10 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       Toast.show(ExceptionHandle.handleException(e).msg);
     }
+  }
 
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return EnterHomePage();
-        },
-      ),
-    );*/
+  void _maintainLogin(){
+
   }
 
   @override
@@ -290,19 +220,10 @@ class _LoginPageState extends State<LoginPage> {
           fit: BoxFit.cover,
         ),
       ),
-      padding:const EdgeInsets.only(left: 26.0, right: 26.0, top: 50.0),
+      padding: const EdgeInsets.only(left: 26.0, right: 26.0, top: 50.0),
       child: Column(
         children: <Widget>[
           GestureDetector(
-            /*onTap: () async {
-              Response response = await DioUtils.instance.getDio().patch(
-                'api/users/875',
-                data: {
-                  'userName': _nameController.text,
-                  'passWord': _passwordController.text
-                },
-              );
-            },*/
             onDoubleTap: () {
               SpUtil.putBool(Constant.spJavaApi,
                   !SpUtil.getBool(Constant.spJavaApi, defValue: true));
@@ -347,17 +268,50 @@ class _LoginPageState extends State<LoginPage> {
             hintText: "请输入密码",
           ),
           Gaps.vGap25,
-          LoginButton(
-            key: const Key('login'),
-            onPressed: _isClick ? _adminLogin : null,
-            color: Colors.lightGreen,
-            text: "环保登录",
+          Row(
+            children: <Widget>[
+              IconCheckButton(
+                text: '环保用户',
+                imagePath: 'assets/images/login_icon_admin.png',
+                color: Colors.lightGreen,
+                checked: _userType == 0,
+                onTap: (){
+                  setState(() {
+                    _userType = 0;
+                  });
+                },
+              ),
+              Gaps.hGap10,
+              IconCheckButton(
+                text: '企业用户',
+                imagePath: 'assets/images/login_icon_enter.png',
+                color: Colors.lightBlueAccent,
+                checked: _userType == 1,
+                onTap: (){
+                  setState(() {
+                    _userType = 1;
+                  });
+                },
+              ),
+              Gaps.hGap10,
+              IconCheckButton(
+                text: '运维用户',
+                imagePath: 'assets/images/login_icon_maintain.png',
+                color: Colors.orangeAccent,
+                checked: _userType == 2,
+                onTap: (){
+                  setState(() {
+                    _userType = 2;
+                  });
+                },
+              ),
+            ],
           ),
           Gaps.vGap15,
           LoginButton(
-            key: const Key('enterLogin'),
-            onPressed: _isClick ? _enterLogin : null,
-            text: "企业登录",
+            key: const Key('login'),
+            onPressed: _isClick ? _login : null,
+            text: "登录",
           ),
         ],
       ),

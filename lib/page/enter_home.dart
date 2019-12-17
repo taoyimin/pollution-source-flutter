@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/application/enter_application_page.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/enter/detail/enter_detail_repository.dart';
 import 'package:pollution_source/module/enter/detail/enter_index_page.dart';
 
 import 'mine.dart';
@@ -29,12 +30,10 @@ class _EnterHomePageState extends State<EnterHomePage> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      //IndexPage(),
-      BlocProvider(
-        builder: (context) => EnterDetailBloc(),
-        child: EnterIndexPage(
-          enterId: '${widget.enterId}',
-        ),
+      BlocProvider<DetailBloc>(
+        create: (BuildContext context) =>
+            DetailBloc(detailRepository: EnterDetailRepository()),
+        child: EnterIndexPage(enterId: '${widget.enterId}'),
       ),
       EnterApplicationPage(
         enterId: '${widget.enterId}',
