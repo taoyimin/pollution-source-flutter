@@ -53,29 +53,3 @@ class License extends Equatable {
         '许可证编号': this.licenseNumber,
       };
 }
-
-/*static License fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      return License(
-        licenseId: '-',
-        enterName: '-',
-        issueUnitStr: '-',
-        issueTimeStr: '-',
-        licenseTimeStr: '-',
-        validTimeStr: '-',
-        licenseManagerTypeStr: '-',
-        licenseNumber: '-',
-      );
-    } else {
-      return License(
-        licenseId: json['licenseId'],
-        enterName: json['enterName'],
-        issueUnitStr: json['issueUnitStr'],
-        issueTimeStr: json['issueTimeStr'],
-        licenseTimeStr: json['licenseTimeStr'],
-        validTimeStr: json['validTimeStr'],
-        licenseManagerTypeStr: json['licenseManagerTypeStr'],
-        licenseNumber: json['licenseNumber'],
-      );
-    }
-  }*/

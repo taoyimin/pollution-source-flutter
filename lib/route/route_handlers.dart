@@ -13,6 +13,8 @@ import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_repository.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
+import 'package:pollution_source/module/license/list/license_list_page.dart';
+import 'package:pollution_source/module/license/list/license_list_repository.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
@@ -306,5 +308,17 @@ var longStopReportUploadHandler = Handler(
       ),
     ],
     child: LongStopReportUploadPage(enterId: enterId),
+  );
+});
+
+var licenseListHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String enterId = params['enterId']?.first ?? '';
+  return BlocProvider<ListBloc>(
+    create: (BuildContext context) =>
+        ListBloc(listRepository: LicenseListRepository()),
+    child: LicenseListPage(
+      enterId: enterId,
+    ),
   );
 });

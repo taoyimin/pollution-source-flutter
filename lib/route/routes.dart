@@ -22,6 +22,7 @@ class Routes {
   static String dischargeReportUpload = "/dischargeReportUpload";
   static String factorReportUpload = "/factorReportUpload";
   static String longStopReportUpload = "/longStopReportUpload";
+  static String licenseList = "/licenseList";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(
@@ -48,5 +49,6 @@ class Routes {
     router.define('$dischargeReportUpload/:id', handler: dischargeReportUploadHandler, transitionType: TransitionType.native);
     router.define('$factorReportUpload/:id', handler: factorReportUploadHandler, transitionType: TransitionType.native);
     router.define('$longStopReportUpload/:id', handler: longStopReportUploadHandler, transitionType: TransitionType.native);
+    router.define('$licenseList', handler: licenseListHandler, transitionType: TransitionType.native);
   }
 }

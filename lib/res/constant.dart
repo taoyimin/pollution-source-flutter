@@ -9,9 +9,15 @@ class Constant {
   static const String responseMessageKey = 'message';
   static const String responseDataKey = 'data';
   static const String responseListKey = 'list';
+  /// python用这个
   static const String responseCurrentPageKey = 'currentPage';
+  /// java用这个
+  static const String responsePageNumKey = 'pageNum';
   static const String responsePageSizeKey = 'pageSize';
+  /// python用这个
   static const String responseHasNextKey = 'hasNext';
+  /// java用这个
+  static const String responseHasNextPageKey = 'hasNextPage';
   static const String responseTotalKey = 'total';
   static const String responseTokenKey = 'token';
 

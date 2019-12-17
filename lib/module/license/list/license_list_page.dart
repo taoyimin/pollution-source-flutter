@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/module/common/list/list_bloc.dart';
+import 'package:pollution_source/module/common/list/list_event.dart';
+import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/common/map_info_page.dart';
+import 'package:pollution_source/module/license/list/license_list_model.dart';
+import 'package:pollution_source/module/license/list/license_list_repository.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
 import 'package:pollution_source/module/common/common_widget.dart';
-
-import 'license_list.dart';
 
 class LicenseListPage extends StatefulWidget {
   final String enterId;
@@ -21,24 +25,29 @@ class LicenseListPage extends StatefulWidget {
 
 class _LicenseListPageState extends State<LicenseListPage>
     with TickerProviderStateMixin {
-  LicenseListBloc _licenseListBloc;
-  //EasyRefreshController _refreshController;
+  ListBloc _listBloc;
 
   @override
   void initState() {
     super.initState();
-    _licenseListBloc = BlocProvider.of<LicenseListBloc>(context);
-    //_refreshController = EasyRefreshController();
+    _listBloc = BlocProvider.of<ListBloc>(context);
     //首次加载
-    _licenseListBloc.add(LicenseListLoad(
-      enterId: widget.enterId,
+    _listBloc.add(ListLoad(
+      isRefresh: true,
+      params: LicenseListRepository.createParams(
+        currentPage: Constant.defaultCurrentPage,
+        pageSize: Constant.defaultPageSize,
+        enterId: widget.enterId,
+      ),
     ));
   }
 
   @override
   void dispose() {
+    //取消正在进行的请求
+    final currentState = _listBloc?.state;
+    if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
-    //_refreshController.dispose();
   }
 
   @override
@@ -47,23 +56,34 @@ class _LicenseListPageState extends State<LicenseListPage>
       body: EasyRefresh.custom(
         slivers: <Widget>[
           SliverAppBar(
-            title: Text('排污许可证列表', style: TextStyle(color: Colours.primary_text),),
+            title: Text(
+              '排污许可证列表',
+              style: TextStyle(color: Colours.primary_text),
+            ),
             centerTitle: true,
             iconTheme: IconThemeData(color: Colours.primary_text),
             backgroundColor: Colors.transparent,
           ),
-          BlocBuilder<LicenseListBloc, LicenseListState>(
+          BlocBuilder<ListBloc, ListState>(
+            condition: (previousState, state) {
+              //刷新状态不重构Widget
+              if (state is ListLoading)
+                return false;
+              else
+                return true;
+            },
             builder: (context, state) {
-              if (state is LicenseListLoading) {
+              if (state is ListInitial) {
                 return LoadingSliver();
-              } else if (state is LicenseListEmpty) {
+              } else if (state is ListEmpty) {
                 return EmptySliver();
-              } else if (state is LicenseListError) {
-                return ErrorSliver(errorMessage: state.errorMessage);
-              } else if (state is LicenseListLoaded) {
-                return _buildPageLoadedList(state.licenseList);
+              } else if (state is ListError) {
+                return ErrorSliver(errorMessage: state.message);
+              } else if (state is ListLoaded) {
+                return _buildPageLoadedList(state.list);
               } else {
-                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
               }
             },
           ),
@@ -92,20 +112,21 @@ class _LicenseListPageState extends State<LicenseListPage>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [Color(0xFF589FFF), Color(0xFF5865FF)]),
-                    //image: DecorationImage(image: AssetImage('assets/images/button_bg_lightblue.png'), fit: BoxFit.fill),
-                    boxShadow: [
-                      UIUtils.getBoxShadow(),
-                    ],
-                    borderRadius: BorderRadius.circular(5)
-                  ),
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF589FFF), Color(0xFF5865FF)]),
+                      boxShadow: [
+                        UIUtils.getBoxShadow(),
+                      ],
+                      borderRadius: BorderRadius.circular(5)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Row(
                         children: <Widget>[
                           Gaps.hGap6,
-                          Image.asset('assets/images/license_list_item_logo.png', width: 40),
+                          Image.asset(
+                              'assets/images/license_list_item_logo.png',
+                              width: 40),
                           /*CircleAvatar(
                             backgroundImage: AssetImage('assets/images/license_list_logo.png'),
                           ),*/
@@ -113,16 +134,29 @@ class _LicenseListPageState extends State<LicenseListPage>
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('发证单位：${licenseList[index].issueUnitStr}', style: TextStyle(color: Colors.white),),
-                              Text('发证时间：${licenseList[index].issueTimeStr}', style: TextStyle(color: Colors.white, fontSize: 12),),
+                              Text(
+                                '发证单位：${licenseList[index].issueUnitStr}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                '发证时间：${licenseList[index].issueTimeStr}',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
                             ],
                           ),
                         ],
                       ),
                       Gaps.vGap6,
-                      Text('${licenseList[index].licenseNumber}',style: TextStyle(color: Colors.white, fontSize: 18),),
+                      Text(
+                        '${licenseList[index].licenseNumber}',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
                       Gaps.vGap6,
-                      Text('有效期：${licenseList[index].validTimeStr}', style: TextStyle(color: Colors.white, fontSize: 12),),
+                      Text(
+                        '有效期：${licenseList[index].validTimeStr}',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
                     ],
                   ),
                 ),

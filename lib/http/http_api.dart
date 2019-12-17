@@ -17,10 +17,10 @@ class HttpApiJava{
   static const String enterDetail = 'enterprise/queryEnterByEntId';
   //排口列表
   static const String dischargeList = 'tDisChargeOut/getDisChageOut';
+  //排口详情
+  static const String dischargeDetail = 'tDisChargeOut/getDisChageOutById';
   //监控点列表
   static const String monitorList = 'tDisChargeOut/getDrainInfo';
-  //排口详情
-  static const String dischargeDetail = 'tDisChargeOut/getDisChageOut';
   //监控点详情
   static const String monitorDetail = 'tDisChargeOut/getDrainInfoById';
   //排污许可证列表
