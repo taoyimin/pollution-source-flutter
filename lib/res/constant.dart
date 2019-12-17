@@ -9,6 +9,10 @@ class Constant {
   static const String responseMessageKey = 'message';
   static const String responseDataKey = 'data';
   static const String responseListKey = 'list';
+  static const String responseCurrentPageKey = 'currentPage';
+  static const String responsePageSizeKey = 'pageSize';
+  static const String responseHasNextKey = 'hasNext';
+  static const String responseTotalKey = 'total';
   static const String responseTokenKey = 'token';
 
   static const int defaultCurrentPage = 1;
