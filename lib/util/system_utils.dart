@@ -4,6 +4,9 @@ import 'package:pollution_source/util/toast_utils.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// 系统工具类
+///
+/// 用于调用系统相关功能
 class SystemUtils {
   /// 调起拨号页
   static void launchTelURL(String phone) async {
@@ -29,7 +32,7 @@ class SystemUtils {
 //    return null;
 //  }
 
-  //调用图片选择器
+  /// 调用图片选择器 [selectedAssets]为默认选中的图片
   static Future<List<Asset>> loadAssets(List<Asset> selectedAssets) async {
     List<Asset> resultAssets;
     try {
@@ -59,6 +62,7 @@ class SystemUtils {
     return resultAssets ?? List<Asset>();
   }
 
+  /// IOS平台键盘配置
   static KeyboardActionsConfig getKeyboardActionsConfig(List<FocusNode> list) {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
