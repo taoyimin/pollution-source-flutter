@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Utils {
+class SystemUtils {
   /// 调起拨号页
   static void launchTelURL(String phone) async {
     String url = 'tel:' + phone;
@@ -17,18 +16,18 @@ class Utils {
   }
 
   /// 调起二维码扫描页
-  /*static Future<String> scan() async {
-    try {
-      return await BarcodeScanner.scan();
-    } catch (e) {
-      if (e is PlatformException) {
-        if (e.code == BarcodeScanner.CameraAccessDenied) {
-          Toast.show("没有相机权限！");
-        }
-      }
-    }
-    return null;
-  }*/
+//  static Future<String> scan() async {
+//    try {
+//      return await BarcodeScanner.scan();
+//    } catch (e) {
+//      if (e is PlatformException) {
+//        if (e.code == BarcodeScanner.CameraAccessDenied) {
+//          Toast.show("没有相机权限！");
+//        }
+//      }
+//    }
+//    return null;
+//  }
 
   //调用图片选择器
   static Future<List<Asset>> loadAssets(List<Asset> selectedAssets) async {
@@ -76,57 +75,10 @@ class Utils {
               )),
     );
   }
-
-  //获取一个数组中的最大数
-  static double getMax(List<double> items) {
-    if (items.length == 0) return 0;
-    double temp = items[0];
-    items.forEach((item) {
-      if (item > temp) {
-        temp = item;
-      }
-    });
-    return temp;
-  }
-
-  //获取一个数组中的最小数
-  static double getMin(List<double> items) {
-    if (items.length == 0) return 0;
-    double temp = items[0];
-    items.forEach((item) {
-      if (item < temp) {
-        temp = item;
-      }
-    });
-    return temp;
-  }
-
-  static double getYAxisInterval(List<ChartData> chartDataList) {
-    double maxY = Utils.getMax(
-        chartDataList.where((chartData) => chartData.checked).map((chartData) {
-      return chartData.maxY;
-    }).toList());
-    double minY = Utils.getMin(
-        chartDataList.where((chartData) => chartData.checked).map((chartData) {
-      return chartData.minY;
-    }).toList());
-    return (maxY - minY) / (4);
-  }
-
-  static double getXAxisInterval(List<ChartData> chartDataList) {
-    double maxX = Utils.getMax(
-        chartDataList.where((chartData) => chartData.checked).map((chartData) {
-      return chartData.maxX;
-    }).toList());
-    double minX = Utils.getMin(
-        chartDataList.where((chartData) => chartData.checked).map((chartData) {
-      return chartData.minX;
-    })?.toList());
-    return (maxX - minX) / (6);
-  }
 }
 
 /// 默认dialog背景色为半透明黑色，这里修改源码改为透明
+@deprecated
 Future<T> showTransparentDialog<T>({
   @required BuildContext context,
   bool barrierDismissible = true,
@@ -154,6 +106,7 @@ Future<T> showTransparentDialog<T>({
   );
 }
 
+@deprecated
 Widget _buildMaterialDialogTransitions(
     BuildContext context,
     Animation<double> animation,
@@ -168,6 +121,7 @@ Widget _buildMaterialDialogTransitions(
   );
 }
 
+@deprecated
 Future<T> showElasticDialog<T>({
   @required BuildContext context,
   bool barrierDismissible = true,
@@ -195,6 +149,7 @@ Future<T> showElasticDialog<T>({
   );
 }
 
+@deprecated
 Widget _buildDialogTransitions(
     BuildContext context,
     Animation<double> animation,
