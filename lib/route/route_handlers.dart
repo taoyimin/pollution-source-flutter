@@ -15,8 +15,10 @@ import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/license/list/license_list_page.dart';
 import 'package:pollution_source/module/license/list/license_list_repository.dart';
+import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
+import 'package:pollution_source/module/monitor/detail/monitor_detail_repository.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_repository.dart';
 import 'package:pollution_source/module/order/detail/order_detail_page.dart';
@@ -42,22 +44,30 @@ import 'package:pollution_source/module/report/longstop/list/long_stop_report_li
 import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_repository.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_page.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_repository.dart';
-import 'package:pollution_source/page/login.dart';
+import 'package:pollution_source/page/admin_home.dart';
+import 'package:pollution_source/page/enter_home.dart';
+import 'package:pollution_source/page/operation_home.dart';
 
 var rootHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return LoginPage();
 });
 
-//var enterIndexHandler = Handler(
-//    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-//  String enterId = params['id']?.first;
-//  return BlocProvider<DetailBloc>(
-//    create: (BuildContext context) =>
-//        DetailBloc(detailRepository: EnterDetailRepository()),
-//    child: EnterIndexPage(enterId: enterId),
-//  );
-//});
+var adminHomeHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return AdminHomePage();
+});
+
+var enterHomeHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String enterId = params['id']?.first;
+  return EnterHomePage(enterId: enterId);
+});
+
+var operationHomeHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return OperationHomePage();
+});
 
 var enterListHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -141,7 +151,8 @@ var monitorDetailHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   String monitorId = params['id']?.first;
   return BlocProvider<MonitorDetailBloc>(
-    create: (BuildContext context) => MonitorDetailBloc(),
+    create: (BuildContext context) =>
+        MonitorDetailBloc(detailRepository: MonitorDetailRepository()),
     child: MonitorDetailPage(monitorId: monitorId),
   );
 });
