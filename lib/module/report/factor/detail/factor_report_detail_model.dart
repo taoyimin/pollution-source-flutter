@@ -68,7 +68,7 @@ class FactorReportDetail extends Equatable {
   Map<String, dynamic> toJson() => _$FactorReportDetailToJson(this);
 
 /*  static FactorReportDetail fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return FactorReportDetail(
         reportId: json['stopApply']['stopApplyId'].toString(),
         enterId: json['stopApply']['enterId'].toString(),

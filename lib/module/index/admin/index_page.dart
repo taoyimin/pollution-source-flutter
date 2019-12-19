@@ -5,6 +5,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 import 'dart:ui';
 import 'dart:math';
 import 'dart:async';
@@ -15,16 +16,16 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/space_header.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/index/index.dart';
+import 'package:pollution_source/module/index/admin/index.dart';
 
-class IndexPage extends StatefulWidget {
-  IndexPage({Key key}) : super(key: key);
+class AdminIndexPage extends StatefulWidget {
+  AdminIndexPage({Key key}) : super(key: key);
 
   @override
-  _IndexPageState createState() => _IndexPageState();
+  _AdminIndexPageState createState() => _AdminIndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage>
+class _AdminIndexPageState extends State<AdminIndexPage>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
@@ -1132,89 +1133,6 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               ),
               Gaps.vGap10,
               Expanded(
-                //fl_charts 0.3.4版本写法
-                /*child: FlChart(
-                  chart: BarChart(BarChartData(
-                    barTouchData: BarTouchData(
-                      touchTooltipData: TouchTooltipData(
-                        tooltipBgColor: Colors.blueGrey,
-                        getTooltipItems: (touchedSpots) {
-                          return touchedSpots.map(
-                            (touchedSpot) {
-                              String weekDay;
-                              switch (touchedSpot.spot.x.toInt()) {
-                                case 0:
-                                  weekDay = '周一';
-                                  break;
-                                case 1:
-                                  weekDay = '周二';
-                                  break;
-                                case 2:
-                                  weekDay = '周三';
-                                  break;
-                                case 3:
-                                  weekDay = '周四';
-                                  break;
-                                case 4:
-                                  weekDay = '周五';
-                                  break;
-                                case 5:
-                                  weekDay = '周六';
-                                  break;
-                                case 6:
-                                  weekDay = '周日';
-                                  break;
-                              }
-                              return TooltipItem(
-                                weekDay + '\n' + touchedSpot.spot.y.toString(),
-                                TextStyle(
-                                  color: Colors.yellow,
-                                ),
-                              );
-                            },
-                          ).toList();
-                        },
-                      ),
-                      touchResponseSink: barTouchedResultStreamController.sink,
-                    ),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      bottomTitles: SideTitles(
-                        showTitles: true,
-                        textStyle: TextStyle(
-                            color: Colours.primary_text, fontSize: 11),
-                        margin: 8,
-                        getTitles: (double value) {
-                          switch (value.toInt()) {
-                            case 0:
-                              return '一';
-                            case 1:
-                              return '二';
-                            case 2:
-                              return '三';
-                            case 3:
-                              return '四';
-                            case 4:
-                              return '五';
-                            case 5:
-                              return '六';
-                            case 6:
-                              return '日';
-                            default:
-                              return '未知';
-                          }
-                        },
-                      ),
-                      leftTitles: SideTitles(
-                        showTitles: false,
-                      ),
-                    ),
-                    borderData: FlBorderData(
-                      show: false,
-                    ),
-                    barGroups: showingBarGroups,
-                  )),
-                ),*/
                 child: BarChart(BarChartData(
                   barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
@@ -1344,8 +1262,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
 
   @override
   void dispose() {
-    super.dispose();
     barTouchedResultStreamController.close();
+    super.dispose();
   }
 }
 
@@ -1427,11 +1345,9 @@ class SimplePieChart extends StatelessWidget {
 
   SimplePieChart(this.seriesList, {this.animate});
 
-  /// Creates a [PieChart] with sample data and no transition.
   factory SimplePieChart.withSampleData() {
     return new SimplePieChart(
       _createSampleData(),
-      // Disable animations for image tests.
       animate: false,
     );
   }
@@ -1444,25 +1360,12 @@ class SimplePieChart extends StatelessWidget {
       behaviors: [
         new charts.DatumLegend(
           outsideJustification: charts.OutsideJustification.middleDrawArea,
-          // Positions for "start" and "end" will be left and right respectively
-          // for widgets with a build context that has directionality ltr.
-          // For rtl, "start" and "end" will be right and left respectively.
-          // Since this example has directionality of ltr, the legend is
-          // positioned on the right side of the chart.
           position: charts.BehaviorPosition.end,
-          // By default, if the position of the chart is on the left or right of
-          // the chart, [horizontalFirst] is set to false. This means that the
-          // legend entries will grow as new rows first instead of a new column.
           horizontalFirst: false,
-          // This defines the padding around each legend entry.
           cellPadding: new EdgeInsets.only(right: 24.0, bottom: 4.0, top: 4.0),
-          // Set [showMeasures] to true to display measures in series legend.
           showMeasures: false,
-          // Configure the measure value to be shown by default in the legend.
           legendDefaultMeasure: charts.LegendDefaultMeasure.firstValue,
           entryTextStyle: charts.TextStyleSpec(),
-          // Optionally provide a measure formatter to format the measure value.
-          // If none is specified the value is formatted as a decimal.
           measureFormatter: (num value) {
             return value == null ? '-' : '$value个';
           },

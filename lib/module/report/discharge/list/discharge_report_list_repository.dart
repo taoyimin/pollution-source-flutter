@@ -1,37 +1,18 @@
-import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
-import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http_api.dart';
-import 'package:pollution_source/module/common/list/list_model.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_model.dart';
 import 'package:pollution_source/res/constant.dart';
 
 class DischargeReportListRepository extends ListRepository<DischargeReport> {
   @override
-  Future<ListPage<DischargeReport>> request(
-      {Map<String, dynamic> params, CancelToken cancelToken}) async {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await JavaDioUtils.instance.getDio().get(
-          HttpApiJava.reportList,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<DischargeReport>(
-          json: response.data[Constant.responseDataKey],
-          fromJson: (json) {
-            return DischargeReport.fromJson(json);
-          });
-    } else {
-      Response response = await PythonDioUtils.instance.getDio().get(
-          HttpApiPython.dischargeReports,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<DischargeReport>(
-          json: response.data,
-          fromJson: (json) {
-            return DischargeReport.fromJson(json);
-          });
-    }
+  HttpApi createApi() {
+    return HttpApi.dischargeReportList;
+  }
+
+  @override
+  DischargeReport fromJson(json) {
+    return DischargeReport.fromJson(json);
   }
 
   /// 生成请求所需的参数
@@ -52,7 +33,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
     monitorId = '',
     state = '',
   }) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return {
         'currentPage': currentPage,
         'pageSize': pageSize,

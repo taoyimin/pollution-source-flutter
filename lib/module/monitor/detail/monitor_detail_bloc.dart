@@ -1,15 +1,19 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
-import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/module/common/detail/detail_repository.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:meta/meta.dart';
 
 import 'monitor_detail.dart';
 
 class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
+  final DetailRepository detailRepository;
+
+  MonitorDetailBloc({@required this.detailRepository})
+      : assert(detailRepository != null);
+
   @override
   MonitorDetailState get initialState => MonitorDetailLoading();
 
@@ -30,7 +34,7 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
   Stream<MonitorDetailState> _mapMonitorDetailLoadToState(
       MonitorDetailLoad event) async* {
     try {
-      final monitorDetail = await _getMonitorDetail(monitorId: event.monitorId);
+      final monitorDetail = await detailRepository.request(detailId: event.monitorId);
       yield MonitorDetailLoaded(
         monitorDetail: monitorDetail,
         isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),
@@ -72,22 +76,6 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
         isCurved: event.isCurved,
         showDotData: event.showDotData,
       );
-    }
-  }
-
-  //获取监控点详情
-  Future<MonitorDetail> _getMonitorDetail({@required monitorId}) async {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await JavaDioUtils.instance.getDio().get(
-        HttpApiJava.monitorDetail,
-        queryParameters: {'monitorId': monitorId},
-      );
-      return MonitorDetail.fromJson(response.data[Constant.responseDataKey]);
-    } else {
-      Response response = await PythonDioUtils.instance.getDio().get(
-            '${HttpApiPython.monitors}/$monitorId',
-          );
-      return MonitorDetail.fromJson(response.data);
     }
   }
 }

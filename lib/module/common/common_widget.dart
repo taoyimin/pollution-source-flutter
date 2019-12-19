@@ -11,7 +11,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
-import 'package:pollution_source/util/utils.dart';
+import 'package:pollution_source/util/system_utils.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'common_model.dart';
@@ -151,8 +151,7 @@ class MessageWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Text(
               '$message',
-              style:
-              const TextStyle(fontSize: 16.0, color: Colours.grey_color),
+              style: const TextStyle(fontSize: 16.0, color: Colours.grey_color),
             ),
           ),
         ],
@@ -1145,7 +1144,7 @@ class ContactsWidget extends StatelessWidget {
             size: 20,
           ),
           onPressed: () {
-            Utils.launchTelURL(contactsTel);
+            SystemUtils.launchTelURL(contactsTel);
           },
         ),
       ],
@@ -1395,12 +1394,12 @@ class LineChartWidgetState extends State<LineChartWidget> {
   //获取图表样式
   LineChartData _getLineChartData() {
     double yInterval;
-    double maxY = Utils.getMax(widget.chartDataList
+    double maxY = UIUtils.getMax(widget.chartDataList
         .where((chartData) => chartData.checked)
         .map((chartData) {
       return chartData.maxY;
     }).toList());
-    double minY = Utils.getMin(widget.chartDataList
+    double minY = UIUtils.getMin(widget.chartDataList
         .where((chartData) => chartData.checked)
         .map((chartData) {
       return chartData.minY;
@@ -1414,12 +1413,12 @@ class LineChartWidgetState extends State<LineChartWidget> {
     yInterval = (maxY - minY) / (widget.yAxisCount - 1);
 
     double xInterval;
-    double maxX = Utils.getMax(widget.chartDataList
+    double maxX = UIUtils.getMax(widget.chartDataList
         .where((chartData) => chartData.checked)
         .map((chartData) {
       return chartData.maxX;
     }).toList());
-    double minX = Utils.getMin(widget.chartDataList
+    double minX = UIUtils.getMin(widget.chartDataList
         .where((chartData) => chartData.checked)
         .map((chartData) {
       return chartData.minX;
@@ -1427,40 +1426,13 @@ class LineChartWidgetState extends State<LineChartWidget> {
     xInterval = (maxX - minX) / (widget.xAxisCount - 1);
 
     return LineChartData(
-      //fl_charts 0.3.4版本写法
-      /*lineTouchData: LineTouchData(
-        touchResponseSink: controller.sink,
-        touchTooltipData: TouchTooltipData(
-          tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
-          getTooltipItems: (touchedSpots) {
-            return touchedSpots.map(
-              (touchedSpot) {
-                int index = touchedSpots.indexOf(touchedSpot);
-                return TooltipItem(
-                  //'${DateUtil.formatDateMs(touchedSpot.spot.x.toInt(), format: 'HH时mm分ss秒')}  \n  ${touchedSpot.spot.y.toString()}',
-                  '${widget.chartDataList[index].factorName} ${touchedSpot.spot.y.toString()}',
-                  TextStyle(
-                    color: touchedSpot.getColor(),
-                  ),
-                );
-              },
-            ).toList();
-          },
-        ),
-      ),*/
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
           getTooltipItems: (List<LineBarSpot> touchedSpots) {
-            if (touchedSpots == null) {
-              return null;
-            }
-
-            //List<LineTooltipItem> tooltipItems =
+            if (touchedSpots == null) return null;
             return touchedSpots.map((LineBarSpot touchedSpot) {
-              if (touchedSpot == null) {
-                return null;
-              }
+              if (touchedSpot == null) return null;
               final TextStyle textStyle = TextStyle(
                 color: touchedSpot.bar.colors[0],
                 fontWeight: FontWeight.bold,
@@ -1470,18 +1442,6 @@ class LineChartWidgetState extends State<LineChartWidget> {
                   '${widget.chartDataList[touchedSpot.barIndex].factorName} ${touchedSpot.y}',
                   textStyle);
             }).toList();
-            /*tooltipItems.insert(
-              0,
-              LineTooltipItem(
-                'title',
-                const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            );*/
-            //return tooltipItems;
           },
         ),
         handleBuiltInTouches: true,
@@ -1658,7 +1618,7 @@ class EditRowWidget extends StatelessWidget {
   final bool readOnly;
   final TextEditingController controller;
   final GestureTapCallback onTap;
-  final PopupMenuButton popupMenuButton;
+  final Widget popupMenuButton;
 
   EditRowWidget({
     Key key,
@@ -1685,7 +1645,7 @@ class EditRowWidget extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 TextField(
-                  onTap: onTap ?? () {},
+                  onTap: onTap,
                   controller: controller,
                   readOnly: readOnly,
                   textAlign: TextAlign.right,
@@ -1702,7 +1662,7 @@ class EditRowWidget extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: popupMenuButton ?? Gaps.empty,
-                )
+                ),
               ],
             ),
           ),

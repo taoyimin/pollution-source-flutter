@@ -38,7 +38,7 @@ class LongStopReport extends Equatable {
   Map<String, dynamic> toJson() => _$LongStopReportToJson(this);
 
   /*static LongStopReport fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return LongStopReport(
         reportId: json['stopApplyId'].toString(),
         enterName: json['enterpriseName'],

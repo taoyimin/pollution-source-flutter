@@ -15,5 +15,5 @@ class DetailLoad extends DetailEvent {
   const DetailLoad({@required this.detailId, this.params});
 
   @override
-  List<Object> get props => [detailId];
+  List<Object> get props => [detailId, params];
 }

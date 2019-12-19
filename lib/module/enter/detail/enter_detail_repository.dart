@@ -1,32 +1,16 @@
-import 'package:dio/dio.dart';
-import 'package:flustars/flustars.dart';
-import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/detail/detail_repository.dart';
-import 'package:pollution_source/res/constant.dart';
 
 import 'enter_detail_model.dart';
 
 class EnterDetailRepository extends DetailRepository<EnterDetail> {
   @override
-  Future<EnterDetail> request(
-      {String detailId,
-      Map<String, dynamic> params,
-      CancelToken cancelToken}) async {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await JavaDioUtils.instance.getDio().get(
-            HttpApiJava.enterDetail,
-            queryParameters: {'enter_id': detailId},
-            cancelToken: cancelToken,
-          );
-      return EnterDetail.fromJson(response.data[Constant.responseDataKey]);
-    } else {
-      Response response = await PythonDioUtils.instance.getDio().get(
-            '${HttpApiPython.enters}/$detailId',
-            queryParameters: params,
-            cancelToken: cancelToken,
-          );
-      return EnterDetail.fromJson(response.data);
-    }
+  HttpApi createApi() {
+    return HttpApi.enterDetail;
+  }
+
+  @override
+  EnterDetail fromJson(json) {
+    return EnterDetail.fromJson(json);
   }
 }

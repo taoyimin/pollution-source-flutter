@@ -26,14 +26,14 @@ class ListPage<T> extends Equatable {
         currentPage,
       ];
 
-  static fromJson<T>({json, fromJson}) {
+  static fromJson<T>({dynamic json,T Function(dynamic) fromJson}) {
     return ListPage<T>(
       list: json[Constant.responseListKey].map<T>(fromJson).toList(),
-      currentPage: SpUtil.getBool(Constant.spJavaApi, defValue: true)
+      currentPage: SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)
           ? json[Constant.responsePageNumKey]
           : json[Constant.responseCurrentPageKey],
       pageSize: json[Constant.responsePageSizeKey],
-      hasNextPage: SpUtil.getBool(Constant.spJavaApi, defValue: true)
+      hasNextPage: SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)
           ? json[Constant.responseHasNextPageKey]
           : json[Constant.responseHasNextKey],
       total: json[Constant.responseTotalKey],

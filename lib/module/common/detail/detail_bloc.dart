@@ -22,15 +22,14 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   }
 
   //处理加载详情事件
-  Stream<DetailState> _mapReportDetailLoadToState(
-      DetailLoad event) async* {
+  Stream<DetailState> _mapReportDetailLoadToState(DetailLoad event) async* {
     try {
       yield DetailLoading();
-      final detail = await detailRepository.request(detailId: event.detailId);
+      final detail = await detailRepository.request(
+          detailId: event.detailId, params: event.params);
       yield DetailLoaded(detail: detail);
     } catch (e) {
-      yield DetailError(
-          message: ExceptionHandle.handleException(e).msg);
+      yield DetailError(message: ExceptionHandle.handleException(e).msg);
     }
   }
 }

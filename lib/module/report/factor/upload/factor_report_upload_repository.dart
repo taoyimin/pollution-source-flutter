@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
@@ -9,29 +8,6 @@ import 'package:pollution_source/module/report/factor/upload/factor_report_uploa
 
 class FactorReportUploadRepository
     extends UploadRepository<FactorReportUpload, String> {
-  @override
-  Future<String> upload({FactorReportUpload data, CancelToken cancelToken}) async {
-    checkData(data);
-    Response response = await PythonDioUtils.instance
-        .getDio()
-        .post(HttpApiPython.factorReports,
-            cancelToken: cancelToken,
-            data: FormData.fromMap({
-              'enterId': data.enterId,
-              'dischargeId': data.discharge.dischargeId,
-              'monitorId': data.monitor.monitorId,
-              'startTime': data.startTime.toString(),
-              'endTime': data.endTime.toString(),
-              'alarmType': data.alarmType,
-              'factorCode': data.factorCode,
-              'exceptionReason': data.exceptionReason,
-              "file": await Future.wait(data.attachments?.map((asset) async {
-                return await MultipartFile.fromFile(await asset.filePath,
-                    filename: asset.name);
-              })?.toList()??[])
-            }));
-    return response.data['message'];
-  }
 
   checkData(FactorReportUpload data) {
     if (data.enterId.isEmpty)
@@ -50,5 +26,29 @@ class FactorReportUploadRepository
       throw DioError(error: InvalidParamException('请选择结束时间'));
     if (data.exceptionReason.isEmpty)
       throw DioError(error: InvalidParamException('请输入异常原因'));
+  }
+
+  @override
+  HttpApi createApi() {
+    return HttpApi.factorReportUpload;
+  }
+
+  @override
+  Future<FormData> createFormData(FactorReportUpload data) async {
+    return FormData.fromMap({
+      'enterId': data.enterId,
+      'dischargeId': data.discharge.dischargeId,
+      'monitorId': data.monitor.monitorId,
+      'startTime': data.startTime.toString(),
+      'endTime': data.endTime.toString(),
+      'alarmType': data.alarmType,
+      'factorCode': data.factorCode,
+      'exceptionReason': data.exceptionReason,
+      "file": await Future.wait(data.attachments?.map((asset) async {
+            return await MultipartFile.fromFile(await asset.filePath,
+                filename: asset.name);
+          })?.toList() ??
+          [])
+    });
   }
 }

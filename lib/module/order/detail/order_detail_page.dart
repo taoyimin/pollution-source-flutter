@@ -12,8 +12,6 @@ import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
 import 'package:pollution_source/module/order/detail/order_detail_model.dart';
 import 'package:pollution_source/module/process/upload/process_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -21,7 +19,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/toast_utils.dart';
-import 'package:pollution_source/util/utils.dart';
+import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/git_dialog.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -410,19 +408,8 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                           imagePath:
                               'assets/images/image_enter_statistics2.png'),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider(
-                                create: (context) => MonitorDetailBloc(),
-                                child: MonitorDetailPage(
-                                  monitorId: orderDetail.monitorId,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.monitorDetail}/${orderDetail.monitorId}');
                       },
                     ),
                   ],
@@ -604,7 +591,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                     //选取图片后重新加载界面
                     _pageBloc.add(PageLoad(
                         model: processUpload.copyWith(
-                            attachments: await Utils.loadAssets(
+                            attachments: await SystemUtils.loadAssets(
                                 processUpload.attachments))));
                   },
                 ),

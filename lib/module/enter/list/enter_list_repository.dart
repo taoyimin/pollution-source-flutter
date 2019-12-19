@@ -1,37 +1,18 @@
-import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
-import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http_api.dart';
-import 'package:pollution_source/module/common/list/list_model.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/res/constant.dart';
 
 class EnterListRepository extends ListRepository<Enter> {
   @override
-  Future<ListPage<Enter>> request(
-      {Map<String, dynamic> params, CancelToken cancelToken}) async {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await JavaDioUtils.instance.getDio().get(
-          HttpApiJava.enterList,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<Enter>(
-          json: response.data[Constant.responseDataKey],
-          fromJson: (json) {
-            return Enter.fromJson(json);
-          });
-    } else {
-      Response response = await PythonDioUtils.instance.getDio().get(
-          HttpApiPython.enters,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<Enter>(
-          json: response.data,
-          fromJson: (json) {
-            return Enter.fromJson(json);
-          });
-    }
+  HttpApi createApi() {
+    return HttpApi.enterList;
+  }
+
+  @override
+  Enter fromJson(json) {
+    return Enter.fromJson(json);
   }
 
   /// 生成请求所需的参数
@@ -50,7 +31,7 @@ class EnterListRepository extends ListRepository<Enter> {
     enterType = '',
     attentionLevel = '',
   }) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return {
         'currentPage': currentPage,
         'pageSize': pageSize,

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 
@@ -11,18 +12,18 @@ class DischargeReportUpload extends Equatable {
   final DateTime reportTime; //申报时间
   final DateTime startTime; //开始时间
   final DateTime endTime; //结束时间
-  final int stopType; //异常类型
+  final DataDict stopType; //异常类型
   final String stopReason; //停产原因
   final List<Asset> attachments; //证明材料
 
-  static List<String> stopTypeList = [
-    '停产',
-    '设备故障',
-    '未安装在线设备',
-    '无外排',
-    '其他原因',
-    '停产监察笔录'
-  ];
+//  static List<String> stopTypeList = [
+//    '停产',
+//    '设备故障',
+//    '未安装在线设备',
+//    '无外排',
+//    '其他原因',
+//    '停产监察笔录'
+//  ];
 
   const DischargeReportUpload({
     this.enterId,
@@ -56,7 +57,7 @@ class DischargeReportUpload extends Equatable {
     DateTime reportTime,
     DateTime startTime,
     DateTime endTime,
-    int stopType,
+    DataDict stopType,
     String stopReason,
     List<Asset> attachments,
   }) {
@@ -74,4 +75,4 @@ class DischargeReportUpload extends Equatable {
   }
 }
 
-enum StopType { tingchan, guzhang, weianzhuang, wuwaipai, qita, jiancha }
+//enum StopType { tingchan, guzhang, weianzhuang, wuwaipai, qita, jiancha }

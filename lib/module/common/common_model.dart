@@ -20,8 +20,7 @@ class Label extends Equatable {
   });
 
   @override
-  List<Object> get props =>
-      [
+  List<Object> get props => [
         color,
         name,
         imagePath,
@@ -45,8 +44,7 @@ class Meta extends Equatable {
   });
 
   @override
-  List<Object> get props =>
-      [
+  List<Object> get props => [
         title,
         content,
         color,
@@ -58,9 +56,9 @@ class Meta extends Equatable {
 //附件类
 @JsonSerializable()
 class Attachment extends Equatable {
-  final String fileName;  //文件名
-  final String url;   //完整路径
-  final int size;   //附件大小
+  final String fileName; //文件名
+  final String url; //完整路径
+  final int size; //附件大小
 
   const Attachment({
     @required this.fileName,
@@ -69,8 +67,7 @@ class Attachment extends Equatable {
   });
 
   @override
-  List<Object> get props =>
-      [
+  List<Object> get props => [
         fileName,
         url,
         size,
@@ -99,11 +96,13 @@ class Attachment extends Equatable {
     }
   }
 
-  factory Attachment.fromJson(Map<String, dynamic> json) => _$AttachmentFromJson(json);
+  factory Attachment.fromJson(Map<String, dynamic> json) =>
+      _$AttachmentFromJson(json);
+
   Map<String, dynamic> toJson() => _$AttachmentToJson(this);
 
-  /*static Attachment fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+/*static Attachment fromJson(dynamic json) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return Attachment(
         fileName: json['File_Name'],
         url: json['Url'],
@@ -128,10 +127,10 @@ class Attachment extends Equatable {
 //处理流程
 @JsonSerializable()
 class Process extends Equatable {
-  final String operateTypeStr;  //操作类型
-  final String operatePerson;   //操作人
-  final String operateTimeStr;  //操作时间
-  final String operateDesc;   //操作描述
+  final String operateTypeStr; //操作类型
+  final String operatePerson; //操作人
+  final String operateTimeStr; //操作时间
+  final String operateDesc; //操作描述
   final List<Attachment> attachments; //附件
 
   const Process({
@@ -143,8 +142,7 @@ class Process extends Equatable {
   });
 
   @override
-  List<Object> get props =>
-      [
+  List<Object> get props => [
         operateTypeStr,
         operatePerson,
         operateTimeStr,
@@ -152,7 +150,9 @@ class Process extends Equatable {
         attachments,
       ];
 
-  factory Process.fromJson(Map<String, dynamic> json) => _$ProcessFromJson(json);
+  factory Process.fromJson(Map<String, dynamic> json) =>
+      _$ProcessFromJson(json);
+
   Map<String, dynamic> toJson() => _$ProcessToJson(this);
 
 /*  static Process fromJson(dynamic json) {
@@ -213,8 +213,7 @@ class ChartData extends Equatable {
   });
 
   @override
-  List<Object> get props =>
-      [
+  List<Object> get props => [
         factorName,
         checked,
         lastValue,
@@ -241,4 +240,27 @@ class ChartData extends Equatable {
       points: this.points,
     );
   }
+}
+
+/// 数据字典类
+@JsonSerializable()
+class DataDict extends Equatable {
+  final String code;
+  final String name;
+
+  const DataDict({
+    @required this.code,
+    @required this.name,
+  });
+
+  @override
+  List<Object> get props => [
+        code,
+        name,
+      ];
+
+  factory DataDict.fromJson(Map<String, dynamic> json) =>
+      _$DataDictFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DataDictToJson(this);
 }

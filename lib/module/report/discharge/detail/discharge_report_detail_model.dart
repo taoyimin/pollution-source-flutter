@@ -68,7 +68,7 @@ class DischargeReportDetail extends Equatable {
   Map<String, dynamic> toJson() => _$DischargeReportDetailToJson(this);
 
 /*  static DischargeReportDetail fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return DischargeReportDetail(
         reportId: json['stopApply']['stopApplyId'].toString(),
         enterId: json['stopApply']['enterId'].toString(),

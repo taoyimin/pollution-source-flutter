@@ -1,37 +1,18 @@
-import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
-import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http_api.dart';
-import 'package:pollution_source/module/common/list/list_model.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/order/list/order_list_model.dart';
 import 'package:pollution_source/res/constant.dart';
 
 class OrderListRepository extends ListRepository<Order> {
   @override
-  Future<ListPage<Order>> request(
-      {Map<String, dynamic> params, CancelToken cancelToken}) async {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await JavaDioUtils.instance.getDio().get(
-          HttpApiJava.orderList,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<Order>(
-          json: response.data[Constant.responseDataKey],
-          fromJson: (json) {
-            return Order.fromJson(json);
-          });
-    } else {
-      Response response = await PythonDioUtils.instance.getDio().get(
-          HttpApiPython.orders,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<Order>(
-          json: response.data,
-          fromJson: (json) {
-            return Order.fromJson(json);
-          });
-    }
+  HttpApi createApi() {
+    return HttpApi.orderList;
+  }
+
+  @override
+  Order fromJson(json) {
+    return Order.fromJson(json);
   }
 
   /// 生成请求所需的参数
@@ -50,7 +31,7 @@ class OrderListRepository extends ListRepository<Order> {
     enterId = '',
     monitorId = '',
   }) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return {
         'currentPage': currentPage,
         'pageSize': pageSize,

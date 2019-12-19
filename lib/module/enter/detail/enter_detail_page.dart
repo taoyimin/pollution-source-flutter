@@ -8,8 +8,6 @@ import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
-import 'package:pollution_source/module/license/list/license_list_bloc.dart';
-import 'package:pollution_source/module/license/list/license_list_page.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -201,8 +199,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     InkWellButton5(
                       ratio: 1.2,
                       onTap: () {
-                        Application.router.navigateTo(
-                            context, '${Routes.orderList}?enterId=${widget.enterId}&state=5');
+                        Application.router.navigateTo(context,
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=5');
                       },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
@@ -216,8 +214,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     InkWellButton5(
                       ratio: 1.2,
                       onTap: () {
-                        Application.router.navigateTo(
-                            context, '${Routes.orderList}?enterId=${widget.enterId}');
+                        Application.router.navigateTo(context,
+                            '${Routes.orderList}?enterId=${widget.enterId}');
                       },
                       meta: Meta(
                         color: Color(0xFFFFB709),
@@ -321,8 +319,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorTotalCount}',
                             ),
                             onTap: () {
-                              Application.router.navigateTo(
-                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}');
+                              Application.router.navigateTo(context,
+                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -336,8 +334,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorOnlineCount}',
                             ),
                             onTap: () {
-                              Application.router.navigateTo(
-                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1');
+                              Application.router.navigateTo(context,
+                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -350,8 +348,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorAlarmCount}',
                             ),
                             onTap: () {
-                              Application.router.navigateTo(
-                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2');
+                              Application.router.navigateTo(context,
+                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2');
                             },
                           ),
                         ],
@@ -367,8 +365,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorOverCount}',
                             ),
                             onTap: () {
-                              Application.router.navigateTo(
-                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3');
+                              Application.router.navigateTo(context,
+                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -382,8 +380,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorOfflineCount}',
                             ),
                             onTap: () {
-                              Application.router.navigateTo(
-                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4');
+                              Application.router.navigateTo(context,
+                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4');
                             },
                           ),
                           VerticalDividerWidget(height: 30),
@@ -396,8 +394,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               content: '${enterDetail.monitorStopCount}',
                             ),
                             onTap: () {
-                              Application.router.navigateTo(
-                                  context, '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5');
+                              Application.router.navigateTo(context,
+                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5');
                             },
                           ),
                         ],
@@ -431,14 +429,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     backgroundPath: 'assets/images/button_bg_red.png',
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        create: (context) => LicenseListBloc(),
-                        child: LicenseListPage(
-                          enterId: '${enterDetail.enterId}',
-                        ),
-                      );
-                    }));
+                    Application.router.navigateTo(context,
+                        '${Routes.licenseList}?enterId=${enterDetail.enterId}');
                   },
                 ),
               ],

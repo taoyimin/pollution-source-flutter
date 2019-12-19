@@ -1,12 +1,11 @@
 import 'dart:ui';
-
 import 'package:dio/dio.dart';
-import 'package:flustars/flustars.dart';
-
-import 'index.dart';
+import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/module/index/admin/index.dart';
 import 'package:bloc/bloc.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/compat_utils.dart';
 
 class IndexBloc extends Bloc<IndexEvent, IndexState> {
   @override
@@ -16,12 +15,8 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
   Stream<IndexState> mapEventToState(IndexEvent event) async* {
     if (event is Load) {
       try {
-        Response response;
-        if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-          response = await JavaDioUtils.instance.getDio().get(HttpApiJava.index);
-        } else {
-          response = await PythonDioUtils.instance.getDio().get(HttpApiPython.index);
-        }
+        Response response = await CompatUtils.getDio()
+            .get(CompatUtils.getApi(HttpApi.adminIndex));
         //空气质量统计
         AqiStatistics aqiStatistics = await _convertAqiStatistics(
             response.data[Constant.responseDataKey][Constant.aqiStatisticsKey]);

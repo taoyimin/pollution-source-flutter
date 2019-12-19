@@ -10,7 +10,7 @@ Attachment _$AttachmentFromJson(Map<String, dynamic> json) {
   return Attachment(
       fileName: json['fileName'].toString(),
       url: json['url'].toString(),
-      size: json['size'] as int);
+      size: int.parse(json['size']));
 }
 
 Map<String, dynamic> _$AttachmentToJson(Attachment instance) =>
@@ -19,6 +19,10 @@ Map<String, dynamic> _$AttachmentToJson(Attachment instance) =>
       'url': instance.url,
       'size': instance.size
     };
+
+DataDict _$DataDictFromJson(Map<String, dynamic> json) {
+  return DataDict(name: json['name'].toString(), code: json['code'].toString());
+}
 
 Process _$ProcessFromJson(Map<String, dynamic> json) {
   return Process(
@@ -39,3 +43,6 @@ Map<String, dynamic> _$ProcessToJson(Process instance) => <String, dynamic>{
       'operateDesc': instance.operateDesc,
       'attachments': instance.attachments
     };
+
+Map<String, dynamic> _$DataDictToJson(DataDict instance) =>
+    <String, dynamic>{'name': instance.name, 'code': instance.code};

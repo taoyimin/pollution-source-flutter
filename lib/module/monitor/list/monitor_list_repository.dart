@@ -1,39 +1,18 @@
-import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
-import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/http_api.dart';
-import 'package:pollution_source/module/common/list/list_model.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/res/constant.dart';
 
 class MonitorListRepository extends ListRepository<Monitor> {
   @override
-  Future<ListPage<Monitor>> request(
-      {Map<String, dynamic> params, CancelToken cancelToken}) async {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      Response response = await JavaDioUtils.instance.getDio().get(
-          HttpApiJava.monitorList,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<Monitor>(
-        json: response.data[Constant.responseDataKey],
-        fromJson: (json) {
-          return Monitor.fromJson(json);
-        },
-      );
-    } else {
-      Response response = await PythonDioUtils.instance.getDio().get(
-          HttpApiPython.monitors,
-          queryParameters: params,
-          cancelToken: cancelToken);
-      return ListPage.fromJson<Monitor>(
-        json: response.data,
-        fromJson: (json) {
-          return Monitor.fromJson(json);
-        },
-      );
-    }
+  HttpApi createApi() {
+    return HttpApi.monitorList;
+  }
+
+  @override
+  Monitor fromJson(json) {
+    return Monitor.fromJson(json);
   }
 
   /// 生成请求所需的参数
@@ -54,7 +33,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
     monitorType = '',
     state = '',
   }) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return {
         'currentPage': currentPage,
         'pageSize': pageSize,

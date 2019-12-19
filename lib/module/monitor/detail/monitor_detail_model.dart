@@ -6,7 +6,6 @@ import 'package:flustars/flustars.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/ui_utils.dart';
-import 'package:pollution_source/util/utils.dart';
 
 //part 'monitor_detail_model.g.dart';
 
@@ -105,7 +104,7 @@ class MonitorDetail extends Equatable {
     List<PointData> points5 = _getRandomPoints();
     List<PointData> points6 = _getRandomPoints();
 
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
+    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
       return MonitorDetail(
         enterId: json['enterId'].toString(),
         dischargeId: json['dischargeId'].toString(),
@@ -129,16 +128,16 @@ class MonitorDetail extends Equatable {
             lastValue: '13.11',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points1.map((point) {
+            maxX: UIUtils.getMax(points1.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points1.map((point) {
+            maxY: UIUtils.getMax(points1.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points1.map((point) {
+            minX: UIUtils.getMin(points1.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points1.map((point) {
+            minY: UIUtils.getMin(points1.map((point) {
               return point.y;
             }).toList()),
             points: points1,
@@ -149,16 +148,16 @@ class MonitorDetail extends Equatable {
             lastValue: '42.5',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points2.map((point) {
+            maxX: UIUtils.getMax(points2.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points2.map((point) {
+            maxY: UIUtils.getMax(points2.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points2.map((point) {
+            minX: UIUtils.getMin(points2.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points2.map((point) {
+            minY: UIUtils.getMin(points2.map((point) {
               return point.y;
             }).toList()),
             points: points2,
@@ -169,16 +168,16 @@ class MonitorDetail extends Equatable {
             lastValue: '11.4',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points3.map((point) {
+            maxX: UIUtils.getMax(points3.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points3.map((point) {
+            maxY: UIUtils.getMax(points3.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points3.map((point) {
+            minX: UIUtils.getMin(points3.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points3.map((point) {
+            minY: UIUtils.getMin(points3.map((point) {
               return point.y;
             }).toList()),
             points: points3,
@@ -189,16 +188,16 @@ class MonitorDetail extends Equatable {
             lastValue: '45.24',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points4.map((point) {
+            maxX: UIUtils.getMax(points4.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points4.map((point) {
+            maxY: UIUtils.getMax(points4.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points4.map((point) {
+            minX: UIUtils.getMin(points4.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points4.map((point) {
+            minY: UIUtils.getMin(points4.map((point) {
               return point.y;
             }).toList()),
             points: points4,
@@ -209,16 +208,16 @@ class MonitorDetail extends Equatable {
             lastValue: '0.125',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points5.map((point) {
+            maxX: UIUtils.getMax(points5.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points5.map((point) {
+            maxY: UIUtils.getMax(points5.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points5.map((point) {
+            minX: UIUtils.getMin(points5.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points5.map((point) {
+            minY: UIUtils.getMin(points5.map((point) {
               return point.y;
             }).toList()),
             points: points5,
@@ -229,16 +228,16 @@ class MonitorDetail extends Equatable {
             lastValue: '45.12',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points6.map((point) {
+            maxX: UIUtils.getMax(points6.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points6.map((point) {
+            maxY: UIUtils.getMax(points6.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points6.map((point) {
+            minX: UIUtils.getMin(points6.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points6.map((point) {
+            minY: UIUtils.getMin(points6.map((point) {
               return point.y;
             }).toList()),
             points: points6,
@@ -269,16 +268,16 @@ class MonitorDetail extends Equatable {
             lastValue: '13.11',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points1.map((point) {
+            maxX: UIUtils.getMax(points1.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points1.map((point) {
+            maxY: UIUtils.getMax(points1.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points1.map((point) {
+            minX: UIUtils.getMin(points1.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points1.map((point) {
+            minY: UIUtils.getMin(points1.map((point) {
               return point.y;
             }).toList()),
             points: points1,
@@ -289,16 +288,16 @@ class MonitorDetail extends Equatable {
             lastValue: '42.5',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points2.map((point) {
+            maxX: UIUtils.getMax(points2.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points2.map((point) {
+            maxY: UIUtils.getMax(points2.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points2.map((point) {
+            minX: UIUtils.getMin(points2.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points2.map((point) {
+            minY: UIUtils.getMin(points2.map((point) {
               return point.y;
             }).toList()),
             points: points2,
@@ -309,16 +308,16 @@ class MonitorDetail extends Equatable {
             lastValue: '11.4',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points3.map((point) {
+            maxX: UIUtils.getMax(points3.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points3.map((point) {
+            maxY: UIUtils.getMax(points3.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points3.map((point) {
+            minX: UIUtils.getMin(points3.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points3.map((point) {
+            minY: UIUtils.getMin(points3.map((point) {
               return point.y;
             }).toList()),
             points: points3,
@@ -329,16 +328,16 @@ class MonitorDetail extends Equatable {
             lastValue: '45.24',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points4.map((point) {
+            maxX: UIUtils.getMax(points4.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points4.map((point) {
+            maxY: UIUtils.getMax(points4.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points4.map((point) {
+            minX: UIUtils.getMin(points4.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points4.map((point) {
+            minY: UIUtils.getMin(points4.map((point) {
               return point.y;
             }).toList()),
             points: points4,
@@ -349,16 +348,16 @@ class MonitorDetail extends Equatable {
             lastValue: '0.125',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points5.map((point) {
+            maxX: UIUtils.getMax(points5.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points5.map((point) {
+            maxY: UIUtils.getMax(points5.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points5.map((point) {
+            minX: UIUtils.getMin(points5.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points5.map((point) {
+            minY: UIUtils.getMin(points5.map((point) {
               return point.y;
             }).toList()),
             points: points5,
@@ -369,16 +368,16 @@ class MonitorDetail extends Equatable {
             lastValue: '45.12',
             unit: 'μg/cm3',
             color: UIUtils.getRandomColor(),
-            maxX: Utils.getMax(points6.map((point) {
+            maxX: UIUtils.getMax(points6.map((point) {
               return point.x;
             }).toList()),
-            maxY: Utils.getMax(points6.map((point) {
+            maxY: UIUtils.getMax(points6.map((point) {
               return point.y;
             }).toList()),
-            minX: Utils.getMin(points6.map((point) {
+            minX: UIUtils.getMin(points6.map((point) {
               return point.x;
             }).toList()),
-            minY: Utils.getMin(points6.map((point) {
+            minY: UIUtils.getMin(points6.map((point) {
               return point.y;
             }).toList()),
             points: points6,

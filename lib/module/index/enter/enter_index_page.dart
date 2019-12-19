@@ -10,8 +10,6 @@ import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
-import 'package:pollution_source/module/license/list/license_list_bloc.dart';
-import 'package:pollution_source/module/license/list/license_list_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
@@ -483,15 +481,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     backgroundPath: 'assets/images/button_bg_red.png',
                   ),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return BlocProvider(
-                        create: (context) => LicenseListBloc(),
-                        child: LicenseListPage(
-                          enterId: '${enterDetail.enterId}',
-                        ),
-                      );
-                    }));
+                    Application.router.navigateTo(context,
+                        '${Routes.licenseList}?enterId=${enterDetail.enterId}');
                   },
                 ),
               ],

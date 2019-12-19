@@ -4,7 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -17,8 +22,9 @@ import 'package:pollution_source/module/report/discharge/upload/discharge_report
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
-import 'package:pollution_source/util/utils.dart';
+import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
+import 'package:pollution_source/widget/data_dict_widget.dart';
 
 class DischargeReportUploadPage extends StatefulWidget {
   final String enterId;
@@ -33,26 +39,29 @@ class DischargeReportUploadPage extends StatefulWidget {
 class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
   PageBloc _pageBloc;
   UploadBloc _uploadBloc;
+  DataDictBloc _stopTypeBloc;
   TextEditingController _stopReasonController;
 
   @override
   void initState() {
     super.initState();
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    //首次加载
+    //初始化界面
     _pageBloc.add(PageLoad(model: DischargeReportUpload()));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
+    _stopTypeBloc = DataDictBloc(
+        dataDictRepository:
+            DataDictRepository(HttpApi.dischargeReportStopTypeList));
+    _stopTypeBloc.add(DataDictLoad());
     _stopReasonController = TextEditingController();
   }
 
   @override
   void dispose() {
+    //释放资源
     _stopReasonController.dispose();
     super.dispose();
   }
-
-  //用来显示SnackBar
-  //var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -76,17 +85,19 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                 listener: uploadListener,
               ),
               BlocListener<UploadBloc, UploadState>(
-                listener: (context, state){
+                listener: (context, state) {
                   //提交成功后重置界面
-                  if (state is UploadSuccess)
+                  if (state is UploadSuccess) {
+                    _stopReasonController.text = '';
                     _pageBloc.add(PageLoad(model: DischargeReportUpload()));
+                  }
                 },
               ),
             ],
             child: BlocBuilder<PageBloc, PageState>(
               builder: (context, state) {
                 if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model);
+                  return _buildPageLoadedDetail(state.model, state);
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -99,7 +110,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(DischargeReportUpload reportUpload) {
+  Widget _buildPageLoadedDetail(
+      DischargeReportUpload reportUpload, PageLoaded pageLoadedState) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -119,10 +131,13 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   ),
                   onTap: () async {
                     Discharge discharge = await Application.router.navigateTo(
-                        context, '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
+                        context,
+                        '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
+                    //重新选择排口后重置已经选择的监控点
                     _pageBloc.add(
                       PageLoad(
-                        model: reportUpload.copyWith(discharge: discharge),
+                        model: reportUpload.copyWith(
+                            discharge: discharge, monitor: null),
                       ),
                     );
                   },
@@ -140,7 +155,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   ),
                   onTap: () async {
                     Monitor monitor = await Application.router.navigateTo(
-                        context, '${Routes.monitorList}?enterId=${widget.enterId}&type=1');
+                        context,
+                        '${Routes.monitorList}?enterId=${widget.enterId}&type=1');
                     _pageBloc.add(
                       PageLoad(
                         model: reportUpload.copyWith(monitor: monitor),
@@ -149,37 +165,17 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                DataDictWidget(
                   title: '停产类型',
-                  hintText: '请选择停产类型',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      text:
-                          '${reportUpload?.stopType != null ? DischargeReportUpload.stopTypeList[reportUpload.stopType] : ''}',
-                    ),
-                  ),
-                  popupMenuButton: PopupMenuButton<StopType>(
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.transparent,
+                  content: reportUpload?.stopType?.name,
+                  dataDictBloc: _stopTypeBloc,
+                  onSelected: (DataDict result) {
+                    _pageBloc.add(
+                      PageLoad(
+                        model: reportUpload.copyWith(stopType: result),
                       ),
-                      onSelected: (StopType result) {
-                        _pageBloc.add(
-                          PageLoad(
-                            model:
-                                reportUpload.copyWith(stopType: result.index),
-                          ),
-                        );
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          StopType.values.map((value) {
-                            return PopupMenuItem<StopType>(
-                              value: value,
-                              child: Text(
-                                  '${DischargeReportUpload.stopTypeList[value.index]}'),
-                            );
-                          }).toList()),
+                    );
+                  },
                 ),
                 Gaps.hLine,
                 EditRowWidget(
@@ -306,8 +302,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                     _pageBloc.add(
                       PageLoad(
                         model: reportUpload.copyWith(
-                          attachments:
-                              await Utils.loadAssets(reportUpload.attachments),
+                          attachments: await SystemUtils.loadAssets(
+                              reportUpload.attachments),
                         ),
                       ),
                     );

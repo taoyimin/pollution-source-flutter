@@ -41,6 +41,7 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
   }
 }
 
+/// 上报时通用的监听方法
 uploadListener(context, state) {
   if (state is Uploading) {
     showDialog<bool>(

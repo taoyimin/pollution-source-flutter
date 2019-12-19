@@ -17,7 +17,7 @@ import 'package:pollution_source/module/report/factor/upload/factor_report_uploa
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
-import 'package:pollution_source/util/utils.dart';
+import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 class FactorReportUploadPage extends StatefulWidget {
@@ -284,7 +284,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                       PageLoad(
                         model: reportUpload.copyWith(
                           attachments:
-                              await Utils.loadAssets(reportUpload.attachments),
+                              await SystemUtils.loadAssets(reportUpload.attachments),
                         ),
                       ),
                     );
