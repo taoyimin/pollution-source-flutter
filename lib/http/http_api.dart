@@ -78,8 +78,8 @@ enum HttpApi {
   /// 排口异常申报停产类型列表
   dischargeReportStopTypeList,
 
-  /// 因子异常申报停产类型列表
-  factorReportStopTypeList,
+  /// 因子异常申报异常类型列表
+  factorReportAlarmTypeList,
 
   /// 因子异常申报因子列表
   factorReportFactorList,
@@ -116,8 +116,8 @@ class HttpApiJava {
   static const String licenseList = '暂无';
   static const String licenseDetail = 'enterprise/getLicenseInfoById';
   static const String dischargeReportStopTypeList = 'dictionary/getSubListByParent?dicCode=stopType';
-  static const String factorReportStopTypeList = 'enterprise/getLicenseInfoById?dicCode=alarm_type';
-  static const String factorReportFactorList = 'stopApplygetPollutionFactor';
+  static const String factorReportAlarmTypeList = 'dictionary/getSubListByParent?dicCode=alarm_type';
+  static const String factorReportFactorList = 'stopApply/getPollutionFactor?monitorType=outletType2';
 }
 
 class HttpApiPython {

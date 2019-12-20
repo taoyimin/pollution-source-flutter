@@ -213,8 +213,8 @@ class CompatUtils {
         return HttpApiJava.licenseDetail;
       case HttpApi.dischargeReportStopTypeList:
         return HttpApiJava.dischargeReportStopTypeList;
-      case HttpApi.factorReportStopTypeList:
-        return HttpApiJava.factorReportStopTypeList;
+      case HttpApi.factorReportAlarmTypeList:
+        return HttpApiJava.factorReportAlarmTypeList;
       case HttpApi.factorReportFactorList:
         return HttpApiJava.factorReportFactorList;
       default:
