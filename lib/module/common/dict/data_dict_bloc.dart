@@ -17,17 +17,34 @@ class DataDictBloc extends Bloc<DataDictEvent, DataDictState> {
   @override
   Stream<DataDictState> mapEventToState(DataDictEvent event) async* {
     if (event is DataDictLoad) {
-      yield* _mapReportDataDictLoadToState(event);
+      yield* _mapDataDictLoadToState(event);
+    }else if(event is DataDictUpdate){
+      yield* _mapDataDictUpdateToState(event);
     }
   }
 
   //处理加载数据字典列表事件
-  Stream<DataDictState> _mapReportDataDictLoadToState(
+  Stream<DataDictState> _mapDataDictLoadToState(
       DataDictLoad event) async* {
     try {
       yield DataDictLoading();
       final dataDictList = await dataDictRepository.request();
       yield DataDictLoaded(dataDictList: dataDictList);
+    } catch (e) {
+      yield DataDictError(
+          message: ExceptionHandle.handleException(e).msg);
+    }
+  }
+
+  //处理更新数据字典列表事件
+  Stream<DataDictState> _mapDataDictUpdateToState(
+      DataDictUpdate event) async* {
+    try {
+      final currentState = state;
+      if(currentState is DataDictLoaded){
+        currentState.dataDictList[event.index] = event.dataDict;
+        yield DataDictLoaded(dataDictList: currentState.dataDictList);
+      }
     } catch (e) {
       yield DataDictError(
           message: ExceptionHandle.handleException(e).msg);

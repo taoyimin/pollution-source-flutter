@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 
 abstract class DataDictState extends Equatable {
   const DataDictState();
@@ -16,7 +17,7 @@ class DataDictLoading extends DataDictState {}
 
 /// 加载完成状态
 class DataDictLoaded extends DataDictState {
-  final dataDictList;
+  final List<DataDict> dataDictList;
 
   const DataDictLoaded({@required this.dataDictList});
 
