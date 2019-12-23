@@ -1378,12 +1378,6 @@ class LineChartWidgetState extends State<LineChartWidget> {
                 _getLineChartData(),
                 swapAnimationDuration: Duration(milliseconds: 250),
               ),
-              /*child: FlChart(
-                swapAnimationDuration: Duration(milliseconds: 250),
-                chart: LineChart(
-                  _getLineChartData(),
-                ),
-              ),*/
             ),
           ],
         ),
@@ -1611,7 +1605,60 @@ class TipClipper extends CustomClipper<Path> {
   bool shouldReclip(TipClipper oldClipper) => false;
 }
 
+class SelectRowWidget extends StatelessWidget {
+  final String title;
+  final String content;
+  final double height;
+  final GestureTapCallback onTap;
+
+  SelectRowWidget({
+    Key key,
+    @required this.title,
+    @required this.content,
+    this.height = 46,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      child: Row(
+        children: <Widget>[
+          Text(
+            '$title',
+            style: const TextStyle(fontSize: 15),
+          ),
+          Gaps.hGap20,
+          Expanded(
+            flex: 1,
+            child: InkWell(
+              onTap: onTap,
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  content == null || content == '' ? '请选择$title' : content,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: content == null || content == ''
+                        ? Colours.secondary_text
+                        : Colours.primary_text,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 //单行文本输入控件
+@Deprecated('已被DataDictWidget替代，后续将删除')
 class EditRowWidget extends StatelessWidget {
   final String title;
   final String hintText;
