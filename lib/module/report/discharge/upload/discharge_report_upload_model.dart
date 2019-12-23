@@ -16,15 +16,6 @@ class DischargeReportUpload extends Equatable {
   final String stopReason; //停产原因
   final List<Asset> attachments; //证明材料
 
-//  static List<String> stopTypeList = [
-//    '停产',
-//    '设备故障',
-//    '未安装在线设备',
-//    '无外排',
-//    '其他原因',
-//    '停产监察笔录'
-//  ];
-
   const DischargeReportUpload({
     this.enterId,
     this.discharge,
@@ -74,5 +65,3 @@ class DischargeReportUpload extends Equatable {
     );
   }
 }
-
-//enum StopType { tingchan, guzhang, weianzhuang, wuwaipai, qita, jiancha }

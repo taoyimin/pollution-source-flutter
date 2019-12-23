@@ -41,8 +41,8 @@ class FactorReportUploadRepository
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
-      'alarmType': data.alarmType,
-      'factorCode': data.factorCode,
+      'alarmType': data.alarmType.code,
+      'factorCode': data.factorCode.map((dataDict)=> dataDict.code).join(','),
       'exceptionReason': data.exceptionReason,
       "file": await Future.wait(data.attachments?.map((asset) async {
             return await MultipartFile.fromFile(await asset.filePath,

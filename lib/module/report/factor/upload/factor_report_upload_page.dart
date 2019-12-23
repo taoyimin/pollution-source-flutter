@@ -4,7 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
+import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -14,11 +20,13 @@ import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/module/report/factor/upload/factor_report_upload_model.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
+import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 
 class FactorReportUploadPage extends StatefulWidget {
   final String enterId;
@@ -32,31 +40,40 @@ class FactorReportUploadPage extends StatefulWidget {
 class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
   PageBloc _pageBloc;
   UploadBloc _uploadBloc;
+  DataDictBloc _alarmTypeBloc;
+  DataDictBloc _factorCodeBloc;
   TextEditingController _exceptionReasonController;
 
   @override
   void initState() {
     super.initState();
+    //初始化Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    //首次加载
-    _pageBloc.add(PageLoad(model: FactorReportUpload()));
+    _pageBloc
+        .add(PageLoad(model: FactorReportUpload(factorCode: List<DataDict>())));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
+    _alarmTypeBloc = DataDictBloc(
+        dataDictRepository:
+            DataDictRepository(HttpApi.factorReportAlarmTypeList));
+    _alarmTypeBloc.add(DataDictLoad());
+    _factorCodeBloc = DataDictBloc(
+        dataDictRepository: DataDictRepository(HttpApi.factorReportFactorList));
     _exceptionReasonController = TextEditingController();
   }
 
   @override
   void dispose() {
     _exceptionReasonController.dispose();
+    if (_alarmTypeBloc?.state is DataDictLoading)
+      (_alarmTypeBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_factorCodeBloc?.state is DataDictLoading)
+      (_factorCodeBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
-
-  //用来显示SnackBar
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           UploadHeaderWidget(
@@ -79,7 +96,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   if (state is UploadSuccess) {
                     //提交成功后重置界面
                     _exceptionReasonController.text = '';
-                    _pageBloc.add(PageLoad(model: FactorReportUpload()));
+                    _pageBloc.add(PageLoad(
+                        model:
+                            FactorReportUpload(factorCode: List<DataDict>())));
+                    // 将异常因子选择控件的状态重置为初始状态
+                    _factorCodeBloc.add(DataDictReset());
                   }
                 },
               ),
@@ -87,7 +108,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             child: BlocBuilder<PageBloc, PageState>(
               builder: (context, state) {
                 if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model);
+                  return _buildPageLoadedDetail(state.model, context);
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -100,7 +121,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(FactorReportUpload reportUpload) {
+  Widget _buildPageLoadedDetail(FactorReportUpload reportUpload, context) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -108,128 +129,147 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: <Widget>[
-                EditRowWidget(
+                SelectRowWidget(
                   title: '排口名称',
-                  hintText: '请选择排口',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text: '${reportUpload?.discharge?.dischargeName ?? ''}',
-                    ),
-                  ),
+                  content: reportUpload?.discharge?.dischargeName,
                   onTap: () async {
+                    // 打开排口选择界面并等待结果返回
                     Discharge discharge = await Application.router.navigateTo(
-                        context, '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
-                    _pageBloc.add(
-                      PageLoad(
-                        model: reportUpload.copyWith(discharge: discharge),
-                      ),
-                    );
+                        context,
+                        '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
+                    if (discharge != null) {
+                      // 设置已经选中的排口，重置已经选中的监控点，和异常因子
+                      // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
+                      _pageBloc.add(
+                        PageLoad(
+                          model: FactorReportUpload(
+                            discharge: discharge,
+                            alarmType: reportUpload?.alarmType,
+                            startTime: reportUpload?.startTime,
+                            endTime: reportUpload?.endTime,
+                            factorCode: List<DataDict>(),
+                            attachments: reportUpload?.attachments,
+                          ),
+                        ),
+                      );
+                      // 将异常因子选择控件的状态重置为初始状态
+                      _factorCodeBloc.add(DataDictReset());
+                    }
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '监控点名',
-                  hintText: '请选择监控点',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text: '${reportUpload?.monitor?.monitorName ?? ''}',
-                    ),
-                  ),
+                  content: reportUpload?.monitor?.monitorName,
                   onTap: () async {
-                    Monitor monitor = await Application.router.navigateTo(
-                        context, '${Routes.monitorList}?enterId=${widget.enterId}&type=1');
-                    _pageBloc.add(
-                      PageLoad(
-                        model: reportUpload.copyWith(monitor: monitor),
-                      ),
-                    );
-                  },
-                ),
-                Gaps.hLine,
-                EditRowWidget(
-                  title: '异常类型',
-                  hintText: '请选择异常类型',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      text:
-                          '${reportUpload?.alarmType != null ? FactorReportUpload.alarmTypeList[reportUpload.alarmType] : ''}',
-                    ),
-                  ),
-                  popupMenuButton: PopupMenuButton<AlarmType>(
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.transparent,
-                      ),
-                      onSelected: (AlarmType result) {
+                    if (reportUpload?.discharge == null) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('请先选择排口！'),
+                          action: SnackBarAction(
+                              label: '我知道了',
+                              textColor: Colours.primary_color,
+                              onPressed: () {}),
+                        ),
+                      );
+                    } else {
+                      // 打开监控点选择界面并等待返回结果
+                      Monitor monitor = await Application.router.navigateTo(
+                          context,
+                          '${Routes.monitorList}?enterId=${widget.enterId}&dischargeId=${reportUpload.discharge.dischargeId}&type=1');
+                      if (monitor != null) {
+                        // 设置选中的监控点，重置已经选中的异常因子
                         _pageBloc.add(
                           PageLoad(
-                            model:
-                                reportUpload.copyWith(alarmType: result.index),
+                            model: reportUpload.copyWith(
+                              monitor: monitor,
+                              factorCode: <DataDict>[],
+                            ),
+                          ),
+                        );
+                        // 选择完监控点后根据监控点类型加载异常因子
+                        _factorCodeBloc.add(DataDictLoad(
+                            params: {'monitorType': monitor.monitorType}));
+                      }
+                    }
+                  },
+                ),
+                Gaps.hLine,
+                DataDictWidget(
+                  title: '异常类型',
+                  content: reportUpload?.alarmType?.name,
+                  dataDictBloc: _alarmTypeBloc,
+                  onSelected: (DataDict result) {
+                    _pageBloc.add(
+                      PageLoad(
+                        model: reportUpload.copyWith(alarmType: result),
+                      ),
+                    );
+                  },
+                ),
+                Gaps.hLine,
+                DataDictMultiWidget(
+                  title: '异常因子',
+                  tipText: '请先选择监控点',
+                  content: reportUpload?.factorCode
+                      ?.map((dataDict) => dataDict.name)
+                      ?.join(','),
+                  dataDictBloc: _factorCodeBloc,
+                  selected: reportUpload?.factorCode,
+                  onSelected: (DataDict dataDict) {
+                    // 如果集合中已有则删除，如果没有则添加
+                    if (reportUpload.factorCode.contains(dataDict))
+                      reportUpload.factorCode.remove(dataDict);
+                    else
+                      reportUpload.factorCode.add(dataDict);
+                    _pageBloc.add(
+                      PageLoad(
+                        model: reportUpload.copyWith(
+                            factorCode: reportUpload.factorCode),
+                      ),
+                    );
+                  },
+                ),
+                Gaps.hLine,
+                SelectRowWidget(
+                  title: '开始时间',
+                  content: DateUtil.formatDate(reportUpload?.startTime,
+                      format: 'yyyy-MM-dd HH:mm:ss'),
+                  onTap: () {
+                    DatePicker.showDatePicker(
+                      context,
+                      locale: DateTimePickerLocale.zh_cn,
+                      pickerMode: DateTimePickerMode.datetime,
+                      onClose: () {},
+                      onConfirm: (dateTime, selectedIndex) {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(startTime: dateTime),
                           ),
                         );
                       },
-                      itemBuilder: (BuildContext context) =>
-                          AlarmType.values.map((value) {
-                            return PopupMenuItem<AlarmType>(
-                              value: value,
-                              child: Text(
-                                  '${FactorReportUpload.alarmTypeList[value.index]}'),
-                            );
-                          }).toList()),
-                ),
-                Gaps.hLine,
-                EditRowWidget(
-                  title: '开始时间',
-                  hintText: '请选择开始时间',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text:
-                          '${DateUtil.formatDate(reportUpload?.startTime, format: 'yyyy-MM-dd HH:mm:ss')}',
-                    ),
-                  ),
-                  onTap: () {
-                    DatePicker.showDatePicker(context,
-                        locale: DateTimePickerLocale.zh_cn,
-                        pickerMode: DateTimePickerMode.datetime,
-                        onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(startTime: dateTime),
-                        ),
-                      );
-                    });
+                    );
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '结束时间',
-                  hintText: '请选择结束时间',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text:
-                          '${DateUtil.formatDate(reportUpload?.endTime, format: 'yyyy-MM-dd HH:mm:ss')}',
-                    ),
-                  ),
+                  content: DateUtil.formatDate(reportUpload?.endTime,
+                      format: 'yyyy-MM-dd HH:mm:ss'),
                   onTap: () {
-                    DatePicker.showDatePicker(context,
-                        locale: DateTimePickerLocale.zh_cn,
-                        pickerMode: DateTimePickerMode.datetime,
-                        onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(endTime: dateTime),
-                        ),
-                      );
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      locale: DateTimePickerLocale.zh_cn,
+                      pickerMode: DateTimePickerMode.datetime,
+                      onClose: () {},
+                      onConfirm: (dateTime, selectedIndex) {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(endTime: dateTime),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 Gaps.hLine,
@@ -242,6 +282,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             ),
           ),
           Gaps.vGap5,
+          // 没有附件则隐藏GridView
           Offstage(
             offstage: reportUpload?.attachments == null ||
                 reportUpload.attachments.length == 0,
@@ -283,8 +324,8 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                     _pageBloc.add(
                       PageLoad(
                         model: reportUpload.copyWith(
-                          attachments:
-                              await SystemUtils.loadAssets(reportUpload.attachments),
+                          attachments: await SystemUtils.loadAssets(
+                              reportUpload.attachments),
                         ),
                       ),
                     );
@@ -298,7 +339,6 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   onTap: () {
                     _uploadBloc.add(Upload(
                         data: reportUpload.copyWith(
-                      factorCode: '110',
                       enterId: widget.enterId,
                       exceptionReason: _exceptionReasonController.text,
                     )));

@@ -10,6 +10,7 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
+import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -24,7 +25,7 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-import 'package:pollution_source/widget/data_dict_widget.dart';
+import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 
 class DischargeReportUploadPage extends StatefulWidget {
   final String enterId;
@@ -45,8 +46,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
   @override
   void initState() {
     super.initState();
+    // 初始化Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    //初始化界面
     _pageBloc.add(PageLoad(model: DischargeReportUpload()));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _stopTypeBloc = DataDictBloc(
@@ -60,13 +61,14 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
   void dispose() {
     //释放资源
     _stopReasonController.dispose();
+    if (_stopTypeBloc?.state is DataDictLoading)
+      (_stopTypeBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           UploadHeaderWidget(
@@ -119,49 +121,51 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: <Widget>[
-                EditRowWidget(
+                SelectRowWidget(
                   title: '排口名称',
-                  hintText: '请选择排口',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text: '${reportUpload?.discharge?.dischargeName ?? ''}',
-                    ),
-                  ),
+                  content: reportUpload?.discharge?.dischargeName,
                   onTap: () async {
+                    // 打开排口选择界面并等待结果返回
                     Discharge discharge = await Application.router.navigateTo(
                         context,
                         '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
-                    //重新选择排口后重置已经选择的监控点
-                    _pageBloc.add(
-                      PageLoad(
-                        model: reportUpload.copyWith(
-                            discharge: discharge, monitor: null),
-                      ),
-                    );
+                    if (discharge != null) {
+                      // 设置已经选中的排口，重置已经选中的监控点
+                      // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
+                      _pageBloc.add(
+                        PageLoad(
+                          model: DischargeReportUpload(
+                            discharge: discharge,
+                            stopType: reportUpload?.stopType,
+                            reportTime: reportUpload?.reportTime,
+                            startTime: reportUpload?.startTime,
+                            endTime: reportUpload?.endTime,
+                            attachments: reportUpload?.attachments,
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '监控点名',
-                  hintText: '请选择监控点',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text: '${reportUpload?.monitor?.monitorName ?? ''}',
-                    ),
-                  ),
+                  content: reportUpload?.monitor?.monitorName,
                   onTap: () async {
+                    // 打开监控点选择界面并等待返回结果
                     Monitor monitor = await Application.router.navigateTo(
                         context,
                         '${Routes.monitorList}?enterId=${widget.enterId}&type=1');
-                    _pageBloc.add(
-                      PageLoad(
-                        model: reportUpload.copyWith(monitor: monitor),
-                      ),
-                    );
+                    if (monitor != null) {
+                      // 设置选中的监控点
+                      _pageBloc.add(
+                        PageLoad(
+                          model: reportUpload.copyWith(
+                            monitor: monitor,
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
                 Gaps.hLine,
@@ -178,77 +182,65 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '申报时间',
-                  hintText: '请选择申报时间',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text:
-                          '${DateUtil.formatDate(reportUpload?.reportTime, format: 'yyyy-MM-dd')}',
-                    ),
-                  ),
+                  content: DateUtil.formatDate(reportUpload?.reportTime,
+                      format: 'yyyy-MM-dd'),
                   onTap: () {
-                    DatePicker.showDatePicker(context,
-                        locale: DateTimePickerLocale.zh_cn,
-                        onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(reportTime: dateTime),
-                        ),
-                      );
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      locale: DateTimePickerLocale.zh_cn,
+                      onClose: () {},
+                      onConfirm: (dateTime, selectedIndex) {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(reportTime: dateTime),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '开始时间',
-                  hintText: '请选择开始时间',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text:
-                          '${DateUtil.formatDate(reportUpload?.startTime, format: 'yyyy-MM-dd HH:mm:ss')}',
-                    ),
-                  ),
+                  content: DateUtil.formatDate(reportUpload?.startTime,
+                      format: 'yyyy-MM-dd HH:mm:ss'),
                   onTap: () {
-                    DatePicker.showDatePicker(context,
-                        locale: DateTimePickerLocale.zh_cn,
-                        pickerMode: DateTimePickerMode.datetime,
-                        onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(startTime: dateTime),
-                        ),
-                      );
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      locale: DateTimePickerLocale.zh_cn,
+                      pickerMode: DateTimePickerMode.datetime,
+                      onClose: () {},
+                      onConfirm: (dateTime, selectedIndex) {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(startTime: dateTime),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '结束时间',
-                  hintText: '请选择结束时间',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text:
-                          '${DateUtil.formatDate(reportUpload?.endTime, format: 'yyyy-MM-dd HH:mm:ss')}',
-                    ),
-                  ),
+                  content: DateUtil.formatDate(reportUpload?.endTime,
+                      format: 'yyyy-MM-dd HH:mm:ss'),
                   onTap: () {
-                    DatePicker.showDatePicker(context,
-                        locale: DateTimePickerLocale.zh_cn,
-                        pickerMode: DateTimePickerMode.datetime,
-                        onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(endTime: dateTime),
-                        ),
-                      );
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      locale: DateTimePickerLocale.zh_cn,
+                      pickerMode: DateTimePickerMode.datetime,
+                      onClose: () {},
+                      onConfirm: (dateTime, selectedIndex) {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(endTime: dateTime),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 Gaps.hLine,
@@ -261,6 +253,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
             ),
           ),
           Gaps.vGap5,
+          // 没有附件则隐藏GridView
           Offstage(
             offstage: reportUpload?.attachments == null ||
                 reportUpload.attachments.length == 0,

@@ -33,8 +33,8 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
   @override
   void initState() {
     super.initState();
+    // 初始化Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    //首次加载
     _pageBloc.add(PageLoad(model: LongStopReportUpload()));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _remarkController = TextEditingController();
@@ -99,17 +99,10 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
             child: Column(
               children: <Widget>[
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '开始时间',
-                  hintText: '请选择开始时间',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text:
-                          '${DateUtil.formatDate(reportUpload?.startTime, format: 'yyyy-MM-dd HH:mm:ss')}',
-                    ),
-                  ),
+                  content: DateUtil.formatDate(reportUpload?.startTime,
+                      format: 'yyyy-MM-dd HH:mm:ss'),
                   onTap: () {
                     DatePicker.showDatePicker(context,
                         locale: DateTimePickerLocale.zh_cn,
@@ -124,28 +117,24 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-                EditRowWidget(
+                SelectRowWidget(
                   title: '结束时间',
-                  hintText: '请选择结束时间',
-                  readOnly: true,
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      // 设置内容
-                      text:
-                          '${DateUtil.formatDate(reportUpload?.endTime, format: 'yyyy-MM-dd HH:mm:ss')}',
-                    ),
-                  ),
+                  content: DateUtil.formatDate(reportUpload?.endTime,
+                      format: 'yyyy-MM-dd HH:mm:ss'),
                   onTap: () {
-                    DatePicker.showDatePicker(context,
-                        locale: DateTimePickerLocale.zh_cn,
-                        pickerMode: DateTimePickerMode.datetime,
-                        onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(endTime: dateTime),
-                        ),
-                      );
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      locale: DateTimePickerLocale.zh_cn,
+                      pickerMode: DateTimePickerMode.datetime,
+                      onClose: () {},
+                      onConfirm: (dateTime, selectedIndex) {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(endTime: dateTime),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 Gaps.hLine,
