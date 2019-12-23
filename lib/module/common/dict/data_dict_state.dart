@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/module/common/common_model.dart';
@@ -13,7 +14,14 @@ abstract class DataDictState extends Equatable {
 class DataDictInitial extends DataDictState {}
 
 /// 加载状态
-class DataDictLoading extends DataDictState {}
+class DataDictLoading extends DataDictState {
+  final CancelToken cancelToken;
+
+  const DataDictLoading({@required this.cancelToken});
+
+  @override
+  List<Object> get props => [cancelToken];
+}
 
 /// 加载完成状态
 class DataDictLoaded extends DataDictState {

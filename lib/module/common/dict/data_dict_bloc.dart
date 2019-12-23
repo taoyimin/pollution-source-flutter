@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
@@ -18,36 +19,21 @@ class DataDictBloc extends Bloc<DataDictEvent, DataDictState> {
   Stream<DataDictState> mapEventToState(DataDictEvent event) async* {
     if (event is DataDictLoad) {
       yield* _mapDataDictLoadToState(event);
-    }else if(event is DataDictUpdate){
-      yield* _mapDataDictUpdateToState(event);
+    } else if (event is DataDictReset) {
+      yield DataDictInitial();
     }
   }
 
   //处理加载数据字典列表事件
-  Stream<DataDictState> _mapDataDictLoadToState(
-      DataDictLoad event) async* {
+  Stream<DataDictState> _mapDataDictLoadToState(DataDictLoad event) async* {
     try {
-      yield DataDictLoading();
-      final dataDictList = await dataDictRepository.request();
+      CancelToken cancelToken = CancelToken();
+      yield DataDictLoading(cancelToken: cancelToken);
+      final dataDictList =
+          await dataDictRepository.request(params: event.params);
       yield DataDictLoaded(dataDictList: dataDictList);
     } catch (e) {
-      yield DataDictError(
-          message: ExceptionHandle.handleException(e).msg);
-    }
-  }
-
-  //处理更新数据字典列表事件
-  Stream<DataDictState> _mapDataDictUpdateToState(
-      DataDictUpdate event) async* {
-    try {
-      final currentState = state;
-      if(currentState is DataDictLoaded){
-        currentState.dataDictList[event.index] = event.dataDict;
-        yield DataDictLoaded(dataDictList: currentState.dataDictList);
-      }
-    } catch (e) {
-      yield DataDictError(
-          message: ExceptionHandle.handleException(e).msg);
+      yield DataDictError(message: ExceptionHandle.handleException(e).msg);
     }
   }
 }
