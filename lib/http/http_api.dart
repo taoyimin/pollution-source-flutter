@@ -99,7 +99,7 @@ class HttpApiJava {
   static const String monitorDetail = 'tDisChargeOut/getDrainInfoById?monitorId=';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
   static const String orderDetail = 'Supervise/querySuperviseDetailById?orderId=';
-  static const String processesUpload = '暂无';
+  static const String processesUpload = 'Supervise/dealSupervise?orderId=';
   static const String dischargeReportList = 'stopApply/getApplyList?dataType=S';
   static const String dischargeReportDetail =
       'stopApply/getStopApply?dataType=S&reportId=';
@@ -117,7 +117,7 @@ class HttpApiJava {
   static const String licenseDetail = 'enterprise/getLicenseInfoById';
   static const String dischargeReportStopTypeList = 'dictionary/getSubListByParent?dicCode=stopType';
   static const String factorReportAlarmTypeList = 'dictionary/getSubListByParent?dicCode=alarm_type';
-  static const String factorReportFactorList = 'stopApply/getPollutionFactor?monitorType=outletType2';
+  static const String factorReportFactorList = 'stopApply/getPollutionFactor';
 }
 
 class HttpApiPython {
@@ -149,16 +149,17 @@ class HttpApiPython {
 }
 
 class HttpApiOperation {
-  static const String operationToken = '暂无';
+  static const String operationToken = 'login';
   static const String operationIndex = '暂无';
-  static const String enterList = '暂无';
-  static const String enterDetail = '暂无';
-  static const String dischargeList = '暂无';
-  static const String dischargeDetail = '暂无';
-  static const String monitorList = '暂无';
-  static const String monitorDetail = '暂无';
-  static const String orderList = '暂无';
-  static const String orderDetail = '暂无';
+  static const String enterList = 'ycyd/enterpriseBas/api/enters';
+  static const String enterDetail = 'ycyd/enterpriseBas/api/enters/';
+  static const String dischargeList = 'ycyd/disChargeInfo/api/discharges';
+  static const String dischargeDetail = 'ycyd/disChargeInfo/api/getDisChageOutById?dischargeId=';
+  static const String monitorList = 'ycyd/disChargeMonitorYcyd/api/getDrainInfo';
+  static const String monitorDetail = 'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
+  static const String orderList = 'commonSupervise/getSuperviseListAPI';
+  static const String orderDetail = 'commonSupervise/querySuperviseDetailByIdAPI?orderId=';
+  static const String processesUpload = 'commonSupervise/dealSuperviseAPI';
   static const String dischargeReportList = '暂无';
   static const String dischargeReportDetail = '暂无';
   static const String factorReportList = '暂无';
