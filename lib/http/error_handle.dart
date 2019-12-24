@@ -41,6 +41,9 @@ class ExceptionHandle{
         if (e is BadRequestException) {
           return NetError(bad_request, e.message);
         }
+        if (e is UnauthorizedException) {
+          return NetError(unauthorized, e.message);
+        }
         if (e is NotFoundException) {
           return NetError(not_found, e.message);
         }
@@ -76,42 +79,49 @@ class NetError {
   NetError(this.code, this.msg);
 }
 
-//bad request异常
+/// bad request异常
 class BadRequestException implements Exception{
   final String message;
 
   BadRequestException(this.message);
 }
 
-//not found异常
+/// not found异常
 class NotFoundException implements Exception{
   final String message;
 
   NotFoundException(this.message);
 }
 
-//服务器异常
+/// 服务器异常
 class ServerErrorException implements Exception{
   final String message;
 
   ServerErrorException(this.message);
 }
 
-//未知异常
+/// 未知异常
 class UnKnownException implements Exception{
   final String message;
 
   UnKnownException(this.message);
 }
 
-//token异常
+/// token异常
 class TokenException implements Exception{
   final String message;
 
   TokenException(this.message);
 }
 
-//请求参数不合法
+/// 未认证异常
+class UnauthorizedException implements Exception{
+  final String message;
+
+  UnauthorizedException(this.message);
+}
+
+/// 请求参数不合法
 class InvalidParamException implements Exception{
   final String message;
 
