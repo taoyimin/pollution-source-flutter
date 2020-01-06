@@ -4,7 +4,7 @@ import 'package:pollution_source/module/application/admin_application_page.dart'
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
-import 'package:pollution_source/module/index/index.dart';
+import 'package:pollution_source/module/index/admin/index.dart';
 
 import 'mine.dart';
 
@@ -23,7 +23,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     //IndexPage(),
     BlocProvider(
       create: (context) => IndexBloc(),
-      child: IndexPage(),
+      child: AdminIndexPage(),
     ),
     AdminApplicationPage(),
     BlocProvider<ListBloc>(

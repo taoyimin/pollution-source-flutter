@@ -18,6 +18,7 @@ import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
+import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/module/report/factor/upload/factor_report_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -31,7 +32,7 @@ import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 class FactorReportUploadPage extends StatefulWidget {
   final String enterId;
 
-  FactorReportUploadPage({@required this.enterId}) : assert(enterId != null);
+  FactorReportUploadPage({this.enterId});
 
   @override
   _FactorReportUploadPageState createState() => _FactorReportUploadPageState();
@@ -44,18 +45,28 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
   DataDictBloc _factorCodeBloc;
   TextEditingController _exceptionReasonController;
 
+  /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
+  Enter defaultEnter;
+
   @override
   void initState() {
     super.initState();
+    // 初始化defaultEnter
+    if (!TextUtil.isEmpty(widget.enterId))
+      defaultEnter = Enter(enterId: int.parse(widget.enterId));
     //初始化Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    _pageBloc
-        .add(PageLoad(model: FactorReportUpload(factorCode: List<DataDict>())));
+    _pageBloc.add(PageLoad(
+        model: FactorReportUpload(
+            enter: defaultEnter, factorCode: List<DataDict>())));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
+    //初始化异常类型Bloc
     _alarmTypeBloc = DataDictBloc(
         dataDictRepository:
             DataDictRepository(HttpApi.factorReportAlarmTypeList));
+    //加载异常类型
     _alarmTypeBloc.add(DataDictLoad());
+    //初始化异常因子Bloc
     _factorCodeBloc = DataDictBloc(
         dataDictRepository: DataDictRepository(HttpApi.factorReportFactorList));
     _exceptionReasonController = TextEditingController();
@@ -63,6 +74,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
 
   @override
   void dispose() {
+    //释放资源
     _exceptionReasonController.dispose();
     if (_alarmTypeBloc?.state is DataDictLoading)
       (_alarmTypeBloc?.state as DataDictLoading).cancelToken.cancel();
@@ -129,6 +141,35 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: <Widget>[
+                Offstage(
+                  offstage: widget.enterId != null,
+                  child: SelectRowWidget(
+                    title: '企业名称',
+                    content: reportUpload?.enter?.enterName,
+                    onTap: () async {
+                      // 打开排口选择界面并等待结果返回
+                      Enter enter = await Application.router
+                          .navigateTo(context, '${Routes.enterList}?type=1');
+                      if (enter != null) {
+                        // 设置已经选中的企业，重置已经选中的排口和监控点
+                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
+                        _pageBloc.add(
+                          PageLoad(
+                            model: FactorReportUpload(
+                              enter: enter,
+                              alarmType: reportUpload?.alarmType,
+                              startTime: reportUpload?.startTime,
+                              endTime: reportUpload?.endTime,
+                              factorCode: List<DataDict>(),
+                              attachments: reportUpload?.attachments,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                widget.enterId != null ? Gaps.empty : Gaps.hLine,
                 SelectRowWidget(
                   title: '排口名称',
                   content: reportUpload?.discharge?.dischargeName,
@@ -143,6 +184,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                       _pageBloc.add(
                         PageLoad(
                           model: FactorReportUpload(
+                            enter: reportUpload?.enter,
                             discharge: discharge,
                             alarmType: reportUpload?.alarmType,
                             startTime: reportUpload?.startTime,
@@ -339,7 +381,6 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   onTap: () {
                     _uploadBloc.add(Upload(
                         data: reportUpload.copyWith(
-                      enterId: widget.enterId,
                       exceptionReason: _exceptionReasonController.text,
                     )));
                   },

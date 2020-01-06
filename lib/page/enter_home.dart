@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/application/enter_application_page.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_repository.dart';
-import 'package:pollution_source/module/enter/detail/enter_index_page.dart';
+import 'package:pollution_source/module/index/enter/enter_index_page.dart';
 
 import 'mine.dart';
 
 class EnterHomePage extends StatefulWidget {
   final String enterId;
 
-  EnterHomePage({Key key, this.enterId})
+  EnterHomePage({Key key,@required this.enterId})
       : assert(enterId != null),
         super(key: key);
 

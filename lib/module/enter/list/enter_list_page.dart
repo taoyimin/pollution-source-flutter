@@ -13,6 +13,7 @@ import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/label_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -23,13 +24,15 @@ class EnterListPage extends StatefulWidget {
   final String state;
   final String enterType;
   final String attentionLevel;
-  final bool automaticallyImplyLeading;
+  final bool automaticallyImplyLeading; //是否显示左上角返回箭头
+  final int type; //启用页面的类型 0：点击列表项查看详情 1：点击列表项返回上一层与企业信息
 
   EnterListPage({
     this.state = '',
     this.enterType = '',
     this.attentionLevel = '',
     this.automaticallyImplyLeading = true,
+    this.type = 0,
   });
 
   @override
@@ -235,8 +238,18 @@ class _EnterListPageState extends State<EnterListPage>
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                Application.router.navigateTo(context,
-                    '${Routes.enterDetail}/${enterList[index].enterId}');
+                switch (widget.type) {
+                  case 0:
+                    Application.router.navigateTo(context,
+                        '${Routes.enterDetail}/${enterList[index].enterId}');
+                    break;
+                  case 1:
+                    Navigator.pop(context, enterList[index]);
+                    break;
+                  default:
+                    Toast.show('未知的页面类型，type=${widget.type}');
+                    break;
+                }
               },
               children: <Widget>[
                 Container(

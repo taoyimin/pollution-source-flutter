@@ -100,7 +100,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
-                          vertical: 10,
+                          vertical: 18,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +144,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
-                          vertical: 10,
+                          vertical: 18,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +204,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
-                          vertical: 10,
+                          vertical: 18,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,247 +242,5 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
         ],
       ),
     );
-    /*return Column(
-      children: <Widget>[
-        Container(
-          height: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                'assets/images/button_bg_green.png',
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                right: 20,
-                bottom: 10,
-                child: Image.asset(
-                  'assets/images/test2.png',
-                  height: 105,
-                ),
-              ),
-              Positioned(
-                top: 50,
-                left: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      width: 90,
-                      child: const Text(
-                        '应用',
-                        style:
-                            const TextStyle(fontSize: 24, color: Colors.white),
-                      ),
-                    ),
-                    Gaps.vGap10,
-                    Container(
-                      width: 90,
-                      child: const Text(
-                        '污染源应用功能列表',
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        //基础数据查询
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ImageTitleWidget(
-                  title: '基础数据查询',
-                  imagePath: 'assets/images/icon_enter_other_info.png'),
-              //Gaps.vGap10,
-              Row(
-                children: <Widget>[
-                  InkWellButton9(
-                    meta: Meta(
-                        title: '企业信息',
-                        content: '查询企业列表',
-                        imagePath:
-                            'assets/images/application_icon_enter.png'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider(
-                              builder: (context) => EnterListBloc(),
-                              child: EnterListPage(),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                  Gaps.hGap20,
-                  InkWellButton9(
-                    meta: Meta(
-                        title: '监测数据',
-                        content: '查询监测数据',
-                        imagePath:
-                        'assets/images/application_icon_monitor.png'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider(
-                              builder: (context) => MonitorListBloc(),
-                              child: MonitorListPage(state: '0'),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        //异常申报查询
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ImageTitleWidget(
-                  title: '异常申报查询',
-                  imagePath: 'assets/images/icon_alarm_error.png'),
-              Row(
-                children: <Widget>[
-                  InkWellButton9(
-                    meta: Meta(
-                        title: '排口异常',
-                        content: '排口异常列表',
-                        imagePath:
-                        'assets/images/application_icon_discharge_report.png'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider(
-                              builder: (context) => DischargeReportListBloc(),
-                              child: DischargeReportListPage(),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                  Gaps.hGap20,
-                  InkWellButton9(
-                    meta: Meta(
-                        title: '因子异常',
-                        content: '因子异常列表',
-                        imagePath:
-                        'assets/images/application_icon_factor_report.png'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider(
-                              builder: (context) => FactorReportListBloc(),
-                              child: FactorReportListPage(),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  InkWellButton9(
-                    meta: Meta(
-                        title: '长期停产',
-                        content: '长期停产列表',
-                        imagePath:
-                        'assets/images/application_icon_longStop_report.png'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider(
-                              builder: (context) => LongStopReportListBloc(),
-                              child: LongStopReportListPage(),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                  Gaps.hGap20,
-                  Expanded(child: Gaps.empty),
-                ],
-              ),
-            ],
-          ),
-        ),
-        //报警管理单查询
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ImageTitleWidget(
-                  title: '报警管理单查询',
-                  imagePath: 'assets/images/application_icon_alarm.png'),
-              Row(
-                children: <Widget>[
-                  InkWellButton9(
-                    meta: Meta(
-                        title: '报警管理单',
-                        content: '报警管理单列表',
-                        imagePath:
-                        'assets/images/application_icon_alarm.png'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider(
-                              builder: (context) => OrderListBloc(),
-                              child: OrderListPage(),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                  Gaps.hGap20,
-                  Expanded(child: Gaps.empty),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );*/
   }
 }

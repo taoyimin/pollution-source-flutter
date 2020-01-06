@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flustars/flustars.dart';
+import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/login/login_repository.dart';
 import 'package:pollution_source/res/constant.dart';
@@ -41,10 +42,10 @@ class _LoginPageState extends State<LoginPage> {
     _nameController.addListener(_verify);
     _passwordController.addListener(_verify);
     _config = SystemUtils.getKeyboardActionsConfig([_nodeText1, _nodeText2]);
-    //初始化输入框
-    _nameController.text = SpUtil.getString(Constant.spUsername);
-    _passwordController.text = SpUtil.getString(Constant.spPassword);
     _userType = SpUtil.getInt(Constant.spUserType, defValue: 0);
+    //初始化输入框
+    _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
+    _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
   }
 
   @override
@@ -74,27 +75,32 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _login() async {
-    Response response = await _loginRepository.login(
-      userType: _userType,
-      userName: _nameController.text,
-      passWord: _passwordController.text,
-    );
-    //登录成功
-    SpUtil.putInt(Constant.spUserType, _userType);
-    SpUtil.putString(Constant.spUsername, _nameController.text);
-    SpUtil.putString(Constant.spPassword, _passwordController.text);
-    SpUtil.putString(Constant.spToken,
-        CompatUtils.getResponseToken(response));
-    switch (_userType) {
-      case 0:
-        Application.router.navigateTo(context, '${Routes.adminHome}');
-        break;
-      case 1:
-        Application.router.navigateTo(context, '${Routes.enterHome}/${CompatUtils.getResponseEnterId(response)}');
-        break;
-      case 2:
-        Application.router.navigateTo(context, '${Routes.operationHome}');
-        break;
+    try {
+      Response response = await _loginRepository.login(
+        userType: _userType,
+        userName: _nameController.text,
+        passWord: _passwordController.text,
+      );
+      //登录成功
+      SpUtil.putInt(Constant.spUserType, _userType);
+      SpUtil.putString(Constant.spUsernameList[_userType], _nameController.text);
+      SpUtil.putString(Constant.spPasswordList[_userType], _passwordController.text);
+      SpUtil.putString(
+          Constant.spToken, CompatUtils.getResponseToken(response));
+      switch (_userType) {
+        case 0:
+          Application.router.navigateTo(context, '${Routes.adminHome}');
+          break;
+        case 1:
+          Application.router.navigateTo(context,
+              '${Routes.enterHome}/${CompatUtils.getResponseEnterId(response)}');
+          break;
+        case 2:
+          Application.router.navigateTo(context, '${Routes.operationHome}');
+          break;
+      }
+    } catch (e) {
+      Toast.show(ExceptionHandle.handleException(e).msg);
     }
   }
 
@@ -185,6 +191,8 @@ class _LoginPageState extends State<LoginPage> {
                     _userType = 0;
                   });
                   SpUtil.putInt(Constant.spUserType, _userType);
+                  _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
+                  _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
                 },
               ),
               Gaps.hGap10,
@@ -198,6 +206,8 @@ class _LoginPageState extends State<LoginPage> {
                     _userType = 1;
                   });
                   SpUtil.putInt(Constant.spUserType, _userType);
+                  _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
+                  _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
                 },
               ),
               Gaps.hGap10,
@@ -211,6 +221,8 @@ class _LoginPageState extends State<LoginPage> {
                     _userType = 2;
                   });
                   SpUtil.putInt(Constant.spUserType, _userType);
+                  _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
+                  _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
                 },
               ),
             ],

@@ -105,13 +105,13 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '关注程度：${enterDetail.attentionLevelStr}',
+                      content: '关注程度：${enterDetail.attentionLevelStr??''}',
                       icon: Icons.star,
                       flex: 4,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      content: '所属区域：${enterDetail.districtName}',
+                      content: '所属区域：${enterDetail.districtName??''}',
                       icon: Icons.location_on,
                       flex: 5,
                     ),
@@ -121,7 +121,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '行业类别：${enterDetail.industryTypeStr}',
+                      content: '行业类别：${enterDetail.industryTypeStr??''}',
                       icon: Icons.work,
                     ),
                   ],
@@ -130,7 +130,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '信用代码：${enterDetail.creditCode}',
+                      content: '信用代码：${enterDetail.creditCode??''}',
                       icon: Icons.mail,
                     ),
                   ],
@@ -163,7 +163,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.contactPersonTel),
                     child: ContactsWidget(
-                      contactsName: '${enterDetail.contactPerson}(联系人)',
+                      contactsName: '${enterDetail.contactPerson??''}(联系人)',
                       contactsTel: '${enterDetail.contactPersonTel}',
                       imagePath: 'assets/images/enter_contacts_tel_header.png',
                     ),
@@ -171,7 +171,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.legalPersonTel),
                     child: ContactsWidget(
-                      contactsName: '${enterDetail.legalPerson}(法人)',
+                      contactsName: '${enterDetail.legalPerson??''}(法人)',
                       contactsTel: '${enterDetail.legalPersonTel}',
                       imagePath: 'assets/images/enter_legal_tel_header.png',
                     ),
@@ -205,7 +205,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '已办结',
-                        content: '${enterDetail.orderCompleteCount}',
+                        content: '${enterDetail.orderCompleteCount??''}',
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
                       ),
@@ -220,7 +220,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       meta: Meta(
                         color: Color(0xFFFFB709),
                         title: '全部',
-                        content: '${enterDetail.orderTotalCount}',
+                        content: '${enterDetail.orderTotalCount??''}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
                       ),
                     ),
@@ -249,7 +249,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       },
                       meta: Meta(
                         title: '长期停产申报',
-                        content: '${enterDetail.longStopReportTotalCount}',
+                        content: '${enterDetail.longStopReportTotalCount??''}',
                         imagePath: 'assets/images/button_image2.png',
                         backgroundPath: 'assets/images/button_bg_lightblue.png',
                       ),
@@ -262,7 +262,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       },
                       meta: Meta(
                         title: '排口异常申报',
-                        content: '${enterDetail.dischargeReportTotalCount}',
+                        content: '${enterDetail.dischargeReportTotalCount??''}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
                       ),
@@ -275,7 +275,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       },
                       meta: Meta(
                         title: '因子异常申报',
-                        content: '${enterDetail.factorReportTotalCount}',
+                        content: '${enterDetail.factorReportTotalCount??''}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
                       ),
@@ -316,7 +316,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '全部',
                               imagePath: 'assets/images/icon_monitor_all.png',
                               color: Color.fromRGBO(77, 167, 248, 1),
-                              content: '${enterDetail.monitorTotalCount}',
+                              content: '${enterDetail.monitorTotalCount??''}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -331,7 +331,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               imagePath:
                                   'assets/images/icon_monitor_online.png',
                               color: Color.fromRGBO(136, 191, 89, 1),
-                              content: '${enterDetail.monitorOnlineCount}',
+                              content: '${enterDetail.monitorOnlineCount??''}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -345,7 +345,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '预警',
                               imagePath: 'assets/images/icon_monitor_alarm.png',
                               color: Color.fromRGBO(241, 190, 67, 1),
-                              content: '${enterDetail.monitorAlarmCount}',
+                              content: '${enterDetail.monitorAlarmCount??''}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -362,7 +362,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '超标',
                               imagePath: 'assets/images/icon_monitor_over.png',
                               color: Color.fromRGBO(233, 119, 111, 1),
-                              content: '${enterDetail.monitorOverCount}',
+                              content: '${enterDetail.monitorOverCount??''}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -377,7 +377,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               imagePath:
                                   'assets/images/icon_monitor_offline.png',
                               color: Color.fromRGBO(179, 129, 127, 1),
-                              content: '${enterDetail.monitorOfflineCount}',
+                              content: '${enterDetail.monitorOfflineCount??''}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -391,7 +391,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '停产',
                               imagePath: 'assets/images/icon_monitor_stop.png',
                               color: Color.fromRGBO(137, 137, 137, 1),
-                              content: '${enterDetail.monitorStopCount}',
+                              content: '${enterDetail.monitorStopCount??''}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -423,7 +423,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 InkWellButton6(
                   meta: Meta(
                     title: '许可证编号',
-                    content: '${enterDetail.licenseNumber}',
+                    content: '${enterDetail.licenseNumber??''}',
                     color: Colors.pink,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
@@ -453,7 +453,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     InkWellButton3(
                       meta: Meta(
                         title: "建设项目",
-                        content: '${enterDetail.buildProjectCount}',
+                        content: '${enterDetail.buildProjectCount??''}',
                         backgroundPath: "assets/images/button_bg_lightblue.png",
                         imagePath: "assets/images/button_image2.png",
                       ),
@@ -464,7 +464,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     InkWellButton3(
                       meta: Meta(
                         title: "现场执法",
-                        content: '${enterDetail.sceneLawCount}',
+                        content: '${enterDetail.sceneLawCount??''}',
                         backgroundPath: "assets/images/button_bg_red.png",
                         imagePath: "assets/images/button_image1.png",
                       ),
@@ -475,7 +475,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     InkWellButton3(
                       meta: Meta(
                         title: '环境信访',
-                        content: '${enterDetail.environmentVisitCount}',
+                        content: '${enterDetail.environmentVisitCount??''}',
                         backgroundPath: "assets/images/button_bg_yellow.png",
                         imagePath: "assets/images/button_image3.png",
                       ),

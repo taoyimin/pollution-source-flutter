@@ -18,6 +18,7 @@ import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
+import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_model.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -30,7 +31,7 @@ import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 class DischargeReportUploadPage extends StatefulWidget {
   final String enterId;
 
-  DischargeReportUploadPage({@required this.enterId}) : assert(enterId != null);
+  DischargeReportUploadPage({this.enterId});
 
   @override
   _DischargeReportUploadPageState createState() =>
@@ -43,12 +44,19 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
   DataDictBloc _stopTypeBloc;
   TextEditingController _stopReasonController;
 
+  /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
+  Enter defaultEnter;
+
   @override
   void initState() {
     super.initState();
+    // 初始化defaultEnter
+    if (!TextUtil.isEmpty(widget.enterId))
+      defaultEnter = Enter(enterId: int.parse(widget.enterId));
     // 初始化Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    _pageBloc.add(PageLoad(model: DischargeReportUpload()));
+    // 加载界面
+    _pageBloc.add(PageLoad(model: DischargeReportUpload(enter: defaultEnter)));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _stopTypeBloc = DataDictBloc(
         dataDictRepository:
@@ -121,6 +129,35 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: <Widget>[
+                Offstage(
+                  offstage: widget.enterId != null,
+                  child: SelectRowWidget(
+                    title: '企业名称',
+                    content: reportUpload?.enter?.enterName,
+                    onTap: () async {
+                      // 打开排口选择界面并等待结果返回
+                      Enter enter = await Application.router
+                          .navigateTo(context, '${Routes.enterList}?type=1');
+                      if (enter != null) {
+                        // 设置已经选中的企业，重置已经选中的排口和监控点
+                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
+                        _pageBloc.add(
+                          PageLoad(
+                            model: DischargeReportUpload(
+                              enter: enter,
+                              stopType: reportUpload?.stopType,
+                              reportTime: reportUpload?.reportTime,
+                              startTime: reportUpload?.startTime,
+                              endTime: reportUpload?.endTime,
+                              attachments: reportUpload?.attachments,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                widget.enterId != null ? Gaps.empty : Gaps.hLine,
                 SelectRowWidget(
                   title: '排口名称',
                   content: reportUpload?.discharge?.dischargeName,
@@ -135,6 +172,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       _pageBloc.add(
                         PageLoad(
                           model: DischargeReportUpload(
+                            enter: reportUpload?.enter,
                             discharge: discharge,
                             stopType: reportUpload?.stopType,
                             reportTime: reportUpload?.reportTime,
@@ -310,7 +348,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   onTap: () {
                     _uploadBloc.add(Upload(
                         data: reportUpload.copyWith(
-                      enterId: widget.enterId,
+                      //enterId: widget.enterId,
                       stopReason: _stopReasonController.text,
                     )));
                   },

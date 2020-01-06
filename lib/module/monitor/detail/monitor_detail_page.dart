@@ -5,11 +5,11 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_page.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
-import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -31,7 +31,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
   void initState() {
     super.initState();
     _monitorDetailBloc = BlocProvider.of<MonitorDetailBloc>(context);
-    _monitorDetailBloc.add(MonitorDetailLoad(monitorId: widget.monitorId));
+    _monitorDetailBloc.add(MonitorDetailLoad(monitorId: '10755'));
   }
 
   @override
@@ -102,7 +102,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               } else if (state is MonitorDetailError) {
                 return ErrorSliver(errorMessage: state.errorMessage);
               } else if (state is MonitorDetailLoaded) {
-                return _buildPageLoadedDetail(state.monitorDetail, state.isCurved, state.showDotData);
+                return _buildPageLoadedDetail(context, state.monitorDetail, state.isCurved, state.showDotData);
               } else {
                 return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
               }
@@ -113,7 +113,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(MonitorDetail monitorDetail, bool isCurved, bool showDotData) {
+  Widget _buildPageLoadedDetail(BuildContext context,MonitorDetail monitorDetail, bool isCurved, bool showDotData) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -136,7 +136,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                     IconBaseInfoWidget(
                       content: '监控点名：${monitorDetail.monitorName}',
                       icon: Icons.linked_camera,
-                      flex: 6,
+                      flex: 7,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
@@ -152,7 +152,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                     IconBaseInfoWidget(
                       content: '监控类别：${monitorDetail.monitorCategoryStr}',
                       icon: Icons.nature,
-                      flex: 6,
+                      flex: 7,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
@@ -212,6 +212,16 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                     return FactorValueWidget(
                       chartData: chartData,
                       onTap: () {
+                        if(chartData.points ==null || chartData.points.length==0){
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${chartData.factorName}没有数据'),
+                              action: SnackBarAction(
+                                  label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                            ),
+                          );
+                          return;
+                        }
                         _monitorDetailBloc.add(
                           UpdateChartData(
                             chartData: chartData.copyWith(
@@ -236,7 +246,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       icon: Icons.business_center,
                       color: Colors.lightBlueAccent,
                       onTap: () {
-                        Toast.show('点击了排放标准');
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            content:const Text('排放标准功能开发中'),
+                            action: SnackBarAction(
+                                label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                          ),
+                        );
                       },
                     ),
                     Gaps.hGap20,
@@ -257,26 +273,6 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                     ),
                   ],
                 ),
-                /*Gaps.vGap10,
-                InkWellButton6(
-                  meta: Meta(
-                    title: '历史监测数据',
-                    content: '展示监测数据详细列表',
-                    color: Colors.pink,
-                    imagePath: 'assets/images/monitor_list_bg_image.png',
-                    backgroundPath: 'assets/images/button_bg_red.png',
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return MonitorTablePage();
-                        },
-                      ),
-                    );
-                  },
-                ),*/
               ],
             ),
           ),

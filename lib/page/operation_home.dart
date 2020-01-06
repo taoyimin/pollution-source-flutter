@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pollution_source/module/application/admin_application_page.dart';
+import 'package:pollution_source/module/application/operation_application_page.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
@@ -21,7 +21,7 @@ class _OperationHomePageState extends State<OperationHomePage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
     OperationIndexPage(),
-    AdminApplicationPage(),
+    OperationApplicationPage(),
     BlocProvider<ListBloc>(
       create: (BuildContext context) =>
           ListBloc(listRepository: EnterListRepository()),

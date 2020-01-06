@@ -104,7 +104,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
-                          vertical: 10,
+                          vertical: 18,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,12 +144,11 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                           ],
                         ),
                       ),
-                      Gaps.vGap16,
                       //异常申报上报
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
-                          vertical: 10,
+                          vertical: 18,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +167,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                           'assets/images/application_icon_discharge_report.png'),
                                   onTap: () {
                                     Application.router.navigateTo(context,
-                                        '${Routes.dischargeReportUpload}/${widget.enterId}');
+                                        '${Routes.dischargeReportUpload}?enterId=${widget.enterId}');
                                   },
                                 ),
                                 Gaps.hGap20,
@@ -180,7 +179,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                           'assets/images/application_icon_factor_report.png'),
                                   onTap: () {
                                     Application.router.navigateTo(context,
-                                        '${Routes.factorReportUpload}/${widget.enterId}');
+                                        '${Routes.factorReportUpload}?enterId=${widget.enterId}');
                                   },
                                 ),
                               ],
@@ -205,12 +204,11 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                           ],
                         ),
                       ),
-                      Gaps.vGap16,
                       //报警管理单查询
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
-                          vertical: 10,
+                          vertical: 18,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
