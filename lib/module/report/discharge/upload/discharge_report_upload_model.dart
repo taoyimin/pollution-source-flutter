@@ -2,11 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
+import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 
 //异常申报单详情
 class DischargeReportUpload extends Equatable {
-  final String enterId; //企业id
+  final Enter enter; //企业
   final Discharge discharge; //排口
   final Monitor monitor; //监控点
   final DateTime reportTime; //申报时间
@@ -17,7 +18,7 @@ class DischargeReportUpload extends Equatable {
   final List<Asset> attachments; //证明材料
 
   const DischargeReportUpload({
-    this.enterId,
+    this.enter,
     this.discharge,
     this.monitor,
     this.reportTime,
@@ -30,7 +31,7 @@ class DischargeReportUpload extends Equatable {
 
   @override
   List<Object> get props => [
-        enterId,
+        enter,
         discharge,
         monitor,
         reportTime,
@@ -42,7 +43,7 @@ class DischargeReportUpload extends Equatable {
       ];
 
   DischargeReportUpload copyWith({
-    String enterId,
+    Enter enter,
     Discharge discharge,
     Monitor monitor,
     DateTime reportTime,
@@ -53,7 +54,7 @@ class DischargeReportUpload extends Equatable {
     List<Asset> attachments,
   }) {
     return DischargeReportUpload(
-      enterId: enterId ?? this.enterId,
+      enter: enter ?? this.enter,
       discharge: discharge ?? this.discharge,
       monitor: monitor ?? this.monitor,
       reportTime: reportTime ?? this.reportTime,

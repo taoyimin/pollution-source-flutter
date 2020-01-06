@@ -9,14 +9,22 @@ part 'factor_report_list_model.g.dart';
 //因子异常申报列表
 @JsonSerializable()
 class FactorReport extends Equatable {
-  final String reportId; //申报单ID
+  @JsonKey(name: 'id')
+  final int reportId; //申报单ID
+  @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名称
+  @JsonKey(name: 'disMonitorName')
   final String monitorName; //监控点名称
   final String alarmTypeStr; //报警类型
-  final String districtName; //区域
+  final String cityName; // 所属市
+  final String areaName; // 所属区
+  @JsonKey(name: 'startTime')
   final String startTimeStr; //开始时间
+  @JsonKey(name: 'endTime')
   final String endTimeStr; //结束时间
+  @JsonKey(name: 'updateTime')
   final String reportTimeStr; //申报时间
+  @JsonKey(name: 'factorCode')
   final String factorCodeStr; //异常因子
 
   const FactorReport({
@@ -24,7 +32,8 @@ class FactorReport extends Equatable {
     this.enterName,
     this.monitorName,
     this.alarmTypeStr,
-    this.districtName,
+    this.cityName,
+    this.areaName,
     this.startTimeStr,
     this.endTimeStr,
     this.reportTimeStr,
@@ -38,7 +47,8 @@ class FactorReport extends Equatable {
         enterName,
         monitorName,
         alarmTypeStr,
-        districtName,
+        cityName,
+        areaName,
         startTimeStr,
         endTimeStr,
         reportTimeStr,
@@ -46,10 +56,15 @@ class FactorReport extends Equatable {
         //labelList,
       ];
 
-  List<Label> get labelList{
+  List<Label> get labelList {
     return TextUtil.isEmpty(factorCodeStr)
         ? const []
         : _getLabelList(factorCodeStr);
+  }
+
+  // 所属区域
+  String get districtName {
+    return '${cityName ?? ''}${areaName ?? ''}';
   }
 
   factory FactorReport.fromJson(Map<String, dynamic> json) =>

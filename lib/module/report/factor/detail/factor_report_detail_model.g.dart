@@ -8,22 +8,22 @@ part of 'factor_report_detail_model.dart';
 
 FactorReportDetail _$FactorReportDetailFromJson(Map<String, dynamic> json) {
   return FactorReportDetail(
-      reportId: json['reportId'].toString(),
-      enterId: json['enterId'].toString(),
-      dischargeId: json['dischargeId'].toString(),
-      monitorId: json['monitorId'].toString(),
-      enterName: json['enterName'].toString(),
-      enterAddress: json['enterAddress'].toString(),
-      dischargeName: json['dischargeName'].toString(),
-      monitorName: json['monitorName'].toString(),
-      districtName: json['districtName'].toString(),
-      reportTimeStr: json['reportTimeStr'].toString(),
-      startTimeStr: json['startTimeStr'].toString(),
-      endTimeStr: json['endTimeStr'].toString(),
-      alarmTypeStr: json['alarmTypeStr'].toString(),
-      exceptionReason: json['exceptionReason'].toString(),
-      reviewOpinion: json['reviewOpinion'].toString(),
-      attachments: (json['attachments'] as List)
+      reportId: json['id'] as int,
+      enterId: json['enterId'] as int,
+      dischargeId: json['outId'] as int,
+      monitorId: json['monitorId'] as int,
+      enterName: json['enterpriseName'] as String,
+      enterAddress: json['entAddress'] as String,
+      dischargeName: json['disOutName'] as String,
+      monitorName: json['disMonitorName'] as String,
+      cityName: json['cityName'] as String,
+      areaName: json['areaName'] as String,
+      reportTimeStr: json['updateTime'] as String,
+      startTimeStr: json['startTime'] as String,
+      endTimeStr: json['endTime'] as String,
+      alarmTypeStr: json['alarmTypeStr'] as String,
+      exceptionReason: json['exceptionReason'] as String,
+      attachments: (json['attachmentList'] as List)
           ?.map((e) =>
               e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))
           ?.toList());
@@ -31,20 +31,20 @@ FactorReportDetail _$FactorReportDetailFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$FactorReportDetailToJson(FactorReportDetail instance) =>
     <String, dynamic>{
-      'reportId': instance.reportId,
+      'id': instance.reportId,
       'enterId': instance.enterId,
-      'dischargeId': instance.dischargeId,
+      'outId': instance.dischargeId,
       'monitorId': instance.monitorId,
-      'enterName': instance.enterName,
-      'enterAddress': instance.enterAddress,
-      'dischargeName': instance.dischargeName,
-      'monitorName': instance.monitorName,
-      'districtName': instance.districtName,
-      'reportTimeStr': instance.reportTimeStr,
-      'startTimeStr': instance.startTimeStr,
-      'endTimeStr': instance.endTimeStr,
+      'enterpriseName': instance.enterName,
+      'entAddress': instance.enterAddress,
+      'disOutName': instance.dischargeName,
+      'disMonitorName': instance.monitorName,
+      'cityName': instance.cityName,
+      'areaName': instance.areaName,
+      'updateTime': instance.reportTimeStr,
+      'startTime': instance.startTimeStr,
+      'endTime': instance.endTimeStr,
       'alarmTypeStr': instance.alarmTypeStr,
       'exceptionReason': instance.exceptionReason,
-      'reviewOpinion': instance.reviewOpinion,
-      'attachments': instance.attachments
+      'attachmentList': instance.attachments
     };

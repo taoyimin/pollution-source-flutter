@@ -9,22 +9,22 @@ part of 'discharge_report_detail_model.dart';
 DischargeReportDetail _$DischargeReportDetailFromJson(
     Map<String, dynamic> json) {
   return DischargeReportDetail(
-      reportId: json['reportId'].toString(),
-      enterId: json['enterId'].toString(),
-      dischargeId: json['dischargeId'].toString(),
-      monitorId: json['monitorId'].toString(),
-      enterName: json['enterName'].toString(),
-      enterAddress: json['enterAddress'].toString(),
-      dischargeName: json['dischargeName'].toString(),
-      monitorName: json['monitorName'].toString(),
-      districtName: json['districtName'].toString(),
-      reportTimeStr: json['reportTimeStr'].toString(),
-      startTimeStr: json['startTimeStr'].toString(),
-      endTimeStr: json['endTimeStr'].toString(),
-      stopTypeStr: json['stopTypeStr'].toString(),
-      stopReason: json['stopReason'].toString(),
-      reviewOpinion: json['reviewOpinion'].toString(),
-      attachments: (json['attachments'] as List)
+      reportId: json['stopApplyId'] as int,
+      enterId: json['enterId'] as int,
+      dischargeId: json['outId'] as int,
+      monitorId: json['monitorId'] as int,
+      enterName: json['enterpriseName'] as String,
+      enterAddress: json['entAddress'] as String,
+      dischargeName: json['disOutName'] as String,
+      monitorName: json['disMonitorName'] as String,
+      cityName: json['cityName'] as String,
+      areaName: json['areaName'] as String,
+      reportTimeStr: json['applayTimeStr'] as String,
+      startTimeStr: json['startTimeStr'] as String,
+      endTimeStr: json['endTimeStr'] as String,
+      stopTypeStr: json['stopTypeStr'] as String,
+      stopReason: json['stopReason'] as String,
+      attachments: (json['attachmentList'] as List)
           ?.map((e) =>
               e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))
           ?.toList());
@@ -33,20 +33,20 @@ DischargeReportDetail _$DischargeReportDetailFromJson(
 Map<String, dynamic> _$DischargeReportDetailToJson(
         DischargeReportDetail instance) =>
     <String, dynamic>{
-      'reportId': instance.reportId,
+      'stopApplyId': instance.reportId,
       'enterId': instance.enterId,
-      'dischargeId': instance.dischargeId,
+      'outId': instance.dischargeId,
       'monitorId': instance.monitorId,
-      'enterName': instance.enterName,
-      'enterAddress': instance.enterAddress,
-      'dischargeName': instance.dischargeName,
-      'monitorName': instance.monitorName,
-      'districtName': instance.districtName,
-      'reportTimeStr': instance.reportTimeStr,
+      'enterpriseName': instance.enterName,
+      'entAddress': instance.enterAddress,
+      'disOutName': instance.dischargeName,
+      'disMonitorName': instance.monitorName,
+      'cityName': instance.cityName,
+      'areaName': instance.areaName,
+      'applayTimeStr': instance.reportTimeStr,
       'startTimeStr': instance.startTimeStr,
       'endTimeStr': instance.endTimeStr,
       'stopTypeStr': instance.stopTypeStr,
       'stopReason': instance.stopReason,
-      'reviewOpinion': instance.reviewOpinion,
-      'attachments': instance.attachments
+      'attachmentList': instance.attachments
     };

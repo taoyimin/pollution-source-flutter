@@ -10,12 +10,18 @@ part 'order_list_model.g.dart';
 //报警管理单列表
 @JsonSerializable()
 class Order extends Equatable {
-  final String orderId; //报警管理单ID
+  @JsonKey(name: 'id')
+  final int orderId; //报警管理单ID
+  @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名称
+  @JsonKey(name: 'disMonitorName')
   final String monitorName; //监控点名称
+  @JsonKey(name: 'alarmDate')
   final String alarmDateStr; //报警时间
+  @JsonKey(name: 'areaName')
   final String districtName; //区域
   final String orderStateStr; //状态
+  @JsonKey(name: 'alarmDesc')
   final String alarmRemark; //报警描述
   final String alarmTypeStr; //报警类型
 

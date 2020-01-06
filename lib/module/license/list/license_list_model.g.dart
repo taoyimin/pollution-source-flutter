@@ -8,14 +8,14 @@ part of 'license_list_model.dart';
 
 License _$LicenseFromJson(Map<String, dynamic> json) {
   return License(
-      licenseId: json['licenseId'].toString(),
-      enterName: json['enterName'].toString(),
-      issueUnitStr: json['issueUnitStr'].toString(),
-      issueTimeStr: json['issueTimeStr'].toString(),
-      licenseTimeStr: json['licenseTimeStr'].toString(),
-      validTimeStr: json['validTimeStr'].toString(),
-      licenseManagerTypeStr: json['licenseManagerTypeStr'].toString(),
-      licenseNumber: json['licenseNumber'].toString());
+      licenseId: json['licenseId'] as String,
+      enterName: json['enterName'] as String,
+      issueUnitStr: json['issueUnitStr'] as String,
+      issueTimeStr: json['issueTimeStr'] as String,
+      licenseTimeStr: json['licenseTimeStr'] as String,
+      validTimeStr: json['validTimeStr'] as String,
+      licenseManagerTypeStr: json['licenseManagerTypeStr'] as String,
+      licenseNumber: json['licenseNumber'] as String);
 }
 
 Map<String, dynamic> _$LicenseToJson(License instance) => <String, dynamic>{

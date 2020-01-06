@@ -10,11 +10,14 @@ part 'enter_list_model.g.dart';
 //企业列表
 @JsonSerializable()
 class Enter extends Equatable {
-  final String enterId; //企业id
+  final int enterId; //企业id
+  @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名
+  @JsonKey(name: 'envirLinkAddress')
   final String enterAddress; //企业地址
   final String attentionLevel; //是否是重点企业 0:非重点 1:重点
   final String industryTypeStr; //行业类别
+  @JsonKey(name: 'enterpriseType')
   final String enterType; //企业类型
 
   const Enter({

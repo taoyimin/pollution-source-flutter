@@ -8,24 +8,26 @@ part of 'discharge_report_list_model.dart';
 
 DischargeReport _$DischargeReportFromJson(Map<String, dynamic> json) {
   return DischargeReport(
-      reportId: json['reportId'].toString(),
-      enterName: json['enterName'].toString(),
-      monitorName: json['monitorName'].toString(),
-      stopTypeStr: json['stopTypeStr'].toString(),
-      districtName: json['districtName'].toString(),
-      startTimeStr: json['startTimeStr'].toString(),
-      endTimeStr: json['endTimeStr'].toString(),
-      reportTimeStr: json['reportTimeStr'].toString());
+      reportId: json['stopApplyId'] as int,
+      enterName: json['enterpriseName'] as String,
+      monitorName: json['disMonitorName'] as String,
+      stopTypeStr: json['stopTypeStr'] as String,
+      cityName: json['cityName'] as String,
+      areaName: json['areaName'] as String,
+      startTimeStr: json['startTimeStr'] as String,
+      endTimeStr: json['endTimeStr'] as String,
+      reportTimeStr: json['applayTimeStr'] as String);
 }
 
 Map<String, dynamic> _$DischargeReportToJson(DischargeReport instance) =>
     <String, dynamic>{
-      'reportId': instance.reportId,
-      'enterName': instance.enterName,
-      'monitorName': instance.monitorName,
+      'stopApplyId': instance.reportId,
+      'enterpriseName': instance.enterName,
+      'disMonitorName': instance.monitorName,
       'stopTypeStr': instance.stopTypeStr,
-      'districtName': instance.districtName,
+      'cityName': instance.cityName,
+      'areaName': instance.areaName,
       'startTimeStr': instance.startTimeStr,
       'endTimeStr': instance.endTimeStr,
-      'reportTimeStr': instance.reportTimeStr
+      'applayTimeStr': instance.reportTimeStr
     };

@@ -6,23 +6,35 @@ part 'discharge_detail_model.g.dart';
 //排口详情
 @JsonSerializable()
 class DischargeDetail extends Equatable {
-  final String dischargeId; //排口ID
-  final String enterId; //企业ID
+  @JsonKey(name: 'outId')
+  final int dischargeId; //排口ID
+  final int enterId; //企业ID
+  @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名称
+  @JsonKey(name: 'entAddress')
   final String enterAddress; //企业地址
+  @JsonKey(name: 'disOutName')
   final String dischargeName; //排口名称
+  @JsonKey(name: 'disOutShortName')
   final String dischargeShortName; //排口简称
+  @JsonKey(name: 'disOutAddress')
   final String dischargeAddress; //排口地址
+  @JsonKey(name: 'disOutId')
   final String dischargeNumber; //排口编号
+  @JsonKey(name: 'disOutRuleStr')
   final String dischargeRuleStr; //排放规律
   final String denoterInstallTypeStr; //标志牌安装形式
+  @JsonKey(name: 'disOutTypeStr')
   final String dischargeTypeStr; //排口类型
+  @JsonKey(name: 'outletTypeStr')
   final String dischargeCategoryStr; //排口类别
   final String outTypeStr; //排放类别
+  @JsonKey(name: 'disOutLongitude')
   final String longitude; //经度
+  @JsonKey(name: 'disOutLatitude')
   final String latitude; //纬度
-  final String dischargeReportTotalCount; //排口异常申报个数
-  final String factorReportTotalCount; //因子异常申报个数
+  final int dischargeReportTotalCount; //排口异常申报个数
+  final int factorReportTotalCount; //因子异常申报个数
 
   const DischargeDetail({
     this.dischargeId,

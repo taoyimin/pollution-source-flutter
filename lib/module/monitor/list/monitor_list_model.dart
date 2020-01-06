@@ -10,11 +10,16 @@ part 'monitor_list_model.g.dart';
 //监控点列表
 @JsonSerializable()
 class Monitor extends Equatable {
-  final String monitorId; //监控点ID
+  final int monitorId; //监控点ID
+  @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名称
+  @JsonKey(name: 'disMonitorName')
   final String monitorName; //监控点名称
+  @JsonKey(name: 'disMonitorAddress')
   final String monitorAddress; //监控点地址
+  @JsonKey(name: 'disMonitorType')
   final String monitorType; //监控点类型
+  @JsonKey(name: 'outletTypeStr')
   final String monitorCategoryStr; //监控点类别
 
   const Monitor({

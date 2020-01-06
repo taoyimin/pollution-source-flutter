@@ -3,11 +3,12 @@ import 'package:meta/meta.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
+import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 
 //异常申报单详情
 class FactorReportUpload extends Equatable {
-  final String enterId; //企业Id
+  final Enter enter; //企业
   final Discharge discharge; //排口
   final Monitor monitor; //监控点
   final List<DataDict> factorCode; //异常因子
@@ -18,7 +19,7 @@ class FactorReportUpload extends Equatable {
   final List<Asset> attachments; //证明材料
 
   const FactorReportUpload({
-    this.enterId,
+    this.enter,
     this.discharge,
     this.monitor,
     @required this.factorCode,
@@ -31,7 +32,7 @@ class FactorReportUpload extends Equatable {
 
   @override
   List<Object> get props => [
-        enterId,
+        enter,
         discharge,
         monitor,
         factorCode?.length,
@@ -45,7 +46,7 @@ class FactorReportUpload extends Equatable {
       ];
 
   FactorReportUpload copyWith({
-    String enterId,
+    Enter enter,
     Discharge discharge,
     Monitor monitor,
     List<DataDict> factorCode,
@@ -56,7 +57,7 @@ class FactorReportUpload extends Equatable {
     List<Asset> attachments,
   }) {
     return FactorReportUpload(
-      enterId: enterId ?? this.enterId,
+      enter: enter ?? this.enter,
       discharge: discharge ?? this.discharge,
       monitor: monitor ?? this.monitor,
       factorCode: factorCode ?? this.factorCode,

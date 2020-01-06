@@ -8,17 +8,17 @@ part of 'order_detail_model.dart';
 
 OrderDetail _$OrderDetailFromJson(Map<String, dynamic> json) {
   return OrderDetail(
-      orderId: json['orderId'].toString(),
-      enterId: json['enterId'].toString(),
-      monitorId: json['monitorId'].toString(),
-      enterName: json['enterName'].toString(),
-      enterAddress: json['enterAddress'].toString(),
-      districtName: json['districtName'].toString(),
-      monitorName: json['monitorName'].toString(),
-      alarmDateStr: json['alarmDateStr'].toString(),
-      orderStateStr: json['orderStateStr'].toString(),
-      alarmTypeStr: json['alarmTypeStr'].toString(),
-      alarmRemark: json['alarmRemark'].toString(),
+      orderId: json['orderId'] as int,
+      enterId: json['enterId'] as int,
+      monitorId: json['monitorId'] as int,
+      enterName: json['enterName'] as String,
+      enterAddress: json['enterAddress'] as String,
+      districtName: json['districtName'] as String,
+      monitorName: json['monitorName'] as String,
+      alarmDateStr: json['alarmDateStr'] as String,
+      orderStateStr: json['orderStateStr'] as String,
+      alarmTypeStr: json['alarmTypeStr'] as String,
+      alarmRemark: json['alarmDesc'] as String,
       processes: (json['processes'] as List)
           ?.map((e) =>
               e == null ? null : Process.fromJson(e as Map<String, dynamic>))
@@ -37,6 +37,6 @@ Map<String, dynamic> _$OrderDetailToJson(OrderDetail instance) =>
       'alarmDateStr': instance.alarmDateStr,
       'orderStateStr': instance.orderStateStr,
       'alarmTypeStr': instance.alarmTypeStr,
-      'alarmRemark': instance.alarmRemark,
+      'alarmDesc': instance.alarmRemark,
       'processes': instance.processes
     };

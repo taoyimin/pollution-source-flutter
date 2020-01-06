@@ -4,10 +4,11 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 
 part 'common_model.g.dart';
 
-//标签
+/// 标签
 class Label extends Equatable {
   final Color color;
   final String name;
@@ -27,7 +28,7 @@ class Label extends Equatable {
       ];
 }
 
-//元数据
+/// 元数据
 class Meta extends Equatable {
   final String title; //标题
   final String content; //内容
@@ -53,12 +54,13 @@ class Meta extends Equatable {
       ];
 }
 
-//附件类
+/// 附件类
 @JsonSerializable()
 class Attachment extends Equatable {
   final String fileName; //文件名
+  @JsonKey(name: 'showUrl')
   final String url; //完整路径
-  final int size; //附件大小
+  final String size; //附件大小
 
   const Attachment({
     @required this.fileName,
@@ -74,13 +76,14 @@ class Attachment extends Equatable {
       ];
 
   String get imagePath {
-    if (url.endsWith('.jpg') || url.endsWith('.png')) {
+    if (fileName == null) return "assets/images/icon_attachment_other.png";
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.png')) {
       return "assets/images/icon_attachment_image.png";
-    } else if (url.endsWith('.doc') || url.endsWith('.docx')) {
+    } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
       return "assets/images/icon_attachment_doc.png";
-    } else if (url.endsWith('.xls') || url.endsWith('.xlsx')) {
+    } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
       return "assets/images/icon_attachment_xls.png";
-    } else if (url.endsWith('.pdf')) {
+    } else if (fileName.endsWith('.pdf')) {
       return "assets/images/icon_attachment_pdf.png";
     } else {
       return "assets/images/icon_attachment_other.png";
@@ -88,11 +91,11 @@ class Attachment extends Equatable {
   }
 
   String get fileSize {
-    if (size < 1024 * 1024) {
+    if (int.parse(size) < 1024 * 1024) {
       //小于1M
-      return '${(size.toDouble() / (1024)).toStringAsFixed(2)}KB';
+      return '${(double.parse(size) / (1024)).toStringAsFixed(2)}KB';
     } else {
-      return '${(size.toDouble() / (1024 * 1024)).toStringAsFixed(2)}M';
+      return '${(double.parse(size) / (1024 * 1024)).toStringAsFixed(2)}M';
     }
   }
 
@@ -100,28 +103,6 @@ class Attachment extends Equatable {
       _$AttachmentFromJson(json);
 
   Map<String, dynamic> toJson() => _$AttachmentToJson(this);
-
-/*static Attachment fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
-      return Attachment(
-        fileName: json['File_Name'],
-        url: json['Url'],
-        size: int.parse(json['Size']),
-      );
-    }else{
-      return Attachment(
-        fileName: json['fileName'],
-        url: json['url'],
-        size: json['size'],
-      );
-    }
-  }
-
-  static List<Attachment> fromJsonArray(dynamic jsonArray) {
-    return jsonArray.map<Attachment>((json) {
-      return Attachment.fromJson(json);
-    }).toList();
-  }*/
 }
 
 //处理流程
@@ -154,25 +135,10 @@ class Process extends Equatable {
       _$ProcessFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProcessToJson(this);
-
-/*  static Process fromJson(dynamic json) {
-    return Process(
-      operateTypeStr: json['operateTypeStr'],
-      operatePerson: json['operatePerson'],
-      operateTimeStr: json['operateTimeStr'],
-      operateDesc: json['operateDesc'],
-      attachmentList: Attachment.fromJsonArray(json['attachments']),
-    );
-  }
-
-  static List<Process> fromJsonArray(dynamic jsonArray) {
-    return jsonArray.map<Process>((json) {
-      return Process.fromJson(json);
-    }).toList();
-  }*/
 }
 
-//坐标点信息 用于记录因子在某个时间的监测值
+/// 坐标点信息 用于记录因子在某个时间的监测值
+@JsonSerializable()
 class PointData extends Equatable {
   final double x; //时间戳
   final double y; //监测值
@@ -184,9 +150,14 @@ class PointData extends Equatable {
 
   @override
   List<Object> get props => [x, y];
+
+  factory PointData.fromJson(Map<String, dynamic> json) =>
+      _$PointDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PointDataToJson(this);
 }
 
-//因子监测数据 记录了一个因子在一段时间内的监测数据
+/// 因子监测数据 记录了一个因子在一段时间内的监测数据
 class ChartData extends Equatable {
   final String factorName; //因子名称
   final bool checked; //是否选中
@@ -240,15 +211,55 @@ class ChartData extends Equatable {
       points: this.points,
     );
   }
+
+  factory ChartData.fromJson(Map<String, dynamic> json) =>
+      _$ChartDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChartDataToJson(this);
 }
+
+ChartData _$ChartDataFromJson(Map<String, dynamic> json) {
+  List<PointData> points = (json['points'] as List)
+      ?.map((e) =>
+          e == null ? null : PointData.fromJson(e as Map<String, dynamic>))
+      ?.toList();
+  return ChartData(
+      factorName: json['factorName'] as String,
+      unit: json['unit'] as String,
+      checked: false,
+      color: UIUtils.getRandomColor(),
+      lastValue: points.length == 0 ? '无数据' : points[0].y.toString(),
+      maxX: UIUtils.getMax(points.map((point) {
+        return point.x;
+      }).toList()),
+      minX: UIUtils.getMin(points.map((point) {
+        return point.x;
+      }).toList()),
+      maxY: UIUtils.getMax(points.map((point) {
+        return point.y;
+      }).toList()),
+      minY: UIUtils.getMin(points.map((point) {
+        return point.y;
+      }).toList()),
+      points: points);
+}
+
+Map<String, dynamic> _$ChartDataToJson(ChartData instance) => <String, dynamic>{
+      'factorName': instance.factorName,
+      'unit': instance.unit,
+      'points': instance.points
+    };
 
 /// 数据字典类
 ///
 /// [checked]默认为false，只有多选时才会用到
 @JsonSerializable()
 class DataDict extends Equatable {
+  @JsonKey(name: 'dicSubCode')
   final String code;
+  @JsonKey(name: 'dicSubName')
   final String name;
+  @JsonKey(ignore: true)
   final bool checked;
 
   const DataDict({

@@ -8,28 +8,24 @@ part of 'common_model.dart';
 
 Attachment _$AttachmentFromJson(Map<String, dynamic> json) {
   return Attachment(
-      fileName: json['fileName'].toString(),
-      url: json['url'].toString(),
-      size: int.parse(json['size']));
+      fileName: json['fileName'] as String,
+      url: json['showUrl'] as String,
+      size: json['size'] as String);
 }
 
 Map<String, dynamic> _$AttachmentToJson(Attachment instance) =>
     <String, dynamic>{
       'fileName': instance.fileName,
-      'url': instance.url,
+      'showUrl': instance.url,
       'size': instance.size
     };
 
-DataDict _$DataDictFromJson(Map<String, dynamic> json) {
-  return DataDict(name: json['name'].toString(), code: json['code'].toString());
-}
-
 Process _$ProcessFromJson(Map<String, dynamic> json) {
   return Process(
-      operateTypeStr: json['operateTypeStr'].toString(),
-      operatePerson: json['operatePerson'].toString(),
-      operateTimeStr: json['operateTimeStr'].toString(),
-      operateDesc: json['operateDesc'].toString(),
+      operateTypeStr: json['operateTypeStr'] as String,
+      operatePerson: json['operatePerson'] as String,
+      operateTimeStr: json['operateTimeStr'] as String,
+      operateDesc: json['operateDesc'] as String,
       attachments: (json['attachments'] as List)
           ?.map((e) =>
               e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))
@@ -44,5 +40,18 @@ Map<String, dynamic> _$ProcessToJson(Process instance) => <String, dynamic>{
       'attachments': instance.attachments
     };
 
+PointData _$PointDataFromJson(Map<String, dynamic> json) {
+  return PointData(
+      x: (json['x'] as num)?.toDouble(), y: (json['y'] as num)?.toDouble());
+}
+
+Map<String, dynamic> _$PointDataToJson(PointData instance) =>
+    <String, dynamic>{'x': instance.x, 'y': instance.y};
+
+DataDict _$DataDictFromJson(Map<String, dynamic> json) {
+  return DataDict(
+      code: json['dicSubCode'] as String, name: json['dicSubName'] as String);
+}
+
 Map<String, dynamic> _$DataDictToJson(DataDict instance) =>
-    <String, dynamic>{'name': instance.name, 'code': instance.code};
+    <String, dynamic>{'dicSubCode': instance.code, 'dicSubName': instance.name};

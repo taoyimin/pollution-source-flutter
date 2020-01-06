@@ -1,38 +1,46 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'enter_detail_model.g.dart';
+//part 'enter_detail_model.g.dart';
 
 //企业详情
-@JsonSerializable()
+//@JsonSerializable()
 class EnterDetail extends Equatable {
-  final String enterId; //企业id
-  final String enterName; //企业名称
-  final String enterAddress; //企业地址
-  final String enterTel; //企业电话
-  final String contactPerson; //企业联系人
-  final String contactPersonTel; //联系人电话
-  final String legalPerson; //法人
-  final String legalPersonTel; //法人电话
-  final String attentionLevelStr; //关注程度
-  final String districtName; //区域
-  final String industryTypeStr; //行业类别
-  final String creditCode; //信用代码
-  final String orderCompleteCount; //报警管理单已办结个数
-  final String orderTotalCount; //报警管理单总数
-  final String longStopReportTotalCount; //长期停产申报总数
-  final String dischargeReportTotalCount; //排口异常申报总数
-  final String factorReportTotalCount; //因子异常申报总数
-  final String monitorTotalCount; //监控点总数
-  final String monitorOnlineCount; //监控点在线数
-  final String monitorAlarmCount; //监控点预警数
-  final String monitorOverCount; //监控点超标数
-  final String monitorOfflineCount; //监控点离线数
-  final String monitorStopCount; //监控点停产数
-  final String licenseNumber; //排污许可证编码
-  final String buildProjectCount; //建设项目总数
-  final String sceneLawCount; //现场执法总数
-  final String environmentVisitCount; //环境信访总数
+  final int enterId; // 企业id
+  @JsonKey(name: 'enterpriseName')
+  final String enterName; // 企业名称
+  @JsonKey(name: 'entAddress')
+  final String enterAddress; // 企业地址
+  @JsonKey(name: 'entLinkPhone')
+  final String enterTel; // 企业电话
+  @JsonKey(name: 'envirLinkMan')
+  final String contactPerson; // 企业联系人
+  @JsonKey(name: 'envirLinkPhone')
+  final String contactPersonTel; // 联系人电话
+  final String legalPerson; // 法人
+  @JsonKey(name: 'legalLinkPhone')
+  final String legalPersonTel; // 法人电话
+  final String attentionLevelStr; // 关注程度
+  final String cityName; // 所属市
+  final String areaName; // 所属区
+  final String industryTypeStr; // 行业类别
+  @JsonKey(name: 'legalPersonCode')
+  final String creditCode; // 信用代码
+  final int orderCompleteCount; // 报警管理单已办结个数
+  final int orderTotalCount; // 报警管理单总数
+  final int longStopReportTotalCount; // 长期停产申报总数
+  final int dischargeReportTotalCount; // 排口异常申报总数
+  final int factorReportTotalCount; // 因子异常申报总数
+  final int monitorTotalCount; // 监控点总数
+  final int monitorOnlineCount; // 监控点在线数
+  final int monitorAlarmCount; // 监控点预警数
+  final int monitorOverCount; // 监控点超标数
+  final int monitorOfflineCount; // 监控点离线数
+  final int monitorStopCount; // 监控点停产数
+  final String licenseNumber; // 排污许可证编码
+  final String buildProjectCount; // 建设项目总数
+  final String sceneLawCount; // 现场执法总数
+  final String environmentVisitCount; // 环境信访总数
 
   EnterDetail({
     this.enterId,
@@ -44,7 +52,8 @@ class EnterDetail extends Equatable {
     this.legalPerson,
     this.legalPersonTel,
     this.attentionLevelStr,
-    this.districtName,
+    this.cityName,
+    this.areaName,
     this.industryTypeStr,
     this.creditCode,
     this.orderCompleteCount,
@@ -75,7 +84,8 @@ class EnterDetail extends Equatable {
         legalPerson,
         legalPersonTel,
         attentionLevelStr,
-        districtName,
+        cityName,
+        areaName,
         industryTypeStr,
         creditCode,
         orderCompleteCount,
@@ -95,8 +105,77 @@ class EnterDetail extends Equatable {
         environmentVisitCount,
       ];
 
+  // 所属区域
+  String get districtName {
+    return '${cityName??''}${areaName??''}';
+  }
+
   factory EnterDetail.fromJson(Map<String, dynamic> json) =>
       _$EnterDetailFromJson(json);
 
   Map<String, dynamic> toJson() => _$EnterDetailToJson(this);
 }
+
+EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
+  return EnterDetail(
+      enterId: json['enterprise']['enterId'] as int,
+      enterName: json['enterprise']['enterpriseName'] as String,
+      enterAddress: json['enterprise']['entAddress'] as String,
+      enterTel: json['enterprise']['entLinkPhone'] as String,
+      contactPerson: json['enterprise']['envirLinkMan'] as String,
+      contactPersonTel: json['enterprise']['envirLinkPhone'] as String,
+      legalPerson: json['enterprise']['legalPerson'] as String,
+      legalPersonTel: json['enterprise']['legalLinkPhone'] as String,
+      attentionLevelStr: json['enterprise']['attentionLevelStr'] as String,
+      cityName: json['enterprise']['cityName'] as String,
+      areaName: json['enterprise']['areaName'] as String,
+      industryTypeStr: json['enterprise']['industryTypeStr'] as String,
+      creditCode: json['enterprise']['legalPersonCode'] as String,
+      orderCompleteCount: json['orderCompleteCount'] as int,
+      orderTotalCount: json['orderTotalCount'] as int,
+      longStopReportTotalCount: json['longStopReportTotalCount'] as int,
+      dischargeReportTotalCount: json['dischargeReportTotalCount'] as int,
+      factorReportTotalCount: json['factorReportTotalCount'] as int,
+      monitorTotalCount: json['monitorTotalCount'] as int,
+      monitorOnlineCount: json['monitorOnlineCount'] as int,
+      monitorAlarmCount: json['monitorAlarmCount'] as int,
+      monitorOverCount: json['monitorOverCount'] as int,
+      monitorOfflineCount: json['monitorOfflineCount'] as int,
+      monitorStopCount: json['monitorStopCount'] as int,
+      licenseNumber: json['licenseNumber'] as String,
+      buildProjectCount: json['buildProjectCount'] as String,
+      sceneLawCount: json['sceneLawCount'] as String,
+      environmentVisitCount: json['environmentVisitCount'] as String);
+}
+
+Map<String, dynamic> _$EnterDetailToJson(EnterDetail instance) =>
+    <String, dynamic>{
+      'enterId': instance.enterId,
+      'enterpriseName': instance.enterName,
+      'entAddress': instance.enterAddress,
+      'entLinkPhone': instance.enterTel,
+      'envirLinkMan': instance.contactPerson,
+      'envirLinkPhone': instance.contactPersonTel,
+      'legalPerson': instance.legalPerson,
+      'legalLinkPhone': instance.legalPersonTel,
+      'attentionLevelStr': instance.attentionLevelStr,
+      'cityName': instance.cityName,
+      'areaName': instance.areaName,
+      'industryTypeStr': instance.industryTypeStr,
+      'legalPersonCode': instance.creditCode,
+      'orderCompleteCount': instance.orderCompleteCount,
+      'orderTotalCount': instance.orderTotalCount,
+      'longStopReportTotalCount': instance.longStopReportTotalCount,
+      'dischargeReportTotalCount': instance.dischargeReportTotalCount,
+      'factorReportTotalCount': instance.factorReportTotalCount,
+      'monitorTotalCount': instance.monitorTotalCount,
+      'monitorOnlineCount': instance.monitorOnlineCount,
+      'monitorAlarmCount': instance.monitorAlarmCount,
+      'monitorOverCount': instance.monitorOverCount,
+      'monitorOfflineCount': instance.monitorOfflineCount,
+      'monitorStopCount': instance.monitorStopCount,
+      'licenseNumber': instance.licenseNumber,
+      'buildProjectCount': instance.buildProjectCount,
+      'sceneLawCount': instance.sceneLawCount,
+      'environmentVisitCount': instance.environmentVisitCount
+    };
