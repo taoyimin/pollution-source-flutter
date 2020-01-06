@@ -157,15 +157,20 @@ class HttpApiOperation {
   static const String dischargeDetail = 'ycyd/disChargeInfo/api/getDisChageOutById?dischargeId=';
   static const String monitorList = 'ycyd/disChargeMonitorYcyd/api/getDrainInfo';
   static const String monitorDetail = 'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
-  static const String orderList = 'commonSupervise/getSuperviseListAPI';
+  static const String orderList = 'commonSupervise/list';
   static const String orderDetail = 'commonSupervise/querySuperviseDetailByIdAPI?orderId=';
   static const String processesUpload = 'commonSupervise/dealSuperviseAPI';
-  static const String dischargeReportList = '暂无';
-  static const String dischargeReportDetail = '暂无';
-  static const String factorReportList = '暂无';
-  static const String factorReportDetail = '暂无';
+  static const String dischargeReportList = 'pollutantsource/stopApply/queryPage';
+  static const String dischargeReportDetail = 'pollutantsource/stopApply/getDetailApi?stopApplyId=';
+  static const String dischargeReportUpload = 'pollutantsource/stopApply/updateStopApply';
+  static const String factorReportList = 'archives/abnormalApply/list';
+  static const String factorReportDetail = 'archives/abnormalApply/detailInterAPI?id=';
+  static const String factorReportUpload = 'archives/abnormalApply/addAbonrmalAPI';
   static const String longStopReportList = '暂无';
   static const String longStopReportDetail = '暂无';
   static const String licenseList = '暂无';
   static const String licenseDetail = '暂无';
+  static const String dischargeReportStopTypeList = 'dictionary/getSubListAPI?dicCode=stopType';
+  static const String factorReportAlarmTypeList = 'dictionary/getSubListAPI?dicCode=alarmType';
+  static const String factorReportFactorList = '暂无';
 }
