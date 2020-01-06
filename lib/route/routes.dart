@@ -36,6 +36,7 @@ class Routes {
     router.define(adminHome, handler: adminHomeHandler, transitionType: TransitionType.native);
     router.define('$enterHome/:id', handler: enterHomeHandler, transitionType: TransitionType.native);
     router.define(operationHome, handler: operationHomeHandler, transitionType: TransitionType.native);
+    router.define(enterList, handler: enterListHandler, transitionType: TransitionType.native);
     router.define('$enterDetail/:id', handler: enterDetailHandler, transitionType: TransitionType.native);
     router.define(dischargeList, handler: dischargeListHandler, transitionType: TransitionType.native);
     router.define('$dischargeDetail/:id', handler: dischargeDetailHandler, transitionType: TransitionType.native);
@@ -49,8 +50,8 @@ class Routes {
     router.define('$factorReportDetail/:id', handler: factorReportDetailHandler, transitionType: TransitionType.native);
     router.define(longStopReportList, handler: longStopReportListHandler, transitionType: TransitionType.native);
     router.define('$longStopReportDetail/:id', handler: longStopReportDetailHandler, transitionType: TransitionType.native);
-    router.define('$dischargeReportUpload/:id', handler: dischargeReportUploadHandler, transitionType: TransitionType.native);
-    router.define('$factorReportUpload/:id', handler: factorReportUploadHandler, transitionType: TransitionType.native);
+    router.define('$dischargeReportUpload', handler: dischargeReportUploadHandler, transitionType: TransitionType.native);
+    router.define('$factorReportUpload', handler: factorReportUploadHandler, transitionType: TransitionType.native);
     router.define('$longStopReportUpload/:id', handler: longStopReportUploadHandler, transitionType: TransitionType.native);
     router.define(licenseList, handler: licenseListHandler, transitionType: TransitionType.native);
   }

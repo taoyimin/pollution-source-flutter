@@ -77,6 +77,7 @@ var enterListHandler = Handler(
   String state = params['state']?.first ?? '';
   String enterType = params['enterType']?.first ?? '';
   String attentionLevel = params['attentionLevel']?.first ?? '';
+  int type = int.parse(params['type']?.first ?? '0');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: EnterListRepository()),
@@ -85,6 +86,7 @@ var enterListHandler = Handler(
       state: state,
       enterType: enterType,
       attentionLevel: attentionLevel,
+      type: type,
     ),
   );
 });
@@ -273,7 +275,7 @@ var longStopReportDetailHandler = Handler(
 
 var dischargeReportUploadHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['id']?.first;
+  String enterId = params['enterId']?.first;
   return MultiBlocProvider(
     providers: [
       BlocProvider<UploadBloc>(
@@ -290,7 +292,7 @@ var dischargeReportUploadHandler = Handler(
 
 var factorReportUploadHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['id']?.first;
+  String enterId = params['enterId']?.first;
   return MultiBlocProvider(
     providers: [
       BlocProvider<UploadBloc>(
