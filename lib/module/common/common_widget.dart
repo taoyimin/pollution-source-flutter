@@ -1200,7 +1200,7 @@ class AttachmentWidget extends StatelessWidget {
             );
             pr.show();
             await FileDioUtils.instance.getDio().download(
-                "http://59.63.215.113:8090/FileServer/file?timestamp=20191202163054&access_token=009ab1b60c3cbc32ff1b61582b5862dc4816317852d9a0a803b499a673ee6ff1016e6b9ffb168030af557b6cb0ce38cc79dc947f6faad207c2f94d9d91bc03bf83259b0c032a3aa7b49aa240b24caadc8ed3dfe1ee2d7fa91a495c59681e91831780294fe51ab60d4776fd5e77b0077d345909f912c0204a956cb1f82dcdb29a&filename=${attachment.url}",
+                "${attachment.url}",
                 localPath, onReceiveProgress: (int count, int total) {
               pr.update(
                 progress:
@@ -1292,15 +1292,15 @@ class FactorValueWidget extends StatelessWidget {
             children: <Widget>[
               Text(
                 '${chartData.factorName}',
-                style: TextStyle(fontSize: 11),
+                style: TextStyle(fontSize: 11.5),
               ),
               Text(
                 '${chartData.lastValue}',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 11.5),
               ),
               Text(
                 '${chartData.unit}',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 11.5),
               ),
             ],
           ),
@@ -1454,7 +1454,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
           ),
           margin: 20,
           getTitles: (value) {
-            return DateUtil.formatDateMs(value.toInt(), format: 'mm分');
+            return DateUtil.formatDateMs(value.toInt(), format: 'HH时');
           },
         ),
         leftTitles: SideTitles(
@@ -1465,10 +1465,10 @@ class LineChartWidgetState extends State<LineChartWidget> {
             fontSize: 14,
           ),
           getTitles: (value) {
-            //间隔大于等于1时，Y轴坐标不保留小数位，小于1时，保留一位小数
+            //间隔大于等于1时，Y轴坐标不保留小数位，小于1时，保留两位小数
             return yInterval >= 1
                 ? value.toStringAsFixed(0)
-                : value.toStringAsFixed(1);
+                : value.toStringAsFixed(2);
           },
           margin: 20,
           reservedSize: 30,
