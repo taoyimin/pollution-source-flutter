@@ -1,49 +1,162 @@
+import 'package:pollution_source/http/http_api.dart';
+
+/// 常量类
 class Constant {
   /// debug开关，上线需要关闭
-  /// App运行在Release环境时，inProduction为true；当App运行在Debug和Profile环境时，inProduction为false
+  /// App运行在Release环境时，inProduction为true；
+  /// 当App运行在Debug和Profile环境时，inProduction为false
   static const bool inProduction =
       const bool.fromEnvironment("dart.vm.product");
 
-  static const String requestHeaderTokenKey = 'token';
-  static const String responseCodeKey = 'code';
-  static const String responseMessageKey = 'message';
-  static const String responseDataKey = 'data';
-  static const String responseListKey = 'list';
-  /// python用这个
-  static const String responseCurrentPageKey = 'currentPage';
-  /// java用这个
-  static const String responsePageNumKey = 'pageNum';
-  static const String responsePageSizeKey = 'pageSize';
-  /// python用这个
-  static const String responseHasNextKey = 'hasNext';
-  /// java用这个
-  static const String responseHasNextPageKey = 'hasNextPage';
-  static const String responseTotalKey = 'total';
-  static const String responseTokenKey = 'token';
+  /// ****************app的一些默认配置***************
+  /// 污染源系统是否默认使用java后台
+  static const bool defaultUseJavaApi = true;
 
+  /// 请求列表时默认页数
   static const int defaultCurrentPage = 1;
+
+  /// 请求列表时默认每页数据量
   static const int defaultPageSize = 20;
 
-  static const String spUsername = 'username';
-  static const String spPassword = 'password';
-  static const String spUserType = 'userType';
-  static const String spToken = 'token';
-  static const String spIsCurved = 'isCurved';
-  static const String spShowDotData = 'showDotData';
-  static const String spJavaApi = 'javaApi';
+  /// ****************网络请求用的key***************
+  /// Java接口header中token的key
+  static const String requestHeaderTokenKey = 'token';
 
+  /// Python接口header中token的key
+  static const String requestHeaderAuthorizationKey = 'Authorization';
+
+  /// 运维登录接口中取token的key
+  static const String requestHeaderauthorizationKey = 'authorization';
+
+  /// ****************解析接口数据用的key***************
+  /// 解析返回数据用的key
+  static const String responseCodeKey = 'code';
+  static const String responseMessageKey = 'message';
+  static const String responseSuccessKey = 'success';
+  static const String responseDataKey = 'data';
+  static const String responseIdKey = 'id';
+  static const String responseEnterIdKey = 'enterId';
+
+  /// 解析list用的key
+  static const String responseListKey = 'list';
+  static const String responseTotalKey = 'total';
+  static const String responsePageSizeKey = 'pageSize';
+
+  /// 解析python后台返回的list用这个key
+  static const String responseCurrentPageKey = 'currentPage';
+  static const String responseHasNextKey = 'hasNext';
+
+  /// 解析java后台返回的list用这个key
+  static const String responsePageNumKey = 'pageNum';
+  static const String responseHasNextPageKey = 'hasNextPage';
+
+  /// 解析运维后台返回的list用这个key
+  static const String responseRecordsTotalKey = 'recordsTotal';
+  static const String responseStartKey = 'start';
+  static const String responseLengthKey = 'length';
+
+  /// 解析返回数据中token用的key
+  static const String responseTokenKey = 'token';
+
+  /// *********SharedPreferences存取数据用的key*********
+  /// 存取登录用户名的key
+  //static const String spUsername = 'username';
+
+  /// 存取登录密码的key
+  //static const String spPassword = 'password';
+
+  /// 登录接口集合
+  static const List<HttpApi> loginApis = [
+    HttpApi.adminToken,
+    HttpApi.enterToken,
+    HttpApi.operationToken
+  ];
+
+  /// 存取环保用户登录用户名的key
+  static const String spAdminUsername = 'adminUsername';
+
+  /// 存取环保用户登录密码的key
+  static const String spAdminPassword = 'adminPassword';
+
+  /// 存取企业用户登录用户名的key
+  static const String spEnterUsername = 'enterUsername';
+
+  /// 存取企业用户登录密码的key
+  static const String spEnterPassword = 'enterPassword';
+
+  /// 存取运维用户登录用户名的key
+  static const String spOperationUsername = 'operationUsername';
+
+  /// 存取运维用户登录密码的key
+  static const String spOperationPassword = 'operationPassword';
+
+  /// 登录用户名key集合
+  static const List<String> spUsernameList = [
+    Constant.spAdminUsername,
+    Constant.spEnterUsername,
+    Constant.spOperationUsername
+  ];
+
+  /// 登录密码key集合
+  static const List<String> spPasswordList = [
+    Constant.spAdminPassword,
+    Constant.spEnterPassword,
+    Constant.spOperationPassword
+  ];
+
+  /// 存取登录用户类型的key
+  static const String spUserType = 'userType';
+
+  /// 存取登录用户token的key
+  static const String spToken = 'token';
+
+  /// 存取在线数据图表是否为曲线的key
+  static const String spIsCurved = 'isCurved';
+
+  /// 存取在线数据图表是否显示数据点的key
+  static const String spShowDotData = 'showDotData';
+
+  /// 存取污染源系统是否使用java后台的key
+  static const String spUseJavaApi = 'useJavaApi';
+
+  /// *********环保用户首页取数据用的key*********
+  /// aqi统计
   static const String aqiStatisticsKey = '10';
+
+  /// pm2.5考核
   static const String pm25ExamineKey = '20';
+
+  /// api考核
   static const String aqiExamineKey = '21';
+
+  /// 国控断面地表水统计
   static const String stateWaterKey = '30';
+
+  /// 省控断面地表水统计
   static const String provinceWaterKey = '31';
+
+  /// 市控断面地表水统计
   static const String countyWaterKey = '32';
+
+  /// 饮用水断面地表水统计
   static const String waterWaterKey = '33';
+
+  /// 金属断面地表水统计
   static const String metalWaterKey = '34';
+
+  /// 污染源企业概况
   static const String pollutionEnterStatisticsKey = '40';
+
+  /// 雨水企业概况
   static const String rainEnterStatisticsKey = '50';
+
+  /// 代办任务统计
   static const String todoTaskStatisticsKey = '60';
+
+  /// 在线监控点概况
   static const String onlineMonitorStatisticsKey = '70';
+
+  /// 综合统计信息
   static const String comprehensiveStatisticsKey = '80';
 }
 
