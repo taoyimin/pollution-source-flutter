@@ -22,3 +22,20 @@ class DataDictRepository {
     }).toList();
   }
 }
+//abstract class DataDictRepository<T> {
+//  Future<List<T>> request(
+//      {Map<String, dynamic> params, CancelToken cancelToken}) async {
+//    Response response = await CompatUtils.getDio().get(
+//      '${CompatUtils.getApi(createApi())}',
+//      queryParameters: params,
+//      cancelToken: cancelToken,
+//    );
+//    return response.data[Constant.responseDataKey].map<T>((json) {
+//      return fromJson(json);
+//    }).toList();
+//  }
+//
+//  HttpApi createApi();
+//
+//  T fromJson(json);
+//}

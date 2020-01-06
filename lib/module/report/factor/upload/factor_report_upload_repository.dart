@@ -8,13 +8,14 @@ import 'package:pollution_source/module/report/factor/upload/factor_report_uploa
 
 class FactorReportUploadRepository
     extends UploadRepository<FactorReportUpload, String> {
-
   checkData(FactorReportUpload data) {
-    if (data.enterId.isEmpty)
-      throw DioError(error: InvalidParamException('企业Id为空'));
-    if (data.discharge == null || data.discharge.dischargeId.isEmpty)
+    if (data.enter == null)
+      throw DioError(error: InvalidParamException('请选择企业'));
+    //if (data.discharge == null || data.discharge?.dischargeId == null)
+    if(data.discharge == null)
       throw DioError(error: InvalidParamException('请选择排口'));
-    if (data.monitor == null || data.monitor.monitorId.isEmpty)
+    //if (data.monitor == null || data.monitor.monitorId.isEmpty)
+    if(data.monitor == null)
       throw DioError(error: InvalidParamException('请选择监控点'));
     if (data.alarmType == null)
       throw DioError(error: InvalidParamException('请选择异常类型'));
@@ -36,13 +37,14 @@ class FactorReportUploadRepository
   @override
   Future<FormData> createFormData(FactorReportUpload data) async {
     return FormData.fromMap({
-      'enterId': data.enterId,
+      'enterId': data.enter.enterId,
       'dischargeId': data.discharge.dischargeId,
+      'outId': data.discharge.dischargeId,
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
       'alarmType': data.alarmType.code,
-      'factorCode': data.factorCode.map((dataDict)=> dataDict.code).join(','),
+      'factorCode': data.factorCode.map((dataDict) => dataDict.code).join(','),
       'exceptionReason': data.exceptionReason,
       "file": await Future.wait(data.attachments?.map((asset) async {
             return await MultipartFile.fromFile(await asset.filePath,

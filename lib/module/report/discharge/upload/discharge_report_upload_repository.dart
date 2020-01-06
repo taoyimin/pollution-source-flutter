@@ -10,11 +10,13 @@ class DischargeReportUploadRepository
     extends UploadRepository<DischargeReportUpload, String> {
   @override
   checkData(DischargeReportUpload data) {
-    if (data.enterId.isEmpty)
-      throw DioError(error: InvalidParamException('企业Id为空'));
-    if (data.discharge == null || data.discharge.dischargeId.isEmpty)
+    if (data.enter == null)
+      throw DioError(error: InvalidParamException('请选择企业'));
+    //if (data.discharge == null || data.discharge.dischargeId.isEmpty)
+    if (data.discharge == null)
       throw DioError(error: InvalidParamException('请选择排口'));
-    if (data.monitor == null || data.monitor.monitorId.isEmpty)
+    //if (data.monitor == null || data.monitor.monitorId.isEmpty)
+    if (data.monitor == null)
       throw DioError(error: InvalidParamException('请选择监控点'));
     if (data.stopType == null)
       throw DioError(error: InvalidParamException('请选择停产类型'));
@@ -34,8 +36,9 @@ class DischargeReportUploadRepository
   @override
   Future<FormData> createFormData(DischargeReportUpload data) async {
     return FormData.fromMap({
-      'enterId': data.enterId,
+      'enterId': data.enter.enterId,
       'dischargeId': data.discharge.dischargeId,
+      'outId': data.discharge.dischargeId,
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
