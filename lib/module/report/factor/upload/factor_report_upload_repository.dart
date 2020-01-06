@@ -11,10 +11,8 @@ class FactorReportUploadRepository
   checkData(FactorReportUpload data) {
     if (data.enter == null)
       throw DioError(error: InvalidParamException('请选择企业'));
-    //if (data.discharge == null || data.discharge?.dischargeId == null)
     if(data.discharge == null)
       throw DioError(error: InvalidParamException('请选择排口'));
-    //if (data.monitor == null || data.monitor.monitorId.isEmpty)
     if(data.monitor == null)
       throw DioError(error: InvalidParamException('请选择监控点'));
     if (data.alarmType == null)
