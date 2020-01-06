@@ -54,7 +54,7 @@ class SystemUtils {
         ),
       );
     } on NoImagesSelectedException {
-      Toast.show('没有选择任何图片');
+      //Toast.show('没有选择任何图片');
       return selectedAssets;
     } on Exception catch (e) {
       Toast.show('选择图片错误！错误信息：$e');

@@ -32,7 +32,7 @@ class CompatUtils {
   }
 
   /// 根据不同用户类型设置请求的token
-  static setToken(options) {
+  static setToken(Options options) {
     String accessToken = SpUtil.getString(Constant.spToken);
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
@@ -46,8 +46,9 @@ class CompatUtils {
               'Bearer $accessToken';
         break;
       case 2:
-        //TODO 运维用户
-        options.headers[Constant.requestHeaderTokenKey] = accessToken;
+        // 运维用户
+        options.headers[Constant.requestHeaderAuthorizationKey] =
+            '$accessToken';
         break;
       default:
         throw Exception(
@@ -58,13 +59,11 @@ class CompatUtils {
   /// 根据不同的用户类型解析json中的token
   static String getResponseToken(Response response) {
     if (response == null)
-      throw DioError(
-          error: TokenException('刷新Token失败！response为空！'));
-    ;
+      throw DioError(error: TokenException('刷新Token失败！response为空！'));
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-        //环保和企业用户
+        //环保和企业用户登录后去返回数据中取token
         if (SpUtil.getBool(Constant.spUseJavaApi,
             defValue: Constant.defaultUseJavaApi)) {
           if (response.statusCode == ExceptionHandle.success &&
@@ -75,7 +74,7 @@ class CompatUtils {
           } else {
             throw DioError(
                 error: TokenException(
-                    '刷新Token失败！response=${response.toString()}'));
+                    '获取Token失败！response=${response.toString()}'));
           }
         } else {
           if (response.statusCode == ExceptionHandle.success) {
@@ -83,34 +82,36 @@ class CompatUtils {
           } else {
             throw DioError(
                 error: TokenException(
-                    '刷新Token失败！response=${response.toString()}'));
+                    '获取Token失败！response=${response.toString()}'));
           }
         }
         break;
       case 2:
-        //TODO 运维用户
-        if (response.statusCode == ExceptionHandle.success) {
-          return response.data[Constant.responseTokenKey];
+        // 运维用户登录后去header中取token
+        if (response.data[Constant.responseSuccessKey]) {
+          return response.headers.map[Constant.requestHeaderauthorizationKey]
+              [0];
         } else {
           throw DioError(
               error:
-                  TokenException('刷新Token失败！response=${response.toString()}'));
+                  TokenException('获取Token失败！response=${response.toString()}'));
         }
         break;
       default:
         throw Exception(
-            '获取数据失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+            '获取Token失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
   }
 
-  /// 企业用户登录时，根据不同用户类型解析enterId
+  /// 企业用户登录时，根据不同用户类型解析response中的enterId
   static getResponseEnterId(response) {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 1:
-      //企业用户
+        //企业用户
         if (SpUtil.getBool(Constant.spUseJavaApi,
             defValue: Constant.defaultUseJavaApi))
-          return response.data[Constant.responseDataKey][Constant.responseIdKey];
+          return response.data[Constant.responseDataKey]
+              [Constant.responseIdKey];
         else
           return response.data[Constant.responseEnterIdKey];
         break;
@@ -121,7 +122,7 @@ class CompatUtils {
   }
 
   /// 根据不同的用户类型解析json中的data（有的数据最外层包了一层code，message，data）
-  static Map<String, dynamic> getResponseData(Response response) {
+  static dynamic getResponseData(Response response) {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
@@ -133,11 +134,103 @@ class CompatUtils {
           return response.data;
         break;
       case 2:
-        //TODO 运维用户
-        return response.data;
+        return response.data[Constant.responseDataKey];
       default:
         throw Exception(
             '获取数据失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型解析json中list的json数组
+  static dynamic getList(Map<String, dynamic> json) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+        // 环保和企业用户
+        return json[Constant.responseListKey];
+      case 2:
+        // 运维用户
+        return json[Constant.responseDataKey];
+      default:
+        throw Exception(
+            '获取List失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型解析json中list的total
+  static int getTotal(Map<String, dynamic> json) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+        // 环保和企业用户
+        return json[Constant.responseTotalKey];
+      case 2:
+        // 运维用户
+        return json[Constant.responseRecordsTotalKey];
+      default:
+        throw Exception(
+            '获取Total失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型解析json中list的pageSize
+  static int getPageSize(Map<String, dynamic> json) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+        // 环保和企业用户
+        return json[Constant.responsePageSizeKey];
+      case 2:
+        // 运维用户
+        return json[Constant.responseLengthKey];
+      default:
+        throw Exception(
+            '获取PageSize失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型解析json中list的hasNextPage
+  static bool getHasNextPage(Map<String, dynamic> json) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+        // 环保和企业用户
+        if (SpUtil.getBool(Constant.spUseJavaApi,
+            defValue: Constant.defaultUseJavaApi))
+          return json[Constant.responseHasNextPageKey];
+        else
+          return json[Constant.responseHasNextKey];
+        break;
+      case 2:
+        return json[Constant.responseStartKey] +
+                json[Constant.responseLengthKey] <
+            json[Constant.responseRecordsTotalKey];
+      default:
+        throw Exception(
+            '获取HasNextPage失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型解析json中list的currentPage
+  static int getCurrentPage(Map<String, dynamic> json) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+        // 环保和企业用户
+        if (SpUtil.getBool(Constant.spUseJavaApi,
+            defValue: Constant.defaultUseJavaApi))
+          return json[Constant.responsePageNumKey];
+        else
+          return json[Constant.responseCurrentPageKey];
+        break;
+      case 2:
+        // 运维用户（向下取整加1）
+        return json[Constant.responseStartKey] ~/
+                json[Constant.responseLengthKey] +
+            1;
+      default:
+        throw Exception(
+            '获取CurrentPage失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
   }
 
@@ -303,14 +396,20 @@ class CompatUtils {
         return HttpApiOperation.orderList;
       case HttpApi.orderDetail:
         return HttpApiOperation.orderDetail;
+      case HttpApi.processesUpload:
+        return HttpApiOperation.processesUpload;
       case HttpApi.dischargeReportList:
         return HttpApiOperation.dischargeReportList;
       case HttpApi.dischargeReportDetail:
         return HttpApiOperation.dischargeReportDetail;
+      case HttpApi.dischargeReportUpload:
+        return HttpApiOperation.dischargeReportUpload;
       case HttpApi.factorReportList:
         return HttpApiOperation.factorReportList;
       case HttpApi.factorReportDetail:
         return HttpApiOperation.factorReportDetail;
+      case HttpApi.factorReportUpload:
+        return HttpApiOperation.factorReportUpload;
       case HttpApi.longStopReportList:
         return HttpApiOperation.longStopReportList;
       case HttpApi.longStopReportDetail:
@@ -319,6 +418,12 @@ class CompatUtils {
         return HttpApiOperation.licenseList;
       case HttpApi.licenseDetail:
         return HttpApiOperation.licenseDetail;
+      case HttpApi.dischargeReportStopTypeList:
+        return HttpApiOperation.dischargeReportStopTypeList;
+      case HttpApi.factorReportAlarmTypeList:
+        return HttpApiOperation.factorReportAlarmTypeList;
+      case HttpApi.factorReportFactorList:
+        return HttpApiOperation.factorReportFactorList;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
