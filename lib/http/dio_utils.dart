@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:pollution_source/http/intercept.dart';
 import 'package:pollution_source/res/constant.dart';
-import 'intercept.dart';
 
-//Dio工具类，使用单例模式
+/// Dio工具类，使用单例模式
+///
+/// 用于访问污染源Python后台接口
+/// debug地址：http://taoyimin.iok.la:58213/api/
 class PythonDioUtils {
   static final PythonDioUtils _singleton = PythonDioUtils._internal();
 
@@ -24,27 +27,21 @@ class PythonDioUtils {
       receiveTimeout: 15000,
       responseType: ResponseType.json,
       validateStatus: (status) {
-        // http响应状态码被dio视为请求成功
         return true;
       },
-      //debug
-      //baseUrl: 'http://taoyimin.iok.la:58213/api/',
       baseUrl: 'http://118.89.20.44:80/api/',
     );
     _dio = Dio(options);
-    /// 统一添加身份验证请求头
     _dio.interceptors.add(AuthInterceptor());
-    /// 刷新Token
     _dio.interceptors.add(TokenInterceptor());
-    /// 处理异常
     _dio.interceptors.add(HandleErrorInterceptor());
-    /// 打印Log(生产模式去除)
-    if (!Constant.inProduction) {
-      _dio.interceptors.add(LoggingInterceptor());
-    }
+    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
   }
 }
 
+/// Dio工具类，使用单例模式
+///
+/// 用于访问污染源Java后台接口
 class JavaDioUtils {
   static final JavaDioUtils _singleton = JavaDioUtils._internal();
 
@@ -66,26 +63,58 @@ class JavaDioUtils {
       receiveTimeout: 15000,
       responseType: ResponseType.json,
       validateStatus: (status) {
-        // http响应状态码被dio视为请求成功
         return true;
       },
       baseUrl: 'http://182.106.189.190:9999/',
-      //baseUrl: SpUtil.getBool(Constant.spJavaApi, defValue: true) ? 'http://182.106.189.190:9999/' : 'http://182.106.189.190:5000/api/',
     );
     _dio = Dio(options);
-    /// 统一添加身份验证请求头
     _dio.interceptors.add(AuthInterceptor());
-    /// 刷新Token
     _dio.interceptors.add(TokenInterceptor());
-    /// 处理异常
     _dio.interceptors.add(HandleErrorInterceptor());
-    /// 打印Log(生产模式去除)
-    if (!Constant.inProduction) {
-      _dio.interceptors.add(LoggingInterceptor());
-    }
+    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
   }
 }
 
+/// Dio工具类，使用单例模式
+///
+/// 用于访问运维后台接口
+class OperationDioUtils {
+  static final OperationDioUtils _singleton = OperationDioUtils._internal();
+
+  static OperationDioUtils get instance => OperationDioUtils();
+
+  factory OperationDioUtils() {
+    return _singleton;
+  }
+
+  static Dio _dio;
+
+  Dio getDio() {
+    return _dio;
+  }
+
+  OperationDioUtils._internal() {
+    var options = BaseOptions(
+      connectTimeout: 15000,
+      receiveTimeout: 15000,
+      responseType: ResponseType.json,
+      validateStatus: (status) {
+        return true;
+      },
+      baseUrl: 'http://192.168.253.3:8001/',
+    );
+    _dio = Dio(options);
+    _dio.interceptors.add(AuthInterceptor());
+    _dio.interceptors.add(TokenInterceptor());
+    _dio.interceptors.add(HandleErrorInterceptor());
+    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
+  }
+}
+
+/// 访问文件Dio工具类
+///
+/// 使用单例工厂模式，去除了[BaseOptions]中[baseUrl]的配置
+/// 和[AuthInterceptor],[TokenInterceptor]两个拦截器
 class FileDioUtils {
   static final FileDioUtils _singleton = FileDioUtils._internal();
 
@@ -107,16 +136,11 @@ class FileDioUtils {
       receiveTimeout: 15000,
       responseType: ResponseType.json,
       validateStatus: (status) {
-        // http响应状态码被dio视为请求成功
         return true;
       },
     );
     _dio = Dio(options);
-    /// 处理异常
-    _dio.interceptors.add(HandleErrorInterceptor());
-    /// 打印Log(生产模式去除)
-    if (!Constant.inProduction) {
-      _dio.interceptors.add(LoggingInterceptor());
-    }
+    //_dio.interceptors.add(HandleErrorInterceptor());
+    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
   }
 }

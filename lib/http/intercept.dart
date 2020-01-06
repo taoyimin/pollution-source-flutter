@@ -1,175 +1,141 @@
 import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
+import 'package:pollution_source/module/login/login_repository.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/compat_utils.dart';
 import 'package:pollution_source/util/log_utils.dart';
 
 import 'http.dart';
 
-//给request添加身份验证
+/// 认证拦截器
+///
+/// 统一给所有request添加身份验证
 class AuthInterceptor extends Interceptor {
   @override
   onRequest(RequestOptions options) {
-    String accessToken = SpUtil.getString(Constant.spToken);
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      if (accessToken.isNotEmpty) {
-        options.headers[Constant.requestHeaderTokenKey] = accessToken;
-      }
-    } else {
-      if (accessToken.isNotEmpty) {
-        options.headers['Authorization'] = accessToken;
-      }
-    }
+    CompatUtils.setToken(options);
     return super.onRequest(options);
   }
 }
 
-//自动刷新token
+/// 自动刷新Token拦截器
+///
+/// 若状态码为401，则自动刷新token，并自动重新进行请求
 class TokenInterceptor extends Interceptor {
-  Dio _tokenDio = Dio();
+  Dio _tokenDio;
 
-  //由于没有刷新token接口，所以这里调用登录接口获取token
-  Future<String> getToken() async {
-    try {
-      if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-        _tokenDio.options = JavaDioUtils.instance.getDio().options;
-        var response = await _tokenDio.get(HttpApiJava.login, queryParameters: {
-          'userName': SpUtil.getString(Constant.spUsername),
-          'password': SpUtil.getString(Constant.spPassword)
-        });
-        if (response.statusCode == ExceptionHandle.success &&
-            response.data[Constant.responseCodeKey] ==
-                ExceptionHandle.success_code) {
-          return response.data[Constant.responseDataKey]
-              [Constant.responseTokenKey];
-        } else {
-          throw DioError(
-              error:
-                  TokenException('刷新Token失败！response=${response.toString()}'));
-        }
-      } else {
-        _tokenDio.options = PythonDioUtils.instance.getDio().options;
-        var response = await _tokenDio.post(HttpApiPython.token, data: {
-          'userName': SpUtil.getString(Constant.spUsername),
-          'passWord': SpUtil.getString(Constant.spPassword)
-        });
-        if (response.statusCode == ExceptionHandle.success) {
-          return response.data[Constant.responseTokenKey];
-        } else {
-          throw DioError(
-              error:
-                  TokenException('刷新Token失败！response=${response.toString()}'));
-        }
-      }
-    } catch (e) {
-      throw DioError(error: TokenException('刷新Token失败！错误信息:$e'));
-    }
+  TokenInterceptor() {
+    _tokenDio = Dio();
+    // 加上异常处理和日志拦截器
+    _tokenDio.interceptors.add(HandleErrorInterceptor());
+    if (!Constant.inProduction)
+      _tokenDio.interceptors.add(LoggingInterceptor());
   }
 
   @override
   onResponse(Response response) async {
-    //401代表token过期
     if (response != null &&
         response.statusCode == ExceptionHandle.unauthorized) {
       Log.d("----------- 自动刷新Token ------------");
-      Dio dio = SpUtil.getBool(Constant.spJavaApi, defValue: true) ? JavaDioUtils.instance.getDio():PythonDioUtils.instance.getDio();
-      dio.interceptors.requestLock.lock();
-      String accessToken = await getToken(); // 获取新的accessToken
-      Log.e("----------- NewToken: $accessToken ------------");
-      //储存token
-      SpUtil.putString(Constant.spToken, 'Bearer $accessToken');
-      dio.interceptors.requestLock.unlock();
-      if (accessToken != null) {
-        // 重新请求失败接口
-        var request = response.request;
-        request.headers[Constant.requestHeaderTokenKey] = accessToken;
-        try {
-          Log.e("----------- 重新请求接口 ------------");
-
-          /// 避免重复执行拦截器，使用tokenDio
-          var response = await _tokenDio.request(request.path,
-              data: request.data,
-              queryParameters: request.queryParameters,
-              cancelToken: request.cancelToken,
-              options: request,
-              onReceiveProgress: request.onReceiveProgress);
-          return response;
-        } on DioError catch (e) {
-          return e;
-        }
-      }
+      _tokenDio.options = CompatUtils.getDio().options;
+      // 锁住防止请求传入，直到token刷新
+      CompatUtils.getDio().lock();
+      await LoginRepository()
+          .login(
+        userType: SpUtil.getInt(Constant.spUserType),
+        userName: SpUtil.getString(
+            Constant.spUsernameList[SpUtil.getInt(Constant.spUserType)]),
+        passWord: SpUtil.getString(
+            Constant.spPasswordList[SpUtil.getInt(Constant.spUserType)]),
+        dio: _tokenDio,
+      )
+          .then((tokenResponse) {
+        String accessToken = CompatUtils.getResponseToken(tokenResponse);
+        Log.i("----------- NewToken: $accessToken ------------");
+        //储存token
+        SpUtil.putString(Constant.spToken, '$accessToken');
+      }).whenComplete(() {
+        CompatUtils.getDio().unlock();
+      });
+      // 重新请求失败接口
+      RequestOptions options = response.request;
+      CompatUtils.setToken(options);
+      Log.i("----------- 重新请求接口 ------------");
+      //避免重复执行拦截器，使用tokenDio
+      var newResponse = await _tokenDio.request(
+        options.path,
+        data: options.data,
+        queryParameters: options.queryParameters,
+        cancelToken: options.cancelToken,
+        options: options,
+        onReceiveProgress: options.onReceiveProgress,
+      );
+      return newResponse;
     }
     return super.onResponse(response);
   }
 }
 
-//统一处理异常
+/// 异常处理拦截器
+///
+/// 统一处理异常
 class HandleErrorInterceptor extends Interceptor {
   @override
   onResponse(Response response) {
-    if (SpUtil.getBool(Constant.spJavaApi, defValue: true)) {
-      if (response != null &&
-          response.statusCode == ExceptionHandle.success &&
-          response.data[Constant.responseCodeKey] ==
-              ExceptionHandle.success_code) {
-        //状态码200且服务器处理成功
+    if (response != null && response.statusCode == ExceptionHandle.success) {
+      // 状态码200（如果response中有code或success还需要判断code是否为success_code，success是否为true）
+      if (response.data is Map &&
+              response.data.containsKey(Constant.responseCodeKey)
+          ? response.data[Constant.responseCodeKey] ==
+              ExceptionHandle.success_code
+          : true && response.data.containsKey(Constant.responseSuccessKey)
+              ? response.data[Constant.responseSuccessKey]
+              : true)
+        // 状态码200服务器处理成功
         return super.onResponse(response);
-      } else if (response != null &&
-          response.statusCode == ExceptionHandle.not_found) {
-        //状态码404
-        throw DioError(
-            error: NotFoundException(
-                '404错误,错误接口${response.request.uri.toString()}'));
-      } else if (response != null &&
-          response.statusCode == ExceptionHandle.server_error) {
-        //状态码500
+      else
+        // 状态码200但服务器处理失败
         throw DioError(
             error: ServerErrorException(
-                '500错误,错误接口:${response.request.uri.toString()}\nresponse=${response.toString()}'));
-      } else if (response != null &&
-          response.statusCode == ExceptionHandle.success &&
-          response.data[Constant.responseCodeKey] ==
-              ExceptionHandle.fail_code) {
-        //状态码200但服务器处理失败
-        throw DioError(
-            error: ServerErrorException(
-                '服务器内部错误,错误信息:${response.data[Constant.responseMessageKey]}'));
-      } else {
-        throw DioError(
-            error: UnKnownException('未知错误,response=${response.toString()}'));
-      }
+                '服务器处理错误,错误信息:response=${response.toString()}'));
+    } else if (response != null &&
+        response.statusCode == ExceptionHandle.bad_request) {
+      // 状态码400
+      throw DioError(
+          error: BadRequestException(response.data is Map &&
+                  response.data.containsKey(Constant.responseMessageKey)
+              ? '${response.data[Constant.responseMessageKey]}'
+              : '400错误,错误接口:${response.request.uri.toString()}'));
+    } else if (response != null &&
+        response.statusCode == ExceptionHandle.unauthorized) {
+      // 状态码401
+      throw DioError(
+          error: UnauthorizedException(
+              '401错误，认证失败:response=${response.toString()}'));
+    } else if (response != null &&
+        response.statusCode == ExceptionHandle.not_found) {
+      // 状态码404
+      throw DioError(
+          error: NotFoundException(response.data is Map &&
+                  response.data.containsKey(Constant.responseMessageKey)
+              ? '${response.data[Constant.responseMessageKey]}'
+              : '404错误,错误接口:${response.request.uri.toString()}'));
+    } else if (response != null &&
+        response.statusCode == ExceptionHandle.server_error) {
+      // 状态码500
+      throw DioError(
+          error: ServerErrorException(
+              '500错误,错误接口:${response.request.uri.toString()}\nresponse=${response.toString()}'));
     } else {
-      if (response != null && response.statusCode == ExceptionHandle.success) {
-        //状态码200
-        return super.onResponse(response);
-      } else if (response != null &&
-          response.statusCode == ExceptionHandle.bad_request) {
-        //状态码400
-        throw DioError(
-            error: BadRequestException(
-                '${response.data[Constant.responseMessageKey]}'));
-      } else if (response != null &&
-          response.statusCode == ExceptionHandle.not_found) {
-        //状态码404
-        throw DioError(
-            error: NotFoundException(response.data is Map &&
-                    response.data.containsKey(Constant.responseMessageKey)
-                ? '${response.data[Constant.responseMessageKey]}'
-                : '404错误,错误接口:${response.request.uri.toString()}'));
-      } else if (response != null &&
-          response.statusCode == ExceptionHandle.server_error) {
-        //状态码500
-        throw DioError(
-            error: ServerErrorException(
-                '500错误,错误接口:${response.request.uri.toString()}\nresponse=${response.toString()}'));
-      } else {
-        throw DioError(
-            error: UnKnownException('未知错误,response=${response.toString()}'));
-      }
+      throw DioError(
+          error: UnKnownException('未知错误,response=${response.toString()}'));
     }
   }
 }
 
-//打印网络请求日志，生产环境下不添加该拦截器
+/// 日志拦截器
+///
+/// 打印网络请求日志，生产环境下不添加该拦截器
 class LoggingInterceptor extends Interceptor {
   DateTime startTime;
   DateTime endTime;
