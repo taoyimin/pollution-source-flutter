@@ -52,7 +52,7 @@ class Routes {
     router.define('$longStopReportDetail/:id', handler: longStopReportDetailHandler, transitionType: TransitionType.native);
     router.define('$dischargeReportUpload', handler: dischargeReportUploadHandler, transitionType: TransitionType.native);
     router.define('$factorReportUpload', handler: factorReportUploadHandler, transitionType: TransitionType.native);
-    router.define('$longStopReportUpload/:id', handler: longStopReportUploadHandler, transitionType: TransitionType.native);
+    router.define('$longStopReportUpload', handler: longStopReportUploadHandler, transitionType: TransitionType.native);
     router.define(licenseList, handler: licenseListHandler, transitionType: TransitionType.native);
   }
 }

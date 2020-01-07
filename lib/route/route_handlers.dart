@@ -309,7 +309,7 @@ var factorReportUploadHandler = Handler(
 
 var longStopReportUploadHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['id']?.first;
+  String enterId = params['enterId']?.first;
   return MultiBlocProvider(
     providers: [
       BlocProvider<UploadBloc>(
