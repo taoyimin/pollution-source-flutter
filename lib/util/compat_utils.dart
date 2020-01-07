@@ -141,6 +141,26 @@ class CompatUtils {
     }
   }
 
+  /// 根据不同的用户类型解析json中的message
+  static dynamic getResponseMessage(Response response) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+      //环保和企业用户
+        if (SpUtil.getBool(Constant.spUseJavaApi,
+            defValue: Constant.defaultUseJavaApi))
+          return response.data[Constant.responseMessageKey];
+        else
+          return response.data;
+        break;
+      case 2:
+        return response.data[Constant.responseMsgKey];
+      default:
+        throw Exception(
+            '获取数据失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
   /// 根据不同的用户类型解析json中list的json数组
   static dynamic getList(Map<String, dynamic> json) {
     switch (SpUtil.getInt(Constant.spUserType)) {
