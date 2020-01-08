@@ -21,6 +21,7 @@ import 'package:pollution_source/module/discharge/list/discharge_list_model.dart
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_model.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -53,14 +54,17 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
     // 初始化defaultEnter
     if (!TextUtil.isEmpty(widget.enterId))
       defaultEnter = Enter(enterId: int.parse(widget.enterId));
-    // 初始化Bloc
+    // 初始化页面Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
     // 加载界面
     _pageBloc.add(PageLoad(model: DischargeReportUpload(enter: defaultEnter)));
+    // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
+    // 初始化停产类型Bloc
     _stopTypeBloc = DataDictBloc(
         dataDictRepository:
             DataDictRepository(HttpApi.dischargeReportStopTypeList));
+    // 加载停产类型
     _stopTypeBloc.add(DataDictLoad());
     _stopReasonController = TextEditingController();
   }
@@ -107,7 +111,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
             child: BlocBuilder<PageBloc, PageState>(
               builder: (context, state) {
                 if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model, state);
+                  return _buildPageLoadedDetail(context, state.model);
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -120,8 +124,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(
-      DischargeReportUpload reportUpload, PageLoaded pageLoadedState) {
+  Widget _buildPageLoadedDetail(context, DischargeReportUpload reportUpload) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -135,7 +138,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                     title: '企业名称',
                     content: reportUpload?.enter?.enterName,
                     onTap: () async {
-                      // 打开排口选择界面并等待结果返回
+                      // 打开企业选择界面并等待结果返回
                       Enter enter = await Application.router
                           .navigateTo(context, '${Routes.enterList}?type=1');
                       if (enter != null) {
@@ -162,26 +165,38 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   title: '排口名称',
                   content: reportUpload?.discharge?.dischargeName,
                   onTap: () async {
-                    // 打开排口选择界面并等待结果返回
-                    Discharge discharge = await Application.router.navigateTo(
-                        context,
-                        '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
-                    if (discharge != null) {
-                      // 设置已经选中的排口，重置已经选中的监控点
-                      // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
-                      _pageBloc.add(
-                        PageLoad(
-                          model: DischargeReportUpload(
-                            enter: reportUpload?.enter,
-                            discharge: discharge,
-                            stopType: reportUpload?.stopType,
-                            reportTime: reportUpload?.reportTime,
-                            startTime: reportUpload?.startTime,
-                            endTime: reportUpload?.endTime,
-                            attachments: reportUpload?.attachments,
-                          ),
+                    if (reportUpload?.enter == null) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('请先选择企业！'),
+                          action: SnackBarAction(
+                              label: '我知道了',
+                              textColor: Colours.primary_color,
+                              onPressed: () {}),
                         ),
                       );
+                    } else {
+                      // 打开排口选择界面并等待结果返回
+                      Discharge discharge = await Application.router.navigateTo(
+                          context,
+                          '${Routes.dischargeList}?enterId=${reportUpload?.enter?.enterId}&type=1');
+                      if (discharge != null) {
+                        // 设置已经选中的排口，重置已经选中的监控点
+                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
+                        _pageBloc.add(
+                          PageLoad(
+                            model: DischargeReportUpload(
+                              enter: reportUpload?.enter,
+                              discharge: discharge,
+                              stopType: reportUpload?.stopType,
+                              reportTime: reportUpload?.reportTime,
+                              startTime: reportUpload?.startTime,
+                              endTime: reportUpload?.endTime,
+                              attachments: reportUpload?.attachments,
+                            ),
+                          ),
+                        );
+                      }
                     }
                   },
                 ),
@@ -190,19 +205,31 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   title: '监控点名',
                   content: reportUpload?.monitor?.monitorName,
                   onTap: () async {
-                    // 打开监控点选择界面并等待返回结果
-                    Monitor monitor = await Application.router.navigateTo(
-                        context,
-                        '${Routes.monitorList}?enterId=${widget.enterId}&type=1');
-                    if (monitor != null) {
-                      // 设置选中的监控点
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(
-                            monitor: monitor,
-                          ),
+                    if (reportUpload?.discharge == null) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('请先选择排口！'),
+                          action: SnackBarAction(
+                              label: '我知道了',
+                              textColor: Colours.primary_color,
+                              onPressed: () {}),
                         ),
                       );
+                    } else {
+                      // 打开监控点选择界面并等待返回结果
+                      Monitor monitor = await Application.router.navigateTo(
+                          context,
+                          '${Routes.monitorList}?dischargeId=${reportUpload?.discharge?.dischargeId}&type=1');
+                      if (monitor != null) {
+                        // 设置选中的监控点
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(
+                              monitor: monitor,
+                            ),
+                          ),
+                        );
+                      }
                     }
                   },
                 ),

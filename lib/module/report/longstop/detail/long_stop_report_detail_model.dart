@@ -6,11 +6,15 @@ part 'long_stop_report_detail_model.g.dart';
 //异常申报单详情
 @JsonSerializable()
 class LongStopReportDetail extends Equatable {
-  final String reportId; //排口异常申报ID
-  final String enterId; //企业ID
+  @JsonKey(name: 'id')
+  final int reportId; //排口异常申报ID
+  final int enterId; //企业ID
+  @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名称
+  @JsonKey(name: 'entAddress')
   final String enterAddress; //企业地址
-  final String districtName; //区域
+  final String cityName; // 所属市
+  final String areaName; // 所属区
   final String reportTimeStr; //申报时间
   final String startTimeStr; //开始时间
   final String endTimeStr; //结束时间
@@ -21,7 +25,8 @@ class LongStopReportDetail extends Equatable {
     this.enterId,
     this.enterName,
     this.enterAddress,
-    this.districtName,
+    this.cityName,
+    this.areaName,
     this.reportTimeStr,
     this.startTimeStr,
     this.endTimeStr,
@@ -34,43 +39,20 @@ class LongStopReportDetail extends Equatable {
         enterId,
         enterName,
         enterAddress,
-        districtName,
+        cityName,
+        areaName,
         reportTimeStr,
         startTimeStr,
         endTimeStr,
         remark,
       ];
 
+  String get districtName {
+    return '${cityName??''}${areaName??''}';
+  }
+
   factory LongStopReportDetail.fromJson(Map<String, dynamic> json) =>
       _$LongStopReportDetailFromJson(json);
 
   Map<String, dynamic> toJson() => _$LongStopReportDetailToJson(this);
-
-  /*static LongStopReportDetail fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
-      return LongStopReportDetail(
-        reportId: json['stopApply']['stopApplyId'],
-        enterId: json['stopApply']['enterId'],
-        enterName: json['stopApply']['enterpriseName'],
-        enterAddress: '-',
-        districtName: json['cityName']+json['areaName'],
-        reportTimeStr: json['stopApply']['applayTimeStr'],
-        startTimeStr: json['stopApply']['startTimeStr'],
-        endTimeStr: json['stopApply']['endTimeStr'],
-        remark: json['stopApply']['remark'],
-      );
-    } else {
-      return LongStopReportDetail(
-        reportId: json['reportId'],
-        enterId: json['enterId'],
-        enterName: json['enterName'],
-        enterAddress: json['enterAddress'],
-        districtName: json['districtName'],
-        reportTimeStr: json['reportTimeStr'],
-        startTimeStr: json['startTimeStr'],
-        endTimeStr: json['endTimeStr'],
-        remark: json['remark'],
-      );
-    }
-  }*/
 }

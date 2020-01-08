@@ -18,6 +18,8 @@ class DischargeReportUploadRepository
       throw DioError(error: InvalidParamException('请选择监控点'));
     if (data.stopType == null)
       throw DioError(error: InvalidParamException('请选择停产类型'));
+    if (data.reportTime == null)
+      throw DioError(error: InvalidParamException('请选择申报时间'));
     if (data.startTime == null)
       throw DioError(error: InvalidParamException('请选择开始时间'));
     if (data.endTime == null)
@@ -35,12 +37,14 @@ class DischargeReportUploadRepository
   Future<FormData> createFormData(DischargeReportUpload data) async {
     return FormData.fromMap({
       'enterId': data.enter.enterId,
-      'dischargeId': data.discharge.dischargeId,
       'outId': data.discharge.dischargeId,
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
+      // 污染源系统的停产类型
       'alarmType': data.stopType.code,
+      // 运维系统的停产类型
+      'stopType': data.stopType.code,
       'stopReason': data.stopReason,
       "file": await Future.wait(data.attachments?.map((asset) async {
             return await MultipartFile.fromFile(await asset.filePath,

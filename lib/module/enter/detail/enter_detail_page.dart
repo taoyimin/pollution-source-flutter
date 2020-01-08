@@ -38,13 +38,9 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
     super.dispose();
   }
 
-  //用来显示SnackBar
-  //var _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(

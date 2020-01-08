@@ -194,7 +194,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                           'assets/images/application_icon_longStop_report.png'),
                                   onTap: () {
                                     Application.router.navigateTo(context,
-                                        '${Routes.longStopReportUpload}/${widget.enterId}');
+                                        '${Routes.longStopReportUpload}?enterId=${widget.enterId}');
                                   },
                                 ),
                                 Gaps.hGap20,

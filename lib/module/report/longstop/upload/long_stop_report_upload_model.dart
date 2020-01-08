@@ -1,13 +1,14 @@
 import 'package:equatable/equatable.dart';
+import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 
 class LongStopReportUpload extends Equatable {
-  final String enterId; //企业Id
+  final Enter enter; //企业
   final DateTime startTime; //开始时间
   final DateTime endTime; //结束时间
   final String remark; //备注
 
   const LongStopReportUpload({
-    this.enterId,
+    this.enter,
     this.startTime,
     this.endTime,
     this.remark,
@@ -15,20 +16,20 @@ class LongStopReportUpload extends Equatable {
 
   @override
   List<Object> get props => [
-        enterId,
+        enter,
         startTime,
         endTime,
         remark,
       ];
 
   LongStopReportUpload copyWith({
-    String enterId,
+    Enter enter,
     DateTime startTime,
     DateTime endTime,
     String remark,
   }) {
     return LongStopReportUpload(
-      enterId: enterId ?? this.enterId,
+      enter: enter ?? this.enter,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       remark: remark ?? this.remark,

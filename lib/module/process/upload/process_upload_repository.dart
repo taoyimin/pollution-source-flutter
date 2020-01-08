@@ -28,6 +28,7 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
   Future<FormData> createFormData(ProcessUpload data) async {
     return FormData.fromMap({
       'id': data.orderId,
+      'orderId': data.orderId,
       'operatePerson': data.operatePerson,
       'operateType': data.operateType,
       'operateDesc': data.operateDesc,

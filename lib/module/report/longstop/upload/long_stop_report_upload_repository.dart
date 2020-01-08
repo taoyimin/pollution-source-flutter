@@ -8,8 +8,8 @@ class LongStopReportUploadRepository
     extends UploadRepository<LongStopReportUpload, String> {
   @override
   checkData(LongStopReportUpload data) {
-    if (data.enterId.isEmpty)
-      throw DioError(error: InvalidParamException('企业Id为空'));
+    if (data.enter == null)
+      throw DioError(error: InvalidParamException('请选择企业'));
     if (data.startTime == null)
       throw DioError(error: InvalidParamException('请选择开始时间'));
     if (data.endTime == null)
@@ -26,7 +26,7 @@ class LongStopReportUploadRepository
   @override
   Future<FormData> createFormData(LongStopReportUpload data) async {
     return FormData.fromMap({
-      'enterId': data.enterId,
+      'enterId': data.enter.enterId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
       'remark': data.remark,

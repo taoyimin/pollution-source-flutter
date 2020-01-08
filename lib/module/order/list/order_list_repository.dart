@@ -1,4 +1,3 @@
-import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/order/list/order_list_model.dart';
@@ -19,9 +18,9 @@ class OrderListRepository extends ListRepository<Order> {
   ///
   /// [enterName] 按企业名称搜索
   /// [areaCode] 按区域搜索
-  /// [state] 状态
+  /// [state] 状态 0：全部 1：待督办 2：待处理 3：待审核 4：审核不通过 5：已办结
   /// [enterId] 筛选某企业的所有报警管理单
-  /// [monitorId] 帅选某监控点的所有报警管理单
+  /// [monitorId] 筛选某监控点的所有报警管理单
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -31,24 +30,33 @@ class OrderListRepository extends ListRepository<Order> {
     enterId = '',
     monitorId = '',
   }) {
-    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterpriseName': enterName,
-        'areaCode': areaCode,
-        'status': state,
-      };
-    } else {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterName': enterName,
-        'areaCode': areaCode,
-        'state': state,
-        'enterId': enterId,
-        'monitorId': monitorId,
-      };
-    }
+    return {
+      'currentPage': currentPage,
+      'pageSize': pageSize,
+      'start': (currentPage - 1) * pageSize,
+      'length': pageSize,
+      'enterpriseName': enterName,
+      'areaCode': areaCode,
+      'enterId': enterId,
+      'monitorId': monitorId,
+      'status': state,
+      // 运维系统的状态参数
+      'orderState': () {
+        switch (state) {
+          case '1':
+            return '10';
+          case '2':
+            return '20';
+          case '3':
+            return '30';
+          case '4':
+            return '40';
+          case '5':
+            return '50';
+          default:
+            return '';
+        }
+      }(),
+    };
   }
 }

@@ -21,7 +21,7 @@ class DischargeListRepository extends ListRepository<Discharge> {
   /// [areaCode] 按区域搜索
   /// [enterId] 筛选某企业的所有排口
   /// [dischargeType] 排口类型 outletType1：雨水 outletType2：废水 outletType3：废气
-  /// [state] 排口状态
+  /// [state] 排口状态 （暂时没用）
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -31,26 +31,16 @@ class DischargeListRepository extends ListRepository<Discharge> {
     dischargeType = '',
     state = '',
   }) {
-    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterpriseName': enterName,
-        'areaCode': areaCode,
-        'enterId': enterId,
-        'dischargeType': dischargeType,
-        'state': state,
-      };
-    } else {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterName': enterName,
-        'areaCode': areaCode,
-        'enterId': enterId,
-        'dischargeType': dischargeType,
-        'state': state,
-      };
-    }
+    return {
+      'currentPage': currentPage,
+      'pageSize': pageSize,
+      'start': (currentPage - 1) * pageSize,
+      'length': pageSize,
+      'enterpriseName': enterName,
+      'areaCode': areaCode,
+      'enterId': enterId,
+      'dischargeType': dischargeType,
+      'disOutType': dischargeType,
+    };
   }
 }

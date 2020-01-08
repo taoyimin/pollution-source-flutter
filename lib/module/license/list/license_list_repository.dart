@@ -27,12 +27,16 @@ class LicenseListRepository extends ListRepository<License> {
       return {
         'currentPage': currentPage,
         'pageSize': pageSize,
+        'start': (currentPage - 1) * pageSize,
+        'length': pageSize,
         'enterId': enterId,
       };
     } else {
       return {
         'currentPage': currentPage,
         'pageSize': pageSize,
+        'start': (currentPage - 1) * pageSize,
+        'length': pageSize,
         'enterId': enterId,
       };
     }

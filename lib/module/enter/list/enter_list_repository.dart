@@ -35,6 +35,8 @@ class EnterListRepository extends ListRepository<Enter> {
       return {
         'currentPage': currentPage,
         'pageSize': pageSize,
+        'start': (currentPage - 1) * pageSize,
+        'length': pageSize,
         'enterpriseName': enterName,
         'areaCode': areaCode,
         'state': state == '1' ? 'online' : '',

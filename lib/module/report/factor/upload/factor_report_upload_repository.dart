@@ -34,9 +34,10 @@ class FactorReportUploadRepository
 
   @override
   Future<FormData> createFormData(FactorReportUpload data) async {
+    print(data.alarmType.code);
+    print(data.factorCode.map((dataDict) => dataDict.code).join(','));
     return FormData.fromMap({
       'enterId': data.enter.enterId,
-      'dischargeId': data.discharge.dischargeId,
       'outId': data.discharge.dischargeId,
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),

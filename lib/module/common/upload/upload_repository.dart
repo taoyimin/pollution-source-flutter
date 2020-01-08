@@ -16,7 +16,7 @@ abstract class UploadRepository<T, V> {
         CompatUtils.getApi(createApi()),
         cancelToken: cancelToken,
         data: await createFormData(data));
-    return response.data['message'];
+    return CompatUtils.getResponseMessage(response);
   }
 
   HttpApi createApi();

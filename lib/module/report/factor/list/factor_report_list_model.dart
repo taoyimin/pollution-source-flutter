@@ -38,7 +38,6 @@ class FactorReport extends Equatable {
     this.endTimeStr,
     this.reportTimeStr,
     this.factorCodeStr,
-    //this.labelList,
   });
 
   @override
@@ -53,7 +52,6 @@ class FactorReport extends Equatable {
         endTimeStr,
         reportTimeStr,
         factorCodeStr,
-        //labelList,
       ];
 
   List<Label> get labelList {
@@ -71,36 +69,6 @@ class FactorReport extends Equatable {
       _$FactorReportFromJson(json);
 
   Map<String, dynamic> toJson() => _$FactorReportToJson(this);
-
-  /*static FactorReport fromJson(dynamic json) {
-    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
-      return FactorReport(
-        reportId: json['stopApplyId'].toString(),
-        enterName: json['enterpriseName'],
-        monitorName: json['disMonitorName'],
-        alarmTypeStr: json['stopTypeStr'],
-        districtName: json['cityName']+json['areaName'],
-        startTimeStr: json['startTimeStr'],
-        endTimeStr: json['endTimeStr'],
-        reportTimeStr: json['applayTimeStr'],
-        labelList: TextUtil.isEmpty(json['factorName']) ? const [] : _getLabelList(json['factorName']),
-      );
-    } else {
-      return FactorReport(
-        reportId: json['reportId'],
-        enterName: json['enterName'],
-        monitorName: json['monitorName'],
-        alarmTypeStr: json['alarmTypeStr'],
-        districtName: json['districtName'],
-        startTimeStr: json['startTimeStr'],
-        endTimeStr: json['endTimeStr'],
-        reportTimeStr: json['reportTimeStr'],
-        labelList: TextUtil.isEmpty(json['factorCodeStr'])
-            ? const []
-            : _getLabelList(json['factorCodeStr']),
-      );
-    }
-  }*/
 
   //将异常因子string转化成List
   static List<Label> _getLabelList(String string) {

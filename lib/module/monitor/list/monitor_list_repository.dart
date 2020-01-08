@@ -1,4 +1,3 @@
-import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
@@ -21,8 +20,8 @@ class MonitorListRepository extends ListRepository<Monitor> {
   /// [areaCode] 按区域搜索
   /// [enterId] 筛选某企业的所有监控点
   /// [dischargeId] 筛选某排口的所有监控点
-  /// [monitorType] 监控点类型
-  /// [state] 0：全部 1：在线 2：预警 3：超标 4：脱机 5：离线
+  /// [monitorType] 监控点类型 outletType1：雨水 outletType2：废水 outletType3：废气
+  /// [state] 监控点状态 0：全部 1：在线 2：预警 3：超标 4：脱机 5：离线
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -33,42 +32,32 @@ class MonitorListRepository extends ListRepository<Monitor> {
     monitorType = '',
     state = '',
   }) {
-    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterpriseName': enterName,
-        'areaCode': areaCode,
-        'enterId': enterId,
-        'monitorType': monitorType,
-        'state': () {
-          switch (state) {
-            case '1':
-              return 'online';
-            case '2':
-              return 'warn';
-            case '3':
-              return 'outrange';
-            case '4':
-              return 'offline';
-            case '5':
-              return 'stopline';
-            default:
-              return '';
-          }
-        }(),
-      };
-    } else {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'enterName': enterName,
-        'areaCode': areaCode,
-        'enterId': enterId,
-        'dischargeId': dischargeId,
-        'monitorType': monitorType,
-        'state': state,
-      };
-    }
+    return {
+      'currentPage': currentPage,
+      'pageSize': pageSize,
+      'start': (currentPage - 1) * pageSize,
+      'length': pageSize,
+      'enterpriseName': enterName,
+      'areaCode': areaCode,
+      'enterId': enterId,
+      'outId': dischargeId,
+      'monitorType': monitorType,
+      'state': () {
+        switch (state) {
+          case '1':
+            return 'online';
+          case '2':
+            return 'warn';
+          case '3':
+            return 'outrange';
+          case '4':
+            return 'offline';
+          case '5':
+            return 'stopline';
+          default:
+            return 'all';
+        }
+      }(),
+    };
   }
 }

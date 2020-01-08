@@ -10,15 +10,18 @@ import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
+import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 class LongStopReportUploadPage extends StatefulWidget {
   final String enterId;
 
-  LongStopReportUploadPage({@required this.enterId}) : assert(enterId != null);
+  LongStopReportUploadPage({this.enterId});
 
   @override
   _LongStopReportUploadPageState createState() =>
@@ -30,18 +33,27 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
   UploadBloc _uploadBloc;
   TextEditingController _remarkController;
 
+  /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
+  Enter defaultEnter;
+
   @override
   void initState() {
     super.initState();
-    // 初始化Bloc
+    // 初始化defaultEnter
+    if (!TextUtil.isEmpty(widget.enterId))
+      defaultEnter = Enter(enterId: int.parse(widget.enterId));
+    // 初始化页面Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    _pageBloc.add(PageLoad(model: LongStopReportUpload()));
+    // 加载界面
+    _pageBloc.add(PageLoad(model: LongStopReportUpload(enter: defaultEnter)));
+    // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _remarkController = TextEditingController();
   }
 
   @override
   void dispose() {
+    // 释放资源
     _remarkController.dispose();
     super.dispose();
   }
@@ -98,7 +110,27 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: <Widget>[
-                Gaps.hLine,
+                Offstage(
+                  offstage: widget.enterId != null,
+                  child: SelectRowWidget(
+                    title: '企业名称',
+                    content: reportUpload?.enter?.enterName,
+                    onTap: () async {
+                      // 打开企业选择界面并等待结果返回
+                      Enter enter = await Application.router
+                          .navigateTo(context, '${Routes.enterList}?type=1');
+                      if (enter != null) {
+                        // 设置已经选中的企业
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(enter: enter),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                widget.enterId != null ? Gaps.empty : Gaps.hLine,
                 SelectRowWidget(
                   title: '开始时间',
                   content: DateUtil.formatDate(reportUpload?.startTime,
@@ -158,7 +190,6 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                   onTap: () {
                     _uploadBloc.add(Upload(
                       data: reportUpload.copyWith(
-                        enterId: widget.enterId,
                         remark: _remarkController.text,
                       ),
                     ));

@@ -31,6 +31,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
   void initState() {
     super.initState();
     _monitorDetailBloc = BlocProvider.of<MonitorDetailBloc>(context);
+    // TODO 测试写死monitorId
     _monitorDetailBloc.add(MonitorDetailLoad(monitorId: '10755'));
   }
 

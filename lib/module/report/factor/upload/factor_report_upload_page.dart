@@ -20,6 +20,7 @@ import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
+import 'package:pollution_source/module/report/factor/upload/factor_data_dict_repository.dart';
 import 'package:pollution_source/module/report/factor/upload/factor_report_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -68,7 +69,8 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     _alarmTypeBloc.add(DataDictLoad());
     //初始化异常因子Bloc
     _factorCodeBloc = DataDictBloc(
-        dataDictRepository: DataDictRepository(HttpApi.factorReportFactorList));
+        dataDictRepository:
+            FactorDataDictRepository(HttpApi.factorReportFactorList));
     _exceptionReasonController = TextEditingController();
   }
 
@@ -120,7 +122,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             child: BlocBuilder<PageBloc, PageState>(
               builder: (context, state) {
                 if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model, context);
+                  return _buildPageLoadedDetail(context, state.model);
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -133,7 +135,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(FactorReportUpload reportUpload, context) {
+  Widget _buildPageLoadedDetail(context, FactorReportUpload reportUpload) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -174,28 +176,40 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   title: '排口名称',
                   content: reportUpload?.discharge?.dischargeName,
                   onTap: () async {
-                    // 打开排口选择界面并等待结果返回
-                    Discharge discharge = await Application.router.navigateTo(
-                        context,
-                        '${Routes.dischargeList}?enterId=${widget.enterId}&type=1');
-                    if (discharge != null) {
-                      // 设置已经选中的排口，重置已经选中的监控点，和异常因子
-                      // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
-                      _pageBloc.add(
-                        PageLoad(
-                          model: FactorReportUpload(
-                            enter: reportUpload?.enter,
-                            discharge: discharge,
-                            alarmType: reportUpload?.alarmType,
-                            startTime: reportUpload?.startTime,
-                            endTime: reportUpload?.endTime,
-                            factorCode: List<DataDict>(),
-                            attachments: reportUpload?.attachments,
-                          ),
+                    if (reportUpload?.enter == null) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('请先选择企业！'),
+                          action: SnackBarAction(
+                              label: '我知道了',
+                              textColor: Colours.primary_color,
+                              onPressed: () {}),
                         ),
                       );
-                      // 将异常因子选择控件的状态重置为初始状态
-                      _factorCodeBloc.add(DataDictReset());
+                    } else {
+                      // 打开排口选择界面并等待结果返回
+                      Discharge discharge = await Application.router.navigateTo(
+                          context,
+                          '${Routes.dischargeList}?enterId=${reportUpload?.enter?.enterId}&type=1');
+                      if (discharge != null) {
+                        // 设置已经选中的排口，重置已经选中的监控点，和异常因子
+                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
+                        _pageBloc.add(
+                          PageLoad(
+                            model: FactorReportUpload(
+                              enter: reportUpload?.enter,
+                              discharge: discharge,
+                              alarmType: reportUpload?.alarmType,
+                              startTime: reportUpload?.startTime,
+                              endTime: reportUpload?.endTime,
+                              factorCode: List<DataDict>(),
+                              attachments: reportUpload?.attachments,
+                            ),
+                          ),
+                        );
+                        // 将异常因子选择控件的状态重置为初始状态
+                        _factorCodeBloc.add(DataDictReset());
+                      }
                     }
                   },
                 ),
@@ -218,7 +232,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                       // 打开监控点选择界面并等待返回结果
                       Monitor monitor = await Application.router.navigateTo(
                           context,
-                          '${Routes.monitorList}?enterId=${widget.enterId}&dischargeId=${reportUpload.discharge.dischargeId}&type=1');
+                          '${Routes.monitorList}?dischargeId=${reportUpload?.discharge?.dischargeId}&type=1');
                       if (monitor != null) {
                         // 设置选中的监控点，重置已经选中的异常因子
                         _pageBloc.add(
@@ -230,8 +244,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                           ),
                         );
                         // 选择完监控点后根据监控点类型加载异常因子
-                        _factorCodeBloc.add(DataDictLoad(
-                            params: {'monitorType': monitor.monitorType}));
+                        // 运维系统用monitorId查，污染源系统用monitorType查
+                        _factorCodeBloc.add(DataDictLoad(params: {
+                          'monitorType': monitor.monitorType,
+                          'monitorId': monitor.monitorId
+                        }));
                       }
                     }
                   },

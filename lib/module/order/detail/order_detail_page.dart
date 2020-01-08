@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -15,10 +16,10 @@ import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/order/detail/order_detail_model.dart';
 import 'package:pollution_source/module/process/upload/process_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
-import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/git_dialog.dart';
 import 'package:pollution_source/widget/custom_header.dart';
@@ -128,7 +129,16 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                   ),
                 );
               } else if (state is UploadSuccess) {
-                Toast.show('${state.message}');
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text('${state.message}'),
+                    action: SnackBarAction(
+                        label: '我知道了',
+                        textColor: Colours.primary_color,
+                        onPressed: () {}),
+                  ),
+                );
                 Application.router.pop(context);
                 //关闭BottomSheet
                 _bottomSheetController?.close();
@@ -139,7 +149,16 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 //只清空操作描述输入框，不清空操作人输入框
                 _operateDescController.text = '';
               } else if (state is UploadFail) {
-                Toast.show('${state.message}');
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text('${state.message}'),
+                    action: SnackBarAction(
+                        label: '我知道了',
+                        textColor: Colours.primary_color,
+                        onPressed: () {}),
+                  ),
+                );
                 Application.router.pop(context);
               }
             },
@@ -169,7 +188,10 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
           } else if (state is DetailError) {
             return Gaps.empty;
           } else if (state is DetailLoaded) {
-            return _buildFloatingActionButton();
+            if (getOperateType(state.detail.orderState) == -1)
+              return Gaps.empty; // 当前用户不能操作督办单
+            else
+              return _buildFloatingActionButton(state.detail);
           } else {
             return Gaps.empty;
           }
@@ -422,7 +444,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     );
   }
 
-  Widget _buildFloatingActionButton() {
+  Widget _buildFloatingActionButton(OrderDetail orderDetail) {
     return Builder(builder: (context) {
       return FloatingActionButton(
         child: AnimatedSwitcher(
@@ -459,7 +481,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 bloc: _pageBloc,
                 builder: (context, state) {
                   if (state is PageLoaded) {
-                    return _buildBottomSheet(state.model);
+                    return _buildBottomSheet(state.model, orderDetail);
                   } else {
                     return MessageWidget(
                         message: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -482,7 +504,8 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     });
   }
 
-  Widget _buildBottomSheet(ProcessUpload processUpload) {
+  Widget _buildBottomSheet(
+      ProcessUpload processUpload, OrderDetail orderDetail) {
     return Container(
       width: double.infinity,
       child: Column(
@@ -596,22 +619,45 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                   },
                 ),
                 Gaps.hGap20,
-                ClipButton(
-                  text: '提交',
-                  icon: Icons.file_upload,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    //发送上传事件
-                    _uploadBloc.add(Upload(
-                        data: ProcessUpload(
-                      orderId: widget.orderId,
-                      operatePerson: _operatePersonController.text,
-                      operateType: '2',
-                      operateDesc: _operateDescController.text,
-                      attachments: processUpload.attachments,
-                    )));
-                  },
-                ),
+                (){
+                  if(getOperateType(orderDetail.orderState) == 2){
+                    return ClipButton(
+                      text: '提交',
+                      icon: Icons.file_upload,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        //发送上传事件
+                        _uploadBloc.add(Upload(
+                            data: ProcessUpload(
+                              orderId: widget.orderId,
+                              operatePerson: _operatePersonController.text,
+                              operateType: '2',
+                              operateDesc: _operateDescController.text,
+                              attachments: processUpload.attachments,
+                            )));
+                      },
+                    );
+                  }else if(getOperateType(orderDetail.orderState) == 4){
+                    return ClipButton(
+                      text: '退回',
+                      icon: Icons.subdirectory_arrow_left,
+                      color: Colors.red,
+                      onTap: () {
+                        //发送上传事件
+                        _uploadBloc.add(Upload(
+                            data: ProcessUpload(
+                              orderId: widget.orderId,
+                              operatePerson: _operatePersonController.text,
+                              operateType: '4',
+                              operateDesc: _operateDescController.text,
+                              attachments: processUpload.attachments,
+                            )));
+                      },
+                    );
+                  }else{
+                    return Gaps.empty;
+                  }
+                }(),
               ],
             ),
           ),
@@ -619,5 +665,26 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
         ],
       ),
     );
+  }
+
+  /// 获取当前用户可以进行的操作
+  ///
+  /// 返回2表示可以处理 返回4表示可以退回 返回-1表示不可以操作督办单
+  int getOperateType(String orderState) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+        // 环保用户
+        if (orderState == '20' || orderState == '40')
+          return 2; // 待处理和已退回状态可以处理
+        else if (orderState == '50') return 4; // 已办结状态可以退回
+        return -1;
+      case 1:
+      case 2:
+        // 企业用户和运维用户
+        if (orderState == '20' || orderState == '40') return 2; // 待处理和已退回状态可以处理
+        return -1;
+      default:
+        return -1;
+    }
   }
 }
