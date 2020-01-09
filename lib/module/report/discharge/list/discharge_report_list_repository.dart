@@ -41,6 +41,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
       'areaCode': areaCode,
       'enterId': enterId,
       'dischargeId': dischargeId,
+      'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'S',
     };

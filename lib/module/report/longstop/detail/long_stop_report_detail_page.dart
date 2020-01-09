@@ -33,6 +33,9 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
 
   @override
   void dispose() {
+    //取消正在进行的请求
+    final currentState = _detailBloc?.state;
+    if (currentState is DetailLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 

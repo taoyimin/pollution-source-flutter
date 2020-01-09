@@ -41,6 +41,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
       'areaCode': areaCode,
       'enterId': enterId,
       'dischargeId': dischargeId,
+      'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'A',
     };
