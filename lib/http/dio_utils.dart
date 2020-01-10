@@ -101,7 +101,8 @@ class OperationDioUtils {
       validateStatus: (status) {
         return true;
       },
-      baseUrl: 'http://192.168.253.3:8001/',
+      // baseUrl: 'http://192.168.253.3:8001/',
+      baseUrl: 'http://192.168.253.1:8001/',
     );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());

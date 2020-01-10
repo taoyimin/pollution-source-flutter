@@ -83,14 +83,24 @@ enum HttpApi {
 
   /// 因子异常申报因子列表
   factorReportFactorList,
+
+  /// 常规巡检列表
+  routineInspectionList,
+
+  /// 常规巡检详情
+  routineInspectionDetail,
+
+  /// 常规巡检上报列表
+  routineInspectionUploadList,
+
+  /// 辅助/监测设备巡检上报
+  deviceInspectionUpload,
 }
 
 class HttpApiJava {
-  static const String adminIndex = 'appIndex/getIndexData';
-  @deprecated
-  static const String login = 'user/login';
   static const String adminToken = 'user/login';
-  static const String enterToken = 'user/login';
+  static const String enterToken = 'user/entpriseLogin';
+  static const String adminIndex = 'appIndex/getIndexData';
   static const String enterList = 'enterprise/queryALLEnter';
   static const String enterDetail = 'enterprise/queryEnterByEntId?enter_id=';
   static const String dischargeList = 'tDisChargeOut/getDisChageOut';
@@ -99,16 +109,16 @@ class HttpApiJava {
   static const String monitorDetail = 'tDisChargeOut/getDrainInfoById?monitorId=';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
   static const String orderDetail = 'Supervise/querySuperviseDetailById?orderId=';
-  static const String processesUpload = 'Supervise/dealSupervise?orderId=';
-  static const String dischargeReportList = 'stopApply/getApplyList?dataType=S';
+  static const String processesUpload = 'Supervise/dealSupervise';
+  static const String dischargeReportList = 'stopApply/getApplyList';
   static const String dischargeReportDetail =
       'stopApply/getStopApply?dataType=S&reportId=';
   static const String dischargeReportUpload = 'stopApply/addAbonrmalInfoS';
-  static const String factorReportList = 'stopApply/getApplyList?dataType=A';
+  static const String factorReportList = 'stopApply/getApplyList';
   static const String factorReportDetail =
       'stopApply/getStopApply?dataType=A&reportId=';
   static const String factorReportUpload = 'stopApply/addAbonrmalInfoA';
-  static const String longStopReportList = 'stopApply/getApplyList?dataType=L';
+  static const String longStopReportList = 'stopApply/getApplyList';
   static const String longStopReportDetail =
       'stopApply/getStopApply?dataType=L&reportId=';
   static const String longStopReportUpload = 'stopApply/addAbonrmalInfoL';
@@ -121,11 +131,9 @@ class HttpApiJava {
 }
 
 class HttpApiPython {
-  static const String adminIndex = 'index';
-  @deprecated
-  static const String token = 'token';
   static const String adminToken = 'admin/token';
   static const String enterToken = 'enter/token';
+  static const String adminIndex = 'index';
   static const String enterList = 'enters';
   static const String enterDetail = 'enters/';
   static const String dischargeList = 'discharges';
@@ -162,7 +170,7 @@ class HttpApiOperation {
   static const String processesUpload = 'commonSupervise/dealSuperviseAPI';
   static const String dischargeReportList = 'pollutantsource/stopApply/queryPage';
   static const String dischargeReportDetail = 'pollutantsource/stopApply/getDetailApi?stopApplyId=';
-  static const String dischargeReportUpload = 'pollutantsource/stopApply/updateStopApply';
+  static const String dischargeReportUpload = 'pollutantsource/stopApply/addStopApply';
   static const String factorReportList = 'archives/abnormalApply/list';
   static const String factorReportDetail = 'archives/abnormalApply/detailInterAPI?id=';
   static const String factorReportUpload = 'archives/abnormalApply/addAbonrmalAPI';
@@ -172,5 +180,9 @@ class HttpApiOperation {
   static const String licenseDetail = '暂无';
   static const String dischargeReportStopTypeList = 'dictionary/getSubListAPI?dicCode=stopType';
   static const String factorReportAlarmTypeList = 'dictionary/getSubListAPI?dicCode=alarmType';
-  static const String factorReportFactorList = '暂无';
+  static const String factorReportFactorList = 'archives/abnormalApply/selectFactorCodeByMonitorId';
+  static const String routineInspectionList = 'ywmh/tInspectionTask/queryStatTasksPage';
+  static const String routineInspectionDetail = 'ywmh/tInspectionTask/selectTaskCount?monitorId=';
+  static const String routineInspectionUploadList = 'ywmh/tInspectionTask/doMonitorTasksForJson';
+  static const String deviceInspectionUpload = '/ywmh/tInspectionTask/submit';
 }
