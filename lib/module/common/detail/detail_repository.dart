@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 
@@ -9,11 +8,11 @@ import 'package:pollution_source/util/compat_utils.dart';
 /// 子类只需规定泛型和重写[createApi]，[fromJson]两个抽象方法即可
 abstract class DetailRepository<T> {
   Future<T> request(
-      {@required String detailId,
+      {String detailId,
       Map<String, dynamic> params,
       CancelToken cancelToken}) async {
     Response response = await CompatUtils.getDio().get(
-      '${CompatUtils.getApi(createApi())}$detailId',
+      '${CompatUtils.getApi(createApi())}${detailId??''}',
       queryParameters: params,
       cancelToken: cancelToken,
     );

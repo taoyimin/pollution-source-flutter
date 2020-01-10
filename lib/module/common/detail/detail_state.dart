@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -9,7 +10,14 @@ abstract class DetailState extends Equatable {
 }
 
 //加载状态
-class DetailLoading extends DetailState {}
+class DetailLoading extends DetailState {
+  final CancelToken cancelToken;
+
+  const DetailLoading({@required this.cancelToken});
+
+  @override
+  List<Object> get props => [cancelToken];
+}
 
 //加载完成状态
 class DetailLoaded extends DetailState {

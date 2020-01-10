@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_repository.dart';
@@ -12,7 +13,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       : assert(detailRepository != null);
 
   @override
-  DetailState get initialState => DetailLoading();
+  DetailState get initialState => DetailLoading(cancelToken: null);
 
   @override
   Stream<DetailState> mapEventToState(DetailEvent event) async* {
@@ -24,9 +25,10 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   //处理加载详情事件
   Stream<DetailState> _mapReportDetailLoadToState(DetailLoad event) async* {
     try {
-      yield DetailLoading();
+      CancelToken cancelToken = CancelToken();
+      yield DetailLoading(cancelToken: cancelToken);
       final detail = await detailRepository.request(
-          detailId: event.detailId, params: event.params);
+          detailId: event.detailId, params: event.params, cancelToken: cancelToken);
       yield DetailLoaded(detail: detail);
     } catch (e) {
       yield DetailError(message: ExceptionHandle.handleException(e).msg);
