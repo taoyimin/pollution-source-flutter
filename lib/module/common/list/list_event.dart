@@ -8,8 +8,10 @@ abstract class ListEvent extends Equatable {
 }
 
 class ListLoad extends ListEvent {
-  //是否刷新
+  /// 是否刷新
   final bool isRefresh;
+
+  /// 查询参数
   final Map<String, dynamic> params;
 
   const ListLoad({this.isRefresh = false, this.params});
@@ -17,3 +19,5 @@ class ListLoad extends ListEvent {
   @override
   List<Object> get props => [isRefresh, params];
 }
+
+class ListUpdate extends ListEvent {}

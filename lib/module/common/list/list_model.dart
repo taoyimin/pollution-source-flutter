@@ -26,12 +26,23 @@ class ListPage<T> extends Equatable {
       ];
 
   static fromJson<T>({dynamic json,T Function(dynamic) fromJson}) {
-    return ListPage<T>(
-      list: CompatUtils.getList(json).map<T>(fromJson).toList(),
-      currentPage: CompatUtils.getCurrentPage(json),
-      pageSize: CompatUtils.getPageSize(json),
-      hasNextPage:CompatUtils.getHasNextPage(json),
-      total: CompatUtils.getTotal(json),
-    );
+    if(json is List){
+      // 列表接口一次性加载全部数据，没有分页信息
+      return ListPage<T>(
+        list: json.map<T>(fromJson).toList(),
+        currentPage: 1,
+        pageSize: json.length,
+        hasNextPage:false,
+        total: json.length,
+      );
+    }else {
+      return ListPage<T>(
+        list: CompatUtils.getList(json).map<T>(fromJson).toList(),
+        currentPage: CompatUtils.getCurrentPage(json),
+        pageSize: CompatUtils.getPageSize(json),
+        hasNextPage: CompatUtils.getHasNextPage(json),
+        total: CompatUtils.getTotal(json),
+      );
+    }
   }
 }

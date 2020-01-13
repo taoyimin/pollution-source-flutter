@@ -6,15 +6,14 @@ import 'package:pollution_source/res/constant.dart';
 abstract class ListState extends Equatable {
   const ListState();
 
-  //传入时间戳，防止加载的数据相同时不触发状态改变
   @override
-  List<Object> get props => [DateTime.now()];
+  List<Object> get props => [];
 }
 
-//初始状态
+/// 初始状态
 class ListInitial extends ListState {}
 
-//加载状态
+/// 加载状态
 class ListLoading extends ListState {
   final CancelToken cancelToken;
 
@@ -24,7 +23,7 @@ class ListLoading extends ListState {
   List<Object> get props => [cancelToken];
 }
 
-//加载完成状态
+/// 加载完成状态
 class ListLoaded extends ListState {
   final list;
   final bool hasNextPage;
@@ -38,14 +37,15 @@ class ListLoaded extends ListState {
     this.currentPage = Constant.defaultCurrentPage,
   });
 
+  /// 传入时间戳，防止ListUpdate事件加载的数据相同时不触发状态改变
   @override
-  List<Object> get props => [list, hasNextPage, total, currentPage];
+  List<Object> get props => [DateTime.now()];
 }
 
-//没有数据状态
+/// 没有数据状态
 class ListEmpty extends ListState {}
 
-//发生错误状态
+/// 发生错误状态
 class ListError extends ListState {
   final String message;
 
