@@ -254,6 +254,8 @@ class _DeviceInspectionUploadListPageState
                 }
                 // 刷新界面
                 _listBloc.add(ListUpdate());
+                // 刷新BottomSheet顶部任务个数提示
+                _pageBloc.add(PageLoad(model: DeviceInspectUpload(selectedList: selectedList)));
               },
               children: <Widget>[
                 Container(
@@ -398,7 +400,7 @@ class _DeviceInspectionUploadListPageState
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ImageTitleWidget(
-              title: '巡检上报',
+              title: '巡检上报(已选中${deviceInspectUpload?.selectedList?.length}项)',
               imagePath: 'assets/images/icon_alarm_manage.png',
             ),
           ),
