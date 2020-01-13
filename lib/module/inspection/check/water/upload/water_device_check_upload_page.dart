@@ -44,10 +44,12 @@ class _WaterDeviceCheckUploadPageState
     task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
     // 初始化页面Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
-    // 加载界面
+    // 加载界面(默认有一条记录)
     _pageBloc.add(PageLoad(model: [
       WaterDeviceCheckUpload(
-          inspectionTaskId: task.inspectionTaskId, itemType: task.itemType)
+        inspectionTaskId: task.inspectionTaskId,
+        itemType: task.itemType,
+      )
     ]));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
