@@ -20,7 +20,7 @@ import 'common_model.dart';
 ///不放复杂的自定义组件
 ///复杂自定义组件放widget包中
 
-//页面加载中的widget
+/// 页面加载中的Sliver
 class LoadingSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -60,8 +60,50 @@ class LoadingSliver extends StatelessWidget {
   }
 }
 
-//页面没有数据的widget
+/// 页面加载中的widget
+class LoadingWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.white,
+      child: Center(
+        child: SizedBox(
+          height: 200.0,
+          width: 300.0,
+          child: Card(
+            elevation: 0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 50.0,
+                  height: 50.0,
+                  child: SpinKitFadingCube(
+                    color: Theme.of(context).primaryColor,
+                    size: 25.0,
+                  ),
+                ),
+                Container(
+                  child: Text('加载中'),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//页面没有数据的Sliver
 class EmptySliver extends StatelessWidget {
+  final String message;
+
+  EmptySliver({this.message = '没有数据'});
+
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
@@ -79,7 +121,7 @@ class EmptySliver extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60),
               child: Text(
-                '没有数据',
+                '$message',
                 style:
                     const TextStyle(fontSize: 16.0, color: Colours.grey_color),
               ),
@@ -91,7 +133,39 @@ class EmptySliver extends StatelessWidget {
   }
 }
 
-//页面加载错误的widget
+//页面没有数据的Widget
+class EmptyWidget extends StatelessWidget {
+  final String message;
+
+  EmptyWidget({this.message = '没有数据'});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: 100.0,
+            height: 100.0,
+            child: Image.asset('assets/images/nodata.png'),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: Text(
+              '$message',
+              style: const TextStyle(fontSize: 16.0, color: Colours.grey_color),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//页面加载错误的Sliver
 class ErrorSliver extends StatelessWidget {
   final String errorMessage;
 
@@ -122,6 +196,39 @@ class ErrorSliver extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+//页面加载错误的widget
+class ErrorMessageWidget extends StatelessWidget {
+  final String errorMessage;
+
+  ErrorMessageWidget({this.errorMessage});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: double.infinity,
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: 100.0,
+            height: 100.0,
+            child: Image.asset('assets/images/nodata.png'),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: Text(
+              '$errorMessage',
+              style: const TextStyle(fontSize: 16.0, color: Colours.grey_color),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1199,9 +1306,10 @@ class AttachmentWidget extends StatelessWidget {
               ),
             );
             pr.show();
-            await FileDioUtils.instance.getDio().download(
-                "${attachment.url}",
-                localPath, onReceiveProgress: (int count, int total) {
+            await FileDioUtils.instance
+                .getDio()
+                .download("${attachment.url}", localPath,
+                    onReceiveProgress: (int count, int total) {
               pr.update(
                 progress:
                     double.parse((count * 100 / total).toStringAsFixed(2)),
@@ -1811,6 +1919,8 @@ class IconCheckButton extends StatelessWidget {
   final String imagePath;
   final Color color;
   final bool checked;
+  final TextStyle style;
+  final EdgeInsetsGeometry padding;
   final GestureTapCallback onTap;
 
   IconCheckButton({
@@ -1818,6 +1928,8 @@ class IconCheckButton extends StatelessWidget {
     this.imagePath,
     this.color,
     this.checked = true,
+    this.style =const TextStyle(color: Colors.white, fontSize: 13),
+    this.padding =const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
     this.onTap,
   });
 
@@ -1829,7 +1941,7 @@ class IconCheckButton extends StatelessWidget {
         opacity: checked ? 1 : 0.5,
         child: FlatButton(
           onPressed: onTap ?? () {},
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+          padding: padding,
           color: color,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -1839,11 +1951,10 @@ class IconCheckButton extends StatelessWidget {
                 imagePath,
                 height: 30,
                 width: 30,
-                color: null,
               ),
               Text(
                 text,
-                style: TextStyle(color: Colors.white, fontSize: 13),
+                style: style,
               ),
             ],
           ),
