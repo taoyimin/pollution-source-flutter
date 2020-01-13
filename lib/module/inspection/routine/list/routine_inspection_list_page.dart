@@ -92,9 +92,9 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                   title: '常规巡检列表',
                   subtitle: '展示常规巡检列表，点击列表项查看该常规巡检的详细信息',
                   subtitle2: subtitle2,
-                  background: 'assets/images/button_bg_lightblue.png',
-                  image: 'assets/images/enter_list_bg_image.png',
-                  color: Colors.blue,
+                  background: 'assets/images/button_bg_green.png',
+                  image: 'assets/images/routine_inspection_list_bg_image.png',
+                  color: Color(0xFF29D0BF),
                   showSearch: false,
                 );
               },

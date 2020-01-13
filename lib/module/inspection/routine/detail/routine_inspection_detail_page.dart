@@ -30,15 +30,14 @@ class RoutineInspectionDetailPage extends StatefulWidget {
 class _RoutineInspectionDetailPageState
     extends State<RoutineInspectionDetailPage>
     with SingleTickerProviderStateMixin {
+  final String _headerBackground = 'assets/images/button_bg_lightblue.png';
   DetailBloc _detailBloc;
-  ScrollController _scrollController;
   TabController _tabController;
 
   // 初始化
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _detailBloc.add(DetailLoad(detailId: widget.monitorId));
   }
@@ -47,7 +46,6 @@ class _RoutineInspectionDetailPageState
   void dispose() {
     // _tabController是在请求完成之后初始化的，所以页面销毁时可能为null
     _tabController?.dispose();
-    _scrollController.dispose();
     //取消正在进行的请求
     final currentState = _detailBloc?.state;
     if (currentState is DetailLoading) currentState.cancelToken?.cancel();
@@ -133,7 +131,7 @@ class _RoutineInspectionDetailPageState
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage(
-                                    'assets/images/button_bg_green.png',
+                                    _headerBackground,
                                   ),
                                   fit: BoxFit.cover,
                                 ),
@@ -144,17 +142,17 @@ class _RoutineInspectionDetailPageState
                                 child: Stack(
                                   children: <Widget>[
                                     Positioned(
-                                      right: -20,
-                                      bottom: 25,
+                                      right: 16,
+                                      bottom: 45,
                                       child: Image.asset(
                                         [
-                                          'assets/images/enter_list_bg_image.png',
-                                          'assets/images/discharge_list_bg_image.png',
-                                          'assets/images/monitor_list_bg_image.png',
-                                          'assets/images/report_list_bg_image.png',
+                                          'assets/images/routine_inspection_detail_header_image1.png',
+                                          'assets/images/routine_inspection_detail_header_image2.png',
+                                          'assets/images/routine_inspection_detail_header_image3.png',
                                         ][_tabController.animation.value
-                                            .round()],
-                                        width: 300,
+                                                .round() %
+                                            3],
+                                        width: 230,
                                       ),
                                     ),
                                     Positioned(
@@ -167,26 +165,43 @@ class _RoutineInspectionDetailPageState
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Container(
-                                            width: 110,
+                                            width: 80,
                                             child: Text(
-                                              '标题标题标题标题标标题标题标题标题标题标题标题标题标题',
-                                              style: TextStyle(
+                                              () {
+                                                String type = state
+                                                    .detail[_tabController
+                                                        .animation.value
+                                                        .round()]
+                                                    .itemInspectType;
+                                                switch (type) {
+                                                  case '1':
+                                                  case '5':
+                                                    return '选中要处理的任务点击处理按钮进行批量处理';
+                                                  case '2':
+                                                  case '3':
+                                                  case '4':
+                                                    return '点击列表中要处理的任务进入该任务的上报界面';
+                                                  default:
+                                                    return '未知任务类型！itemInspectType=$type';
+                                                }
+                                              }(),
+                                              style:const TextStyle(
                                                   fontSize: 10,
                                                   color: Colors.white),
                                             ),
                                           ),
                                           Gaps.vGap10,
                                           Container(
-                                            padding: EdgeInsets.symmetric(
+                                            padding:const EdgeInsets.symmetric(
                                                 horizontal: 10, vertical: 3),
-                                            decoration: BoxDecoration(
+                                            decoration:const BoxDecoration(
                                               color: Colors.white,
                                             ),
                                             child: Text(
                                               '共${state.detail[_tabController.animation.value.round()].taskCount}条数据',
-                                              style: TextStyle(
+                                              style:const TextStyle(
                                                 fontSize: 10,
-                                                color: Color(0xFF29D0BF),
+                                                color: Colors.lightBlue,
                                               ),
                                             ),
                                           ),
@@ -206,7 +221,7 @@ class _RoutineInspectionDetailPageState
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(
-                                'assets/images/button_bg_green.png',
+                                _headerBackground,
                               ),
                               fit: BoxFit.cover,
                             ),
@@ -222,8 +237,8 @@ class _RoutineInspectionDetailPageState
                   child: Card(
                       color: Colors.transparent,
                       elevation: 0.0,
-                      margin: EdgeInsets.all(0.0),
-                      shape: RoundedRectangleBorder(
+                      margin: const EdgeInsets.all(0.0),
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0.0)),
                       ),
                       child: BlocBuilder<DetailBloc, DetailState>(
@@ -231,6 +246,7 @@ class _RoutineInspectionDetailPageState
                           if (state is DetailLoaded) {
                             return TabBar(
                               isScrollable: true,
+                              indicatorColor: Colors.white,
                               controller: _tabController,
                               tabs: state.detail
                                   .map<Widget>((routineInspectionDetail) {
@@ -244,7 +260,7 @@ class _RoutineInspectionDetailPageState
                           }
                         },
                       )),
-                  preferredSize: Size(double.infinity, 46.0),
+                  preferredSize:const Size(double.infinity, 46.0),
                 ),
               ),
             ),
@@ -258,9 +274,7 @@ class _RoutineInspectionDetailPageState
               return ErrorMessageWidget(errorMessage: state.message);
             } else if (state is DetailLoaded) {
               if (state.detail.length == 0) {
-                return EmptyWidget(
-                  message: '没有任务需要处理',
-                );
+                return EmptyWidget(message: '没有任务需要处理');
               } else {
                 return _buildPageLoadedDetail(state.detail);
               }
@@ -299,7 +313,7 @@ class _RoutineInspectionDetailPageState
               switch (routineInspectionDetail.itemInspectType) {
                 case '1':
                 case '5':
-                  // 监测/辅助设备巡检上报列表
+                  // 辅助/监测设备巡检上报列表
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider<UploadBloc>(
