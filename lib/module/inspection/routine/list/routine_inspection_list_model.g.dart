@@ -12,7 +12,8 @@ RoutineInspection _$RoutineInspectionFromJson(Map<String, dynamic> json) {
       enterName: json['enterName'] as String,
       dischargeName: json['outName'] as String,
       monitorName: json['monitorName'] as String,
-      taskCount: json['cnt'] as int);
+      taskCount: json['cnt'] as int,
+      monitorType: json['disMonitorType'] as String);
 }
 
 Map<String, dynamic> _$RoutineInspectionToJson(RoutineInspection instance) =>
@@ -21,5 +22,6 @@ Map<String, dynamic> _$RoutineInspectionToJson(RoutineInspection instance) =>
       'enterName': instance.enterName,
       'outName': instance.dischargeName,
       'monitorName': instance.monitorName,
-      'cnt': instance.taskCount
+      'cnt': instance.taskCount,
+      'disMonitorType': instance.monitorType
     };

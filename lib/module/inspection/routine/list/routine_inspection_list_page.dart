@@ -191,7 +191,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
             child: InkWellButton(
               onTap: () {
                 Application.router.navigateTo(context,
-                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}');
+                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}');
               },
               children: <Widget>[
                 Container(

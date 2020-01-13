@@ -12,6 +12,8 @@ class RoutineInspection extends Equatable{
   final String monitorName;
   @JsonKey(name: 'cnt')
   final int taskCount;
+  @JsonKey(name: 'disMonitorType')
+  final String monitorType;
 
   const RoutineInspection({
     this.monitorId,
@@ -19,6 +21,7 @@ class RoutineInspection extends Equatable{
     this.dischargeName,
     this.monitorName,
     this.taskCount,
+    this.monitorType,
   });
 
   @override
@@ -28,6 +31,7 @@ class RoutineInspection extends Equatable{
     dischargeName,
     monitorName,
     taskCount,
+    monitorType,
   ];
 
   factory RoutineInspection.fromJson(Map<String, dynamic> json) =>

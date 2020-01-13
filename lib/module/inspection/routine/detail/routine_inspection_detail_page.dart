@@ -9,6 +9,7 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
+import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_repository.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_repository.dart';
@@ -18,9 +19,13 @@ import 'package:pollution_source/res/gaps.dart';
 /// 常规巡检详情页
 class RoutineInspectionDetailPage extends StatefulWidget {
   final String monitorId;
+  final String monitorType;
 
-  RoutineInspectionDetailPage({@required this.monitorId})
-      : assert(monitorId != null);
+  RoutineInspectionDetailPage({
+    @required this.monitorId,
+    @required this.monitorType,
+  })  : assert(monitorId != null),
+        assert(monitorType != null);
 
   @override
   _RoutineInspectionDetailPageState createState() =>
@@ -28,8 +33,7 @@ class RoutineInspectionDetailPage extends StatefulWidget {
 }
 
 class _RoutineInspectionDetailPageState
-    extends State<RoutineInspectionDetailPage>
-    with SingleTickerProviderStateMixin {
+    extends State<RoutineInspectionDetailPage> with TickerProviderStateMixin {
   final String _headerBackground = 'assets/images/button_bg_lightblue.png';
   DetailBloc _detailBloc;
   TabController _tabController;
@@ -64,57 +68,12 @@ class _RoutineInspectionDetailPageState
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-//            ListHeaderWidget(
-//              title: '常规巡检详情',
-//              subtitle: '展示常规巡检列表列表，点击列表项查看该常规巡检的列表',
-//              subtitle2: '共100条数据',
-//              expandedHeight: 170,
-//              background: 'assets/images/button_bg_green.png',
-//              image: 'assets/images/report_list_bg_image.png',
-//              color: Color(0xFF29D0BF),
-//              showSearch: false,
-//              bottom: PreferredSize(
-//                child: Card(
-//                    color: Colors.transparent,
-//                    elevation: 0.0,
-//                    margin: EdgeInsets.all(0.0),
-//                    shape: RoundedRectangleBorder(
-//                      borderRadius: BorderRadius.all(Radius.circular(0.0)),
-//                    ),
-//                    child: BlocListener<DetailBloc, DetailState>(
-//                      listener: (context, state) {
-//                        if (state is DetailLoaded)
-//                          _tabController = TabController(
-//                              length: state.detail.length, vsync: this);
-//                      },
-//                      child: BlocBuilder<DetailBloc, DetailState>(
-//                        builder: (context, state) {
-//                          if (state is DetailLoaded) {
-//                            return TabBar(
-//                              indicatorColor: Colors.white,
-//                              isScrollable: true,
-//                              controller: _tabController,
-//                              tabs: state.detail
-//                                  .map<Widget>((routineInspectionDetail) {
-//                                return Tab(
-//                                    text:
-//                                        '${routineInspectionDetail.itemInspectTypeName}');
-//                              }).toList(),
-//                            );
-//                          } else {
-//                            return Gaps.empty;
-//                          }
-//                        },
-//                      ),
-//                    )),
-//                preferredSize: Size(double.infinity, 46.0),
-//              ),
-//            ),
             BlocListener<DetailBloc, DetailState>(
               listener: (context, state) {
-                if (state is DetailLoaded)
+                if (state is DetailLoaded) {
                   _tabController =
                       TabController(length: state.detail.length, vsync: this);
+                }
               },
               child: SliverAppBar(
                 title: Text('常规巡检详情'),
@@ -185,21 +144,21 @@ class _RoutineInspectionDetailPageState
                                                     return '未知任务类型！itemInspectType=$type';
                                                 }
                                               }(),
-                                              style:const TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 10,
                                                   color: Colors.white),
                                             ),
                                           ),
                                           Gaps.vGap10,
                                           Container(
-                                            padding:const EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 horizontal: 10, vertical: 3),
-                                            decoration:const BoxDecoration(
+                                            decoration: const BoxDecoration(
                                               color: Colors.white,
                                             ),
                                             child: Text(
                                               '共${state.detail[_tabController.animation.value.round()].taskCount}条数据',
-                                              style:const TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.lightBlue,
                                               ),
@@ -260,7 +219,7 @@ class _RoutineInspectionDetailPageState
                           }
                         },
                       )),
-                  preferredSize:const Size(double.infinity, 46.0),
+                  preferredSize: const Size(double.infinity, 46.0),
                 ),
               ),
             ),
@@ -334,6 +293,35 @@ class _RoutineInspectionDetailPageState
                       monitorId: widget.monitorId,
                       itemInspectType: routineInspectionDetail.itemInspectType,
                     ),
+                  );
+                case '3':
+                  if (widget.monitorType == 'outletType2') {
+                    // 废水监测设备校验上报列表
+                    return BlocProvider<ListBloc>(
+                      create: (BuildContext context) => ListBloc(
+                          listRepository:
+                              RoutineInspectionUploadListRepository()),
+                      child: WaterDeviceCheckUploadListPage(
+                        monitorId: widget.monitorId,
+                        itemInspectType:
+                            routineInspectionDetail.itemInspectType,
+                      ),
+                    );
+                  } else if (widget.monitorType == 'outletType3') {
+                    // 废气监测设备校验上报列表
+                    return BlocProvider<ListBloc>(
+                      create: (BuildContext context) => ListBloc(
+                          listRepository:
+                              RoutineInspectionUploadListRepository()),
+                      child: WaterDeviceCheckUploadListPage(
+                        monitorId: widget.monitorId,
+                        itemInspectType:
+                            routineInspectionDetail.itemInspectType,
+                      ),
+                    );
+                  }
+                  return Center(
+                    child: Text('未知的监控点类型，monitorType=${widget.monitorType}'),
                   );
                 default:
                   return Center(
