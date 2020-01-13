@@ -16,3 +16,13 @@ class DetailLoad extends DetailEvent {
   @override
   List<Object> get props => [detailId, params];
 }
+
+class DetailUpdate extends DetailEvent {
+  final String detailId;
+  final Map<String, dynamic> params;
+
+  const DetailUpdate({this.detailId, this.params});
+
+  @override
+  List<Object> get props => [detailId, params];
+}

@@ -19,16 +19,31 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   Stream<DetailState> mapEventToState(DetailEvent event) async* {
     if (event is DetailLoad) {
       yield* _mapReportDetailLoadToState(event);
+    } else if (event is DetailUpdate) {
+      yield* _mapReportDetailUpdateToState(event);
     }
   }
 
-  //处理加载详情事件
+  /// 处理加载详情事件
   Stream<DetailState> _mapReportDetailLoadToState(DetailLoad event) async* {
     try {
       CancelToken cancelToken = CancelToken();
       yield DetailLoading(cancelToken: cancelToken);
       final detail = await detailRepository.request(
-          detailId: event.detailId, params: event.params, cancelToken: cancelToken);
+          detailId: event.detailId,
+          params: event.params,
+          cancelToken: cancelToken);
+      yield DetailLoaded(detail: detail);
+    } catch (e) {
+      yield DetailError(message: ExceptionHandle.handleException(e).msg);
+    }
+  }
+
+  /// 处理更新详情事件，与DetailLoad唯一不同为不会触发DetailLoading状态
+  Stream<DetailState> _mapReportDetailUpdateToState(DetailUpdate event) async* {
+    try {
+      final detail = await detailRepository.request(
+          detailId: event.detailId, params: event.params);
       yield DetailLoaded(detail: detail);
     } catch (e) {
       yield DetailError(message: ExceptionHandle.handleException(e).msg);
