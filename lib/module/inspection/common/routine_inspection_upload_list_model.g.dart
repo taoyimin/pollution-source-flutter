@@ -11,11 +11,16 @@ RoutineInspectionUploadList _$RoutineInspectionUploadListFromJson(
   return RoutineInspectionUploadList(
       inspectionTaskId: json['inspectionTaskId'] as String,
       itemName: json['itemName'] as String,
+      itemType: json['itemType'] as String,
       contentName: json['contentName'] as String,
       inspectionStartTime: json['inspectionStartTime'] as String,
       inspectionEndTime: json['inspectionEndTime'] as String,
       inspectionRemark: json['inspectionRemark'] as String,
-      remark: json['remark'] as String);
+      remark: json['remark'] as String,
+      deviceName: json['deviceName'] as String,
+      enterName: json['enterpriseName'] as String,
+      dischargeName: json['disOutName'] as String,
+      monitorName: json['disMonitorName'] as String);
 }
 
 Map<String, dynamic> _$RoutineInspectionUploadListToJson(
@@ -23,9 +28,14 @@ Map<String, dynamic> _$RoutineInspectionUploadListToJson(
     <String, dynamic>{
       'inspectionTaskId': instance.inspectionTaskId,
       'itemName': instance.itemName,
+      'itemType': instance.itemType,
       'contentName': instance.contentName,
       'inspectionStartTime': instance.inspectionStartTime,
       'inspectionEndTime': instance.inspectionEndTime,
       'inspectionRemark': instance.inspectionRemark,
-      'remark': instance.remark
+      'remark': instance.remark,
+      'deviceName': instance.deviceName,
+      'enterpriseName': instance.enterName,
+      'disOutName': instance.dischargeName,
+      'disMonitorName': instance.monitorName
     };
