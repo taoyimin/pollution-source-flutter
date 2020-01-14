@@ -162,7 +162,7 @@ class _WaterDeviceCheckUploadPageState
                   onTap: () {
                     list.add(WaterDeviceCheckUpload(
                         inspectionTaskId: task.inspectionTaskId,
-                        itemType: '哈哈哈'));
+                        itemType: task.itemType));
                     _pageBloc.add(PageLoad(model: list));
                   },
                 ),
