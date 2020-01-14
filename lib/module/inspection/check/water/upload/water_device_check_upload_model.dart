@@ -1,10 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'water_device_check_upload_model.g.dart';
-
-// 废水监测设备校验上报
-@JsonSerializable()
+/// 废水监测设备校验上报
 class WaterDeviceCheckUpload extends Equatable {
   final String inspectionTaskId;
   final String itemType;
@@ -41,7 +37,6 @@ class WaterDeviceCheckUpload extends Equatable {
     bool currentCheckIsPass,
     DateTime currentCorrectTime,
     bool currentCorrectIsPass,
-    bool isExpanded,
   }) {
     return WaterDeviceCheckUpload(
       inspectionTaskId: this.inspectionTaskId,

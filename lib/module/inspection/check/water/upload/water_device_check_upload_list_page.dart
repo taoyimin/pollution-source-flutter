@@ -39,7 +39,7 @@ class _WaterDeviceCheckUploadListPageState
   bool get wantKeepAlive => true;
   ListBloc _listBloc;
 
-  /// 用于刷新常规巡检详情（上报成功后刷新header中的数据条数）
+  /// 常规巡检详情Bloc，用于上报成功后刷新header中的数据条数
   DetailBloc _detailBloc;
   Completer<void> _refreshCompleter;
 
@@ -118,27 +118,6 @@ class _WaterDeviceCheckUploadListPageState
       ),
     );
   }
-
-//  List<RoutineInspectionUploadList> convert(
-//      List<RoutineInspectionUploadList> list) {
-//    return list.expand((item) {
-//      List<RoutineInspectionUploadList> tempList = [];
-//      List<String> inspectionTaskIds = item.inspectionTaskId.split(',');
-//      List<String> contentNames = item.contentName.split(',');
-//      List<String> inspectionStartTimes = item.inspectionStartTime.split(',');
-//      List<String> inspectionEndTimes = item.inspectionEndTime.split(',');
-//      for (int i = 0; i < inspectionTaskIds.length; i++) {
-//        tempList.add(RoutineInspectionUploadList(
-//          itemName: item.itemName,
-//          inspectionTaskId: inspectionTaskIds[i],
-//          contentName: contentNames[i],
-//          inspectionStartTime: inspectionStartTimes[i],
-//          inspectionEndTime: inspectionEndTimes[i],
-//        ));
-//      }
-//      return tempList;
-//    }).toList();
-//  }
 
   Widget _buildPageLoadedList(List<RoutineInspectionUploadList> list) {
     return SliverList(

@@ -18,54 +18,50 @@ class WaterDeviceUploadRepository
   }
 
   @override
-  Future<dynamic> createFormData(List<WaterDeviceCheckUpload> data) async {
-//    return {
-//      'inspectionTaskId': data.map((item) {
-//        return int.parse(item.inspectionTaskId);
-//      }).toList(),
-//      'itemType': data.map((item) {
-//        return item.itemType;
-//      }).toList(),
-//      'currentCheckTime': data.map((item) {
-//        return item.currentCheckTime.toString();
-//      }).toList(),
-//      'currentCheckIsPass': data.map((item) {
-//        return item.currentCheckIsPass ? '合格' : '不合格';
-//      }).toList(),
-//      'currentCheckResult': data.map((item) {
-//        return item.currentCheckResult;
-//      }).toList(),
-//      'currentCorrectTime': data.map((item) {
-//        return item.currentCorrectTime.toString();
-//      }).toList(),
-//      'currentCorrectIsPass': data.map((item) {
-//        return item.currentCorrectIsPass ? '通过' : '不通过';
-//      }).toList(),
-//    };
-    var formData = FormData.fromMap({
-      'inspectionTaskId': data.map((item) {
-        return int.parse(item.inspectionTaskId);
-      }).toList().join(','),
-      'itemType': data.map((item) {
-        return item.itemType;
-      }).toList().join(','),
-      'currentCheckTime': data.map((item) {
-        return item.currentCheckTime.toString();
-      }).toList().join(','),
-      'currentCheckIsPass': data.map((item) {
-        return item.currentCheckIsPass ? '合格' : '不合格';
-      }).toList().join(','),
-      'currentCheckResult': data.map((item) {
-        return item.currentCheckResult;
-      }).toList().join(','),
-      'currentCorrectTime': data.map((item) {
-        return item.currentCorrectTime.toString();
-      }).toList().join(','),
-      'currentCorrectIsPass': data.map((item) {
-        return item.currentCorrectIsPass ? '通过' : '不通过';
-      }).toList().join(','),
+  Future<FormData> createFormData(List<WaterDeviceCheckUpload> data) async {
+    return FormData.fromMap({
+      'inspectionTaskId': data
+          .map((item) {
+            return int.parse(item.inspectionTaskId);
+          })
+          .toList()
+          .join(','),
+      'itemType': data
+          .map((item) {
+            return item.itemType;
+          })
+          .toList()
+          .join(','),
+      'currentCheckTime': data
+          .map((item) {
+            return item.currentCheckTime.toString();
+          })
+          .toList()
+          .join(','),
+      'currentCheckIsPass': data
+          .map((item) {
+            return item.currentCheckIsPass ? '合格' : '不合格';
+          })
+          .toList()
+          .join(','),
+      'currentCheckResult': data
+          .map((item) {
+            return item.currentCheckResult;
+          })
+          .toList()
+          .join(','),
+      'currentCorrectTime': data
+          .map((item) {
+            return item.currentCorrectTime.toString();
+          })
+          .toList()
+          .join(','),
+      'currentCorrectIsPass': data
+          .map((item) {
+            return item.currentCorrectIsPass ? '通过' : '不通过';
+          })
+          .toList()
+          .join(','),
     });
-    print(formData.fields);
-    return formData;
   }
 }

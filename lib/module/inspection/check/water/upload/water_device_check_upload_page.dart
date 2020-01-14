@@ -35,7 +35,6 @@ class _WaterDeviceCheckUploadPageState
     extends State<WaterDeviceCheckUploadPage> {
   PageBloc _pageBloc;
   UploadBloc _uploadBloc;
-  TextEditingController _remarkController;
   RoutineInspectionUploadList task;
 
   @override
@@ -53,13 +52,11 @@ class _WaterDeviceCheckUploadPageState
     ]));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    _remarkController = TextEditingController();
   }
 
   @override
   void dispose() {
     // 释放资源
-    _remarkController.dispose();
     super.dispose();
   }
 
