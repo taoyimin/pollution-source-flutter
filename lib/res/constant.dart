@@ -32,6 +32,7 @@ class Constant {
   /// 解析返回数据用的key
   static const String responseCodeKey = 'code';
   static const String responseMessageKey = 'message';
+  static const String responseMsgKey = 'msg';
   static const String responseSuccessKey = 'success';
   static const String responseDataKey = 'data';
   static const String responseIdKey = 'id';
