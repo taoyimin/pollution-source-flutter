@@ -126,7 +126,7 @@ class CompatUtils {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-        //环保和企业用户
+        // 环保和企业用户
         if (SpUtil.getBool(Constant.spUseJavaApi,
             defValue: Constant.defaultUseJavaApi))
           return response.data[Constant.responseDataKey];
@@ -134,7 +134,12 @@ class CompatUtils {
           return response.data;
         break;
       case 2:
-        return response.data[Constant.responseDataKey];
+        // 如果是List则直接返回
+        if (response.data is List<dynamic>)
+          return response.data;
+        else
+          return response.data[Constant.responseDataKey];
+        break;
       default:
         throw Exception(
             '获取数据失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
@@ -146,7 +151,7 @@ class CompatUtils {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-      //环保和企业用户
+        //环保和企业用户
         if (SpUtil.getBool(Constant.spUseJavaApi,
             defValue: Constant.defaultUseJavaApi))
           return response.data[Constant.responseMessageKey];
@@ -154,7 +159,13 @@ class CompatUtils {
           return response.data;
         break;
       case 2:
-        return response.data[Constant.responseMsgKey];
+        if (response.data.containsKey(Constant.responseMsgKey))
+          return response.data[Constant.responseMsgKey];
+        else if (response.data.containsKey(Constant.responseMessageKey))
+          return response.data[Constant.responseMessageKey];
+        else
+          return response.toString();
+        break;
       default:
         throw Exception(
             '获取数据失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
@@ -322,8 +333,6 @@ class CompatUtils {
         return HttpApiJava.longStopReportUpload;
       case HttpApi.licenseList:
         return HttpApiJava.licenseList;
-      case HttpApi.licenseDetail:
-        return HttpApiJava.licenseDetail;
       case HttpApi.dischargeReportStopTypeList:
         return HttpApiJava.dischargeReportStopTypeList;
       case HttpApi.factorReportAlarmTypeList:
@@ -384,8 +393,6 @@ class CompatUtils {
         return HttpApiPython.longStopReportUpload;
       case HttpApi.licenseList:
         return HttpApiPython.licenseList;
-      case HttpApi.licenseDetail:
-        return HttpApiPython.licenseDetail;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
@@ -430,20 +437,32 @@ class CompatUtils {
         return HttpApiOperation.factorReportDetail;
       case HttpApi.factorReportUpload:
         return HttpApiOperation.factorReportUpload;
-      case HttpApi.longStopReportList:
-        return HttpApiOperation.longStopReportList;
-      case HttpApi.longStopReportDetail:
-        return HttpApiOperation.longStopReportDetail;
       case HttpApi.licenseList:
         return HttpApiOperation.licenseList;
-      case HttpApi.licenseDetail:
-        return HttpApiOperation.licenseDetail;
       case HttpApi.dischargeReportStopTypeList:
         return HttpApiOperation.dischargeReportStopTypeList;
       case HttpApi.factorReportAlarmTypeList:
         return HttpApiOperation.factorReportAlarmTypeList;
       case HttpApi.factorReportFactorList:
         return HttpApiOperation.factorReportFactorList;
+      case HttpApi.routineInspectionList:
+        return HttpApiOperation.routineInspectionList;
+      case HttpApi.routineInspectionDetail:
+        return HttpApiOperation.routineInspectionDetail;
+      case HttpApi.routineInspectionUploadList:
+        return HttpApiOperation.routineInspectionUploadList;
+      case HttpApi.deviceInspectionUpload:
+        return HttpApiOperation.deviceInspectionUpload;
+      case HttpApi.deviceCheckUpload:
+        return HttpApiOperation.deviceCheckUpload;
+      case HttpApi.routineInspectionFactorDetail:
+        return HttpApiOperation.routineInspectionFactorDetail;
+      case HttpApi.deviceCorrectUpload:
+        return HttpApiOperation.deviceCorrectUpload;
+      case HttpApi.deviceParamUpload:
+        return HttpApiOperation.deviceParamUpload;
+      case HttpApi.deviceParamList:
+        return HttpApiOperation.deviceParamList;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
