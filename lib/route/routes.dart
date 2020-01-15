@@ -25,6 +25,12 @@ class Routes {
   static String factorReportUpload = "/factorReportUpload";
   static String longStopReportUpload = "/longStopReportUpload";
   static String licenseList = "/licenseList";
+  static String routineInspectionList = "/routineInspectionList";
+  static String routineInspectionDetail = "/routineInspectionDetail";
+  static String waterDeviceCheckUpload = "/waterDeviceCheckUpload";
+  static String airDeviceCheckUpload = "/airDeviceCheckUpload";
+  static String airDeviceCorrectUpload = "/airDeviceCorrectUpload";
+  static String waterDeviceParamUpload = "/waterDeviceParamUpload";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(
@@ -50,9 +56,15 @@ class Routes {
     router.define('$factorReportDetail/:id', handler: factorReportDetailHandler, transitionType: TransitionType.native);
     router.define(longStopReportList, handler: longStopReportListHandler, transitionType: TransitionType.native);
     router.define('$longStopReportDetail/:id', handler: longStopReportDetailHandler, transitionType: TransitionType.native);
-    router.define('$dischargeReportUpload', handler: dischargeReportUploadHandler, transitionType: TransitionType.native);
-    router.define('$factorReportUpload', handler: factorReportUploadHandler, transitionType: TransitionType.native);
-    router.define('$longStopReportUpload', handler: longStopReportUploadHandler, transitionType: TransitionType.native);
+    router.define(dischargeReportUpload, handler: dischargeReportUploadHandler, transitionType: TransitionType.native);
+    router.define(factorReportUpload, handler: factorReportUploadHandler, transitionType: TransitionType.native);
+    router.define(longStopReportUpload, handler: longStopReportUploadHandler, transitionType: TransitionType.native);
     router.define(licenseList, handler: licenseListHandler, transitionType: TransitionType.native);
+    router.define(routineInspectionList, handler: routineInspectionListHandler, transitionType: TransitionType.native);
+    router.define('$routineInspectionDetail/:id', handler: routineInspectionDetailHandler, transitionType: TransitionType.native);
+    router.define(waterDeviceCheckUpload, handler: waterDeviceCheckUploadHandler, transitionType: TransitionType.native);
+    router.define(airDeviceCheckUpload, handler: airDeviceCheckUploadHandler, transitionType: TransitionType.native);
+    router.define(airDeviceCorrectUpload, handler: airDeviceCorrectUploadHandler, transitionType: TransitionType.native);
+    router.define(waterDeviceParamUpload, handler: waterDeviceParamUploadHandler, transitionType: TransitionType.native);
   }
 }

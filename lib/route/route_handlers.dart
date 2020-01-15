@@ -13,6 +13,20 @@ import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_repository.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
+import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_page.dart';
+import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_repository.dart';
+import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_page.dart';
+import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_repository.dart';
+import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_repository.dart';
+import 'package:pollution_source/module/inspection/common/water_device_param_list_repository.dart';
+import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_page.dart';
+import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_repository.dart';
+import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_page.dart';
+import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_repository.dart';
+import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_page.dart';
+import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
+import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_page.dart';
+import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_repository.dart';
 import 'package:pollution_source/module/license/list/license_list_page.dart';
 import 'package:pollution_source/module/license/list/license_list_repository.dart';
 import 'package:pollution_source/module/login/login_page.dart';
@@ -332,6 +346,124 @@ var licenseListHandler = Handler(
         ListBloc(listRepository: LicenseListRepository()),
     child: LicenseListPage(
       enterId: enterId,
+    ),
+  );
+});
+
+var routineInspectionListHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String enterId = params['enterId']?.first ?? '';
+  String monitorId = params['monitorId']?.first ?? '';
+  String state = params['state']?.first ?? '';
+  return BlocProvider<ListBloc>(
+    create: (BuildContext context) =>
+        ListBloc(listRepository: RoutineInspectionListRepository()),
+    child: RoutineInspectionListPage(
+      enterId: enterId,
+      monitorId: monitorId,
+      state: state,
+    ),
+  );
+});
+
+var routineInspectionDetailHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String id = params['id']?.first;
+  String monitorType = params['monitorType']?.first;
+  return BlocProvider<DetailBloc>(
+    create: (BuildContext context) =>
+        DetailBloc(detailRepository: RoutineInspectionDetailRepository()),
+    child: RoutineInspectionDetailPage(
+      monitorId: id,
+      monitorType: monitorType,
+    ),
+  );
+});
+
+var waterDeviceCheckUploadHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String json = params['json']?.first;
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider<UploadBloc>(
+        create: (BuildContext context) =>
+            UploadBloc(uploadRepository: WaterDeviceUploadRepository()),
+      ),
+      BlocProvider<PageBloc>(
+        create: (BuildContext context) => PageBloc(),
+      ),
+    ],
+    child: WaterDeviceCheckUploadPage(
+      json: json,
+    ),
+  );
+});
+
+var airDeviceCheckUploadHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String json = params['json']?.first;
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider<UploadBloc>(
+        create: (BuildContext context) =>
+            UploadBloc(uploadRepository: AirDeviceCheckUploadRepository()),
+      ),
+      BlocProvider<DetailBloc>(
+        create: (BuildContext context) => DetailBloc(
+            detailRepository: RoutineInspectionUploadFactorRepository()),
+      ),
+      BlocProvider<PageBloc>(
+        create: (BuildContext context) => PageBloc(),
+      ),
+    ],
+    child: AirDeviceCheckUploadPage(
+      json: json,
+    ),
+  );
+});
+
+var airDeviceCorrectUploadHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String json = params['json']?.first;
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider<UploadBloc>(
+        create: (BuildContext context) =>
+            UploadBloc(uploadRepository: AirDeviceCorrectUploadRepository()),
+      ),
+      BlocProvider<DetailBloc>(
+        create: (BuildContext context) => DetailBloc(
+            detailRepository: RoutineInspectionUploadFactorRepository()),
+      ),
+      BlocProvider<PageBloc>(
+        create: (BuildContext context) => PageBloc(),
+      ),
+    ],
+    child: AirDeviceCorrectUploadPage(
+      json: json,
+    ),
+  );
+});
+
+var waterDeviceParamUploadHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String json = params['json']?.first;
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider<UploadBloc>(
+        create: (BuildContext context) =>
+            UploadBloc(uploadRepository: WaterDeviceParamUploadRepository()),
+      ),
+      BlocProvider<ListBloc>(
+        create: (BuildContext context) =>
+            ListBloc(listRepository: WaterDeviceParamListRepository()),
+      ),
+      BlocProvider<PageBloc>(
+        create: (BuildContext context) => PageBloc(),
+      ),
+    ],
+    child: WaterDeviceParamUploadPage(
+      json: json,
     ),
   );
 });
