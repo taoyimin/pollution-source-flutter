@@ -124,22 +124,22 @@ class _EnterListPageState extends State<EnterListPage>
                   areaPickerListener: (areaId) {
                     areaCode = areaId;
                   },
-                  popupMenuButton: PopupMenuButton<String>(
-                    itemBuilder: (BuildContext context) =>
-                        <PopupMenuItem<String>>[
-                      UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
-                      UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
-                    ],
-                    onSelected: (String action) {
-                      // 点击选项的时候
-                      switch (action) {
-                        case 'A':
-                          break;
-                        case 'B':
-                          break;
-                      }
-                    },
-                  ),
+//                  popupMenuButton: PopupMenuButton<String>(
+//                    itemBuilder: (BuildContext context) =>
+//                        <PopupMenuItem<String>>[
+//                      UIUtils.getSelectView(Icons.message, '发起群聊', 'A'),
+//                      UIUtils.getSelectView(Icons.group_add, '添加服务', 'B'),
+//                    ],
+//                    onSelected: (String action) {
+//                      // 点击选项的时候
+//                      switch (action) {
+//                        case 'A':
+//                          break;
+//                        case 'B':
+//                          break;
+//                      }
+//                    },
+//                  ),
                 );
               },
             ),

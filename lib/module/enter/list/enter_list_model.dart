@@ -39,6 +39,11 @@ class Enter extends Equatable {
     enterType,
   ];
 
+  factory Enter.fromJson(Map<String, dynamic> json) =>
+      _$EnterFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EnterToJson(this);
+
   //企业图标
   String get imagePath{
     return _getEnterTypeImage(enterType);
@@ -54,11 +59,6 @@ class Enter extends Equatable {
         ? const []
         : _getLabelList(enterType);
   }
-
-  factory Enter.fromJson(Map<String, dynamic> json) =>
-      _$EnterFromJson(json);
-
-  Map<String, dynamic> toJson() => _$EnterToJson(this);
 
   //根据企业类型获取图片
   static String _getEnterTypeImage(String enterType) {
