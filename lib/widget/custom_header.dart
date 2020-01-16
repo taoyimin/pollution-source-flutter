@@ -14,6 +14,8 @@ class ListHeaderWidget extends StatefulWidget {
   final Widget popupMenuButton;
   final bool showSearch;
   final bool automaticallyImplyLeading;
+  final PreferredSizeWidget bottom;
+  final double expandedHeight;
 
   //外部传入，用于回到顶部
   final ScrollController scrollController;
@@ -30,6 +32,8 @@ class ListHeaderWidget extends StatefulWidget {
     this.color = Colours.primary_color,
     this.showSearch = false,
     this.automaticallyImplyLeading = true,
+    this.bottom,
+    this.expandedHeight = 150,
     this.popupMenuButton,
     this.scrollController,
     this.editController,
@@ -132,10 +136,11 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
   Widget build(BuildContext context) {
     return SliverAppBar(
       title: Text(widget.title),
-      expandedHeight: 150.0,
+      expandedHeight: widget.expandedHeight,
       pinned: true,
       floating: false,
       snap: false,
+      bottom: widget.bottom,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(

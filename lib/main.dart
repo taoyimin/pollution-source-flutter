@@ -53,6 +53,8 @@ class _MyAppState extends State<MyApp> {
           accentColor: Colours.accent_color,
           brightness: Brightness.light,
           primaryColorBrightness: Brightness.dark,
+          // 设置中文和英文的基准线一致
+          textTheme: TextTheme(subhead: TextStyle(textBaseline: TextBaseline.alphabetic)),
         ),
         onGenerateRoute: Application.router.generator,
       ),
