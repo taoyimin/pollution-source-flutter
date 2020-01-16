@@ -61,6 +61,18 @@ class TokenInterceptor extends Interceptor {
       RequestOptions options = response.request;
       CompatUtils.setToken(options);
       Log.i("----------- 重新请求接口 ------------");
+      if (options.data is FormData) {
+        // 由于MultipartFile是基于Stream的，Stream只能读取一次，所以应该重新创建
+        FormData formData = FormData();
+        formData.fields.addAll(options.data.fields);
+        for (MapEntry mapFile in options.data.files) {
+          formData.files.add(MapEntry(
+              mapFile.key,
+              MultipartFile.fromFileSync(mapFile.value.FILE_PATH,
+              filename: mapFile.value.filename)));
+        }
+        options.data = formData;
+      }
       //避免重复执行拦截器，使用tokenDio
       var newResponse = await _tokenDio.request(
         options.path,
@@ -84,7 +96,10 @@ class HandleErrorInterceptor extends Interceptor {
   onResponse(Response response) {
     if (response != null && response.statusCode == ExceptionHandle.success) {
       // 状态码200（如果response中有code或success还需要判断code是否为success_code，success是否为true）
-      if (response.data is Map &&
+      if(response.data is List<dynamic>){
+        // 有时接口会直接返回List
+        return super.onResponse(response);
+      } else if (response.data is Map &&
               response.data.containsKey(Constant.responseCodeKey)
           ? response.data[Constant.responseCodeKey] ==
               ExceptionHandle.success_code
