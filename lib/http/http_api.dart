@@ -72,9 +72,6 @@ enum HttpApi {
   /// 排污许可证列表
   licenseList,
 
-  /// 排污许可证详情
-  licenseDetail,
-
   /// 排口异常申报停产类型列表
   dischargeReportStopTypeList,
 
@@ -95,6 +92,21 @@ enum HttpApi {
 
   /// 辅助/监测设备巡检上报
   deviceInspectionUpload,
+
+  /// 废水/废气监测设备校验上报
+  deviceCheckUpload,
+
+  /// 巡检上报查询设备的某个监测因子
+  routineInspectionFactorDetail,
+
+  /// 废气监测设备校准上报
+  deviceCorrectUpload,
+
+  /// 废水监测设备参数巡检上报
+  deviceParamUpload,
+
+  /// 废水监测设备参数列表
+  deviceParamList,
 }
 
 class HttpApiJava {
@@ -122,9 +134,7 @@ class HttpApiJava {
   static const String longStopReportDetail =
       'stopApply/getStopApply?dataType=L&reportId=';
   static const String longStopReportUpload = 'stopApply/addAbonrmalInfoL';
-
-  static const String licenseList = '暂无';
-  static const String licenseDetail = 'enterprise/getLicenseInfoById';
+  static const String licenseList = '/enterprise/getLicenseInfoById';
   static const String dischargeReportStopTypeList = 'dictionary/getSubListByParent?dicCode=stopType';
   static const String factorReportAlarmTypeList = 'dictionary/getSubListByParent?dicCode=alarm_type';
   static const String factorReportFactorList = 'stopApply/getPollutionFactor';
@@ -153,7 +163,6 @@ class HttpApiPython {
   static const String longStopReportDetail = 'longStopReports/';
   static const String longStopReportUpload = 'longStopReports';
   static const String licenseList = 'licenses';
-  static const String licenseDetail = 'licenses/';
 }
 
 class HttpApiOperation {
@@ -174,10 +183,7 @@ class HttpApiOperation {
   static const String factorReportList = 'archives/abnormalApply/list';
   static const String factorReportDetail = 'archives/abnormalApply/detailInterAPI?id=';
   static const String factorReportUpload = 'archives/abnormalApply/addAbonrmalAPI';
-  static const String longStopReportList = '暂无';
-  static const String longStopReportDetail = '暂无';
   static const String licenseList = '暂无';
-  static const String licenseDetail = '暂无';
   static const String dischargeReportStopTypeList = 'dictionary/getSubListAPI?dicCode=stopType';
   static const String factorReportAlarmTypeList = 'dictionary/getSubListAPI?dicCode=alarmType';
   static const String factorReportFactorList = 'archives/abnormalApply/selectFactorCodeByMonitorId';
@@ -185,4 +191,9 @@ class HttpApiOperation {
   static const String routineInspectionDetail = 'ywmh/tInspectionTask/selectTaskCount?monitorId=';
   static const String routineInspectionUploadList = 'ywmh/tInspectionTask/doMonitorTasksForJson';
   static const String deviceInspectionUpload = '/ywmh/tInspectionTask/submit';
+  static const String deviceCheckUpload = '/ywmh/tInspectionTask/submitGasOrWatCheck';
+  static const String routineInspectionFactorDetail = '/ywmh/tInspectionTask/selectMonitorPoint';
+  static const String deviceCorrectUpload = '/ywmh/tInspectionTask/submitGasCmesCorrect';
+  static const String deviceParamUpload = '/ywmh/tInspectionTask/submitWatParameter';
+  static const String deviceParamList = '/ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
 }
