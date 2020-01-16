@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:common_utils/common_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:open_file/open_file.dart';
 import 'package:pollution_source/http/dio_utils.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/file_utils.dart';
@@ -1140,60 +1143,6 @@ class IconBaseInfoWidget extends StatelessWidget {
   }
 }
 
-/*class IconBaseInfoWidget extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String content;
-  final int flex;
-  final TextAlign contentTextAlign;
-  final double contentMarginTop;
-
-  IconBaseInfoWidget({
-    @required this.icon,
-    @required this.title,
-    @required this.content,
-    this.flex = 1,
-    this.contentTextAlign = TextAlign.left,
-    this.contentMarginTop = 0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: flex,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          //加一个padding使图标和后面内容对齐
-          Padding(
-            padding:const EdgeInsets.only(top: 2),
-            child: Icon(
-              icon,
-              size: 14,
-            ),
-          ),
-          Gaps.hGap3,
-          Text(title, style: const TextStyle(fontSize: 13)),
-          //Gaps.hGap10,
-          Expanded(
-            //当content是纯数字或字母时无法和title对齐，所以加一个padding
-            child: Padding(
-              padding: EdgeInsets.only(top: contentMarginTop),
-              child: Text(
-                '：$content',
-                style: const TextStyle(
-                  fontSize: 13,
-                ),
-                textAlign: contentTextAlign,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}*/
-
 //详情页联系人信息widget
 class ContactsWidget extends StatelessWidget {
   final String contactsName;
@@ -1713,6 +1662,7 @@ class TipClipper extends CustomClipper<Path> {
   bool shouldReclip(TipClipper oldClipper) => false;
 }
 
+/// 单行选择控件
 class SelectRowWidget extends StatelessWidget {
   final String title;
   final String content;
@@ -1765,9 +1715,191 @@ class SelectRowWidget extends StatelessWidget {
   }
 }
 
+/// 没有标题的单行选择控件
+class SelectRowWidget2 extends StatelessWidget {
+  final String content;
+  final GestureTapCallback onTap;
+
+  SelectRowWidget2({
+    Key key,
+    @required this.content,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          height: 46,
+          alignment: Alignment.center,
+          child: Text(
+            content == null || content == '' ? '请选择' : content,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              color: content == null || content == ''
+                  ? Colours.secondary_text
+                  : Colours.primary_text,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 单行文本输入控件
+class EditRowWidget extends StatelessWidget {
+  final String title;
+  final TextStyle style;
+  final TextInputType keyboardType;
+  final ValueChanged<String> onChanged;
+
+  EditRowWidget({
+    Key key,
+    @required this.title,
+    this.style = const TextStyle(fontSize: 15),
+    this.keyboardType = TextInputType.text,
+    this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 46,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '$title',
+            style: style,
+          ),
+          Gaps.hGap20,
+          Flexible(
+            child: TextField(
+              textAlign: TextAlign.right,
+              style: style,
+              keyboardType: keyboardType,
+              onChanged: onChanged,
+              decoration: InputDecoration(
+                hintText: '请输入$title',
+                hintStyle: style,
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 没有标题的单行文本输入控件
+class EditRowWidget2 extends StatelessWidget {
+  final String hintText;
+  final int flex;
+  final TextStyle style;
+  final ValueChanged<String> onChanged;
+
+  EditRowWidget2({
+    Key key,
+    this.hintText = '请输入',
+    this.flex = 1,
+    this.style = const TextStyle(fontSize: 15),
+    this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      flex: flex,
+      child: Container(
+        height: 46,
+        child: TextField(
+          textAlign: TextAlign.center,
+          style: style,
+          keyboardType: TextInputType.number,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: style,
+            border: UnderlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RadioRowWidget extends StatelessWidget {
+  final String title;
+  final String trueText;
+  final String falseText;
+  final bool checked;
+  final TextStyle style;
+  final ValueChanged<bool> onChanged;
+
+  RadioRowWidget({
+    Key key,
+    @required this.title,
+    @required this.trueText,
+    @required this.falseText,
+    @required this.checked,
+    this.style = const TextStyle(fontSize: 15),
+    this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 46,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '$title',
+            style: style,
+          ),
+          Expanded(
+            child: Gaps.empty,
+            flex: 1,
+          ),
+          Radio(
+            value: true,
+            groupValue: checked,
+            onChanged: onChanged,
+          ),
+          Text(
+            '$trueText',
+            style: style,
+          ),
+          Radio(
+            value: false,
+            groupValue: checked,
+            onChanged: onChanged,
+          ),
+          Text(
+            '$falseText',
+            style: style,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 //单行文本输入控件
 @Deprecated('已被DataDictWidget替代，后续将删除')
-class EditRowWidget extends StatelessWidget {
+class EditRowWidget3 extends StatelessWidget {
   final String title;
   final String hintText;
   final bool readOnly;
@@ -1775,7 +1907,7 @@ class EditRowWidget extends StatelessWidget {
   final GestureTapCallback onTap;
   final Widget popupMenuButton;
 
-  EditRowWidget({
+  EditRowWidget3({
     Key key,
     @required this.title,
     this.hintText = '请输入',
@@ -1832,14 +1964,18 @@ class TextAreaWidget extends StatelessWidget {
   final String title;
   final String hintText;
   final TextEditingController controller;
+  final ValueChanged<String> onChanged;
   final GestureTapCallback onTap;
+  final int maxLines;
 
   TextAreaWidget({
     Key key,
-    @required this.title,
+    this.title,
     this.hintText = '请输入',
-    @required this.controller,
+    this.controller,
+    this.onChanged,
     this.onTap,
+    this.maxLines = 4,
   }) : super(key: key);
 
   @override
@@ -1847,23 +1983,26 @@ class TextAreaWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          height: 46,
-          child: Row(
-            children: <Widget>[
-              Text(
-                '$title',
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
-          ),
-        ),
+        title != null
+            ? Container(
+                height: 46,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      '$title',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+              )
+            : Gaps.empty,
         Container(
           child: TextField(
             onTap: onTap ?? () {},
             controller: controller,
+            onChanged: onChanged,
             textAlign: TextAlign.start,
-            maxLines: 4,
+            maxLines: maxLines,
             style: TextStyle(fontSize: 15),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(top: 0, bottom: 16),
@@ -1880,34 +2019,134 @@ class TextAreaWidget extends StatelessWidget {
   }
 }
 
-class MapInfoRowWidget extends StatelessWidget {
+/// [DetailRowWidget]加载完成后的回调函数
+typedef DetailRowLoaded<T> = void Function(T value);
+
+/// 详情加载单行控件
+class DetailRowWidget<T> extends StatelessWidget {
+  final String title;
+  final String content;
+  final DetailBloc detailBloc;
+  final double height;
+
+  /// 加载完成后触发的回调函数
+  final DetailRowLoaded<T> onLoaded;
+
+  /// 加载失败后的点击事件
+  final GestureTapCallback onErrorTap;
+
+  DetailRowWidget({
+    Key key,
+    @required this.title,
+    @required this.content,
+    @required this.detailBloc,
+    this.height = 46,
+    @required this.onLoaded,
+    this.onErrorTap,
+  })  : assert(detailBloc != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<DetailBloc, DetailState>(
+      bloc: detailBloc,
+      listener: (context, state) {
+        if (state is DetailLoaded) {
+          // 请求完成后通过回调把实体类传递出去
+          onLoaded(state.detail);
+        }
+      },
+      child: BlocBuilder<DetailBloc, DetailState>(
+        bloc: detailBloc,
+        builder: (context, state) {
+          return Container(
+            height: height,
+            child: Row(
+              children: <Widget>[
+                Text(
+                  '$title',
+                  style: const TextStyle(fontSize: 15),
+                ),
+                Gaps.hGap20,
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: state is DetailError ? onErrorTap : () {},
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        content == null || content == ''
+                            ? () {
+                                if (state is DetailLoading)
+                                  return '$title加载中';
+                                else if (state is DetailError)
+                                  return '$title加载失败';
+                                else if (state is DetailLoaded)
+                                  return '$content';
+                                else
+                                  return '未知状态，state=$state';
+                              }()
+                            : content,
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: content == null || content == ''
+                              ? () {
+                                  if (state is DetailError)
+                                    return Colors.red;
+                                  else
+                                    return Colours.secondary_text;
+                                }()
+                              : Colours.primary_text,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// 信息展示单行控件
+class InfoRowWidget extends StatelessWidget {
   final String title;
   final String content;
 
-  MapInfoRowWidget({
+  InfoRowWidget({
     @required this.title,
     @required this.content,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 56,
-      child: Row(
-        children: <Widget>[
-          Gaps.hGap16,
-          Text(
-            '$title',
-            style: TextStyle(fontSize: 15),
-          ),
-          Expanded(child: Gaps.empty),
-          Text(
-            '$content',
-            textAlign: TextAlign.right,
-            style: TextStyle(fontSize: 15),
-          ),
-          Gaps.hGap16,
-        ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 46),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: <Widget>[
+            Text(
+              '$title',
+              style: TextStyle(fontSize: 15),
+            ),
+            Gaps.hGap20,
+            Expanded(
+              flex: 1,
+              child: Text(
+                '$content',
+                textAlign: TextAlign.right,
+                style: TextStyle(fontSize: 15),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1921,6 +2160,7 @@ class IconCheckButton extends StatelessWidget {
   final bool checked;
   final TextStyle style;
   final EdgeInsetsGeometry padding;
+  final int flex;
   final GestureTapCallback onTap;
 
   IconCheckButton({
@@ -1928,15 +2168,16 @@ class IconCheckButton extends StatelessWidget {
     this.imagePath,
     this.color,
     this.checked = true,
-    this.style =const TextStyle(color: Colors.white, fontSize: 13),
-    this.padding =const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+    this.style = const TextStyle(color: Colors.white, fontSize: 13),
+    this.padding = const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+    this.flex = 1,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 1,
+      flex: flex,
       child: Opacity(
         opacity: checked ? 1 : 0.5,
         child: FlatButton(

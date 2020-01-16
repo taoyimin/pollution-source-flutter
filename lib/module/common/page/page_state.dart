@@ -13,6 +13,7 @@ class PageLoaded extends PageState {
 
   const PageLoaded({@required this.model});
 
+  /// 默认每次都触发状态改变
   @override
-  List<Object> get props => [model];
+  List<Object> get props => [DateTime.now()];
 }

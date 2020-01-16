@@ -9,6 +9,7 @@ abstract class PageEvent extends Equatable {
 }
 
 class PageLoad extends PageEvent {
+  /// 页面对应的实体类
   final model;
 
   const PageLoad({@required this.model});

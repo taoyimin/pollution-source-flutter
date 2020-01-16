@@ -23,9 +23,10 @@ class MapInfoPage extends StatelessWidget {
 
   Widget _buildBodyWidget() {
     return ListView.separated(
+      padding:const EdgeInsets.symmetric(horizontal: 16),
       itemCount: mapInfo.length,
       itemBuilder: (BuildContext context, int index) {
-        return MapInfoRowWidget(
+        return InfoRowWidget(
           title: '${mapInfo.keys.toList()[index]}',
           content: '${mapInfo.values.toList()[index]}',
         );

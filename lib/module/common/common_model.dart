@@ -226,7 +226,7 @@ ChartData _$ChartDataFromJson(Map<String, dynamic> json) {
   return ChartData(
       factorName: json['factorName'] as String,
       unit: json['unit'] as String,
-      checked: false,
+      checked: points.length != 0,
       color: UIUtils.getRandomColor(),
       lastValue: points.length == 0 ? '无数据' : points[0].y.toString(),
       maxX: UIUtils.getMax(points.map((point) {
