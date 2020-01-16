@@ -9,10 +9,13 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
+import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_repository.dart';
+import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_repository.dart';
+import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_model.dart';
 import 'package:pollution_source/res/gaps.dart';
 
@@ -71,8 +74,12 @@ class _RoutineInspectionDetailPageState
             BlocListener<DetailBloc, DetailState>(
               listener: (context, state) {
                 if (state is DetailLoaded) {
-                  _tabController =
-                      TabController(length: state.detail.length, vsync: this);
+                  if (_tabController == null ||
+                      _tabController.length != state.detail.length) {
+                    // 如果_tabController为null或者tab个数改变了再重新初始化_tabController
+                    _tabController =
+                        TabController(length: state.detail.length, vsync: this);
+                  }
                 }
               },
               child: SliverAppBar(
@@ -127,6 +134,8 @@ class _RoutineInspectionDetailPageState
                                             width: 80,
                                             child: Text(
                                               () {
+                                                if (state.detail.length == 0)
+                                                  return '当前监控点没有待办巡检项目';
                                                 String type = state
                                                     .detail[_tabController
                                                         .animation.value
@@ -157,7 +166,9 @@ class _RoutineInspectionDetailPageState
                                               color: Colors.white,
                                             ),
                                             child: Text(
-                                              '共${state.detail[_tabController.animation.value.round()].taskCount}条数据',
+                                              state.detail.length != 0
+                                                  ? '共${state.detail[_tabController.animation.value.round()].taskCount}条数据'
+                                                  : '没有巡检项目',
                                               style: const TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.lightBlue,
@@ -233,7 +244,7 @@ class _RoutineInspectionDetailPageState
               return ErrorMessageWidget(errorMessage: state.message);
             } else if (state is DetailLoaded) {
               if (state.detail.length == 0) {
-                return EmptyWidget(message: '没有任务需要处理');
+                return EmptyWidget(message: '没有巡检需要处理');
               } else {
                 return _buildPageLoadedDetail(state.detail);
               }
@@ -313,7 +324,7 @@ class _RoutineInspectionDetailPageState
                       create: (BuildContext context) => ListBloc(
                           listRepository:
                               RoutineInspectionUploadListRepository()),
-                      child: WaterDeviceCheckUploadListPage(
+                      child: AirDeviceCheckUploadListPage(
                         monitorId: widget.monitorId,
                         itemInspectType:
                             routineInspectionDetail.itemInspectType,
@@ -322,6 +333,28 @@ class _RoutineInspectionDetailPageState
                   }
                   return Center(
                     child: Text('未知的监控点类型，monitorType=${widget.monitorType}'),
+                  );
+                case '2':
+                  // 废气监测设备校准上报列表
+                  return BlocProvider<ListBloc>(
+                    create: (BuildContext context) => ListBloc(
+                        listRepository:
+                            RoutineInspectionUploadListRepository()),
+                    child: AirDeviceCorrectUploadListPage(
+                      monitorId: widget.monitorId,
+                      itemInspectType: routineInspectionDetail.itemInspectType,
+                    ),
+                  );
+                case '4':
+                  // 废水监测设备参数巡检上报列表
+                  return BlocProvider<ListBloc>(
+                    create: (BuildContext context) => ListBloc(
+                        listRepository:
+                            RoutineInspectionUploadListRepository()),
+                    child: WaterDeviceParamUploadListPage(
+                      monitorId: widget.monitorId,
+                      itemInspectType: routineInspectionDetail.itemInspectType,
+                    ),
                   );
                 default:
                   return Center(

@@ -66,7 +66,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _pageBloc = PageBloc();
     //首次加载
-    _pageBloc.add(PageLoad(model: ProcessUpload()));
+    _pageBloc.add(PageLoad(model: ProcessUpload(orderId: widget.orderId)));
     //初始化编辑框控制器
     _operatePersonController = TextEditingController();
     _operateDescController = TextEditingController();
@@ -88,6 +88,9 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     _operatePersonController.dispose();
     _operateDescController.dispose();
     controller.dispose();
+    //取消正在进行的请求
+    final currentState = _detailBloc?.state;
+    if (currentState is DetailLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
@@ -131,7 +134,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
               } else if (state is UploadSuccess) {
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
-                    behavior: SnackBarBehavior.floating,
                     content: Text('${state.message}'),
                     action: SnackBarAction(
                         label: '我知道了',
@@ -143,9 +145,10 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 //关闭BottomSheet
                 _bottomSheetController?.close();
                 //刷新详情页面
-                _detailBloc.add(DetailLoad(detailId: widget.orderId));
+                _detailBloc.add(DetailUpdate(detailId: widget.orderId));
                 //刷新上报界面
-                _pageBloc.add(PageLoad(model: ProcessUpload()));
+                _pageBloc.add(
+                    PageLoad(model: ProcessUpload(orderId: widget.orderId)));
                 //只清空操作描述输入框，不清空操作人输入框
                 _operateDescController.text = '';
               } else if (state is UploadFail) {
@@ -619,42 +622,46 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                   },
                 ),
                 Gaps.hGap20,
-                (){
-                  if(getOperateType(orderDetail.orderState) == 2){
+                () {
+                  if (getOperateType(orderDetail.orderState) == 1) {
                     return ClipButton(
                       text: '提交',
                       icon: Icons.file_upload,
                       color: Colors.lightBlue,
                       onTap: () {
                         //发送上传事件
-                        _uploadBloc.add(Upload(
-                            data: ProcessUpload(
-                              orderId: widget.orderId,
+                        _uploadBloc.add(
+                          Upload(
+                            data: processUpload.copyWith(
+                              // 退回
+                              operateType: '1',
                               operatePerson: _operatePersonController.text,
-                              operateType: '2',
                               operateDesc: _operateDescController.text,
-                              attachments: processUpload.attachments,
-                            )));
+                            ),
+                          ),
+                        );
                       },
                     );
-                  }else if(getOperateType(orderDetail.orderState) == 4){
+                  } else if (getOperateType(orderDetail.orderState) == 4) {
                     return ClipButton(
                       text: '退回',
                       icon: Icons.subdirectory_arrow_left,
                       color: Colors.red,
                       onTap: () {
                         //发送上传事件
-                        _uploadBloc.add(Upload(
-                            data: ProcessUpload(
-                              orderId: widget.orderId,
-                              operatePerson: _operatePersonController.text,
+                        _uploadBloc.add(
+                          Upload(
+                            data: processUpload.copyWith(
+                              // 退回
                               operateType: '4',
+                              operatePerson: _operatePersonController.text,
                               operateDesc: _operateDescController.text,
-                              attachments: processUpload.attachments,
-                            )));
+                            ),
+                          ),
+                        );
                       },
                     );
-                  }else{
+                  } else {
                     return Gaps.empty;
                   }
                 }(),
@@ -669,19 +676,19 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
 
   /// 获取当前用户可以进行的操作
   ///
-  /// 返回2表示可以处理 返回4表示可以退回 返回-1表示不可以操作督办单
+  /// 返回1表示可以处理 返回4表示可以退回 返回-1表示不可以操作督办单
   int getOperateType(String orderState) {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
         // 环保用户
         if (orderState == '20' || orderState == '40')
-          return 2; // 待处理和已退回状态可以处理
+          return 1; // 待处理和已退回状态可以处理
         else if (orderState == '50') return 4; // 已办结状态可以退回
         return -1;
       case 1:
       case 2:
         // 企业用户和运维用户
-        if (orderState == '20' || orderState == '40') return 2; // 待处理和已退回状态可以处理
+        if (orderState == '20' || orderState == '40') return 1; // 待处理和已退回状态可以处理
         return -1;
       default:
         return -1;

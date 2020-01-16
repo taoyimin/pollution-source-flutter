@@ -193,7 +193,7 @@ class _DeviceInspectionUploadListPageState
                 } else if (state is ListError) {
                   return ErrorSliver(errorMessage: state.message);
                 } else if (state is ListLoaded) {
-                  return _buildPageLoadedList(convert(state.list));
+                  return _buildPageLoadedList(RoutineInspectionUploadList.convert(state.list));
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -213,27 +213,6 @@ class _DeviceInspectionUploadListPageState
         },
       ),
     );
-  }
-
-  List<RoutineInspectionUploadList> convert(
-      List<RoutineInspectionUploadList> list) {
-    return list.expand((item) {
-      List<RoutineInspectionUploadList> tempList = [];
-      List<String> inspectionTaskIds = item.inspectionTaskId.split(',');
-      List<String> contentNames = item.contentName.split(',');
-      List<String> inspectionStartTimes = item.inspectionStartTime.split(',');
-      List<String> inspectionEndTimes = item.inspectionEndTime.split(',');
-      for (int i = 0; i < inspectionTaskIds.length; i++) {
-        tempList.add(RoutineInspectionUploadList(
-          itemName: item.itemName,
-          inspectionTaskId: inspectionTaskIds[i],
-          contentName: contentNames[i],
-          inspectionStartTime: inspectionStartTimes[i],
-          inspectionEndTime: inspectionEndTimes[i],
-        ));
-      }
-      return tempList;
-    }).toList();
   }
 
   Widget _buildPageLoadedList(List<RoutineInspectionUploadList> list) {

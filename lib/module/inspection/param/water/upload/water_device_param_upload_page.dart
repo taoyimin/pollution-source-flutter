@@ -105,7 +105,7 @@ class _WaterDeviceParamUploadPageState
               BlocListener<UploadBloc, UploadState>(
                 listener: (context, state) {
                   if (state is UploadSuccess) {
-                    Toast.show(state.message);
+                    Toast.show('${state.message}');
                     Navigator.pop(context, true);
                   }
                 },
@@ -147,20 +147,45 @@ class _WaterDeviceParamUploadPageState
           Gaps.hLine,
           InfoRowWidget(title: '分析方法', content: task?.analysisMethod ?? '无'),
           Gaps.hLine,
-          Column(
-            children: waterDeviceParamUpload?.waterDeviceParamTypeList
-                    ?.asMap()
-                    ?.map((i, WaterDeviceParamType waterDeviceParamType) =>
-                        MapEntry(
-                            i,
-                            _buildPageParamType(
-                              i,
-                              waterDeviceParamUpload.waterDeviceParamTypeList,
-                              waterDeviceParamUpload,
-                            )))
-                    ?.values
-                    ?.toList() ??
-                [],
+          BlocBuilder<ListBloc, ListState>(
+            builder: (context, state) {
+              if (state is ListInitial || state is ListLoading) {
+                return Container(height: 300, child: LoadingWidget());
+              } else if (state is ListEmpty) {
+                return Container(
+                  height: 300,
+                  child: EmptyWidget(
+                    message: '没有查询到设备的参数巡检项目',
+                  ),
+                );
+              } else if (state is ListError) {
+                return Container(
+                  height: 300,
+                  child: ErrorMessageWidget(errorMessage: state.message),
+                );
+              } else if (state is ListLoaded) {
+                return Column(
+                  children: waterDeviceParamUpload?.waterDeviceParamTypeList
+                          ?.asMap()
+                          ?.map(
+                              (i, WaterDeviceParamType waterDeviceParamType) =>
+                                  MapEntry(
+                                      i,
+                                      _buildPageParamType(
+                                        i,
+                                        waterDeviceParamUpload
+                                            .waterDeviceParamTypeList,
+                                        waterDeviceParamUpload,
+                                      )))
+                          ?.values
+                          ?.toList() ??
+                      [],
+                );
+              } else {
+                return Container(height: 300, child: ErrorMessageWidget(
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state'),);
+              }
+            },
           ),
           Gaps.vGap10,
           Row(

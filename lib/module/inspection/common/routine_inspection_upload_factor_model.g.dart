@@ -12,7 +12,8 @@ RoutineInspectionUploadFactor _$RoutineInspectionUploadFactorFromJson(
       factorId: json['Factor_Id'] as int,
       factorCode: json['Factor_Code'] as String,
       factorName: json['Factor_Name'] as String,
-      unit: json['Unit'] as String);
+      unit: json['Unit'] as String,
+      measureRange: json['Standar_Value'] as String);
 }
 
 Map<String, dynamic> _$RoutineInspectionUploadFactorToJson(
@@ -21,5 +22,6 @@ Map<String, dynamic> _$RoutineInspectionUploadFactorToJson(
       'Factor_Id': instance.factorId,
       'Factor_Code': instance.factorCode,
       'Factor_Name': instance.factorName,
-      'Unit': instance.unit
+      'Unit': instance.unit,
+      'Standar_Value': instance.measureRange
     };

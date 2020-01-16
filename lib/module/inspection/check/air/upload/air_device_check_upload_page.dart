@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -13,6 +15,8 @@ import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_model.dart';
+import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_model.dart';
+import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_repository.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
@@ -33,8 +37,10 @@ class AirDeviceCheckUploadPage extends StatefulWidget {
 
 class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
   PageBloc _pageBloc;
+
+  /// 加载因子信息Bloc
+  DetailBloc _detailBloc;
   UploadBloc _uploadBloc;
-  TextEditingController _remarkController;
   RoutineInspectionUploadList task;
 
   @override
@@ -48,7 +54,6 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
         model: AirDeviceCheckUpload(
       inspectionTaskId: task.inspectionTaskId,
       itemType: task.itemType,
-      factorCode: task.factorCode,
       airDeviceCheckRecordList: [
         AirDeviceCheckRecord(),
         AirDeviceCheckRecord(),
@@ -57,15 +62,21 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
         AirDeviceCheckRecord(),
       ],
     )));
+    _detailBloc = BlocProvider.of<DetailBloc>(context);
+    // 加载该设备的监测因子
+    _detailBloc.add(DetailLoad(
+        params: RoutineInspectionUploadFactorRepository.createParams(
+      factorCode: task.factorCode,
+      deviceId: task.deviceId,
+      monitorId: task.monitorId,
+    )));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    _remarkController = TextEditingController();
   }
 
   @override
   void dispose() {
     // 释放资源
-    _remarkController.dispose();
     super.dispose();
   }
 
@@ -89,8 +100,8 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                 inspectionEndTime = task?.inspectionEndTime ?? '';
               }
               return UploadHeaderWidget(
-                title: '废水监测设备校验上报',
-                subTitle: '''企业名称：$enterName
+                title: '废气监测设备校验',
+                subTitle: '''$enterName
 监控点名：$monitorName
 设备名称：$deviceName
 开始日期：$inspectionStartTime
@@ -133,87 +144,268 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
 
   Widget _buildPageLoadedDetail(AirDeviceCheckUpload airDeviceCheckUpload) {
     return SliverToBoxAdapter(
+        child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+          DetailRowWidget<RoutineInspectionUploadFactor>(
+            title: '校验因子',
+            content: airDeviceCheckUpload?.factor?.factorName,
+            detailBloc: _detailBloc,
+            onLoaded: (RoutineInspectionUploadFactor factor) {
+              _pageBloc.add(PageLoad(
+                model: airDeviceCheckUpload.copyWith(factor: factor),
+              ));
+            },
+            onErrorTap: () {
+              _detailBloc.add(DetailLoad(
+                  params: RoutineInspectionUploadFactorRepository.createParams(
+                factorCode: task.factorCode,
+                deviceId: task.deviceId,
+                monitorId: task.monitorId,
+              )));
+            },
+          ),
+          Gaps.hLine,
+          DetailRowWidget<RoutineInspectionUploadFactor>(
+            title: '测量单位',
+            content: airDeviceCheckUpload?.factor?.unit,
+            detailBloc: _detailBloc,
+            onLoaded: (RoutineInspectionUploadFactor factor) {},
+            onErrorTap: () {
+              _detailBloc.add(DetailLoad(
+                  params: RoutineInspectionUploadFactorRepository.createParams(
+                factorCode: task.factorCode,
+                deviceId: task.deviceId,
+                monitorId: task.monitorId,
+              )));
+            },
+          ),
+          Gaps.hLine,
+          Container(
+            height: 46,
             child: Row(
               children: <Widget>[
-                Text('监测时间'),
-                Text('监测时间1'),
-                Text('监测时间2'),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: airDeviceCheckUpload?.airDeviceCheckRecordList
-                      ?.asMap()
-                      ?.map((i, AirDeviceCheckRecord airDeviceCheckRecord) =>
-                          MapEntry(
-                              i,
-                              _buildPageListItem(
-                                  airDeviceCheckUpload
-                                      ?.airDeviceCheckRecordList,
-                                  i)))
-                      ?.values
-                      ?.toList() ??
-                  [],
-            ),
-          ),
-          Gaps.vGap10,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: const Text(
-              '备注：至少上传五条监测记录',
-              style: TextStyle(fontSize: 13, color: Colours.secondary_text),
-            ),
-          ),
-          Gaps.vGap10,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[
-//                ClipButton(
-//                  text: '添加记录',
-//                  icon: Icons.add,
-//                  color: Colors.lightGreen,
-//                  onTap: () {
-//                    list.add(AirDeviceCheckUpload(
-//                        inspectionTaskId: task.inspectionTaskId,
-//                        itemType: task.itemType));
-//                    _pageBloc.add(PageLoad(model: list));
-//                  },
-//                ),
-//                Gaps.hGap20,
-                ClipButton(
-                  text: '提交',
-                  icon: Icons.file_upload,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    _uploadBloc.add(Upload(
-                      data: airDeviceCheckUpload,
-                    ));
-                  },
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      '监测时间',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      '参比方法测量值',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      'CEMS测量值',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
+          Gaps.hLine,
+          Column(
+            children: airDeviceCheckUpload?.airDeviceCheckRecordList
+                    ?.asMap()
+                    ?.map((i, AirDeviceCheckRecord airDeviceCheckRecord) =>
+                        MapEntry(
+                            i,
+                            _buildPageListItem(
+                              i,
+                              airDeviceCheckUpload.airDeviceCheckRecordList,
+                              airDeviceCheckUpload,
+                            )))
+                    ?.values
+                    ?.toList() ??
+                [],
+          ),
+          Container(
+            height: 46,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      '平均测量值',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      '${airDeviceCheckUpload?.compareAvgVal}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      '${airDeviceCheckUpload?.cemsAvgVal}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Gaps.hLine,
+          Gaps.vGap10,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                '备注：至少上传五条记录',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colours.secondary_text,
+                ),
+              ),
+              Gaps.hGap10,
+              InkWell(
+                onTap: () {
+                  airDeviceCheckUpload.airDeviceCheckRecordList
+                      .add(AirDeviceCheckRecord());
+                  _pageBloc.add(PageLoad(model: airDeviceCheckUpload));
+                },
+                child: const Text(
+                  '点击新增',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colours.primary_color,
+                  ),
+                ),
+              )
+            ],
+          ),
+          Gaps.vGap10,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Gaps.hLine,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: const Text('如校验合格前对系统进行过处理、调整、参数修改，请说明:'),
+              ),
+              TextAreaWidget(
+                maxLines: 3,
+                onChanged: (value) {
+                  _pageBloc.add(PageLoad(
+                      model:
+                          airDeviceCheckUpload.copyWith(paramRemark: value)));
+                },
+              ),
+              Gaps.hLine,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: const Text('如校验后，颗粒物测量仪、流速仪的原校正系统改动，请说明:'),
+              ),
+              TextAreaWidget(
+                maxLines: 3,
+                onChanged: (value) {
+                  _pageBloc.add(PageLoad(
+                      model:
+                          airDeviceCheckUpload.copyWith(changeRemark: value)));
+                },
+              ),
+              Gaps.hLine,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: const Text('总体校验是否合格:'),
+              ),
+              TextAreaWidget(
+                maxLines: 3,
+                onChanged: (value) {
+                  _pageBloc.add(PageLoad(
+                      model:
+                          airDeviceCheckUpload.copyWith(checkResult: value)));
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              ClipButton(
+                text: '提交',
+                icon: Icons.file_upload,
+                color: Colors.lightBlue,
+                onTap: () {
+                  _uploadBloc.add(Upload(
+                    data: airDeviceCheckUpload,
+                  ));
+                },
+              ),
+            ],
+          ),
           Gaps.vGap20,
         ],
       ),
-    );
+    ));
   }
 
-  Widget _buildPageListItem(List<AirDeviceCheckRecord> list, int index) {
+  Widget _buildPageListItem(int index, List<AirDeviceCheckRecord> list,
+      AirDeviceCheckUpload airDeviceCheckUpload) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        EditRowWidget(
-          title: '哈哈哈',
-          onChanged: (value) {
-          },
+        Row(
+          children: <Widget>[
+            SelectRowWidget2(
+              content: DateUtil.formatDate(list[index]?.currentCheckTime,
+                  format: 'MM-dd HH:mm'),
+              onTap: () {
+                DatePicker.showDatePicker(context,
+                    locale: DateTimePickerLocale.zh_cn,
+                    pickerMode: DateTimePickerMode.datetime,
+                    onClose: () {}, onConfirm: (dateTime, selectedIndex) {
+                  list[index] =
+                      list[index].copyWith(currentCheckTime: dateTime);
+                  _pageBloc.add(PageLoad(
+                      model: airDeviceCheckUpload.copyWith(
+                          airDeviceCheckRecordList: list)));
+                });
+              },
+            ),
+            EditRowWidget2(
+              onChanged: (value) {
+                list[index] = list[index].copyWith(currentCheckResult: value);
+                _pageBloc.add(PageLoad(
+                    model: airDeviceCheckUpload.copyWith(
+                        airDeviceCheckRecordList: list)));
+              },
+            ),
+            EditRowWidget2(
+              onChanged: (value) {
+                list[index] = list[index].copyWith(currentCheckIsPass: value);
+                _pageBloc.add(PageLoad(
+                    model: airDeviceCheckUpload.copyWith(
+                        airDeviceCheckRecordList: list)));
+              },
+            ),
+          ],
         ),
         Gaps.hLine,
       ],

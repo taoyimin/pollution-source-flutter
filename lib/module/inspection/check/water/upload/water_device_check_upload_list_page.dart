@@ -97,7 +97,8 @@ class _WaterDeviceCheckUploadListPageState
                 } else if (state is ListError) {
                   return ErrorSliver(errorMessage: state.message);
                 } else if (state is ListLoaded) {
-                  return _buildPageLoadedList(state.list);
+                  return _buildPageLoadedList(
+                      RoutineInspectionUploadList.convert(state.list));
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -133,6 +134,14 @@ class _WaterDeviceCheckUploadListPageState
                 if (success) {
                   // 刷新常规巡检详情界面header中的任务条数
                   _detailBloc.add(DetailUpdate(detailId: widget.monitorId));
+                  // 刷新列表页面
+                  _listBloc.add(ListLoad(
+                    isRefresh: true,
+                    params: RoutineInspectionUploadListRepository.createParams(
+                      monitorId: widget.monitorId,
+                      itemInspectType: widget.itemInspectType,
+                    ),
+                  ));
                 }
               },
               children: <Widget>[

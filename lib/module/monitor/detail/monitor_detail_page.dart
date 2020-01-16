@@ -37,6 +37,10 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
 
   @override
   void dispose() {
+    //取消正在进行的请求
+    final currentState = _monitorDetailBloc?.state;
+    if (currentState is MonitorDetailLoading)
+      currentState.cancelToken?.cancel();
     super.dispose();
   }
 
@@ -103,7 +107,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               } else if (state is MonitorDetailError) {
                 return ErrorSliver(errorMessage: state.errorMessage);
               } else if (state is MonitorDetailLoaded) {
-                return _buildPageLoadedDetail(context, state.monitorDetail, state.isCurved, state.showDotData);
+                return _buildPageLoadedDetail(context, state.monitorDetail,
+                    state.isCurved, state.showDotData);
               } else {
                 return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
               }
@@ -114,7 +119,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(BuildContext context,MonitorDetail monitorDetail, bool isCurved, bool showDotData) {
+  Widget _buildPageLoadedDetail(BuildContext context,
+      MonitorDetail monitorDetail, bool isCurved, bool showDotData) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -195,7 +201,23 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '监测数据',
-                  content: DateUtil.formatDateMs(monitorDetail.chartDataList[0].maxX.toInt(), format: 'yyyy-MM-dd HH:mm:ss'),
+                  content: monitorDetail.chartDataList
+                              .skipWhile((chartData) {
+                                return !chartData.checked;
+                              })
+                              .toList()
+                              .length ==
+                          0
+                      ? ''
+                      : DateUtil.formatDateMs(
+                          monitorDetail.chartDataList
+                              .skipWhile((chartData) {
+                                return !chartData.checked;
+                              })
+                              .toList()[0]
+                              .maxX
+                              .toInt(),
+                          format: 'yyyy-MM-dd HH:mm:ss'),
                   imagePath: 'assets/images/icon_monitor_statistics.png',
                 ),
                 GridView.count(
@@ -213,12 +235,15 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                     return FactorValueWidget(
                       chartData: chartData,
                       onTap: () {
-                        if(chartData.points ==null || chartData.points.length==0){
+                        if (chartData.points == null ||
+                            chartData.points.length == 0) {
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
                               content: Text('${chartData.factorName}没有数据'),
                               action: SnackBarAction(
-                                  label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                  label: '我知道了',
+                                  textColor: Colours.primary_color,
+                                  onPressed: () {}),
                             ),
                           );
                           return;
@@ -249,9 +274,11 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       onTap: () {
                         Scaffold.of(context).showSnackBar(
                           SnackBar(
-                            content:const Text('排放标准功能开发中'),
+                            content: const Text('排放标准功能开发中'),
                             action: SnackBarAction(
-                                label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                label: '我知道了',
+                                textColor: Colours.primary_color,
+                                onPressed: () {}),
                           ),
                         );
                       },
@@ -296,23 +323,23 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                     InkWellButton5(
                       ratio: 1.2,
                       onTap: () {
-                        Application.router.navigateTo(
-                            context, '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&state=5');
+                        Application.router.navigateTo(context,
+                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&state=5');
                       },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '已办结',
                         content: '${monitorDetail.orderCompleteCount}',
                         imagePath:
-                        'assets/images/icon_alarm_manage_complete.png',
+                            'assets/images/icon_alarm_manage_complete.png',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
                       ratio: 1.2,
                       onTap: () {
-                        Application.router.navigateTo(
-                            context, '${Routes.orderList}?monitorId=${monitorDetail.monitorId}');
+                        Application.router.navigateTo(context,
+                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}');
                       },
                       meta: Meta(
                         color: Color(0xFFFFB709),

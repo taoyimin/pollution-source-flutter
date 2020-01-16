@@ -25,6 +25,10 @@ class RoutineInspectionUploadList extends Equatable {
   final String monitorId;
   final String deviceId;
   final String factorName;
+  @JsonKey(name: 'measure_principle')
+  final String measurePrinciple;
+  @JsonKey(name: 'analysis_method')
+  final String analysisMethod;
 
   const RoutineInspectionUploadList({
     this.inspectionTaskId,
@@ -43,6 +47,8 @@ class RoutineInspectionUploadList extends Equatable {
     this.monitorId,
     this.deviceId,
     this.factorName,
+    this.measurePrinciple,
+    this.analysisMethod,
   });
 
   @override
@@ -63,6 +69,8 @@ class RoutineInspectionUploadList extends Equatable {
         monitorId,
         deviceId,
         factorName,
+        measurePrinciple,
+        analysisMethod,
       ];
 
   factory RoutineInspectionUploadList.fromJson(Map<String, dynamic> json) =>
@@ -115,6 +123,8 @@ class RoutineInspectionUploadList extends Equatable {
             deviceName: item.deviceName,
             deviceId: item.deviceId,
             monitorId: item.monitorId,
+            measurePrinciple: item.measurePrinciple,
+            analysisMethod: item.analysisMethod,
             // itemName只有分号拼接，没有逗号拼接
             itemName: content.itemName,
             inspectionTaskId: inspectionTaskIds[j],

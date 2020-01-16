@@ -13,12 +13,15 @@ class RoutineInspectionUploadFactor extends Equatable{
   final String factorName;
   @JsonKey(name: 'Unit')
   final String unit;
+  @JsonKey(name: 'Standar_Value')
+  final String measureRange;  //分析仪量程
 
   const RoutineInspectionUploadFactor({
     this.factorId,
     this.factorCode,
     this.factorName,
     this.unit,
+    this.measureRange,
   });
 
   @override
@@ -27,6 +30,7 @@ class RoutineInspectionUploadFactor extends Equatable{
     factorCode,
     factorName,
     unit,
+    measureRange,
   ];
 
   factory RoutineInspectionUploadFactor.fromJson(Map<String, dynamic> json) =>

@@ -8,23 +8,25 @@ part of 'license_list_model.dart';
 
 License _$LicenseFromJson(Map<String, dynamic> json) {
   return License(
-      licenseId: json['licenseId'] as String,
-      enterName: json['enterName'] as String,
-      issueUnitStr: json['issueUnitStr'] as String,
-      issueTimeStr: json['issueTimeStr'] as String,
-      licenseTimeStr: json['licenseTimeStr'] as String,
-      validTimeStr: json['validTimeStr'] as String,
-      licenseManagerTypeStr: json['licenseManagerTypeStr'] as String,
+      licenseId: json['licenseId'] as int,
+      enterName: json['enterpriseName'] as String,
+      issueUnitStr: json['issueUnitName'] as String,
+      issueTimeStr: json['issueTime'] as String,
+      licenseTimeStr: json['licenseTime'] as String,
+      validStartTime: json['validStartTime'] as String,
+      validEndTime: json['validEndTime'] as String,
+      licenseManagerTypeStr: json['licenceManagementType'] as String,
       licenseNumber: json['licenseNumber'] as String);
 }
 
 Map<String, dynamic> _$LicenseToJson(License instance) => <String, dynamic>{
       'licenseId': instance.licenseId,
-      'enterName': instance.enterName,
-      'issueUnitStr': instance.issueUnitStr,
-      'issueTimeStr': instance.issueTimeStr,
-      'licenseTimeStr': instance.licenseTimeStr,
-      'validTimeStr': instance.validTimeStr,
-      'licenseManagerTypeStr': instance.licenseManagerTypeStr,
+      'enterpriseName': instance.enterName,
+      'issueUnitName': instance.issueUnitStr,
+      'issueTime': instance.issueTimeStr,
+      'licenseTime': instance.licenseTimeStr,
+      'validStartTime': instance.validStartTime,
+      'validEndTime': instance.validEndTime,
+      'licenceManagementType': instance.licenseManagerTypeStr,
       'licenseNumber': instance.licenseNumber
     };

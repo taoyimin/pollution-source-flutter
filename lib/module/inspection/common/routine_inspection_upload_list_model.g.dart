@@ -20,7 +20,13 @@ RoutineInspectionUploadList _$RoutineInspectionUploadListFromJson(
       deviceName: json['deviceName'] as String,
       enterName: json['enterpriseName'] as String,
       dischargeName: json['disOutName'] as String,
-      monitorName: json['disMonitorName'] as String);
+      monitorName: json['disMonitorName'] as String,
+      factorCode: json['factorCode'] as String,
+      monitorId: json['monitorId'] as String,
+      deviceId: json['deviceId'] as String,
+      factorName: json['factorName'] as String,
+      measurePrinciple: json['measure_principle'] as String,
+      analysisMethod: json['analysis_method'] as String);
 }
 
 Map<String, dynamic> _$RoutineInspectionUploadListToJson(
@@ -37,5 +43,11 @@ Map<String, dynamic> _$RoutineInspectionUploadListToJson(
       'deviceName': instance.deviceName,
       'enterpriseName': instance.enterName,
       'disOutName': instance.dischargeName,
-      'disMonitorName': instance.monitorName
+      'disMonitorName': instance.monitorName,
+      'factorCode': instance.factorCode,
+      'monitorId': instance.monitorId,
+      'deviceId': instance.deviceId,
+      'factorName': instance.factorName,
+      'measure_principle': instance.measurePrinciple,
+      'analysis_method': instance.analysisMethod
     };

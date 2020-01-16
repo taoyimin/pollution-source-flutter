@@ -96,7 +96,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           ],
                         ),
                       ),
-                      //基础数据查询
+                      // 基础数据查询
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -140,7 +140,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           ],
                         ),
                       ),
-                      //异常申报查询
+                      // 运维管理上报
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -150,32 +150,32 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             ImageTitleWidget(
-                                title: '异常申报查询',
+                                title: '运维管理上报',
                                 imagePath:
-                                    'assets/images/icon_alarm_error.png'),
+                                'assets/images/icon_alarm_manage.png'),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '排口异常',
-                                      content: '排口异常列表',
+                                      title: '常规巡检',
+                                      content: '常规巡检上报',
                                       imagePath:
-                                          'assets/images/application_icon_discharge_report.png'),
+                                      'assets/images/application_icon_discharge_report.png'),
                                   onTap: () {
                                     Application.router.navigateTo(context,
-                                        '${Routes.dischargeReportList}');
+                                        '${Routes.routineInspectionList}');
                                   },
                                 ),
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '因子异常',
-                                      content: '因子异常列表',
+                                      title: '易耗品更换',
+                                      content: '易耗品更换上报',
                                       imagePath:
-                                          'assets/images/application_icon_factor_report.png'),
+                                      'assets/images/application_icon_factor_report.png'),
                                   onTap: () {
-                                    Application.router.navigateTo(
-                                        context, '${Routes.factorReportList}');
+                                    Application.router.navigateTo(context,
+                                        '${Routes.factorReportUpload}');
                                   },
                                 ),
                               ],
@@ -183,7 +183,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           ],
                         ),
                       ),
-                      //报警管理单查询
+                      // 报警管理单查询
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -195,7 +195,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                             ImageTitleWidget(
                                 title: '报警管理单查询',
                                 imagePath:
-                                    'assets/images/application_icon_alarm.png'),
+                                'assets/images/application_icon_alarm.png'),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
@@ -203,7 +203,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                       title: '报警管理单',
                                       content: '报警管理单列表',
                                       imagePath:
-                                          'assets/images/application_icon_order.png'),
+                                      'assets/images/application_icon_order.png'),
                                   onTap: () {
                                     Application.router.navigateTo(
                                         context, '${Routes.orderList}');
@@ -216,7 +216,50 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           ],
                         ),
                       ),
-                      //异常申报上报
+                      // 异常申报查询
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ImageTitleWidget(
+                                title: '异常申报查询',
+                                imagePath:
+                                'assets/images/icon_alarm_error.png'),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '排口异常',
+                                      content: '排口异常列表',
+                                      imagePath:
+                                      'assets/images/application_icon_discharge_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(context,
+                                        '${Routes.dischargeReportList}');
+                                  },
+                                ),
+                                Gaps.hGap20,
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '因子异常',
+                                      content: '因子异常列表',
+                                      imagePath:
+                                      'assets/images/application_icon_factor_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(
+                                        context, '${Routes.factorReportList}');
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      // 异常申报上报
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,

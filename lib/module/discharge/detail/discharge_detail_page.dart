@@ -33,16 +33,15 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
 
   @override
   void dispose() {
+    //取消正在进行的请求
+    final currentState = _detailBloc?.state;
+    if (currentState is DetailLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
-
-  //用来显示SnackBar
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
@@ -134,7 +133,7 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                   children: <Widget>[
                     IconBaseInfoWidget(
                       content: '排口编号：${dischargeDetail.dischargeNumber}',
-                      icon: Icons.format_list_numbered,
+                      icon: Icons.table_chart,
                       flex: 6,
                     ),
                     Gaps.hGap10,

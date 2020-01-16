@@ -1,4 +1,3 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
@@ -20,7 +19,7 @@ class WaterDeviceParamUploadRepository
 
   @override
   Future<FormData> createFormData(WaterDeviceParamUpload data) async {
-    var formData = FormData.fromMap({
+    return FormData.fromMap({
       'inspectionTaskId': data.waterDeviceParamTypeList
           .map(
             (WaterDeviceParamType waterDeviceParamType) {
@@ -112,8 +111,5 @@ class WaterDeviceParamUploadRepository
           .toList()
           .join(','),
     });
-    LogUtil.e(formData.fields);
-    //throw DioError(error: InvalidParamException('测试'));
-    return formData;
   }
 }

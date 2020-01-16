@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -11,7 +12,14 @@ abstract class MonitorDetailState extends Equatable {
 }
 
 //监控点详情页初始的加载状态
-class MonitorDetailLoading extends MonitorDetailState {}
+class MonitorDetailLoading extends MonitorDetailState {
+  final CancelToken cancelToken;
+
+  const MonitorDetailLoading({@required this.cancelToken});
+
+  @override
+  List<Object> get props => [cancelToken];
+}
 
 //监控点详情加载完成的状态
 class MonitorDetailLoaded extends MonitorDetailState {

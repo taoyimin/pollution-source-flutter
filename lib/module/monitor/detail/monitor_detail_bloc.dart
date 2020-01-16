@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_model.dart';
@@ -15,7 +16,8 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
       : assert(detailRepository != null);
 
   @override
-  MonitorDetailState get initialState => MonitorDetailLoading();
+  MonitorDetailState get initialState =>
+      MonitorDetailLoading(cancelToken: null);
 
   @override
   Stream<MonitorDetailState> mapEventToState(MonitorDetailEvent event) async* {
@@ -34,7 +36,10 @@ class MonitorDetailBloc extends Bloc<MonitorDetailEvent, MonitorDetailState> {
   Stream<MonitorDetailState> _mapMonitorDetailLoadToState(
       MonitorDetailLoad event) async* {
     try {
-      final monitorDetail = await detailRepository.request(detailId: event.monitorId);
+      CancelToken cancelToken = CancelToken();
+      MonitorDetailLoading(cancelToken: cancelToken);
+      final monitorDetail = await detailRepository.request(
+          detailId: event.monitorId, cancelToken: cancelToken);
       yield MonitorDetailLoaded(
         monitorDetail: monitorDetail,
         isCurved: SpUtil.getBool(Constant.spIsCurved, defValue: true),

@@ -80,8 +80,8 @@ class _WaterDeviceCheckUploadPageState
                 inspectionEndTime = task?.inspectionEndTime ?? '';
               }
               return UploadHeaderWidget(
-                title: '废水监测设备校验上报',
-                subTitle: '''企业名称：$enterName
+                title: '废水监测设备校验',
+                subTitle: '''$enterName
 监控点名：$monitorName
 设备名称：$deviceName
 开始日期：$inspectionStartTime
@@ -100,7 +100,7 @@ class _WaterDeviceCheckUploadPageState
               BlocListener<UploadBloc, UploadState>(
                 listener: (context, state) {
                   if (state is UploadSuccess) {
-                    Toast.show(state.message);
+                    Toast.show('${state.message}');
                     Navigator.pop(context, true);
                   }
                 },
@@ -185,7 +185,6 @@ class _WaterDeviceCheckUploadPageState
 
   Widget _buildPageListItem(List<WaterDeviceCheckUpload> list, int index) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           children: <Widget>[

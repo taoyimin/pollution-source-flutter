@@ -93,7 +93,7 @@ class _AirDeviceCorrectUploadPageState
                 inspectionEndTime = task?.inspectionEndTime ?? '';
               }
               return UploadHeaderWidget(
-                title: '废气监测设备校准上报',
+                title: '废气监测设备校准',
                 subTitle: '''$enterName
 监控点名：$monitorName
 设备名称：$deviceName
@@ -291,7 +291,7 @@ class _AirDeviceCorrectUploadPageState
               title: '仪器校准是否正常',
               trueText: '正常',
               falseText: '不正常',
-              checked: airDeviceCorrectUpload.zeroIsNormal,
+              checked: airDeviceCorrectUpload?.zeroIsNormal ?? true,
               onChanged: (value) {
                 _pageBloc.add(PageLoad(
                     model:
@@ -367,7 +367,7 @@ class _AirDeviceCorrectUploadPageState
               title: '仪器校准是否正常',
               trueText: '正常',
               falseText: '不正常',
-              checked: airDeviceCorrectUpload.rangeIsNormal,
+              checked: airDeviceCorrectUpload?.rangeIsNormal ?? true,
               onChanged: (value) {
                 _pageBloc.add(PageLoad(
                     model:

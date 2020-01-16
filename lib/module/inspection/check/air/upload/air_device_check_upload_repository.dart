@@ -3,13 +3,14 @@ import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_model.dart';
-import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_model.dart';
 
-class AirDeviceUploadRepository
+class AirDeviceCheckUploadRepository
     extends UploadRepository<AirDeviceCheckUpload, String> {
   @override
   checkData(AirDeviceCheckUpload data) {
-    if (data.airDeviceCheckRecordList.length < 5)
+    if (data.factor == null)
+      throw DioError(error: InvalidParamException('请先加载校验因子'));
+    else if (data.airDeviceCheckRecordList.length < 5)
       throw DioError(error: InvalidParamException('请至少上传五条记录'));
   }
 
@@ -20,21 +21,21 @@ class AirDeviceUploadRepository
 
   @override
   Future<FormData> createFormData(AirDeviceCheckUpload data) async {
-    var formData = FormData.fromMap({
+    return FormData.fromMap({
       'inspectionTaskId': int.parse(data.inspectionTaskId),
       'itemType': data.itemType,
-      'factorId': int.parse(data.factorId),
-      'factorCode': data.factorCode,
-      'factorName': data.factorName,
-      'compareUnit': data.compareUnit,
-      'cemsUnit': data.cemsUnit,
+      'factorId': data.factor.factorId,
+      'factorCode': data.factor.factorCode,
+      'factorName': data.factor.factorName,
+      'compareUnit': data.factor.unit,
+      'cemsUnit': data.factor.unit,
       'compareAvgVal': data.compareAvgVal,
       'cemsAvgVal': data.cemsAvgVal,
       'inspectionTaskInsideId': data.airDeviceCheckRecordList.map((item) {
         return int.parse(data.inspectionTaskId);
       }).toList().join(','),
       'factorInsideId': data.airDeviceCheckRecordList.map((item) {
-        return int.parse(data.factorId);
+        return data.factor.factorId;
       }).toList().join(','),
       'currentCheckTime': data.airDeviceCheckRecordList.map((item) {
         return item.currentCheckTime.toString();
@@ -49,8 +50,5 @@ class AirDeviceUploadRepository
       'changeRemark': data.changeRemark,
       'checkResult': data.checkResult,
     });
-    print(formData.fields);
-    throw DioError(error: InvalidParamException('测试'));
-    return formData;
   }
 }

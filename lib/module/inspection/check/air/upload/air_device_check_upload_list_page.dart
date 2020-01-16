@@ -97,7 +97,8 @@ class _AirDeviceCheckUploadListPageState
                 } else if (state is ListError) {
                   return ErrorSliver(errorMessage: state.message);
                 } else if (state is ListLoaded) {
-                  return _buildPageLoadedList(convert(state.list));
+                  return _buildPageLoadedList(
+                      RoutineInspectionUploadList.convert(state.list));
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -119,33 +120,6 @@ class _AirDeviceCheckUploadListPageState
     );
   }
 
-  List<RoutineInspectionUploadList> convert(
-      List<RoutineInspectionUploadList> list) {
-    return list.expand((item) {
-      List<RoutineInspectionUploadList> tempList = [];
-      List<String> inspectionTaskIds = item.inspectionTaskId.split(',');
-      List<String> itemTypes = item.itemType.split(',');
-      List<String> contentNames = item.contentName.split(',');
-      List<String> inspectionStartTimes = item.inspectionStartTime.split(',');
-      List<String> inspectionEndTimes = item.inspectionEndTime.split(',');
-      List<String> factorCodes = item.factorCode.split(',');
-      for (int i = 0; i < inspectionTaskIds.length; i++) {
-        tempList.add(RoutineInspectionUploadList(
-          itemName: item.itemName,
-          deviceName: item.deviceName,
-          deviceId: item.deviceId,
-          inspectionTaskId: inspectionTaskIds[i],
-          itemType: itemTypes[i],
-          contentName: contentNames[i],
-          inspectionStartTime: inspectionStartTimes[i],
-          inspectionEndTime: inspectionEndTimes[i],
-          factorCode: factorCodes[i],
-        ));
-      }
-      return tempList;
-    }).toList();
-  }
-
   Widget _buildPageLoadedList(List<RoutineInspectionUploadList> list) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -156,10 +130,18 @@ class _AirDeviceCheckUploadListPageState
             child: InkWellButton(
               onTap: () async {
                 bool success = await Application.router.navigateTo(context,
-                    '${Routes.waterDeviceCheckUpload}?json=${Uri.encodeComponent(json.encode(list[index].toJson()))}');
-                if (success) {
+                    '${Routes.airDeviceCheckUpload}?json=${Uri.encodeComponent(json.encode(list[index].toJson()))}');
+                if (success ?? false) {
                   // 刷新常规巡检详情界面header中的任务条数
                   _detailBloc.add(DetailUpdate(detailId: widget.monitorId));
+                  // 刷新列表页面
+                  _listBloc.add(ListLoad(
+                    isRefresh: true,
+                    params: RoutineInspectionUploadListRepository.createParams(
+                      monitorId: widget.monitorId,
+                      itemInspectType: widget.itemInspectType,
+                    ),
+                  ));
                 }
               },
               children: <Widget>[
@@ -182,7 +164,7 @@ class _AirDeviceCheckUploadListPageState
                             Padding(
                               padding: const EdgeInsets.only(right: 16),
                               child: Text(
-                                '${list[index].deviceName}',
+                                '${list[index].deviceName}：${list[index].factorName}校验',
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
