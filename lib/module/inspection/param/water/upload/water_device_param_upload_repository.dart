@@ -19,97 +19,50 @@ class WaterDeviceParamUploadRepository
 
   @override
   Future<FormData> createFormData(WaterDeviceParamUpload data) async {
-    return FormData.fromMap({
-      'inspectionTaskId': data.waterDeviceParamTypeList
-          .map(
-            (WaterDeviceParamType waterDeviceParamType) {
-              return waterDeviceParamType.waterDeviceParamNameList
-                  .map(
-                    (WaterDeviceParamName waterDeviceParamName) {
-                      return int.parse(data.inspectionTaskId);
-                    },
-                  )
-                  .toList()
-                  .join(',');
-            },
-          )
-          .toList()
-          .join(','),
-      'parameterType': data.waterDeviceParamTypeList
-          .map(
-            (WaterDeviceParamType waterDeviceParamType) {
-              return waterDeviceParamType.waterDeviceParamNameList
-                  .map(
-                    (WaterDeviceParamName waterDeviceParamName) {
-                      return waterDeviceParamType.parameterType;
-                    },
-                  )
-                  .toList()
-                  .join(',');
-            },
-          )
-          .toList()
-          .join(','),
-      'parameterName': data.waterDeviceParamTypeList
-          .map(
-            (WaterDeviceParamType waterDeviceParamType) {
-              return waterDeviceParamType.waterDeviceParamNameList
-                  .map(
-                    (WaterDeviceParamName waterDeviceParamName) {
-                      return waterDeviceParamName.parameterName;
-                    },
-                  )
-                  .toList()
-                  .join(',');
-            },
-          )
-          .toList()
-          .join(','),
-      'originalVal': data.waterDeviceParamTypeList
-          .map(
-            (WaterDeviceParamType waterDeviceParamType) {
-              return waterDeviceParamType.waterDeviceParamNameList
-                  .map(
-                    (WaterDeviceParamName waterDeviceParamName) {
-                      return waterDeviceParamName.originalVal;
-                    },
-                  )
-                  .toList()
-                  .join(',');
-            },
-          )
-          .toList()
-          .join(','),
-      'updateVal': data.waterDeviceParamTypeList
-          .map(
-            (WaterDeviceParamType waterDeviceParamType) {
-              return waterDeviceParamType.waterDeviceParamNameList
-                  .map(
-                    (WaterDeviceParamName waterDeviceParamName) {
-                      return waterDeviceParamName.updateVal;
-                    },
-                  )
-                  .toList()
-                  .join(',');
-            },
-          )
-          .toList()
-          .join(','),
-      'modifyReason': data.waterDeviceParamTypeList
-          .map(
-            (WaterDeviceParamType waterDeviceParamType) {
-              return waterDeviceParamType.waterDeviceParamNameList
-                  .map(
-                    (WaterDeviceParamName waterDeviceParamName) {
-                      return waterDeviceParamName.modifyReason;
-                    },
-                  )
-                  .toList()
-                  .join(',');
-            },
-          )
-          .toList()
-          .join(','),
-    });
+    FormData formData = FormData();
+    formData.fields
+      ..addAll(data.waterDeviceParamTypeList
+          .expand((WaterDeviceParamType waterDeviceParamType) {
+        return waterDeviceParamType.waterDeviceParamNameList
+            .map((WaterDeviceParamName waterDeviceParamName) {
+          return MapEntry('inspectionTaskId', data.inspectionTaskId);
+        });
+      }))
+      ..addAll(data.waterDeviceParamTypeList
+          .expand((WaterDeviceParamType waterDeviceParamType) {
+        return waterDeviceParamType.waterDeviceParamNameList
+            .map((WaterDeviceParamName waterDeviceParamName) {
+          return MapEntry('parameterType', waterDeviceParamType.parameterType);
+        });
+      }))
+      ..addAll(data.waterDeviceParamTypeList
+          .expand((WaterDeviceParamType waterDeviceParamType) {
+        return waterDeviceParamType.waterDeviceParamNameList
+            .map((WaterDeviceParamName waterDeviceParamName) {
+          return MapEntry('parameterName', waterDeviceParamName.parameterName);
+        });
+      }))
+      ..addAll(data.waterDeviceParamTypeList
+          .expand((WaterDeviceParamType waterDeviceParamType) {
+        return waterDeviceParamType.waterDeviceParamNameList
+            .map((WaterDeviceParamName waterDeviceParamName) {
+          return MapEntry('originalVal', waterDeviceParamName.originalVal);
+        });
+      }))
+      ..addAll(data.waterDeviceParamTypeList
+          .expand((WaterDeviceParamType waterDeviceParamType) {
+        return waterDeviceParamType.waterDeviceParamNameList
+            .map((WaterDeviceParamName waterDeviceParamName) {
+          return MapEntry('updateVal', waterDeviceParamName.updateVal);
+        });
+      }))
+      ..addAll(data.waterDeviceParamTypeList
+          .expand((WaterDeviceParamType waterDeviceParamType) {
+        return waterDeviceParamType.waterDeviceParamNameList
+            .map((WaterDeviceParamName waterDeviceParamName) {
+          return MapEntry('modifyReason', waterDeviceParamName.modifyReason);
+        });
+      }));
+    return formData;
   }
 }

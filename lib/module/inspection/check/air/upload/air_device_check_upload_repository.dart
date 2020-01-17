@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
@@ -12,6 +13,14 @@ class AirDeviceCheckUploadRepository
       throw DioError(error: InvalidParamException('请先加载校验因子'));
     else if (data.airDeviceCheckRecordList.length < 5)
       throw DioError(error: InvalidParamException('请至少上传五条记录'));
+    for (int i = 0; i < data.airDeviceCheckRecordList.length; i++) {
+      if (data.airDeviceCheckRecordList[i].currentCheckTime == null)
+        throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的监测时间'));
+      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckResult))
+        throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的参比方法测量值'));
+      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckIsPass))
+        throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的CEMS测量值'));
+    }
   }
 
   @override
@@ -21,34 +30,53 @@ class AirDeviceCheckUploadRepository
 
   @override
   Future<FormData> createFormData(AirDeviceCheckUpload data) async {
-    return FormData.fromMap({
-      'inspectionTaskId': int.parse(data.inspectionTaskId),
-      'itemType': data.itemType,
-      'factorId': data.factor.factorId,
-      'factorCode': data.factor.factorCode,
-      'factorName': data.factor.factorName,
-      'compareUnit': data.factor.unit,
-      'cemsUnit': data.factor.unit,
-      'compareAvgVal': data.compareAvgVal,
-      'cemsAvgVal': data.cemsAvgVal,
-      'inspectionTaskInsideId': data.airDeviceCheckRecordList.map((item) {
-        return int.parse(data.inspectionTaskId);
-      }).toList().join(','),
-      'factorInsideId': data.airDeviceCheckRecordList.map((item) {
-        return data.factor.factorId;
-      }).toList().join(','),
-      'currentCheckTime': data.airDeviceCheckRecordList.map((item) {
-        return item.currentCheckTime.toString();
-      }).toList().join(','),
-      'currentCheckResult': data.airDeviceCheckRecordList.map((item) {
-        return item.currentCheckResult;
-      }).toList().join(','),
-      'currentCheckIsPass': data.airDeviceCheckRecordList.map((item) {
-        return item.currentCheckIsPass;
-      }).toList().join(','),
-      'paramRemark': data.paramRemark,
-      'changeRemark': data.changeRemark,
-      'checkResult': data.checkResult,
-    });
+    FormData formData = FormData();
+    formData.fields
+      ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
+      ..addAll([MapEntry('itemType', data.itemType)])
+      ..addAll([MapEntry('factorId', data.factor.factorId.toString())])
+      // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
+      ..addAll([
+        MapEntry(
+            'factorCode',
+            TextUtil.isEmpty(data.factor.factorCode)
+                ? ' '
+                : data.factor.factorCode)
+      ])
+      ..addAll([MapEntry('factorName', data.factor.factorName)])
+      ..addAll([MapEntry('compareUnit', data.factor.unit)])
+      ..addAll([MapEntry('cemsUnit', data.factor.unit)])
+      ..addAll([MapEntry('compareAvgVal', data.compareAvgVal)])
+      ..addAll([MapEntry('cemsAvgVal', data.cemsAvgVal)])
+      ..addAll(data.airDeviceCheckRecordList.map((item) {
+        return MapEntry('inspectionTaskInsideId', data.inspectionTaskId);
+      }))
+      ..addAll(data.airDeviceCheckRecordList.map((item) {
+        return MapEntry('factorInsideId', data.factor.factorId.toString());
+      }))
+      ..addAll(data.airDeviceCheckRecordList.map((item) {
+        return MapEntry('currentCheckTime',
+            DateUtil.getDateStrByDateTime(item.currentCheckTime));
+      }))
+      ..addAll(data.airDeviceCheckRecordList.map((item) {
+        return MapEntry('currentCheckResult', item.currentCheckResult);
+      }))
+      ..addAll(data.airDeviceCheckRecordList.map((item) {
+        return MapEntry('currentCheckIsPass', item.currentCheckIsPass);
+      }))
+      // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
+      ..addAll([
+        MapEntry('paramRemark',
+            TextUtil.isEmpty(data.paramRemark) ? ' ' : data.paramRemark)
+      ])
+      ..addAll([
+        MapEntry('changeRemark',
+            TextUtil.isEmpty(data.changeRemark) ? ' ' : data.changeRemark)
+      ])
+      ..addAll([
+        MapEntry('checkResult',
+            TextUtil.isEmpty(data.checkResult) ? ' ' : data.checkResult)
+      ]);
+    return formData;
   }
 }

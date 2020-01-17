@@ -8,12 +8,14 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
+import 'package:pollution_source/module/inspection/common/air_device_last_value_repository.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_model.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_repository.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
@@ -41,12 +43,19 @@ class _AirDeviceCorrectUploadPageState
 
   /// 加载因子信息Bloc
   DetailBloc _detailBloc;
+
+  /// 加载上次校准后测试值
+  DetailBloc _lastValueBloc;
   UploadBloc _uploadBloc;
   RoutineInspectionUploadList task;
+  TextEditingController _zeroCorrectValController;
+  TextEditingController _rangeCorrectValController;
 
   @override
   void initState() {
     super.initState();
+    _zeroCorrectValController = TextEditingController();
+    _rangeCorrectValController = TextEditingController();
     task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
     // 初始化页面Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
@@ -63,6 +72,9 @@ class _AirDeviceCorrectUploadPageState
       deviceId: task.deviceId,
       monitorId: task.monitorId,
     )));
+    _lastValueBloc =
+        DetailBloc(detailRepository: AirDeviceLastValueRepository());
+    _lastValueBloc.add(DetailLoad(detailId: '92774'));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
   }
@@ -115,6 +127,23 @@ class _AirDeviceCorrectUploadPageState
                   if (state is UploadSuccess) {
                     Toast.show(state.message);
                     Navigator.pop(context, true);
+                  }
+                },
+              ),
+              BlocListener<DetailBloc, DetailState>(
+                bloc: _lastValueBloc,
+                listener: (context, state) {
+                  final currentState = _pageBloc.state;
+                  if (state is DetailLoaded && currentState is PageLoaded) {
+                    // 加载上次校准后测试值成功
+                    if (!TextUtil.isEmpty(state.detail.zeroCorrectVal)) {
+                      _zeroCorrectValController.text =
+                          state.detail.zeroCorrectVal;
+                    }
+                    if (!TextUtil.isEmpty(state.detail.rangeCorrectVal)) {
+                      _rangeCorrectValController.text =
+                          state.detail.rangeCorrectVal;
+                    }
                   }
                 },
               ),
@@ -258,8 +287,9 @@ class _AirDeviceCorrectUploadPageState
             ),
             Gaps.hLine,
             EditRowWidget(
-              title: '上次校准后 测试值',
+              title: '上次校准后测试值',
               keyboardType: TextInputType.number,
+              controller: _zeroCorrectValController,
               onChanged: (value) {
                 _pageBloc.add(PageLoad(
                     model:
@@ -334,8 +364,9 @@ class _AirDeviceCorrectUploadPageState
             ),
             Gaps.hLine,
             EditRowWidget(
-              title: '上次校准后 测试值',
+              title: '上次校准后测试值',
               keyboardType: TextInputType.number,
+              controller: _rangeCorrectValController,
               onChanged: (value) {
                 _pageBloc.add(PageLoad(
                     model: airDeviceCorrectUpload.copyWith(

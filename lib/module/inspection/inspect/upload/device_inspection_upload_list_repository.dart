@@ -20,25 +20,18 @@ class DeviceInspectionUploadRepository
   @override
   Future<FormData> createFormData(
       DeviceInspectUpload deviceInspectUpload) async {
-    return FormData.fromMap({
-      'inspectionTaskId': deviceInspectUpload.selectedList
-          .map((item) {
-            return item.inspectionTaskId;
-          })
-          .toList()
-          .join(','),
-      'inspectionRemark': deviceInspectUpload.selectedList
-          .map((item) {
-            return deviceInspectUpload.isNormal ? '正常' : '不正常';
-          })
-          .toList()
-          .join(','),
-      'remark': deviceInspectUpload.selectedList
-          .map((item) {
-            return deviceInspectUpload.remark;
-          })
-          .toList()
-          .join(','),
-    });
+    FormData formData = FormData();
+    formData.fields
+      ..addAll(deviceInspectUpload.selectedList.map((item) {
+        return MapEntry('inspectionTaskId', item.inspectionTaskId);
+      }))
+      ..addAll(deviceInspectUpload.selectedList.map((item) {
+        return MapEntry(
+            'inspectionRemark', deviceInspectUpload.isNormal ? '正常' : '不正常');
+      }))
+      ..addAll(deviceInspectUpload.selectedList.map((item) {
+        return MapEntry('remark', deviceInspectUpload.remark);
+      }));
+    return formData;
   }
 }

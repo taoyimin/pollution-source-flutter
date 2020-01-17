@@ -17,9 +17,9 @@ class AirDeviceCheckUpload extends Equatable {
     this.itemType,
     this.factor,
     this.airDeviceCheckRecordList,
-    this.paramRemark,
-    this.changeRemark,
-    this.checkResult,
+    this.paramRemark = '',
+    this.changeRemark = '',
+    this.checkResult = '',
   });
 
   @override
@@ -102,8 +102,8 @@ class AirDeviceCheckRecord extends Equatable {
 
   AirDeviceCheckRecord({
     this.currentCheckTime,
-    this.currentCheckResult,
-    this.currentCheckIsPass,
+    this.currentCheckResult = '',
+    this.currentCheckIsPass = '',
   });
 
   @override
