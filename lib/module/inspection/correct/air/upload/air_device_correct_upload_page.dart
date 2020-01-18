@@ -112,7 +112,7 @@ class _AirDeviceCorrectUploadPageState
 开始日期：$inspectionStartTime
 截至日期：$inspectionEndTime''',
                 imagePath:
-                    'assets/images/long_stop_report_upload_header_image.png',
+                    'assets/images/factor_report_upload_header_image.png',
                 backgroundColor: Colours.primary_color,
               );
             },

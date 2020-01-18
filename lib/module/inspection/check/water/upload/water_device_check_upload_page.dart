@@ -213,29 +213,30 @@ class _WaterDeviceCheckUploadPageState
                   padding: EdgeInsets.only(right: 0),
                   onPressed: () {
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text("删除记录"),
-                            content: Text("是否确定删除第${index + 1}条记录？"),
-                            actions: <Widget>[
-                              FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("取消"),
-                              ),
-                              FlatButton(
-                                onPressed: () async {
-                                  Navigator.of(context).pop();
-                                  list.removeAt(index);
-                                  _pageBloc.add(PageLoad(model: list));
-                                },
-                                child: const Text("确认"),
-                              ),
-                            ],
-                          );
-                        });
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("删除记录"),
+                          content: Text("是否确定删除第${index + 1}条记录？"),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("取消"),
+                            ),
+                            FlatButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                list.removeAt(index);
+                                _pageBloc.add(PageLoad(model: list));
+                              },
+                              child: const Text("确认"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ),

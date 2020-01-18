@@ -369,7 +369,6 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
   Widget _buildPageListItem(int index, List<AirDeviceCheckRecord> list,
       AirDeviceCheckUpload airDeviceCheckUpload) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           children: <Widget>[
@@ -381,17 +380,18 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                     locale: DateTimePickerLocale.zh_cn,
                     pickerMode: DateTimePickerMode.datetime,
                     onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                  list[index] =
-                      list[index].copyWith(currentCheckTime: dateTime);
-                  _pageBloc.add(PageLoad(
-                      model: airDeviceCheckUpload.copyWith(
-                          airDeviceCheckRecordList: list)));
-                });
+                      list[index] =
+                          list[index].copyWith(currentCheckTime: dateTime);
+                      _pageBloc.add(PageLoad(
+                          model: airDeviceCheckUpload.copyWith(
+                              airDeviceCheckRecordList: list)));
+                    });
               },
             ),
             EditRowWidget2(
               onChanged: (value) {
-                list[index] = list[index].copyWith(currentCheckResult: value);
+                list[index] =
+                    list[index].copyWith(currentCheckResult: value);
                 _pageBloc.add(PageLoad(
                     model: airDeviceCheckUpload.copyWith(
                         airDeviceCheckRecordList: list)));
@@ -399,11 +399,51 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
             ),
             EditRowWidget2(
               onChanged: (value) {
-                list[index] = list[index].copyWith(currentCheckIsPass: value);
+                list[index] =
+                    list[index].copyWith(currentCheckIsPass: value);
                 _pageBloc.add(PageLoad(
                     model: airDeviceCheckUpload.copyWith(
                         airDeviceCheckRecordList: list)));
               },
+            ),
+            Offstage(
+              offstage: list.length <= 5,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("删除记录"),
+                        content: Text("是否确定删除第${index + 1}条记录？"),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("取消"),
+                          ),
+                          FlatButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              airDeviceCheckUpload.airDeviceCheckRecordList
+                                  .removeAt(index);
+                              _pageBloc.add(PageLoad(model: airDeviceCheckUpload));
+                              //_pageBloc.add(PageLoad(model: airDeviceCheckUpload.copyWith(airDeviceCheckRecordList: list)));
+                            },
+                            child: const Text("确认"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Image.asset(
+                  'assets/images/icon_delete.png',
+                  height: 16,
+                  width: 16,
+                ),
+              ),
             ),
           ],
         ),

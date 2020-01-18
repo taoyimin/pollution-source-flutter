@@ -393,7 +393,7 @@ class _DeviceInspectionUploadListPageState
               children: <Widget>[
                 IconCheckButton(
                   text: '维护情况',
-                  imagePath: 'assets/images/icon_device.png',
+                  imagePath: 'assets/images/icon_fixed.png',
                   color: Colors.transparent,
                   flex: 4,
                   style: const TextStyle(
