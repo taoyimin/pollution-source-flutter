@@ -35,6 +35,8 @@ import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart'
 import 'package:pollution_source/module/monitor/detail/monitor_detail_repository.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_repository.dart';
+import 'package:pollution_source/module/monitor/table/monitor_table_page.dart';
+import 'package:pollution_source/module/monitor/table/monitor_table_repository.dart';
 import 'package:pollution_source/module/order/detail/order_detail_page.dart';
 import 'package:pollution_source/module/order/detail/order_detail_repository.dart';
 import 'package:pollution_source/module/order/list/order_list_page.dart';
@@ -170,6 +172,16 @@ var monitorDetailHandler = Handler(
     create: (BuildContext context) =>
         MonitorDetailBloc(detailRepository: MonitorDetailRepository()),
     child: MonitorDetailPage(monitorId: monitorId),
+  );
+});
+
+var monitorHistoryDataHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String monitorId = params['monitorId']?.first;
+  return BlocProvider<DetailBloc>(
+    create: (BuildContext context) =>
+        DetailBloc(detailRepository: MonitorHistoryDataRepository()),
+    child: MonitorTablePage(monitorId: monitorId),
   );
 });
 

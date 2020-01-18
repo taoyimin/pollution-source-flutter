@@ -13,6 +13,7 @@ class Routes {
   static String dischargeDetail = "/dischargeDetail";
   static String monitorList = "/monitorList";
   static String monitorDetail = "/monitorDetail";
+  static String monitorHistoryData = "/monitorHistoryData";
   static String orderList = "/orderList";
   static String orderDetail = "/orderDetail";
   static String dischargeReportList = "/dischargeReportList";
@@ -48,6 +49,7 @@ class Routes {
     router.define('$dischargeDetail/:id', handler: dischargeDetailHandler, transitionType: TransitionType.native);
     router.define(monitorList, handler: monitorListHandler, transitionType: TransitionType.native);
     router.define('$monitorDetail/:id', handler: monitorDetailHandler, transitionType: TransitionType.native);
+    router.define(monitorHistoryData, handler: monitorHistoryDataHandler, transitionType: TransitionType.native);
     router.define(orderList, handler: orderListHandler, transitionType: TransitionType.native);
     router.define('$orderDetail/:id', handler: orderDetailHandler, transitionType: TransitionType.native);
     router.define(dischargeReportList, handler: dischargeReportListHandler, transitionType: TransitionType.native);
