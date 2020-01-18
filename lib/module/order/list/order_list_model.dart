@@ -73,6 +73,7 @@ class Order extends Equatable {
               imagePath: 'assets/images/icon_alarm_type_factor_outrange.png',
               color: Colors.blue);
         case '排放流量异常':
+        case '超大值':
           return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_discharge_abnormal.png',
@@ -92,6 +93,11 @@ class Order extends Equatable {
               name: string,
               imagePath: 'assets/images/icon_alarm_type_no_upload.png',
               color: Colors.orange);
+        case '零值':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_type_zero_value.png',
+              color: Colors.blue);
         default:
           return Label(
               name: string,
