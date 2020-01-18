@@ -144,6 +144,99 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                           ],
                         ),
                       ),
+                      //异常申报查询
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ImageTitleWidget(
+                                title: '异常申报查询',
+                                imagePath:
+                                'assets/images/icon_alarm_error.png'),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '排口异常',
+                                      content: '排口异常列表',
+                                      imagePath:
+                                      'assets/images/application_icon_discharge_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(context,
+                                        '${Routes.dischargeReportList}?enterId=${widget.enterId}');
+                                  },
+                                ),
+                                Gaps.hGap20,
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '因子异常',
+                                      content: '因子异常列表',
+                                      imagePath:
+                                      'assets/images/application_icon_factor_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(
+                                        context, '${Routes.factorReportList}?enterId=${widget.enterId}');
+                                  },
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '长期停产',
+                                      content: '长期停产列表',
+                                      imagePath:
+                                      'assets/images/application_icon_longStop_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(context,
+                                        '${Routes.longStopReportList}?enterId=${widget.enterId}');
+                                  },
+                                ),
+                                Gaps.hGap20,
+                                Expanded(child: Gaps.empty),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      //报警管理单查询
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ImageTitleWidget(
+                                title: '报警管理单查询',
+                                imagePath:
+                                'assets/images/application_icon_alarm.png'),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '报警管理单',
+                                      content: '报警管理单列表',
+                                      imagePath:
+                                      'assets/images/application_icon_order.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(
+                                        context, '${Routes.orderList}?enterId=${widget.enterId}');
+                                  },
+                                ),
+                                Gaps.hGap20,
+                                Expanded(child: Gaps.empty),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                       //异常申报上报
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -195,39 +288,6 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                   onTap: () {
                                     Application.router.navigateTo(context,
                                         '${Routes.longStopReportUpload}?enterId=${widget.enterId}');
-                                  },
-                                ),
-                                Gaps.hGap20,
-                                Expanded(child: Gaps.empty),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      //报警管理单查询
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 18,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                                title: '报警管理单查询',
-                                imagePath:
-                                    'assets/images/application_icon_alarm.png'),
-                            Row(
-                              children: <Widget>[
-                                InkWellButton9(
-                                  meta: Meta(
-                                      title: '报警管理单',
-                                      content: '报警管理单列表',
-                                      imagePath:
-                                          'assets/images/application_icon_order.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                        context, '${Routes.orderList}?enterId=${widget.enterId}');
                                   },
                                 ),
                                 Gaps.hGap20,

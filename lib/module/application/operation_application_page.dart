@@ -167,17 +167,18 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                   },
                                 ),
                                 Gaps.hGap20,
-                                InkWellButton9(
-                                  meta: Meta(
-                                      title: '易耗品更换',
-                                      content: '易耗品更换上报',
-                                      imagePath:
-                                      'assets/images/application_icon_factor_report.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(context,
-                                        '${Routes.factorReportUpload}');
-                                  },
-                                ),
+                                Expanded(child: Gaps.empty),
+//                                InkWellButton9(
+//                                  meta: Meta(
+//                                      title: '易耗品更换',
+//                                      content: '易耗品更换上报',
+//                                      imagePath:
+//                                      'assets/images/application_icon_factor_report.png'),
+//                                  onTap: () {
+//                                    Application.router.navigateTo(context,
+//                                        '${Routes.factorReportUpload}');
+//                                  },
+//                                ),
                               ],
                             ),
                           ],
