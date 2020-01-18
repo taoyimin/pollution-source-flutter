@@ -254,101 +254,101 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                           ],
                         ),
                       ),
-                      Theme(
-                        data: ThemeData(
-                          hoverColor: Colors.white,
-                          hintColor: Colors.white,
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 36,
-                                alignment: Alignment.center,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _openPicker();
-                                  },
-                                  child: Text(
-                                    provinceName,
-                                    style: TextStyle(
-                                      color: Colours.secondary_text,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                decoration:
-                                    const BoxDecoration(color: Colors.white),
-                              ),
-                            ),
-                            Gaps.hGap10,
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 36,
-                                child: Container(
-                                  height: 36,
-                                  alignment: Alignment.center,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _openPicker();
-                                    },
-                                    child: Text(
-                                      cityName,
-                                      style: TextStyle(
-                                        color: Colours.secondary_text,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ),
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Gaps.hGap10,
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 36,
-                                child: Container(
-                                  height: 36,
-                                  alignment: Alignment.center,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _openPicker();
-                                    },
-                                    child: Text(
-                                      areaName,
-                                      style: TextStyle(
-                                        color: Colours.secondary_text,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ),
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Gaps.hGap10,
-                            Container(
-                              height: 36,
-                              width: 70,
-                              color: Colors.orange,
-                              child: RaisedButton(
-                                onPressed: () => _resetSearch(),
-                                child: Text(
-                                  "重置",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                color: Color(0XFFFFC107),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+//                      Theme(
+//                        data: ThemeData(
+//                          hoverColor: Colors.white,
+//                          hintColor: Colors.white,
+//                        ),
+//                        child: Row(
+//                          children: <Widget>[
+//                            Expanded(
+//                              flex: 1,
+//                              child: Container(
+//                                height: 36,
+//                                alignment: Alignment.center,
+//                                child: GestureDetector(
+//                                  onTap: () {
+//                                    _openPicker();
+//                                  },
+//                                  child: Text(
+//                                    provinceName,
+//                                    style: TextStyle(
+//                                      color: Colours.secondary_text,
+//                                      fontSize: 15,
+//                                    ),
+//                                  ),
+//                                ),
+//                                decoration:
+//                                    const BoxDecoration(color: Colors.white),
+//                              ),
+//                            ),
+//                            Gaps.hGap10,
+//                            Expanded(
+//                              flex: 1,
+//                              child: Container(
+//                                height: 36,
+//                                child: Container(
+//                                  height: 36,
+//                                  alignment: Alignment.center,
+//                                  child: GestureDetector(
+//                                    onTap: () {
+//                                      _openPicker();
+//                                    },
+//                                    child: Text(
+//                                      cityName,
+//                                      style: TextStyle(
+//                                        color: Colours.secondary_text,
+//                                        fontSize: 15,
+//                                      ),
+//                                    ),
+//                                  ),
+//                                  decoration:
+//                                      BoxDecoration(color: Colors.white),
+//                                ),
+//                              ),
+//                            ),
+//                            Gaps.hGap10,
+//                            Expanded(
+//                              flex: 1,
+//                              child: Container(
+//                                height: 36,
+//                                child: Container(
+//                                  height: 36,
+//                                  alignment: Alignment.center,
+//                                  child: GestureDetector(
+//                                    onTap: () {
+//                                      _openPicker();
+//                                    },
+//                                    child: Text(
+//                                      areaName,
+//                                      style: TextStyle(
+//                                        color: Colours.secondary_text,
+//                                        fontSize: 15,
+//                                      ),
+//                                    ),
+//                                  ),
+//                                  decoration:
+//                                      BoxDecoration(color: Colors.white),
+//                                ),
+//                              ),
+//                            ),
+//                            Gaps.hGap10,
+//                            Container(
+//                              height: 36,
+//                              width: 70,
+//                              color: Colors.orange,
+//                              child: RaisedButton(
+//                                onPressed: () => _resetSearch(),
+//                                child: Text(
+//                                  "重置",
+//                                  style: TextStyle(color: Colors.white),
+//                                ),
+//                                color: Color(0XFFFFC107),
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                      ),
                     ],
                   ),
                 ),
