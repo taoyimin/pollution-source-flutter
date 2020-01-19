@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/monitor/table/monitor_table_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/res/constant.dart';
@@ -31,26 +30,21 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
   void initState() {
     super.initState();
     _monitorDetailBloc = BlocProvider.of<MonitorDetailBloc>(context);
-    // TODO 测试写死monitorId
-    _monitorDetailBloc.add(MonitorDetailLoad(monitorId: '10755'));
+    _monitorDetailBloc.add(MonitorDetailLoad(monitorId: widget.monitorId));
   }
 
   @override
   void dispose() {
-    //取消正在进行的请求
+    // 取消正在进行的请求
     final currentState = _monitorDetailBloc?.state;
     if (currentState is MonitorDetailLoading)
       currentState.cancelToken?.cancel();
     super.dispose();
   }
 
-  //用来显示SnackBar
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<MonitorDetailBloc, MonitorDetailState>(
@@ -267,36 +261,38 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Gaps.vGap10,
                 Row(
                   children: <Widget>[
-                    ClipButton(
-                      text: '排放标准',
-                      icon: Icons.business_center,
-                      color: Colors.lightBlueAccent,
-                      onTap: () {
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text('排放标准功能开发中'),
-                            action: SnackBarAction(
-                                label: '我知道了',
-                                textColor: Colours.primary_color,
-                                onPressed: () {}),
-                          ),
-                        );
-                      },
-                    ),
-                    Gaps.hGap20,
+//                    ClipButton(
+//                      text: '排放标准',
+//                      icon: Icons.business_center,
+//                      color: Colors.lightBlueAccent,
+//                      onTap: () {
+//                        Scaffold.of(context).showSnackBar(
+//                          SnackBar(
+//                            content: const Text('排放标准功能开发中'),
+//                            action: SnackBarAction(
+//                                label: '我知道了',
+//                                textColor: Colours.primary_color,
+//                                onPressed: () {}),
+//                          ),
+//                        );
+//                      },
+//                    ),
+//                    Gaps.hGap20,
                     ClipButton(
                       text: '历史数据',
                       icon: Icons.table_chart,
                       color: Colors.orange,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return MonitorTablePage();
-                            },
-                          ),
-                        );
+//                        Navigator.push(
+//                          context,
+//                          MaterialPageRoute(
+//                            builder: (context) {
+//                              return MonitorTablePage();
+//                            },
+//                          ),
+//                        );
+                        Application.router.navigateTo(context,
+                            '${Routes.monitorHistoryData}?monitorId=${monitorDetail.monitorId}');
                       },
                     ),
                   ],

@@ -37,7 +37,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
       'pageSize': pageSize,
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
-      'enterpriseName': enterName,
+      'enterName': enterName,
       'areaCode': areaCode,
       'enterId': enterId,
       'dischargeId': dischargeId,

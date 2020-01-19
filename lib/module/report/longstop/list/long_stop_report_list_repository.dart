@@ -33,7 +33,7 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
       'pageSize': pageSize,
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
-      'enterpriseName': enterName,
+      'enterName': enterName,
       'areaCode': areaCode,
       'enterId': enterId,
       'dataType': 'L',

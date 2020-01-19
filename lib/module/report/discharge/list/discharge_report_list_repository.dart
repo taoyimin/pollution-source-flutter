@@ -37,7 +37,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
       'pageSize': pageSize,
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
-      'enterpriseName': enterName,
+      'enterName': enterName,
       'areaCode': areaCode,
       'enterId': enterId,
       'dischargeId': dischargeId,

@@ -1759,6 +1759,7 @@ class EditRowWidget extends StatelessWidget {
   final TextStyle style;
   final TextInputType keyboardType;
   final ValueChanged<String> onChanged;
+  final TextEditingController controller;
 
   EditRowWidget({
     Key key,
@@ -1766,6 +1767,7 @@ class EditRowWidget extends StatelessWidget {
     this.style = const TextStyle(fontSize: 15),
     this.keyboardType = TextInputType.text,
     this.onChanged,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -1786,6 +1788,7 @@ class EditRowWidget extends StatelessWidget {
               style: style,
               keyboardType: keyboardType,
               onChanged: onChanged,
+              controller: controller,
               decoration: InputDecoration(
                 hintText: '请输入$title',
                 hintStyle: style,

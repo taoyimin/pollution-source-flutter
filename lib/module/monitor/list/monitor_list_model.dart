@@ -46,7 +46,7 @@ class Monitor extends Equatable {
   }
 
   List<Label> get labelList {
-    return TextUtil.isEmpty('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*')
+    return TextUtil.isEmpty('')
         ? const []
         : _getLabelList('流量* PH* 化学需氧量* 氨氮* 总磷* 总氮*');
   }
