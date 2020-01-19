@@ -117,4 +117,12 @@ class UIUtils {
     })?.toList());
     return (maxX - minX) / (6);
   }
+
+  /// 判断String是否是数字
+  static bool isNumeric(String str) {
+    if(str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
 }

@@ -307,6 +307,8 @@ class CompatUtils {
         return HttpApiJava.monitorList;
       case HttpApi.monitorDetail:
         return HttpApiJava.monitorDetail;
+      case HttpApi.monitorHistoryData:
+        return HttpApiJava.monitorHistoryData;
       case HttpApi.orderList:
         return HttpApiJava.orderList;
       case HttpApi.orderDetail:
@@ -419,6 +421,8 @@ class CompatUtils {
         return HttpApiOperation.monitorList;
       case HttpApi.monitorDetail:
         return HttpApiOperation.monitorDetail;
+      case HttpApi.monitorHistoryData:
+        return HttpApiOperation.monitorHistoryData;
       case HttpApi.orderList:
         return HttpApiOperation.orderList;
       case HttpApi.orderDetail:
@@ -459,6 +463,8 @@ class CompatUtils {
         return HttpApiOperation.routineInspectionFactorDetail;
       case HttpApi.deviceCorrectUpload:
         return HttpApiOperation.deviceCorrectUpload;
+      case HttpApi.deviceCorrectLastValue:
+        return HttpApiOperation.deviceCorrectLastValue;
       case HttpApi.deviceParamUpload:
         return HttpApiOperation.deviceParamUpload;
       case HttpApi.deviceParamList:
