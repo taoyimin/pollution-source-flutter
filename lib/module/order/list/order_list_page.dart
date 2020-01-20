@@ -18,12 +18,19 @@ import 'package:pollution_source/util/ui_utils.dart';
 
 import 'package:pollution_source/module/common/common_widget.dart';
 
+/// 报警管理单列表界面
 class OrderListPage extends StatefulWidget {
   final String state;
+  final String overdue;
   final String enterId;
   final String monitorId;
 
-  OrderListPage({this.state = '', this.enterId = '', this.monitorId = ''});
+  OrderListPage({
+    this.state = '',
+    this.overdue = '',
+    this.enterId = '',
+    this.monitorId = '',
+  });
 
   @override
   _OrderListPageState createState() => _OrderListPageState();
@@ -53,6 +60,7 @@ class _OrderListPageState extends State<OrderListPage>
         currentPage: Constant.defaultCurrentPage,
         pageSize: Constant.defaultPageSize,
         state: widget.state,
+        overdue: widget.overdue,
         enterId: widget.enterId,
         monitorId: widget.monitorId,
       ),
@@ -83,14 +91,13 @@ class _OrderListPageState extends State<OrderListPage>
             BlocBuilder<ListBloc, ListState>(
               builder: (context, state) {
                 String subtitle2 = '';
-                if(state is ListLoading)
+                if (state is ListLoading)
                   subtitle2 = '数据加载中';
                 else if (state is ListLoaded)
                   subtitle2 = '共${state.total}条数据';
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
-                else if(state is ListError)
-                  subtitle2 = '数据加载错误';
+                else if (state is ListError) subtitle2 = '数据加载错误';
                 return ListHeaderWidget(
                   title: '报警管理单列表',
                   subtitle: '展示报警管理单列表，点击列表项查看该报警管理单的详细信息',
@@ -161,6 +168,7 @@ class _OrderListPageState extends State<OrderListPage>
                   enterName: _editController.text,
                   areaCode: areaCode,
                   state: widget.state,
+                  overdue: widget.overdue,
                   enterId: widget.enterId,
                   monitorId: widget.monitorId,
                 ),
@@ -182,6 +190,7 @@ class _OrderListPageState extends State<OrderListPage>
                   enterName: _editController.text,
                   areaCode: areaCode,
                   state: widget.state,
+                  overdue: widget.overdue,
                   enterId: widget.enterId,
                   monitorId: widget.monitorId,
                 ),
@@ -197,7 +206,7 @@ class _OrderListPageState extends State<OrderListPage>
   Widget _buildPageLoadedList(List<Order> orderList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
+        (BuildContext context, int index) {
           //创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -238,8 +247,8 @@ class _OrderListPageState extends State<OrderListPage>
                           ),
                           Expanded(
                             flex: 1,
-                            child:
-                            ListTileWidget('区域：${orderList[index].districtName}'),
+                            child: ListTileWidget(
+                                '区域：${orderList[index].districtName}'),
                           ),
                         ],
                       ),

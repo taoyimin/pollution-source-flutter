@@ -625,7 +625,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 () {
                   if (getOperateType(orderDetail.orderState) == 1) {
                     return ClipButton(
-                      text: '提交',
+                      text: '处理',
                       icon: Icons.file_upload,
                       color: Colors.lightBlue,
                       onTap: () {
