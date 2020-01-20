@@ -98,6 +98,11 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                             ? RainEnterStatisticsWidget(
                                 metaList: state.rainEnterStatisticsList)
                             : Gaps.empty,
+                        state.reportStatisticsList.length > 0
+                            ? ReportStatisticsWidget(
+                                metaList: state.reportStatisticsList,
+                              )
+                            : Gaps.empty,
                         state.comprehensiveStatisticsList.length > 0
                             ? ComprehensiveStatisticsWidget(
                                 metaList: state.comprehensiveStatisticsList,
@@ -637,7 +642,7 @@ class WaterStatisticsWidget extends StatelessWidget {
   }
 }
 
-//代办任务
+/// 代办任务统计
 class TodoTaskStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
 
@@ -657,8 +662,7 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               InkWellButton2(
                 meta: metaList[0],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.orderList}');
+                  Application.router.navigateTo(context, '${Routes.orderList}');
                 },
               ),
               Gaps.hGap6,
@@ -666,8 +670,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               InkWellButton2(
                 meta: metaList[1],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.dischargeReportList}');
+                  Application.router
+                      .navigateTo(context, '${Routes.dischargeReportList}');
                 },
               ),
               Gaps.hGap6,
@@ -675,8 +679,57 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               InkWellButton2(
                 meta: metaList[2],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.factorReportList}');
+                  Application.router
+                      .navigateTo(context, '${Routes.factorReportList}');
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 异常申报统计
+class ReportStatisticsWidget extends StatelessWidget {
+  final List<Meta> metaList;
+
+  ReportStatisticsWidget({Key key, this.metaList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          TitleWidget(title: "异常申报统计"),
+          Row(
+            children: <Widget>[
+              // 长期停产
+              InkWellButton3(
+                meta: metaList[0],
+                onTap: () {
+                  Application.router
+                      .navigateTo(context, '${Routes.longStopReportList}');
+                },
+              ),
+              Gaps.hGap10,
+              // 排口异常
+              InkWellButton3(
+                meta: metaList[1],
+                onTap: () {
+                  Application.router
+                      .navigateTo(context, '${Routes.dischargeReportList}');
+                },
+              ),
+              Gaps.hGap10,
+              // 因子异常
+              InkWellButton3(
+                meta: metaList[2],
+                onTap: () {
+                  Application.router
+                      .navigateTo(context, '${Routes.factorReportList}');
                 },
               ),
             ],
@@ -707,8 +760,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[0],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.monitorList}?state=0');
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=0');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -717,8 +770,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[1],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.monitorList}?state=1');
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=1');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -727,8 +780,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[2],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.monitorList}?state=2');
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=2');
                 },
               ),
             ],
@@ -740,8 +793,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[3],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.monitorList}?state=3');
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=3');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -750,8 +803,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[4],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.monitorList}?state=4');
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=4');
                 },
               ),
               VerticalDividerWidget(height: 40),
@@ -760,8 +813,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 ratio: 1.15,
                 meta: metaList[5],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.monitorList}?state=5');
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=5');
                 },
               ),
             ],
@@ -838,8 +891,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[5],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=EnterType1,EnterType2');
+                  Application.router.navigateTo(context,
+                      '${Routes.enterList}?enterType=EnterType1,EnterType2');
                 },
               ),
             ],
@@ -850,8 +903,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[6],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType2');
+                  Application.router.navigateTo(context,
+                      '${Routes.dischargeList}?dischargeType=outletType2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -859,8 +912,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[7],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType3');
+                  Application.router.navigateTo(context,
+                      '${Routes.dischargeList}?dischargeType=outletType3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -908,8 +961,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[1],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=outletType1&state=1');
+                  Application.router.navigateTo(context,
+                      '${Routes.enterList}?enterType=outletType1&state=1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -917,8 +970,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[2],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType1');
+                  Application.router.navigateTo(context,
+                      '${Routes.dischargeList}?dischargeType=outletType1');
                 },
               ),
             ],

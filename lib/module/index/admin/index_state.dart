@@ -20,6 +20,7 @@ class IndexLoaded extends IndexState {
   final pollutionEnterStatisticsList;
   final onlineMonitorStatisticsList;
   final todoTaskStatisticsList;
+  final reportStatisticsList;
   final comprehensiveStatisticsList;
   final rainEnterStatisticsList;
 
@@ -30,6 +31,7 @@ class IndexLoaded extends IndexState {
     @required this.pollutionEnterStatisticsList,
     @required this.onlineMonitorStatisticsList,
     @required this.todoTaskStatisticsList,
+    @required this.reportStatisticsList,
     @required this.comprehensiveStatisticsList,
     @required this.rainEnterStatisticsList,
   });

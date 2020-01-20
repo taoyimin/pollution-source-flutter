@@ -249,31 +249,42 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                 Row(
                   children: <Widget>[
                     InkWellButton5(
-                      ratio: 1.2,
                       onTap: () {
-                        Application.router.navigateTo(
-                            context, '${Routes.orderList}?enterId=${widget.enterId}&state=5');
+                        Application.router.navigateTo(context,
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=2');
                       },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
-                        title: '已办结',
-                        content: '${enterDetail.orderCompleteCount}',
-                        imagePath:
-                            'assets/images/icon_alarm_manage_complete.png',
+                        title: '待处理',
+                        content: '${enterDetail.orderDealCount??''}',
+                        imagePath: 'assets/images/icon_alarm_manage_all.png',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
-                      ratio: 1.2,
                       onTap: () {
-                        Application.router.navigateTo(
-                            context, '${Routes.orderList}?enterId=${widget.enterId}');
+                        Application.router.navigateTo(context,
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=2&overdue=1');
                       },
                       meta: Meta(
                         color: Color(0xFFFFB709),
-                        title: '全部',
-                        content: '${enterDetail.orderTotalCount}',
-                        imagePath: 'assets/images/icon_alarm_manage_all.png',
+                        title: '超期待办',
+                        content: '${enterDetail.orderOverdueCount??''}',
+                        imagePath: 'assets/images/icon_alarm_manage_complete.png',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton5(
+                      onTap: () {
+                        Application.router.navigateTo(context,
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=4');
+                      },
+                      meta: Meta(
+                        color: Color(0xFFFD6C6B),
+                        title: '已退回',
+                        content: '${enterDetail.orderReturnCount??''}',
+                        imagePath:
+                        'assets/images/icon_alarm_manage_return.png',
                       ),
                     ),
                   ],
@@ -281,6 +292,54 @@ class _EnterIndexPageState extends State<EnterIndexPage>
               ],
             ),
           ),
+//          Padding(
+//            padding: const EdgeInsets.symmetric(
+//              horizontal: 20,
+//              vertical: 10,
+//            ),
+//            child: Column(
+//              crossAxisAlignment: CrossAxisAlignment.start,
+//              children: <Widget>[
+//                ImageTitleWidget(
+//                  title: '报警管理单',
+//                  imagePath: 'assets/images/icon_alarm_manage.png',
+//                ),
+//                Gaps.vGap10,
+//                Row(
+//                  children: <Widget>[
+//                    InkWellButton5(
+//                      ratio: 1.2,
+//                      onTap: () {
+//                        Application.router.navigateTo(
+//                            context, '${Routes.orderList}?enterId=${widget.enterId}&state=5');
+//                      },
+//                      meta: Meta(
+//                        color: Color(0xFF45C4FF),
+//                        title: '已办结',
+//                        content: '${enterDetail.orderCompleteCount}',
+//                        imagePath:
+//                            'assets/images/icon_alarm_manage_complete.png',
+//                      ),
+//                    ),
+//                    Gaps.hGap10,
+//                    InkWellButton5(
+//                      ratio: 1.2,
+//                      onTap: () {
+//                        Application.router.navigateTo(
+//                            context, '${Routes.orderList}?enterId=${widget.enterId}');
+//                      },
+//                      meta: Meta(
+//                        color: Color(0xFFFFB709),
+//                        title: '全部',
+//                        content: '${enterDetail.orderTotalCount}',
+//                        imagePath: 'assets/images/icon_alarm_manage_all.png',
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ],
+//            ),
+//          ),
           //异常申报信息
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

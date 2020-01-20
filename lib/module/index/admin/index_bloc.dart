@@ -17,10 +17,10 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
       try {
         Response response = await CompatUtils.getDio()
             .get(CompatUtils.getApi(HttpApi.adminIndex));
-        //空气质量统计
+        // 空气质量统计
         AqiStatistics aqiStatistics = await _convertAqiStatistics(
             response.data[Constant.responseDataKey][Constant.aqiStatisticsKey]);
-        //空气质量考核(过滤无效数据)
+        // 空气质量考核(过滤无效数据)
         List<AqiExamine> aqiExamineList = await Future.wait([
           _convertAqiExamine(Constant.pm25ExamineKey,
               response.data[Constant.responseDataKey][Constant.pm25ExamineKey]),
@@ -30,12 +30,7 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             aqiExamineList.skipWhile((AqiExamine aqiExamine) {
               return !aqiExamine.show;
             }).toList());
-        //水环境质量情况(过滤无效数据)
-        //TODO 缺少两条数据
-        /*        _convertSurfaceWater(Constant.countyWaterKey,
-            response.data[Constant.responseDataKey][Constant.countyWaterKey]),
-    _convertSurfaceWater(Constant.waterWaterKey,
-    response.data[Constant.responseDataKey][Constant.waterWaterKey]),*/
+        // 水环境质量情况(过滤无效数据)
         List<WaterStatistics> waterStatisticsList = await Future.wait([
           _convertSurfaceWater(Constant.stateWaterKey,
               response.data[Constant.responseDataKey][Constant.stateWaterKey]),
@@ -43,32 +38,40 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
               Constant.provinceWaterKey,
               response.data[Constant.responseDataKey]
                   [Constant.provinceWaterKey]),
+          _convertSurfaceWater(Constant.countyWaterKey,
+              response.data[Constant.responseDataKey][Constant.countyWaterKey]),
+          _convertSurfaceWater(Constant.waterWaterKey,
+              response.data[Constant.responseDataKey][Constant.waterWaterKey]),
           _convertSurfaceWater(Constant.metalWaterKey,
               response.data[Constant.responseDataKey][Constant.metalWaterKey]),
         ]).then((waterStatisticsList) =>
             waterStatisticsList.skipWhile((WaterStatistics waterStatistics) {
               return !waterStatistics.show;
             }).toList());
-        //污染源企业统计
+        // 污染源企业统计
         List<Meta> pollutionEnterStatisticsList =
             await _convertPollutionEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.pollutionEnterStatisticsKey]);
-        //在线监控点统计
+        // 在线监控点统计
         List<Meta> onlineMonitorStatisticsList =
             await _convertOnlineMonitorStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.onlineMonitorStatisticsKey]);
-        //代办任务统计
+        // 代办任务统计
         List<Meta> todoTaskStatisticsList = await _convertTodoTaskStatistics(
             response.data[Constant.responseDataKey]
                 [Constant.todoTaskStatisticsKey]);
-        //综合信息统计
+        // 异常申报统计
+        List<Meta> reportStatisticsList = await _convertReportStatistics(
+            response.data[Constant.responseDataKey]
+                [Constant.reportStatisticsKey]);
+        // 综合信息统计
         List<Meta> comprehensiveStatisticsList =
             await _convertComprehensiveStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.comprehensiveStatisticsKey]);
-        //雨水企业统计
+        // 雨水企业统计
         List<Meta> rainEnterStatisticsList = await _convertRainEnterStatistics(
             response.data[Constant.responseDataKey]
                 [Constant.rainEnterStatisticsKey]);
@@ -79,6 +82,7 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
           pollutionEnterStatisticsList: pollutionEnterStatisticsList,
           onlineMonitorStatisticsList: onlineMonitorStatisticsList,
           todoTaskStatisticsList: todoTaskStatisticsList,
+          reportStatisticsList: reportStatisticsList,
           comprehensiveStatisticsList: comprehensiveStatisticsList,
           rainEnterStatisticsList: rainEnterStatisticsList,
         );
@@ -338,19 +342,49 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
   } else {
     return [
       Meta(
-        title: '报警管理单总数',
+        title: '待处理督办单',
         imagePath: 'assets/images/button_bg_blue.png',
         content: strings[1],
       ),
       Meta(
-        title: '排口异常申报总数',
-        imagePath: 'assets/images/button_bg_green.png',
+        title: '超期待处理督办单',
+        imagePath: 'assets/images/button_bg_pink.png',
         content: strings[2],
       ),
       Meta(
-        title: '因子异常申报总数',
-        imagePath: 'assets/images/button_bg_pink.png',
+        title: '已办结督办单',
+        imagePath: 'assets/images/button_bg_green.png',
         content: strings[3],
+      ),
+    ];
+  }
+}
+
+//格式化异常申报统计统计
+Future<List<Meta>> _convertReportStatistics(String string) async {
+  List<String> strings = string.split(',');
+  bool show = strings[0] == '1' ? true : false;
+  if (!show) {
+    return [];
+  } else {
+    return [
+      Meta(
+        title: '长期停产申报',
+        content: strings[1],
+        imagePath: 'assets/images/button_image2.png',
+        backgroundPath: 'assets/images/button_bg_lightblue.png',
+      ),
+      Meta(
+        title: '排口异常申报',
+        content: strings[2],
+        imagePath: 'assets/images/button_image1.png',
+        backgroundPath: 'assets/images/button_bg_green.png',
+      ),
+      Meta(
+        title: '因子异常申报',
+        content: strings[3],
+        imagePath: 'assets/images/button_image4.png',
+        backgroundPath: 'assets/images/button_bg_pink.png',
       ),
     ];
   }
