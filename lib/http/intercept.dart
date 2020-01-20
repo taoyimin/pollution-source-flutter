@@ -69,7 +69,7 @@ class TokenInterceptor extends Interceptor {
           formData.files.add(MapEntry(
               mapFile.key,
               MultipartFile.fromFileSync(mapFile.value.FILE_PATH,
-              filename: mapFile.value.filename)));
+                  filename: mapFile.value.filename)));
         }
         options.data = formData;
       }
@@ -96,7 +96,7 @@ class HandleErrorInterceptor extends Interceptor {
   onResponse(Response response) {
     if (response != null && response.statusCode == ExceptionHandle.success) {
       // 状态码200（如果response中有code或success还需要判断code是否为success_code，success是否为true）
-      if(response.data is List<dynamic>){
+      if (response.data is List<dynamic>) {
         // 有时接口会直接返回List
         return super.onResponse(response);
       } else if (response.data is Map &&
@@ -171,7 +171,10 @@ class LoggingInterceptor extends Interceptor {
     Log.d("RequestMethod: " + options.method);
     Log.d("RequestHeaders:" + options.headers.toString());
     Log.d("RequestContentType: ${options.contentType}");
-    Log.d("RequestData: ${options.data.toString()}");
+    if (options.data is FormData)
+      Log.d("RequestData: ${options.data.fields}");
+    else
+      Log.d("RequestData: ${options.data.toString()}");
     return super.onRequest(options);
   }
 
