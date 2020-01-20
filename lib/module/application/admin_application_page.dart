@@ -217,8 +217,20 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '报警管理单',
-                                      content: '报警管理单列表',
+                                      title: '待办督办单',
+                                      content: '查询待办督办单',
+                                      imagePath:
+                                      'assets/images/application_icon_order.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(
+                                        context, '${Routes.orderList}?state=2');
+                                  },
+                                ),
+                                Gaps.hGap20,
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '全部督办单',
+                                      content: '查询全部督办单',
                                       imagePath:
                                           'assets/images/application_icon_order.png'),
                                   onTap: () {
@@ -226,8 +238,6 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                         context, '${Routes.orderList}');
                                   },
                                 ),
-                                Gaps.hGap20,
-                                Expanded(child: Gaps.empty),
                               ],
                             ),
                           ],
