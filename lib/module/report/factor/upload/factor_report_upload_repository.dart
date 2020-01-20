@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/error_handle.dart';
@@ -46,10 +47,16 @@ class FactorReportUploadRepository
       'factorCode': data.factorCode.map((dataDict) => dataDict.code).join(','),
       'exceptionReason': data.exceptionReason,
       "file": await Future.wait(data.attachments?.map((asset) async {
-            return await MultipartFile.fromFile(await asset.filePath,
-                filename: asset.name);
-          })?.toList() ??
+        ByteData byteData = await asset.getByteData();
+        return MultipartFile.fromBytes(byteData.buffer.asUint8List(),
+            filename: asset.name);
+      })?.toList() ??
           [])
+//      "file": await Future.wait(data.attachments?.map((asset) async {
+//            return await MultipartFile.fromFile(await asset.filePath,
+//                filename: asset.name);
+//          })?.toList() ??
+//          [])
     });
   }
 }
