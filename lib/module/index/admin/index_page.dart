@@ -658,29 +658,29 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //报警管理单总数
+              // 待处理督办单
               InkWellButton2(
                 meta: metaList[0],
                 onTap: () {
-                  Application.router.navigateTo(context, '${Routes.orderList}');
+                  Application.router.navigateTo(context, '${Routes.orderList}?state=2');
                 },
               ),
               Gaps.hGap6,
-              //排口异常申报单总数
+              // 超期待处理督办单
               InkWellButton2(
                 meta: metaList[1],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.dischargeReportList}');
+                      .navigateTo(context, '${Routes.orderList}?state=2&overdue=1');
                 },
               ),
               Gaps.hGap6,
-              //因子异常申报单总数
+              // 已办结督办单
               InkWellButton2(
                 meta: metaList[2],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.factorReportList}');
+                      .navigateTo(context, '${Routes.orderList}?state=5');
                 },
               ),
             ],
@@ -808,7 +808,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 },
               ),
               VerticalDividerWidget(height: 40),
-              //停产
+              //异常
               InkWellButton1(
                 ratio: 1.15,
                 meta: metaList[5],
@@ -874,7 +874,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[3],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=EnterType1');
+                      context, '${Routes.enterList}?enterType=2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -883,7 +883,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[4],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=EnterType2');
+                      context, '${Routes.enterList}?enterType=3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -892,7 +892,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[5],
                 onTap: () {
                   Application.router.navigateTo(context,
-                      '${Routes.enterList}?enterType=EnterType1,EnterType2');
+                      '${Routes.enterList}?enterType=4');
                 },
               ),
             ],
@@ -904,7 +904,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[6],
                 onTap: () {
                   Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=outletType2');
+                      '${Routes.dischargeList}?dischargeType=2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -913,7 +913,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[7],
                 onTap: () {
                   Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=outletType3');
+                      '${Routes.dischargeList}?dischargeType=3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -922,7 +922,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[8],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=licence');
+                      context, '${Routes.enterList}?enterType=5');
                 },
               ),
             ],
@@ -953,7 +953,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[0],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=outletType1');
+                      context, '${Routes.enterList}?enterType=1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -962,7 +962,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[1],
                 onTap: () {
                   Application.router.navigateTo(context,
-                      '${Routes.enterList}?enterType=outletType1&state=1');
+                      '${Routes.enterList}?enterType=1&state=1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -971,7 +971,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[2],
                 onTap: () {
                   Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=outletType1');
+                      '${Routes.dischargeList}?dischargeType=1');
                 },
               ),
             ],
@@ -1435,7 +1435,7 @@ class SimplePieChart extends StatelessWidget {
       new LinearAlarms(
           "待审核            123*个", 123, charts.Color.fromHex(code: "#F1BE43")),
       new LinearAlarms(
-          "审核不通过    42*个", 42, charts.Color.fromHex(code: "#E9776F")),
+          "已退回            42*个", 42, charts.Color.fromHex(code: "#E9776F")),
       new LinearAlarms(
           "已办结            14*个", 14, charts.Color.fromHex(code: "#88BF59")),
     ];
