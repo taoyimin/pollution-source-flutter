@@ -196,7 +196,7 @@ class HttpApiOperation {
   static const String factorReportAlarmTypeList = 'dictionary/getSubListAPI?dicCode=alarmType';
   static const String factorReportFactorList = 'archives/abnormalApply/selectFactorCodeByMonitorId';
   static const String routineInspectionList = 'ywmh/tInspectionTask/queryStatTasksPage';
-  static const String routineInspectionDetail = 'ywmh/tInspectionTask/selectTaskCount?monitorId=';
+  static const String routineInspectionDetail = 'ywmh/tInspectionTask/selectTaskCount';
   static const String routineInspectionUploadList = 'ywmh/tInspectionTask/doMonitorTasksForJson';
   static const String deviceInspectionUpload = 'ywmh/tInspectionTask/submit';
   static const String deviceCheckUpload = 'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
