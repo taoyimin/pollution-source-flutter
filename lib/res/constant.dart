@@ -159,6 +159,9 @@ class Constant {
 
   /// 综合统计信息
   static const String comprehensiveStatisticsKey = '80';
+
+  /// 异常申报统计
+  static const String reportStatisticsKey = '90';
 }
 
 const Map<String, String> provincesData = {
