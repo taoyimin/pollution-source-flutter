@@ -38,6 +38,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
       'enterpriseName': enterName,
+      'enterName': enterName,
       'areaCode': areaCode,
       'enterId': enterId,
       'outId': dischargeId,

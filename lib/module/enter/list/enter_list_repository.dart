@@ -36,6 +36,7 @@ class EnterListRepository extends ListRepository<Enter> {
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
       'enterpriseName': enterName,
+      'enterName': enterName,
       'areaCode': areaCode,
       'state': state == '1' ? 'online' : '',
       'enterpriseType': () {

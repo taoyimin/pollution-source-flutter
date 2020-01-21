@@ -1,33 +1,35 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 //part 'enter_detail_model.g.dart';
 
-//企业详情
-//@JsonSerializable()
+/// 企业详情
+// @JsonSerializable()
 class EnterDetail extends Equatable {
   final int enterId; // 企业id
-  @JsonKey(name: 'enterpriseName')
+  // @JsonKey(name: 'enterpriseName')
   final String enterName; // 企业名称
-  @JsonKey(name: 'entAddress')
+  // @JsonKey(name: 'entAddress')
   final String enterAddress; // 企业地址
-  @JsonKey(name: 'entLinkPhone')
+  // @JsonKey(name: 'entLinkPhone')
   final String enterTel; // 企业电话
-  @JsonKey(name: 'envirLinkMan')
+  // @JsonKey(name: 'envirLinkMan')
   final String contactPerson; // 企业联系人
-  @JsonKey(name: 'envirLinkPhone')
+  // @JsonKey(name: 'envirLinkPhone')
   final String contactPersonTel; // 联系人电话
   final String legalPerson; // 法人
-  @JsonKey(name: 'legalLinkPhone')
+  // @JsonKey(name: 'legalLinkPhone')
   final String legalPersonTel; // 法人电话
   final String attentionLevelStr; // 关注程度
   final String cityName; // 所属市
   final String areaName; // 所属区
   final String industryTypeStr; // 行业类别
-  @JsonKey(name: 'legalPersonCode')
+  // @JsonKey(name: 'legalPersonCode')
   final String creditCode; // 信用代码
   final int orderCompleteCount; // 报警管理单已办结个数
   final int orderTotalCount; // 报警管理单总数
+  final int orderDealCount; // 报警管理单待处理数
+  final int orderOverdueCount; // 报警管理单待处理超期数
+  final int orderReturnCount; // 报警管理单已退回数
   final int longStopReportTotalCount; // 长期停产申报总数
   final int dischargeReportTotalCount; // 排口异常申报总数
   final int factorReportTotalCount; // 因子异常申报总数
@@ -58,6 +60,9 @@ class EnterDetail extends Equatable {
     this.creditCode,
     this.orderCompleteCount,
     this.orderTotalCount,
+    this.orderDealCount,
+    this.orderOverdueCount,
+    this.orderReturnCount,
     this.longStopReportTotalCount,
     this.dischargeReportTotalCount,
     this.factorReportTotalCount,
@@ -90,6 +95,9 @@ class EnterDetail extends Equatable {
         creditCode,
         orderCompleteCount,
         orderTotalCount,
+        orderDealCount,
+        orderOverdueCount,
+    orderReturnCount,
         longStopReportTotalCount,
         dischargeReportTotalCount,
         factorReportTotalCount,
@@ -107,7 +115,7 @@ class EnterDetail extends Equatable {
 
   // 所属区域
   String get districtName {
-    return '${cityName??''}${areaName??''}';
+    return '${cityName ?? ''}${areaName ?? ''}';
   }
 
   factory EnterDetail.fromJson(Map<String, dynamic> json) =>
@@ -133,6 +141,9 @@ EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
       creditCode: json['enterprise']['legalPersonCode'] as String,
       orderCompleteCount: json['orderCompleteCount'] as int,
       orderTotalCount: json['orderTotalCount'] as int,
+      orderDealCount: json['orderDealCount'] as int,
+      orderOverdueCount: json['orderOverdueCount'] as int,
+      orderReturnCount: json['orderReturnCount'] as int,
       longStopReportTotalCount: json['longStopReportTotalCount'] as int,
       dischargeReportTotalCount: json['dischargeReportTotalCount'] as int,
       factorReportTotalCount: json['factorReportTotalCount'] as int,
@@ -165,6 +176,9 @@ Map<String, dynamic> _$EnterDetailToJson(EnterDetail instance) =>
       'legalPersonCode': instance.creditCode,
       'orderCompleteCount': instance.orderCompleteCount,
       'orderTotalCount': instance.orderTotalCount,
+      'orderDealCount': instance.orderDealCount,
+      'orderOverdueCount': instance.orderOverdueCount,
+      'orderReturnCount': instance.orderReturnCount,
       'longStopReportTotalCount': instance.longStopReportTotalCount,
       'dischargeReportTotalCount': instance.dischargeReportTotalCount,
       'factorReportTotalCount': instance.factorReportTotalCount,
