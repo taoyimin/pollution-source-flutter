@@ -13,6 +13,7 @@ import 'package:pollution_source/route/routes.dart';
 /// 在这里初始化[SpUtil]实例，并且设置系统UI样式为[SystemUiOverlayStyle.light]
 /// 全局状态栏使用白色字体
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await SpUtil.getInstance();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   runApp(MyApp());
