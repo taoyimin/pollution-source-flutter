@@ -12,6 +12,7 @@ import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_repository.dart';
+import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -21,10 +22,13 @@ import 'package:pollution_source/util/ui_utils.dart';
 class WaterDeviceCheckUploadListPage extends StatefulWidget {
   final String monitorId;
   final String itemInspectType;
+  final String state;
 
-  WaterDeviceCheckUploadListPage(
-      {@required this.monitorId, @required this.itemInspectType})
-      : assert(monitorId != null),
+  WaterDeviceCheckUploadListPage({
+    @required this.monitorId,
+    @required this.itemInspectType,
+    this.state,
+  })  : assert(monitorId != null),
         assert(itemInspectType != null);
 
   @override
@@ -53,6 +57,7 @@ class _WaterDeviceCheckUploadListPageState
         params: RoutineInspectionUploadListRepository.createParams(
       monitorId: widget.monitorId,
       itemInspectType: widget.itemInspectType,
+      state: widget.state,
     )));
     _refreshCompleter = Completer<void>();
   }
@@ -113,6 +118,7 @@ class _WaterDeviceCheckUploadListPageState
               params: RoutineInspectionUploadListRepository.createParams(
                 monitorId: widget.monitorId,
                 itemInspectType: widget.itemInspectType,
+                state: widget.state,
               )));
           return _refreshCompleter.future;
         },
@@ -133,13 +139,19 @@ class _WaterDeviceCheckUploadListPageState
                     '${Routes.waterDeviceCheckUpload}?json=${Uri.encodeComponent(json.encode(list[index].toJson()))}');
                 if (success) {
                   // 刷新常规巡检详情界面header中的任务条数
-                  _detailBloc.add(DetailUpdate(detailId: widget.monitorId));
+                  _detailBloc.add(DetailLoad(
+                    params: RoutineInspectionDetailRepository.createParams(
+                      monitorId: widget.monitorId,
+                      state: widget.state,
+                    ),
+                  ));
                   // 刷新列表页面
                   _listBloc.add(ListLoad(
                     isRefresh: true,
                     params: RoutineInspectionUploadListRepository.createParams(
                       monitorId: widget.monitorId,
                       itemInspectType: widget.itemInspectType,
+                      state: widget.state,
                     ),
                   ));
                 }

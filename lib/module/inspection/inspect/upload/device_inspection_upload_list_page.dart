@@ -18,6 +18,7 @@ import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_repository.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspect_upload_model.dart';
+import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
@@ -28,10 +29,13 @@ import 'package:pollution_source/widget/git_dialog.dart';
 class DeviceInspectionUploadListPage extends StatefulWidget {
   final String monitorId;
   final String itemInspectType;
+  final String state;
 
-  DeviceInspectionUploadListPage(
-      {@required this.monitorId, @required this.itemInspectType})
-      : assert(monitorId != null),
+  DeviceInspectionUploadListPage({
+    @required this.monitorId,
+    @required this.itemInspectType,
+    this.state,
+  })  : assert(monitorId != null),
         assert(itemInspectType != null);
 
   @override
@@ -68,6 +72,7 @@ class _DeviceInspectionUploadListPageState
         params: RoutineInspectionUploadListRepository.createParams(
       monitorId: widget.monitorId,
       itemInspectType: widget.itemInspectType,
+      state: widget.state,
     )));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _pageBloc = PageBloc();
@@ -153,6 +158,7 @@ class _DeviceInspectionUploadListPageState
                             RoutineInspectionUploadListRepository.createParams(
                           monitorId: widget.monitorId,
                           itemInspectType: widget.itemInspectType,
+                              state: widget.state,
                         )));
                     // 清空上报界面
                     _pageBloc.add(PageLoad(
@@ -160,7 +166,12 @@ class _DeviceInspectionUploadListPageState
                             DeviceInspectUpload(selectedList: selectedList)));
                     _remarkController.text = '';
                     // 刷新常规巡检详情界面header中的任务条数
-                    _detailBloc.add(DetailUpdate(detailId: widget.monitorId));
+                    _detailBloc.add(DetailLoad(
+                      params: RoutineInspectionDetailRepository.createParams(
+                        monitorId: widget.monitorId,
+                        state: widget.state,
+                      ),
+                    ));
                   } else if (state is UploadFail) {
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
@@ -193,7 +204,8 @@ class _DeviceInspectionUploadListPageState
                 } else if (state is ListError) {
                   return ErrorSliver(errorMessage: state.message);
                 } else if (state is ListLoaded) {
-                  return _buildPageLoadedList(RoutineInspectionUploadList.convert(state.list));
+                  return _buildPageLoadedList(
+                      RoutineInspectionUploadList.convert(state.list));
                 } else {
                   return ErrorSliver(
                       errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
@@ -208,6 +220,7 @@ class _DeviceInspectionUploadListPageState
               params: RoutineInspectionUploadListRepository.createParams(
                 monitorId: widget.monitorId,
                 itemInspectType: widget.itemInspectType,
+                state: widget.state,
               )));
           return _refreshCompleter.future;
         },
@@ -234,7 +247,8 @@ class _DeviceInspectionUploadListPageState
                 // 刷新界面
                 _listBloc.add(ListUpdate());
                 // 刷新BottomSheet顶部任务个数提示
-                _pageBloc.add(PageLoad(model: DeviceInspectUpload(selectedList: selectedList)));
+                _pageBloc.add(PageLoad(
+                    model: DeviceInspectUpload(selectedList: selectedList)));
               },
               children: <Widget>[
                 Container(

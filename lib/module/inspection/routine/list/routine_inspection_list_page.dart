@@ -190,8 +190,9 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
+                print(widget.state);
                 Application.router.navigateTo(context,
-                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}');
+                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}&state=${widget.state}');
               },
               children: <Widget>[
                 Container(

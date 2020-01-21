@@ -17,16 +17,19 @@ import 'package:pollution_source/module/inspection/inspect/upload/device_inspect
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_repository.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_model.dart';
+import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
 import 'package:pollution_source/res/gaps.dart';
 
 /// 常规巡检详情页
 class RoutineInspectionDetailPage extends StatefulWidget {
   final String monitorId;
   final String monitorType;
+  final String state;
 
   RoutineInspectionDetailPage({
     @required this.monitorId,
     @required this.monitorType,
+    this.state,
   })  : assert(monitorId != null),
         assert(monitorType != null);
 
@@ -46,7 +49,12 @@ class _RoutineInspectionDetailPageState
   void initState() {
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _detailBloc.add(DetailLoad(detailId: widget.monitorId));
+    _detailBloc.add(DetailLoad(
+      params: RoutineInspectionDetailRepository.createParams(
+        monitorId: widget.monitorId,
+        state: widget.state,
+      ),
+    ));
   }
 
   @override
@@ -303,6 +311,7 @@ class _RoutineInspectionDetailPageState
                     child: DeviceInspectionUploadListPage(
                       monitorId: widget.monitorId,
                       itemInspectType: routineInspectionDetail.itemInspectType,
+                      state: widget.state,
                     ),
                   );
                 case '3':
@@ -316,6 +325,7 @@ class _RoutineInspectionDetailPageState
                         monitorId: widget.monitorId,
                         itemInspectType:
                             routineInspectionDetail.itemInspectType,
+                        state: widget.state,
                       ),
                     );
                   } else if (widget.monitorType == 'outletType3') {
@@ -328,6 +338,7 @@ class _RoutineInspectionDetailPageState
                         monitorId: widget.monitorId,
                         itemInspectType:
                             routineInspectionDetail.itemInspectType,
+                        state: widget.state,
                       ),
                     );
                   }
@@ -343,6 +354,7 @@ class _RoutineInspectionDetailPageState
                     child: AirDeviceCorrectUploadListPage(
                       monitorId: widget.monitorId,
                       itemInspectType: routineInspectionDetail.itemInspectType,
+                      state: widget.state,
                     ),
                   );
                 case '4':
@@ -354,6 +366,7 @@ class _RoutineInspectionDetailPageState
                     child: WaterDeviceParamUploadListPage(
                       monitorId: widget.monitorId,
                       itemInspectType: routineInspectionDetail.itemInspectType,
+                      state: widget.state,
                     ),
                   );
                 default:
