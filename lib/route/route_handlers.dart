@@ -190,6 +190,7 @@ var orderListHandler = Handler(
   String enterId = params['enterId']?.first ?? '';
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
+  String overdue = params['overdue']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: OrderListRepository()),
@@ -197,6 +198,7 @@ var orderListHandler = Handler(
       enterId: enterId,
       monitorId: monitorId,
       state: state,
+      overdue: overdue,
     ),
   );
 });
@@ -382,12 +384,14 @@ var routineInspectionDetailHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   String id = params['id']?.first;
   String monitorType = params['monitorType']?.first;
+  String state = params['state']?.first ?? '';
   return BlocProvider<DetailBloc>(
     create: (BuildContext context) =>
         DetailBloc(detailRepository: RoutineInspectionDetailRepository()),
     child: RoutineInspectionDetailPage(
       monitorId: id,
       monitorType: monitorType,
+      state: state,
     ),
   );
 });
