@@ -11,9 +11,9 @@ class License extends Equatable {
   final String enterName; //企业名称
   @JsonKey(name: 'issueUnitName')
   final String issueUnitStr; //发证单位
-  @JsonKey(name: 'issueTime')
+  @JsonKey(name: 'issueTime', defaultValue: '')
   final String issueTimeStr; //发证时间
-  @JsonKey(name: 'licenseTime')
+  @JsonKey(name: 'licenseTime', defaultValue: '')
   final String licenseTimeStr; //领证时间
   final String validStartTime; //有效期开始时间
   final String validEndTime; //有效期结束时间

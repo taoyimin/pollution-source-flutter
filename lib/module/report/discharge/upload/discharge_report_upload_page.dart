@@ -17,7 +17,6 @@ import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_model.dart';
@@ -142,7 +141,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       Enter enter = await Application.router
                           .navigateTo(context, '${Routes.enterList}?type=1');
                       if (enter != null) {
-                        // 设置已经选中的企业，重置已经选中的排口和监控点
+                        // 设置已经选中的企业，重置已经选中的监控点
                         // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
                         _pageBloc.add(
                           PageLoad(
@@ -161,9 +160,49 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   ),
                 ),
                 widget.enterId != null ? Gaps.empty : Gaps.hLine,
+//                SelectRowWidget(
+//                  title: '排口名称',
+//                  content: reportUpload?.discharge?.dischargeName,
+//                  onTap: () async {
+//                    if (reportUpload?.enter == null) {
+//                      Scaffold.of(context).showSnackBar(
+//                        SnackBar(
+//                          content: const Text('请先选择企业！'),
+//                          action: SnackBarAction(
+//                              label: '我知道了',
+//                              textColor: Colours.primary_color,
+//                              onPressed: () {}),
+//                        ),
+//                      );
+//                    } else {
+//                      // 打开排口选择界面并等待结果返回
+//                      Discharge discharge = await Application.router.navigateTo(
+//                          context,
+//                          '${Routes.dischargeList}?enterId=${reportUpload?.enter?.enterId}&type=1');
+//                      if (discharge != null) {
+//                        // 设置已经选中的排口，重置已经选中的监控点
+//                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
+//                        _pageBloc.add(
+//                          PageLoad(
+//                            model: DischargeReportUpload(
+//                              enter: reportUpload?.enter,
+//                              discharge: discharge,
+//                              stopType: reportUpload?.stopType,
+//                              reportTime: reportUpload?.reportTime,
+//                              startTime: reportUpload?.startTime,
+//                              endTime: reportUpload?.endTime,
+//                              attachments: reportUpload?.attachments,
+//                            ),
+//                          ),
+//                        );
+//                      }
+//                    }
+//                  },
+//                ),
+//                Gaps.hLine,
                 SelectRowWidget(
-                  title: '排口名称',
-                  content: reportUpload?.discharge?.dischargeName,
+                  title: '监控点名',
+                  content: reportUpload?.monitor?.monitorName,
                   onTap: () async {
                     if (reportUpload?.enter == null) {
                       Scaffold.of(context).showSnackBar(
@@ -176,50 +215,10 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                         ),
                       );
                     } else {
-                      // 打开排口选择界面并等待结果返回
-                      Discharge discharge = await Application.router.navigateTo(
-                          context,
-                          '${Routes.dischargeList}?enterId=${reportUpload?.enter?.enterId}&type=1');
-                      if (discharge != null) {
-                        // 设置已经选中的排口，重置已经选中的监控点
-                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
-                        _pageBloc.add(
-                          PageLoad(
-                            model: DischargeReportUpload(
-                              enter: reportUpload?.enter,
-                              discharge: discharge,
-                              stopType: reportUpload?.stopType,
-                              reportTime: reportUpload?.reportTime,
-                              startTime: reportUpload?.startTime,
-                              endTime: reportUpload?.endTime,
-                              attachments: reportUpload?.attachments,
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  },
-                ),
-                Gaps.hLine,
-                SelectRowWidget(
-                  title: '监控点名',
-                  content: reportUpload?.monitor?.monitorName,
-                  onTap: () async {
-                    if (reportUpload?.discharge == null) {
-                      Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('请先选择排口！'),
-                          action: SnackBarAction(
-                              label: '我知道了',
-                              textColor: Colours.primary_color,
-                              onPressed: () {}),
-                        ),
-                      );
-                    } else {
                       // 打开监控点选择界面并等待返回结果
                       Monitor monitor = await Application.router.navigateTo(
                           context,
-                          '${Routes.monitorList}?dischargeId=${reportUpload?.discharge?.dischargeId}&type=1');
+                          '${Routes.monitorList}?enterId=${reportUpload?.enter?.enterId}&type=1');
                       if (monitor != null) {
                         // 设置选中的监控点
                         _pageBloc.add(

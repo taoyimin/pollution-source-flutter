@@ -44,6 +44,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
       'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'S',
+      'hasValid': '0',
     };
   }
 }

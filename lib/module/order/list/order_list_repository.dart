@@ -38,6 +38,7 @@ class OrderListRepository extends ListRepository<Order> {
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
       'enterpriseName': enterName,
+      'enterName': enterName,
       'areaCode': areaCode,
       'enterId': enterId,
       'monitorId': monitorId,

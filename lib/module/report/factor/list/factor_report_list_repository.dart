@@ -44,6 +44,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
       'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'A',
+      'hasValid': '0',
     };
   }
 }

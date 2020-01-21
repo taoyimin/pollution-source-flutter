@@ -13,8 +13,8 @@ class DischargeReportUploadRepository
   checkData(DischargeReportUpload data) {
     if (data.enter == null)
       throw DioError(error: InvalidParamException('请选择企业'));
-    if (data.discharge == null)
-      throw DioError(error: InvalidParamException('请选择排口'));
+//    if (data.discharge == null)
+//      throw DioError(error: InvalidParamException('请选择排口'));
     if (data.monitor == null)
       throw DioError(error: InvalidParamException('请选择监控点'));
     if (data.stopType == null)
@@ -38,7 +38,7 @@ class DischargeReportUploadRepository
   Future<FormData> createFormData(DischargeReportUpload data) async {
     return FormData.fromMap({
       'enterId': data.enter.enterId,
-      'outId': data.discharge.dischargeId,
+      //'outId': data.discharge.dischargeId,
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),

@@ -223,8 +223,10 @@ class _RoutineInspectionDetailPageState
                         builder: (context, state) {
                           if (state is DetailLoaded) {
                             return TabBar(
+                              labelColor: Colors.cyanAccent,
+                              unselectedLabelColor: Colors.white.withOpacity(0.7),
                               isScrollable: true,
-                              indicatorColor: Colors.white,
+                              indicatorColor: Colors.cyanAccent,
                               controller: _tabController,
                               tabs: state.detail
                                   .map<Widget>((routineInspectionDetail) {

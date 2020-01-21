@@ -37,6 +37,7 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
       'areaCode': areaCode,
       'enterId': enterId,
       'dataType': 'L',
+      'hasValid': '0',
     };
   }
 }

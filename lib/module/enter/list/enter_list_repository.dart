@@ -18,8 +18,8 @@ class EnterListRepository extends ListRepository<Enter> {
   ///
   /// [enterName] 按企业名称搜索
   /// [areaCode] 按区域搜索
-  /// [state] 在线状态 online:在线 空:全部
-  /// [enterType] 企业类型 outletType1:雨水企业 outletType2:废水企业 outletType3:废气企业 licence:许可证企业
+  /// [state] 0：全部 1：在线
+  /// [enterType] 企业类型 0:全部 1:雨水企业 2:废水企业 3:废气企业 4:水气企业 5:许可证企业
   /// [attentionLevel] 0:非重点源 1:重点源
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
@@ -41,16 +41,16 @@ class EnterListRepository extends ListRepository<Enter> {
       'state': state == '1' ? 'online' : '',
       'enterpriseType': () {
         switch(enterType){
-          case 'EnterType1':
-            return 'outletType2';
-          case 'EnterType2':
-            return 'outletType3';
-          case 'EnterType1,EnterType2':
-            return 'outletType2,outletType3';
-          case 'licence':
-            return 'licence';
-          case 'outletType1':
+          case '1':
             return 'outletType1';
+          case '2':
+            return 'outletType2';
+          case '3':
+            return 'outletType3';
+          case '4':
+            return 'outletType2,outletType3';
+          case '5':
+            return 'licence';
           default:
             return '';
         }

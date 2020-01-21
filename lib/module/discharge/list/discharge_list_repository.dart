@@ -1,4 +1,3 @@
-import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
@@ -20,7 +19,7 @@ class DischargeListRepository extends ListRepository<Discharge> {
   /// [enterName] 按企业名称搜索
   /// [areaCode] 按区域搜索
   /// [enterId] 筛选某企业的所有排口
-  /// [dischargeType] 排口类型 outletType1：雨水 outletType2：废水 outletType3：废气
+  /// [dischargeType] 排口类型 0：全部 1：雨水 2：废水 3：废气
   /// [state] 排口状态 （暂时没用）
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
@@ -39,8 +38,30 @@ class DischargeListRepository extends ListRepository<Discharge> {
       'enterpriseName': enterName,
       'areaCode': areaCode,
       'enterId': enterId,
-      'dischargeType': dischargeType,
-      'disOutType': dischargeType,
+      'dischargeType': () {
+        switch(dischargeType){
+          case '1':
+            return 'outletType1';
+          case '2':
+            return 'outletType2';
+          case '3':
+            return 'outletType3';
+          default:
+            return '';
+        }
+      }(),
+      'disOutType': () {
+        switch(dischargeType){
+          case '1':
+            return 'outletType1';
+          case '2':
+            return 'outletType2';
+          case '3':
+            return 'outletType3';
+          default:
+            return '';
+        }
+      }(),
     };
   }
 }

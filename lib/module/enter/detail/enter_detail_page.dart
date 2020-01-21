@@ -384,10 +384,10 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                             },
                           ),
                           VerticalDividerWidget(height: 30),
-                          //停产
+                          //异常
                           InkWellButton1(
                             meta: Meta(
-                              title: '停产',
+                              title: '异常',
                               imagePath: 'assets/images/icon_monitor_stop.png',
                               color: Color.fromRGBO(137, 137, 137, 1),
                               content: '${enterDetail.monitorStopCount??''}',

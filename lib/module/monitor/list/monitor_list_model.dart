@@ -15,7 +15,7 @@ class Monitor extends Equatable {
   final String enterName; //企业名称
   @JsonKey(name: 'disMonitorName')
   final String monitorName; //监控点名称
-  @JsonKey(name: 'disMonitorAddress')
+  @JsonKey(name: 'disMonitorAddress', defaultValue: '')
   final String monitorAddress; //监控点地址
   @JsonKey(name: 'disMonitorType')
   final String monitorType; //监控点类型

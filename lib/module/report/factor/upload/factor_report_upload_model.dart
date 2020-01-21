@@ -2,14 +2,13 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/module/common/common_model.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 
 //异常申报单详情
 class FactorReportUpload extends Equatable {
   final Enter enter; //企业
-  final Discharge discharge; //排口
+  //final Discharge discharge; //排口
   final Monitor monitor; //监控点
   final List<DataDict> factorCode; //异常因子
   final DateTime startTime; //开始时间
@@ -20,7 +19,7 @@ class FactorReportUpload extends Equatable {
 
   const FactorReportUpload({
     this.enter,
-    this.discharge,
+    //this.discharge,
     this.monitor,
     @required this.factorCode,
     this.startTime,
@@ -33,7 +32,7 @@ class FactorReportUpload extends Equatable {
   @override
   List<Object> get props => [
         enter,
-        discharge,
+        //discharge,
         monitor,
         factorCode?.length,
         startTime,
@@ -47,7 +46,7 @@ class FactorReportUpload extends Equatable {
 
   FactorReportUpload copyWith({
     Enter enter,
-    Discharge discharge,
+    //Discharge discharge,
     Monitor monitor,
     List<DataDict> factorCode,
     DateTime startTime,
@@ -58,7 +57,7 @@ class FactorReportUpload extends Equatable {
   }) {
     return FactorReportUpload(
       enter: enter ?? this.enter,
-      discharge: discharge ?? this.discharge,
+      //discharge: discharge ?? this.discharge,
       monitor: monitor ?? this.monitor,
       factorCode: factorCode ?? this.factorCode,
       startTime: startTime ?? this.startTime,

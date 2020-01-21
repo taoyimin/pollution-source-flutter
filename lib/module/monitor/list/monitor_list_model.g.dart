@@ -11,7 +11,7 @@ Monitor _$MonitorFromJson(Map<String, dynamic> json) {
       monitorId: json['monitorId'] as int,
       enterName: json['enterpriseName'] as String,
       monitorName: json['disMonitorName'] as String,
-      monitorAddress: json['disMonitorAddress'] as String,
+      monitorAddress: json['disMonitorAddress'] as String ?? '',
       monitorType: json['disMonitorType'] as String,
       monitorCategoryStr: json['outletTypeStr'] as String);
 }
