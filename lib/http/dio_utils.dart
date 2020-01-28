@@ -65,7 +65,10 @@ class JavaDioUtils {
       validateStatus: (status) {
         return true;
       },
-      baseUrl: 'http://182.106.189.190:9999/',
+      // 正式环境
+      baseUrl: 'http://111.75.227.207:19551/'
+      // 测试环境
+      // baseUrl: 'http://182.106.189.190:9999/',
     );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());
