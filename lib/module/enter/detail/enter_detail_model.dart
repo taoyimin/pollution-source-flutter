@@ -38,7 +38,7 @@ class EnterDetail extends Equatable {
   final int monitorAlarmCount; // 监控点预警数
   final int monitorOverCount; // 监控点超标数
   final int monitorOfflineCount; // 监控点离线数
-  final int monitorStopCount; // 监控点停产数
+  final int monitorStopCount; // 监控点异常数
   final String licenseNumber; // 排污许可证编码
   final String buildProjectCount; // 建设项目总数
   final String sceneLawCount; // 现场执法总数
@@ -97,7 +97,7 @@ class EnterDetail extends Equatable {
         orderTotalCount,
         orderDealCount,
         orderOverdueCount,
-    orderReturnCount,
+        orderReturnCount,
         longStopReportTotalCount,
         dischargeReportTotalCount,
         factorReportTotalCount,
