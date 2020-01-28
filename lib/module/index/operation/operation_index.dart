@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
@@ -10,7 +9,7 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
-import 'package:pollution_source/widget/indicator.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 
 class OperationIndexPage extends StatefulWidget {
@@ -130,7 +129,6 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                     ),
                   ],
                 ),
-                PieChartSample2(),
                 OnlineMonitorStatisticsWidget(metaList: [
                   Meta(
                     title: '全部',
@@ -501,13 +499,132 @@ class _RoutineInspectionTabViewWidgetState
           ],
         ),
         Container(
-          height: 200,
+          height: 250,
           child: TabBarView(
             controller: _tabController,
             children: <Widget>[
-              Container(
-                color: Colors.green,
-                child: Text('111'),
+              Column(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        UIUtils.getBoxShadow(),
+                      ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Gaps.hGap10,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Text(
+                                  '企业名称企业名称企业名称企业',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              Gaps.vGap6,
+                              Row(
+                                children: <Widget>[
+                                  ListTileWidget('地址：企业名称企业名称企业名称'),
+                                  ListTileWidget('距离我500米'),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Gaps.vGap6,
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        UIUtils.getBoxShadow(),
+                      ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Gaps.hGap10,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Text(
+                                  '企业名称企业名称企业名称企业',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              Gaps.vGap6,
+                              Row(
+                                children: <Widget>[
+                                  ListTileWidget('地址：企业名称企业名称企业名称'),
+                                  ListTileWidget('距离我500米'),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Gaps.vGap6,
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        UIUtils.getBoxShadow(),
+                      ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Gaps.hGap10,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Text(
+                                  '企业名称企业名称企业名称企业',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              Gaps.vGap6,
+                              Row(
+                                children: <Widget>[
+                                  ListTileWidget('地址：企业名称企业名称企业名称'),
+                                  ListTileWidget('距离我500米'),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
               Container(
                 height: 100,
@@ -626,8 +743,8 @@ class OrderStatisticsWidget extends StatelessWidget {
               InkWellButton3(
                 meta: metaList[0],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.orderList}?state=2');
+                  Application.router
+                      .navigateTo(context, '${Routes.orderList}?state=2');
                 },
               ),
               Gaps.hGap10,
@@ -644,8 +761,8 @@ class OrderStatisticsWidget extends StatelessWidget {
               InkWellButton3(
                 meta: metaList[2],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.orderList}?state=4');
+                  Application.router
+                      .navigateTo(context, '${Routes.orderList}?state=4');
                 },
               ),
             ],
@@ -704,8 +821,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[3],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=2');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -713,8 +830,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[4],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=3');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -722,8 +839,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[5],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.enterList}?enterType=4');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=4');
                 },
               ),
             ],
@@ -734,8 +851,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[6],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=2');
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -743,8 +860,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[7],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=3');
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -752,8 +869,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[8],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=5');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=5');
                 },
               ),
             ],
@@ -761,138 +878,5 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class PieChartSample2 extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => PieChart2State();
-}
-
-class PieChart2State extends State {
-  int touchedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child:PieChart(
-            PieChartData(
-                pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                  setState(() {
-                    if (pieTouchResponse.touchInput is FlLongPressEnd ||
-                        pieTouchResponse.touchInput is FlPanEnd) {
-                      touchedIndex = -1;
-                    } else {
-                      touchedIndex = pieTouchResponse.touchedSectionIndex;
-                    }
-                  });
-                }),
-                borderData: FlBorderData(
-                  show: false,
-                ),
-                sectionsSpace: 0,
-                centerSpaceRadius: 0,
-                sections: showingSections()),
-          ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const <Widget>[
-            Indicator(
-              color: Color(0xff0293ee),
-              text: 'First',
-              isSquare: true,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Indicator(
-              color: Color(0xfff8b250),
-              text: 'Second',
-              isSquare: true,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Indicator(
-              color: Color(0xff845bef),
-              text: 'Third',
-              isSquare: true,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Indicator(
-              color: Color(0xff13d38e),
-              text: 'Fourth',
-              isSquare: true,
-            ),
-            SizedBox(
-              height: 18,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
-      final isTouched = i == touchedIndex;
-      final double fontSize = isTouched ? 25 : 16;
-      final double radius = isTouched ? 80 : 70;
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: const Color(0xff0293ee),
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: const Color(0xfff8b250),
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: const Color(0xff845bef),
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: const Color(0xff13d38e),
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-          );
-        default:
-          return null;
-      }
-    });
   }
 }
