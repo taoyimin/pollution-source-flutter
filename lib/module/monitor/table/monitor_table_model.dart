@@ -122,3 +122,15 @@ class MonitorTableCell extends Equatable {
         alarmFlag,
       ];
 }
+
+/// 监测数据类型枚举类
+enum DataType {
+  // 实时数据
+  minute,
+  // 十分钟数据
+  tenminute,
+  // 小时诗句
+  hour,
+  // 日数据
+  day,
+}

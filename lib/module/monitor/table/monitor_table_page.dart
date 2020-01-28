@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
+import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_repository.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/widget/fixed_data_table.dart';
 
 import 'monitor_table_model.dart';
@@ -23,7 +25,7 @@ class MonitorTablePage extends StatefulWidget {
 }
 
 class _MonitorTableState extends State<MonitorTablePage> {
-  List<dynamic> _dropDownHeaderItem = ['日数据', null, null];
+  List<dynamic> _dropDownHeaderItem = ['实时数据', null, null];
   List<SortCondition> _dataTypeConditions = [];
   SortCondition _selectBrandSortCondition;
   GZXDropdownMenuController _dropdownMenuController =
@@ -37,15 +39,16 @@ class _MonitorTableState extends State<MonitorTablePage> {
   @override
   void initState() {
     super.initState();
-    _dataTypeConditions
-        .add(SortCondition(name: '实时数据', value: 'minute', isSelected: false));
+    // 默认选中实时数据
     _dataTypeConditions.add(
-        SortCondition(name: '十分钟数据', value: 'tenminute', isSelected: false));
-    _dataTypeConditions
-        .add(SortCondition(name: '小时数据', value: 'hour', isSelected: false));
-    _dataTypeConditions
-        .add(SortCondition(name: '日数据', value: 'day', isSelected: true));
-    _selectBrandSortCondition = _dataTypeConditions[3];
+        SortCondition(name: '实时数据', value: DataType.minute, isSelected: true));
+    _dataTypeConditions.add(SortCondition(
+        name: '十分钟数据', value: DataType.tenminute, isSelected: false));
+    _dataTypeConditions.add(
+        SortCondition(name: '小时数据', value: DataType.hour, isSelected: false));
+    _dataTypeConditions.add(
+        SortCondition(name: '日数据', value: DataType.day, isSelected: false));
+    _selectBrandSortCondition = _dataTypeConditions[0];
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _detailBloc.add(DetailLoad(
       params: MonitorHistoryDataRepository.createParams(
@@ -102,43 +105,81 @@ class _MonitorTableState extends State<MonitorTablePage> {
                 // 当点击头部项的事件，在这里可以进行页面跳转或openEndDrawer
                 onItemTap: (index) {
                   if (index == 1) {
-                    DatePicker.showDatePicker(context,
-                        // pickerMode: DateTimePickerMode.datetime,
-                        locale: DateTimePickerLocale.zh_cn, onClose: () {
-                      _dropdownMenuController.hide();
-                    }, onConfirm: (dateTime, selectedIndex) {
-                      _dropDownHeaderItem[1] = dateTime;
-                      if(_dropDownHeaderItem[2] != null){
-                        _detailBloc.add(DetailLoad(
-                          params: MonitorHistoryDataRepository.createParams(
-                            monitorId: widget.monitorId,
-                            dataType: _selectBrandSortCondition.value,
-                            startTime: _dropDownHeaderItem[1],
-                            endTime: _dropDownHeaderItem[2],
-                          ),
-                        ));
-                      }
-                      setState(() {});
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      // pickerMode: DateTimePickerMode.datetime,
+                      maxDateTime: DateTime.now(),
+                      initialDateTime: _dropDownHeaderItem[1] ?? DateTime.now(),
+                      locale: DateTimePickerLocale.zh_cn,
+                      onClose: () {
+                        _dropdownMenuController.hide();
+                      },
+                      onConfirm: (dateTime, selectedIndex) {
+                        _dropDownHeaderItem[1] = dateTime;
+                        if (_dropDownHeaderItem[2] != null) {
+                          try {
+                            _detailBloc.add(DetailLoad(
+                              params: MonitorHistoryDataRepository.createParams(
+                                monitorId: widget.monitorId,
+                                dataType: _selectBrandSortCondition.value,
+                                startTime: dateTime,
+                                endTime: _dropDownHeaderItem[2],
+                              ),
+                            ));
+                          } catch (e) {
+                            _scaffoldKey.currentState.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    '${ExceptionHandle.handleException(e).msg}'),
+                                action: SnackBarAction(
+                                    label: '我知道了',
+                                    textColor: Colours.primary_color,
+                                    onPressed: () {}),
+                              ),
+                            );
+                          }
+                        }
+                        setState(() {});
+                      },
+                    );
                   } else if (index == 2) {
-                    DatePicker.showDatePicker(context,
-                        // pickerMode: DateTimePickerMode.datetime,
-                        locale: DateTimePickerLocale.zh_cn, onClose: () {
-                      _dropdownMenuController.hide();
-                    }, onConfirm: (dateTime, selectedIndex) {
-                      _dropDownHeaderItem[2] = dateTime;
-                      if(_dropDownHeaderItem[1] != null){
-                        _detailBloc.add(DetailLoad(
-                          params: MonitorHistoryDataRepository.createParams(
-                            monitorId: widget.monitorId,
-                            dataType: _selectBrandSortCondition.value,
-                            startTime: _dropDownHeaderItem[1],
-                            endTime: _dropDownHeaderItem[2],
-                          ),
-                        ));
-                      }
-                      setState(() {});
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      // pickerMode: DateTimePickerMode.datetime,
+                      maxDateTime: DateTime.now(),
+                      initialDateTime: _dropDownHeaderItem[2] ?? DateTime.now(),
+                      locale: DateTimePickerLocale.zh_cn,
+                      onClose: () {
+                        _dropdownMenuController.hide();
+                      },
+                      onConfirm: (dateTime, selectedIndex) {
+                        _dropDownHeaderItem[2] = dateTime;
+                        if (_dropDownHeaderItem[1] != null) {
+                          try {
+                            _detailBloc.add(DetailLoad(
+                              params: MonitorHistoryDataRepository.createParams(
+                                monitorId: widget.monitorId,
+                                dataType: _selectBrandSortCondition.value,
+                                startTime: _dropDownHeaderItem[1],
+                                endTime: dateTime,
+                              ),
+                            ));
+                          } catch (e) {
+                            _scaffoldKey.currentState.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    '${ExceptionHandle.handleException(e).msg}'),
+                                action: SnackBarAction(
+                                    label: '我知道了',
+                                    textColor: Colours.primary_color,
+                                    onPressed: () {}),
+                              ),
+                            );
+                          }
+                        }
+                        setState(() {});
+                      },
+                    );
                   }
                 },
 //                // 头部的高度
@@ -205,14 +246,27 @@ class _MonitorTableState extends State<MonitorTablePage> {
                     _dropDownHeaderItem[0] = _selectBrandSortCondition.name;
                     _dropdownMenuController.hide();
                     setState(() {});
-                    _detailBloc.add(DetailLoad(
-                      params: MonitorHistoryDataRepository.createParams(
-                        monitorId: widget.monitorId,
-                        dataType: _selectBrandSortCondition.value,
-                        startTime: _dropDownHeaderItem[1],
-                        endTime: _dropDownHeaderItem[2],
-                      ),
-                    ));
+                    try {
+                      _detailBloc.add(DetailLoad(
+                        params: MonitorHistoryDataRepository.createParams(
+                          monitorId: widget.monitorId,
+                          dataType: _selectBrandSortCondition.value,
+                          startTime: _dropDownHeaderItem[1],
+                          endTime: _dropDownHeaderItem[2],
+                        ),
+                      ));
+                    } catch (e) {
+                      _scaffoldKey.currentState.showSnackBar(
+                        SnackBar(
+                          content:
+                              Text('${ExceptionHandle.handleException(e).msg}'),
+                          action: SnackBarAction(
+                              label: '我知道了',
+                              textColor: Colours.primary_color,
+                              onPressed: () {}),
+                        ),
+                      );
+                    }
                   },
                 ),
               ),
@@ -223,7 +277,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
     );
   }
 
-  String getDateTimeFormat(String dataType) {
+  String getDateTimeFormat(DataType dataType) {
     return 'yyyy-MM-dd  ';
 //    switch (dataType) {
 //      case 'minute':
@@ -314,7 +368,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
 
 class SortCondition {
   String name;
-  String value;
+  DataType value;
   bool isSelected;
 
   SortCondition({this.name, this.value, this.isSelected});
