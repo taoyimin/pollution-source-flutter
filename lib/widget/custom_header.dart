@@ -84,8 +84,8 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
+    super.dispose();
   }
 
   IconData _actionIcon = Icons.search;
@@ -218,8 +218,8 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                           children: <Widget>[
                             Expanded(
                               child: Container(
-                                height: 36,
-                                child: TextField(
+                                height: 42,
+                                child: Center(child: TextField(
                                   controller: widget.editController,
                                   decoration: const InputDecoration(
                                     contentPadding: EdgeInsets.all(6),
@@ -232,12 +232,12 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget>
                                     prefixIcon: Icon(Icons.business),
                                     border: InputBorder.none,
                                   ),
-                                ),
+                                ),),
                               ),
                             ),
                             Gaps.hGap10,
                             Container(
-                              height: 36,
+                              height: 42,
                               width: 70,
                               color: Colors.orange,
                               child: RaisedButton(

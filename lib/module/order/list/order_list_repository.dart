@@ -42,6 +42,7 @@ class OrderListRepository extends ListRepository<Order> {
       'areaCode': areaCode,
       'enterId': enterId,
       'monitorId': monitorId,
+      // 污染源系统的状态参数
       'status': state,
       'overdue': overdue,
       // 运维系统的状态参数
