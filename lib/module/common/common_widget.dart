@@ -1227,14 +1227,16 @@ class AttachmentWidget extends StatelessWidget {
           String localPath =
               await FileUtils.getAttachmentLocalPathByAttachment(attachment);
           if (await File(localPath).exists()) {
-            //附件已经存在
+            // 附件已经存在
             OpenFile.open(localPath);
           } else {
-            //附件不存在
-            pr = ProgressDialog(context,
-                type: ProgressDialogType.Download,
-                isDismissible: true,
-                showLogs: true);
+            // 附件不存在
+            pr = ProgressDialog(
+              context,
+              type: ProgressDialogType.Download,
+              isDismissible: true,
+              showLogs: true,
+            );
             pr.style(
               message: '正在下载附件...',
               borderRadius: 10.0,
