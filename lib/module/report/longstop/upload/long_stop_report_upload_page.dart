@@ -139,6 +139,7 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                     DatePicker.showDatePicker(context,
                         locale: DateTimePickerLocale.zh_cn,
                         pickerMode: DateTimePickerMode.datetime,
+                        maxDateTime: reportUpload?.endTime,
                         onClose: () {}, onConfirm: (dateTime, selectedIndex) {
                       _pageBloc.add(
                         PageLoad(
@@ -158,6 +159,7 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       context,
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
+                      minDateTime: reportUpload?.startTime,
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(

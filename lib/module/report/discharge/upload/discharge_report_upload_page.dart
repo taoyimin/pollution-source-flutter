@@ -275,6 +275,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       context,
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
+                      maxDateTime: reportUpload?.endTime,
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(
@@ -296,6 +297,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       context,
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
+                      minDateTime: reportUpload?.startTime,
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(
