@@ -12,10 +12,12 @@ class FactorReportUploadRepository
   checkData(FactorReportUpload data) {
     if (data.enter == null)
       throw DioError(error: InvalidParamException('请选择企业'));
-//    if(data.discharge == null)
-//      throw DioError(error: InvalidParamException('请选择排口'));
     if(data.monitor == null)
       throw DioError(error: InvalidParamException('请选择监控点'));
+    if (data.monitor.dischargeId == null) {
+      throw DioError(error: InvalidParamException(
+          'monitorId=${data.monitor.monitorId}的监控点没有对应的排口Id'));
+    }
     if (data.alarmType == null)
       throw DioError(error: InvalidParamException('请选择异常类型'));
     if (data.factorCode.isEmpty)
@@ -39,7 +41,7 @@ class FactorReportUploadRepository
     print(data.factorCode.map((dataDict) => dataDict.code).join(','));
     return FormData.fromMap({
       'enterId': data.enter.enterId,
-      //'outId': data.discharge.dischargeId,
+      'outId': data.monitor.dischargeId,
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
@@ -52,11 +54,6 @@ class FactorReportUploadRepository
             filename: asset.name);
       })?.toList() ??
           [])
-//      "file": await Future.wait(data.attachments?.map((asset) async {
-//            return await MultipartFile.fromFile(await asset.filePath,
-//                filename: asset.name);
-//          })?.toList() ??
-//          [])
     });
   }
 }

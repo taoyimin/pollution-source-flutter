@@ -13,10 +13,12 @@ class DischargeReportUploadRepository
   checkData(DischargeReportUpload data) {
     if (data.enter == null)
       throw DioError(error: InvalidParamException('请选择企业'));
-//    if (data.discharge == null)
-//      throw DioError(error: InvalidParamException('请选择排口'));
     if (data.monitor == null)
       throw DioError(error: InvalidParamException('请选择监控点'));
+    if (data.monitor.dischargeId == null) {
+      throw DioError(error: InvalidParamException(
+          'monitorId=${data.monitor.monitorId}的监控点没有对应的排口Id'));
+    }
     if (data.stopType == null)
       throw DioError(error: InvalidParamException('请选择停产类型'));
     if (data.reportTime == null)
@@ -38,7 +40,7 @@ class DischargeReportUploadRepository
   Future<FormData> createFormData(DischargeReportUpload data) async {
     return FormData.fromMap({
       'enterId': data.enter.enterId,
-      //'outId': data.discharge.dischargeId,
+      'outId': data.monitor.dischargeId,
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
@@ -53,11 +55,6 @@ class DischargeReportUploadRepository
             filename: asset.name);
       })?.toList() ??
           [])
-//      "file": await Future.wait(data.attachments?.map((asset) async {
-//            return await MultipartFile.fromFile(await asset.filePath,
-//                filename: asset.name);
-//          })?.toList() ??
-//          [])
     });
   }
 }
