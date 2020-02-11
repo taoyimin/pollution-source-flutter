@@ -30,7 +30,7 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             aqiExamineList.skipWhile((AqiExamine aqiExamine) {
               return !aqiExamine.show;
             }).toList());
-        // 水环境质量情况(过滤无效数据)
+        // 水环境质量情况
         List<WaterStatistics> waterStatisticsList = await Future.wait([
           _convertSurfaceWater(Constant.stateWaterKey,
               response.data[Constant.responseDataKey][Constant.stateWaterKey]),
