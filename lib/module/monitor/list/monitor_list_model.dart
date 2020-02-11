@@ -10,6 +10,8 @@ part 'monitor_list_model.g.dart';
 //监控点列表
 @JsonSerializable()
 class Monitor extends Equatable {
+  @JsonKey(name: 'outId')
+  final int dischargeId; //排口ID
   final int monitorId; //监控点ID
   @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名称
@@ -23,6 +25,7 @@ class Monitor extends Equatable {
   final String monitorCategoryStr; //监控点类别
 
   const Monitor({
+    this.dischargeId,
     this.monitorId,
     this.enterName,
     this.monitorName,
@@ -33,6 +36,7 @@ class Monitor extends Equatable {
 
   @override
   List<Object> get props => [
+        dischargeId,
         monitorId,
         enterName,
         monitorName,
