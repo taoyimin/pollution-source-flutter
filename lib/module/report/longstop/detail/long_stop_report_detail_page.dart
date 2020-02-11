@@ -100,7 +100,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '所属区域：${reportDetail.districtName}',
+                      content: '所属区域：${reportDetail.districtName ?? ''}',
                       icon: Icons.location_on,
                     ),
                   ],
@@ -109,7 +109,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '申报时间：${reportDetail.reportTimeStr}',
+                      content: '申报时间：${reportDetail.reportTimeStr ?? ''}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -118,7 +118,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '开始时间：${reportDetail.startTimeStr}',
+                      content: '开始时间：${reportDetail.startTimeStr ?? ''}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -127,7 +127,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '结束时间：${reportDetail.endTimeStr}',
+                      content: '结束时间：${reportDetail.endTimeStr ?? ''}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -136,7 +136,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '备注：${reportDetail.remark}',
+                      content: '备注：${reportDetail.remark ?? ''}',
                       icon: Icons.receipt,
                     ),
                   ],

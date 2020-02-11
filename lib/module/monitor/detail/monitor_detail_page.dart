@@ -135,13 +135,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控点名：${monitorDetail.monitorName}',
+                      content: '监控点名：${monitorDetail.monitorName ?? ''}',
                       icon: Icons.linked_camera,
                       flex: 7,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      content: '监控类型：${monitorDetail.monitorTypeStr}',
+                      content: '监控类型：${monitorDetail.monitorTypeStr ?? ''}',
                       icon: Icons.videocam,
                       flex: 5,
                     ),
@@ -151,13 +151,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控类别：${monitorDetail.monitorCategoryStr}',
+                      content: '监控类别：${monitorDetail.monitorCategoryStr ?? ''}',
                       icon: Icons.nature,
                       flex: 7,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      content: '网络类型：${monitorDetail.networkTypeStr}',
+                      content: '网络类型：${monitorDetail.networkTypeStr ?? ''}',
                       icon: Icons.network_wifi,
                       flex: 5,
                     ),
@@ -167,7 +167,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控位置：${monitorDetail.monitorAddress}',
+                      content: '监控位置：${monitorDetail.monitorAddress ?? ''}',
                       icon: Icons.location_on,
                     ),
                   ],
@@ -176,7 +176,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '数采编号：${monitorDetail.mnCode}',
+                      content: '数采编号：${monitorDetail.mnCode ?? ''}',
                       icon: Icons.insert_drive_file,
                     ),
                   ],

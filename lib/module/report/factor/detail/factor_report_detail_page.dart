@@ -100,13 +100,13 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '排口名称：${reportDetail.dischargeName}',
+                      content: '排口名称：${reportDetail.dischargeName ?? ''}',
                       icon: Icons.nature,
                       flex: 9,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      content: '申报时间：${reportDetail.reportTimeStr}',
+                      content: '申报时间：${reportDetail.reportTimeStr ?? ''}',
                       icon: Icons.date_range,
                       flex: 10,
                     ),
@@ -116,13 +116,13 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控点名：${reportDetail.monitorName}',
+                      content: '监控点名：${reportDetail.monitorName ?? ''}',
                       icon: Icons.linked_camera,
                       flex: 9,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      content: '所属区域：${reportDetail.districtName}',
+                      content: '所属区域：${reportDetail.districtName ?? ''}',
                       icon: Icons.location_on,
                       flex: 10,
                     ),
@@ -132,7 +132,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '开始时间：${reportDetail.startTimeStr}',
+                      content: '开始时间：${reportDetail.startTimeStr ?? ''}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -141,7 +141,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '结束时间：${reportDetail.endTimeStr}',
+                      content: '结束时间：${reportDetail.endTimeStr ?? ''}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -150,7 +150,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '报警类型：${reportDetail.alarmTypeStr}',
+                      content: '报警类型：${reportDetail.alarmTypeStr ?? ''}',
                       icon: Icons.alarm,
                     ),
                   ],
@@ -159,7 +159,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '异常原因：${reportDetail.exceptionReason}',
+                      content: '异常原因：${reportDetail.exceptionReason ?? ''}',
                       icon: Icons.receipt,
                     ),
                   ],

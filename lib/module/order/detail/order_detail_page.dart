@@ -224,13 +224,13 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控名称：${orderDetail.monitorName}',
+                      content: '监控名称：${orderDetail.monitorName ?? ''}',
                       icon: Icons.linked_camera,
                       flex: 1,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      content: '区域：${orderDetail.districtName}',
+                      content: '区域：${orderDetail.districtName ?? ''}',
                       icon: Icons.location_on,
                       flex: 1,
                     ),
@@ -240,13 +240,13 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '报警时间：${orderDetail.alarmDateStr}',
+                      content: '报警时间：${orderDetail.alarmDateStr ?? ''}',
                       icon: Icons.date_range,
                       flex: 1,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      content: '状态：${orderDetail.orderStateStr}',
+                      content: '状态：${orderDetail.orderStateStr ?? ''}',
                       icon: Icons.assignment_late,
                       flex: 1,
                     ),
@@ -256,7 +256,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '报警类型：${orderDetail.alarmTypeStr}',
+                      content: '报警类型：${orderDetail.alarmTypeStr ?? ''}',
                       icon: Icons.alarm,
                     ),
                   ],
@@ -265,7 +265,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '报警描述：${orderDetail.alarmRemark}',
+                      content: '报警描述：${orderDetail.alarmRemark ?? ''}',
                       icon: Icons.receipt,
                     ),
                   ],

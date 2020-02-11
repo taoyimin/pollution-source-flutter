@@ -108,14 +108,14 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                   children: <Widget>[
                     IconBaseInfoWidget(
                       content:
-                      '排口名称：${reportDetail.dischargeName}',
+                      '排口名称：${reportDetail.dischargeName ?? ''}',
                       icon: Icons.nature,
                       flex: 9,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
                       content:
-                      '申报时间：${reportDetail.reportTimeStr}',
+                      '申报时间：${reportDetail.reportTimeStr ?? ''}',
                       icon: Icons.date_range,
                       flex: 10,
                     ),
@@ -125,13 +125,13 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控点名：${reportDetail.monitorName}',
+                      content: '监控点名：${reportDetail.monitorName ?? ''}',
                       icon: Icons.linked_camera,
                       flex: 9,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      content: '所属区域：${reportDetail.districtName}',
+                      content: '所属区域：${reportDetail.districtName ?? ''}',
                       icon: Icons.location_on,
                       flex: 10,
                     ),
@@ -141,7 +141,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '开始时间：${reportDetail.startTimeStr}',
+                      content: '开始时间：${reportDetail.startTimeStr ?? ''}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -150,7 +150,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '结束时间：${reportDetail.endTimeStr}',
+                      content: '结束时间：${reportDetail.endTimeStr ?? ''}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -159,7 +159,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '异常类型：${reportDetail.stopTypeStr}',
+                      content: '异常类型：${reportDetail.stopTypeStr ?? ''}',
                       icon: Icons.alarm,
                     ),
                   ],
@@ -168,7 +168,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '停产原因：${reportDetail.stopReason}',
+                      content: '停产原因：${reportDetail.stopReason ?? ''}',
                       icon: Icons.receipt,
                     ),
                   ],

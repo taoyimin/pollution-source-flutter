@@ -42,9 +42,16 @@ class OrderListRepository extends ListRepository<Order> {
       'areaCode': areaCode,
       'enterId': enterId,
       'monitorId': monitorId,
+      'alarmLevel': () {
+        switch (overdue) {
+          case '1':
+            return '3';
+          default:
+            return '';
+        }
+      }(),
       // 污染源系统的状态参数
       'status': state,
-      'overdue': overdue,
       // 运维系统的状态参数
       'orderState': () {
         switch (state) {

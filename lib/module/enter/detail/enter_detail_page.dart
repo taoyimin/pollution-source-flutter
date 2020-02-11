@@ -204,7 +204,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '已办结',
-                        content: '${enterDetail.orderCompleteCount??''}',
+                        content: '${enterDetail.orderCompleteCount}',
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
                       ),
@@ -219,7 +219,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       meta: Meta(
                         color: Color(0xFFFFB709),
                         title: '全部',
-                        content: '${enterDetail.orderTotalCount??''}',
+                        content: '${enterDetail.orderTotalCount}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
                       ),
                     ),
@@ -248,7 +248,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       },
                       meta: Meta(
                         title: '长期停产申报',
-                        content: '${enterDetail.longStopReportTotalCount??''}',
+                        content: '${enterDetail.longStopReportTotalCount}',
                         imagePath: 'assets/images/button_image2.png',
                         backgroundPath: 'assets/images/button_bg_lightblue.png',
                       ),
@@ -261,7 +261,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       },
                       meta: Meta(
                         title: '排口异常申报',
-                        content: '${enterDetail.dischargeReportTotalCount??''}',
+                        content: '${enterDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
                       ),
@@ -274,7 +274,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       },
                       meta: Meta(
                         title: '因子异常申报',
-                        content: '${enterDetail.factorReportTotalCount??''}',
+                        content: '${enterDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
                       ),
@@ -315,7 +315,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '全部',
                               imagePath: 'assets/images/icon_monitor_all.png',
                               color: Color.fromRGBO(77, 167, 248, 1),
-                              content: '${enterDetail.monitorTotalCount??''}',
+                              content: '${enterDetail.monitorTotalCount}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -330,7 +330,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               imagePath:
                                   'assets/images/icon_monitor_online.png',
                               color: Color.fromRGBO(136, 191, 89, 1),
-                              content: '${enterDetail.monitorOnlineCount??''}',
+                              content: '${enterDetail.monitorOnlineCount}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -344,7 +344,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '预警',
                               imagePath: 'assets/images/icon_monitor_alarm.png',
                               color: Color.fromRGBO(241, 190, 67, 1),
-                              content: '${enterDetail.monitorAlarmCount??''}',
+                              content: '${enterDetail.monitorAlarmCount}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -361,7 +361,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '超标',
                               imagePath: 'assets/images/icon_monitor_over.png',
                               color: Color.fromRGBO(233, 119, 111, 1),
-                              content: '${enterDetail.monitorOverCount??''}',
+                              content: '${enterDetail.monitorOverCount}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -376,7 +376,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               imagePath:
                                   'assets/images/icon_monitor_offline.png',
                               color: Color.fromRGBO(179, 129, 127, 1),
-                              content: '${enterDetail.monitorOfflineCount??''}',
+                              content: '${enterDetail.monitorOfflineCount}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
@@ -390,7 +390,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                               title: '异常',
                               imagePath: 'assets/images/icon_monitor_stop.png',
                               color: Color.fromRGBO(137, 137, 137, 1),
-                              content: '${enterDetail.monitorStopCount??''}',
+                              content: '${enterDetail.monitorStopCount}',
                             ),
                             onTap: () {
                               Application.router.navigateTo(context,
