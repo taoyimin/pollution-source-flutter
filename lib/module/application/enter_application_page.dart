@@ -136,7 +136,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                           'assets/images/application_icon_monitor.png'),
                                   onTap: () {
                                     Application.router.navigateTo(
-                                        context, '${Routes.monitorList}?enterId=${widget.enterId}');
+                                        context, '${Routes.monitorList}?enterId=${widget.enterId}&state=1');
                                   },
                                 ),
                               ],

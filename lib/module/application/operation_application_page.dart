@@ -132,7 +132,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                           'assets/images/application_icon_monitor.png'),
                                   onTap: () {
                                     Application.router.navigateTo(
-                                        context, '${Routes.monitorList}');
+                                        context, '${Routes.monitorList}?state=1');
                                   },
                                 ),
                               ],
