@@ -347,7 +347,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ImageTitleWidget(
-                  title: '异常申报信息',
+                  title: '异常申报(有效数)',
                   imagePath: 'assets/images/icon_outlet_report.png',
                 ),
                 Gaps.vGap10,
