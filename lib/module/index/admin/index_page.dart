@@ -68,7 +68,7 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                         state.aqiStatistics.show
                             ? AqiStatisticsWidget(
                                 aqiStatistics: state.aqiStatistics)
-                            : Gaps.empty,
+                            : HeaderWidget(),
                         state.todoTaskStatisticsList.length > 0
                             ? TodoTaskStatisticsWidget(
                                 metaList: state.todoTaskStatisticsList,
@@ -78,8 +78,8 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                             ? AqiExamineWidget(
                                 aqiExamineList: state.aqiExamineList)
                             : Gaps.empty,
-                        WeekTrendWidget(),
-                        AlarmListWidget(),
+                        //WeekTrendWidget(),
+                        //AlarmListWidget(),
                         state.onlineMonitorStatisticsList.length > 0
                             ? OnlineMonitorStatisticsWidget(
                                 metaList: state.onlineMonitorStatisticsList,
@@ -436,6 +436,58 @@ class AqiStatisticsWidget extends StatelessWidget {
   }
 }
 
+class HeaderWidget extends StatelessWidget {
+  HeaderWidget({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 190,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/index_header_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: SvgPicture.asset(
+              "assets/images/index_header_image.svg",
+              width: 150,
+              fit: BoxFit.fill,
+            ),
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.fromLTRB(16, 65, 16, 0),
+                //color: Colours.accent_color,
+                child: Row(
+                  children: <Widget>[
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    Text(
+                      '欢迎使用\n污染源APP',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 //空气质量考核达标
 class AqiExamineWidget extends StatelessWidget {
   final List<AqiExamine> aqiExamineList;
@@ -662,7 +714,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               InkWellButton2(
                 meta: metaList[0],
                 onTap: () {
-                  Application.router.navigateTo(context, '${Routes.orderList}?state=2');
+                  Application.router
+                      .navigateTo(context, '${Routes.orderList}?state=2');
                 },
               ),
               Gaps.hGap6,
@@ -670,8 +723,8 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
               InkWellButton2(
                 meta: metaList[1],
                 onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.orderList}?state=2&overdue=1');
+                  Application.router.navigateTo(
+                      context, '${Routes.orderList}?state=2&overdue=1');
                 },
               ),
               Gaps.hGap6,
@@ -873,8 +926,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[3],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=2');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -882,8 +935,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[4],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=3');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -891,8 +944,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[5],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.enterList}?enterType=4');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=4');
                 },
               ),
             ],
@@ -903,8 +956,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[6],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=2');
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -912,8 +965,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[7],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=3');
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -921,8 +974,8 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[8],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=5');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=5');
                 },
               ),
             ],
@@ -952,8 +1005,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[0],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=1');
+                  Application.router
+                      .navigateTo(context, '${Routes.enterList}?enterType=1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -961,8 +1014,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[1],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.enterList}?enterType=1&state=1');
+                  Application.router.navigateTo(
+                      context, '${Routes.enterList}?enterType=1&state=1');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -970,8 +1023,8 @@ class RainEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[2],
                 onTap: () {
-                  Application.router.navigateTo(context,
-                      '${Routes.dischargeList}?dischargeType=1');
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeList}?dischargeType=1');
                 },
               ),
             ],
