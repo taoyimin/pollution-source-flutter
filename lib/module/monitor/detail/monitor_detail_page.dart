@@ -61,9 +61,9 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuItem<String>>[
                     UIUtils.getSelectView(
-                        Icons.message, isCurved ? '折线图' : '曲线图', '1'),
+                        Icons.equalizer, isCurved ? '显示折线图' : '显示曲线图', '1'),
                     UIUtils.getSelectView(
-                        Icons.group_add, showDotData ? '隐藏点' : '显示点', '2'),
+                        Icons.lens, showDotData ? '隐藏坐标点' : '显示坐标点', '2'),
                   ],
                   onSelected: (String action) {
                     // 点击选项的时候 持久化储存并更新配置
@@ -370,7 +370,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             '${Routes.dischargeReportList}?monitorId=${monitorDetail.monitorId}');
                       },
                       meta: Meta(
-                        title: '排口异常申报总数',
+                        title: '排口异常申报有效数',
                         content: '${monitorDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
@@ -385,7 +385,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             '${Routes.factorReportList}?monitorId=${monitorDetail.monitorId}');
                       },
                       meta: Meta(
-                        title: '因子异常申报总数',
+                        title: '因子异常申报有效数',
                         content: '${monitorDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
