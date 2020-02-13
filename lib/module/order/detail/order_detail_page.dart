@@ -97,7 +97,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      // resizeToAvoidBottomInset: true,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           //生成header

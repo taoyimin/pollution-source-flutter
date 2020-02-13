@@ -1,4 +1,5 @@
 import 'package:common_utils/common_utils.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -8,6 +9,7 @@ import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -25,6 +27,8 @@ class EnterDetailPage extends StatefulWidget {
 
 class _EnterDetailPageState extends State<EnterDetailPage> {
   DetailBloc _detailBloc;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -44,6 +48,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
@@ -104,13 +109,13 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '关注程度：${enterDetail.attentionLevelStr??''}',
+                      content: '关注程度：${enterDetail.attentionLevelStr ?? ''}',
                       icon: Icons.star,
                       flex: 4,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      content: '所属区域：${enterDetail.districtName??''}',
+                      content: '所属区域：${enterDetail.districtName ?? ''}',
                       icon: Icons.location_on,
                       flex: 5,
                     ),
@@ -120,7 +125,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '行业类别：${enterDetail.industryTypeStr??''}',
+                      content: '行业类别：${enterDetail.industryTypeStr ?? ''}',
                       icon: Icons.work,
                     ),
                   ],
@@ -129,7 +134,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '信用代码：${enterDetail.creditCode??''}',
+                      content: '信用代码：${enterDetail.creditCode ?? ''}',
                       icon: Icons.mail,
                     ),
                   ],
@@ -162,7 +167,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.contactPersonTel),
                     child: ContactsWidget(
-                      contactsName: '${enterDetail.contactPerson??''}(联系人)',
+                      contactsName: '${enterDetail.contactPerson ?? ''}(联系人)',
                       contactsTel: '${enterDetail.contactPersonTel}',
                       imagePath: 'assets/images/enter_contacts_tel_header.png',
                     ),
@@ -170,7 +175,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.legalPersonTel),
                     child: ContactsWidget(
-                      contactsName: '${enterDetail.legalPerson??''}(法人)',
+                      contactsName: '${enterDetail.legalPerson ?? ''}(法人)',
                       contactsTel: '${enterDetail.legalPersonTel}',
                       imagePath: 'assets/images/enter_legal_tel_header.png',
                     ),
@@ -235,7 +240,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ImageTitleWidget(
-                  title: '异常申报信息',
+                  title: '异常申报(有效数)',
                   imagePath: 'assets/images/icon_outlet_report.png',
                 ),
                 Gaps.vGap10,
@@ -243,6 +248,18 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   children: <Widget>[
                     InkWellButton3(
                       onTap: () {
+                        if (SpUtil.getInt(Constant.spUserType) == 2) {
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text('运维用户不支持查询长期停产'),
+                              action: SnackBarAction(
+                                label: '我知道了',
+                                onPressed: () {},
+                              ),
+                            ),
+                          );
+                          return;
+                        }
                         Application.router.navigateTo(context,
                             '${Routes.longStopReportList}?enterId=${enterDetail.enterId}');
                       },
@@ -255,6 +272,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     ),
                     Gaps.hGap10,
                     InkWellButton3(
+                      titleFontSize: 13,
                       onTap: () {
                         Application.router.navigateTo(context,
                             '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}');
@@ -422,7 +440,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 InkWellButton6(
                   meta: Meta(
                     title: '许可证编号',
-                    content: '${enterDetail.licenseNumber??''}',
+                    content: '${enterDetail.licenseNumber ?? ''}',
                     color: Colors.pink,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',

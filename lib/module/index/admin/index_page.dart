@@ -724,7 +724,7 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
                 meta: metaList[1],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.orderList}?state=2&overdue=1');
+                      context, '${Routes.orderList}?overdue=1');
                 },
               ),
               Gaps.hGap6,
@@ -756,7 +756,7 @@ class ReportStatisticsWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "异常申报统计"),
+          TitleWidget(title: "异常申报(有效数)统计"),
           Row(
             children: <Widget>[
               // 长期停产

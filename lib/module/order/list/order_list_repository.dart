@@ -50,9 +50,6 @@ class OrderListRepository extends ListRepository<Order> {
             return '';
         }
       }(),
-      // 污染源系统的状态参数
-      'status': state,
-      // 运维系统的状态参数
       'orderState': () {
         switch (state) {
           case '1':

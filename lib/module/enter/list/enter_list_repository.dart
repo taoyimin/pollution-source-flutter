@@ -48,7 +48,7 @@ class EnterListRepository extends ListRepository<Enter> {
           case '3':
             return 'outletType3';
           case '4':
-            return 'outletType2,outletType3';
+            return 'outletType4';
           case '5':
             return 'licence';
           default:

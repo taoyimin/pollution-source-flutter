@@ -48,23 +48,23 @@ class _OperationIndexPageState extends State<OperationIndexPage>
           SliverToBoxAdapter(
             child: Column(
               children: <Widget>[
-                AqiStatisticsWidget(),
+                HeaderWidget(),
                 RoutineInspectionStatisticsWidget(
                   metaList: [
                     Meta(
                       title: '待巡检任务数',
                       imagePath: 'assets/images/button_bg_blue.png',
-                      content: '52',
+                      content: '52*',
                     ),
                     Meta(
                       title: '超期任务数',
                       imagePath: 'assets/images/button_bg_green.png',
-                      content: '13',
+                      content: '13*',
                     ),
                     Meta(
                       title: '已巡检任务数',
                       imagePath: 'assets/images/button_bg_pink.png',
-                      content: '25',
+                      content: '25*',
                     ),
                   ],
                 ),
@@ -74,58 +74,58 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                       title: '企业总数',
                       imagePath: 'assets/images/icon_pollution_all_enter.png',
                       color: Color.fromRGBO(77, 167, 248, 1),
-                      content: '245',
+                      content: '245*',
                     ),
                     Meta(
                       title: '重点企业',
                       imagePath: 'assets/images/icon_pollution_point_enter.png',
                       color: Color.fromRGBO(241, 190, 67, 1),
-                      content: '125',
+                      content: '125*',
                     ),
                     Meta(
                       title: '在线企业',
                       imagePath:
                           'assets/images/icon_pollution_online_enter.png',
                       color: Color.fromRGBO(136, 191, 89, 1),
-                      content: '223',
+                      content: '223*',
                     ),
                     Meta(
                       title: '废水企业',
                       imagePath: 'assets/images/icon_pollution_water_enter.png',
                       color: Color.fromRGBO(0, 188, 212, 1),
-                      content: '45',
+                      content: '45*',
                     ),
                     Meta(
                       title: '废气企业',
                       imagePath: 'assets/images/icon_pollution_air_enter.png',
                       color: Color.fromRGBO(255, 87, 34, 1),
-                      content: '65',
+                      content: '65*',
                     ),
                     Meta(
                       title: '水气企业',
                       imagePath: 'assets/images/icon_pollution_air_water.png',
                       color: Color.fromRGBO(137, 137, 137, 1),
-                      content: '63',
+                      content: '63*',
                     ),
                     Meta(
                       title: '废水排口',
                       imagePath:
                           'assets/images/icon_pollution_water_outlet.png',
                       color: Color.fromRGBO(63, 81, 181, 1),
-                      content: '42',
+                      content: '42*',
                     ),
                     Meta(
                       title: '废气排口',
                       imagePath: 'assets/images/icon_pollution_air_outlet.png',
                       color: Color.fromRGBO(233, 30, 99, 1),
-                      content: '63',
+                      content: '63*',
                     ),
                     Meta(
                       title: '许可证企业',
                       imagePath:
                           'assets/images/icon_pollution_licence_enter.png',
                       color: Color.fromRGBO(179, 129, 127, 1),
-                      content: '0',
+                      content: '0*',
                     ),
                   ],
                 ),
@@ -134,37 +134,37 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                     title: '全部',
                     imagePath: 'assets/images/icon_monitor_all.png',
                     color: Color.fromRGBO(77, 167, 248, 1),
-                    content: '12',
+                    content: '12*',
                   ),
                   Meta(
                     title: '在线',
                     imagePath: 'assets/images/icon_monitor_online.png',
                     color: Color.fromRGBO(136, 191, 89, 1),
-                    content: '11',
+                    content: '11*',
                   ),
                   Meta(
                     title: '预警',
                     imagePath: 'assets/images/icon_monitor_alarm.png',
                     color: Color.fromRGBO(241, 190, 67, 1),
-                    content: '0',
+                    content: '0*',
                   ),
                   Meta(
                     title: '超标',
                     imagePath: 'assets/images/icon_monitor_over.png',
                     color: Color.fromRGBO(233, 119, 111, 1),
-                    content: '0',
+                    content: '0*',
                   ),
                   Meta(
                     title: '脱机',
                     imagePath: 'assets/images/icon_monitor_offline.png',
                     color: Color.fromRGBO(179, 129, 127, 1),
-                    content: '0',
+                    content: '0*',
                   ),
                   Meta(
                     title: '异常',
                     imagePath: 'assets/images/icon_monitor_stop.png',
                     color: Color.fromRGBO(137, 137, 137, 1),
-                    content: '1',
+                    content: '1*',
                   ),
                 ]),
                 OrderStatisticsWidget(
@@ -173,19 +173,19 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                       title: '待处理数',
                       imagePath: 'assets/images/button_image2.png',
                       backgroundPath: 'assets/images/button_bg_lightblue.png',
-                      content: '52',
+                      content: '52*',
                     ),
                     Meta(
                       title: '超期待办数',
                       imagePath: 'assets/images/button_image1.png',
                       backgroundPath: 'assets/images/button_bg_green.png',
-                      content: '13',
+                      content: '13*',
                     ),
                     Meta(
                       title: '已退回数',
                       imagePath: 'assets/images/button_image4.png',
                       backgroundPath: 'assets/images/button_bg_pink.png',
-                      content: '25',
+                      content: '25*',
                     ),
                   ],
                 ),
@@ -203,33 +203,8 @@ class _OperationIndexPageState extends State<OperationIndexPage>
   }
 }
 
-class AqiStatisticsWidget extends StatelessWidget {
-  AqiStatisticsWidget({Key key}) : super(key: key);
-
-  Widget _getAqiStatisticsRowItem(factorName, factorValue) {
-    return Expanded(
-      flex: 1, //设置一个宽度，防止宽度不同无法对齐
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            factorValue,
-            style: const TextStyle(
-              fontSize: 17,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            factorName,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+class HeaderWidget extends StatelessWidget {
+  HeaderWidget({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -255,144 +230,19 @@ class AqiStatisticsWidget extends StatelessWidget {
           Column(
             children: <Widget>[
               Container(
-                height: 80,
-                padding: const EdgeInsets.fromLTRB(16, 35, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 75, 16, 0),
                 //color: Colours.accent_color,
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      width: 30,
-                      height: 30,
-                      padding: const EdgeInsets.all(5),
-                      child: Image(
-                          image:
-                              AssetImage("assets/images/index_location.png")),
-                    ),
                     const SizedBox(
                       width: 6,
                     ),
                     Text(
-                      '欢迎！admin',
+                      '欢迎使用\n运维APP',
                       style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold),
-                    ),
-                    Expanded(
-                      child: Text(
-                        '1',
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '10',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 38,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(3), //3像素圆角
-                          ),
-                          child: Text(
-                            '1',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '2',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        _getAqiStatisticsRowItem(
-                          "PM2.5",
-                          '3',
-                        ),
-                        VerticalDividerWidget(
-                          height: 26,
-                          width: 1,
-                          color: Colors.white,
-                        ),
-                        _getAqiStatisticsRowItem(
-                          "PM10",
-                          '3',
-                        ),
-                        VerticalDividerWidget(
-                          height: 26,
-                          width: 1,
-                          color: Colors.white,
-                        ),
-                        _getAqiStatisticsRowItem(
-                          "SO₂",
-                          '4',
-                        ),
-                        VerticalDividerWidget(
-                          height: 26,
-                          width: 1,
-                          color: Colors.white,
-                        ),
-                        _getAqiStatisticsRowItem(
-                          "NO₂",
-                          '5',
-                        ),
-                        VerticalDividerWidget(
-                          height: 26,
-                          width: 1,
-                          color: Colors.white,
-                        ),
-                        _getAqiStatisticsRowItem(
-                          "O₃",
-                          '6',
-                        ),
-                        VerticalDividerWidget(
-                          height: 26,
-                          width: 1,
-                          color: Colors.white,
-                        ),
-                        _getAqiStatisticsRowItem(
-                          "CO",
-                          '6',
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -456,7 +306,7 @@ class RoutineInspectionStatisticsWidget extends StatelessWidget {
               ),
             ],
           ),
-          RoutineInspectionTabViewWidget(),
+          //RoutineInspectionTabViewWidget(),
         ],
       ),
     );
