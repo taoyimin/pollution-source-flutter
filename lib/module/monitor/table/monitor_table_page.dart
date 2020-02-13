@@ -10,6 +10,7 @@ import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_repository.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/widget/fixed_data_table.dart';
 
 import 'monitor_table_model.dart';
@@ -25,6 +26,11 @@ class MonitorTablePage extends StatefulWidget {
 }
 
 class _MonitorTableState extends State<MonitorTablePage> {
+  /// 每页数据条数
+  final int pageSize = 30;
+
+  /// 每页数据条数
+  int currentPage = 0;
   List<dynamic> _dropDownHeaderItem = ['实时数据', null, null];
   List<SortCondition> _dataTypeConditions = [];
   SortCondition _selectBrandSortCondition;
@@ -76,27 +82,29 @@ class _MonitorTableState extends State<MonitorTablePage> {
                 items: [
                   GZXDropDownHeaderItem(_dropDownHeaderItem[0], iconSize: 24),
                   GZXDropDownHeaderItem(
-                      _dropDownHeaderItem[1] == null
-                          ? '开始时间  '
-                          : DateUtil.formatDate(
-                              _dropDownHeaderItem[1],
-                              format: getDateTimeFormat(
-                                _selectBrandSortCondition.value,
-                              ),
+                    _dropDownHeaderItem[1] == null
+                        ? '开始时间  '
+                        : DateUtil.formatDate(
+                            _dropDownHeaderItem[1],
+                            format: getDateTimeFormat(
+                              _selectBrandSortCondition.value,
                             ),
-                      iconData: Icons.date_range,
-                      iconSize: 15),
+                          ),
+                    iconData: Icons.date_range,
+                    iconSize: 15,
+                  ),
                   GZXDropDownHeaderItem(
-                      _dropDownHeaderItem[2] == null
-                          ? '结束时间  '
-                          : DateUtil.formatDate(
-                              _dropDownHeaderItem[2],
-                              format: getDateTimeFormat(
-                                _selectBrandSortCondition.value,
-                              ),
+                    _dropDownHeaderItem[2] == null
+                        ? '结束时间  '
+                        : DateUtil.formatDate(
+                            _dropDownHeaderItem[2],
+                            format: getDateTimeFormat(
+                              _selectBrandSortCondition.value,
                             ),
-                      iconData: Icons.date_range,
-                      iconSize: 15),
+                          ),
+                    iconData: Icons.date_range,
+                    iconSize: 15,
+                  ),
                 ],
                 // GZXDropDownHeader对应第一父级Stack的key
                 stackKey: _stackKey,
@@ -227,6 +235,48 @@ class _MonitorTableState extends State<MonitorTablePage> {
                   },
                 ),
               ),
+              BlocBuilder<DetailBloc, DetailState>(
+                builder: (context, state) {
+                  if (state is DetailLoaded) {
+                    int pages =
+                        (state.detail.fixedColCells.length / pageSize).ceil();
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(pages, (index) {
+                          return InkWellButton(
+                            onTap: () {
+                              setState(() {
+                                currentPage = index;
+                              });
+                            },
+                            children: <Widget>[
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  color: index == currentPage
+                                      ? Colours.primary_color.withOpacity(0.3)
+                                      : Colors.white,
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Colours.divider_color,
+                                  ),
+                                ),
+                                child: Center(
+                                  child:Text('${index + 1}'),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
+                    );
+                  } else {
+                    return Gaps.empty;
+                  }
+                },
+              ),
             ],
           ),
           // 下拉菜单
@@ -296,8 +346,14 @@ class _MonitorTableState extends State<MonitorTablePage> {
   Widget _buildPageLoadedDetail(MonitorTable monitorTable) {
     return FixedDataTable(
       fixedCornerCell: MonitorTableCell(value: '    监测时间'),
-      rowsCells: monitorTable.rowsCells,
-      fixedColCells: monitorTable.fixedColCells,
+      rowsCells: monitorTable.rowsCells
+          .skip(currentPage * pageSize)
+          .take(pageSize)
+          .toList(),
+      fixedColCells: monitorTable.fixedColCells
+          .skip(currentPage * pageSize)
+          .take(pageSize)
+          .toList(),
       fixedRowCells: monitorTable.fixedRowCells,
       cellBuilder: (data) {
         return Text(
@@ -330,7 +386,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
             itemOnTap(goodsSortCondition);
           },
           child: Container(
-//            color: Colors.blue,
+            // color: Colors.blue,
             height: 50,
             child: Row(
               children: <Widget>[
