@@ -89,6 +89,10 @@ dependencies:
   fluro: ^1.5.1
   # 跨平台路径操作库 https://github.com/dart-lang/path
   path: ^1.6.4
+  # 高德地图插件 https://github.com/best-flutter/flutter_amap_location
+  amap_location: ^0.2.0
+  # 权限申请 https://github.com/Baseflow/flutter-permission-handler
+  permission_handler: '^4.2.0+hotfix.3'
   # 扫码 https://github.com/apptreesoftware/flutter_barcode_reader
   # barcode_scan:
     # git:
