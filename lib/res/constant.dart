@@ -151,17 +151,17 @@ class Constant {
   /// 雨水企业概况
   static const String rainEnterStatisticsKey = '50';
 
-  /// 代办任务统计
-  static const String todoTaskStatisticsKey = '60';
+  /// 综合统计信息
+  static const String comprehensiveStatisticsKey = '60';
 
   /// 在线监控点概况
   static const String onlineMonitorStatisticsKey = '70';
 
-  /// 综合统计信息
-  static const String comprehensiveStatisticsKey = '80';
+  /// 报警管理单统计
+  static const String todoTaskStatisticsKey = '90';
 
   /// 异常申报统计
-  static const String reportStatisticsKey = '90';
+  static const String reportStatisticsKey = '100';
 }
 
 const Map<String, String> provincesData = {
