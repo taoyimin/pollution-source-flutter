@@ -22,12 +22,14 @@ class DischargeReportListPage extends StatefulWidget {
   final String dischargeId;
   final String monitorId;
   final String state;
+  final String valid;
 
   DischargeReportListPage({
     this.enterId = '',
     this.dischargeId = '',
     this.monitorId = '',
     this.state = '',
+    this.valid = '',
   });
 
   @override
@@ -62,6 +64,7 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
         dischargeId: widget.dischargeId,
         monitorId: widget.monitorId,
         state: widget.state,
+        valid: widget.valid,
       ),
     ));
   }
@@ -171,6 +174,7 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
                   dischargeId: widget.dischargeId,
                   monitorId: widget.monitorId,
                   state: widget.state,
+                  valid: widget.valid,
                 ),
               ));
               return _refreshCompleter.future;
@@ -194,6 +198,7 @@ class _DischargeReportListPageState extends State<DischargeReportListPage>
                   dischargeId: widget.dischargeId,
                   monitorId: widget.monitorId,
                   state: widget.state,
+                  valid: widget.valid,
                 ),
               ));
               return _refreshCompleter.future;

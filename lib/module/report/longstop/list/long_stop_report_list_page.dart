@@ -20,10 +20,12 @@ import 'package:pollution_source/widget/custom_header.dart';
 class LongStopReportListPage extends StatefulWidget {
   final String enterId;
   final String state;
+  final String valid;
 
   LongStopReportListPage({
     this.enterId = '',
     this.state = '',
+    this.valid = '',
   });
 
   @override
@@ -56,6 +58,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage>
         pageSize: Constant.defaultPageSize,
         enterId: widget.enterId,
         state: widget.state,
+        valid: widget.valid,
       ),
     ));
   }
@@ -163,6 +166,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage>
                   areaCode: areaCode,
                   enterId: widget.enterId,
                   state: widget.state,
+                  valid: widget.valid,
                 ),
               ));
               return _refreshCompleter.future;
@@ -184,6 +188,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage>
                   areaCode: areaCode,
                   enterId: widget.enterId,
                   state: widget.state,
+                  valid: widget.valid,
                 ),
               ));
               return _refreshCompleter.future;

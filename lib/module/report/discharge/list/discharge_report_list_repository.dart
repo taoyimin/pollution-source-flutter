@@ -22,6 +22,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
   /// [dischargeId] 筛选某排口的排口异常申报
   /// [monitorId] 筛选某监控点的排口异常申报
   /// [state] 状态 0：待审核 1：审核通过 2：审核不通过（目前只要上报成功就默认审核通过，暂时不用该参数）
+  /// [valid] 是否有效 0：生效中 1：已失效
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -31,6 +32,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
     dischargeId = '',
     monitorId = '',
     state = '',
+    valid = '',
   }) {
     return {
       'currentPage': currentPage,
@@ -44,7 +46,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
       'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'S',
-      'hasValid': '0',
+      'hasValid': valid,
     };
   }
 }

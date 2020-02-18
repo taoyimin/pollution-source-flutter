@@ -22,6 +22,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
   /// [dischargeId] 筛选某排口的所有因子异常申报单
   /// [monitorId] 筛选某监控点的所有因子异常申报单
   /// [state] 状态 0：待审核 1：审核通过 2：审核不通过（目前只要上报成功就默认审核通过，暂时不用该参数）
+  /// [valid] 是否有效 0：生效中 1：已失效
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -31,6 +32,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
     dischargeId = '',
     monitorId = '',
     state = '',
+    valid = '',
   }) {
     return {
       'currentPage': currentPage,
@@ -44,7 +46,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
       'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'A',
-      'hasValid': '0',
+      'hasValid': valid,
     };
   }
 }

@@ -227,6 +227,7 @@ var dischargeReportListHandler = Handler(
   String dischargeId = params['dischargeId']?.first ?? '';
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
+  String valid = params['valid']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: DischargeReportListRepository()),
@@ -235,6 +236,7 @@ var dischargeReportListHandler = Handler(
       dischargeId: dischargeId,
       monitorId: monitorId,
       state: state,
+      valid: valid,
     ),
   );
 });
@@ -255,6 +257,7 @@ var factorReportListHandler = Handler(
   String dischargeId = params['dischargeId']?.first ?? '';
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
+  String valid = params['valid']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: FactorReportListRepository()),
@@ -263,6 +266,7 @@ var factorReportListHandler = Handler(
       dischargeId: dischargeId,
       monitorId: monitorId,
       state: state,
+      valid: valid,
     ),
   );
 });
@@ -281,12 +285,14 @@ var longStopReportListHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   String enterId = params['enterId']?.first ?? '';
   String state = params['state']?.first ?? '';
+  String valid = params['valid']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: LongStopReportListRepository()),
     child: LongStopReportListPage(
       enterId: enterId,
       state: state,
+      valid: valid,
     ),
   );
 });

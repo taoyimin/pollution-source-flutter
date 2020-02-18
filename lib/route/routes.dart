@@ -39,7 +39,7 @@ class Routes {
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
           print("ROUTE WAS NOT FOUND !!!");
         });
-    router.define(root, handler: rootHandler);
+    router.define(root, handler: rootHandler,  transitionType: TransitionType.native);
     router.define(adminHome, handler: adminHomeHandler, transitionType: TransitionType.native);
     router.define('$enterHome/:id', handler: enterHomeHandler, transitionType: TransitionType.native);
     router.define(operationHome, handler: operationHomeHandler, transitionType: TransitionType.native);
