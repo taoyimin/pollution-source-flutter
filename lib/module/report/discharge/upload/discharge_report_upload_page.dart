@@ -234,7 +234,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                 ),
                 Gaps.hLine,
                 DataDictWidget(
-                  title: '停产类型',
+                  title: '异常类型',
                   content: reportUpload?.stopType?.name,
                   dataDictBloc: _stopTypeBloc,
                   onSelected: (DataDict result) {
@@ -253,6 +253,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
+                      dateFormat: 'yyyy年-MM月-dd日',
                       locale: DateTimePickerLocale.zh_cn,
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
@@ -269,10 +270,11 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                 SelectRowWidget(
                   title: '开始时间',
                   content: DateUtil.formatDate(reportUpload?.startTime,
-                      format: 'yyyy-MM-dd HH:mm:ss'),
+                      format: 'yyyy-MM-dd HH:mm'),
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
+                      dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
                       maxDateTime: reportUpload?.endTime,
@@ -291,10 +293,11 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                 SelectRowWidget(
                   title: '结束时间',
                   content: DateUtil.formatDate(reportUpload?.endTime,
-                      format: 'yyyy-MM-dd HH:mm:ss'),
+                      format: 'yyyy-MM-dd HH:mm'),
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
+                      dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
                       minDateTime: reportUpload?.startTime,
@@ -311,8 +314,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                 ),
                 Gaps.hLine,
                 TextAreaWidget(
-                  title: '停产描述',
-                  hintText: '请使用一句话简单概括停产的原因',
+                  title: '异常描述',
+                  hintText: '请使用一句话简单概括异常的原因',
                   controller: _stopReasonController,
                 ),
               ],

@@ -292,10 +292,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                 SelectRowWidget(
                   title: '开始时间',
                   content: DateUtil.formatDate(reportUpload?.startTime,
-                      format: 'yyyy-MM-dd HH:mm:ss'),
+                      format: 'yyyy-MM-dd HH:mm'),
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
+                      dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
                       maxDateTime: reportUpload?.endTime,
@@ -314,10 +315,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                 SelectRowWidget(
                   title: '结束时间',
                   content: DateUtil.formatDate(reportUpload?.endTime,
-                      format: 'yyyy-MM-dd HH:mm:ss'),
+                      format: 'yyyy-MM-dd HH:mm'),
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
+                      dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
                       minDateTime: reportUpload?.startTime,

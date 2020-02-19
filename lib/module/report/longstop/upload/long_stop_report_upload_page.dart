@@ -134,29 +134,34 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                 SelectRowWidget(
                   title: '开始时间',
                   content: DateUtil.formatDate(reportUpload?.startTime,
-                      format: 'yyyy-MM-dd HH:mm:ss'),
+                      format: 'yyyy-MM-dd HH:mm'),
                   onTap: () {
-                    DatePicker.showDatePicker(context,
-                        locale: DateTimePickerLocale.zh_cn,
-                        pickerMode: DateTimePickerMode.datetime,
-                        maxDateTime: reportUpload?.endTime,
-                        onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      _pageBloc.add(
-                        PageLoad(
-                          model: reportUpload.copyWith(startTime: dateTime),
-                        ),
-                      );
-                    });
+                    DatePicker.showDatePicker(
+                      context,
+                      dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
+                      locale: DateTimePickerLocale.zh_cn,
+                      pickerMode: DateTimePickerMode.datetime,
+                      maxDateTime: reportUpload?.endTime,
+                      onClose: () {},
+                      onConfirm: (dateTime, selectedIndex) {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(startTime: dateTime),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 Gaps.hLine,
                 SelectRowWidget(
                   title: '结束时间',
                   content: DateUtil.formatDate(reportUpload?.endTime,
-                      format: 'yyyy-MM-dd HH:mm:ss'),
+                      format: 'yyyy-MM-dd HH:mm'),
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
+                      dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
                       minDateTime: reportUpload?.startTime,
