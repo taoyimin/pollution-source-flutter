@@ -31,7 +31,13 @@ class _MonitorTableState extends State<MonitorTablePage> {
 
   /// 每页数据条数
   int currentPage = 0;
-  List<dynamic> _dropDownHeaderItem = ['实时数据', null, null];
+  List<dynamic> _dropDownHeaderItem = [
+    '实时数据',
+    DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0),
+    DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 23, 59, 59),
+  ];
   List<SortCondition> _dataTypeConditions = [];
   SortCondition _selectBrandSortCondition;
   GZXDropdownMenuController _dropdownMenuController =
@@ -115,7 +121,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                   if (index == 1) {
                     DatePicker.showDatePicker(
                       context,
-                      // pickerMode: DateTimePickerMode.datetime,
+                      dateFormat: 'yyyy年-MM月-dd日',
                       maxDateTime: DateTime.now(),
                       initialDateTime: _dropDownHeaderItem[1] ?? DateTime.now(),
                       locale: DateTimePickerLocale.zh_cn,
@@ -153,7 +159,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                   } else if (index == 2) {
                     DatePicker.showDatePicker(
                       context,
-                      // pickerMode: DateTimePickerMode.datetime,
+                      dateFormat: 'yyyy年-MM月-dd日',
                       maxDateTime: DateTime.now(),
                       initialDateTime: _dropDownHeaderItem[2] ?? DateTime.now(),
                       locale: DateTimePickerLocale.zh_cn,
@@ -264,7 +270,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                                   ),
                                 ),
                                 child: Center(
-                                  child:Text('${index + 1}'),
+                                  child: Text('${index + 1}'),
                                 ),
                               ),
                             ],

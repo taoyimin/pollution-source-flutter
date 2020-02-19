@@ -363,11 +363,11 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      "操作人：${orderDetail.processes[index].operatePerson}",
+                                      "反馈人：${orderDetail.processes[index].operatePerson}",
                                       style: const TextStyle(fontSize: 12),
                                     ),
                                     Text(
-                                      "操作描述：${orderDetail.processes[index].operateDesc}",
+                                      "核实情况：${orderDetail.processes[index].operateDesc}",
                                       style: const TextStyle(fontSize: 12),
                                     ),
                                     Gaps.vGap3,
@@ -536,7 +536,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                     decoration: const InputDecoration(
                       fillColor: Color(0xFFDFDFDF),
                       filled: true,
-                      hintText: "请输入操作人",
+                      hintText: "请输入反馈人",
                       hintStyle: TextStyle(
                         color: Colours.secondary_text,
                       ),
@@ -562,7 +562,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                     decoration: const InputDecoration(
                       fillColor: Color(0xFFDFDFDF),
                       filled: true,
-                      hintText: "请输入操作描述",
+                      hintText: "请输入核实情况",
                       hintStyle: TextStyle(
                         color: Colours.secondary_text,
                       ),

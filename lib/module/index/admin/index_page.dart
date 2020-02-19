@@ -764,7 +764,7 @@ class ReportStatisticsWidget extends StatelessWidget {
                 meta: metaList[0],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.longStopReportList}');
+                      .navigateTo(context, '${Routes.longStopReportList}?valid=0');
                 },
               ),
               Gaps.hGap10,
@@ -773,7 +773,7 @@ class ReportStatisticsWidget extends StatelessWidget {
                 meta: metaList[1],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.dischargeReportList}');
+                      .navigateTo(context, '${Routes.dischargeReportList}?valid=0');
                 },
               ),
               Gaps.hGap10,
@@ -782,7 +782,7 @@ class ReportStatisticsWidget extends StatelessWidget {
                 meta: metaList[2],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.factorReportList}');
+                      .navigateTo(context, '${Routes.factorReportList}?valid=0');
                 },
               ),
             ],

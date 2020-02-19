@@ -43,7 +43,7 @@ class MonitorTable extends Equatable {
         json['datas'].map<List<MonitorTableCell>>((row) {
       return fixedRowCells.map((header) {
         return MonitorTableCell(
-          value: row[header.field] ?? '无',
+          value: row[header.field] ?? '',
           alarmFlag: row[header.field.replaceAll('factor_data', 'alarm_flag')],
         );
       }).toList();

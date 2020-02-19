@@ -389,6 +389,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               },
             ),
             EditRowWidget2(
+              key: Key('currentCheckResult$index'),
               onChanged: (value) {
                 list[index] =
                     list[index].copyWith(currentCheckResult: value);
@@ -398,6 +399,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               },
             ),
             EditRowWidget2(
+              key: Key('currentCheckIsPass$index'),
               onChanged: (value) {
                 list[index] =
                     list[index].copyWith(currentCheckIsPass: value);

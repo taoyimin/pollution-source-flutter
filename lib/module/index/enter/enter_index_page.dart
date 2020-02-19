@@ -356,7 +356,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     InkWellButton3(
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.longStopReportList}?enterId=${enterDetail.enterId}');
+                            '${Routes.longStopReportList}?enterId=${enterDetail.enterId}&valid=0');
                       },
                       meta: Meta(
                         title: '长期停产申报',
@@ -369,7 +369,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     InkWellButton3(
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}');
+                            '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}&valid=0');
                       },
                       meta: Meta(
                         title: '排口异常申报',
@@ -382,7 +382,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     InkWellButton3(
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.factorReportList}?enterId=${enterDetail.enterId}');
+                            '${Routes.factorReportList}?enterId=${enterDetail.enterId}&valid=0');
                       },
                       meta: Meta(
                         title: '因子异常申报',

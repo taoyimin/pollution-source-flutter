@@ -135,13 +135,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控点名：${monitorDetail.monitorName ?? ''}',
+                      content: '站位名称：${monitorDetail.monitorName ?? ''}',
                       icon: Icons.linked_camera,
                       flex: 7,
                     ),
                     Gaps.hGap20,
                     IconBaseInfoWidget(
-                      content: '监控类型：${monitorDetail.monitorTypeStr ?? ''}',
+                      content: '监测类型：${monitorDetail.monitorTypeStr ?? ''}',
                       icon: Icons.videocam,
                       flex: 5,
                     ),
@@ -151,7 +151,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控类别：${monitorDetail.monitorCategoryStr ?? ''}',
+                      content: '监测类别：${monitorDetail.monitorCategoryStr ?? ''}',
                       icon: Icons.nature,
                       flex: 7,
                     ),
@@ -167,8 +167,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控位置：${monitorDetail.monitorAddress ?? ''}',
-                      icon: Icons.location_on,
+                      content: '数采编号：${monitorDetail.mnCode ?? ''}',
+                      icon: Icons.insert_drive_file,
                     ),
                   ],
                 ),
@@ -176,8 +176,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '数采编号：${monitorDetail.mnCode ?? ''}',
-                      icon: Icons.insert_drive_file,
+                      content: '位置：${monitorDetail.monitorAddress ?? ''}',
+                      icon: Icons.location_on,
                     ),
                   ],
                 ),
@@ -367,7 +367,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       contentFontSize: 19,
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.dischargeReportList}?monitorId=${monitorDetail.monitorId}');
+                            '${Routes.dischargeReportList}?monitorId=${monitorDetail.monitorId}&valid=0');
                       },
                       meta: Meta(
                         title: '排口异常申报有效数',
@@ -382,7 +382,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       contentFontSize: 19,
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.factorReportList}?monitorId=${monitorDetail.monitorId}');
+                            '${Routes.factorReportList}?monitorId=${monitorDetail.monitorId}&valid=0');
                       },
                       meta: Meta(
                         title: '因子异常申报有效数',
