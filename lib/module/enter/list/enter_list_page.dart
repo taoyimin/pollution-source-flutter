@@ -5,11 +5,13 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -46,32 +48,51 @@ class _EnterListPageState extends State<EnterListPage>
         TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
-
-  ScrollController _scrollController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final EasyRefreshController _refreshController = EasyRefreshController();
+  final TextEditingController _enterNameController = TextEditingController();
+  final List<DataDict> enterTypeList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '雨水企业', code: '1'),
+    DataDict(name: '废水企业', code: '2'),
+    DataDict(name: '废气企业', code: '3'),
+    DataDict(name: '水气企业', code: '4'),
+    DataDict(name: '许可证企业', code: '5'),
+  ];
+  final List<DataDict> stateList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '在线', code: '1'),
+  ];
+  final List<DataDict> attentionLevelList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '非重点源', code: '0'),
+    DataDict(name: '重点源', code: '1'),
+  ];
   ListBloc _listBloc;
-  EasyRefreshController _refreshController;
-  TextEditingController _editController;
   Completer<void> _refreshCompleter;
-
+  int enterTypeIndex;
+  int stateIndex;
+  int attentionLevelIndex;
   String areaCode = '';
 
   @override
   void initState() {
     super.initState();
+    initParam();
+    // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
-    _scrollController = ScrollController();
-    _editController = TextEditingController();
-    //首次加载
+    // 首次加载
     _listBloc.add(ListLoad(
       isRefresh: true,
       params: EnterListRepository.createParams(
         currentPage: Constant.defaultCurrentPage,
         pageSize: Constant.defaultPageSize,
-        state: widget.state,
-        enterType: widget.enterType,
-        attentionLevel: widget.attentionLevel,
+        enterName: _enterNameController.text,
+        areaCode: areaCode,
+        state: stateList[stateIndex].code,
+        enterType: enterTypeList[enterTypeIndex].code,
+        attentionLevel: attentionLevelList[attentionLevelIndex].code,
       ),
     ));
   }
@@ -79,21 +100,161 @@ class _EnterListPageState extends State<EnterListPage>
   @override
   void dispose() {
     //释放资源
+    _enterNameController.dispose();
     _refreshController.dispose();
-    _scrollController.dispose();
-    _editController.dispose();
     //取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
+  /// 初始化查询参数
+  initParam() {
+    _enterNameController.text = '';
+    enterTypeIndex = enterTypeList.indexWhere((dataDict) {
+      return dataDict.code == widget.enterType;
+    });
+    stateIndex = stateList.indexWhere((dataDict) {
+      return dataDict.code == widget.state;
+    });
+    attentionLevelIndex = attentionLevelList.indexWhere((dataDict) {
+      return dataDict.code == widget.attentionLevel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          '企业名称',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gaps.vGap10,
+                        Container(
+                          height: 36,
+                          child: TextField(
+                            controller: _enterNameController,
+                            style: const TextStyle(fontSize: 13),
+                            decoration: const InputDecoration(
+                              fillColor: Colours.grey_color,
+                              filled: true,
+                              hintText: "请输入企业名称",
+                              hintStyle: TextStyle(
+                                color: Colours.secondary_text,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        Gaps.vGap30,
+                        const Text(
+                          '企业类型',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: enterTypeIndex,
+                          dataDictList: enterTypeList,
+                          onItemTap: (index) {
+                            setState(() {
+                              enterTypeIndex = index;
+                            });
+                          },
+                        ),
+                        const Text(
+                          '是否在线',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: stateIndex,
+                          dataDictList: stateList,
+                          onItemTap: (index) {
+                            setState(() {
+                              stateIndex = index;
+                            });
+                          },
+                        ),
+                        const Text(
+                          '是否重点源',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: attentionLevelIndex,
+                          dataDictList: attentionLevelList,
+                          onItemTap: (index) {
+                            setState(() {
+                              attentionLevelIndex = index;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                child: Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '重置',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.refresh,
+                      color: Colors.orange,
+                      onTap: () {
+                        setState(() {
+                          initParam();
+                        });
+                      },
+                    ),
+                    Gaps.hGap10,
+                    ClipButton(
+                      text: '搜索',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.search,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        Navigator.pop(context);
+                        _refreshController.callRefresh();
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       body: extended.NestedScrollView(
-        controller: _scrollController,
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
         },
@@ -109,20 +270,16 @@ class _EnterListPageState extends State<EnterListPage>
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
                 else if (state is ListError) subtitle2 = '数据加载错误';
-                return ListHeaderWidget(
+                return ListHeaderWidget2(
                   title: '企业列表',
                   subtitle: '展示污染源企业列表，点击列表项查看该企业的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_lightblue.png',
                   image: 'assets/images/enter_list_bg_image.png',
                   color: Colors.blue,
-                  showSearch: true,
                   automaticallyImplyLeading: widget.automaticallyImplyLeading,
-                  editController: _editController,
-                  scrollController: _scrollController,
-                  onSearchPressed: () => _refreshController.callRefresh(),
-                  areaPickerListener: (areaId) {
-                    areaCode = areaId;
+                  onSearchTap: () {
+                    _scaffoldKey.currentState.openEndDrawer();
                   },
 //                  popupMenuButton: PopupMenuButton<String>(
 //                    itemBuilder: (BuildContext context) =>
@@ -175,9 +332,10 @@ class _EnterListPageState extends State<EnterListPage>
                     } else if (state is ListError) {
                       return ErrorSliver(errorMessage: state.message);
                     } else if (state is ListLoaded) {
-                      if (!state.hasNextPage)
+                      if (!state.hasNextPage) {
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
+                      }
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
@@ -188,16 +346,17 @@ class _EnterListPageState extends State<EnterListPage>
               ),
             ],
             onRefresh: () async {
+              _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
                 params: EnterListRepository.createParams(
                   currentPage: Constant.defaultCurrentPage,
                   pageSize: Constant.defaultPageSize,
-                  enterName: _editController.text,
+                  enterName: _enterNameController.text,
                   areaCode: areaCode,
-                  state: widget.state,
-                  enterType: widget.enterType,
-                  attentionLevel: widget.attentionLevel,
+                  state: stateList[stateIndex].code,
+                  enterType: enterTypeList[enterTypeIndex].code,
+                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
                 ),
               ));
               return _refreshCompleter.future;
@@ -214,11 +373,11 @@ class _EnterListPageState extends State<EnterListPage>
                 params: EnterListRepository.createParams(
                   currentPage: currentPage,
                   pageSize: Constant.defaultPageSize,
-                  enterName: _editController.text,
+                  enterName: _enterNameController.text,
                   areaCode: areaCode,
-                  state: widget.state,
-                  enterType: widget.enterType,
-                  attentionLevel: widget.attentionLevel,
+                  state: stateList[stateIndex].code,
+                  enterType: enterTypeList[enterTypeIndex].code,
+                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
                 ),
               ));
               return _refreshCompleter.future;
@@ -235,7 +394,7 @@ class _EnterListPageState extends State<EnterListPage>
         (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            padding:const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
                 switch (widget.type) {
