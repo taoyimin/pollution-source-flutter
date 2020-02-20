@@ -190,7 +190,8 @@ var orderListHandler = Handler(
   String enterId = params['enterId']?.first ?? '';
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
-  String overdue = params['overdue']?.first ?? '';
+  String alarmLevel = params['alarmLevel']?.first ?? '';
+  String attentionLevel = params['attentionLevel']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: OrderListRepository()),
@@ -198,7 +199,8 @@ var orderListHandler = Handler(
       enterId: enterId,
       monitorId: monitorId,
       state: state,
-      overdue: overdue,
+      alarmLevel: alarmLevel,
+      attentionLevel: attentionLevel,
     ),
   );
 });
