@@ -264,7 +264,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     InkWellButton5(
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=2&overdue=1');
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=2&alarmLevel=3');
                       },
                       meta: Meta(
                         color: Color(0xFFFFB709),

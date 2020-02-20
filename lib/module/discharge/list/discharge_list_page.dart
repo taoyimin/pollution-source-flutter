@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_repository.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 
 import 'package:pollution_source/res/gaps.dart';
@@ -36,23 +38,28 @@ class DischargeListPage extends StatefulWidget {
   _DischargeListPageState createState() => _DischargeListPageState();
 }
 
-class _DischargeListPageState extends State<DischargeListPage>
-    with TickerProviderStateMixin {
-  ScrollController _scrollController;
+class _DischargeListPageState extends State<DischargeListPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final EasyRefreshController _refreshController = EasyRefreshController();
+  final TextEditingController _enterNameController = TextEditingController();
+  final List<DataDict> dischargeTypeList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '雨水排口', code: '1'),
+    DataDict(name: '废水排口', code: '2'),
+    DataDict(name: '废气排口', code: '3'),
+  ];
+  int dischargeTypeIndex;
   ListBloc _listBloc;
-  EasyRefreshController _refreshController;
-  TextEditingController _editController;
   Completer<void> _refreshCompleter;
   String areaCode = '';
 
   @override
   void initState() {
     super.initState();
+    initParam();
+    // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
-    _scrollController = ScrollController();
-    _editController = TextEditingController();
     //首次加载
     _listBloc.add(ListLoad(
         isRefresh: true,
@@ -60,7 +67,9 @@ class _DischargeListPageState extends State<DischargeListPage>
           currentPage: Constant.defaultCurrentPage,
           pageSize: Constant.defaultPageSize,
           enterId: widget.enterId,
-          dischargeType: widget.dischargeType,
+          enterName: _enterNameController.text,
+          areaCode: areaCode,
+          dischargeType: dischargeTypeList[dischargeTypeIndex].code,
           state: widget.state,
         )));
   }
@@ -68,19 +77,121 @@ class _DischargeListPageState extends State<DischargeListPage>
   @override
   void dispose() {
     _refreshController.dispose();
-    _scrollController.dispose();
-    _editController.dispose();
+    _enterNameController.dispose();
     //取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
+  /// 初始化查询参数
+  initParam() {
+    _enterNameController.text = '';
+    dischargeTypeIndex = dischargeTypeList.indexWhere((dataDict) {
+      return dataDict.code == widget.dischargeType;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          '企业名称',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gaps.vGap10,
+                        Container(
+                          height: 36,
+                          child: TextField(
+                            controller: _enterNameController,
+                            style: const TextStyle(fontSize: 13),
+                            decoration: const InputDecoration(
+                              fillColor: Colours.grey_color,
+                              filled: true,
+                              hintText: "请输入企业名称",
+                              hintStyle: TextStyle(
+                                color: Colours.secondary_text,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        Gaps.vGap30,
+                        const Text(
+                          '排口类型',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: dischargeTypeIndex,
+                          dataDictList: dischargeTypeList,
+                          onItemTap: (index) {
+                            setState(() {
+                              dischargeTypeIndex = index;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 20, 16, 20),
+                child: Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '重置',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.refresh,
+                      color: Colors.orange,
+                      onTap: () {
+                        setState(() {
+                          initParam();
+                        });
+                      },
+                    ),
+                    Gaps.hGap10,
+                    ClipButton(
+                      text: '搜索',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.search,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        Navigator.pop(context);
+                        _refreshController.callRefresh();
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       body: extended.NestedScrollView(
-        controller: _scrollController,
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
         },
@@ -89,27 +200,22 @@ class _DischargeListPageState extends State<DischargeListPage>
             BlocBuilder<ListBloc, ListState>(
               builder: (context, state) {
                 String subtitle2 = '';
-                if(state is ListLoading)
+                if (state is ListLoading)
                   subtitle2 = '数据加载中';
                 else if (state is ListLoaded)
                   subtitle2 = '共${state.total}条数据';
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
-                else if(state is ListError)
-                  subtitle2 = '数据加载错误';
-                return ListHeaderWidget(
+                else if (state is ListError) subtitle2 = '数据加载错误';
+                return ListHeaderWidget2(
                   title: '排口列表',
                   subtitle: '展示污染源排口列表，点击列表项查看该排口的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_yellow.png',
                   image: 'assets/images/discharge_list_bg_image.png',
                   color: Colors.orangeAccent,
-                  showSearch: true,
-                  editController: _editController,
-                  scrollController: _scrollController,
-                  onSearchPressed: () => _refreshController.callRefresh(),
-                  areaPickerListener: (areaId) {
-                    areaCode = areaId;
+                  onSearchTap: () {
+                    _scaffoldKey.currentState.openEndDrawer();
                   },
                 );
               },
@@ -146,9 +252,10 @@ class _DischargeListPageState extends State<DischargeListPage>
                     } else if (state is ListError) {
                       return ErrorSliver(errorMessage: state.message);
                     } else if (state is ListLoaded) {
-                      if (!state.hasNextPage)
+                      if (!state.hasNextPage) {
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
+                      }
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
@@ -159,18 +266,18 @@ class _DischargeListPageState extends State<DischargeListPage>
               ),
             ],
             onRefresh: () async {
+              _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
                 params: DischargeListRepository.createParams(
                   currentPage: Constant.defaultCurrentPage,
                   pageSize: Constant.defaultPageSize,
-                  enterName: _editController.text,
                   areaCode: areaCode,
                   enterId: widget.enterId,
-                  dischargeType: widget.dischargeType,
+                  enterName: _enterNameController.text,
+                  dischargeType: dischargeTypeList[dischargeTypeIndex].code,
                   state: widget.state,
                 ),
-
               ));
               return _refreshCompleter.future;
             },
@@ -186,7 +293,7 @@ class _DischargeListPageState extends State<DischargeListPage>
                 params: DischargeListRepository.createParams(
                   currentPage: currentPage,
                   pageSize: Constant.defaultPageSize,
-                  enterName: _editController.text,
+                  enterName: _enterNameController.text,
                   areaCode: areaCode,
                   enterId: widget.enterId,
                   dischargeType: widget.dischargeType,

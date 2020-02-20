@@ -42,10 +42,7 @@ class EnterListPage extends StatefulWidget {
 }
 
 class _EnterListPageState extends State<EnterListPage>
-    with
-        AutomaticKeepAliveClientMixin,
-        SingleTickerProviderStateMixin,
-        TickerProviderStateMixin {
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -65,8 +62,8 @@ class _EnterListPageState extends State<EnterListPage>
   ];
   final List<DataDict> attentionLevelList = [
     DataDict(name: '全部', code: ''),
-    DataDict(name: '非重点源', code: '0'),
-    DataDict(name: '重点源', code: '1'),
+    DataDict(name: '非重点', code: '0'),
+    DataDict(name: '重点', code: '1'),
   ];
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
@@ -137,7 +134,7 @@ class _EnterListPageState extends State<EnterListPage>
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
+                    padding:const EdgeInsets.fromLTRB(16, 56, 16, 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -199,7 +196,7 @@ class _EnterListPageState extends State<EnterListPage>
                           },
                         ),
                         const Text(
-                          '是否重点源',
+                          '关注程度',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -220,7 +217,7 @@ class _EnterListPageState extends State<EnterListPage>
                 ),
               ),
               Padding(
-                padding:const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
                 child: Row(
                   children: <Widget>[
                     ClipButton(
@@ -394,7 +391,7 @@ class _EnterListPageState extends State<EnterListPage>
         (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding:const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
                 switch (widget.type) {

@@ -18,9 +18,9 @@ class EnterListRepository extends ListRepository<Enter> {
   ///
   /// [enterName] 按企业名称搜索
   /// [areaCode] 按区域搜索
-  /// [state] 0：全部 1：在线
-  /// [enterType] 企业类型 0:全部 1:雨水企业 2:废水企业 3:废气企业 4:水气企业 5:许可证企业
-  /// [attentionLevel] 0:非重点源 1:重点源
+  /// [state] 1：在线
+  /// [enterType] 企业类型 1:雨水企业 2:废水企业 3:废气企业 4:水气企业 5:许可证企业
+  /// [attentionLevel] 关注程度 0:非重点 1:重点
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,

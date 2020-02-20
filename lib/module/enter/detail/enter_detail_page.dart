@@ -56,8 +56,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               String enterName = '';
               String enterAddress = '';
               if (state is DetailLoaded) {
-                enterName = state.detail.enterName;
-                enterAddress = state.detail.enterAddress;
+                enterName = state.detail.enterName ?? '';
+                enterAddress = state.detail.enterAddress ?? '';
               }
               return DetailHeaderWidget(
                 title: '企业详情',

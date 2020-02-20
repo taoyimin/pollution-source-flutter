@@ -46,7 +46,19 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
       'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'S',
+      // 污染源参数
       'hasValid': valid,
+      // 运维参数
+      'effective': () {
+        switch (valid) {
+          case '0':
+            return '1';
+          case '1':
+            return '0';
+          default:
+            return '';
+        }
+      }(),
     };
   }
 }

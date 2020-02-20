@@ -21,7 +21,11 @@ class OrderListRepository extends ListRepository<Order> {
   /// [state] 状态 0：全部 1：待督办 2：待处理 3：待审核 4：审核不通过 5：已办结
   /// [enterId] 筛选某企业的所有报警管理单
   /// [monitorId] 筛选某监控点的所有报警管理单
-  /// [overdue] 超期 0：全部 1：超期
+  /// [alarmLevel] 工单级别 0：正常 1：黄色预警 2：橙色预警 3：红色预警
+  /// [attentionLevel] 关注程度 0:非重点 1:重点
+  /// [alarmType] 报警类型
+  /// [startTime] 报警开始时间
+  /// [endTime] 报警结束时间
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -30,7 +34,11 @@ class OrderListRepository extends ListRepository<Order> {
     state = '',
     enterId = '',
     monitorId = '',
-    overdue = '',
+    alarmLevel = '',
+    attentionLevel = '',
+    alarmType = '',
+    startTime,
+    endTime,
   }) {
     return {
       'currentPage': currentPage,
@@ -42,14 +50,11 @@ class OrderListRepository extends ListRepository<Order> {
       'areaCode': areaCode,
       'enterId': enterId,
       'monitorId': monitorId,
-      'alarmLevel': () {
-        switch (overdue) {
-          case '1':
-            return '3';
-          default:
-            return '';
-        }
-      }(),
+      'alarmLevel': alarmLevel,
+      'attentionLevel': attentionLevel,
+      'alarmType': alarmType,
+      'startTime': startTime.toString(),
+      'endTime': endTime.toString(),
       'orderState': () {
         switch (state) {
           case '1':

@@ -19,7 +19,7 @@ class DischargeListRepository extends ListRepository<Discharge> {
   /// [enterName] 按企业名称搜索
   /// [areaCode] 按区域搜索
   /// [enterId] 筛选某企业的所有排口
-  /// [dischargeType] 排口类型 0：全部 1：雨水 2：废水 3：废气
+  /// [dischargeType] 排口类型 1：雨水 2：废水 3：废气
   /// [state] 排口状态 （暂时没用）
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
@@ -36,6 +36,7 @@ class DischargeListRepository extends ListRepository<Discharge> {
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
       'enterpriseName': enterName,
+      'enterName': enterName,
       'areaCode': areaCode,
       'enterId': enterId,
       'dischargeType': () {

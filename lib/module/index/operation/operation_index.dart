@@ -603,7 +603,7 @@ class OrderStatisticsWidget extends StatelessWidget {
                 meta: metaList[1],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.orderList}?state=2&overdue=1');
+                      context, '${Routes.orderList}?state=2&alarmLevel=3');
                 },
               ),
               Gaps.hGap10,

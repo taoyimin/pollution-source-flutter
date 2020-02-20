@@ -46,7 +46,19 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
       'outId': dischargeId,
       'monitorId': monitorId,
       'dataType': 'A',
+      // 污染源参数
       'hasValid': valid,
+      // 运维参数
+      'effective': () {
+        switch (valid) {
+          case '0':
+            return '1';
+          case '1':
+            return '0';
+          default:
+            return '';
+        }
+      }(),
     };
   }
 }

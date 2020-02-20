@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/order/list/order_list_model.dart';
 import 'package:pollution_source/module/order/list/order_list_repository.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -21,13 +25,15 @@ import 'package:pollution_source/module/common/common_widget.dart';
 /// 报警管理单列表界面
 class OrderListPage extends StatefulWidget {
   final String state;
-  final String overdue;
+  final String alarmLevel;
+  final String attentionLevel;
   final String enterId;
   final String monitorId;
 
   OrderListPage({
     this.state = '',
-    this.overdue = '',
+    this.alarmLevel = '',
+    this.attentionLevel = '',
     this.enterId = '',
     this.monitorId = '',
   });
@@ -36,53 +42,338 @@ class OrderListPage extends StatefulWidget {
   _OrderListPageState createState() => _OrderListPageState();
 }
 
-class _OrderListPageState extends State<OrderListPage>
-    with TickerProviderStateMixin {
-  ScrollController _scrollController;
+class _OrderListPageState extends State<OrderListPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final EasyRefreshController _refreshController = EasyRefreshController();
+  final TextEditingController _enterNameController = TextEditingController();
+  final List<DataDict> stateList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '待处理', code: '2'),
+    DataDict(name: '已退回', code: '4'),
+    DataDict(name: '已办结', code: '5'),
+  ];
+  final List<DataDict> alarmLevelList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '正常', code: '0'),
+    DataDict(name: '黄色预警', code: '1'),
+    DataDict(name: '橙色预警', code: '2'),
+    DataDict(name: '红色预警', code: '3'),
+  ];
+  final List<DataDict> attentionLevelList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '非重点', code: '0'),
+    DataDict(name: '重点', code: '1'),
+  ];
+  int stateIndex;
+  int alarmLevelIndex;
+  int attentionLevelIndex;
+  DateTime startTime;
+  DateTime endTime;
   ListBloc _listBloc;
-  EasyRefreshController _refreshController;
-  TextEditingController _editController;
   Completer<void> _refreshCompleter;
   String areaCode = '';
 
   @override
   void initState() {
     super.initState();
+    initParam();
+    // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
-    _scrollController = ScrollController();
-    _editController = TextEditingController();
-    //首次加载
+    // 首次加载
     _listBloc.add(ListLoad(
       isRefresh: true,
       params: OrderListRepository.createParams(
         currentPage: Constant.defaultCurrentPage,
         pageSize: Constant.defaultPageSize,
-        state: widget.state,
-        overdue: widget.overdue,
         enterId: widget.enterId,
         monitorId: widget.monitorId,
+        enterName: _enterNameController.text,
+        areaCode: areaCode,
+        state: stateList[stateIndex].code,
+        alarmLevel: alarmLevelList[alarmLevelIndex].code,
+        attentionLevel: attentionLevelList[attentionLevelIndex].code,
       ),
     ));
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    // 释放资源
+    _enterNameController.dispose();
     _refreshController.dispose();
-    _editController.dispose();
-    //取消正在进行的请求
+    // 取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
+  /// 初始化查询参数
+  initParam() {
+    _enterNameController.text = '';
+    startTime = null;
+    endTime = null;
+    stateIndex = stateList.indexWhere((dataDict) {
+      return dataDict.code == widget.state;
+    });
+    alarmLevelIndex = alarmLevelList.indexWhere((dataDict) {
+      return dataDict.code == widget.alarmLevel;
+    });
+    attentionLevelIndex = attentionLevelList.indexWhere((dataDict) {
+      return dataDict.code == widget.attentionLevel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 46, 16, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          '企业名称',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gaps.vGap10,
+                        Container(
+                          height: 36,
+                          child: TextField(
+                            controller: _enterNameController,
+                            style: const TextStyle(fontSize: 13),
+                            decoration: const InputDecoration(
+                              fillColor: Colours.grey_color,
+                              filled: true,
+                              hintText: "请输入企业名称",
+                              hintStyle: TextStyle(
+                                color: Colours.secondary_text,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        Gaps.vGap20,
+                        const Text(
+                          '报警单状态',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: stateIndex,
+                          dataDictList: stateList,
+                          onItemTap: (index) {
+                            setState(() {
+                              stateIndex = index;
+                            });
+                          },
+                        ),
+                        Gaps.vGap10,
+                        const Text(
+                          '报警时间',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gaps.vGap10,
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  DatePicker.showDatePicker(
+                                    context,
+                                    dateFormat: 'yyyy年-MM月-dd日',
+                                    maxDateTime: endTime ?? DateTime.now(),
+                                    locale: DateTimePickerLocale.zh_cn,
+                                    onClose: () {},
+                                    onConfirm: (dateTime, selectedIndex) {
+                                      setState(() {
+                                        startTime = dateTime;
+                                      });
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 0.5,
+                                      color: startTime != null
+                                          ? Colours.primary_color
+                                          : Colours.divider_color,
+                                    ),
+                                    color: startTime != null
+                                        ? Colours.primary_color.withOpacity(0.3)
+                                        : Colours.divider_color,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      DateUtil.getDateStrByDateTime(startTime,
+                                              format: DateFormat.ZH_YEAR_MONTH_DAY) ??
+                                          '开始时间',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: startTime != null
+                                            ? Colours.primary_color
+                                            : Colours.secondary_text,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 40,
+                              child: const Center(
+                                child: Text(
+                                  '至',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colours.secondary_text,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  DatePicker.showDatePicker(
+                                    context,
+                                    dateFormat: 'yyyy年-MM月-dd日',
+                                    minDateTime: startTime,
+                                    maxDateTime: DateTime.now(),
+                                    locale: DateTimePickerLocale.zh_cn,
+                                    onClose: () {},
+                                    onConfirm: (dateTime, selectedIndex) {
+                                      setState(() {
+                                        endTime = dateTime;
+                                      });
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 0.5,
+                                      color: endTime != null
+                                          ? Colours.primary_color
+                                          : Colours.divider_color,
+                                    ),
+                                    color: endTime != null
+                                        ? Colours.primary_color.withOpacity(0.3)
+                                        : Colours.divider_color,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      DateUtil.getDateStrByDateTime(endTime,
+                                              format: DateFormat.ZH_YEAR_MONTH_DAY) ??
+                                          '结束时间',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: endTime != null
+                                            ? Colours.primary_color
+                                            : Colours.secondary_text,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gaps.vGap20,
+                        const Text(
+                          '工单级别',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: alarmLevelIndex,
+                          dataDictList: alarmLevelList,
+                          onItemTap: (index) {
+                            setState(() {
+                              alarmLevelIndex = index;
+                            });
+                          },
+                        ),
+                        Gaps.vGap10,
+                        const Text(
+                          '关注程度',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: attentionLevelIndex,
+                          dataDictList: attentionLevelList,
+                          onItemTap: (index) {
+                            setState(() {
+                              attentionLevelIndex = index;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                child: Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '重置',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.refresh,
+                      color: Colors.orange,
+                      onTap: () {
+                        setState(() {
+                          initParam();
+                        });
+                      },
+                    ),
+                    Gaps.hGap10,
+                    ClipButton(
+                      text: '搜索',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.search,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        Navigator.pop(context);
+                        _refreshController.callRefresh();
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       body: extended.NestedScrollView(
-        controller: _scrollController,
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
         },
@@ -98,19 +389,15 @@ class _OrderListPageState extends State<OrderListPage>
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
                 else if (state is ListError) subtitle2 = '数据加载错误';
-                return ListHeaderWidget(
+                return ListHeaderWidget2(
                   title: '报警管理单列表',
                   subtitle: '展示报警管理单列表，点击列表项查看该报警管理单的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_blue.png',
                   image: 'assets/images/order_list_bg_image.png',
                   color: Colors.blue,
-                  showSearch: true,
-                  editController: _editController,
-                  scrollController: _scrollController,
-                  onSearchPressed: () => _refreshController.callRefresh(),
-                  areaPickerListener: (areaId) {
-                    areaCode = areaId;
+                  onSearchTap: () {
+                    _scaffoldKey.currentState.openEndDrawer();
                   },
                 );
               },
@@ -147,9 +434,10 @@ class _OrderListPageState extends State<OrderListPage>
                     } else if (state is ListError) {
                       return ErrorSliver(errorMessage: state.message);
                     } else if (state is ListLoaded) {
-                      if (!state.hasNextPage)
+                      if (!state.hasNextPage) {
                         _refreshController.finishLoad(
                             noMore: !state.hasNextPage, success: true);
+                      }
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
@@ -160,17 +448,19 @@ class _OrderListPageState extends State<OrderListPage>
               ),
             ],
             onRefresh: () async {
+              _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
                 params: OrderListRepository.createParams(
                   currentPage: Constant.defaultCurrentPage,
                   pageSize: Constant.defaultPageSize,
-                  enterName: _editController.text,
-                  areaCode: areaCode,
-                  state: widget.state,
-                  overdue: widget.overdue,
                   enterId: widget.enterId,
                   monitorId: widget.monitorId,
+                  enterName: _enterNameController.text,
+                  areaCode: areaCode,
+                  state: stateList[stateIndex].code,
+                  alarmLevel: alarmLevelList[alarmLevelIndex].code,
+                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
                 ),
               ));
               return _refreshCompleter.future;
@@ -187,12 +477,13 @@ class _OrderListPageState extends State<OrderListPage>
                 params: OrderListRepository.createParams(
                   currentPage: currentPage,
                   pageSize: Constant.defaultPageSize,
-                  enterName: _editController.text,
-                  areaCode: areaCode,
-                  state: widget.state,
-                  overdue: widget.overdue,
                   enterId: widget.enterId,
                   monitorId: widget.monitorId,
+                  enterName: _enterNameController.text,
+                  areaCode: areaCode,
+                  state: stateList[stateIndex].code,
+                  alarmLevel: alarmLevelList[alarmLevelIndex].code,
+                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
                 ),
               ));
               return _refreshCompleter.future;

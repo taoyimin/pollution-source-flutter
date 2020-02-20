@@ -5,11 +5,13 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_model.dart';
 import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_repository.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
@@ -36,15 +38,24 @@ class RoutineInspectionListPage extends StatefulWidget {
 }
 
 class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final EasyRefreshController _refreshController = EasyRefreshController();
+  final TextEditingController _enterNameController = TextEditingController();
+  final List<DataDict> stateList = [
+    DataDict(name: '全部', code: ''),
+    DataDict(name: '当前待处理', code: '1'),
+    DataDict(name: '超时待处理', code: '2'),
+  ];
+  int stateIndex;
   ListBloc _listBloc;
-  EasyRefreshController _refreshController;
   Completer<void> _refreshCompleter;
 
   @override
   void initState() {
     super.initState();
+    initParam();
+    // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    _refreshController = EasyRefreshController();
     _refreshCompleter = Completer<void>();
     //首次加载
     _listBloc.add(ListLoad(
@@ -54,7 +65,8 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
         pageSize: Constant.defaultPageSize,
         enterId: widget.enterId,
         monitorId: widget.monitorId,
-        state: widget.state,
+        enterName: _enterNameController.text,
+        state: stateList[stateIndex].code,
       ),
     ));
   }
@@ -63,15 +75,119 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
   void dispose() {
     //释放资源
     _refreshController.dispose();
+    _enterNameController.dispose();
     //取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
+  initParam() {
+    _enterNameController.text = '';
+    stateIndex = stateList.indexWhere((dataDict) {
+      return dataDict.code == widget.state;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          '企业名称',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gaps.vGap10,
+                        Container(
+                          height: 36,
+                          child: TextField(
+                            controller: _enterNameController,
+                            style: const TextStyle(fontSize: 13),
+                            decoration: const InputDecoration(
+                              fillColor: Colours.grey_color,
+                              filled: true,
+                              hintText: "请输入企业名称",
+                              hintStyle: TextStyle(
+                                color: Colours.secondary_text,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        Gaps.vGap30,
+                        const Text(
+                          '巡检状态',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictGrid(
+                          checkIndex: stateIndex,
+                          dataDictList: stateList,
+                          onItemTap: (index) {
+                            setState(() {
+                              stateIndex = index;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 20, 16, 20),
+                child: Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '重置',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.refresh,
+                      color: Colors.orange,
+                      onTap: () {
+                        setState(() {
+                          initParam();
+                        });
+                      },
+                    ),
+                    Gaps.hGap10,
+                    ClipButton(
+                      text: '搜索',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.search,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        Navigator.pop(context);
+                        _refreshController.callRefresh();
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       body: extended.NestedScrollView(
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
@@ -88,14 +204,16 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
                 else if (state is ListError) subtitle2 = '数据加载错误';
-                return ListHeaderWidget(
+                return ListHeaderWidget2(
                   title: '常规巡检列表',
                   subtitle: '展示常规巡检列表，点击列表项查看该常规巡检的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_green.png',
                   image: 'assets/images/routine_inspection_list_bg_image.png',
                   color: Color(0xFF29D0BF),
-                  showSearch: false,
+                  onSearchTap: () {
+                    _scaffoldKey.currentState.openEndDrawer();
+                  },
                 );
               },
             ),
@@ -149,9 +267,10 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                 params: RoutineInspectionListRepository.createParams(
                   currentPage: Constant.defaultCurrentPage,
                   pageSize: Constant.defaultPageSize,
+                  enterName: _enterNameController.text,
                   enterId: widget.enterId,
                   monitorId: widget.monitorId,
-                  state: widget.state,
+                  state: stateList[stateIndex].code,
                 ),
               ));
               return _refreshCompleter.future;
@@ -168,9 +287,10 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                 params: RoutineInspectionListRepository.createParams(
                   currentPage: currentPage,
                   pageSize: Constant.defaultPageSize,
+                  enterName: _enterNameController.text,
                   enterId: widget.enterId,
                   monitorId: widget.monitorId,
-                  state: widget.state,
+                  state: stateList[stateIndex].code,
                 ),
               ));
               return _refreshCompleter.future;
@@ -190,9 +310,8 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                print(widget.state);
                 Application.router.navigateTo(context,
-                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}&state=${widget.state}');
+                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}&state=${stateList[stateIndex].code}');
               },
               children: <Widget>[
                 Container(
