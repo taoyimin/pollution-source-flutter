@@ -13,7 +13,7 @@ class Enter extends Equatable {
   final int enterId; //企业id
   @JsonKey(name: 'enterpriseName')
   final String enterName; //企业名
-  @JsonKey(name: 'envirLinkAddress')
+  @JsonKey(name: 'entAddress')
   final String enterAddress; //企业地址
   final String attentionLevel; //是否是重点企业 0:非重点 1:重点
   final String industryTypeStr; //行业类别

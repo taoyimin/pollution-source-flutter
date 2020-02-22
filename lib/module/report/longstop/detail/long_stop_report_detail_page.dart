@@ -49,14 +49,17 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
+              String districtName = '';
               if (state is DetailLoaded) {
                 enterName = state.detail.enterName;
                 enterAddress = state.detail.enterAddress;
+                districtName = state.detail.districtName;
               }
               return DetailHeaderWidget(
                 title: '长期停产申报详情',
-                subTitle1: '$enterName',
-                subTitle2: '$enterAddress',
+                subTitle1: '$districtName',
+                subTitle2: '$enterName',
+                subTitle3: '$enterAddress',
                 imagePath: 'assets/images/report_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_lightblue.png',
                 color: Colours.background_light_blue,
@@ -97,15 +100,6 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 ImageTitleWidget(
                   title: '基本信息',
                   imagePath: 'assets/images/icon_enter_baseinfo.png',
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '所属区域：${reportDetail.districtName ?? ''}',
-                      icon: Icons.location_on,
-                    ),
-                  ],
                 ),
                 Gaps.vGap10,
                 Row(

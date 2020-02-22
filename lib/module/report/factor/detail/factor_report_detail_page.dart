@@ -49,14 +49,17 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
+              String districtName = '';
               if (state is DetailLoaded) {
                 enterName = state.detail.enterName;
                 enterAddress = state.detail.enterAddress;
+                districtName = state.detail.districtName;
               }
               return DetailHeaderWidget(
                 title: '因子异常申报详情',
-                subTitle1: '$enterName',
-                subTitle2: '$enterAddress',
+                subTitle1: '$districtName',
+                subTitle2: '$enterName',
+                subTitle3: '$enterAddress',
                 imagePath: 'assets/images/report_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_pink.png',
                 color: Colours.background_pink,
@@ -102,15 +105,8 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '排口名称：${reportDetail.dischargeName ?? ''}',
-                      icon: Icons.nature,
-                      flex: 9,
-                    ),
-                    Gaps.hGap10,
-                    IconBaseInfoWidget(
-                      content: '申报时间：${reportDetail.reportTimeStr ?? ''}',
-                      icon: Icons.date_range,
-                      flex: 10,
+                      content: '监控点名：${reportDetail.monitorName ?? ''}',
+                      icon: Icons.linked_camera,
                     ),
                   ],
                 ),
@@ -118,15 +114,8 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控点名：${reportDetail.monitorName ?? ''}',
-                      icon: Icons.linked_camera,
-                      flex: 9,
-                    ),
-                    Gaps.hGap10,
-                    IconBaseInfoWidget(
-                      content: '所属区域：${reportDetail.districtName ?? ''}',
-                      icon: Icons.location_on,
-                      flex: 10,
+                      content: '申报时间：${reportDetail.reportTimeStr ?? ''}',
+                      icon: Icons.date_range,
                     ),
                   ],
                 ),

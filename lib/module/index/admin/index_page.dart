@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'dart:ui';
@@ -112,64 +111,9 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                     ),
                   );
                 } else if (state is IndexLoading) {
-                  return SliverFillRemaining(
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.white,
-                      child: Center(
-                        child: SizedBox(
-                          height: 200.0,
-                          width: 300.0,
-                          child: Card(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: SpinKitFadingCube(
-                                    color: Theme.of(context).primaryColor,
-                                    size: 25.0,
-                                  ),
-                                ),
-                                Container(
-                                  child: Text('加载中'),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                  return LoadingSliver();
                 } else if (state is IndexError) {
-                  return SliverFillRemaining(
-                    child: Container(
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 100.0,
-                            height: 100.0,
-                            child: Image.asset('assets/images/nodata.png'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 60),
-                            child: Text(
-                              '${state.errorMessage}',
-                              style: const TextStyle(
-                                  fontSize: 16.0, color: Colours.grey_color),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return ErrorSliver(errorMessage: state.errorMessage);
                 } else {
                   return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
                 }

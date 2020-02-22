@@ -11,26 +11,27 @@ part 'order_list_model.g.dart';
 @JsonSerializable()
 class Order extends Equatable {
   @JsonKey(name: 'id')
-  final int orderId; //报警管理单ID
+  final int orderId; // 报警管理单ID
   @JsonKey(name: 'enterpriseName')
-  final String enterName; //企业名称
+  final String enterName; // 企业名称
   @JsonKey(name: 'disMonitorName')
-  final String monitorName; //监控点名称
+  final String monitorName; // 监控点名称
   @JsonKey(name: 'alarmDate')
-  final String alarmDateStr; //报警时间
-  @JsonKey(name: 'areaName')
-  final String districtName; //区域
-  final String orderStateStr; //状态
+  final String alarmDateStr; // 报警时间
+  final String cityName; // 所属市
+  final String areaName; // 所属区
+  final String orderStateStr; // 状态
   @JsonKey(name: 'alarmDesc')
-  final String alarmRemark; //报警描述
-  final String alarmTypeStr; //报警类型
+  final String alarmRemark; // 报警描述
+  final String alarmTypeStr; // 报警类型
 
   const Order({
     this.orderId,
     this.enterName,
     this.monitorName,
     this.alarmDateStr,
-    this.districtName,
+    this.cityName,
+    this.areaName,
     this.orderStateStr,
     this.alarmRemark,
     this.alarmTypeStr,
@@ -42,7 +43,8 @@ class Order extends Equatable {
         enterName,
         monitorName,
         alarmDateStr,
-        districtName,
+        cityName,
+        areaName,
         orderStateStr,
         alarmRemark,
         alarmTypeStr,
@@ -52,6 +54,11 @@ class Order extends Equatable {
     return TextUtil.isEmpty(alarmTypeStr)
         ? const []
         : _getLabelList(alarmTypeStr);
+  }
+
+  // 所属区域
+  String get districtName {
+    return '${cityName ?? ''}${areaName ?? ''}';
   }
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);

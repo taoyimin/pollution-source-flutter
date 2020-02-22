@@ -25,6 +25,7 @@ class DischargeReportDetailPage extends StatefulWidget {
 }
 
 class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   DetailBloc _detailBloc;
 
   @override
@@ -42,9 +43,6 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
     super.dispose();
   }
 
-  //用来显示SnackBar
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,14 +53,17 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
+              String districtName = '';
               if (state is DetailLoaded) {
                 enterName = state.detail.enterName;
                 enterAddress = state.detail.enterAddress;
+                districtName = state.detail.districtName;
               }
               return DetailHeaderWidget(
                 title: '排口异常申报详情',
-                subTitle1: '$enterName',
-                subTitle2: '$enterAddress',
+                subTitle1: '$districtName',
+                subTitle2: '$enterName',
+                subTitle3: '$enterAddress',
                 imagePath: 'assets/images/report_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_green.png',
                 color: Colours.background_green,
@@ -109,17 +110,8 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content:
-                      '排口名称：${reportDetail.dischargeName ?? ''}',
-                      icon: Icons.nature,
-                      flex: 9,
-                    ),
-                    Gaps.hGap10,
-                    IconBaseInfoWidget(
-                      content:
-                      '申报时间：${reportDetail.reportTimeStr ?? ''}',
-                      icon: Icons.date_range,
-                      flex: 10,
+                      content: '监控点名：${reportDetail.monitorName ?? ''}',
+                      icon: Icons.linked_camera,
                     ),
                   ],
                 ),
@@ -127,15 +119,8 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控点名：${reportDetail.monitorName ?? ''}',
-                      icon: Icons.linked_camera,
-                      flex: 9,
-                    ),
-                    Gaps.hGap10,
-                    IconBaseInfoWidget(
-                      content: '所属区域：${reportDetail.districtName ?? ''}',
-                      icon: Icons.location_on,
-                      flex: 10,
+                      content: '申报时间：${reportDetail.reportTimeStr ?? ''}',
+                      icon: Icons.date_range,
                     ),
                   ],
                 ),

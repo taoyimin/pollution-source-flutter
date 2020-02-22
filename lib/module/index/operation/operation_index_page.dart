@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/index/admin/index_page.dart';
@@ -86,221 +85,18 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                     ),
                   );
                 } else if (state is IndexLoading) {
-                  return SliverFillRemaining(
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.white,
-                      child: Center(
-                        child: SizedBox(
-                          height: 200.0,
-                          width: 300.0,
-                          child: Card(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: SpinKitFadingCube(
-                                    color: Theme.of(context).primaryColor,
-                                    size: 25.0,
-                                  ),
-                                ),
-                                Container(
-                                  child: Text('加载中'),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                  return LoadingSliver();
                 } else if (state is IndexError) {
-                  return SliverFillRemaining(
-                    child: Container(
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 100.0,
-                            height: 100.0,
-                            child: Image.asset('assets/images/nodata.png'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 60),
-                            child: Text(
-                              '${state.errorMessage}',
-                              style: const TextStyle(
-                                  fontSize: 16.0, color: Colours.grey_color),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return ErrorSliver(errorMessage: state.errorMessage);
                 } else {
                   return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
                 }
               },
             ),
           ),
-//          SliverToBoxAdapter(
-//            child: Column(
-//              children: <Widget>[
-//                HeaderWidget(),
-//                RoutineInspectionStatisticsWidget(
-//                  metaList: [
-//                    Meta(
-//                      title: '待巡检任务数',
-//                      imagePath: 'assets/images/button_bg_blue.png',
-//                      content: '52*',
-//                    ),
-//                    Meta(
-//                      title: '超期任务数',
-//                      imagePath: 'assets/images/button_bg_green.png',
-//                      content: '13*',
-//                    ),
-//                    Meta(
-//                      title: '已巡检任务数',
-//                      imagePath: 'assets/images/button_bg_pink.png',
-//                      content: '25*',
-//                    ),
-//                  ],
-//                ),
-//                PollutionEnterStatisticsWidget(
-//                  metaList: [
-//                    Meta(
-//                      title: '企业总数',
-//                      imagePath: 'assets/images/icon_pollution_all_enter.png',
-//                      color: Color.fromRGBO(77, 167, 248, 1),
-//                      content: '245*',
-//                    ),
-//                    Meta(
-//                      title: '重点企业',
-//                      imagePath: 'assets/images/icon_pollution_point_enter.png',
-//                      color: Color.fromRGBO(241, 190, 67, 1),
-//                      content: '125*',
-//                    ),
-//                    Meta(
-//                      title: '在线企业',
-//                      imagePath:
-//                          'assets/images/icon_pollution_online_enter.png',
-//                      color: Color.fromRGBO(136, 191, 89, 1),
-//                      content: '223*',
-//                    ),
-//                    Meta(
-//                      title: '废水企业',
-//                      imagePath: 'assets/images/icon_pollution_water_enter.png',
-//                      color: Color.fromRGBO(0, 188, 212, 1),
-//                      content: '45*',
-//                    ),
-//                    Meta(
-//                      title: '废气企业',
-//                      imagePath: 'assets/images/icon_pollution_air_enter.png',
-//                      color: Color.fromRGBO(255, 87, 34, 1),
-//                      content: '65*',
-//                    ),
-//                    Meta(
-//                      title: '水气企业',
-//                      imagePath: 'assets/images/icon_pollution_air_water.png',
-//                      color: Color.fromRGBO(137, 137, 137, 1),
-//                      content: '63*',
-//                    ),
-//                    Meta(
-//                      title: '废水排口',
-//                      imagePath:
-//                          'assets/images/icon_pollution_water_outlet.png',
-//                      color: Color.fromRGBO(63, 81, 181, 1),
-//                      content: '42*',
-//                    ),
-//                    Meta(
-//                      title: '废气排口',
-//                      imagePath: 'assets/images/icon_pollution_air_outlet.png',
-//                      color: Color.fromRGBO(233, 30, 99, 1),
-//                      content: '63*',
-//                    ),
-//                    Meta(
-//                      title: '许可证企业',
-//                      imagePath:
-//                          'assets/images/icon_pollution_licence_enter.png',
-//                      color: Color.fromRGBO(179, 129, 127, 1),
-//                      content: '0*',
-//                    ),
-//                  ],
-//                ),
-//                OnlineMonitorStatisticsWidget(metaList: [
-//                  Meta(
-//                    title: '全部',
-//                    imagePath: 'assets/images/icon_monitor_all.png',
-//                    color: Color.fromRGBO(77, 167, 248, 1),
-//                    content: '12*',
-//                  ),
-//                  Meta(
-//                    title: '在线',
-//                    imagePath: 'assets/images/icon_monitor_online.png',
-//                    color: Color.fromRGBO(136, 191, 89, 1),
-//                    content: '11*',
-//                  ),
-//                  Meta(
-//                    title: '预警',
-//                    imagePath: 'assets/images/icon_monitor_alarm.png',
-//                    color: Color.fromRGBO(241, 190, 67, 1),
-//                    content: '0*',
-//                  ),
-//                  Meta(
-//                    title: '超标',
-//                    imagePath: 'assets/images/icon_monitor_over.png',
-//                    color: Color.fromRGBO(233, 119, 111, 1),
-//                    content: '0*',
-//                  ),
-//                  Meta(
-//                    title: '脱机',
-//                    imagePath: 'assets/images/icon_monitor_offline.png',
-//                    color: Color.fromRGBO(179, 129, 127, 1),
-//                    content: '0*',
-//                  ),
-//                  Meta(
-//                    title: '异常',
-//                    imagePath: 'assets/images/icon_monitor_stop.png',
-//                    color: Color.fromRGBO(137, 137, 137, 1),
-//                    content: '1*',
-//                  ),
-//                ]),
-//                OrderStatisticsWidget(
-//                  metaList: [
-//                    Meta(
-//                      title: '待处理数',
-//                      imagePath: 'assets/images/button_image2.png',
-//                      backgroundPath: 'assets/images/button_bg_lightblue.png',
-//                      content: '52*',
-//                    ),
-//                    Meta(
-//                      title: '超期待办数',
-//                      imagePath: 'assets/images/button_image1.png',
-//                      backgroundPath: 'assets/images/button_bg_green.png',
-//                      content: '13*',
-//                    ),
-//                    Meta(
-//                      title: '已退回数',
-//                      imagePath: 'assets/images/button_image4.png',
-//                      backgroundPath: 'assets/images/button_bg_pink.png',
-//                      content: '25*',
-//                    ),
-//                  ],
-//                ),
-//              ],
-//            ),
-//          ),
         ],
         onRefresh: () async {
           _indexBloc.add(Load());
-          //await Future.delayed(Duration(seconds: 2));
           return _refreshCompleter.future;
         },
       ),

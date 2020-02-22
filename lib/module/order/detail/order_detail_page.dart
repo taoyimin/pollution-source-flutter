@@ -105,14 +105,17 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
+              String districtName = '';
               if (state is DetailLoaded) {
                 enterName = state.detail.enterName;
                 enterAddress = state.detail.enterAddress;
+                districtName = state.detail.districtName;
               }
               return DetailHeaderWidget(
                 title: '报警管理单详情',
-                subTitle1: '$enterName',
-                subTitle2: '$enterAddress',
+                subTitle1: '$districtName',
+                subTitle2: '$enterName',
+                subTitle3: '$enterAddress',
                 imagePath: 'assets/images/order_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_blue.png',
                 color: Colours.background_blue,
@@ -225,22 +228,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控名称：${orderDetail.monitorName ?? ''}',
-                      icon: Icons.linked_camera,
-                      flex: 1,
-                    ),
-                    Gaps.hGap20,
-                    IconBaseInfoWidget(
-                      content: '区域：${orderDetail.districtName ?? ''}',
-                      icon: Icons.location_on,
-                      flex: 1,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
                       content: '报警时间：${orderDetail.alarmDateStr ?? ''}',
                       icon: Icons.date_range,
                       flex: 1,
@@ -250,6 +237,15 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                       content: '状态：${orderDetail.orderStateStr ?? ''}',
                       icon: Icons.assignment_late,
                       flex: 1,
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
+                      content: '监控名称：${orderDetail.monitorName ?? ''}',
+                      icon: Icons.linked_camera,
                     ),
                   ],
                 ),

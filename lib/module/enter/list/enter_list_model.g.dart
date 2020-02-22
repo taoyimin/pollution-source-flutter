@@ -10,7 +10,7 @@ Enter _$EnterFromJson(Map<String, dynamic> json) {
   return Enter(
       enterId: json['enterId'] as int,
       enterName: json['enterpriseName'] as String,
-      enterAddress: json['envirLinkAddress'] as String,
+      enterAddress: json['entAddress'] as String,
       attentionLevel: json['attentionLevel'] as String,
       industryTypeStr: json['industryTypeStr'] as String,
       enterType: json['enterpriseType'] as String);
@@ -19,7 +19,7 @@ Enter _$EnterFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$EnterToJson(Enter instance) => <String, dynamic>{
       'enterId': instance.enterId,
       'enterpriseName': instance.enterName,
-      'envirLinkAddress': instance.enterAddress,
+      'entAddress': instance.enterAddress,
       'attentionLevel': instance.attentionLevel,
       'industryTypeStr': instance.industryTypeStr,
       'enterpriseType': instance.enterType

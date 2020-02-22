@@ -12,7 +12,8 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
       enterName: json['enterpriseName'] as String,
       monitorName: json['disMonitorName'] as String,
       alarmDateStr: json['alarmDate'] as String,
-      districtName: json['areaName'] as String,
+      cityName: json['cityName'] as String,
+      areaName: json['areaName'] as String,
       orderStateStr: json['orderStateStr'] as String,
       alarmRemark: json['alarmDesc'] as String,
       alarmTypeStr: json['alarmTypeStr'] as String);
@@ -23,7 +24,8 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'enterpriseName': instance.enterName,
       'disMonitorName': instance.monitorName,
       'alarmDate': instance.alarmDateStr,
-      'areaName': instance.districtName,
+      'cityName': instance.cityName,
+      'areaName': instance.areaName,
       'orderStateStr': instance.orderStateStr,
       'alarmDesc': instance.alarmRemark,
       'alarmTypeStr': instance.alarmTypeStr
