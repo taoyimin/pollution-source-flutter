@@ -6,6 +6,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
@@ -103,7 +104,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
+                    padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -204,13 +205,13 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
                 else if (state is ListError) subtitle2 = '数据加载错误';
-                return ListHeaderWidget2(
+                return ListHeaderWidget(
                   title: '常规巡检列表',
                   subtitle: '展示常规巡检列表，点击列表项查看该常规巡检的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_green.png',
                   image: 'assets/images/routine_inspection_list_bg_image.png',
-                  color: Color(0xFF29D0BF),
+                  color: Colours.background_green,
                   onSearchTap: () {
                     _scaffoldKey.currentState.openEndDrawer();
                   },
@@ -307,7 +308,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
         (BuildContext context, int index) {
           //创建列表项
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
                 Application.router.navigateTo(context,
@@ -322,37 +323,65 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                       UIUtils.getBoxShadow(),
                     ],
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Row(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Text(
-                          '${routineInspectionList[index].enterName}',
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      Gaps.vGap6,
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '排口名称：${routineInspectionList[index].dischargeName}'),
+                          Row(
+                            children: <Widget>[
+                              Image.asset(
+                                'assets/images/icon_bulb.png',
+                                width: 16,
+                                height: 16,
+                              ),
+                              Gaps.hGap4,
+                              const Text(
+                                '任务数',
+                                style: TextStyle(
+                                  color: Colours.background_green,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '监控点名：${routineInspectionList[index].monitorName}'),
+                          Gaps.vGap4,
+                          Text(
+                            '${routineInspectionList[index].taskCount}',
+                            style: const TextStyle(
+                              color: Colours.background_green,
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
-                      Gaps.vGap6,
-                      ListTileWidget(
-                          '任务数：${routineInspectionList[index].taskCount}'),
+                      Gaps.hGap16,
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                '${routineInspectionList[index].enterName}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            Gaps.vGap6,
+                            ListTileWidget(
+                                '排口名称：${routineInspectionList[index].dischargeName}'),
+                            Gaps.vGap6,
+                            ListTileWidget(
+                                '监控点名：${routineInspectionList[index].monitorName}'),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

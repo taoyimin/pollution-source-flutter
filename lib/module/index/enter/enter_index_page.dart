@@ -535,7 +535,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                   meta: Meta(
                     title: '许可证编号',
                     content: '${enterDetail.licenseNumber}',
-                    color: Colors.pink,
+                    color: Colours.background_red,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
                   ),

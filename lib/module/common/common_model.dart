@@ -77,7 +77,10 @@ class Attachment extends Equatable {
 
   String get imagePath {
     if (fileName == null) return "assets/images/icon_attachment_other.png";
-    if (fileName.endsWith('.jpg') || fileName.endsWith('.png')) {
+    if (fileName.endsWith('.jpg') ||
+        fileName.endsWith('.png') ||
+        fileName.endsWith('.JPG') ||
+        fileName.endsWith('.PNG')) {
       return "assets/images/icon_attachment_image.png";
     } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
       return "assets/images/icon_attachment_doc.png";

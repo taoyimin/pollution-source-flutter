@@ -36,7 +36,7 @@ class MonitorTable extends Equatable {
     List<MonitorTableCell> fixedColCells =
         json['times'].map<MonitorTableCell>((time) {
       return MonitorTableCell(
-        value: DateUtil.formatDateMs(time, format: '  yyyy-MM-dd HH:mm:ss', isUtc: false),
+        value: DateUtil.formatDateMs(time, format: '  yyyy-MM-dd HH:mm'),
       );
     }).toList();
     List<List<MonitorTableCell>> rowsCells =

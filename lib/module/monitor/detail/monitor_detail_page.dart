@@ -88,6 +88,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/monitor_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_red.png',
+                color: Colours.background_red,
                 popupMenuButton: popupMenuButton,
               );
             },

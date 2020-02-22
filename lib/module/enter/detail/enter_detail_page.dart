@@ -9,6 +9,7 @@ import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
@@ -65,6 +66,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/enter_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_lightblue.png',
+                color: Colours.background_light_blue,
               );
             },
           ),
@@ -441,7 +443,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   meta: Meta(
                     title: '许可证编号',
                     content: '${enterDetail.licenseNumber ?? ''}',
-                    color: Colors.pink,
+                    color: Colours.background_red,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
                   ),

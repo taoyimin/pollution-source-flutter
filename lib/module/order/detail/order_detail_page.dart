@@ -115,6 +115,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/order_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_blue.png',
+                color: Colours.background_blue,
               );
             },
           ),

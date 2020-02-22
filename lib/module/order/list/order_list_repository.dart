@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/order/list/order_list_model.dart';
@@ -53,8 +54,10 @@ class OrderListRepository extends ListRepository<Order> {
       'alarmLevel': alarmLevel,
       'attentionLevel': attentionLevel,
       'alarmType': alarmType,
-      'startTime': startTime.toString(),
-      'endTime': endTime.toString(),
+      'alarmBeginTime': DateUtil.getDateStrByDateTime(startTime,
+          format: DateFormat.YEAR_MONTH_DAY) ?? '',
+      'alarmEndTime': DateUtil.getDateStrByDateTime(endTime,
+          format: DateFormat.YEAR_MONTH_DAY) ?? '',
       'orderState': () {
         switch (state) {
           case '1':

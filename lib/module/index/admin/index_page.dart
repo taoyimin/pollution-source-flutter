@@ -814,7 +814,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 meta: metaList[0],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=0');
+                      .navigateTo(context, '${Routes.monitorList}');
                 },
               ),
               VerticalDividerWidget(height: 40),

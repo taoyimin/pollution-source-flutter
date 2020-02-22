@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
@@ -210,13 +211,13 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
                 else if (state is ListError) subtitle2 = '数据加载错误';
-                return ListHeaderWidget2(
+                return ListHeaderWidget(
                   title: '因子异常申报列表',
                   subtitle: '展示因子异常申报列表，点击列表项查看该因子异常申报的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_pink.png',
                   image: 'assets/images/report_list_bg_image.png',
-                  color: Colors.pink,
+                  color: Colours.background_pink,
                   onSearchTap: (){
                     _scaffoldKey.currentState.openEndDrawer();
                   },

@@ -6,6 +6,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
@@ -267,13 +268,13 @@ class _EnterListPageState extends State<EnterListPage>
                 else if (state is ListEmpty)
                   subtitle2 = '共0条数据';
                 else if (state is ListError) subtitle2 = '数据加载错误';
-                return ListHeaderWidget2(
+                return ListHeaderWidget(
                   title: '企业列表',
                   subtitle: '展示污染源企业列表，点击列表项查看该企业的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_lightblue.png',
                   image: 'assets/images/enter_list_bg_image.png',
-                  color: Colors.blue,
+                  color: Colours.background_light_blue,
                   automaticallyImplyLeading: widget.automaticallyImplyLeading,
                   onSearchTap: () {
                     _scaffoldKey.currentState.openEndDrawer();

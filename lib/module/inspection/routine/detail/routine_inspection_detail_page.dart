@@ -18,6 +18,7 @@ import 'package:pollution_source/module/inspection/inspect/upload/device_inspect
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_model.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 
 /// 常规巡检详情页
@@ -91,8 +92,9 @@ class _RoutineInspectionDetailPageState
                 }
               },
               child: SliverAppBar(
-                title: Text('常规巡检详情'),
+                title: const Text('常规巡检详情'),
                 expandedHeight: 170.0,
+                backgroundColor: Colours.background_light_blue,
                 flexibleSpace: BlocBuilder<DetailBloc, DetailState>(
                   builder: (context, state) {
                     if (state is DetailLoaded) {
@@ -169,7 +171,9 @@ class _RoutineInspectionDetailPageState
                                           Gaps.vGap10,
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 3),
+                                              horizontal: 10,
+                                              vertical: 3,
+                                            ),
                                             decoration: const BoxDecoration(
                                               color: Colors.white,
                                             ),
@@ -179,7 +183,7 @@ class _RoutineInspectionDetailPageState
                                                   : '没有巡检项目',
                                               style: const TextStyle(
                                                 fontSize: 10,
-                                                color: Colors.lightBlue,
+                                                color: Colours.background_light_blue,
                                               ),
                                             ),
                                           ),
@@ -224,7 +228,8 @@ class _RoutineInspectionDetailPageState
                           if (state is DetailLoaded) {
                             return TabBar(
                               labelColor: Colors.cyanAccent,
-                              unselectedLabelColor: Colors.white.withOpacity(0.7),
+                              unselectedLabelColor:
+                                  Colors.white.withOpacity(0.7),
                               isScrollable: true,
                               indicatorColor: Colors.cyanAccent,
                               controller: _tabController,

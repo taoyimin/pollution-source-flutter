@@ -7,6 +7,7 @@ import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/report/longstop/detail/long_stop_report_detail_model.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -58,6 +59,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 subTitle2: '$enterAddress',
                 imagePath: 'assets/images/report_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_lightblue.png',
+                color: Colours.background_light_blue,
               );
             },
           ),
