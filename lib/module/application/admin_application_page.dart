@@ -243,6 +243,66 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                           ],
                         ),
                       ),
+                      //异常申报上报
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ImageTitleWidget(
+                                title: '异常申报上报',
+                                imagePath:
+                                'assets/images/icon_alarm_manage.png'),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '排口异常',
+                                      content: '排口异常上报',
+                                      imagePath:
+                                      'assets/images/application_icon_discharge_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(context,
+                                        '${Routes.dischargeReportUpload}');
+                                  },
+                                ),
+                                Gaps.hGap20,
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '因子异常',
+                                      content: '因子异常上报',
+                                      imagePath:
+                                      'assets/images/application_icon_factor_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(context,
+                                        '${Routes.factorReportUpload}');
+                                  },
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                      title: '长期停产',
+                                      content: '长期停产上报',
+                                      imagePath:
+                                      'assets/images/application_icon_longStop_report.png'),
+                                  onTap: () {
+                                    Application.router.navigateTo(context,
+                                        '${Routes.longStopReportUpload}');
+                                  },
+                                ),
+                                Gaps.hGap20,
+                                Expanded(child: Gaps.empty),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

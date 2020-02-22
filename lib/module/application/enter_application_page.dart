@@ -287,23 +287,6 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                 ),
                               ],
                             ),
-                            Row(
-                              children: <Widget>[
-                                InkWellButton9(
-                                  meta: Meta(
-                                      title: '长期停产',
-                                      content: '长期停产上报',
-                                      imagePath:
-                                          'assets/images/application_icon_longStop_report.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(context,
-                                        '${Routes.longStopReportUpload}?enterId=${widget.enterId}');
-                                  },
-                                ),
-                                Gaps.hGap20,
-                                Expanded(child: Gaps.empty),
-                              ],
-                            ),
                           ],
                         ),
                       ),
