@@ -148,7 +148,6 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                             model: DischargeReportUpload(
                               enter: enter,
                               stopType: reportUpload?.stopType,
-                              reportTime: reportUpload?.reportTime,
                               startTime: reportUpload?.startTime,
                               endTime: reportUpload?.endTime,
                               attachments: reportUpload?.attachments,
@@ -160,46 +159,6 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   ),
                 ),
                 widget.enterId != null ? Gaps.empty : Gaps.hLine,
-//                SelectRowWidget(
-//                  title: '排口名称',
-//                  content: reportUpload?.discharge?.dischargeName,
-//                  onTap: () async {
-//                    if (reportUpload?.enter == null) {
-//                      Scaffold.of(context).showSnackBar(
-//                        SnackBar(
-//                          content: const Text('请先选择企业！'),
-//                          action: SnackBarAction(
-//                              label: '我知道了',
-//                              textColor: Colours.primary_color,
-//                              onPressed: () {}),
-//                        ),
-//                      );
-//                    } else {
-//                      // 打开排口选择界面并等待结果返回
-//                      Discharge discharge = await Application.router.navigateTo(
-//                          context,
-//                          '${Routes.dischargeList}?enterId=${reportUpload?.enter?.enterId}&type=1');
-//                      if (discharge != null) {
-//                        // 设置已经选中的排口，重置已经选中的监控点
-//                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
-//                        _pageBloc.add(
-//                          PageLoad(
-//                            model: DischargeReportUpload(
-//                              enter: reportUpload?.enter,
-//                              discharge: discharge,
-//                              stopType: reportUpload?.stopType,
-//                              reportTime: reportUpload?.reportTime,
-//                              startTime: reportUpload?.startTime,
-//                              endTime: reportUpload?.endTime,
-//                              attachments: reportUpload?.attachments,
-//                            ),
-//                          ),
-//                        );
-//                      }
-//                    }
-//                  },
-//                ),
-//                Gaps.hLine,
                 SelectRowWidget(
                   title: '监控点名',
                   content: reportUpload?.monitor?.monitorName,
@@ -242,27 +201,6 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       PageLoad(
                         model: reportUpload.copyWith(stopType: result),
                       ),
-                    );
-                  },
-                ),
-                Gaps.hLine,
-                SelectRowWidget(
-                  title: '申报时间',
-                  content: DateUtil.formatDate(reportUpload?.reportTime,
-                      format: 'yyyy-MM-dd'),
-                  onTap: () {
-                    DatePicker.showDatePicker(
-                      context,
-                      dateFormat: 'yyyy年-MM月-dd日',
-                      locale: DateTimePickerLocale.zh_cn,
-                      onClose: () {},
-                      onConfirm: (dateTime, selectedIndex) {
-                        _pageBloc.add(
-                          PageLoad(
-                            model: reportUpload.copyWith(reportTime: dateTime),
-                          ),
-                        );
-                      },
                     );
                   },
                 ),

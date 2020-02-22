@@ -171,48 +171,6 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   ),
                 ),
                 widget.enterId != null ? Gaps.empty : Gaps.hLine,
-//                SelectRowWidget(
-//                  title: '排口名称',
-//                  content: reportUpload?.discharge?.dischargeName,
-//                  onTap: () async {
-//                    if (reportUpload?.enter == null) {
-//                      Scaffold.of(context).showSnackBar(
-//                        SnackBar(
-//                          content: const Text('请先选择企业！'),
-//                          action: SnackBarAction(
-//                              label: '我知道了',
-//                              textColor: Colours.primary_color,
-//                              onPressed: () {}),
-//                        ),
-//                      );
-//                    } else {
-//                      // 打开排口选择界面并等待结果返回
-//                      Discharge discharge = await Application.router.navigateTo(
-//                          context,
-//                          '${Routes.dischargeList}?enterId=${reportUpload?.enter?.enterId}&type=1');
-//                      if (discharge != null) {
-//                        // 设置已经选中的排口，重置已经选中的监控点，和异常因子
-//                        // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
-//                        _pageBloc.add(
-//                          PageLoad(
-//                            model: FactorReportUpload(
-//                              enter: reportUpload?.enter,
-//                              discharge: discharge,
-//                              alarmType: reportUpload?.alarmType,
-//                              startTime: reportUpload?.startTime,
-//                              endTime: reportUpload?.endTime,
-//                              factorCode: List<DataDict>(),
-//                              attachments: reportUpload?.attachments,
-//                            ),
-//                          ),
-//                        );
-//                        // 将异常因子选择控件的状态重置为初始状态
-//                        _factorCodeBloc.add(DataDictReset());
-//                      }
-//                    }
-//                  },
-//                ),
-//                Gaps.hLine,
                 SelectRowWidget(
                   title: '监控点名',
                   content: reportUpload?.monitor?.monitorName,

@@ -7,9 +7,7 @@ import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 //异常申报单详情
 class DischargeReportUpload extends Equatable {
   final Enter enter; //企业
-  //final Discharge discharge; //排口
   final Monitor monitor; //监控点
-  final DateTime reportTime; //申报时间
   final DateTime startTime; //开始时间
   final DateTime endTime; //结束时间
   final DataDict stopType; //异常类型
@@ -18,9 +16,7 @@ class DischargeReportUpload extends Equatable {
 
   const DischargeReportUpload({
     this.enter,
-    //this.discharge,
     this.monitor,
-    this.reportTime,
     this.startTime,
     this.endTime,
     this.stopType,
@@ -31,9 +27,7 @@ class DischargeReportUpload extends Equatable {
   @override
   List<Object> get props => [
         enter,
-        //discharge,
         monitor,
-        reportTime,
         startTime,
         endTime,
         stopType,
@@ -43,7 +37,6 @@ class DischargeReportUpload extends Equatable {
 
   DischargeReportUpload copyWith({
     Enter enter,
-    //Discharge discharge,
     Monitor monitor,
     DateTime reportTime,
     DateTime startTime,
@@ -54,9 +47,7 @@ class DischargeReportUpload extends Equatable {
   }) {
     return DischargeReportUpload(
       enter: enter ?? this.enter,
-      //discharge: discharge ?? this.discharge,
       monitor: monitor ?? this.monitor,
-      reportTime: reportTime ?? this.reportTime,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       stopType: stopType ?? this.stopType,

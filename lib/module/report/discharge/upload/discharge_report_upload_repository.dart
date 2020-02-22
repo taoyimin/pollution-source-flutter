@@ -21,8 +21,6 @@ class DischargeReportUploadRepository
     }
     if (data.stopType == null)
       throw DioError(error: InvalidParamException('请选择停产类型'));
-    if (data.reportTime == null)
-      throw DioError(error: InvalidParamException('请选择申报时间'));
     if (data.startTime == null)
       throw DioError(error: InvalidParamException('请选择开始时间'));
     if (data.endTime == null)
