@@ -29,7 +29,7 @@ class MonitorHistoryDataRepository extends DetailRepository<MonitorTable> {
     }
     if (endTime == null) {
       endTime = DateTime(
-          nowDateTime.year, nowDateTime.month, nowDateTime.day, 0, 0, 0);
+          nowDateTime.year, nowDateTime.month, nowDateTime.day, 23, 59, 59);
     }
     Duration duration = endTime.difference(startTime);
     if (duration.inMilliseconds < 0) {
@@ -81,15 +81,9 @@ class MonitorHistoryDataRepository extends DetailRepository<MonitorTable> {
       'startTime':
           DateUtil.getDateStrByDateTime(startTime, format: DateFormat.NORMAL) ??
               '',
-      // 结束时间加上23小时59分59秒
-      'endTime': DateUtil.getDateStrByDateTime(
-              endTime?.add(Duration(
-                hours: 23,
-                minutes: 59,
-                seconds: 59,
-              )),
-              format: DateFormat.NORMAL) ??
-          '',
+      'endTime':
+          DateUtil.getDateStrByDateTime(endTime, format: DateFormat.NORMAL) ??
+              '',
     };
   }
 }

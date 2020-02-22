@@ -29,14 +29,14 @@ class _MonitorTableState extends State<MonitorTablePage> {
   /// 每页数据条数
   final int pageSize = 30;
 
-  /// 每页数据条数
+  /// 当前页数
   int currentPage = 0;
   List<dynamic> _dropDownHeaderItem = [
     '实时数据',
     DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0),
-    DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 23, 59, 59),
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 23,
+        59, 59),
   ];
   List<SortCondition> _dataTypeConditions = [];
   SortCondition _selectBrandSortCondition;
@@ -132,6 +132,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                         _dropDownHeaderItem[1] = dateTime;
                         if (_dropDownHeaderItem[2] != null) {
                           try {
+                            currentPage = 0;
                             _detailBloc.add(DetailLoad(
                               params: MonitorHistoryDataRepository.createParams(
                                 monitorId: widget.monitorId,
@@ -167,9 +168,15 @@ class _MonitorTableState extends State<MonitorTablePage> {
                         _dropdownMenuController.hide();
                       },
                       onConfirm: (dateTime, selectedIndex) {
-                        _dropDownHeaderItem[2] = dateTime;
+                        // 结束时间默认加上23小时59分59秒
+                        _dropDownHeaderItem[2] = dateTime.add(Duration(
+                          hours: 23,
+                          minutes: 59,
+                          seconds: 59,
+                        ));
                         if (_dropDownHeaderItem[1] != null) {
                           try {
+                            currentPage = 0;
                             _detailBloc.add(DetailLoad(
                               params: MonitorHistoryDataRepository.createParams(
                                 monitorId: widget.monitorId,
@@ -246,38 +253,42 @@ class _MonitorTableState extends State<MonitorTablePage> {
                   if (state is DetailLoaded) {
                     int pages =
                         (state.detail.fixedColCells.length / pageSize).ceil();
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(pages, (index) {
-                          return InkWellButton(
-                            onTap: () {
-                              setState(() {
-                                currentPage = index;
-                              });
-                            },
-                            children: <Widget>[
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  color: index == currentPage
-                                      ? Colours.primary_color.withOpacity(0.3)
-                                      : Colors.white,
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: Colours.divider_color,
+                    if(pages > 1) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(pages, (index) {
+                            return InkWellButton(
+                              onTap: () {
+                                setState(() {
+                                  currentPage = index;
+                                });
+                              },
+                              children: <Widget>[
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: index == currentPage
+                                        ? Colours.primary_color.withOpacity(0.3)
+                                        : Colors.white,
+                                    border: Border.all(
+                                      width: 0.5,
+                                      color: Colours.divider_color,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text('${index + 1}'),
                                   ),
                                 ),
-                                child: Center(
-                                  child: Text('${index + 1}'),
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    );
+                              ],
+                            );
+                          }),
+                        ),
+                      );
+                    }else{
+                      return Gaps.empty;
+                    }
                   } else {
                     return Gaps.empty;
                   }
@@ -303,6 +314,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                     _dropdownMenuController.hide();
                     setState(() {});
                     try {
+                      currentPage = 0;
                       _detailBloc.add(DetailLoad(
                         params: MonitorHistoryDataRepository.createParams(
                           monitorId: widget.monitorId,
