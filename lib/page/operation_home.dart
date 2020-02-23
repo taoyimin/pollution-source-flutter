@@ -4,7 +4,8 @@ import 'package:pollution_source/module/application/operation_application_page.d
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
-import 'package:pollution_source/module/index/operation/operation_index.dart';
+import 'package:pollution_source/module/index/operation/operation_index_bloc.dart';
+import 'package:pollution_source/module/index/operation/operation_index_page.dart';
 
 import 'mine.dart';
 
@@ -20,7 +21,10 @@ class _OperationHomePageState extends State<OperationHomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    OperationIndexPage(),
+    BlocProvider<IndexBloc>(
+      create: (BuildContext context) => IndexBloc(),
+      child: OperationIndexPage(),
+    ),
     OperationApplicationPage(),
     BlocProvider<ListBloc>(
       create: (BuildContext context) =>
