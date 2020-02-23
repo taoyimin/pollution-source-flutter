@@ -83,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       //登录成功
       SpUtil.putInt(Constant.spUserType, _userType);
+      SpUtil.putString(Constant.spRealName, CompatUtils.getResponseRealName(response));
       SpUtil.putString(Constant.spUsernameList[_userType], _nameController.text);
       SpUtil.putString(Constant.spPasswordList[_userType], _passwordController.text);
       SpUtil.putString(

@@ -20,8 +20,7 @@ class LoginRepository {
         dio = Dio(CompatUtils.getDio().options);
         // 加上异常处理和日志拦截器
         dio.interceptors.add(HandleErrorInterceptor());
-        if (!Constant.inProduction)
-          dio.interceptors.add(LoggingInterceptor());
+        if (!Constant.inProduction) dio.interceptors.add(LoggingInterceptor());
       }
       dio.options.headers = {
         Constant.requestHeaderAuthorizationKey:
@@ -46,16 +45,17 @@ class LoginRepository {
       case 1:
         //环保和企业用户
         if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
+            defValue: Constant.defaultUseJavaApi)) {
           return FormData.fromMap({
             'userName': userName,
             'password': passWord,
           });
-        else
+        } else {
           return FormData.fromMap({
             'userName': userName,
             'passWord': passWord,
           });
+        }
         break;
       case 2:
         //运维用户账号密码放在header中，isEncryption为false表示登录不需要加密解密

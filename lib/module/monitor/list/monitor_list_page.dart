@@ -111,117 +111,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Container(
-        width: MediaQuery.of(context).size.width * 0.75,
-        child: Drawer(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
-                          '企业名称',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Gaps.vGap10,
-                        Container(
-                          height: 36,
-                          child: TextField(
-                            controller: _enterNameController,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: const InputDecoration(
-                              fillColor: Colours.grey_color,
-                              filled: true,
-                              hintText: "请输入企业名称",
-                              hintStyle: TextStyle(
-                                color: Colours.secondary_text,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        Gaps.vGap30,
-                        const Text(
-                          '监控点类型',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictGrid(
-                          checkIndex: monitorTypeIndex,
-                          dataDictList: monitorTypeList,
-                          onItemTap: (index) {
-                            setState(() {
-                              monitorTypeIndex = index;
-                            });
-                          },
-                        ),
-                        const Text(
-                          '监控点状态',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictGrid(
-                          checkIndex: stateIndex,
-                          dataDictList: stateList,
-                          onItemTap: (index) {
-                            setState(() {
-                              stateIndex = index;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                child: Row(
-                  children: <Widget>[
-                    ClipButton(
-                      text: '重置',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.refresh,
-                      color: Colors.orange,
-                      onTap: () {
-                        setState(() {
-                          initParam();
-                        });
-                      },
-                    ),
-                    Gaps.hGap10,
-                    ClipButton(
-                      text: '搜索',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.search,
-                      color: Colors.lightBlue,
-                      onTap: () {
-                        Navigator.pop(context);
-                        _refreshController.callRefresh();
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+      endDrawer: _buildEndDrawer(),
       body: extended.NestedScrollView(
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
@@ -409,12 +299,12 @@ class _MonitorListPageState extends State<MonitorListPage> {
                                 Expanded(
                                   flex: 1,
                                   child: ListTileWidget(
-                                      '监控点名称：${monitorList[index].monitorName}'),
+                                      '站点名称：${monitorList[index].monitorName}'),
                                 ),
                                 Expanded(
                                   flex: 1,
                                   child: ListTileWidget(
-                                      '监控点类别：${monitorList[index].monitorCategoryStr}'),
+                                      '监测类别：${monitorList[index].monitorCategoryStr}'),
                                 ),
                               ],
                             ),
@@ -432,6 +322,120 @@ class _MonitorListPageState extends State<MonitorListPage> {
           );
         },
         childCount: monitorList.length,
+      ),
+    );
+  }
+
+  Widget _buildEndDrawer(){
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Drawer(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        '企业名称',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gaps.vGap10,
+                      Container(
+                        height: 36,
+                        child: TextField(
+                          controller: _enterNameController,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: const InputDecoration(
+                            fillColor: Colours.grey_color,
+                            filled: true,
+                            hintText: "请输入企业名称",
+                            hintStyle: TextStyle(
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      Gaps.vGap30,
+                      const Text(
+                        '监控点类型',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictGrid(
+                        checkIndex: monitorTypeIndex,
+                        dataDictList: monitorTypeList,
+                        onItemTap: (index) {
+                          setState(() {
+                            monitorTypeIndex = index;
+                          });
+                        },
+                      ),
+                      const Text(
+                        '监控点状态',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictGrid(
+                        checkIndex: stateIndex,
+                        dataDictList: stateList,
+                        onItemTap: (index) {
+                          setState(() {
+                            stateIndex = index;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+              child: Row(
+                children: <Widget>[
+                  ClipButton(
+                    text: '重置',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.refresh,
+                    color: Colors.orange,
+                    onTap: () {
+                      setState(() {
+                        initParam();
+                      });
+                    },
+                  ),
+                  Gaps.hGap10,
+                  ClipButton(
+                    text: '搜索',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.search,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      Navigator.pop(context);
+                      _refreshController.callRefresh();
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

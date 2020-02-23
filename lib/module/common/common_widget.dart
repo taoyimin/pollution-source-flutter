@@ -126,8 +126,8 @@ class EmptySliver extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 60),
               child: Text(
                 '$message',
-                style:
-                    const TextStyle(fontSize: 16.0, color: Colours.secondary_text),
+                style: const TextStyle(
+                    fontSize: 16.0, color: Colours.secondary_text),
               ),
             ),
           ],
@@ -160,7 +160,8 @@ class EmptyWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Text(
               '$message',
-              style: const TextStyle(fontSize: 16.0, color: Colours.secondary_text),
+              style: const TextStyle(
+                  fontSize: 16.0, color: Colours.secondary_text),
             ),
           ),
         ],
@@ -194,10 +195,11 @@ class ErrorSliver extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 60),
               child: Text(
                 '$errorMessage',
-                style:
-                    const TextStyle(fontSize: 16.0, color: Colours.secondary_text),
+                style: const TextStyle(
+                    fontSize: 16.0, color: Colours.secondary_text),
               ),
             ),
+            Gaps.vGap30,
           ],
         ),
       ),
@@ -229,9 +231,11 @@ class ErrorMessageWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Text(
               '$errorMessage',
-              style: const TextStyle(fontSize: 16.0, color: Colours.secondary_text),
+              style: const TextStyle(
+                  fontSize: 16.0, color: Colours.secondary_text),
             ),
           ),
+          Gaps.vGap30,
         ],
       ),
     );
@@ -262,7 +266,8 @@ class MessageWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Text(
               '$message',
-              style: const TextStyle(fontSize: 16.0, color: Colours.secondary_text),
+              style: const TextStyle(
+                  fontSize: 16.0, color: Colours.secondary_text),
             ),
           ),
         ],
@@ -910,7 +915,7 @@ class InkWellButton9 extends StatelessWidget {
   }
 }
 
-//list展示信息 展示标题下方的信息
+//list展示信息(单行)
 class ListTileWidget extends StatelessWidget {
   final String content;
 
@@ -922,10 +927,34 @@ class ListTileWidget extends StatelessWidget {
       content,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colours.secondary_text,
         fontSize: 12,
       ),
+    );
+  }
+}
+
+//list展示信息(多行)
+class ListTileMultiRowWidget extends StatelessWidget {
+  final String content;
+
+  ListTileMultiRowWidget(this.content);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            content,
+            style: const TextStyle(
+              color: Colours.secondary_text,
+              fontSize: 12,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

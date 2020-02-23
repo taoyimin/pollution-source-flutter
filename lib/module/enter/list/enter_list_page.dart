@@ -125,133 +125,7 @@ class _EnterListPageState extends State<EnterListPage>
     super.build(context);
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Container(
-        width: MediaQuery.of(context).size.width * 0.75,
-        child: Drawer(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding:const EdgeInsets.fromLTRB(16, 56, 16, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
-                          '企业名称',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Gaps.vGap10,
-                        Container(
-                          height: 36,
-                          child: TextField(
-                            controller: _enterNameController,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: const InputDecoration(
-                              fillColor: Colours.grey_color,
-                              filled: true,
-                              hintText: "请输入企业名称",
-                              hintStyle: TextStyle(
-                                color: Colours.secondary_text,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        Gaps.vGap30,
-                        const Text(
-                          '企业类型',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictGrid(
-                          checkIndex: enterTypeIndex,
-                          dataDictList: enterTypeList,
-                          onItemTap: (index) {
-                            setState(() {
-                              enterTypeIndex = index;
-                            });
-                          },
-                        ),
-                        const Text(
-                          '是否在线',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictGrid(
-                          checkIndex: stateIndex,
-                          dataDictList: stateList,
-                          onItemTap: (index) {
-                            setState(() {
-                              stateIndex = index;
-                            });
-                          },
-                        ),
-                        const Text(
-                          '关注程度',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictGrid(
-                          checkIndex: attentionLevelIndex,
-                          dataDictList: attentionLevelList,
-                          onItemTap: (index) {
-                            setState(() {
-                              attentionLevelIndex = index;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                child: Row(
-                  children: <Widget>[
-                    ClipButton(
-                      text: '重置',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.refresh,
-                      color: Colors.orange,
-                      onTap: () {
-                        setState(() {
-                          initParam();
-                        });
-                      },
-                    ),
-                    Gaps.hGap10,
-                    ClipButton(
-                      text: '搜索',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.search,
-                      color: Colors.lightBlue,
-                      onTap: () {
-                        Navigator.pop(context);
-                        _refreshController.callRefresh();
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+      endDrawer: _buildEndDrawer(),
       body: extended.NestedScrollView(
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
@@ -474,6 +348,136 @@ class _EnterListPageState extends State<EnterListPage>
           );
         },
         childCount: enterList.length,
+      ),
+    );
+  }
+
+  Widget _buildEndDrawer(){
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Drawer(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding:const EdgeInsets.fromLTRB(16, 56, 16, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        '企业名称',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gaps.vGap10,
+                      Container(
+                        height: 36,
+                        child: TextField(
+                          controller: _enterNameController,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: const InputDecoration(
+                            fillColor: Colours.grey_color,
+                            filled: true,
+                            hintText: "请输入企业名称",
+                            hintStyle: TextStyle(
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      Gaps.vGap30,
+                      const Text(
+                        '企业类型',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictGrid(
+                        checkIndex: enterTypeIndex,
+                        dataDictList: enterTypeList,
+                        onItemTap: (index) {
+                          setState(() {
+                            enterTypeIndex = index;
+                          });
+                        },
+                      ),
+                      const Text(
+                        '是否在线',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictGrid(
+                        checkIndex: stateIndex,
+                        dataDictList: stateList,
+                        onItemTap: (index) {
+                          setState(() {
+                            stateIndex = index;
+                          });
+                        },
+                      ),
+                      const Text(
+                        '关注程度',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictGrid(
+                        checkIndex: attentionLevelIndex,
+                        dataDictList: attentionLevelList,
+                        onItemTap: (index) {
+                          setState(() {
+                            attentionLevelIndex = index;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+              child: Row(
+                children: <Widget>[
+                  ClipButton(
+                    text: '重置',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.refresh,
+                    color: Colors.orange,
+                    onTap: () {
+                      setState(() {
+                        initParam();
+                      });
+                    },
+                  ),
+                  Gaps.hGap10,
+                  ClipButton(
+                    text: '搜索',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.search,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      Navigator.pop(context);
+                      _refreshController.callRefresh();
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
