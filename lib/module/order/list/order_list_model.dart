@@ -24,6 +24,8 @@ class Order extends Equatable {
   @JsonKey(name: 'alarmDesc')
   final String alarmRemark; // 报警描述
   final String alarmTypeStr; // 报警类型
+  final String alarmLevel; // 报警级别
+  final String superviseStatus; // 报警级别描述
 
   const Order({
     this.orderId,
@@ -35,6 +37,8 @@ class Order extends Equatable {
     this.orderStateStr,
     this.alarmRemark,
     this.alarmTypeStr,
+    this.alarmLevel,
+    this.superviseStatus,
   });
 
   @override
@@ -48,6 +52,8 @@ class Order extends Equatable {
         orderStateStr,
         alarmRemark,
         alarmTypeStr,
+        alarmLevel,
+        superviseStatus,
       ];
 
   List<Label> get labelList {

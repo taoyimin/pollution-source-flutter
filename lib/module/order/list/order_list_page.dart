@@ -27,6 +27,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/widget/label_widget.dart';
 
 /// 报警管理单列表界面
 class OrderListPage extends StatefulWidget {
@@ -329,7 +330,7 @@ class _OrderListPageState extends State<OrderListPage> {
                           Expanded(
                             flex: 1,
                             child: ListTileWidget(
-                                '区域：${orderList[index].districtName}'),
+                                '报警单状态：${orderList[index].orderStateStr}'),
                           ),
                         ],
                       ),
@@ -344,13 +345,33 @@ class _OrderListPageState extends State<OrderListPage> {
                           Expanded(
                             flex: 1,
                             child: ListTileWidget(
-                                '报警单状态：${orderList[index].orderStateStr}'),
+                                '所属区域：${orderList[index].districtName}'),
                           ),
                         ],
                       ),
                       Gaps.vGap6,
-                      ListTileWidget('报警描述：${orderList[index].alarmRemark}'),
+                      ListTileMultiRowWidget('报警描述：${orderList[index].alarmRemark}'),
                     ],
+                  ),
+                ),
+                Offstage(
+                  offstage: orderList[index].alarmLevel == null || orderList[index].alarmLevel == '0',
+                  child: LabelView(
+                    Size.fromHeight(80),
+                    labelText: '${orderList[index].superviseStatus}',
+                    labelColor: (){
+                      switch (orderList[index].alarmLevel){
+                        case '1':
+                          return Colors.amber;
+                        case '2':
+                          return Colors.deepOrangeAccent;
+                        case '3':
+                          return Colors.red;
+                        default:
+                          return Theme.of(context).primaryColor;
+                      }
+                    }(),
+                    labelAlignment: LabelAlignment.rightTop,
                   ),
                 ),
               ],
@@ -555,7 +576,7 @@ class _OrderListPageState extends State<OrderListPage> {
                       ),
                       Gaps.vGap10,
                       const Text(
-                        '工单级别',
+                        '报警级别',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
