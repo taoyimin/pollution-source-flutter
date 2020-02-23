@@ -20,6 +20,7 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 因子异常申报列表
 class FactorReportListPage extends StatefulWidget {
   final String enterId;
   final String dischargeId;
@@ -43,38 +44,26 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
-  final List<DataDict> validList = [
+  final List<DataDict> _validList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '生效中', code: '0'),
     DataDict(name: '已失效', code: '1'),
   ];
-  int validIndex;
+  int _validIndex;
+  int _currentPage = Constant.defaultCurrentPage;
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
-  String areaCode = '';
+  String _areaCode = '';
 
   @override
   void initState() {
     super.initState();
     initParam();
+    _refreshCompleter = Completer<void>();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    _refreshCompleter = Completer<void>();
     // 首次加载
-    _listBloc.add(ListLoad(
-      isRefresh: true,
-      params: FactorReportListRepository.createParams(
-        currentPage: Constant.defaultCurrentPage,
-        pageSize: Constant.defaultPageSize,
-        enterId: widget.enterId,
-        dischargeId: widget.dischargeId,
-        monitorId: widget.monitorId,
-        enterName: _enterNameController.text,
-        areaCode: areaCode,
-        state: widget.state,
-        valid: validList[validIndex].code,
-      ),
-    ));
+    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
   }
 
   @override
@@ -91,110 +80,31 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    validIndex = validList.indexWhere((dataDict) {
+    _validIndex = _validList.indexWhere((dataDict) {
       return dataDict.code == widget.valid;
     });
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return FactorReportListRepository.createParams(
+      currentPage: _currentPage,
+      pageSize: Constant.defaultPageSize,
+      enterId: widget.enterId,
+      dischargeId: widget.dischargeId,
+      monitorId: widget.monitorId,
+      enterName: _enterNameController.text,
+      areaCode: _areaCode,
+      state: widget.state,
+      valid: _validList[_validIndex].code,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Container(
-        width: MediaQuery.of(context).size.width * 0.75,
-        child: Drawer(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
-                          '企业名称',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Gaps.vGap10,
-                        Container(
-                          height: 36,
-                          child: TextField(
-                            controller: _enterNameController,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: const InputDecoration(
-                              fillColor: Colours.grey_color,
-                              filled: true,
-                              hintText: "请输入企业名称",
-                              hintStyle: TextStyle(
-                                color: Colours.secondary_text,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        Gaps.vGap30,
-                        const Text(
-                          '是否有效',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictGrid(
-                          checkIndex: validIndex,
-                          dataDictList: validList,
-                          onItemTap: (index) {
-                            setState(() {
-                              validIndex = index;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                child: Row(
-                  children: <Widget>[
-                    ClipButton(
-                      text: '重置',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.refresh,
-                      color: Colors.orange,
-                      onTap: () {
-                        setState(() {
-                          initParam();
-                        });
-                      },
-                    ),
-                    Gaps.hGap10,
-                    ClipButton(
-                      text: '搜索',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.search,
-                      color: Colors.lightBlue,
-                      onTap: () {
-                        Navigator.pop(context);
-                        _refreshController.callRefresh();
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+      endDrawer: _buildEndDrawer(),
       body: extended.NestedScrollView(
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
@@ -218,7 +128,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
                   background: 'assets/images/button_bg_pink.png',
                   image: 'assets/images/report_list_bg_image.png',
                   color: Colours.background_pink,
-                  onSearchTap: (){
+                  onSearchTap: () {
                     _scaffoldKey.currentState.openEndDrawer();
                   },
                 );
@@ -270,46 +180,23 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
               ),
             ],
             onRefresh: () async {
+              _currentPage = Constant.defaultCurrentPage;
               _refreshController.resetLoadState();
-              //刷新事件
+              // 刷新事件
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: FactorReportListRepository.createParams(
-                  currentPage: Constant.defaultCurrentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  enterId: widget.enterId,
-                  dischargeId: widget.dischargeId,
-                  monitorId: widget.monitorId,
-                  state: widget.state,
-                  valid: validList[validIndex].code,
-                ),
+                params: getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
               final currentState = _listBloc.state;
-              int currentPage;
               if (currentState is ListLoaded)
-                currentPage = currentState.currentPage + 1;
+                _currentPage = currentState.currentPage + 1;
               else
-                currentPage = Constant.defaultCurrentPage;
-              //加载事件
-              _listBloc.add(ListLoad(
-                isRefresh: false,
-                params: FactorReportListRepository.createParams(
-                  currentPage: currentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  enterId: widget.enterId,
-                  dischargeId: widget.dischargeId,
-                  monitorId: widget.monitorId,
-                  state: widget.state,
-                  valid: validList[validIndex].code,
-                ),
-              ));
+                _currentPage = Constant.defaultCurrentPage;
+              // 加载事件
+              _listBloc.add(ListLoad(params: getRequestParam()));
               return _refreshCompleter.future;
             },
           ),
@@ -322,7 +209,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          //创建列表项
+          // 创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
@@ -405,6 +292,104 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
           );
         },
         childCount: reportList.length,
+      ),
+    );
+  }
+
+  Widget _buildEndDrawer() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Drawer(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        '企业名称',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gaps.vGap10,
+                      Container(
+                        height: 36,
+                        child: TextField(
+                          controller: _enterNameController,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: const InputDecoration(
+                            fillColor: Colours.grey_color,
+                            filled: true,
+                            hintText: "请输入企业名称",
+                            hintStyle: TextStyle(
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      Gaps.vGap30,
+                      const Text(
+                        '是否有效',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictGrid(
+                        checkIndex: _validIndex,
+                        dataDictList: _validList,
+                        onItemTap: (index) {
+                          setState(() {
+                            _validIndex = index;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+              child: Row(
+                children: <Widget>[
+                  ClipButton(
+                    text: '重置',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.refresh,
+                    color: Colors.orange,
+                    onTap: () {
+                      setState(() {
+                        initParam();
+                      });
+                    },
+                  ),
+                  Gaps.hGap10,
+                  ClipButton(
+                    text: '搜索',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.search,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      Navigator.pop(context);
+                      _refreshController.callRefresh();
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

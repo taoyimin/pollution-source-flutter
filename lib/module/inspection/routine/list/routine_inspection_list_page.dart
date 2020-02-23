@@ -21,7 +21,7 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 
-/// 常规巡检列表页
+/// 常规巡检列表
 class RoutineInspectionListPage extends StatefulWidget {
   final String enterId;
   final String monitorId;
@@ -42,12 +42,21 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
-  final List<DataDict> stateList = [
+
+  /// 巡检任务状态菜单
+  final List<DataDict> _stateList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '当前待处理', code: '1'),
     DataDict(name: '超时待处理', code: '2'),
   ];
-  int stateIndex;
+
+  /// 巡检任务状态下标
+  int _stateIndex;
+
+  /// 当前页
+  int _currentPage = Constant.defaultCurrentPage;
+
+  /// 列表Bloc
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
 
@@ -59,17 +68,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
     _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshCompleter = Completer<void>();
     //首次加载
-    _listBloc.add(ListLoad(
-      isRefresh: true,
-      params: RoutineInspectionListRepository.createParams(
-        currentPage: Constant.defaultCurrentPage,
-        pageSize: Constant.defaultPageSize,
-        enterId: widget.enterId,
-        monitorId: widget.monitorId,
-        enterName: _enterNameController.text,
-        state: stateList[stateIndex].code,
-      ),
-    ));
+    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
   }
 
   @override
@@ -83,112 +82,31 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
     super.dispose();
   }
 
+  /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    stateIndex = stateList.indexWhere((dataDict) {
+    _stateIndex = _stateList.indexWhere((dataDict) {
       return dataDict.code == widget.state;
     });
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return RoutineInspectionListRepository.createParams(
+      currentPage: _currentPage,
+      pageSize: Constant.defaultPageSize,
+      enterId: widget.enterId,
+      monitorId: widget.monitorId,
+      enterName: _enterNameController.text,
+      state: _stateList[_stateIndex].code,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Container(
-        width: MediaQuery.of(context).size.width * 0.75,
-        child: Drawer(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
-                          '企业名称',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Gaps.vGap10,
-                        Container(
-                          height: 36,
-                          child: TextField(
-                            controller: _enterNameController,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: const InputDecoration(
-                              fillColor: Colours.grey_color,
-                              filled: true,
-                              hintText: "请输入企业名称",
-                              hintStyle: TextStyle(
-                                color: Colours.secondary_text,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        Gaps.vGap30,
-                        const Text(
-                          '巡检状态',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictGrid(
-                          checkIndex: stateIndex,
-                          dataDictList: stateList,
-                          onItemTap: (index) {
-                            setState(() {
-                              stateIndex = index;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 20, 16, 20),
-                child: Row(
-                  children: <Widget>[
-                    ClipButton(
-                      text: '重置',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.refresh,
-                      color: Colors.orange,
-                      onTap: () {
-                        setState(() {
-                          initParam();
-                        });
-                      },
-                    ),
-                    Gaps.hGap10,
-                    ClipButton(
-                      text: '搜索',
-                      height: 40,
-                      fontSize: 13,
-                      icon: Icons.search,
-                      color: Colors.lightBlue,
-                      onTap: () {
-                        Navigator.pop(context);
-                        _refreshController.callRefresh();
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+      endDrawer: _buildEndDrawer(),
       body: extended.NestedScrollView(
         pinnedHeaderSliverHeightBuilder: () {
           return MediaQuery.of(context).padding.top + kToolbarHeight;
@@ -263,37 +181,21 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
               ),
             ],
             onRefresh: () async {
+              _currentPage = Constant.defaultCurrentPage;
+              _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: RoutineInspectionListRepository.createParams(
-                  currentPage: Constant.defaultCurrentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  enterId: widget.enterId,
-                  monitorId: widget.monitorId,
-                  state: stateList[stateIndex].code,
-                ),
+                params: getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
               final currentState = _listBloc.state;
-              int currentPage;
               if (currentState is ListLoaded)
-                currentPage = currentState.currentPage + 1;
+                _currentPage = currentState.currentPage + 1;
               else
-                currentPage = Constant.defaultCurrentPage;
-              _listBloc.add(ListLoad(
-                isRefresh: false,
-                params: RoutineInspectionListRepository.createParams(
-                  currentPage: currentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  enterId: widget.enterId,
-                  monitorId: widget.monitorId,
-                  state: stateList[stateIndex].code,
-                ),
-              ));
+                _currentPage = Constant.defaultCurrentPage;
+              _listBloc.add(ListLoad(params: getRequestParam()));
               return _refreshCompleter.future;
             },
           ),
@@ -312,7 +214,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
             child: InkWellButton(
               onTap: () {
                 Application.router.navigateTo(context,
-                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}&state=${stateList[stateIndex].code}');
+                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}&state=${_stateList[_stateIndex].code}');
               },
               children: <Widget>[
                 Container(
@@ -390,6 +292,104 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
           );
         },
         childCount: routineInspectionList.length,
+      ),
+    );
+  }
+
+  Widget _buildEndDrawer() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Drawer(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        '企业名称',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gaps.vGap10,
+                      Container(
+                        height: 36,
+                        child: TextField(
+                          controller: _enterNameController,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: const InputDecoration(
+                            fillColor: Colours.grey_color,
+                            filled: true,
+                            hintText: "请输入企业名称",
+                            hintStyle: TextStyle(
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      Gaps.vGap30,
+                      const Text(
+                        '巡检状态',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictGrid(
+                        checkIndex: _stateIndex,
+                        dataDictList: _stateList,
+                        onItemTap: (index) {
+                          setState(() {
+                            _stateIndex = index;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, 20, 16, 20),
+              child: Row(
+                children: <Widget>[
+                  ClipButton(
+                    text: '重置',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.refresh,
+                    color: Colors.orange,
+                    onTap: () {
+                      setState(() {
+                        initParam();
+                      });
+                    },
+                  ),
+                  Gaps.hGap10,
+                  ClipButton(
+                    text: '搜索',
+                    height: 40,
+                    fontSize: 13,
+                    icon: Icons.search,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      Navigator.pop(context);
+                      _refreshController.callRefresh();
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

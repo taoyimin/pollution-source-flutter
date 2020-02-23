@@ -23,6 +23,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 
+/// 企业列表
 class EnterListPage extends StatefulWidget {
   final String state;
   final String enterType;
@@ -49,7 +50,9 @@ class _EnterListPageState extends State<EnterListPage>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
-  final List<DataDict> enterTypeList = [
+
+  /// 企业类型菜单
+  final List<DataDict> _enterTypeList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '雨水企业', code: '1'),
     DataDict(name: '废水企业', code: '2'),
@@ -57,21 +60,26 @@ class _EnterListPageState extends State<EnterListPage>
     DataDict(name: '水气企业', code: '4'),
     DataDict(name: '许可证企业', code: '5'),
   ];
-  final List<DataDict> stateList = [
+
+  /// 是否在线菜单
+  final List<DataDict> _stateList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '在线', code: '1'),
   ];
-  final List<DataDict> attentionLevelList = [
+
+  /// 关注程度菜单
+  final List<DataDict> _attentionLevelList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '非重点', code: '0'),
     DataDict(name: '重点', code: '1'),
   ];
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
-  int enterTypeIndex;
-  int stateIndex;
-  int attentionLevelIndex;
-  String areaCode = '';
+  int _enterTypeIndex;
+  int _stateIndex;
+  int _attentionLevelIndex;
+  int _currentPage = Constant.defaultCurrentPage;
+  String _areaCode = '';
 
   @override
   void initState() {
@@ -81,18 +89,7 @@ class _EnterListPageState extends State<EnterListPage>
     _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshCompleter = Completer<void>();
     // 首次加载
-    _listBloc.add(ListLoad(
-      isRefresh: true,
-      params: EnterListRepository.createParams(
-        currentPage: Constant.defaultCurrentPage,
-        pageSize: Constant.defaultPageSize,
-        enterName: _enterNameController.text,
-        areaCode: areaCode,
-        state: stateList[stateIndex].code,
-        enterType: enterTypeList[enterTypeIndex].code,
-        attentionLevel: attentionLevelList[attentionLevelIndex].code,
-      ),
-    ));
+    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
   }
 
   @override
@@ -109,15 +106,28 @@ class _EnterListPageState extends State<EnterListPage>
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    enterTypeIndex = enterTypeList.indexWhere((dataDict) {
+    _enterTypeIndex = _enterTypeList.indexWhere((dataDict) {
       return dataDict.code == widget.enterType;
     });
-    stateIndex = stateList.indexWhere((dataDict) {
+    _stateIndex = _stateList.indexWhere((dataDict) {
       return dataDict.code == widget.state;
     });
-    attentionLevelIndex = attentionLevelList.indexWhere((dataDict) {
+    _attentionLevelIndex = _attentionLevelList.indexWhere((dataDict) {
       return dataDict.code == widget.attentionLevel;
     });
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return EnterListRepository.createParams(
+      currentPage: _currentPage,
+      pageSize: Constant.defaultPageSize,
+      enterName: _enterNameController.text,
+      areaCode: _areaCode,
+      state: _stateList[_stateIndex].code,
+      enterType: _enterTypeList[_enterTypeIndex].code,
+      attentionLevel: _attentionLevelList[_attentionLevelIndex].code,
+    );
   }
 
   @override
@@ -218,40 +228,21 @@ class _EnterListPageState extends State<EnterListPage>
               ),
             ],
             onRefresh: () async {
+              _currentPage = Constant.defaultCurrentPage;
               _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: EnterListRepository.createParams(
-                  currentPage: Constant.defaultCurrentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  state: stateList[stateIndex].code,
-                  enterType: enterTypeList[enterTypeIndex].code,
-                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
-                ),
+                params: getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
               final currentState = _listBloc.state;
-              int currentPage;
               if (currentState is ListLoaded)
-                currentPage = currentState.currentPage + 1;
+                _currentPage = currentState.currentPage + 1;
               else
-                currentPage = Constant.defaultCurrentPage;
-              _listBloc.add(ListLoad(
-                isRefresh: false,
-                params: EnterListRepository.createParams(
-                  currentPage: currentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  state: stateList[stateIndex].code,
-                  enterType: enterTypeList[enterTypeIndex].code,
-                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
-                ),
-              ));
+                _currentPage = Constant.defaultCurrentPage;
+              _listBloc.add(ListLoad(params: getRequestParam()));
               return _refreshCompleter.future;
             },
           ),
@@ -352,7 +343,7 @@ class _EnterListPageState extends State<EnterListPage>
     );
   }
 
-  Widget _buildEndDrawer(){
+  Widget _buildEndDrawer() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
       child: Drawer(
@@ -363,7 +354,7 @@ class _EnterListPageState extends State<EnterListPage>
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Padding(
-                  padding:const EdgeInsets.fromLTRB(16, 56, 16, 20),
+                  padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -400,11 +391,11 @@ class _EnterListPageState extends State<EnterListPage>
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: enterTypeIndex,
-                        dataDictList: enterTypeList,
+                        checkIndex: _enterTypeIndex,
+                        dataDictList: _enterTypeList,
                         onItemTap: (index) {
                           setState(() {
-                            enterTypeIndex = index;
+                            _enterTypeIndex = index;
                           });
                         },
                       ),
@@ -416,11 +407,11 @@ class _EnterListPageState extends State<EnterListPage>
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: stateIndex,
-                        dataDictList: stateList,
+                        checkIndex: _stateIndex,
+                        dataDictList: _stateList,
                         onItemTap: (index) {
                           setState(() {
-                            stateIndex = index;
+                            _stateIndex = index;
                           });
                         },
                       ),
@@ -432,11 +423,11 @@ class _EnterListPageState extends State<EnterListPage>
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: attentionLevelIndex,
-                        dataDictList: attentionLevelList,
+                        checkIndex: _attentionLevelIndex,
+                        dataDictList: _attentionLevelList,
                         onItemTap: (index) {
                           setState(() {
-                            attentionLevelIndex = index;
+                            _attentionLevelIndex = index;
                           });
                         },
                       ),

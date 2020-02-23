@@ -14,6 +14,7 @@ import 'package:pollution_source/util/ui_utils.dart';
 
 import 'package:pollution_source/module/common/common_widget.dart';
 
+/// 排污许可证列表
 class LicenseListPage extends StatefulWidget {
   final String enterId;
 
@@ -23,23 +24,26 @@ class LicenseListPage extends StatefulWidget {
   _LicenseListPageState createState() => _LicenseListPageState();
 }
 
-class _LicenseListPageState extends State<LicenseListPage>
-    with TickerProviderStateMixin {
+class _LicenseListPageState extends State<LicenseListPage> {
   ListBloc _listBloc;
+  int _currentPage = Constant.defaultCurrentPage;
 
   @override
   void initState() {
     super.initState();
+    // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    //首次加载
-    _listBloc.add(ListLoad(
-      isRefresh: true,
-      params: LicenseListRepository.createParams(
-        currentPage: Constant.defaultCurrentPage,
-        pageSize: Constant.defaultPageSize,
-        enterId: widget.enterId,
-      ),
-    ));
+    // 首次加载
+    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return LicenseListRepository.createParams(
+      currentPage: _currentPage,
+      pageSize: Constant.defaultPageSize,
+      enterId: widget.enterId,
+    );
   }
 
   @override
@@ -56,7 +60,7 @@ class _LicenseListPageState extends State<LicenseListPage>
       body: EasyRefresh.custom(
         slivers: <Widget>[
           SliverAppBar(
-            title: Text(
+            title: const Text(
               '排污许可证列表',
               style: TextStyle(color: Colours.primary_text),
             ),

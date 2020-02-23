@@ -53,34 +53,58 @@ class _OrderListPageState extends State<OrderListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
-  final List<DataDict> stateList = [
+
+  /// 报警单状态菜单
+  final List<DataDict> _stateList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '待处理', code: '2'),
     DataDict(name: '已退回', code: '4'),
     DataDict(name: '已办结', code: '5'),
   ];
-  final List<DataDict> alarmLevelList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '正常', code: '0'),
-    DataDict(name: '黄色预警', code: '1'),
-    DataDict(name: '橙色预警', code: '2'),
-    DataDict(name: '红色预警', code: '3'),
-  ];
-  final List<DataDict> attentionLevelList = [
+
+  /// 关注程度菜单
+  final List<DataDict> _attentionLevelList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '非重点', code: '0'),
     DataDict(name: '重点', code: '1'),
   ];
-  int stateIndex;
-  int alarmLevelIndex;
-  int attentionLevelIndex;
-  int alarmTypeIndex;
-  DateTime startTime;
-  DateTime endTime;
+
+  /// 报警类型Bloc
+  final DataDictBloc _alarmTypeBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.orderAlarmType),
+  );
+
+  /// 报警级别Bloc
+  final DataDictBloc _alarmLevelBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.orderAlarmLevel),
+  );
+
+  /// 报警单状态下标
+  int _stateIndex;
+
+  /// 关注程度下标
+  int _attentionLevelIndex;
+
+  /// 报警类型下标
+  int _alarmTypeIndex;
+
+  /// 报警级别下标
+  int _alarmLevelIndex;
+
+  /// 报警开始时间
+  DateTime _startTime;
+
+  /// 报警结束时间
+  DateTime _endTime;
+
+  /// 当前页
+  int _currentPage = Constant.defaultCurrentPage;
+
+  /// 列表Bloc
   ListBloc _listBloc;
-  DataDictBloc _alarmTypeBloc;
+
   Completer<void> _refreshCompleter;
-  String areaCode = '';
+  String _areaCode = '';
 
   @override
   void initState() {
@@ -88,30 +112,13 @@ class _OrderListPageState extends State<OrderListPage> {
     _initParam();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    //初始化报警类型Bloc
-    _alarmTypeBloc = DataDictBloc(
-        dataDictRepository: DataDictRepository(HttpApi.orderAlarmType));
-    //加载报警类型
+    // 加载报警类型
     _alarmTypeBloc.add(DataDictLoad());
+    // 加载报警级别
+    _alarmLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
     // 首次加载
-    _listBloc.add(ListLoad(
-      isRefresh: true,
-      params: OrderListRepository.createParams(
-        currentPage: Constant.defaultCurrentPage,
-        pageSize: Constant.defaultPageSize,
-        enterId: widget.enterId,
-        monitorId: widget.monitorId,
-        enterName: _enterNameController.text,
-        areaCode: areaCode,
-        state: stateList[stateIndex].code,
-        alarmLevel: alarmLevelList[alarmLevelIndex].code,
-        attentionLevel: attentionLevelList[attentionLevelIndex].code,
-        startTime: startTime,
-        endTime: endTime,
-        alarmType: _getDataDictBlocValue(_alarmTypeBloc, alarmTypeIndex),
-      ),
-    ));
+    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
   }
 
   @override
@@ -128,20 +135,19 @@ class _OrderListPageState extends State<OrderListPage> {
   /// 初始化查询参数
   _initParam() {
     _enterNameController.text = '';
-    startTime = null;
-    endTime = null;
-    alarmTypeIndex = 0;
-    stateIndex = stateList.indexWhere((dataDict) {
+    _startTime = null;
+    _endTime = null;
+    _alarmTypeIndex = 0;
+    _alarmLevelIndex = 0;
+    _stateIndex = _stateList.indexWhere((dataDict) {
       return dataDict.code == widget.state;
     });
-    alarmLevelIndex = alarmLevelList.indexWhere((dataDict) {
-      return dataDict.code == widget.alarmLevel;
-    });
-    attentionLevelIndex = attentionLevelList.indexWhere((dataDict) {
+    _attentionLevelIndex = _attentionLevelList.indexWhere((dataDict) {
       return dataDict.code == widget.attentionLevel;
     });
   }
 
+  /// 根据下标获取数据字典Bloc中对应的code
   String _getDataDictBlocValue(DataDictBloc bloc, int index) {
     final currentState = bloc.state;
     if (currentState is DataDictLoaded) {
@@ -149,6 +155,24 @@ class _OrderListPageState extends State<OrderListPage> {
     } else {
       return '';
     }
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return OrderListRepository.createParams(
+      currentPage: _currentPage,
+      pageSize: Constant.defaultPageSize,
+      enterId: widget.enterId,
+      monitorId: widget.monitorId,
+      enterName: _enterNameController.text,
+      areaCode: _areaCode,
+      state: _stateList[_stateIndex].code,
+      alarmLevel: _getDataDictBlocValue(_alarmLevelBloc, _alarmLevelIndex),
+      alarmType: _getDataDictBlocValue(_alarmTypeBloc, _alarmTypeIndex),
+      attentionLevel: _attentionLevelList[_attentionLevelIndex].code,
+      startTime: _startTime,
+      endTime: _endTime,
+    );
   }
 
   @override
@@ -231,52 +255,21 @@ class _OrderListPageState extends State<OrderListPage> {
               ),
             ],
             onRefresh: () async {
+              _currentPage = Constant.defaultCurrentPage;
               _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: OrderListRepository.createParams(
-                  currentPage: Constant.defaultCurrentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterId: widget.enterId,
-                  monitorId: widget.monitorId,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  state: stateList[stateIndex].code,
-                  alarmLevel: alarmLevelList[alarmLevelIndex].code,
-                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
-                  startTime: startTime,
-                  endTime: endTime,
-                  alarmType:
-                      _getDataDictBlocValue(_alarmTypeBloc, alarmTypeIndex),
-                ),
+                params: getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
               final currentState = _listBloc.state;
-              int currentPage;
               if (currentState is ListLoaded)
-                currentPage = currentState.currentPage + 1;
+                _currentPage = currentState.currentPage + 1;
               else
-                currentPage = Constant.defaultCurrentPage;
-              _listBloc.add(ListLoad(
-                isRefresh: false,
-                params: OrderListRepository.createParams(
-                  currentPage: currentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterId: widget.enterId,
-                  monitorId: widget.monitorId,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  state: stateList[stateIndex].code,
-                  alarmLevel: alarmLevelList[alarmLevelIndex].code,
-                  attentionLevel: attentionLevelList[attentionLevelIndex].code,
-                  startTime: startTime,
-                  endTime: endTime,
-                  alarmType:
-                      _getDataDictBlocValue(_alarmTypeBloc, alarmTypeIndex),
-                ),
-              ));
+                _currentPage = Constant.defaultCurrentPage;
+              _listBloc.add(ListLoad(params: getRequestParam()));
               return _refreshCompleter.future;
             },
           ),
@@ -350,17 +343,19 @@ class _OrderListPageState extends State<OrderListPage> {
                         ],
                       ),
                       Gaps.vGap6,
-                      ListTileMultiRowWidget('报警描述：${orderList[index].alarmRemark}'),
+                      ListTileMultiRowWidget(
+                          '报警描述：${orderList[index].alarmRemark}'),
                     ],
                   ),
                 ),
                 Offstage(
-                  offstage: orderList[index].alarmLevel == null || orderList[index].alarmLevel == '0',
+                  offstage: orderList[index].alarmLevel == null ||
+                      orderList[index].alarmLevel == '0',
                   child: LabelView(
                     Size.fromHeight(80),
                     labelText: '${orderList[index].superviseStatus}',
-                    labelColor: (){
-                      switch (orderList[index].alarmLevel){
+                    labelColor: () {
+                      switch (orderList[index].alarmLevel) {
                         case '1':
                           return Colors.amber;
                         case '2':
@@ -431,11 +426,11 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: stateIndex,
-                        dataDictList: stateList,
+                        checkIndex: _stateIndex,
+                        dataDictList: _stateList,
                         onItemTap: (index) {
                           setState(() {
-                            stateIndex = index;
+                            _stateIndex = index;
                           });
                         },
                       ),
@@ -456,12 +451,12 @@ class _OrderListPageState extends State<OrderListPage> {
                                 DatePicker.showDatePicker(
                                   context,
                                   dateFormat: 'yyyy年-MM月-dd日',
-                                  maxDateTime: endTime ?? DateTime.now(),
+                                  maxDateTime: _endTime ?? DateTime.now(),
                                   locale: DateTimePickerLocale.zh_cn,
                                   onClose: () {},
                                   onConfirm: (dateTime, selectedIndex) {
                                     setState(() {
-                                      startTime = dateTime;
+                                      _startTime = dateTime;
                                     });
                                   },
                                 );
@@ -471,23 +466,23 @@ class _OrderListPageState extends State<OrderListPage> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     width: 0.5,
-                                    color: startTime != null
+                                    color: _startTime != null
                                         ? Colours.primary_color
                                         : Colours.divider_color,
                                   ),
-                                  color: startTime != null
+                                  color: _startTime != null
                                       ? Colours.primary_color.withOpacity(0.3)
                                       : Colours.divider_color,
                                 ),
                                 child: Center(
                                   child: Text(
-                                    DateUtil.getDateStrByDateTime(startTime,
+                                    DateUtil.getDateStrByDateTime(_startTime,
                                             format:
                                                 DateFormat.ZH_YEAR_MONTH_DAY) ??
                                         '开始时间',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: startTime != null
+                                      color: _startTime != null
                                           ? Colours.primary_color
                                           : Colours.secondary_text,
                                     ),
@@ -514,13 +509,13 @@ class _OrderListPageState extends State<OrderListPage> {
                                 DatePicker.showDatePicker(
                                   context,
                                   dateFormat: 'yyyy年-MM月-dd日',
-                                  minDateTime: startTime,
+                                  minDateTime: _startTime,
                                   maxDateTime: DateTime.now(),
                                   locale: DateTimePickerLocale.zh_cn,
                                   onClose: () {},
                                   onConfirm: (dateTime, selectedIndex) {
                                     setState(() {
-                                      endTime = dateTime;
+                                      _endTime = dateTime;
                                     });
                                   },
                                 );
@@ -530,23 +525,23 @@ class _OrderListPageState extends State<OrderListPage> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     width: 0.5,
-                                    color: endTime != null
+                                    color: _endTime != null
                                         ? Colours.primary_color
                                         : Colours.divider_color,
                                   ),
-                                  color: endTime != null
+                                  color: _endTime != null
                                       ? Colours.primary_color.withOpacity(0.3)
                                       : Colours.divider_color,
                                 ),
                                 child: Center(
                                   child: Text(
-                                    DateUtil.getDateStrByDateTime(endTime,
+                                    DateUtil.getDateStrByDateTime(_endTime,
                                             format:
                                                 DateFormat.ZH_YEAR_MONTH_DAY) ??
                                         '结束时间',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: endTime != null
+                                      color: _endTime != null
                                           ? Colours.primary_color
                                           : Colours.secondary_text,
                                     ),
@@ -566,11 +561,11 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                       ),
                       DataDictBlocGrid(
-                        checkIndex: alarmTypeIndex,
+                        checkIndex: _alarmTypeIndex,
                         dataDictBloc: _alarmTypeBloc,
                         onItemTap: (index) {
                           setState(() {
-                            alarmTypeIndex = index;
+                            _alarmTypeIndex = index;
                           });
                         },
                       ),
@@ -582,12 +577,12 @@ class _OrderListPageState extends State<OrderListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
-                        checkIndex: alarmLevelIndex,
-                        dataDictList: alarmLevelList,
+                      DataDictBlocGrid(
+                        checkIndex: _alarmLevelIndex,
+                        dataDictBloc: _alarmLevelBloc,
                         onItemTap: (index) {
                           setState(() {
-                            alarmLevelIndex = index;
+                            _alarmLevelIndex = index;
                           });
                         },
                       ),
@@ -600,11 +595,11 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: attentionLevelIndex,
-                        dataDictList: attentionLevelList,
+                        checkIndex: _attentionLevelIndex,
+                        dataDictList: _attentionLevelList,
                         onItemTap: (index) {
                           setState(() {
-                            attentionLevelIndex = index;
+                            _attentionLevelIndex = index;
                           });
                         },
                       ),

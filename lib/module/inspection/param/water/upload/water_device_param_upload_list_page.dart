@@ -18,7 +18,7 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
-/// 废水监测设备参数巡检上报列表界面
+/// 废水监测设备参数巡检上报列表
 class WaterDeviceParamUploadListPage extends StatefulWidget {
   final String monitorId;
   final String itemInspectType;
@@ -50,25 +50,28 @@ class _WaterDeviceParamUploadListPageState
   @override
   void initState() {
     super.initState();
+    _refreshCompleter = Completer<void>();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _listBloc = BlocProvider.of<ListBloc>(context);
-    //首次加载
-    _listBloc.add(ListLoad(
-        params: RoutineInspectionUploadListRepository.createParams(
-      monitorId: widget.monitorId,
-      itemInspectType: widget.itemInspectType,
-      state: widget.state,
-    )));
-    _refreshCompleter = Completer<void>();
+    // 首次加载
+    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
   }
 
   @override
   void dispose() {
-    //释放资源
     //取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return RoutineInspectionUploadListRepository.createParams(
+      monitorId: widget.monitorId,
+      itemInspectType: widget.itemInspectType,
+      state: widget.state,
+    );
   }
 
   @override
@@ -113,13 +116,7 @@ class _WaterDeviceParamUploadListPageState
           ),
         ],
         onRefresh: () async {
-          _listBloc.add(ListLoad(
-              isRefresh: true,
-              params: RoutineInspectionUploadListRepository.createParams(
-                monitorId: widget.monitorId,
-                itemInspectType: widget.itemInspectType,
-                state: widget.state,
-              )));
+          _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
           return _refreshCompleter.future;
         },
       ),

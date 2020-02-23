@@ -22,6 +22,7 @@ import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 监控点列表
 class MonitorListPage extends StatefulWidget {
   final String enterId;
   final String dischargeId;
@@ -45,13 +46,13 @@ class _MonitorListPageState extends State<MonitorListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
-  final List<DataDict> monitorTypeList = [
+  final List<DataDict> _monitorTypeList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '雨水监控', code: 'outletType1'),
     DataDict(name: '废水监控', code: 'outletType2'),
     DataDict(name: '废气监控', code: 'outletType3'),
   ];
-  final List<DataDict> stateList = [
+  final List<DataDict> _stateList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '在线', code: '1'),
     DataDict(name: '预警', code: '2'),
@@ -59,52 +60,57 @@ class _MonitorListPageState extends State<MonitorListPage> {
     DataDict(name: '脱机', code: '4'),
     DataDict(name: '异常', code: '5'),
   ];
-  int monitorTypeIndex;
-  int stateIndex;
+  int _monitorTypeIndex;
+  int _stateIndex;
+  int _currentPage = Constant.defaultCurrentPage;
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
-  String areaCode = '';
+  String _areaCode = '';
 
   @override
   void initState() {
     super.initState();
     initParam();
-    _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshCompleter = Completer<void>();
-    //首次加载
-    _listBloc.add(ListLoad(
-      isRefresh: true,
-      params: MonitorListRepository.createParams(
-        currentPage: Constant.defaultCurrentPage,
-        pageSize: Constant.defaultPageSize,
-        enterId: widget.enterId,
-        dischargeId: widget.dischargeId,
-        enterName: _enterNameController.text,
-        areaCode: areaCode,
-        monitorType: monitorTypeList[monitorTypeIndex].code,
-        state: stateList[stateIndex].code,
-      ),
-    ));
+    _listBloc = BlocProvider.of<ListBloc>(context);
+    // 首次加载
+    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
   }
 
   @override
   void dispose() {
+    // 释放资源
     _refreshController.dispose();
     _enterNameController.dispose();
-    //取消正在进行的请求
+    // 取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
+  /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    monitorTypeIndex = monitorTypeList.indexWhere((dataDict) {
+    _monitorTypeIndex = _monitorTypeList.indexWhere((dataDict) {
       return dataDict.code == widget.monitorType;
     });
-    stateIndex = stateList.indexWhere((dataDict) {
+    _stateIndex = _stateList.indexWhere((dataDict) {
       return dataDict.code == widget.state;
     });
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return MonitorListRepository.createParams(
+      currentPage: _currentPage,
+      pageSize: Constant.defaultPageSize,
+      enterId: widget.enterId,
+      dischargeId: widget.dischargeId,
+      enterName: _enterNameController.text,
+      areaCode: _areaCode,
+      monitorType: _monitorTypeList[_monitorTypeIndex].code,
+      state: _stateList[_stateIndex].code,
+    );
   }
 
   @override
@@ -187,42 +193,21 @@ class _MonitorListPageState extends State<MonitorListPage> {
               ),
             ],
             onRefresh: () async {
+              _currentPage = Constant.defaultCurrentPage;
               _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: MonitorListRepository.createParams(
-                  currentPage: Constant.defaultCurrentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  enterId: widget.enterId,
-                  dischargeId: widget.dischargeId,
-                  monitorType: monitorTypeList[monitorTypeIndex].code,
-                  state: stateList[stateIndex].code,
-                ),
+                params: getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
             onLoad: () async {
               final currentState = _listBloc.state;
-              int currentPage;
               if (currentState is ListLoaded)
-                currentPage = currentState.currentPage + 1;
+                _currentPage = currentState.currentPage + 1;
               else
-                currentPage = Constant.defaultCurrentPage;
-              _listBloc.add(ListLoad(
-                isRefresh: false,
-                params: MonitorListRepository.createParams(
-                  currentPage: currentPage,
-                  pageSize: Constant.defaultPageSize,
-                  enterName: _enterNameController.text,
-                  areaCode: areaCode,
-                  enterId: widget.enterId,
-                  dischargeId: widget.dischargeId,
-                  monitorType: monitorTypeList[monitorTypeIndex].code,
-                  state: stateList[stateIndex].code,
-                ),
-              ));
+                _currentPage = Constant.defaultCurrentPage;
+              _listBloc.add(ListLoad(params: getRequestParam()));
               return _refreshCompleter.future;
             },
           ),
@@ -326,7 +311,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
     );
   }
 
-  Widget _buildEndDrawer(){
+  Widget _buildEndDrawer() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
       child: Drawer(
@@ -374,11 +359,11 @@ class _MonitorListPageState extends State<MonitorListPage> {
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: monitorTypeIndex,
-                        dataDictList: monitorTypeList,
+                        checkIndex: _monitorTypeIndex,
+                        dataDictList: _monitorTypeList,
                         onItemTap: (index) {
                           setState(() {
-                            monitorTypeIndex = index;
+                            _monitorTypeIndex = index;
                           });
                         },
                       ),
@@ -390,11 +375,11 @@ class _MonitorListPageState extends State<MonitorListPage> {
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: stateIndex,
-                        dataDictList: stateList,
+                        checkIndex: _stateIndex,
+                        dataDictList: _stateList,
                         onItemTap: (index) {
                           setState(() {
-                            stateIndex = index;
+                            _stateIndex = index;
                           });
                         },
                       ),

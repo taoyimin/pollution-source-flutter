@@ -25,7 +25,7 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/git_dialog.dart';
 
-/// 辅助/监测设备上报列表界面
+/// 辅助/监测设备巡检上报列表
 class DeviceInspectionUploadListPage extends StatefulWidget {
   final String monitorId;
   final String itemInspectType;
@@ -56,39 +56,35 @@ class _DeviceInspectionUploadListPageState
   DetailBloc _detailBloc;
   Completer<void> _refreshCompleter;
   TextEditingController _remarkController;
-  AnimationController controller;
-  Animation animation;
+  AnimationController _animateController;
+  Animation _animation;
   PersistentBottomSheetController _bottomSheetController;
   IconData _actionIcon = Icons.edit;
-  final List<RoutineInspectionUploadList> selectedList = [];
+  final List<RoutineInspectionUploadList> _selectedList = [];
 
   @override
   void initState() {
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _listBloc = BlocProvider.of<ListBloc>(context);
-    //首次加载
-    _listBloc.add(ListLoad(
-        params: RoutineInspectionUploadListRepository.createParams(
-      monitorId: widget.monitorId,
-      itemInspectType: widget.itemInspectType,
-      state: widget.state,
-    )));
+    // 首次加载
+    _listBloc.add(ListLoad(params: getRequestParam()));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _pageBloc = PageBloc();
-    //首次加载
-    _pageBloc
-        .add(PageLoad(model: DeviceInspectUpload(selectedList: selectedList)));
-    //初始化编辑框控制器
+    // 首次加载
+    _pageBloc.add(PageLoad(
+      model: DeviceInspectUpload(selectedList: _selectedList),
+    ));
+    // 初始化编辑框控制器
     _remarkController = TextEditingController();
-    //初始化fab颜色渐变动画
-    controller = AnimationController(
+    // 初始化fab颜色渐变动画
+    _animateController = AnimationController(
       duration: Duration(milliseconds: 500),
       vsync: this,
     );
-    animation = ColorTween(begin: Colors.lightBlue, end: Colors.redAccent)
-        .animate(controller);
-    controller.addListener(() {
+    _animation = ColorTween(begin: Colors.lightBlue, end: Colors.redAccent)
+        .animate(_animateController);
+    _animateController.addListener(() {
       setState(() {});
     });
     _refreshCompleter = Completer<void>();
@@ -96,13 +92,22 @@ class _DeviceInspectionUploadListPageState
 
   @override
   void dispose() {
-    //释放资源
+    // 释放资源
     _remarkController.dispose();
-    controller.dispose();
-    //取消正在进行的请求
+    _animateController.dispose();
+    // 取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return RoutineInspectionUploadListRepository.createParams(
+      monitorId: widget.monitorId,
+      itemInspectType: widget.itemInspectType,
+      state: widget.state,
+    );
   }
 
   @override
@@ -150,7 +155,7 @@ class _DeviceInspectionUploadListPageState
                     // 关闭BottomSheet
                     _bottomSheetController?.close();
                     // 重置已选中任务
-                    selectedList.clear();
+                    _selectedList.clear();
                     // 刷新列表页面
                     _listBloc.add(ListLoad(
                         isRefresh: true,
@@ -158,12 +163,12 @@ class _DeviceInspectionUploadListPageState
                             RoutineInspectionUploadListRepository.createParams(
                           monitorId: widget.monitorId,
                           itemInspectType: widget.itemInspectType,
-                              state: widget.state,
+                          state: widget.state,
                         )));
                     // 清空上报界面
                     _pageBloc.add(PageLoad(
                         model:
-                            DeviceInspectUpload(selectedList: selectedList)));
+                            DeviceInspectUpload(selectedList: _selectedList)));
                     _remarkController.text = '';
                     // 刷新常规巡检详情界面header中的任务条数
                     _detailBloc.add(DetailLoad(
@@ -215,13 +220,7 @@ class _DeviceInspectionUploadListPageState
           ),
         ],
         onRefresh: () async {
-          _listBloc.add(ListLoad(
-              isRefresh: true,
-              params: RoutineInspectionUploadListRepository.createParams(
-                monitorId: widget.monitorId,
-                itemInspectType: widget.itemInspectType,
-                state: widget.state,
-              )));
+          _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
           return _refreshCompleter.future;
         },
       ),
@@ -237,18 +236,18 @@ class _DeviceInspectionUploadListPageState
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                if (selectedList.contains(list[index])) {
+                if (_selectedList.contains(list[index])) {
                   // 如果已选中则移除
-                  selectedList.remove(list[index]);
+                  _selectedList.remove(list[index]);
                 } else {
                   // 如果未选中则添加
-                  selectedList.add(list[index]);
+                  _selectedList.add(list[index]);
                 }
                 // 刷新界面
                 _listBloc.add(ListUpdate());
                 // 刷新BottomSheet顶部任务个数提示
                 _pageBloc.add(PageLoad(
-                    model: DeviceInspectUpload(selectedList: selectedList)));
+                    model: DeviceInspectUpload(selectedList: _selectedList)));
               },
               children: <Widget>[
                 Container(
@@ -295,7 +294,7 @@ class _DeviceInspectionUploadListPageState
                         ),
                       ),
                       Checkbox(
-                        value: selectedList.contains(list[index]),
+                        value: _selectedList.contains(list[index]),
                         onChanged: (value) {},
                       ),
                     ],
@@ -325,14 +324,14 @@ class _DeviceInspectionUploadListPageState
             color: Colors.white,
           ),
         ),
-        backgroundColor: animation.value,
+        backgroundColor: _animation.value,
         onPressed: () {
           if (_bottomSheetController != null) {
             //已经处于打开状态
             _bottomSheetController.close();
             return;
           }
-          if (selectedList.length == 0) {
+          if (_selectedList.length == 0) {
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: const Text('请至少选择一项任务进行处理'),
@@ -345,7 +344,7 @@ class _DeviceInspectionUploadListPageState
             return;
           }
           //fab由蓝变红
-          controller.forward();
+          _animateController.forward();
           setState(() {
             _actionIcon = Icons.close;
           });
@@ -372,7 +371,7 @@ class _DeviceInspectionUploadListPageState
           //监听BottomSheet关闭
           _bottomSheetController.closed.then((value) {
             //fab由红变蓝
-            controller.reverse();
+            _animateController.reverse();
             setState(() {
               _bottomSheetController = null;
               _actionIcon = Icons.edit;
@@ -482,7 +481,7 @@ class _DeviceInspectionUploadListPageState
                     //发送上传事件
                     _uploadBloc.add(Upload(
                         data: deviceInspectUpload.copyWith(
-                      selectedList: selectedList,
+                      selectedList: _selectedList,
                       remark: _remarkController.text,
                     )));
                   },
