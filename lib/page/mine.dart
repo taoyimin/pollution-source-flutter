@@ -1,10 +1,13 @@
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
+import 'package:pollution_source/widget/wave.dart';
 
 /// 个人中心页面
 class MinePage extends StatefulWidget {
@@ -67,12 +70,17 @@ class _MinePageState extends State<MinePage> {
                       ),
                       // 名字
                       Container(
-                        margin: new EdgeInsets.only(top: 50.0),
-                        child: new Center(
-                          child: new Text(
-                            '环境保护厅',
-                            style: new TextStyle(
-                              fontSize: 25.0,
+                        margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+                        child: Center(
+                          child: Text(
+                            '${SpUtil.getString(Constant.spRealName)}',
+                            style: TextStyle(
+                              fontSize:
+                                  '${SpUtil.getString(Constant.spRealName)}'
+                                              .length <=
+                                          12
+                                      ? 25
+                                      : 18,
                               color: Colors.white,
                             ),
                           ),
@@ -122,65 +130,92 @@ class _MinePageState extends State<MinePage> {
                         right: 10,
                         left: 10,
                         child: Container(
-                          height: 80,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "18",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontStyle: FontStyle.normal),
-                                  ),
-                                  Text(
-                                    "代办",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colours.secondary_text),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "458",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontStyle: FontStyle.normal),
-                                  ),
-                                  Text(
-                                    "代办",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colours.secondary_text),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "69",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontStyle: FontStyle.normal),
-                                  ),
-                                  Text(
-                                    "代办",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colours.secondary_text),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          height: 80.0,
+                          width: double.infinity,
+                          child: Wave(
+                            config: CustomConfig(
+                              gradients: [
+                                [Colors.red, Color(0xEEF44336)],
+                                [Colors.red[800], Color(0x77E57373)],
+                                [Colors.orange, Color(0x66FF9800)],
+                                [Colors.yellow, Color(0x55FFEB3B)]
+                              ],
+                              durations: [35000, 19440, 10800, 6000],
+                              heightPercentages: [0.20, 0.23, 0.25, 0.30],
+                              blur: MaskFilter.blur(BlurStyle.inner, 16.0),
+                              gradientBegin: Alignment.bottomLeft,
+                              gradientEnd: Alignment.topRight,
+                            ),
+                            backgroundColor: Colors.transparent,
+                            size: Size(double.infinity, double.infinity),
+                            waveAmplitude: 0,
                           ),
                         ),
                       ),
+//                      Positioned(
+//                        bottom: 30,
+//                        right: 10,
+//                        left: 10,
+//                        child: Container(
+//                          height: 80,
+//                          child: Row(
+//                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                            children: <Widget>[
+//                              Column(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                                children: <Widget>[
+//                                  Text(
+//                                    "18",
+//                                    style: TextStyle(
+//                                        fontSize: 30,
+//                                        fontStyle: FontStyle.normal),
+//                                  ),
+//                                  Text(
+//                                    "代办",
+//                                    style: TextStyle(
+//                                        fontSize: 13,
+//                                        color: Colours.secondary_text),
+//                                  ),
+//                                ],
+//                              ),
+//                              Column(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                                children: <Widget>[
+//                                  Text(
+//                                    "458",
+//                                    style: TextStyle(
+//                                        fontSize: 30,
+//                                        fontStyle: FontStyle.normal),
+//                                  ),
+//                                  Text(
+//                                    "代办",
+//                                    style: TextStyle(
+//                                        fontSize: 13,
+//                                        color: Colours.secondary_text),
+//                                  ),
+//                                ],
+//                              ),
+//                              Column(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                                children: <Widget>[
+//                                  Text(
+//                                    "69",
+//                                    style: TextStyle(
+//                                        fontSize: 30,
+//                                        fontStyle: FontStyle.normal),
+//                                  ),
+//                                  Text(
+//                                    "代办",
+//                                    style: TextStyle(
+//                                        fontSize: 13,
+//                                        color: Colours.secondary_text),
+//                                  ),
+//                                ],
+//                              ),
+//                            ],
+//                          ),
+//                        ),
+//                      ),
                       Positioned(
                         bottom: 140,
                         right: 50,
@@ -191,14 +226,14 @@ class _MinePageState extends State<MinePage> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      Positioned(
-                        top: 36,
-                        left: 16,
-                        child: Icon(
-                          Icons.notifications_none,
-                          color: Colors.white,
-                        ),
-                      ),
+//                      Positioned(
+//                        top: 36,
+//                        left: 16,
+//                        child: Icon(
+//                          Icons.notifications_none,
+//                          color: Colors.white,
+//                        ),
+//                      ),
                     ],
                   ),
                   Container(
@@ -325,22 +360,23 @@ class _MinePageState extends State<MinePage> {
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
-                                              title:const Text("清理缓存"),
-                                              content:const Text("是否确定清理缓存？"),
+                                              title: const Text("清理缓存"),
+                                              content: const Text("是否确定清理缓存？"),
                                               actions: <Widget>[
-                                                 FlatButton(
+                                                FlatButton(
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
                                                   },
-                                                  child:const Text("取消"),
+                                                  child: const Text("取消"),
                                                 ),
-                                                 FlatButton(
+                                                FlatButton(
                                                   onPressed: () async {
-                                                    await FileUtils.clearApplicationDirectory();
+                                                    await FileUtils
+                                                        .clearApplicationDirectory();
                                                     Toast.show('清理附件成功！');
                                                     Navigator.of(context).pop();
                                                   },
-                                                  child:const Text("确认"),
+                                                  child: const Text("确认"),
                                                 ),
                                               ],
                                             );
