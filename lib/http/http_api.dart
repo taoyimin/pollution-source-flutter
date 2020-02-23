@@ -42,6 +42,9 @@ enum HttpApi {
   /// 报警管理单报警类型列表
   orderAlarmType,
 
+  /// 报警管理单报警级别列表
+  orderAlarmLevel,
+
   /// 报警管理单详情
   orderDetail,
 
@@ -131,6 +134,7 @@ class HttpApiJava {
   static const String monitorHistoryData = 'monitorRealData/queryDetailHistory';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
   static const String orderAlarmType = 'dictionary/getAlarmTypeList?dicCode=alarm_type';
+  static const String orderAlarmLevel = 'dictionary/getAlarmTypeList?dicCode=alarmLevel';
   static const String orderDetail = 'Supervise/querySuperviseDetailById?orderId=';
   static const String processesUpload = 'Supervise/dealSupervise';
   static const String dischargeReportList = 'stopApply/getApplyList';
@@ -187,7 +191,8 @@ class HttpApiOperation {
   static const String monitorDetail = 'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
   static const String monitorHistoryData = 'pollutantsource/tMonitorRealDataView/queryDetailHistoryAPI';
   static const String orderList = 'commonSupervise/list';
-  static const String orderAlarmType = '/dictionary/getSubListAPI?dicCode=alarm_type';
+  static const String orderAlarmType = 'dictionary/getSubListAPI?dicCode=alarm_type';
+  static const String orderAlarmLevel = 'dictionary/getSubListAPI?dicCode=alarmLevel';
   static const String orderDetail = 'commonSupervise/querySuperviseDetailByIdAPI?orderId=';
   static const String processesUpload = 'commonSupervise/dealSuperviseAPI';
   static const String dischargeReportList = 'pollutantsource/stopApply/queryPage';
