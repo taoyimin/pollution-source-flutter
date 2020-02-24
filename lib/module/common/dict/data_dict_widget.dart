@@ -44,11 +44,41 @@ class DataDictWidget extends StatelessWidget {
         if (state is DataDictError) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
-              content: Text('$title加载失败！${state.message}'),
+              content: Text('$title加载失败！'),
               action: SnackBarAction(
-                  label: '我知道了',
-                  textColor: Colours.primary_color,
-                  onPressed: () {}),
+                label: '查看详情',
+                textColor: Colours.primary_color,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("错误信息"),
+                        content: SingleChildScrollView(
+                          child: Text('${state.message}'),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Clipboard.setData(
+                                  ClipboardData(text: '${state.message}'));
+                              Toast.show('复制成功！');
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("复制"),
+                          ),
+                          FlatButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("确认"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           );
         }
@@ -312,12 +342,12 @@ class DataDictGrid extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       children: List.generate(
         dataDictList.length,
-            (index) {
+        (index) {
           return InkWell(
             onTap: onItemTap != null
                 ? () {
-              onItemTap(index);
-            }
+                    onItemTap(index);
+                  }
                 : () {},
             child: Container(
               decoration: BoxDecoration(
@@ -385,12 +415,12 @@ class DataDictBlocGrid extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             children: List.generate(
               state.dataDictList.length,
-                  (index) {
+              (index) {
                 return InkWell(
                   onTap: onItemTap != null
                       ? () {
-                    onItemTap(index);
-                  }
+                          onItemTap(index);
+                        }
                       : () {},
                   child: Container(
                     decoration: BoxDecoration(
@@ -469,30 +499,33 @@ class DataDictBlocGrid extends StatelessWidget {
                             child: InkWell(
                               onTap: () {
                                 showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text("错误信息"),
-                                        content: Text('${state.message}'),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            onPressed: () {
-                                              Clipboard.setData(ClipboardData(
-                                                  text: '${state.message}'));
-                                              Toast.show('复制成功！');
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text("复制"),
-                                          ),
-                                          FlatButton(
-                                            onPressed: () async {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text("确认"),
-                                          ),
-                                        ],
-                                      );
-                                    });
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("错误信息"),
+                                      content: SingleChildScrollView(
+                                        child: Text('${state.message}'),
+                                      ),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          onPressed: () {
+                                            Clipboard.setData(ClipboardData(
+                                                text: '${state.message}'));
+                                            Toast.show('复制成功！');
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("复制"),
+                                        ),
+                                        FlatButton(
+                                          onPressed: () async {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("确认"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                               child: Container(
                                 height: 36,

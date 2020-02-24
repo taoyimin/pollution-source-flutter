@@ -102,7 +102,7 @@ class LoadingWidget extends StatelessWidget {
   }
 }
 
-//页面没有数据的Sliver
+/// 页面没有数据的Sliver
 class EmptySliver extends StatelessWidget {
   final String message;
 
@@ -137,7 +137,7 @@ class EmptySliver extends StatelessWidget {
   }
 }
 
-//页面没有数据的Widget
+/// 页面没有数据的Widget
 class EmptyWidget extends StatelessWidget {
   final String message;
 
@@ -170,7 +170,7 @@ class EmptyWidget extends StatelessWidget {
   }
 }
 
-//页面加载错误的Sliver
+/// 页面加载错误的Sliver
 class ErrorSliver extends StatelessWidget {
   final String errorMessage;
 
@@ -207,7 +207,7 @@ class ErrorSliver extends StatelessWidget {
   }
 }
 
-//页面加载错误的widget
+/// 页面加载错误的widget
 class ErrorMessageWidget extends StatelessWidget {
   final String errorMessage;
 
@@ -242,7 +242,7 @@ class ErrorMessageWidget extends StatelessWidget {
   }
 }
 
-//BottomSheet展示错误信息用的widget
+/// BottomSheet展示错误信息用的widget
 class MessageWidget extends StatelessWidget {
   final String message;
 
@@ -276,7 +276,7 @@ class MessageWidget extends StatelessWidget {
   }
 }
 
-//左边图片加圆形半透明背景 右边上面标题下面内容 无背景图片 默认一行三个 污染源在线监控ratio=1.15
+/// 左边图片加圆形半透明背景 右边上面标题下面内容 无背景图片 默认一行三个 污染源在线监控ratio=1.15
 class InkWellButton1 extends StatelessWidget {
   final double ratio;
   final Meta meta;
@@ -350,7 +350,7 @@ class InkWellButton1 extends StatelessWidget {
   }
 }
 
-//上面内容下面标题 有背景图片无图标 默认一行三个
+/// 上面内容下面标题 有背景图片无图标 默认一行三个
 class InkWellButton2 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -403,7 +403,7 @@ class InkWellButton2 extends StatelessWidget {
   }
 }
 
-//左上内容 左下标题 右上图标 有背景图片 默认一行三个 一行两个时建议ratio=1.3
+/// 左上内容 左下标题 右上图标 有背景图片 默认一行三个 一行两个时建议ratio=1.3
 class InkWellButton3 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -483,7 +483,7 @@ class InkWellButton3 extends StatelessWidget {
   }
 }
 
-//左上标题 左下内容 右下图标 有背景图片
+/// 左上标题 左下内容 右下图标 有背景图片
 class InkWellButton4 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -563,7 +563,7 @@ class InkWellButton4 extends StatelessWidget {
   }
 }
 
-//左边图标加圆形半透明背景 右边上面标题下面内容 顶部描边 默认一行三个 一行两个时建议ratio=1.2
+/// 左边图标加圆形半透明背景 右边上面标题下面内容 顶部描边 默认一行三个 一行两个时建议ratio=1.2
 class InkWellButton5 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -633,7 +633,7 @@ class InkWellButton5 extends StatelessWidget {
   }
 }
 
-//左上标题 左中内容 左下查看详情按钮 右边图标 有背景图片 默认一行一个
+/// 左上标题 左中内容 左下查看详情按钮 右边图标 有背景图片 默认一行一个
 class InkWellButton6 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -714,7 +714,7 @@ class InkWellButton6 extends StatelessWidget {
   }
 }
 
-//左上标题 左下内容 右边图标 有背景图片 默认一行两个
+/// 左上标题 左下内容 右边图标 有背景图片 默认一行两个
 class InkWellButton7 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -785,7 +785,7 @@ class InkWellButton7 extends StatelessWidget {
   }
 }
 
-//配合InkWellButton7使用，组成两行两列布局，其中两行合并成一个
+/// 配合InkWellButton7使用，组成两行两列布局，其中两行合并成一个
 class InkWellButton8 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -863,7 +863,7 @@ class InkWellButton8 extends StatelessWidget {
   }
 }
 
-//应用页功能按钮 左上标题 左下内容 右边图标 默认一行两个
+/// 应用页功能按钮 左上标题 左下内容 右边图标 默认一行两个
 class InkWellButton9 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -915,7 +915,7 @@ class InkWellButton9 extends StatelessWidget {
   }
 }
 
-//list展示信息(单行)
+/// list展示信息(单行)
 class ListTileWidget extends StatelessWidget {
   final String content;
 
@@ -935,7 +935,7 @@ class ListTileWidget extends StatelessWidget {
   }
 }
 
-//list展示信息(多行)
+/// list展示信息(多行)
 class ListTileMultiRowWidget extends StatelessWidget {
   final String content;
 
@@ -959,7 +959,7 @@ class ListTileMultiRowWidget extends StatelessWidget {
   }
 }
 
-//水平分割线 自定义宽高颜色时使用 否则使用Gaps
+/// 水平分割线 自定义宽高颜色时使用 否则使用Gaps
 class HorizontalDividerWidget extends StatelessWidget {
   final double width;
   final double height;
@@ -983,7 +983,7 @@ class HorizontalDividerWidget extends StatelessWidget {
   }
 }
 
-//垂直分割线 自定义宽高颜色时使用 否则使用Gaps
+/// 垂直分割线 自定义宽高颜色时使用 否则使用Gaps
 class VerticalDividerWidget extends StatelessWidget {
   final double width;
   final double height;
@@ -1007,7 +1007,7 @@ class VerticalDividerWidget extends StatelessWidget {
   }
 }
 
-//解决InkWell因为child设置了背景而显示不出涟漪的问题
+/// 解决InkWell因为child设置了背景而显示不出涟漪的问题
 class InkWellButton extends StatelessWidget {
   final GestureTapCallback onTap;
   final List<Widget> children;
@@ -1037,7 +1037,7 @@ class InkWellButton extends StatelessWidget {
   }
 }
 
-//标签widget
+/// 标签widget
 class LabelWidget extends StatelessWidget {
   final Label label;
 
@@ -1071,7 +1071,7 @@ class LabelWidget extends StatelessWidget {
   }
 }
 
-//标签集合widget
+/// 标签集合widget
 class LabelWrapWidget extends StatelessWidget {
   final List<Label> labelList;
 
@@ -1093,7 +1093,7 @@ class LabelWrapWidget extends StatelessWidget {
   }
 }
 
-//详情页图片标题widget
+/// 详情页图片标题widget
 class ImageTitleWidget extends StatelessWidget {
   final String title;
   final String content;
@@ -1135,7 +1135,7 @@ class ImageTitleWidget extends StatelessWidget {
   }
 }
 
-//详情页基本信息展示widget
+/// 详情页基本信息展示widget
 class IconBaseInfoWidget extends StatelessWidget {
   final IconData icon;
   final String content;
@@ -1173,7 +1173,7 @@ class IconBaseInfoWidget extends StatelessWidget {
   }
 }
 
-//详情页联系人信息widget
+/// 详情页联系人信息widget
 class ContactsWidget extends StatelessWidget {
   final String contactsName;
   final String contactsTel;
@@ -1238,7 +1238,7 @@ class ContactsWidget extends StatelessWidget {
   }
 }
 
-//展示附件widget
+/// 展示附件widget
 class AttachmentWidget extends StatelessWidget {
   final Attachment attachment;
   final GestureTapCallback onTap;
@@ -1349,7 +1349,7 @@ class AttachmentWidget extends StatelessWidget {
   }
 }
 
-//展示因子监测数据radio button
+/// 展示因子监测数据radio button
 class FactorValueWidget extends StatelessWidget {
   final ChartData chartData;
   final GestureTapCallback onTap;
@@ -1411,7 +1411,7 @@ class FactorValueWidget extends StatelessWidget {
   }
 }
 
-//监测因子图标数据
+/// 监测因子图标数据
 class LineChartWidget extends StatefulWidget {
   //图标数据集合
   final List<ChartData> chartDataList;
@@ -1474,7 +1474,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
     );
   }
 
-  //获取图表样式
+  /// 获取图表样式
   LineChartData _getLineChartData() {
     double yInterval;
     double maxY = UIUtils.getMax(widget.chartDataList
@@ -1574,7 +1574,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
     );
   }
 
-  //获取图表数据
+  /// 获取图表数据
   List<LineChartBarData> _getLineChartBarDataList(
       List<ChartData> chartDataList) {
     //只取选中的因子
@@ -1605,7 +1605,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
   }
 }
 
-//自定义裁剪按钮
+/// 自定义裁剪按钮
 class ClipButton extends StatelessWidget {
   final double height;
   final String text;
@@ -1666,10 +1666,10 @@ class ClipButton extends StatelessWidget {
   }
 }
 
-//自定义尖头裁剪器
+/// 自定义尖头裁剪器
 class TipClipper extends CustomClipper<Path> {
-  double clipHeightRatio; //裁剪的尖头高度占控件总高度的比率
-  double clipWidthRatio; //裁剪的尖头宽度占控件总高度的比率
+  double clipHeightRatio; // 裁剪的尖头高度占控件总高度的比率
+  double clipWidthRatio; // 裁剪的尖头宽度占控件总高度的比率
 
   TipClipper({this.clipHeightRatio = 0.5, this.clipWidthRatio = 0.25});
 
@@ -1749,12 +1749,12 @@ class SelectRowWidget extends StatelessWidget {
   }
 }
 
-/// 没有标题的单行选择控件
-class SelectRowWidget2 extends StatelessWidget {
+/// 没有标题的选择控件
+class SelectWidget extends StatelessWidget {
   final String content;
   final GestureTapCallback onTap;
 
-  SelectRowWidget2({
+  SelectWidget({
     Key key,
     @required this.content,
     @required this.onTap,
@@ -1838,14 +1838,14 @@ class EditRowWidget extends StatelessWidget {
   }
 }
 
-/// 没有标题的单行文本输入控件
-class EditRowWidget2 extends StatelessWidget {
+/// 没有标题的文本输入控件
+class EditWidget extends StatelessWidget {
   final String hintText;
   final int flex;
   final TextStyle style;
   final ValueChanged<String> onChanged;
 
-  EditRowWidget2({
+  EditWidget({
     Key key,
     this.hintText = '请输入',
     this.flex = 1,
@@ -1934,7 +1934,7 @@ class RadioRowWidget extends StatelessWidget {
   }
 }
 
-//单行文本输入控件
+/// 单行文本输入控件
 @Deprecated('已被DataDictWidget替代，后续将删除')
 class EditRowWidget3 extends StatelessWidget {
   final String title;
@@ -1996,7 +1996,7 @@ class EditRowWidget3 extends StatelessWidget {
   }
 }
 
-//多行文本输入控件
+/// 多行文本输入控件
 class TextAreaWidget extends StatelessWidget {
   final String title;
   final String hintText;
@@ -2189,7 +2189,7 @@ class InfoRowWidget extends StatelessWidget {
   }
 }
 
-//登录页选择用户类型按钮 左边图片右边文字 可改透明度
+/// 登录页选择用户类型按钮 左边图片右边文字 可改透明度
 class IconCheckButton extends StatelessWidget {
   final String text;
   final String imagePath;
