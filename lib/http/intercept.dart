@@ -108,11 +108,17 @@ class HandleErrorInterceptor extends Interceptor {
               : true)
         // 状态码200服务器处理成功
         return super.onResponse(response);
-      else
+      else {
+        String message = '';
+        if (response.data.containsKey(Constant.responseMessageKey))
+          message = response.data[Constant.responseMessageKey];
+        else if (response.data.containsKey(Constant.responseMsgKey))
+          message = response.data[Constant.responseMsgKey];
+        else
+          message = '服务器处理错误,错误信息:response=${response.toString()}';
         // 状态码200但服务器处理失败
-        throw DioError(
-            error: ServerErrorException(
-                '服务器处理错误,错误信息:response=${response.toString()}'));
+        throw DioError(error: ServerErrorException('$message'));
+      }
     } else if (response != null &&
         response.statusCode == ExceptionHandle.bad_request) {
       // 状态码400
@@ -123,10 +129,15 @@ class HandleErrorInterceptor extends Interceptor {
               : '400错误,错误接口:${response.request.uri.toString()}'));
     } else if (response != null &&
         response.statusCode == ExceptionHandle.unauthorized) {
+      String message = '';
+      if (response.data.containsKey(Constant.responseMessageKey))
+        message = response.data[Constant.responseMessageKey];
+      else if (response.data.containsKey(Constant.responseMsgKey))
+        message = response.data[Constant.responseMsgKey];
+      else
+        message = '401错误，认证失败:response=${response.toString()}';
       // 状态码401
-      throw DioError(
-          error: UnauthorizedException(
-              '401错误，认证失败:response=${response.toString()}'));
+      throw DioError(error: UnauthorizedException('$message'));
     } else if (response != null &&
         response.statusCode == ExceptionHandle.not_found) {
       // 状态码404
@@ -161,12 +172,19 @@ class LoggingInterceptor extends Interceptor {
     Log.d("----------Start----------");
     if (options.queryParameters.isEmpty) {
       Log.i("RequestUrl: " + options.baseUrl + options.path);
+      //Toast.show(options.baseUrl + options.path, duration: 300000);
     } else {
       Log.i("RequestUrl: " +
           options.baseUrl +
           options.path +
           "?" +
           Transformer.urlEncodeMap(options.queryParameters));
+//      Toast.show(
+//          options.baseUrl +
+//              options.path +
+//              "?" +
+//              Transformer.urlEncodeMap(options.queryParameters),
+//          duration: 300000);
     }
     Log.d("RequestMethod: " + options.method);
     Log.d("RequestHeaders:" + options.headers.toString());
