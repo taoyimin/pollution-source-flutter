@@ -24,8 +24,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
   KeyboardActionsConfig _config;
@@ -50,9 +50,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    //释放资源
-    _nameController.dispose();
-    _passwordController.dispose();
+    // 释放资源(此处执行dispose方法会抛出异常，原因未知)
+    // _nameController?.removeListener(_verify);
+    // _nameController?.dispose();
+    // passwordController?.removeListener(_verify);
+    // _passwordController?.dispose();
     super.dispose();
   }
 
@@ -84,20 +86,22 @@ class _LoginPageState extends State<LoginPage> {
       //登录成功
       SpUtil.putInt(Constant.spUserType, _userType);
       SpUtil.putString(Constant.spRealName, CompatUtils.getResponseRealName(response));
+      SpUtil.putString(Constant.spLoginTime, DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE));
       SpUtil.putString(Constant.spUsernameList[_userType], _nameController.text);
+      SpUtil.putString(Constant.spPasswordList[_userType], _passwordController.text);
       SpUtil.putString(Constant.spPasswordList[_userType], _passwordController.text);
       SpUtil.putString(
           Constant.spToken, CompatUtils.getResponseToken(response));
       switch (_userType) {
         case 0:
-          Application.router.navigateTo(context, '${Routes.adminHome}');
+          Application.router.navigateTo(context, '${Routes.adminHome}', clearStack: true);
           break;
         case 1:
           Application.router.navigateTo(context,
-              '${Routes.enterHome}/${CompatUtils.getResponseEnterId(response)}');
+              '${Routes.enterHome}/${CompatUtils.getResponseEnterId(response)}', clearStack: true);
           break;
         case 2:
-          Application.router.navigateTo(context, '${Routes.operationHome}');
+          Application.router.navigateTo(context, '${Routes.operationHome}', clearStack: true);
           break;
       }
     } catch (e) {
