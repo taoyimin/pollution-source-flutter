@@ -40,24 +40,31 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return OKToast(
-      child: MaterialApp(
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale.fromSubtags(languageCode: 'zh'),
-        ],
-        theme: ThemeData(
-          primaryColor: Colours.primary_color,
-          accentColor: Colours.accent_color,
-          brightness: Brightness.light,
-          primaryColorBrightness: Brightness.dark,
-          // 设置中文和英文的基准线一致
-          textTheme: TextTheme(subhead: TextStyle(textBaseline: TextBaseline.alphabetic)),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: MaterialApp(
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale.fromSubtags(languageCode: 'zh'),
+          ],
+          theme: ThemeData(
+            primaryColor: Colours.primary_color,
+            accentColor: Colours.accent_color,
+            brightness: Brightness.light,
+            primaryColorBrightness: Brightness.dark,
+            // 设置中文和英文的基准线一致
+            textTheme: TextTheme(subhead: TextStyle(textBaseline: TextBaseline.alphabetic)),
+          ),
+          onGenerateRoute: Application.router.generator,
         ),
-        onGenerateRoute: Application.router.generator,
       ),
     );
   }
