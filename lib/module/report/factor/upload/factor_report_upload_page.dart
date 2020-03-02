@@ -224,26 +224,57 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-                DataDictMultiWidget(
+//                DataDictMultiWidget(
+//                  title: '异常因子',
+//                  tipText: '请先选择监控点',
+//                  content: reportUpload?.factorCode
+//                      ?.map((dataDict) => dataDict.name)
+//                      ?.join(','),
+//                  dataDictBloc: _factorCodeBloc,
+//                  selected: reportUpload?.factorCode,
+//                  onSelected: (DataDict dataDict) {
+//                    // 如果集合中已有则删除，如果没有则添加
+//                    if (reportUpload.factorCode.contains(dataDict))
+//                      reportUpload.factorCode.remove(dataDict);
+//                    else
+//                      reportUpload.factorCode.add(dataDict);
+//                    _pageBloc.add(
+//                      PageLoad(
+//                        model: reportUpload.copyWith(
+//                            factorCode: reportUpload.factorCode),
+//                      ),
+//                    );
+//                  },
+//                ),
+//                Gaps.hLine,
+                SelectRowWidget(
                   title: '异常因子',
-                  tipText: '请先选择监控点',
                   content: reportUpload?.factorCode
                       ?.map((dataDict) => dataDict.name)
                       ?.join(','),
-                  dataDictBloc: _factorCodeBloc,
-                  selected: reportUpload?.factorCode,
-                  onSelected: (DataDict dataDict) {
-                    // 如果集合中已有则删除，如果没有则添加
-                    if (reportUpload.factorCode.contains(dataDict))
-                      reportUpload.factorCode.remove(dataDict);
-                    else
-                      reportUpload.factorCode.add(dataDict);
-                    _pageBloc.add(
-                      PageLoad(
-                        model: reportUpload.copyWith(
-                            factorCode: reportUpload.factorCode),
-                      ),
+                  onTap: () {
+                    //打开BottomSheet
+                    showModalBottomSheet(
+                      context: context,
+                      elevation: 20,
+                      backgroundColor: Colors.white,
+                      builder: (BuildContext context) {
+                        return BlocBuilder<DataDictBloc, DataDictState>(
+                          bloc: _factorCodeBloc,
+                          builder: (context, state) {
+                            print(state);
+                            if (state is DataDictLoaded) {
+                              return _buildBottomSheet(
+                                  reportUpload, state.dataDictList);
+                            } else {
+                              return MessageWidget(
+                                  message: 'BlocBuilder监听到未知的的状态！state=$state');
+                            }
+                          },
+                        );
+                      },
                     );
+                    return;
                   },
                 ),
                 Gaps.hLine,
@@ -367,6 +398,109 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             ),
           ),
           Gaps.vGap20,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomSheet(
+      FactorReportUpload reportUpload, List<DataDict> dataDictList) {
+    return Container(
+      width: double.infinity,
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Gaps.hGap10,
+              GestureDetector(
+                onTap: () {
+                  _factorCodeBloc.add(DataDictUpdate(
+                    dataDictList: dataDictList.map((dataDict) {
+                      return dataDict.copyWith(checked: false);
+                    }).toList(),
+                    timeStamp: DateTime.now().millisecondsSinceEpoch,
+                  ));
+                  _pageBloc.add(
+                    PageLoad(
+                      model: reportUpload.copyWith(
+                          factorCode: []),
+                    ),
+                  );
+                },
+                child: const Text(
+                  '重置',
+                  style: TextStyle(
+                    color: Colours.secondary_text,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(child: Gaps.empty),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  '确定',
+                  style: TextStyle(
+                    color: Colours.primary_color,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Gaps.hGap10,
+            ],
+          ),
+          Gaps.vGap16,
+          Wrap(
+            runSpacing: 8,
+            spacing: 8,
+            children: dataDictList.map((dataDict) {
+              return InkWell(
+                onTap: () {
+                  dataDictList[dataDictList.indexOf(dataDict)] =
+                      dataDict.copyWith(checked: !dataDict.checked);
+                  _factorCodeBloc.add(DataDictUpdate(
+                      dataDictList: dataDictList,
+                      timeStamp: DateTime.now().millisecondsSinceEpoch));
+                  _pageBloc.add(
+                    PageLoad(
+                      model: reportUpload.copyWith(
+                          factorCode: dataDictList.where((dataDict) {
+                        return dataDict.checked;
+                      }).toList()),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.5,
+                      color: dataDict.checked
+                          ? Colours.primary_color
+                          : Colours.divider_color,
+                    ),
+                    color: dataDict.checked
+                        ? Colours.primary_color.withOpacity(0.3)
+                        : Colours.divider_color,
+                  ),
+                  child: Text(
+                    dataDict.name,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: dataDict.checked
+                          ? Colours.primary_color
+                          : Colours.secondary_text,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
         ],
       ),
     );
