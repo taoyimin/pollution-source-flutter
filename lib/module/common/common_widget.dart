@@ -1790,16 +1790,20 @@ class SelectWidget extends StatelessWidget {
 // 单行文本输入控件
 class EditRowWidget extends StatelessWidget {
   final String title;
+  final String hintText;
   final TextStyle style;
   final TextInputType keyboardType;
+  final bool obscureText;
   final ValueChanged<String> onChanged;
   final TextEditingController controller;
 
   EditRowWidget({
     Key key,
     @required this.title,
+    this.hintText,
     this.style = const TextStyle(fontSize: 15),
     this.keyboardType = TextInputType.text,
+    this.obscureText = false,
     this.onChanged,
     this.controller,
   }) : super(key: key);
@@ -1822,9 +1826,10 @@ class EditRowWidget extends StatelessWidget {
               style: style,
               keyboardType: keyboardType,
               onChanged: onChanged,
+              obscureText: obscureText,
               controller: controller,
               decoration: InputDecoration(
-                hintText: '请输入$title',
+                hintText: hintText ?? '请输入$title',
                 hintStyle: style,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide.none,
