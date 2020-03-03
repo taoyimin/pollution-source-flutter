@@ -71,7 +71,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   icon: Icons.check,
                   color: Colors.lightBlue,
                   onTap: () {
-                    Toast.show('修改密码功能暂未开放');
+                    Toast.show('修改密码功能即将开放');
                   },
                 ),
               ],
