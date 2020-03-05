@@ -34,7 +34,8 @@ dependencies:
   # Google 图表库 https://github.com/google/charts
   charts_flutter: ^0.8.1
   # 图表库(首页最近一周变化趋势和监测数据详情使用了) https://github.com/imaNNeoFighT/fl_chart
-  fl_chart: ^0.5.0
+  # fl_chart: ^0.5.0
+  fl_chart: ^0.8.1
   # 常用加载动画库 https://github.com/jogboms/flutter_spinkit
   flutter_spinkit: ^4.0.0
   # 动画库 https://github.com/2d-inc/Flare-Flutter
@@ -86,7 +87,10 @@ dependencies:
   amap_location: ^0.2.0
   # 权限申请 https://github.com/Baseflow/flutter-permission-handler
   permission_handler: '^4.2.0+hotfix.3'
-  # wave: ^0.0.8
+  # 自动变更文本大小控件 https://github.com/leisim/auto_size_text
+  auto_size_text: ^2.1.0
+  # 获取应用版本信息 https://github.com/flutter/plugins/tree/master/packages/package_info
+  package_info: ^0.4.0+2
   # 扫码 https://github.com/apptreesoftware/flutter_barcode_reader
   # barcode_scan:
     # git:
