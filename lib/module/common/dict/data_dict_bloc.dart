@@ -21,6 +21,8 @@ class DataDictBloc extends Bloc<DataDictEvent, DataDictState> {
       yield* _mapDataDictLoadToState(event);
     } else if (event is DataDictReset) {
       yield DataDictInitial();
+    } else if (event is DataDictUpdate) {
+      yield DataDictLoaded(dataDictList: event.dataDictList, timeStamp: event.timeStamp);
     }
   }
 

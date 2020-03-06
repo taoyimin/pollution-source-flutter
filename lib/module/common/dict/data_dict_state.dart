@@ -26,11 +26,12 @@ class DataDictLoading extends DataDictState {
 /// 加载完成状态
 class DataDictLoaded extends DataDictState {
   final List<DataDict> dataDictList;
+  final int timeStamp;
 
-  const DataDictLoaded({@required this.dataDictList});
+  const DataDictLoaded({@required this.dataDictList, this.timeStamp});
 
   @override
-  List<Object> get props => [dataDictList];
+  List<Object> get props => [dataDictList, timeStamp];
 }
 
 /// 发生错误状态
