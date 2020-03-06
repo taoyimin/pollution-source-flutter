@@ -103,6 +103,52 @@ class CompatUtils {
     }
   }
 
+  /// 根据不同的用户类型解析json中的realName
+  static String getResponseRealName(Response response) {
+    if (response == null)
+      throw DioError(error: TokenException('获取RealName失败！response为空！'));
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+      //环保和企业用户登录后去返回数据中取RealName
+        if (SpUtil.getBool(Constant.spUseJavaApi,
+            defValue: Constant.defaultUseJavaApi)) {
+          if (response.statusCode == ExceptionHandle.success &&
+              response.data[Constant.responseCodeKey] ==
+                  ExceptionHandle.success_code) {
+            return response.data[Constant.responseDataKey]
+            [Constant.responseRealNameKey];
+          } else {
+            throw DioError(
+                error: TokenException(
+                    '获取RealName失败！response=${response.toString()}'));
+          }
+        } else {
+          if (response.statusCode == ExceptionHandle.success) {
+            return response.data[Constant.responseRealNameKey];
+          } else {
+            throw DioError(
+                error: TokenException(
+                    '获取RealName失败！response=${response.toString()}'));
+          }
+        }
+        break;
+      case 2:
+      // 运维用户登录后去header中取RealName
+        if (response.data[Constant.responseSuccessKey]) {
+          return response.data[Constant.responseRealNameKey];
+        } else {
+          throw DioError(
+              error:
+              TokenException('获取RealName失败！response=${response.toString()}'));
+        }
+        break;
+      default:
+        throw Exception(
+            '获取RealName失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
   /// 企业用户登录时，根据不同用户类型解析response中的enterId
   static getResponseEnterId(response) {
     switch (SpUtil.getInt(Constant.spUserType)) {
@@ -289,6 +335,8 @@ class CompatUtils {
   /// 根据传入的枚举类型返回对应的Java接口
   static String getJavaApi(httpApi) {
     switch (httpApi) {
+      case HttpApi.checkVersion:
+        return HttpApiJava.checkVersion;
       case HttpApi.adminIndex:
         return HttpApiJava.adminIndex;
       case HttpApi.adminToken:
@@ -311,6 +359,10 @@ class CompatUtils {
         return HttpApiJava.monitorHistoryData;
       case HttpApi.orderList:
         return HttpApiJava.orderList;
+      case HttpApi.orderAlarmType:
+        return HttpApiJava.orderAlarmType;
+      case HttpApi.orderAlarmLevel:
+        return HttpApiJava.orderAlarmLevel;
       case HttpApi.orderDetail:
         return HttpApiJava.orderDetail;
       case HttpApi.processesUpload:
@@ -405,6 +457,8 @@ class CompatUtils {
   /// 根据传入的枚举类型返回对应的运维接口
   static String getOperationApi(httpApi) {
     switch (httpApi) {
+      case HttpApi.checkVersion:
+        return HttpApiOperation.checkVersion;
       case HttpApi.operationToken:
         return HttpApiOperation.operationToken;
       case HttpApi.operationIndex:
@@ -425,6 +479,10 @@ class CompatUtils {
         return HttpApiOperation.monitorHistoryData;
       case HttpApi.orderList:
         return HttpApiOperation.orderList;
+      case HttpApi.orderAlarmType:
+        return HttpApiOperation.orderAlarmType;
+      case HttpApi.orderAlarmLevel:
+        return HttpApiOperation.orderAlarmLevel;
       case HttpApi.orderDetail:
         return HttpApiOperation.orderDetail;
       case HttpApi.processesUpload:
