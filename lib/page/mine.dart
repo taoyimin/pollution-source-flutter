@@ -1,13 +1,17 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flustars/flustars.dart';
+import 'package:package_info/package_info.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
-import 'package:pollution_source/widget/wave.dart';
 
 /// 个人中心页面
 class MinePage extends StatefulWidget {
@@ -19,6 +23,18 @@ class _MinePageState extends State<MinePage> {
   final double _headerHeight = 300;
   final double _headerBgHeight = 230;
   final double _cardHeight = 200;
+  final double _cardMarginBottom = 30;
+  String version;
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      setState(() {
+        version = packageInfo.version;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,25 +85,25 @@ class _MinePageState extends State<MinePage> {
                         ),
                       ),
                       // 名字
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-                        child: Center(
-                          child: Text(
-                            '${SpUtil.getString(Constant.spRealName)}',
-                            style: TextStyle(
-                              fontSize:
-                                  '${SpUtil.getString(Constant.spRealName)}'
-                                              .length <=
-                                          12
-                                      ? 25
-                                      : 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
+//                      Container(
+//                        margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+//                        child: Center(
+//                          child: Text(
+//                            '${SpUtil.getString(Constant.spRealName)}',
+//                            style: TextStyle(
+//                              fontSize:
+//                                  '${SpUtil.getString(Constant.spRealName)}'
+//                                              .length <=
+//                                          12
+//                                      ? 25
+//                                      : 18,
+//                              color: Colors.white,
+//                            ),
+//                          ),
+//                        ),
+//                      ),
                       Positioned(
-                        bottom: 30,
+                        bottom: _cardMarginBottom,
                         right: 10,
                         left: 10,
                         child: ClipPath(
@@ -105,127 +121,90 @@ class _MinePageState extends State<MinePage> {
                           ),
                         ),
                       ),
+//                      Positioned(
+//                        bottom: 130,
+//                        left: 0,
+//                        right: 0,
+//                        child: Stack(
+//                          children: <Widget>[
+//                            Align(
+//                              alignment: Alignment.center,
+//                              child: Container(
+//                                height: 90,
+//                                width: 90,
+//                                child: CircleAvatar(
+//                                  backgroundImage: AssetImage(
+//                                      "assets/images/mine_user_header.png"),
+//                                ),
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                      ),
+//                      Positioned(
+//                        bottom: 80,
+//                        left: 56,
+//                        right: 56,
+//                        child: Center(
+//                          child: AutoSizeText(
+//                            '${SpUtil.getString(Constant.spRealName)}',
+//                            style: TextStyle(fontSize: 23),
+//                            maxLines: 1,
+//                          ),
+//                        ),
+//                      ),
                       Positioned(
-                        bottom: 120,
-                        left: 0,
-                        right: 0,
-                        child: Stack(
+                        top: _headerHeight -
+                            _cardMarginBottom -
+                            _cardHeight +
+                            10,
+                        right: 56,
+                        left: 56,
+                        child: Column(
                           children: <Widget>[
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 90,
-                                width: 90,
-                                child: CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                      "assets/images/mine_user_header.png"),
-                                ),
+                            Container(
+                              height: 90,
+                              width: 90,
+                              child: CircleAvatar(
+                                backgroundImage: AssetImage(
+                                    "assets/images/mine_user_header.png"),
+                              ),
+                            ),
+                            Gaps.vGap8,
+                            AutoSizeText(
+                              '${SpUtil.getString(Constant.spRealName)}',
+                              style: const TextStyle(fontSize: 23),
+                              maxLines: 1,
+                            ),
+                            Gaps.vGap8,
+                            Text(
+                              '登录时间：${SpUtil.getString(Constant.spLoginTime, defValue: '未知')}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colours.secondary_text,
+                              ),
+                            ),
+                            Gaps.vGap8,
+                            Text(
+                              '当前版本号：${version ?? '未知'}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colours.secondary_text,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Positioned(
-                        bottom: 30,
-                        right: 10,
-                        left: 10,
-                        child: Container(
-                          height: 80.0,
-                          width: double.infinity,
-                          child: Wave(
-                            config: CustomConfig(
-                              gradients: [
-                                [Colors.red, Color(0xEEF44336)],
-                                [Colors.red[800], Color(0x77E57373)],
-                                [Colors.orange, Color(0x66FF9800)],
-                                [Colors.yellow, Color(0x55FFEB3B)]
-                              ],
-                              durations: [35000, 19440, 10800, 6000],
-                              heightPercentages: [0.20, 0.23, 0.25, 0.30],
-                              blur: MaskFilter.blur(BlurStyle.inner, 16.0),
-                              gradientBegin: Alignment.bottomLeft,
-                              gradientEnd: Alignment.topRight,
-                            ),
-                            backgroundColor: Colors.transparent,
-                            size: Size(double.infinity, double.infinity),
-                            waveAmplitude: 0,
-                          ),
-                        ),
-                      ),
 //                      Positioned(
-//                        bottom: 30,
-//                        right: 10,
-//                        left: 10,
-//                        child: Container(
-//                          height: 80,
-//                          child: Row(
-//                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                            children: <Widget>[
-//                              Column(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                children: <Widget>[
-//                                  Text(
-//                                    "18",
-//                                    style: TextStyle(
-//                                        fontSize: 30,
-//                                        fontStyle: FontStyle.normal),
-//                                  ),
-//                                  Text(
-//                                    "代办",
-//                                    style: TextStyle(
-//                                        fontSize: 13,
-//                                        color: Colours.secondary_text),
-//                                  ),
-//                                ],
-//                              ),
-//                              Column(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                children: <Widget>[
-//                                  Text(
-//                                    "458",
-//                                    style: TextStyle(
-//                                        fontSize: 30,
-//                                        fontStyle: FontStyle.normal),
-//                                  ),
-//                                  Text(
-//                                    "代办",
-//                                    style: TextStyle(
-//                                        fontSize: 13,
-//                                        color: Colours.secondary_text),
-//                                  ),
-//                                ],
-//                              ),
-//                              Column(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                children: <Widget>[
-//                                  Text(
-//                                    "69",
-//                                    style: TextStyle(
-//                                        fontSize: 30,
-//                                        fontStyle: FontStyle.normal),
-//                                  ),
-//                                  Text(
-//                                    "代办",
-//                                    style: TextStyle(
-//                                        fontSize: 13,
-//                                        color: Colours.secondary_text),
-//                                  ),
-//                                ],
-//                              ),
-//                            ],
-//                          ),
+//                        bottom: 140,
+//                        right: 50,
+//                        child: Image.asset(
+//                          "assets/images/icon_QR_code.png",
+//                          width: 30,
+//                          height: 30,
+//                          fit: BoxFit.cover,
 //                        ),
 //                      ),
-                      Positioned(
-                        bottom: 140,
-                        right: 50,
-                        child: Image.asset(
-                          "assets/images/icon_QR_code.png",
-                          width: 30,
-                          height: 30,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
 //                      Positioned(
 //                        top: 36,
 //                        left: 16,
@@ -237,22 +216,20 @@ class _MinePageState extends State<MinePage> {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     width: double.infinity,
                     color: Color(0xFFFAFAFA),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "常用功能",
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        Gaps.vGap10,
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 20),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -265,92 +242,86 @@ class _MinePageState extends State<MinePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  InkWellButton(
+                                    onTap: () {
+                                      Application.router.navigateTo(
+                                          context, '${Routes.changePassword}');
+                                    },
                                     children: <Widget>[
-                                      Image.asset(
-                                        "assets/images/icon_change_password.png",
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                      Text(
-                                        "修改密码",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.asset(
+                                            "assets/images/icon_change_password.png",
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          const Text(
+                                            "修改密码",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colours.secondary_text),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  InkWellButton(
+                                    onTap: (){
+                                      Scaffold.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('功能即将开放'),
+                                          action: SnackBarAction(
+                                              label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                        ),
+                                      );
+                                    },
                                     children: <Widget>[
-                                      Image.asset(
-                                        "assets/images/icon_help_book.png",
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                      Text(
-                                        "帮助手册",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.asset(
+                                            "assets/images/icon_check_update.png",
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          const Text(
+                                            "版本更新",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colours.secondary_text),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  InkWellButton(
+                                    onTap: (){
+                                      Scaffold.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('功能即将开放'),
+                                          action: SnackBarAction(
+                                              label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                        ),
+                                      );
+                                    },
                                     children: <Widget>[
-                                      Image.asset(
-                                        "assets/images/icon_share_product.png",
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                      Text(
-                                        "分享产品",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                        "assets/images/icon_feedback.png",
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                      Text(
-                                        "问题反馈",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                        "assets/images/icon_check_update.png",
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                      Text(
-                                        "版本更新",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.asset(
+                                            "assets/images/icon_share_product.png",
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          const Text(
+                                            "分享产品",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colours.secondary_text),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -376,7 +347,64 @@ class _MinePageState extends State<MinePage> {
                                                     Toast.show('清理附件成功！');
                                                     Navigator.of(context).pop();
                                                   },
-                                                  child: const Text("确认"),
+                                                  child: const Text("确定"),
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    children: <Widget>[
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.asset(
+                                            "assets/images/icon_clear_cache.png",
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          const Text(
+                                            '清理缓存',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colours.secondary_text),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Gaps.vGap20,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  InkWellButton(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text('注销登录'),
+                                              content: const Text(
+                                                  "是否确定注销当前登录用户并返回登录界面？"),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text("取消"),
+                                                ),
+                                                FlatButton(
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop();
+                                                    Application.router
+                                                        .navigateTo(context,
+                                                            '${Routes.root}',
+                                                            clearStack: true);
+                                                  },
+                                                  child: const Text("确定"),
                                                 ),
                                               ],
                                             );
@@ -388,12 +416,12 @@ class _MinePageState extends State<MinePage> {
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           Image.asset(
-                                            "assets/images/icon_clear_cache.png",
+                                            "assets/images/icon_login_out.png",
                                             width: 30,
                                             height: 30,
                                           ),
-                                          Text(
-                                            "清理缓存",
+                                          const Text(
+                                            "注销登录",
                                             style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colours.secondary_text),
@@ -405,13 +433,8 @@ class _MinePageState extends State<MinePage> {
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Image.asset(
-                                        "assets/images/icon_login_out.png",
-                                        width: 30,
-                                        height: 30,
-                                      ),
                                       Text(
-                                        "注销登录",
+                                        "                ",
                                         style: TextStyle(
                                             fontSize: 12,
                                             color: Colours.secondary_text),
@@ -429,6 +452,49 @@ class _MinePageState extends State<MinePage> {
                                       ),
                                     ],
                                   ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "                ",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colours.secondary_text),
+                                      ),
+                                    ],
+                                  ),
+                                  //                                  Column(
+//                                    mainAxisAlignment: MainAxisAlignment.center,
+//                                    children: <Widget>[
+//                                      Image.asset(
+//                                        "assets/images/icon_feedback.png",
+//                                        width: 30,
+//                                        height: 30,
+//                                      ),
+//                                      const Text(
+//                                        "问题反馈",
+//                                        style: TextStyle(
+//                                            fontSize: 12,
+//                                            color: Colours.secondary_text),
+//                                      ),
+//                                    ],
+//                                  ),
+                                  //                                  Column(
+//                                    mainAxisAlignment: MainAxisAlignment.center,
+//                                    children: <Widget>[
+//                                      Image.asset(
+//                                        "assets/images/icon_help_book.png",
+//                                        width: 30,
+//                                        height: 30,
+//                                      ),
+//                                      const Text(
+//                                        "帮助手册",
+//                                        style: TextStyle(
+//                                            fontSize: 12,
+//                                            color: Colours.secondary_text),
+//                                      ),
+//                                    ],
+//                                  ),
                                 ],
                               ),
                             ],
