@@ -368,10 +368,10 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       contentFontSize: 19,
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.dischargeReportList}?monitorId=${monitorDetail.monitorId}&valid=0');
+                            '${Routes.dischargeReportList}?monitorId=${monitorDetail.monitorId}');
                       },
                       meta: Meta(
-                        title: '排口异常申报有效数',
+                        title: '排口异常申报总数',
                         content: '${monitorDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
@@ -383,10 +383,10 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       contentFontSize: 19,
                       onTap: () {
                         Application.router.navigateTo(context,
-                            '${Routes.factorReportList}?monitorId=${monitorDetail.monitorId}&valid=0');
+                            '${Routes.factorReportList}?monitorId=${monitorDetail.monitorId}');
                       },
                       meta: Meta(
-                        title: '因子异常申报有效数',
+                        title: '因子异常申报总数',
                         content: '${monitorDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',

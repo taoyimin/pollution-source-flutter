@@ -241,7 +241,7 @@ class _WaterDeviceParamUploadPageState
                               flex: 3,
                               child: Text(waterDeviceParamName.parameterName),
                             ),
-                            EditRowWidget2(
+                            EditWidget(
                               hintText: '原始值',
                               flex: 2,
                               onChanged: (value) {
@@ -254,7 +254,7 @@ class _WaterDeviceParamUploadPageState
                                         waterDeviceParamTypeList: list)));
                               },
                             ),
-                            EditRowWidget2(
+                            EditWidget(
                               hintText: '修改值',
                               flex: 2,
                               onChanged: (value) {
@@ -267,7 +267,7 @@ class _WaterDeviceParamUploadPageState
                                         waterDeviceParamTypeList: list)));
                               },
                             ),
-                            EditRowWidget2(
+                            EditWidget(
                               hintText: '修改原因',
                               flex: 2,
                               onChanged: (value) {

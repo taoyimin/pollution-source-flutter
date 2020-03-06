@@ -372,7 +372,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            SelectRowWidget2(
+            SelectWidget(
               content: DateUtil.formatDate(list[index]?.currentCheckTime,
                   format: 'MM-dd HH:mm'),
               onTap: () {
@@ -388,7 +388,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                     });
               },
             ),
-            EditRowWidget2(
+            EditWidget(
               key: Key('currentCheckResult$index'),
               onChanged: (value) {
                 list[index] =
@@ -398,7 +398,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                         airDeviceCheckRecordList: list)));
               },
             ),
-            EditRowWidget2(
+            EditWidget(
               key: Key('currentCheckIsPass$index'),
               onChanged: (value) {
                 list[index] =

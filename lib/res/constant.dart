@@ -59,6 +59,9 @@ class Constant {
   /// 解析返回数据中token用的key
   static const String responseTokenKey = 'token';
 
+  /// 解析返回数据中realName用的key
+  static const String responseRealNameKey = 'realName';
+
   /// *********SharedPreferences存取数据用的key*********
   /// 存取登录用户名的key
   //static const String spUsername = 'username';
@@ -90,6 +93,12 @@ class Constant {
 
   /// 存取运维用户登录密码的key
   static const String spOperationPassword = 'operationPassword';
+
+  /// 当前登陆人的真实姓名
+  static const String spRealName = 'realName';
+
+  /// 登录时间
+  static const String spLoginTime = 'loginTime';
 
   /// 登录用户名key集合
   static const List<String> spUsernameList = [

@@ -9,6 +9,7 @@ class Gaps {
   static const Widget hGap4 = const SizedBox(width: Dimens.gap_dp4);
   static const Widget hGap5 = const SizedBox(width: Dimens.gap_dp5);
   static const Widget hGap6 = const SizedBox(width: Dimens.gap_dp6);
+  static const Widget hGap8 = const SizedBox(width: Dimens.gap_dp8);
   static const Widget hGap10 = const SizedBox(width: Dimens.gap_dp10);
   static const Widget hGap15 = const SizedBox(width: Dimens.gap_dp15);
   static const Widget hGap16 = const SizedBox(width: Dimens.gap_dp16);

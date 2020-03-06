@@ -68,7 +68,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     //首次加载
     _pageBloc.add(PageLoad(model: ProcessUpload(orderId: widget.orderId)));
     //初始化编辑框控制器
-    _operatePersonController = TextEditingController();
+    _operatePersonController = TextEditingController(text: '${SpUtil.getString(Constant.spRealName)}');
     _operateDescController = TextEditingController();
     //初始化fab颜色渐变动画
     controller = AnimationController(
@@ -461,22 +461,22 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
         backgroundColor: animation.value,
         onPressed: () {
           if (_bottomSheetController != null) {
-            //已经处于打开状态
+            // 已经处于打开状态
             _bottomSheetController.close();
             return;
           }
-          //fab由蓝变红
+          // fab由蓝变红
           controller.forward();
           setState(() {
             _actionIcon = Icons.close;
           });
-          //打开BottomSheet
+          // 打开BottomSheet
           _bottomSheetController = showBottomSheet(
             context: context,
             elevation: 20,
             backgroundColor: Colors.white,
             builder: (BuildContext context) {
-              //生成流程上报界面
+              // 生成流程上报界面
               return BlocBuilder<PageBloc, PageState>(
                 bloc: _pageBloc,
                 builder: (context, state) {
@@ -490,9 +490,9 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
               );
             },
           );
-          //监听BottomSheet关闭
+          // 监听BottomSheet关闭
           _bottomSheetController.closed.then((value) {
-            //fab由红变蓝
+            // fab由红变蓝
             controller.reverse();
             setState(() {
               _bottomSheetController = null;

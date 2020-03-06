@@ -13,6 +13,7 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/index/admin/index.dart';
@@ -37,6 +38,7 @@ class _AdminIndexPageState extends State<AdminIndexPage>
     super.initState();
     _indexBloc = BlocProvider.of<IndexBloc>(context);
     _refreshCompleter = Completer<void>();
+    SystemUtils.checkUpdate(context);
   }
 
   @override
@@ -1300,7 +1302,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
         y: y,
         color: widget.color,
         width: width,
-        isRound: true,
+        //isRound: true,
         backDrawRodData: BackgroundBarChartRodData(
           show: true,
           y: 20,
