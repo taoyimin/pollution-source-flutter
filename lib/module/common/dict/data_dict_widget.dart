@@ -182,6 +182,7 @@ class DataDictWidget extends StatelessWidget {
 /// 数据字典多选控件
 ///
 /// [selected]参数为默认已经选中的选项，其他参数项参考[DataDictWidget]单选控件
+@Deprecated('已弃用')
 class DataDictMultiWidget extends StatelessWidget {
   final String title;
   final String content;
@@ -210,11 +211,40 @@ class DataDictMultiWidget extends StatelessWidget {
         if (state is DataDictError) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
-              content: Text('$title加载失败！${state.message}'),
+              content: Text('$title加载失败！'),
               action: SnackBarAction(
-                  label: '我知道了',
+                  label: '查看详情',
                   textColor: Colours.primary_color,
-                  onPressed: () {}),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("错误信息"),
+                          content: SingleChildScrollView(
+                            child: Text('${state.message}'),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: '${state.message}'));
+                                Toast.show('复制成功！');
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("复制"),
+                            ),
+                            FlatButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("确认"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }),
             ),
           );
         }
