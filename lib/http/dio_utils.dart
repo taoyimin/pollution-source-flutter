@@ -138,8 +138,8 @@ class FileDioUtils {
 
   FileDioUtils._internal() {
     var options = BaseOptions(
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
+      connectTimeout: 600000,
+      receiveTimeout: 600000,
       responseType: ResponseType.json,
       validateStatus: (status) {
         return true;
