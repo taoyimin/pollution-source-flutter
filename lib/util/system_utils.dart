@@ -1,7 +1,18 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:open_file/open_file.dart';
+import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:pollution_source/http/http.dart';
+import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/util/compat_utils.dart';
+import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 系统工具类
@@ -16,6 +27,144 @@ class SystemUtils {
     } else {
       Toast.show('拨号失败！');
     }
+  }
+
+  static Future<bool> checkLocationPermission() async {
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.location);
+    if (permission != PermissionStatus.granted) {
+      Map<PermissionGroup, PermissionStatus> permissions =
+          await PermissionHandler()
+              .requestPermissions([PermissionGroup.location]);
+      if (permissions[PermissionGroup.location] != PermissionStatus.granted) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  static checkUpdate(context) async {
+    Response response = await CompatUtils.getDio()
+        .get(CompatUtils.getApi(HttpApi.checkVersion));
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    if (Platform.isAndroid) {
+      if (checkVersion(
+          packageInfo.version, response.data['android']['version'])) {
+        String title = response.data['android']['title'];
+        String describe = response.data['android']['describe'];
+        String url = response.data['android']['url'];
+        bool force = response.data['android']['force'];
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return WillPopScope(
+                child: AlertDialog(
+                  title: Text('$title'),
+                  content: Text('$describe'),
+                  actions: <Widget>[
+                    Offstage(
+                      offstage: force,
+                      child: FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("取消"),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () async {
+                        if (!force)
+                          Navigator.of(context).pop();
+                        ProgressDialog pr;
+                        try {
+                          Attachment attachment = Attachment(
+                            fileName: FileUtils.getFileNameByUrl(url),
+                            url: url,
+                            size: null,
+                          );
+                          String localPath = await FileUtils
+                              .getAttachmentLocalPathByAttachment(attachment);
+                          if (await File(localPath).exists()) {
+                            // 安装包已经存在
+                            OpenFile.open(localPath);
+                          } else {
+                            // 安装包不存在
+                            pr = ProgressDialog(
+                              context,
+                              type: ProgressDialogType.Download,
+                              isDismissible: true,
+                              showLogs: true,
+                            );
+                            pr.style(
+                              message: '正在下载安装包...',
+                              borderRadius: 10.0,
+                              backgroundColor: Colors.white,
+                              elevation: 10.0,
+                              insetAnimCurve: Curves.easeInOut,
+                              progress: 0.0,
+                              maxProgress: 100.0,
+                              progressTextStyle: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              messageTextStyle: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            );
+                            pr.show();
+                            await FileDioUtils.instance
+                                .getDio()
+                                .download("${attachment.url}", localPath,
+                                    onReceiveProgress: (int count, int total) {
+                              pr.update(
+                                progress: double.parse(
+                                    (count * 100 / total).toStringAsFixed(2)),
+                              );
+                            });
+                            OpenFile.open(localPath);
+                          }
+                        } catch (e) {
+                          Toast.show(e.toString());
+                        }
+                        if (pr?.isShowing() ?? false) {
+                          pr.hide().then((isHidden) {});
+                        }
+                      },
+                      child: const Text("确定"),
+                    ),
+                  ],
+                ),
+                onWillPop: () async {
+                  return false;
+                },
+              );
+            });
+      }
+    } else if (Platform.isIOS) {
+      if (checkVersion(packageInfo.version, response.data['iOS']['version'])) {
+        // TODO
+      }
+    }
+  }
+
+  static bool checkVersion(String currentVersion, String targetVersion) {
+    List<int> current = currentVersion.split('.').map((str) {
+      return int.parse(str);
+    }).toList();
+    List<int> target = targetVersion.split('.').map((str) {
+      return int.parse(str);
+    }).toList();
+    for (int i = 0; i < current.length && i < target.length; i++) {
+      if (current[i] < target[i]) return true;
+    }
+    return false;
   }
 
   /// 调起二维码扫描页
