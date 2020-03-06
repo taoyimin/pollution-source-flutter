@@ -1,5 +1,8 @@
 /// 网络请求接口枚举类
 enum HttpApi {
+  ///检查更新
+  checkVersion,
+
   /// 管理员首页
   adminIndex,
 
@@ -122,6 +125,7 @@ enum HttpApi {
 }
 
 class HttpApiJava {
+  static const String checkVersion = 'update/update.json';
   static const String adminToken = 'user/login';
   static const String enterToken = 'user/entpriseLogin';
   static const String adminIndex = 'appIndex/getIndexData';
@@ -181,6 +185,7 @@ class HttpApiPython {
 }
 
 class HttpApiOperation {
+  static const String checkVersion = 'not found api';
   static const String operationToken = 'login';
   static const String operationIndex = 'ywmh/tInspectionTask/indexCount';
   static const String enterList = 'ycyd/enterpriseBas/api/enters';
