@@ -1,6 +1,12 @@
+import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/compat_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 
 /// 修改密码界面
@@ -15,6 +21,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void dispose() {
     oldPasswordController.dispose();
@@ -26,6 +34,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('修改密码'),
       ),
@@ -70,8 +79,59 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   text: '修改',
                   icon: Icons.check,
                   color: Colors.lightBlue,
-                  onTap: () {
-                    Toast.show('修改密码功能即将开放');
+                  onTap: () async {
+                    try {
+                      showDialog(
+                          context: context,
+                          builder: (context){
+                            return LoadingDialog(text: '修改密码中...');
+                          }
+                      );
+                      if (TextUtil.isEmpty(oldPasswordController.text)) {
+                        throw DioError(error: InvalidParamException('请输入旧密码'));
+                      }
+                      if (TextUtil.isEmpty(newPasswordController.text)) {
+                        throw DioError(error: InvalidParamException('请输入新密码'));
+                      }
+                      if (TextUtil.isEmpty(confirmPasswordController.text)) {
+                        throw DioError(error: InvalidParamException('请确认新密码'));
+                      }
+                      if (newPasswordController.text ==
+                          oldPasswordController.text) {
+                        throw DioError(
+                            error: InvalidParamException('新密码与旧密码不能相同'));
+                      }
+                      if (newPasswordController.text !=
+                          confirmPasswordController.text) {
+                        throw DioError(
+                            error: InvalidParamException('新密码与确认新密码不一致'));
+                      }
+                      await CompatUtils.getDio().get(
+                        CompatUtils.getApi(HttpApi.changePassword),
+                        queryParameters: {
+                          // 污染源参数
+                          'pwdOld': oldPasswordController.text.toString(),
+                          'pwdNew': newPasswordController.text.toString(),
+                          // 运维参数
+                          'password': oldPasswordController.text.toString(),
+                          'oldPassword': newPasswordController.text.toString(),
+                        },
+                      );
+                      Toast.show('密码修改成功，请重新登录！');
+                      Application.router.navigateTo(context, '${Routes.root}',
+                          clearStack: true);
+                    } catch (e) {
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(
+                        content:
+                            Text('${ExceptionHandle.handleException(e).msg}'),
+                        action: SnackBarAction(
+                          label: '我知道了',
+                          onPressed: () {},
+                        ),
+                      ));
+                    } finally{
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ],
