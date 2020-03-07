@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flustars/flustars.dart';
 import 'package:package_info/package_info.dart';
+import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/file_utils.dart';
+import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
@@ -268,14 +270,27 @@ class _MinePageState extends State<MinePage> {
                                     ],
                                   ),
                                   InkWellButton(
-                                    onTap: (){
-                                      Scaffold.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('功能即将开放'),
-                                          action: SnackBarAction(
-                                              label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
-                                        ),
-                                      );
+                                    onTap: () async {
+                                      try{
+                                        bool hasUpdate = await SystemUtils.checkUpdate(context);
+                                        if(!hasUpdate){
+                                          Scaffold.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: const Text('已经是最新版本'),
+                                              action: SnackBarAction(
+                                                  label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                            ),
+                                          );
+                                        }
+                                      }catch(e){
+                                        Scaffold.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('${ExceptionHandle.handleException(e).msg}'),
+                                            action: SnackBarAction(
+                                                label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                          ),
+                                        );
+                                      }
                                     },
                                     children: <Widget>[
                                       Column(
