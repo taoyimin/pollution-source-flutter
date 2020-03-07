@@ -2246,3 +2246,56 @@ class IconCheckButton extends StatelessWidget {
     );
   }
 }
+
+class LoadingDialog extends Dialog {
+  final String text;
+
+  LoadingDialog({
+    Key key,
+    this.text = '加载中',
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      child: Material(
+        // 透明类型
+        type: MaterialType.transparency,
+        child: Center(
+          child: SizedBox(
+            width: 120.0,
+            height: 120.0,
+            child: Container(
+              decoration: const ShapeDecoration(
+                color: Color(0xFFFFFFFF),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SpinKitFadingCube(
+                    color: Theme.of(context).primaryColor,
+                    size: 25.0,
+                  ),
+                  Gaps.vGap25,
+                  Text(
+                    text,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      onWillPop: () async {
+        return false;
+      },
+    );
+  }
+}
