@@ -46,13 +46,13 @@ class SystemUtils {
     }
   }
 
-  static checkUpdate(context) async {
+  static Future<bool> checkUpdate(context) async {
     Response response = await CompatUtils.getDio()
         .get(CompatUtils.getApi(HttpApi.checkVersion));
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isAndroid) {
       if (checkVersion(
-          packageInfo.version, response.data['android']['version'])) {
+          packageInfo.version, '1.0.1')) {
         String title = response.data['android']['title'];
         String describe = response.data['android']['describe'];
         String url = response.data['android']['url'];
@@ -147,10 +147,16 @@ class SystemUtils {
               );
             });
       }
+      return checkVersion(
+          packageInfo.version, '1.0.1');
     } else if (Platform.isIOS) {
-      if (checkVersion(packageInfo.version, response.data['iOS']['version'])) {
+      if (checkVersion(packageInfo.version, response.data['ios']['version'])) {
         // TODO
       }
+      return checkVersion(
+          packageInfo.version, response.data['ios']['version']);
+    }else{
+      return false;
     }
   }
 
