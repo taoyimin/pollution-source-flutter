@@ -1,8 +1,5 @@
 /// 网络请求接口枚举类
 enum HttpApi {
-  ///检查更新
-  checkVersion,
-
   /// 管理员首页
   adminIndex,
 
@@ -122,10 +119,15 @@ enum HttpApi {
 
   /// 废水监测设备参数列表
   deviceParamList,
+
+  /// 检查更新
+  checkVersion,
+
+  /// 修改密码
+  changePassword,
 }
 
 class HttpApiJava {
-  static const String checkVersion = 'update/update.json';
   static const String adminToken = 'user/login';
   static const String enterToken = 'user/entpriseLogin';
   static const String adminIndex = 'appIndex/getIndexData';
@@ -153,10 +155,12 @@ class HttpApiJava {
   static const String longStopReportDetail =
       'stopApply/getStopApply?dataType=L&reportId=';
   static const String longStopReportUpload = 'stopApply/addAbonrmalInfoL';
-  static const String licenseList = '/enterprise/getLicenseInfoById';
+  static const String licenseList = 'enterprise/getLicenseInfoById';
   static const String dischargeReportStopTypeList = 'dictionary/getSubListByParent?dicCode=stopType';
   static const String factorReportAlarmTypeList = 'dictionary/getSubListByParent?dicCode=alarm_type';
   static const String factorReportFactorList = 'stopApply/getPollutionFactor';
+  static const String checkVersion = 'update/update.json';
+  static const String changePassword = 'user/changePwd';
 }
 
 class HttpApiPython {
@@ -185,7 +189,6 @@ class HttpApiPython {
 }
 
 class HttpApiOperation {
-  static const String checkVersion = 'not found api';
   static const String operationToken = 'login';
   static const String operationIndex = 'ywmh/tInspectionTask/indexCount';
   static const String enterList = 'ycyd/enterpriseBas/api/enters';
@@ -220,4 +223,6 @@ class HttpApiOperation {
   static const String deviceCorrectLastValue = 'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
   static const String deviceParamUpload = 'ywmh/tInspectionTask/submitWatParameter';
   static const String deviceParamList = 'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
+  static const String checkVersion = 'app/update.json';
+  static const String changePassword = 'ywyh/updatePassword';
 }

@@ -335,8 +335,6 @@ class CompatUtils {
   /// 根据传入的枚举类型返回对应的Java接口
   static String getJavaApi(httpApi) {
     switch (httpApi) {
-      case HttpApi.checkVersion:
-        return HttpApiJava.checkVersion;
       case HttpApi.adminIndex:
         return HttpApiJava.adminIndex;
       case HttpApi.adminToken:
@@ -393,6 +391,10 @@ class CompatUtils {
         return HttpApiJava.factorReportAlarmTypeList;
       case HttpApi.factorReportFactorList:
         return HttpApiJava.factorReportFactorList;
+      case HttpApi.checkVersion:
+        return HttpApiJava.checkVersion;
+      case HttpApi.changePassword:
+        return HttpApiJava.changePassword;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
@@ -457,8 +459,6 @@ class CompatUtils {
   /// 根据传入的枚举类型返回对应的运维接口
   static String getOperationApi(httpApi) {
     switch (httpApi) {
-      case HttpApi.checkVersion:
-        return HttpApiOperation.checkVersion;
       case HttpApi.operationToken:
         return HttpApiOperation.operationToken;
       case HttpApi.operationIndex:
@@ -527,6 +527,10 @@ class CompatUtils {
         return HttpApiOperation.deviceParamUpload;
       case HttpApi.deviceParamList:
         return HttpApiOperation.deviceParamList;
+      case HttpApi.checkVersion:
+        return HttpApiOperation.checkVersion;
+      case HttpApi.changePassword:
+        return HttpApiOperation.changePassword;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
