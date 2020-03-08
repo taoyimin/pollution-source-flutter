@@ -45,8 +45,8 @@ class _MonitorTableState extends State<MonitorTablePage> {
 
   DetailBloc _detailBloc;
 
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
-  GlobalKey _stackKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
