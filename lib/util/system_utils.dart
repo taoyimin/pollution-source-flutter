@@ -148,7 +148,7 @@ class SystemUtils {
             });
       }
       return checkVersion(
-          packageInfo.version, '1.0.1');
+          packageInfo.version, response.data['android']['version']);
     } else if (Platform.isIOS) {
       if (checkVersion(packageInfo.version, response.data['ios']['version'])) {
         // TODO
