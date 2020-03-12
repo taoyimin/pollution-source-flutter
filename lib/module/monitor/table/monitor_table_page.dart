@@ -31,22 +31,24 @@ class _MonitorTableState extends State<MonitorTablePage> {
 
   /// 当前页数
   int currentPage = 0;
-  List<dynamic> _dropDownHeaderItem = [
+
+  /// 下拉菜单默认选中项
+  final List<dynamic> _dropDownHeaderItem = [
     '实时数据',
     DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0),
     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 23,
         59, 59),
   ];
-  List<SortCondition> _dataTypeConditions = [];
-  SortCondition _selectBrandSortCondition;
-  GZXDropdownMenuController _dropdownMenuController =
+  final List<SortCondition> _dataTypeConditions = [];
+  final GZXDropdownMenuController _dropdownMenuController =
       GZXDropdownMenuController();
-
-  DetailBloc _detailBloc;
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey _stackKey = GlobalKey();
+
+  /// 当前选中的数据类型
+  SortCondition _selectDataTypeCondition;
+  DetailBloc _detailBloc;
 
   @override
   void initState() {
@@ -60,12 +62,12 @@ class _MonitorTableState extends State<MonitorTablePage> {
         SortCondition(name: '小时数据', value: DataType.hour, isSelected: false));
     _dataTypeConditions.add(
         SortCondition(name: '日数据', value: DataType.day, isSelected: false));
-    _selectBrandSortCondition = _dataTypeConditions[0];
+    _selectDataTypeCondition = _dataTypeConditions[0];
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _detailBloc.add(DetailLoad(
       params: MonitorHistoryDataRepository.createParams(
         monitorId: widget.monitorId,
-        dataType: _selectBrandSortCondition.value,
+        dataType: _selectDataTypeCondition.value,
       ),
     ));
   }
@@ -93,7 +95,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                         : DateUtil.formatDate(
                             _dropDownHeaderItem[1],
                             format: getDateTimeFormat(
-                              _selectBrandSortCondition.value,
+                              _selectDataTypeCondition.value,
                             ),
                           ),
                     iconData: Icons.date_range,
@@ -105,7 +107,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                         : DateUtil.formatDate(
                             _dropDownHeaderItem[2],
                             format: getDateTimeFormat(
-                              _selectBrandSortCondition.value,
+                              _selectDataTypeCondition.value,
                             ),
                           ),
                     iconData: Icons.date_range,
@@ -136,7 +138,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                             _detailBloc.add(DetailLoad(
                               params: MonitorHistoryDataRepository.createParams(
                                 monitorId: widget.monitorId,
-                                dataType: _selectBrandSortCondition.value,
+                                dataType: _selectDataTypeCondition.value,
                                 startTime: dateTime,
                                 endTime: _dropDownHeaderItem[2],
                               ),
@@ -180,7 +182,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                             _detailBloc.add(DetailLoad(
                               params: MonitorHistoryDataRepository.createParams(
                                 monitorId: widget.monitorId,
-                                dataType: _selectBrandSortCondition.value,
+                                dataType: _selectDataTypeCondition.value,
                                 startTime: _dropDownHeaderItem[1],
                                 endTime: dateTime,
                               ),
@@ -253,7 +255,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                   if (state is DetailLoaded) {
                     int pages =
                         (state.detail.fixedColCells.length / pageSize).ceil();
-                    if(pages > 1) {
+                    if (pages > 1) {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -286,7 +288,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                           }),
                         ),
                       );
-                    }else{
+                    } else {
                       return Gaps.empty;
                     }
                   } else {
@@ -309,8 +311,8 @@ class _MonitorTableState extends State<MonitorTablePage> {
                 dropDownWidget: _buildConditionListWidget(
                   _dataTypeConditions,
                   (value) {
-                    _selectBrandSortCondition = value;
-                    _dropDownHeaderItem[0] = _selectBrandSortCondition.name;
+                    _selectDataTypeCondition = value;
+                    _dropDownHeaderItem[0] = _selectDataTypeCondition.name;
                     _dropdownMenuController.hide();
                     setState(() {});
                     try {
@@ -318,7 +320,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                       _detailBloc.add(DetailLoad(
                         params: MonitorHistoryDataRepository.createParams(
                           monitorId: widget.monitorId,
-                          dataType: _selectBrandSortCondition.value,
+                          dataType: _selectDataTypeCondition.value,
                           startTime: _dropDownHeaderItem[1],
                           endTime: _dropDownHeaderItem[2],
                         ),
