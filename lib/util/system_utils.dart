@@ -29,6 +29,7 @@ class SystemUtils {
     }
   }
 
+  /// 检查是否拥有定位权限
   static Future<bool> checkLocationPermission() async {
     PermissionStatus permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.location);
@@ -46,13 +47,14 @@ class SystemUtils {
     }
   }
 
+  /// 检查是否需要更新
   static Future<bool> checkUpdate(context) async {
     Response response = await CompatUtils.getDio()
         .get(CompatUtils.getApi(HttpApi.checkVersion));
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isAndroid) {
       if (checkVersion(
-          packageInfo.version, '1.0.1')) {
+          packageInfo.version, response.data['android']['version'])) {
         String title = response.data['android']['title'];
         String describe = response.data['android']['describe'];
         String url = response.data['android']['url'];
@@ -160,6 +162,7 @@ class SystemUtils {
     }
   }
 
+  /// 检查版本号，返回是否需要更新
   static bool checkVersion(String currentVersion, String targetVersion) {
     List<int> current = currentVersion.split('.').map((str) {
       return int.parse(str);
