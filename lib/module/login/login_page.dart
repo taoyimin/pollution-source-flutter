@@ -45,7 +45,8 @@ class _LoginPageState extends State<LoginPage> {
     _userType = SpUtil.getInt(Constant.spUserType, defValue: 0);
     //初始化输入框
     _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
-    _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
+    _passwordController.text =
+        SpUtil.getString(Constant.spPasswordList[_userType]);
   }
 
   @override
@@ -85,27 +86,38 @@ class _LoginPageState extends State<LoginPage> {
       );
       //登录成功
       SpUtil.putInt(Constant.spUserType, _userType);
-      SpUtil.putString(Constant.spRealName, CompatUtils.getResponseRealName(response));
-      SpUtil.putString(Constant.spLoginTime, DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE));
-      SpUtil.putString(Constant.spUsernameList[_userType], _nameController.text);
-      SpUtil.putString(Constant.spPasswordList[_userType], _passwordController.text);
-      SpUtil.putString(Constant.spPasswordList[_userType], _passwordController.text);
+      SpUtil.putString(
+          Constant.spRealName, CompatUtils.getResponseRealName(response));
+      SpUtil.putString(Constant.spAttentionLevel, CompatUtils.getResponseAttentionLevel(response));
+      SpUtil.putString(Constant.spLoginTime, DateUtil.getDateStrByDateTime(
+          DateTime.now(), format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE));
+      SpUtil.putString(
+          Constant.spUsernameList[_userType], _nameController.text);
+      SpUtil.putString(
+          Constant.spPasswordList[_userType], _passwordController.text);
+      SpUtil.putString(
+          Constant.spPasswordList[_userType], _passwordController.text);
       SpUtil.putString(
           Constant.spToken, CompatUtils.getResponseToken(response));
       switch (_userType) {
         case 0:
-          Application.router.navigateTo(context, '${Routes.adminHome}', clearStack: true);
+          Application.router.navigateTo(
+              context, '${Routes.adminHome}', clearStack: true);
           break;
         case 1:
           Application.router.navigateTo(context,
-              '${Routes.enterHome}/${CompatUtils.getResponseEnterId(response)}', clearStack: true);
+              '${Routes.enterHome}/${CompatUtils.getResponseEnterId(response)}',
+              clearStack: true);
           break;
         case 2:
-          Application.router.navigateTo(context, '${Routes.operationHome}', clearStack: true);
+          Application.router.navigateTo(
+              context, '${Routes.operationHome}', clearStack: true);
           break;
       }
     } catch (e) {
-      Toast.show(ExceptionHandle.handleException(e).msg);
+      Toast.show(ExceptionHandle
+          .handleException(e)
+          .msg);
     }
   }
 
@@ -114,18 +126,24 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: defaultTargetPlatform == TargetPlatform.iOS
           ? FormKeyboardActions(
-              child: _buildBody(),
-            )
+        child: _buildBody(),
+      )
           : SingleChildScrollView(
-              child: _buildBody(),
-            ),
+        child: _buildBody(),
+      ),
     );
   }
 
   _buildBody() {
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
@@ -196,8 +214,10 @@ class _LoginPageState extends State<LoginPage> {
                     _userType = 0;
                   });
                   SpUtil.putInt(Constant.spUserType, _userType);
-                  _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
-                  _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
+                  _nameController.text =
+                      SpUtil.getString(Constant.spUsernameList[_userType]);
+                  _passwordController.text =
+                      SpUtil.getString(Constant.spPasswordList[_userType]);
                 },
               ),
               Gaps.hGap10,
@@ -211,8 +231,10 @@ class _LoginPageState extends State<LoginPage> {
                     _userType = 1;
                   });
                   SpUtil.putInt(Constant.spUserType, _userType);
-                  _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
-                  _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
+                  _nameController.text =
+                      SpUtil.getString(Constant.spUsernameList[_userType]);
+                  _passwordController.text =
+                      SpUtil.getString(Constant.spPasswordList[_userType]);
                 },
               ),
               Gaps.hGap10,
@@ -226,8 +248,10 @@ class _LoginPageState extends State<LoginPage> {
                     _userType = 2;
                   });
                   SpUtil.putInt(Constant.spUserType, _userType);
-                  _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
-                  _passwordController.text = SpUtil.getString(Constant.spPasswordList[_userType]);
+                  _nameController.text =
+                      SpUtil.getString(Constant.spUsernameList[_userType]);
+                  _passwordController.text =
+                      SpUtil.getString(Constant.spPasswordList[_userType]);
                 },
               ),
             ],
