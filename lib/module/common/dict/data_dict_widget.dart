@@ -346,17 +346,17 @@ class DataDictMultiWidget extends StatelessWidget {
 }
 
 /// [DataDictGrid] item点击的回调函数
-typedef DataDictGridItemTap = void Function(int index);
+typedef DataDictGridItemTap = void Function(String value);
 
 /// 网格布局的数据字典
 class DataDictGrid extends StatelessWidget {
   final List<DataDict> dataDictList;
-  final int checkIndex;
+  final String checkValue;
   final DataDictGridItemTap onItemTap;
 
   DataDictGrid({
     @required this.dataDictList,
-    @required this.checkIndex,
+    @required this.checkValue,
     this.onItemTap,
   });
 
@@ -372,22 +372,22 @@ class DataDictGrid extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       children: List.generate(
         dataDictList.length,
-        (index) {
+            (index) {
           return InkWell(
             onTap: onItemTap != null
                 ? () {
-                    onItemTap(index);
-                  }
+              onItemTap(dataDictList[index].code);
+            }
                 : () {},
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 0.5,
-                  color: checkIndex == index
+                  color: checkValue == dataDictList[index].code
                       ? Colours.primary_color
                       : Colours.divider_color,
                 ),
-                color: checkIndex == index
+                color: checkValue == dataDictList[index].code
                     ? Colours.primary_color.withOpacity(0.3)
                     : Colours.divider_color,
               ),
@@ -396,7 +396,7 @@ class DataDictGrid extends StatelessWidget {
                   dataDictList[index].name,
                   style: TextStyle(
                     fontSize: 12,
-                    color: checkIndex == index
+                    color: checkValue == dataDictList[index].code
                         ? Colours.primary_color
                         : Colours.secondary_text,
                   ),
@@ -413,13 +413,13 @@ class DataDictGrid extends StatelessWidget {
 /// 网格布局的数据字典（通过Bloc获取数据字典的内容）
 class DataDictBlocGrid extends StatelessWidget {
   final DataDictBloc dataDictBloc;
-  final int checkIndex;
+  final String checkValue;
   final DataDictGridItemTap onItemTap;
 
   DataDictBlocGrid({
     Key key,
     @required this.dataDictBloc,
-    @required this.checkIndex,
+    this.checkValue,
     this.onItemTap,
   })  : assert(dataDictBloc != null),
         super(key: key);
@@ -432,6 +432,7 @@ class DataDictBlocGrid extends StatelessWidget {
         if (state is DataDictLoaded) {
           // 默认添加一个全部的数据字典
           DataDict dataDict = DataDict(code: '', name: '全部');
+          // 防止重复添加
           if (!state.dataDictList.contains(dataDict)) {
             state.dataDictList.insert(0, dataDict);
           }
@@ -445,22 +446,22 @@ class DataDictBlocGrid extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             children: List.generate(
               state.dataDictList.length,
-              (index) {
+                  (index) {
                 return InkWell(
                   onTap: onItemTap != null
                       ? () {
-                          onItemTap(index);
-                        }
+                    onItemTap(state.dataDictList[index].code);
+                  }
                       : () {},
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 0.5,
-                        color: checkIndex == index
+                        color: checkValue == state.dataDictList[index].code
                             ? Colours.primary_color
                             : Colours.divider_color,
                       ),
-                      color: checkIndex == index
+                      color: checkValue == state.dataDictList[index].code
                           ? Colours.primary_color.withOpacity(0.3)
                           : Colours.divider_color,
                     ),
@@ -469,7 +470,7 @@ class DataDictBlocGrid extends StatelessWidget {
                         state.dataDictList[index].name,
                         style: TextStyle(
                           fontSize: 12,
-                          color: checkIndex == index
+                          color: checkValue == state.dataDictList[index].code
                               ? Colours.primary_color
                               : Colours.secondary_text,
                         ),
