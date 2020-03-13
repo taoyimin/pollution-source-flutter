@@ -1,4 +1,5 @@
 import 'package:fluro/fluro.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
@@ -64,6 +65,7 @@ import 'package:pollution_source/page/admin_home.dart';
 import 'package:pollution_source/page/change_password_page.dart';
 import 'package:pollution_source/page/enter_home.dart';
 import 'package:pollution_source/page/operation_home.dart';
+import 'package:pollution_source/res/constant.dart';
 
 var rootHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -192,7 +194,8 @@ var orderListHandler = Handler(
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
   String alarmLevel = params['alarmLevel']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
+  // 默认取当前登录用户的关注程度
+  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: OrderListRepository()),
