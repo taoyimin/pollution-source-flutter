@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -28,6 +33,7 @@ class MonitorListPage extends StatefulWidget {
   final String dischargeId;
   final String monitorType;
   final String state;
+  final String attentionLevel;
   final int type; //页面启动类型 0：点击列表项查看详情 1：点击列表项携带数据返回上一层
 
   MonitorListPage({
@@ -35,6 +41,7 @@ class MonitorListPage extends StatefulWidget {
     this.dischargeId = '',
     this.monitorType = '',
     this.state = '',
+    this.attentionLevel = '',
     this.type = 0,
   });
 
@@ -46,22 +53,34 @@ class _MonitorListPageState extends State<MonitorListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
-  final List<DataDict> _monitorTypeList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '雨水监控', code: 'outletType1'),
-    DataDict(name: '废水监控', code: 'outletType2'),
-    DataDict(name: '废气监控', code: 'outletType3'),
-  ];
+
+  /// 运维用户隐藏关注程度相关布局
+  final bool _showAttentionLevel = SpUtil.getInt(Constant.spUserType) != 2;
+
   final List<DataDict> _stateList = [
     DataDict(name: '全部', code: ''),
     DataDict(name: '在线', code: '1'),
     DataDict(name: '预警', code: '2'),
     DataDict(name: '超标', code: '3'),
-    DataDict(name: '脱机', code: '4'),
-    DataDict(name: '异常', code: '5'),
+    DataDict(name: '负值', code: '4'),
+    DataDict(name: '超大值', code: '5'),
+    DataDict(name: '零值', code: '6'),
+    DataDict(name: '脱机', code: '7'),
+    DataDict(name: '异常申报', code: '8'),
   ];
-  int _monitorTypeIndex;
-  int _stateIndex;
+
+  /// 监控点类型Bloc
+  final DataDictBloc _monitorTypeBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.outletType),
+  );
+
+  /// 关注程度Bloc
+  final DataDictBloc _attentionLevelBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
+  );
+  String _state;
+  String _monitorType;
+  String _attentionLevel;
   int _currentPage = Constant.defaultCurrentPage;
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
@@ -71,6 +90,10 @@ class _MonitorListPageState extends State<MonitorListPage> {
   void initState() {
     super.initState();
     initParam();
+    // 加载监控点类型
+    _monitorTypeBloc.add(DataDictLoad());
+    // 加载关注程度
+    if (_showAttentionLevel) _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
@@ -91,12 +114,9 @@ class _MonitorListPageState extends State<MonitorListPage> {
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    _monitorTypeIndex = _monitorTypeList.indexWhere((dataDict) {
-      return dataDict.code == widget.monitorType;
-    });
-    _stateIndex = _stateList.indexWhere((dataDict) {
-      return dataDict.code == widget.state;
-    });
+    _monitorType = widget.monitorType;
+    _state = widget.state;
+    _attentionLevel = widget.attentionLevel;
   }
 
   /// 获取请求参数
@@ -108,8 +128,9 @@ class _MonitorListPageState extends State<MonitorListPage> {
       dischargeId: widget.dischargeId,
       enterName: _enterNameController.text,
       areaCode: _areaCode,
-      monitorType: _monitorTypeList[_monitorTypeIndex].code,
-      state: _stateList[_stateIndex].code,
+      monitorType: _monitorType,
+      state: _state,
+      attentionLevel: _attentionLevel,
     );
   }
 
@@ -358,12 +379,12 @@ class _MonitorListPageState extends State<MonitorListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
-                        checkIndex: _monitorTypeIndex,
-                        dataDictList: _monitorTypeList,
-                        onItemTap: (index) {
+                      DataDictBlocGrid(
+                        checkValue: _monitorType,
+                        dataDictBloc: _monitorTypeBloc,
+                        onItemTap: (value) {
                           setState(() {
-                            _monitorTypeIndex = index;
+                            _monitorType = value;
                           });
                         },
                       ),
@@ -375,13 +396,35 @@ class _MonitorListPageState extends State<MonitorListPage> {
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: _stateIndex,
+                        checkValue: _state,
                         dataDictList: _stateList,
-                        onItemTap: (index) {
+                        onItemTap: (value) {
                           setState(() {
-                            _stateIndex = index;
+                            _state = value;
                           });
                         },
+                      ),
+                      Offstage(
+                        offstage: !_showAttentionLevel,
+                        child: const Text(
+                          '关注程度',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Offstage(
+                        offstage: !_showAttentionLevel,
+                        child: DataDictBlocGrid(
+                          checkValue: _attentionLevel,
+                          dataDictBloc: _attentionLevelBloc,
+                          onItemTap: (value) {
+                            setState(() {
+                              _attentionLevel = value;
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),
