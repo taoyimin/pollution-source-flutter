@@ -318,16 +318,34 @@ Future<List<Meta>> _convertOnlineMonitorStatistics(String string) async {
         content: strings[4],
       ),
       Meta(
-        title: '脱机',
-        imagePath: 'assets/images/icon_monitor_offline.png',
-        color: Color.fromRGBO(179, 129, 127, 1),
+        title: '负值',
+        imagePath: 'assets/images/icon_monitor_negative_value.png',
+        color: Color.fromRGBO(0, 188, 212, 1),
         content: strings[5],
       ),
       Meta(
-        title: '异常',
+        title: '超大值',
+        imagePath: 'assets/images/icon_monitor_large_value.png',
+        color: Color.fromRGBO(255, 87, 34, 1),
+        content: strings[6],
+      ),
+      Meta(
+        title: '零值',
+        imagePath: 'assets/images/icon_monitor_zero_value.png',
+        color: Color.fromRGBO(106, 106, 255, 1),
+        content: strings[7],
+      ),
+      Meta(
+        title: '脱机',
+        imagePath: 'assets/images/icon_monitor_offline.png',
+        color: Color.fromRGBO(179, 129, 127, 1),
+        content: strings[8],
+      ),
+      Meta(
+        title: '异常申报',
         imagePath: 'assets/images/icon_monitor_stop.png',
         color: Color.fromRGBO(137, 137, 137, 1),
-        content: strings[6],
+        content: strings[9],
       ),
     ];
   }

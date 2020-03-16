@@ -754,9 +754,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
           TitleWidget(title: "在线监控点概况"),
           Row(
             children: <Widget>[
-              //全部
+              // 全部
               InkWellButton1(
-                ratio: 1.15,
                 meta: metaList[0],
                 onTap: () {
                   Application.router
@@ -764,9 +763,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 },
               ),
               VerticalDividerWidget(height: 40),
-              //在线
+              // 在线
               InkWellButton1(
-                ratio: 1.15,
                 meta: metaList[1],
                 onTap: () {
                   Application.router
@@ -774,9 +772,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 },
               ),
               VerticalDividerWidget(height: 40),
-              //预警
+              // 预警
               InkWellButton1(
-                ratio: 1.15,
                 meta: metaList[2],
                 onTap: () {
                   Application.router
@@ -787,9 +784,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              //超标
+              // 超标
               InkWellButton1(
-                ratio: 1.15,
                 meta: metaList[3],
                 onTap: () {
                   Application.router
@@ -797,9 +793,8 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 },
               ),
               VerticalDividerWidget(height: 40),
-              //脱机
+              // 负值
               InkWellButton1(
-                ratio: 1.15,
                 meta: metaList[4],
                 onTap: () {
                   Application.router
@@ -807,13 +802,42 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
                 },
               ),
               VerticalDividerWidget(height: 40),
-              //异常
+              // 超大值
               InkWellButton1(
-                ratio: 1.15,
                 meta: metaList[5],
                 onTap: () {
                   Application.router
                       .navigateTo(context, '${Routes.monitorList}?state=5');
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              // 零值
+              InkWellButton1(
+                meta: metaList[6],
+                onTap: () {
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=6');
+                },
+              ),
+              VerticalDividerWidget(height: 40),
+              // 脱机
+              InkWellButton1(
+                meta: metaList[7],
+                onTap: () {
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=7');
+                },
+              ),
+              VerticalDividerWidget(height: 40),
+              // 异常申报
+              InkWellButton1(
+                meta: metaList[8],
+                onTap: () {
+                  Application.router
+                      .navigateTo(context, '${Routes.monitorList}?state=8');
                 },
               ),
             ],
@@ -843,7 +867,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
               InkWellButton1(
                 meta: metaList[0],
                 onTap: () {
-                  Application.router.navigateTo(context, '${Routes.enterList}');
+                  Application.router.navigateTo(context, '${Routes.enterList}?attentionLevel=');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -861,7 +885,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[2],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.enterList}?state=1');
+                      .navigateTo(context, '${Routes.enterList}?state=1&attentionLevel=');
                 },
               ),
             ],
@@ -873,7 +897,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[3],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=2');
+                      .navigateTo(context, '${Routes.enterList}?enterType=2&attentionLevel=');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -882,7 +906,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[4],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=3');
+                      .navigateTo(context, '${Routes.enterList}?enterType=3&attentionLevel=');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -891,7 +915,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[5],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=4');
+                      .navigateTo(context, '${Routes.enterList}?enterType=4&attentionLevel=');
                 },
               ),
             ],
@@ -903,7 +927,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[6],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=2');
+                      context, '${Routes.dischargeList}?dischargeType=outletType2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -912,7 +936,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[7],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=3');
+                      context, '${Routes.dischargeList}?dischargeType=outletType3');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -921,7 +945,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[8],
                 onTap: () {
                   Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=5');
+                      .navigateTo(context, '${Routes.enterList}?enterType=5&attentionLevel=');
                 },
               ),
             ],
@@ -970,7 +994,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[2],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=1');
+                      context, '${Routes.dischargeList}?dischargeType=outletType1');
                 },
               ),
             ],
