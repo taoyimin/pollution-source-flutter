@@ -95,7 +95,7 @@ var enterListHandler = Handler(
           'true' == 'true';
   String state = params['state']?.first ?? '';
   String enterType = params['enterType']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
+  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   int type = int.parse(params['type']?.first ?? '0');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
@@ -155,6 +155,8 @@ var monitorListHandler = Handler(
   int type = int.parse(params['type']?.first ?? '0');
   String state = params['state']?.first ?? '';
   String monitorType = params['monitorType']?.first ?? '';
+  // 默认取当前登录用户的关注程度
+  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: MonitorListRepository()),
@@ -164,6 +166,7 @@ var monitorListHandler = Handler(
       type: type,
       state: state,
       monitorType: monitorType,
+      attentionLevel: attentionLevel,
     ),
   );
 });
@@ -234,6 +237,8 @@ var dischargeReportListHandler = Handler(
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
+  // 默认取当前登录用户的关注程度
+  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: DischargeReportListRepository()),
@@ -243,6 +248,7 @@ var dischargeReportListHandler = Handler(
       monitorId: monitorId,
       state: state,
       valid: valid,
+      attentionLevel: attentionLevel,
     ),
   );
 });
@@ -264,6 +270,8 @@ var factorReportListHandler = Handler(
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
+  // 默认取当前登录用户的关注程度
+  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: FactorReportListRepository()),
@@ -273,6 +281,7 @@ var factorReportListHandler = Handler(
       monitorId: monitorId,
       state: state,
       valid: valid,
+      attentionLevel: attentionLevel,
     ),
   );
 });
@@ -292,6 +301,8 @@ var longStopReportListHandler = Handler(
   String enterId = params['enterId']?.first ?? '';
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
+  // 默认取当前登录用户的关注程度
+  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: LongStopReportListRepository()),
@@ -299,6 +310,7 @@ var longStopReportListHandler = Handler(
       enterId: enterId,
       state: state,
       valid: valid,
+      attentionLevel: attentionLevel,
     ),
   );
 });
