@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -25,11 +29,13 @@ class LongStopReportListPage extends StatefulWidget {
   final String enterId;
   final String state;
   final String valid;
+  final String attentionLevel;
 
   LongStopReportListPage({
     this.enterId = '',
     this.state = '',
     this.valid = '',
+    this.attentionLevel = '',
   });
 
   @override
@@ -40,12 +46,21 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
-  final List<DataDict> _validList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '生效中', code: '0'),
-    DataDict(name: '已失效', code: '1'),
-  ];
-  int _validIndex;
+
+  /// 运维用户隐藏关注程度相关布局
+  final bool _showAttentionLevel = SpUtil.getInt(Constant.spUserType) != 2;
+
+  /// 是否生效Bloc
+  final DataDictBloc _validBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.reportValid),
+  );
+
+  /// 关注程度Bloc
+  final DataDictBloc _attentionLevelBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
+  );
+  String _valid;
+  String _attentionLevel;
   int _currentPage = Constant.defaultCurrentPage;
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
@@ -55,6 +70,10 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
   void initState() {
     super.initState();
     initParam();
+    // 加载是否生效
+    _validBloc.add(DataDictLoad());
+    // 加载关注程度
+    if (_showAttentionLevel) _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
@@ -76,9 +95,8 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    _validIndex = _validList.indexWhere((dataDict) {
-      return dataDict.code == widget.valid;
-    });
+    _valid = widget.valid;
+    _attentionLevel = widget.attentionLevel;
   }
 
   /// 获取请求参数
@@ -90,7 +108,8 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
       enterName: _enterNameController.text,
       areaCode: _areaCode,
       state: widget.state,
-      valid: _validList[_validIndex].code,
+      valid: _valid,
+      attentionLevel: _attentionLevel,
     );
   }
 
@@ -312,20 +331,42 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
                       ),
                       Gaps.vGap30,
                       const Text(
-                        '是否有效',
+                        '是否生效',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
-                        checkIndex: _validIndex,
-                        dataDictList: _validList,
-                        onItemTap: (index) {
+                      DataDictBlocGrid(
+                        checkValue: _valid,
+                        dataDictBloc: _validBloc,
+                        onItemTap: (value) {
                           setState(() {
-                            _validIndex = index;
+                            _valid = value;
                           });
                         },
+                      ),
+                      Offstage(
+                        offstage: !_showAttentionLevel,
+                        child: const Text(
+                          '关注程度',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Offstage(
+                        offstage: !_showAttentionLevel,
+                        child: DataDictBlocGrid(
+                          checkValue: _attentionLevel,
+                          dataDictBloc: _attentionLevelBloc,
+                          onItemTap: (value) {
+                            setState(() {
+                              _attentionLevel = value;
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),

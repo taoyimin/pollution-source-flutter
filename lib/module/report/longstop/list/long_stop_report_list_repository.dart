@@ -20,7 +20,8 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
   /// [areaCode] 按区域搜索
   /// [enterId] 筛选某企业的所有长期停产申报单
   /// [state] 状态 0：待审核 1：审核通过 2：审核不通过（目前只要上报成功就默认审核通过，暂时不用该参数）
-  /// [valid] 是否有效 0：生效中 1：已失效
+  /// [valid] 是否生效 0：生效中 1：已失效
+  /// [attentionLevel] 关注程度 0：其他 1：重点
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -29,6 +30,7 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
     enterId = '',
     state = '',
     valid = '',
+    attentionLevel = '',
   }) {
     return {
       'currentPage': currentPage,
@@ -40,6 +42,7 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
       'enterId': enterId,
       'dataType': 'L',
       'hasValid': valid,
+      'attentionLevel': attentionLevel,
     };
   }
 }
