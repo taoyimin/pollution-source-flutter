@@ -6,7 +6,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/http/http_api.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
@@ -57,21 +56,26 @@ class _MonitorListPageState extends State<MonitorListPage> {
   /// 运维用户隐藏关注程度相关布局
   final bool _showAttentionLevel = SpUtil.getInt(Constant.spUserType) != 2;
 
-  final List<DataDict> _stateList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '在线', code: '1'),
-    DataDict(name: '预警', code: '2'),
-    DataDict(name: '超标', code: '3'),
-    DataDict(name: '负值', code: '4'),
-    DataDict(name: '超大值', code: '5'),
-    DataDict(name: '零值', code: '6'),
-    DataDict(name: '脱机', code: '7'),
-    DataDict(name: '异常申报', code: '8'),
-  ];
+//  final List<DataDict> _stateList = [
+//    DataDict(name: '全部', code: ''),
+//    DataDict(name: '在线', code: '1'),
+//    DataDict(name: '预警', code: '2'),
+//    DataDict(name: '超标', code: '3'),
+//    DataDict(name: '负值', code: '4'),
+//    DataDict(name: '超大值', code: '5'),
+//    DataDict(name: '零值', code: '6'),
+//    DataDict(name: '脱机', code: '7'),
+//    DataDict(name: '异常申报', code: '8'),
+//  ];
 
   /// 监控点类型Bloc
   final DataDictBloc _monitorTypeBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.outletType),
+  );
+
+  /// 监控点类型Bloc
+  final DataDictBloc _stateBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.monitorState),
   );
 
   /// 关注程度Bloc
@@ -92,6 +96,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
     initParam();
     // 加载监控点类型
     _monitorTypeBloc.add(DataDictLoad());
+    // 加载监控点状态
+    _stateBloc.add(DataDictLoad());
     // 加载关注程度
     if (_showAttentionLevel) _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
@@ -115,7 +121,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
   initParam() {
     _enterNameController.text = '';
     _monitorType = widget.monitorType;
-    _state = widget.state;
+    _state = MonitorListRepository.convertState(widget.state);
     _attentionLevel = widget.attentionLevel;
   }
 
@@ -395,9 +401,10 @@ class _MonitorListPageState extends State<MonitorListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
+                      DataDictBlocGrid(
+                        addFirst: false,
                         checkValue: _state,
-                        dataDictList: _stateList,
+                        dataDictBloc: _stateBloc,
                         onItemTap: (value) {
                           setState(() {
                             _state = value;

@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -45,16 +48,13 @@ class _DischargeListPageState extends State<DischargeListPage> {
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
 
-  /// 排口类型菜单
-  final List<DataDict> _dischargeTypeList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '雨水排口', code: '1'),
-    DataDict(name: '废水排口', code: '2'),
-    DataDict(name: '废气排口', code: '3'),
-  ];
+  /// 监控点类型Bloc
+  final DataDictBloc _dischargeTypeBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.outletType),
+  );
 
   /// 排口类型下标
-  int _dischargeTypeIndex;
+  String _dischargeType;
 
   /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
@@ -68,6 +68,8 @@ class _DischargeListPageState extends State<DischargeListPage> {
   void initState() {
     super.initState();
     initParam();
+    // 加载排口类型
+    _dischargeTypeBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
@@ -89,9 +91,7 @@ class _DischargeListPageState extends State<DischargeListPage> {
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    _dischargeTypeIndex = _dischargeTypeList.indexWhere((dataDict) {
-      return dataDict.code == widget.dischargeType;
-    });
+    _dischargeType = widget.dischargeType;
   }
 
   /// 获取请求参数
@@ -102,7 +102,7 @@ class _DischargeListPageState extends State<DischargeListPage> {
       enterId: widget.enterId,
       enterName: _enterNameController.text,
       areaCode: _areaCode,
-      dischargeType: _dischargeTypeList[_dischargeTypeIndex].code,
+      dischargeType: _dischargeType,
       state: widget.state,
     );
   }
@@ -362,12 +362,12 @@ class _DischargeListPageState extends State<DischargeListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
-                        checkIndex: _dischargeTypeIndex,
-                        dataDictList: _dischargeTypeList,
-                        onItemTap: (index) {
+                      DataDictBlocGrid(
+                        checkValue: _dischargeType,
+                        dataDictBloc: _dischargeTypeBloc,
+                        onItemTap: (value) {
                           setState(() {
-                            _dischargeTypeIndex = index;
+                            _dischargeType = value;
                           });
                         },
                       ),

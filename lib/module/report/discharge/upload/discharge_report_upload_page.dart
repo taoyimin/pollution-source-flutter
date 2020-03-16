@@ -62,7 +62,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
     // 初始化停产类型Bloc
     _stopTypeBloc = DataDictBloc(
         dataDictRepository:
-            DataDictRepository(HttpApi.dischargeReportStopTypeList));
+            DataDictRepository(HttpApi.dischargeReportStopType));
     // 加载停产类型
     _stopTypeBloc.add(DataDictLoad());
     _stopReasonController = TextEditingController();

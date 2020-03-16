@@ -21,7 +21,8 @@ class MonitorListRepository extends ListRepository<Monitor> {
   /// [enterId] 筛选某企业的所有监控点
   /// [dischargeId] 筛选某排口的所有监控点
   /// [monitorType] 监控点类型 outletType1：雨水 outletType2：废水 outletType3：废气
-  /// [state] 监控点状态 1：在线 2：预警 3：超标 4：脱机 5：异常
+  /// [state] 监控点状态 all：全部 online：在线 warn：预警 outrange：超标 negativeValue：负值 ultraUpperlimit：超大值 6：零值 offline：脱机 stopline：异常申报
+  /// [attentionLevel] 关注程度 0:非重点 1:重点
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -31,6 +32,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
     dischargeId = '',
     monitorType = '',
     state = '',
+    attentionLevel = '',
   }) {
     return {
       'currentPage': currentPage,
@@ -43,22 +45,32 @@ class MonitorListRepository extends ListRepository<Monitor> {
       'enterId': enterId,
       'outId': dischargeId,
       'monitorType': monitorType,
-      'state': () {
-        switch (state) {
-          case '1':
-            return 'online';
-          case '2':
-            return 'warn';
-          case '3':
-            return 'outrange';
-          case '4':
-            return 'offline';
-          case '5':
-            return 'stopline';
-          default:
-            return 'all';
-        }
-      }(),
+      'state': state,
+      'attentionLevel': attentionLevel,
     };
+  }
+
+  /// [state] 监控点状态 1：在线 2：预警 3：超标 4：负值 5：超大值 6：零值 7：脱机 8：异常申报
+  static String convertState(String state){
+    switch (state) {
+      case '1':
+        return 'online';
+      case '2':
+        return 'warn';
+      case '3':
+        return 'outrange';
+      case '4':
+        return 'ultraLowerlimit';
+      case '5':
+        return 'ultraUpperlimit';
+      case '6':
+        return 'zero';
+      case '7':
+        return 'offline';
+      case '8':
+        return 'stopline';
+      default:
+        return 'all';
+    }
   }
 }

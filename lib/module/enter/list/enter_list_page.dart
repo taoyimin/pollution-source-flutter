@@ -5,7 +5,11 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -67,17 +71,15 @@ class _EnterListPageState extends State<EnterListPage>
     DataDict(name: '在线', code: '1'),
   ];
 
-  /// 关注程度菜单
-  final List<DataDict> _attentionLevelList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '非重点', code: '0'),
-    DataDict(name: '重点', code: '1'),
-  ];
+  /// 关注程度Bloc
+  final DataDictBloc _attentionLevelBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
+  );
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
-  int _enterTypeIndex;
-  int _stateIndex;
-  int _attentionLevelIndex;
+  String _enterType;
+  String _state;
+  String _attentionLevel;
   int _currentPage = Constant.defaultCurrentPage;
   String _areaCode = '';
 
@@ -85,6 +87,8 @@ class _EnterListPageState extends State<EnterListPage>
   void initState() {
     super.initState();
     initParam();
+    // 加载关注程度
+    _attentionLevelBloc.add(DataDictLoad());
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshCompleter = Completer<void>();
@@ -106,15 +110,9 @@ class _EnterListPageState extends State<EnterListPage>
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    _enterTypeIndex = _enterTypeList.indexWhere((dataDict) {
-      return dataDict.code == widget.enterType;
-    });
-    _stateIndex = _stateList.indexWhere((dataDict) {
-      return dataDict.code == widget.state;
-    });
-    _attentionLevelIndex = _attentionLevelList.indexWhere((dataDict) {
-      return dataDict.code == widget.attentionLevel;
-    });
+    _enterType = widget.enterType;
+    _state = widget.state;
+    _attentionLevel = widget.attentionLevel;
   }
 
   /// 获取请求参数
@@ -124,9 +122,9 @@ class _EnterListPageState extends State<EnterListPage>
       pageSize: Constant.defaultPageSize,
       enterName: _enterNameController.text,
       areaCode: _areaCode,
-      state: _stateList[_stateIndex].code,
-      enterType: _enterTypeList[_enterTypeIndex].code,
-      attentionLevel: _attentionLevelList[_attentionLevelIndex].code,
+      state: _state,
+      enterType: _enterType,
+      attentionLevel: _attentionLevel,
     );
   }
 
@@ -391,27 +389,27 @@ class _EnterListPageState extends State<EnterListPage>
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: _enterTypeIndex,
+                        checkValue: _enterType,
                         dataDictList: _enterTypeList,
-                        onItemTap: (index) {
+                        onItemTap: (value) {
                           setState(() {
-                            _enterTypeIndex = index;
+                            _enterType = value;
                           });
                         },
                       ),
                       const Text(
-                        '是否在线',
+                        '是否安装在线',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: _stateIndex,
+                        checkValue: _state,
                         dataDictList: _stateList,
-                        onItemTap: (index) {
+                        onItemTap: (value) {
                           setState(() {
-                            _stateIndex = index;
+                            _state = value;
                           });
                         },
                       ),
@@ -422,12 +420,12 @@ class _EnterListPageState extends State<EnterListPage>
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
-                        checkIndex: _attentionLevelIndex,
-                        dataDictList: _attentionLevelList,
-                        onItemTap: (index) {
+                      DataDictBlocGrid(
+                        checkValue: _attentionLevel,
+                        dataDictBloc: _attentionLevelBloc,
+                        onItemTap: (value) {
                           setState(() {
-                            _attentionLevelIndex = index;
+                            _attentionLevel = value;
                           });
                         },
                       ),

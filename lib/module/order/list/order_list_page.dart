@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:common_utils/common_utils.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
@@ -11,7 +12,6 @@ import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
-import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -62,12 +62,10 @@ class _OrderListPageState extends State<OrderListPage> {
     DataDict(name: '已办结', code: '5'),
   ];
 
-  /// 关注程度菜单
-  final List<DataDict> _attentionLevelList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '非重点', code: '0'),
-    DataDict(name: '重点', code: '1'),
-  ];
+  /// 关注程度Bloc
+  final DataDictBloc _attentionLevelBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
+  );
 
   /// 报警类型Bloc
   final DataDictBloc _alarmTypeBloc = DataDictBloc(
@@ -79,17 +77,17 @@ class _OrderListPageState extends State<OrderListPage> {
     dataDictRepository: DataDictRepository(HttpApi.orderAlarmLevel),
   );
 
-  /// 报警单状态下标
-  int _stateIndex;
+  /// 报警单状态
+  String _state;
 
-  /// 关注程度下标
-  int _attentionLevelIndex;
+  /// 关注程度
+  String _attentionLevel;
 
-  /// 报警类型下标
-  int _alarmTypeIndex;
+  /// 报警类型
+  String _alarmType;
 
-  /// 报警级别下标
-  int _alarmLevelIndex;
+  /// 报警级别
+  String _alarmLevel;
 
   /// 报警开始时间
   DateTime _startTime;
@@ -112,6 +110,8 @@ class _OrderListPageState extends State<OrderListPage> {
     _initParam();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
+    // 加载关注程度
+    _attentionLevelBloc.add(DataDictLoad());
     // 加载报警类型
     _alarmTypeBloc.add(DataDictLoad());
     // 加载报警级别
@@ -137,24 +137,10 @@ class _OrderListPageState extends State<OrderListPage> {
     _enterNameController.text = '';
     _startTime = null;
     _endTime = null;
-    _alarmTypeIndex = 0;
-    _alarmLevelIndex = 0;
-    _stateIndex = _stateList.indexWhere((dataDict) {
-      return dataDict.code == widget.state;
-    });
-    _attentionLevelIndex = _attentionLevelList.indexWhere((dataDict) {
-      return dataDict.code == widget.attentionLevel;
-    });
-  }
-
-  /// 根据下标获取数据字典Bloc中对应的code
-  String _getDataDictBlocValue(DataDictBloc bloc, int index) {
-    final currentState = bloc.state;
-    if (currentState is DataDictLoaded) {
-      return currentState.dataDictList[index].code;
-    } else {
-      return '';
-    }
+    _alarmType = '';
+    _alarmLevel = widget.alarmLevel;
+    _state = widget.state;
+    _attentionLevel = widget.attentionLevel;
   }
 
   /// 获取请求参数
@@ -166,10 +152,10 @@ class _OrderListPageState extends State<OrderListPage> {
       monitorId: widget.monitorId,
       enterName: _enterNameController.text,
       areaCode: _areaCode,
-      state: _stateList[_stateIndex].code,
-      alarmLevel: _getDataDictBlocValue(_alarmLevelBloc, _alarmLevelIndex),
-      alarmType: _getDataDictBlocValue(_alarmTypeBloc, _alarmTypeIndex),
-      attentionLevel: _attentionLevelList[_attentionLevelIndex].code,
+      state: _state,
+      alarmLevel: _alarmLevel,
+      alarmType: _alarmType,
+      attentionLevel: _attentionLevel,
       startTime: _startTime,
       endTime: _endTime,
     );
@@ -426,11 +412,11 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: _stateIndex,
+                        checkValue: _state,
                         dataDictList: _stateList,
-                        onItemTap: (index) {
+                        onItemTap: (value) {
                           setState(() {
-                            _stateIndex = index;
+                            _state = value;
                           });
                         },
                       ),
@@ -561,11 +547,11 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                       ),
                       DataDictBlocGrid(
-                        checkIndex: _alarmTypeIndex,
+                        checkValue: _alarmType,
                         dataDictBloc: _alarmTypeBloc,
-                        onItemTap: (index) {
+                        onItemTap: (value) {
                           setState(() {
-                            _alarmTypeIndex = index;
+                            _alarmType = value;
                           });
                         },
                       ),
@@ -578,11 +564,11 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                       ),
                       DataDictBlocGrid(
-                        checkIndex: _alarmLevelIndex,
+                        checkValue: _alarmLevel,
                         dataDictBloc: _alarmLevelBloc,
-                        onItemTap: (index) {
+                        onItemTap: (value) {
                           setState(() {
-                            _alarmLevelIndex = index;
+                            _alarmLevel = value;
                           });
                         },
                       ),
@@ -594,12 +580,12 @@ class _OrderListPageState extends State<OrderListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
-                        checkIndex: _attentionLevelIndex,
-                        dataDictList: _attentionLevelList,
-                        onItemTap: (index) {
+                      DataDictBlocGrid(
+                        checkValue: _attentionLevel,
+                        dataDictBloc: _attentionLevelBloc,
+                        onItemTap: (value) {
                           setState(() {
-                            _attentionLevelIndex = index;
+                            _attentionLevel = value;
                           });
                         },
                       ),

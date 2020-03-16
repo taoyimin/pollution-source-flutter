@@ -50,8 +50,8 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
     DataDict(name: '超时待处理', code: '2'),
   ];
 
-  /// 巡检任务状态下标
-  int _stateIndex;
+  /// 巡检任务状态
+  String _state;
 
   /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
@@ -85,9 +85,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
-    _stateIndex = _stateList.indexWhere((dataDict) {
-      return dataDict.code == widget.state;
-    });
+    _state = widget.state;
   }
 
   /// 获取请求参数
@@ -98,7 +96,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
       enterId: widget.enterId,
       monitorId: widget.monitorId,
       enterName: _enterNameController.text,
-      state: _stateList[_stateIndex].code,
+      state: _state,
     );
   }
 
@@ -214,7 +212,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
             child: InkWellButton(
               onTap: () {
                 Application.router.navigateTo(context,
-                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}&state=${_stateList[_stateIndex].code}');
+                    '${Routes.routineInspectionDetail}/${routineInspectionList[index].monitorId}?monitorType=${routineInspectionList[index].monitorType}&state=$_state');
               },
               children: <Widget>[
                 Container(
@@ -344,11 +342,11 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                         ),
                       ),
                       DataDictGrid(
-                        checkIndex: _stateIndex,
+                        checkValue: _state,
                         dataDictList: _stateList,
-                        onItemTap: (index) {
+                        onItemTap: (value) {
                           setState(() {
-                            _stateIndex = index;
+                            _state = value;
                           });
                         },
                       ),

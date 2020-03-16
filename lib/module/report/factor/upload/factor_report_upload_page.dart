@@ -63,7 +63,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     //初始化异常类型Bloc
     _alarmTypeBloc = DataDictBloc(
         dataDictRepository:
-            DataDictRepository(HttpApi.factorReportAlarmTypeList));
+            DataDictRepository(HttpApi.factorReportAlarmType));
     //加载异常类型
     _alarmTypeBloc.add(DataDictLoad());
     //初始化异常因子Bloc

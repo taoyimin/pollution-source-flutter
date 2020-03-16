@@ -607,7 +607,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[6],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=2');
+                      context, '${Routes.dischargeList}?dischargeType=outletType2');
                 },
               ),
               VerticalDividerWidget(height: 30),
@@ -616,7 +616,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
                 meta: metaList[7],
                 onTap: () {
                   Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=3');
+                      context, '${Routes.dischargeList}?dischargeType=outletType3');
                 },
               ),
               VerticalDividerWidget(height: 30),
