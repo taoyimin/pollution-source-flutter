@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/application/admin_application_page.dart';
@@ -5,6 +6,7 @@ import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/index/admin/index.dart';
+import 'package:pollution_source/res/constant.dart';
 
 import 'mine.dart';
 
@@ -31,6 +33,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ListBloc(listRepository: EnterListRepository()),
       child: EnterListPage(
         automaticallyImplyLeading: false,
+        attentionLevel: SpUtil.getString(Constant.spAttentionLevel, defValue: ''),
       ),
     ),
     MinePage(),
