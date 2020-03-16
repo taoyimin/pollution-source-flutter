@@ -110,7 +110,7 @@ class CompatUtils {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-      //环保和企业用户登录后去返回数据中取RealName
+      //环保和企业用户
         if (SpUtil.getBool(Constant.spUseJavaApi,
             defValue: Constant.defaultUseJavaApi)) {
           if (response.statusCode == ExceptionHandle.success &&
@@ -134,7 +134,7 @@ class CompatUtils {
         }
         break;
       case 2:
-      // 运维用户登录后去header中取RealName
+      // 运维用户
         if (response.data[Constant.responseSuccessKey]) {
           return response.data[Constant.responseRealNameKey];
         } else {
@@ -146,6 +146,53 @@ class CompatUtils {
       default:
         throw Exception(
             '获取RealName失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型解析json中的attentionLevel
+  static String getResponseAttentionLevel(Response response) {
+    if (response == null)
+      throw DioError(error: TokenException('获取AttentionLevel失败！response为空！'));
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+      //环保和企业用户
+        if (SpUtil.getBool(Constant.spUseJavaApi,
+            defValue: Constant.defaultUseJavaApi)) {
+          if (response.statusCode == ExceptionHandle.success &&
+              response.data[Constant.responseCodeKey] ==
+                  ExceptionHandle.success_code) {
+            return response.data[Constant.responseDataKey]
+            [Constant.responseAttentionLevelKey];
+          } else {
+            throw DioError(
+                error: TokenException(
+                    '获取AttentionLevel失败！response=${response.toString()}'));
+          }
+        } else {
+          if (response.statusCode == ExceptionHandle.success) {
+            return response.data[Constant.responseAttentionLevelKey];
+          } else {
+            throw DioError(
+                error: TokenException(
+                    '获取AttentionLevel失败！response=${response.toString()}'));
+          }
+        }
+        break;
+      case 2:
+      // 运维用户
+        if (response.data[Constant.responseSuccessKey]) {
+          // 运维用户的关注程度默认就是全部
+          return '';
+        } else {
+          throw DioError(
+              error:
+              TokenException('获取AttentionLevel失败！response=${response.toString()}'));
+        }
+        break;
+      default:
+        throw Exception(
+            '获取AttentionLevel失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
   }
 
@@ -343,14 +390,20 @@ class CompatUtils {
         return HttpApiJava.enterToken;
       case HttpApi.enterList:
         return HttpApiJava.enterList;
+      case HttpApi.attentionLevel:
+        return HttpApiJava.attentionLevel;
       case HttpApi.enterDetail:
         return HttpApiJava.enterDetail;
       case HttpApi.dischargeList:
         return HttpApiJava.dischargeList;
       case HttpApi.dischargeDetail:
         return HttpApiJava.dischargeDetail;
+      case HttpApi.outletType:
+        return HttpApiJava.outletType;
       case HttpApi.monitorList:
         return HttpApiJava.monitorList;
+      case HttpApi.monitorState:
+        return HttpApiJava.monitorState;
       case HttpApi.monitorDetail:
         return HttpApiJava.monitorDetail;
       case HttpApi.monitorHistoryData:
@@ -367,6 +420,8 @@ class CompatUtils {
         return HttpApiJava.processesUpload;
       case HttpApi.dischargeReportList:
         return HttpApiJava.dischargeReportList;
+      case HttpApi.reportValid:
+        return HttpApiJava.reportValid;
       case HttpApi.dischargeReportDetail:
         return HttpApiJava.dischargeReportDetail;
       case HttpApi.dischargeReportUpload:
@@ -385,10 +440,10 @@ class CompatUtils {
         return HttpApiJava.longStopReportUpload;
       case HttpApi.licenseList:
         return HttpApiJava.licenseList;
-      case HttpApi.dischargeReportStopTypeList:
-        return HttpApiJava.dischargeReportStopTypeList;
-      case HttpApi.factorReportAlarmTypeList:
-        return HttpApiJava.factorReportAlarmTypeList;
+      case HttpApi.dischargeReportStopType:
+        return HttpApiJava.dischargeReportStopType;
+      case HttpApi.factorReportAlarmType:
+        return HttpApiJava.factorReportAlarmType;
       case HttpApi.factorReportFactorList:
         return HttpApiJava.factorReportFactorList;
       case HttpApi.checkVersion:
@@ -465,14 +520,20 @@ class CompatUtils {
         return HttpApiOperation.operationIndex;
       case HttpApi.enterList:
         return HttpApiOperation.enterList;
+      case HttpApi.attentionLevel:
+        return HttpApiOperation.attentionLevel;
       case HttpApi.enterDetail:
         return HttpApiOperation.enterDetail;
       case HttpApi.dischargeList:
         return HttpApiOperation.dischargeList;
       case HttpApi.dischargeDetail:
         return HttpApiOperation.dischargeDetail;
+      case HttpApi.outletType:
+        return HttpApiOperation.outletType;
       case HttpApi.monitorList:
         return HttpApiOperation.monitorList;
+      case HttpApi.monitorState:
+        return HttpApiOperation.monitorState;
       case HttpApi.monitorDetail:
         return HttpApiOperation.monitorDetail;
       case HttpApi.monitorHistoryData:
@@ -489,6 +550,8 @@ class CompatUtils {
         return HttpApiOperation.processesUpload;
       case HttpApi.dischargeReportList:
         return HttpApiOperation.dischargeReportList;
+      case HttpApi.reportValid:
+        return HttpApiOperation.reportValid;
       case HttpApi.dischargeReportDetail:
         return HttpApiOperation.dischargeReportDetail;
       case HttpApi.dischargeReportUpload:
@@ -501,10 +564,10 @@ class CompatUtils {
         return HttpApiOperation.factorReportUpload;
       case HttpApi.licenseList:
         return HttpApiOperation.licenseList;
-      case HttpApi.dischargeReportStopTypeList:
-        return HttpApiOperation.dischargeReportStopTypeList;
-      case HttpApi.factorReportAlarmTypeList:
-        return HttpApiOperation.factorReportAlarmTypeList;
+      case HttpApi.dischargeReportStopType:
+        return HttpApiOperation.dischargeReportStopType;
+      case HttpApi.factorReportAlarmType:
+        return HttpApiOperation.factorReportAlarmType;
       case HttpApi.factorReportFactorList:
         return HttpApiOperation.factorReportFactorList;
       case HttpApi.routineInspectionList:
