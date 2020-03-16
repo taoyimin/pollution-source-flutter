@@ -1,6 +1,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jxtele.pollution_source">
 
+    <!--联网权限-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--读文件权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--写文件权限-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--相机权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--地图包、搜索包需要的基础权限-->
+<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+<!--    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
+<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+<!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
+    <!--定位包、导航包需要的额外权限-->
+<!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+<!--    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />-->
+<!--    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />-->
+
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -8,7 +27,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="pollution_source"
+        android:label="污染源监控"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
