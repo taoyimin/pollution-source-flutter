@@ -136,15 +136,17 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '站位名称：${monitorDetail.monitorName ?? ''}',
+                      content: '站位名称：${monitorDetail.monitorName}',
                       icon: Icons.linked_camera,
-                      flex: 7,
                     ),
-                    Gaps.hGap20,
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监测类型：${monitorDetail.monitorTypeStr ?? ''}',
+                      content: '监测类型：${monitorDetail.monitorTypeStr} ${monitorDetail.monitorCategoryStr}',
                       icon: Icons.videocam,
-                      flex: 5,
                     ),
                   ],
                 ),
@@ -152,33 +154,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监测类别：${monitorDetail.monitorCategoryStr ?? ''}',
-                      icon: Icons.nature,
-                      flex: 7,
-                    ),
-                    Gaps.hGap20,
-                    IconBaseInfoWidget(
-                      content: '网络类型：${monitorDetail.networkTypeStr ?? ''}',
-                      icon: Icons.network_wifi,
-                      flex: 5,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '数采编号：${monitorDetail.mnCode ?? ''}',
+                      content: '数采编号：${monitorDetail.mnCode}',
                       icon: Icons.insert_drive_file,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '位置：${monitorDetail.monitorAddress ?? ''}',
-                      icon: Icons.location_on,
                     ),
                   ],
                 ),
@@ -284,14 +261,6 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       icon: Icons.table_chart,
                       color: Colors.orange,
                       onTap: () {
-//                        Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                            builder: (context) {
-//                              return MonitorTablePage();
-//                            },
-//                          ),
-//                        );
                         Application.router.navigateTo(context,
                             '${Routes.monitorHistoryData}?monitorId=${monitorDetail.monitorId}');
                       },

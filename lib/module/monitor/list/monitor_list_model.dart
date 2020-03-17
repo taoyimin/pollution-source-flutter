@@ -17,8 +17,6 @@ class Monitor extends Equatable {
   final String enterName; //企业名称
   @JsonKey(name: 'disMonitorName')
   final String monitorName; //监控点名称
-  @JsonKey(name: 'disMonitorAddress', defaultValue: '')
-  final String monitorAddress; //监控点地址
   @JsonKey(name: 'disMonitorType')
   final String monitorType; //监控点类型
   @JsonKey(name: 'outletTypeStr')
@@ -29,7 +27,6 @@ class Monitor extends Equatable {
     this.monitorId,
     this.enterName,
     this.monitorName,
-    this.monitorAddress,
     this.monitorType,
     this.monitorCategoryStr,
   });
@@ -40,7 +37,6 @@ class Monitor extends Equatable {
         monitorId,
         enterName,
         monitorName,
-        monitorAddress,
         monitorType,
         monitorCategoryStr,
       ];

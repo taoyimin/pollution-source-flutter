@@ -329,7 +329,7 @@ class _OrderListPageState extends State<OrderListPage> {
                         ],
                       ),
                       Gaps.vGap6,
-                      ListTileMultiRowWidget(
+                      ListTileWidget(
                           '报警描述：${orderList[index].alarmRemark}'),
                     ],
                   ),
@@ -437,7 +437,8 @@ class _OrderListPageState extends State<OrderListPage> {
                                 DatePicker.showDatePicker(
                                   context,
                                   dateFormat: 'yyyy年-MM月-dd日',
-                                  maxDateTime: _endTime ?? DateTime.now(),
+                                  initialDateTime: _startTime,
+                                  maxDateTime: _endTime ?? DateTime.now().add(Duration(days: -1)),
                                   locale: DateTimePickerLocale.zh_cn,
                                   onClose: () {},
                                   onConfirm: (dateTime, selectedIndex) {
@@ -495,8 +496,9 @@ class _OrderListPageState extends State<OrderListPage> {
                                 DatePicker.showDatePicker(
                                   context,
                                   dateFormat: 'yyyy年-MM月-dd日',
+                                  initialDateTime: _endTime,
                                   minDateTime: _startTime,
-                                  maxDateTime: DateTime.now(),
+                                  maxDateTime: DateTime.now().add(Duration(days: -1)),
                                   locale: DateTimePickerLocale.zh_cn,
                                   onClose: () {},
                                   onConfirm: (dateTime, selectedIndex) {

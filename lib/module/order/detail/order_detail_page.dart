@@ -68,7 +68,8 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     //首次加载
     _pageBloc.add(PageLoad(model: ProcessUpload(orderId: widget.orderId)));
     //初始化编辑框控制器
-    _operatePersonController = TextEditingController(text: '${SpUtil.getString(Constant.spRealName)}');
+    _operatePersonController =
+        TextEditingController(text: '${SpUtil.getString(Constant.spRealName)}');
     _operateDescController = TextEditingController();
     //初始化fab颜色渐变动画
     controller = AnimationController(
@@ -406,35 +407,59 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                   imagePath: 'assets/images/icon_fast_link.png',
                 ),
                 Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    InkWellButton7(
-                      meta: Meta(
-                          title: '企业信息',
-                          content: '查看报警单所属的企业信息',
-                          backgroundPath:
-                              'assets/images/button_bg_lightblue.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics1.png'),
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.enterDetail}/${orderDetail.enterId}');
-                      },
-                    ),
-                    Gaps.hGap10,
-                    InkWellButton7(
-                      meta: Meta(
-                          title: '在线数据',
-                          content: '查看报警管理单对应的在线数据',
-                          backgroundPath: 'assets/images/button_bg_yellow.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics2.png'),
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.monitorDetail}/${orderDetail.monitorId}');
-                      },
-                    ),
-                  ],
+                Container(
+                  height: 158,
+                  child: Row(
+                    children: <Widget>[
+                      InkWellButton8(
+                        meta: Meta(
+                            title: '历史数据',
+                            content: '查看报警单报警当天的历史数据',
+                            backgroundPath: 'assets/images/button_bg_green.png',
+                            imagePath:
+                                'assets/images/image_enter_statistics1.png'),
+                        onTap: () {
+                          Application.router.navigateTo(context,
+                              '${Routes.monitorHistoryData}?monitorId=${orderDetail.monitorId}&startTime=${orderDetail.alarmDateStr} 00:00:00&endTime=${orderDetail.alarmDateStr} 23:59:59');
+                        },
+                      ),
+                      Gaps.hGap10,
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: <Widget>[
+                            InkWellButton7(
+                              meta: Meta(
+                                  title: '企业信息',
+                                  content: '查看报警单所属的企业信息',
+                                  backgroundPath:
+                                      'assets/images/button_bg_lightblue.png',
+                                  imagePath:
+                                      'assets/images/image_enter_statistics3.png'),
+                              onTap: () {
+                                Application.router.navigateTo(context,
+                                    '${Routes.enterDetail}/${orderDetail.enterId}');
+                              },
+                            ),
+                            Gaps.vGap10,
+                            InkWellButton7(
+                              meta: Meta(
+                                  title: '监控点信息',
+                                  content: '查看报警单对应的监控点信息',
+                                  backgroundPath:
+                                      'assets/images/button_bg_red.png',
+                                  imagePath:
+                                      'assets/images/image_enter_statistics2.png'),
+                              onTap: () {
+                                Application.router.navigateTo(context,
+                                    '${Routes.monitorDetail}/${orderDetail.monitorId}');
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -506,38 +531,42 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
 
   Widget _buildBottomSheet(
       ProcessUpload processUpload, OrderDetail orderDetail) {
-    return Container(
-      width: double.infinity,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Gaps.vGap20,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ImageTitleWidget(
-              title: '处理督办单',
-              imagePath: 'assets/images/icon_alarm_manage.png',
-            ),
+          ImageTitleWidget(
+            title: '处理督办单',
+            imagePath: 'assets/images/icon_order_process.png',
           ),
           Gaps.vGap16,
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
+          Container(
+            height: 46,
+            color: Color(0xFFDFDFDF),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Gaps.hGap16,
+                Image.asset(
+                  'assets/images/icon_enter_contacts.png',
+                  height: 20,
+                  width: 20,
+                ),
                 Flexible(
                   child: TextField(
                     controller: _operatePersonController,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
                     decoration: const InputDecoration(
                       fillColor: Color(0xFFDFDFDF),
                       filled: true,
                       hintText: "请输入反馈人",
                       hintStyle: TextStyle(
+                        fontSize: 14,
                         color: Colours.secondary_text,
                       ),
-                      prefixIcon: Icon(Icons.person),
                       border: InputBorder.none,
                     ),
                   ),
@@ -546,24 +575,34 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             ),
           ),
           Gaps.vGap10,
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
+          DecoratedBox(
+            decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 12),
+                  child: Image.asset(
+                    'assets/images/icon_alarm_manage.png',
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
                 Flexible(
                   child: TextField(
+                    maxLines: 3,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
                     controller: _operateDescController,
                     decoration: const InputDecoration(
                       fillColor: Color(0xFFDFDFDF),
                       filled: true,
                       hintText: "请输入核实情况",
                       hintStyle: TextStyle(
+                        fontSize: 14,
                         color: Colours.secondary_text,
                       ),
-                      prefixIcon: Icon(Icons.event_note),
                       border: InputBorder.none,
                     ),
                   ),
@@ -583,7 +622,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               padding: const EdgeInsets.symmetric(
-                horizontal: 16,
                 vertical: 5,
               ),
               children: List.generate(
@@ -602,68 +640,65 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             ),
           ),
           Gaps.vGap5,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[
-                ClipButton(
-                  text: '选择图片',
-                  icon: Icons.image,
-                  color: Colors.green,
-                  onTap: () async {
-                    //选取图片后重新加载界面
-                    _pageBloc.add(PageLoad(
-                        model: processUpload.copyWith(
-                            attachments: await SystemUtils.loadAssets(
-                                processUpload.attachments))));
-                  },
-                ),
-                Gaps.hGap20,
-                () {
-                  if (getOperateType(orderDetail.orderState) == 1) {
-                    return ClipButton(
-                      text: '处理',
-                      icon: Icons.file_upload,
-                      color: Colors.lightBlue,
-                      onTap: () {
-                        //发送上传事件
-                        _uploadBloc.add(
-                          Upload(
-                            data: processUpload.copyWith(
-                              // 退回
-                              operateType: '1',
-                              operatePerson: _operatePersonController.text,
-                              operateDesc: _operateDescController.text,
-                            ),
+          Row(
+            children: <Widget>[
+              ClipButton(
+                text: '选择图片',
+                icon: Icons.image,
+                color: Colors.green,
+                onTap: () async {
+                  //选取图片后重新加载界面
+                  _pageBloc.add(PageLoad(
+                      model: processUpload.copyWith(
+                          attachments: await SystemUtils.loadAssets(
+                              processUpload.attachments))));
+                },
+              ),
+              Gaps.hGap20,
+              () {
+                if (getOperateType(orderDetail.orderState) == 1) {
+                  return ClipButton(
+                    text: '处理',
+                    icon: Icons.file_upload,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      //发送上传事件
+                      _uploadBloc.add(
+                        Upload(
+                          data: processUpload.copyWith(
+                            // 退回
+                            operateType: '1',
+                            operatePerson: _operatePersonController.text,
+                            operateDesc: _operateDescController.text,
                           ),
-                        );
-                      },
-                    );
-                  } else if (getOperateType(orderDetail.orderState) == 4) {
-                    return ClipButton(
-                      text: '退回',
-                      icon: Icons.subdirectory_arrow_left,
-                      color: Colors.red,
-                      onTap: () {
-                        //发送上传事件
-                        _uploadBloc.add(
-                          Upload(
-                            data: processUpload.copyWith(
-                              // 退回
-                              operateType: '4',
-                              operatePerson: _operatePersonController.text,
-                              operateDesc: _operateDescController.text,
-                            ),
+                        ),
+                      );
+                    },
+                  );
+                } else if (getOperateType(orderDetail.orderState) == 4) {
+                  return ClipButton(
+                    text: '退回',
+                    icon: Icons.subdirectory_arrow_left,
+                    color: Colors.red,
+                    onTap: () {
+                      //发送上传事件
+                      _uploadBloc.add(
+                        Upload(
+                          data: processUpload.copyWith(
+                            // 退回
+                            operateType: '4',
+                            operatePerson: _operatePersonController.text,
+                            operateDesc: _operateDescController.text,
                           ),
-                        );
-                      },
-                    );
-                  } else {
-                    return Gaps.empty;
-                  }
-                }(),
-              ],
-            ),
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return Gaps.empty;
+                }
+              }(),
+            ],
           ),
           Gaps.vGap20,
         ],

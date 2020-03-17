@@ -211,7 +211,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                 ),
                 Gaps.vGap10,
                 Container(
-                  height: 152,
+                  height: 158,
                   child: Row(
                     children: <Widget>[
                       InkWellButton8(

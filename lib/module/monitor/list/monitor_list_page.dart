@@ -320,9 +320,6 @@ class _MonitorListPageState extends State<MonitorListPage> {
                                 ),
                               ],
                             ),
-                            Gaps.vGap6,
-                            ListTileWidget(
-                                '监控点地址：${monitorList[index].monitorAddress}'),
                           ],
                         ),
                       )

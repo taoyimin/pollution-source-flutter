@@ -58,7 +58,7 @@ class _EnterListPageState extends State<EnterListPage>
   /// 企业类型菜单
   final List<DataDict> _enterTypeList = [
     DataDict(name: '全部', code: ''),
-    DataDict(name: '雨水企业', code: '1'),
+    //DataDict(name: '雨水企业', code: '1'),
     DataDict(name: '废水企业', code: '2'),
     DataDict(name: '废气企业', code: '3'),
     DataDict(name: '水气企业', code: '4'),

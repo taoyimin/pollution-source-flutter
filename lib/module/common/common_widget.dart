@@ -736,7 +736,6 @@ class InkWellButton7 extends StatelessWidget {
         onTap: onTap,
         children: <Widget>[
           Container(
-            //height: 72,
             padding: const EdgeInsets.all(10),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -752,6 +751,7 @@ class InkWellButton7 extends StatelessWidget {
                   flex: 3,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         '${meta.title}',
@@ -936,6 +936,7 @@ class ListTileWidget extends StatelessWidget {
 }
 
 /// list展示信息(多行)
+@Deprecated('已弃用')
 class ListTileMultiRowWidget extends StatelessWidget {
   final String content;
 
@@ -1046,7 +1047,8 @@ class LabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      height: 18,
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: this.label.color.withOpacity(0.2),
       ),
@@ -1057,8 +1059,8 @@ class LabelWidget extends StatelessWidget {
               ? Gaps.empty
               : Image.asset(
                   this.label.imagePath,
-                  width: 8,
-                  height: 8,
+                  width: 10,
+                  height: 10,
                   color: this.label.color,
                 ),
           Text(

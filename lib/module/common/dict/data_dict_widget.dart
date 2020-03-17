@@ -415,12 +415,14 @@ class DataDictBlocGrid extends StatelessWidget {
   final DataDictBloc dataDictBloc;
   final String checkValue;
   final DataDictGridItemTap onItemTap;
+  final bool addFirst;
 
   DataDictBlocGrid({
     Key key,
     @required this.dataDictBloc,
     this.checkValue,
     this.onItemTap,
+    this.addFirst = true,
   })  : assert(dataDictBloc != null),
         super(key: key);
 
@@ -430,11 +432,13 @@ class DataDictBlocGrid extends StatelessWidget {
       bloc: dataDictBloc,
       builder: (context, state) {
         if (state is DataDictLoaded) {
-          // 默认添加一个全部的数据字典
-          DataDict dataDict = DataDict(code: '', name: '全部');
-          // 防止重复添加
-          if (!state.dataDictList.contains(dataDict)) {
-            state.dataDictList.insert(0, dataDict);
+          if(addFirst){
+            // 默认添加一个全部的数据字典
+            DataDict dataDict = DataDict(code: '', name: '全部');
+            // 防止重复添加
+            if (!state.dataDictList.contains(dataDict)) {
+              state.dataDictList.insert(0, dataDict);
+            }
           }
           return GridView.count(
             shrinkWrap: true,
