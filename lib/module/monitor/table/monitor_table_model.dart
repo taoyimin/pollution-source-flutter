@@ -103,13 +103,13 @@ class MonitorTableCell extends Equatable {
         return Colors.red;
       case '3':
         // 负值（原极小值）
-        return Colors.red;
+        return Colors.blue;
       case '4':
         // 超大值（原极大值）
-        return Colors.red;
+        return Colors.green;
       case '5':
         // 零值
-        return Colors.red;
+        return Colors.deepPurple;
       default:
         return Colors.black;
     }
@@ -121,16 +121,4 @@ class MonitorTableCell extends Equatable {
         value,
         alarmFlag,
       ];
-}
-
-/// 监测数据类型枚举类
-enum DataType {
-  // 实时数据
-  minute,
-  // 十分钟数据
-  tenminute,
-  // 小时诗句
-  hour,
-  // 日数据
-  day,
 }

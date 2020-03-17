@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:pollution_source/http/error_handle.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
@@ -18,8 +19,16 @@ import 'monitor_table_model.dart';
 /// 监控点历史数据界面
 class MonitorTablePage extends StatefulWidget {
   final String monitorId;
+  final String dataType;
+  final DateTime startTime;
+  final DateTime endTime;
 
-  MonitorTablePage({this.monitorId}) : assert(!TextUtil.isEmpty(monitorId));
+  MonitorTablePage({
+    this.monitorId,
+    this.dataType,
+    this.startTime,
+    this.endTime,
+  }) : assert(!TextUtil.isEmpty(monitorId));
 
   @override
   State<StatefulWidget> createState() => _MonitorTableState();
@@ -32,44 +41,54 @@ class _MonitorTableState extends State<MonitorTablePage> {
   /// 当前页数
   int currentPage = 0;
 
-  /// 下拉菜单默认选中项
-  final List<dynamic> _dropDownHeaderItem = [
-    '实时数据',
-    DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0),
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 23,
-        59, 59),
+  /// 数据类型菜单
+  final List<DataDict> _dataTypeList = [
+    DataDict(name: '实时数据', code: 'minute', checked: false),
+    DataDict(name: '十分钟数据', code: 'tenminute', checked: false),
+    DataDict(name: '小时数据', code: 'hour', checked: true),
+    DataDict(name: '日数据', code: 'day', checked: false),
   ];
-  final List<SortCondition> _dataTypeConditions = [];
   final GZXDropdownMenuController _dropdownMenuController =
       GZXDropdownMenuController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey _stackKey = GlobalKey();
 
-  /// 当前选中的数据类型
-  SortCondition _selectDataTypeCondition;
+  String _dataType;
+  String _dataTypeStr;
+  DateTime _startTime;
+  DateTime _endTime;
   DetailBloc _detailBloc;
 
   @override
   void initState() {
     super.initState();
-    // 默认选中实时数据
-    _dataTypeConditions.add(
-        SortCondition(name: '实时数据', value: DataType.minute, isSelected: true));
-    _dataTypeConditions.add(SortCondition(
-        name: '十分钟数据', value: DataType.tenminute, isSelected: false));
-    _dataTypeConditions.add(
-        SortCondition(name: '小时数据', value: DataType.hour, isSelected: false));
-    _dataTypeConditions.add(
-        SortCondition(name: '日数据', value: DataType.day, isSelected: false));
-    _selectDataTypeCondition = _dataTypeConditions[0];
+    initParam();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _detailBloc.add(DetailLoad(
-      params: MonitorHistoryDataRepository.createParams(
-        monitorId: widget.monitorId,
-        dataType: _selectDataTypeCondition.value,
-      ),
-    ));
+    _detailBloc.add(DetailLoad(params: getRequestParam()));
+  }
+
+  /// 初始化查询参数
+  initParam() {
+    _dataType = widget.dataType;
+    _dataTypeStr = _dataTypeList.singleWhere((DataDict dataDict) {
+      return dataDict.code == _dataType;
+    }).name;
+    DateTime nowDateTime = DateTime.now();
+    _startTime = widget.startTime ??
+        DateTime(nowDateTime.year, nowDateTime.month, nowDateTime.day, 0, 0, 0);
+    _endTime = widget.endTime ??
+        DateTime(
+            nowDateTime.year, nowDateTime.month, nowDateTime.day, 23, 59, 59);
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> getRequestParam() {
+    return MonitorHistoryDataRepository.createParams(
+      monitorId: widget.monitorId,
+      dataType: _dataType,
+      startTime: _startTime,
+      endTime: _endTime,
+    );
   }
 
   @override
@@ -88,28 +107,14 @@ class _MonitorTableState extends State<MonitorTablePage> {
               GZXDropDownHeader(
                 // 下拉的头部项，目前每一项，只能自定义显示的文字、图标、图标大小修改
                 items: [
-                  GZXDropDownHeaderItem(_dropDownHeaderItem[0], iconSize: 24),
+                  GZXDropDownHeaderItem(_dataTypeStr, iconSize: 24),
                   GZXDropDownHeaderItem(
-                    _dropDownHeaderItem[1] == null
-                        ? '开始时间  '
-                        : DateUtil.formatDate(
-                            _dropDownHeaderItem[1],
-                            format: getDateTimeFormat(
-                              _selectDataTypeCondition.value,
-                            ),
-                          ),
+                    DateUtil.formatDate(_startTime, format: 'yyyy-MM-dd  '),
                     iconData: Icons.date_range,
                     iconSize: 15,
                   ),
                   GZXDropDownHeaderItem(
-                    _dropDownHeaderItem[2] == null
-                        ? '结束时间  '
-                        : DateUtil.formatDate(
-                            _dropDownHeaderItem[2],
-                            format: getDateTimeFormat(
-                              _selectDataTypeCondition.value,
-                            ),
-                          ),
+                    DateUtil.formatDate(_endTime, format: 'yyyy-MM-dd  '),
                     iconData: Icons.date_range,
                     iconSize: 15,
                   ),
@@ -124,37 +129,29 @@ class _MonitorTableState extends State<MonitorTablePage> {
                     DatePicker.showDatePicker(
                       context,
                       dateFormat: 'yyyy年-MM月-dd日',
+                      initialDateTime: _startTime,
                       maxDateTime: DateTime.now(),
-                      initialDateTime: _dropDownHeaderItem[1] ?? DateTime.now(),
                       locale: DateTimePickerLocale.zh_cn,
                       onClose: () {
                         _dropdownMenuController.hide();
                       },
                       onConfirm: (dateTime, selectedIndex) {
-                        _dropDownHeaderItem[1] = dateTime;
-                        if (_dropDownHeaderItem[2] != null) {
-                          try {
-                            currentPage = 0;
-                            _detailBloc.add(DetailLoad(
-                              params: MonitorHistoryDataRepository.createParams(
-                                monitorId: widget.monitorId,
-                                dataType: _selectDataTypeCondition.value,
-                                startTime: dateTime,
-                                endTime: _dropDownHeaderItem[2],
-                              ),
-                            ));
-                          } catch (e) {
-                            _scaffoldKey.currentState.showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    '${ExceptionHandle.handleException(e).msg}'),
-                                action: SnackBarAction(
-                                    label: '我知道了',
-                                    textColor: Colours.primary_color,
-                                    onPressed: () {}),
-                              ),
-                            );
-                          }
+                        _startTime = dateTime;
+                        try {
+                          currentPage = 0;
+                          _detailBloc
+                              .add(DetailLoad(params: getRequestParam()));
+                        } catch (e) {
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  '${ExceptionHandle.handleException(e).msg}'),
+                              action: SnackBarAction(
+                                  label: '我知道了',
+                                  textColor: Colours.primary_color,
+                                  onPressed: () {}),
+                            ),
+                          );
                         }
                         setState(() {});
                       },
@@ -163,42 +160,34 @@ class _MonitorTableState extends State<MonitorTablePage> {
                     DatePicker.showDatePicker(
                       context,
                       dateFormat: 'yyyy年-MM月-dd日',
+                      initialDateTime: _endTime,
                       maxDateTime: DateTime.now(),
-                      initialDateTime: _dropDownHeaderItem[2] ?? DateTime.now(),
                       locale: DateTimePickerLocale.zh_cn,
                       onClose: () {
                         _dropdownMenuController.hide();
                       },
                       onConfirm: (dateTime, selectedIndex) {
                         // 结束时间默认加上23小时59分59秒
-                        _dropDownHeaderItem[2] = dateTime.add(Duration(
+                        _endTime = dateTime.add(Duration(
                           hours: 23,
                           minutes: 59,
                           seconds: 59,
                         ));
-                        if (_dropDownHeaderItem[1] != null) {
-                          try {
-                            currentPage = 0;
-                            _detailBloc.add(DetailLoad(
-                              params: MonitorHistoryDataRepository.createParams(
-                                monitorId: widget.monitorId,
-                                dataType: _selectDataTypeCondition.value,
-                                startTime: _dropDownHeaderItem[1],
-                                endTime: dateTime,
-                              ),
-                            ));
-                          } catch (e) {
-                            _scaffoldKey.currentState.showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    '${ExceptionHandle.handleException(e).msg}'),
-                                action: SnackBarAction(
-                                    label: '我知道了',
-                                    textColor: Colours.primary_color,
-                                    onPressed: () {}),
-                              ),
-                            );
-                          }
+                        try {
+                          currentPage = 0;
+                          _detailBloc
+                              .add(DetailLoad(params: getRequestParam()));
+                        } catch (e) {
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  '${ExceptionHandle.handleException(e).msg}'),
+                              action: SnackBarAction(
+                                  label: '我知道了',
+                                  textColor: Colours.primary_color,
+                                  onPressed: () {}),
+                            ),
+                          );
                         }
                         setState(() {});
                       },
@@ -309,21 +298,16 @@ class _MonitorTableState extends State<MonitorTablePage> {
               GZXDropdownMenuBuilder(
                 dropDownHeight: 50 * 4.0,
                 dropDownWidget: _buildConditionListWidget(
-                  _dataTypeConditions,
+                  _dataTypeList,
                   (value) {
-                    _selectDataTypeCondition = value;
-                    _dropDownHeaderItem[0] = _selectDataTypeCondition.name;
+                    _dataType = value.code;
+                    _dataTypeStr = value.name;
                     _dropdownMenuController.hide();
                     setState(() {});
                     try {
                       currentPage = 0;
                       _detailBloc.add(DetailLoad(
-                        params: MonitorHistoryDataRepository.createParams(
-                          monitorId: widget.monitorId,
-                          dataType: _selectDataTypeCondition.value,
-                          startTime: _dropDownHeaderItem[1],
-                          endTime: _dropDownHeaderItem[2],
-                        ),
+                        params: getRequestParam(),
                       ));
                     } catch (e) {
                       _scaffoldKey.currentState.showSnackBar(
@@ -345,22 +329,6 @@ class _MonitorTableState extends State<MonitorTablePage> {
         ],
       ),
     );
-  }
-
-  String getDateTimeFormat(DataType dataType) {
-    return 'yyyy-MM-dd  ';
-//    switch (dataType) {
-//      case 'minute':
-//        return 'HH:mm:ss  ';
-//      case 'tenminute':
-//        return 'HH:mm:ss  ';
-//      case 'hour':
-//        return 'MM-dd HH时  ';
-//      case 'day':
-//        return 'yyyy-MM-dd  ';
-//      default:
-//        return 'yyyy-MM-dd  ';
-//    }
   }
 
   Widget _buildPageLoadedDetail(MonitorTable monitorTable) {
@@ -386,7 +354,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
   }
 
   _buildConditionListWidget(
-      items, void itemOnTap(SortCondition sortCondition)) {
+      List<DataDict> items, void itemOnTap(DataDict dataDict)) {
     return ListView.separated(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
@@ -396,14 +364,14 @@ class _MonitorTableState extends State<MonitorTablePage> {
           Divider(height: 1.0),
       // 添加分割线
       itemBuilder: (BuildContext context, int index) {
-        SortCondition goodsSortCondition = items[index];
+        DataDict dataDict = items[index];
         return GestureDetector(
           onTap: () {
-            for (var value in items) {
-              value.isSelected = false;
+            for (int i = 0; i < items.length; i++) {
+              items[i] = items[i].copyWith(checked: false);
             }
-            goodsSortCondition.isSelected = true;
-            itemOnTap(goodsSortCondition);
+            dataDict = dataDict.copyWith(checked: true);
+            itemOnTap(dataDict);
           },
           child: Container(
             // color: Colors.blue,
@@ -415,24 +383,22 @@ class _MonitorTableState extends State<MonitorTablePage> {
                 ),
                 Expanded(
                   child: Text(
-                    goodsSortCondition.name,
+                    dataDict.name,
                     style: TextStyle(
-                      color: goodsSortCondition.isSelected
+                      color: dataDict.checked
                           ? Theme.of(context).primaryColor
                           : Colors.black,
                     ),
                   ),
                 ),
-                goodsSortCondition.isSelected
+                dataDict.checked
                     ? Icon(
                         Icons.check,
                         color: Theme.of(context).primaryColor,
                         size: 16,
                       )
-                    : SizedBox(),
-                SizedBox(
-                  width: 16,
-                ),
+                    : Gaps.empty,
+                Gaps.hGap16,
               ],
             ),
           ),
@@ -440,12 +406,4 @@ class _MonitorTableState extends State<MonitorTablePage> {
       },
     );
   }
-}
-
-class SortCondition {
-  String name;
-  DataType value;
-  bool isSelected;
-
-  SortCondition({this.name, this.value, this.isSelected});
 }

@@ -18,41 +18,38 @@ class MonitorHistoryDataRepository extends DetailRepository<MonitorTable> {
 
   static Map<String, dynamic> createParams({
     String monitorId = '',
-    DataType dataType,
+    String dataType,
     DateTime startTime,
     DateTime endTime,
   }) {
-    DateTime nowDateTime = DateTime.now();
     if (startTime == null) {
-      startTime = DateTime(
-          nowDateTime.year, nowDateTime.month, nowDateTime.day, 0, 0, 0);
+      throw DioError(error: InvalidParamException('开始时间不能为空'));
     }
     if (endTime == null) {
-      endTime = DateTime(
-          nowDateTime.year, nowDateTime.month, nowDateTime.day, 23, 59, 59);
+      throw DioError(error: InvalidParamException('结束时间不能为空'));
     }
     Duration duration = endTime.difference(startTime);
     if (duration.inMilliseconds < 0) {
       throw DioError(error: InvalidParamException('开始时间不能大于结束时间'));
     }
     switch (dataType) {
-      case DataType.minute:
+      case 'minute':
         if (duration.inDays > 0) {
           throw DioError(error: InvalidParamException('实时数据不能跨天查询'));
         }
         break;
-      case DataType.tenminute:
+      case 'tenminute':
         if (duration.inDays > 0) {
           throw DioError(error: InvalidParamException('十分钟数据不能跨天查询'));
         }
         break;
-      case DataType.hour:
+      case 'hour':
         if (startTime.year != endTime.year ||
             startTime.month != endTime.month) {
           throw DioError(error: InvalidParamException('小时数据不能跨月查询'));
         }
         break;
-      case DataType.day:
+      case 'day':
         break;
       default:
         throw DioError(
@@ -61,23 +58,7 @@ class MonitorHistoryDataRepository extends DetailRepository<MonitorTable> {
     }
     return {
       'monitorId': monitorId,
-      'dataType': () {
-        switch (dataType) {
-          case DataType.minute:
-            return 'minute';
-          case DataType.tenminute:
-            return 'tenminute';
-          case DataType.hour:
-            return 'hour';
-          case DataType.day:
-            return 'day';
-          default:
-            throw DioError(
-                error:
-                    InvalidParamException('未知的DataType类型，DataType=$dataType'));
-            break;
-        }
-      }(),
+      'dataType': dataType,
       'startTime':
           DateUtil.getDateStrByDateTime(startTime, format: DateFormat.NORMAL) ??
               '',
