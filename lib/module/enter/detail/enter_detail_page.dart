@@ -325,101 +325,64 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                       UIUtils.getBoxShadow(),
                     ],
                   ),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          //全部
-                          InkWellButton1(
-                            meta: Meta(
-                              title: '全部',
-                              imagePath: 'assets/images/icon_monitor_all.png',
-                              color: Color.fromRGBO(77, 167, 248, 1),
-                              content: '${enterDetail.monitorTotalCount}',
-                            ),
-                            onTap: () {
-                              Application.router.navigateTo(context,
-                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}');
-                            },
-                          ),
-                          VerticalDividerWidget(height: 30),
-                          //在线
-                          InkWellButton1(
-                            meta: Meta(
-                              title: '在线',
-                              imagePath:
-                                  'assets/images/icon_monitor_online.png',
-                              color: Color.fromRGBO(136, 191, 89, 1),
-                              content: '${enterDetail.monitorOnlineCount}',
-                            ),
-                            onTap: () {
-                              Application.router.navigateTo(context,
-                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1');
-                            },
-                          ),
-                          VerticalDividerWidget(height: 30),
-                          //预警
-                          InkWellButton1(
-                            meta: Meta(
-                              title: '预警',
-                              imagePath: 'assets/images/icon_monitor_alarm.png',
-                              color: Color.fromRGBO(241, 190, 67, 1),
-                              content: '${enterDetail.monitorAlarmCount}',
-                            ),
-                            onTap: () {
-                              Application.router.navigateTo(context,
-                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2');
-                            },
-                          ),
-                        ],
+                  child: OnlineMonitorStatisticsGrid(
+                    metaList: [
+                      Meta(
+                        title: '全部',
+                        imagePath: 'assets/images/icon_monitor_all.png',
+                        color: Color.fromRGBO(77, 167, 248, 1),
+                        content: '${enterDetail.monitorTotalCount}',
                       ),
-                      Row(
-                        children: <Widget>[
-                          //超标
-                          InkWellButton1(
-                            meta: Meta(
-                              title: '超标',
-                              imagePath: 'assets/images/icon_monitor_over.png',
-                              color: Color.fromRGBO(233, 119, 111, 1),
-                              content: '${enterDetail.monitorOverCount}',
-                            ),
-                            onTap: () {
-                              Application.router.navigateTo(context,
-                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3');
-                            },
-                          ),
-                          VerticalDividerWidget(height: 30),
-                          //脱机
-                          InkWellButton1(
-                            meta: Meta(
-                              title: '脱机',
-                              imagePath:
-                                  'assets/images/icon_monitor_offline.png',
-                              color: Color.fromRGBO(179, 129, 127, 1),
-                              content: '${enterDetail.monitorOfflineCount}',
-                            ),
-                            onTap: () {
-                              Application.router.navigateTo(context,
-                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4');
-                            },
-                          ),
-                          VerticalDividerWidget(height: 30),
-                          //异常
-                          InkWellButton1(
-                            meta: Meta(
-                              title: '异常',
-                              imagePath: 'assets/images/icon_monitor_stop.png',
-                              color: Color.fromRGBO(137, 137, 137, 1),
-                              content: '${enterDetail.monitorStopCount}',
-                            ),
-                            onTap: () {
-                              Application.router.navigateTo(context,
-                                  '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5');
-                            },
-                          ),
-                        ],
+                      Meta(
+                        title: '在线',
+                        imagePath: 'assets/images/icon_monitor_online.png',
+                        color: Color.fromRGBO(136, 191, 89, 1),
+                        content: '${enterDetail.monitorOnlineCount}',
+                      ),
+                      Meta(
+                        title: '预警',
+                        imagePath: 'assets/images/icon_monitor_alarm.png',
+                        color: Color.fromRGBO(241, 190, 67, 1),
+                        content: '${enterDetail.monitorAlarmCount}',
+                      ),
+                      Meta(
+                        title: '超标',
+                        imagePath: 'assets/images/icon_monitor_over.png',
+                        color: Color.fromRGBO(233, 119, 111, 1),
+                        content: '${enterDetail.monitorOverCount}',
+                      ),
+                      Meta(
+                        title: '负值',
+                        imagePath: 'assets/images/icon_monitor_negative_value.png',
+                        color: Color.fromRGBO(0, 188, 212, 1),
+                        content: '-',
+                      ),
+                      Meta(
+                        title: '超大值',
+                        imagePath: 'assets/images/icon_monitor_large_value.png',
+                        color: Color.fromRGBO(255, 87, 34, 1),
+                        content: '-',
+                      ),
+                      Meta(
+                        title: '零值',
+                        imagePath: 'assets/images/icon_monitor_zero_value.png',
+                        color: Color.fromRGBO(106, 106, 255, 1),
+                        content: '-',
+                      ),
+                      Meta(
+                        title: '脱机',
+                        imagePath: 'assets/images/icon_monitor_offline.png',
+                        color: Color.fromRGBO(179, 129, 127, 1),
+                        content: '${enterDetail.monitorOfflineCount}',
+                      ),
+                      Meta(
+                        title: '异常申报',
+                        imagePath: 'assets/images/icon_monitor_stop.png',
+                        color: Color.fromRGBO(137, 137, 137, 1),
+                        content: '${enterDetail.monitorStopCount}',
                       ),
                     ],
+                    enterId: '${enterDetail.enterId}',
                   ),
                 ),
               ],
