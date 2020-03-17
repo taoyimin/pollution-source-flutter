@@ -95,7 +95,8 @@ var enterListHandler = Handler(
           'true' == 'true';
   String state = params['state']?.first ?? '';
   String enterType = params['enterType']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ??
+      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   int type = int.parse(params['type']?.first ?? '0');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
@@ -156,7 +157,8 @@ var monitorListHandler = Handler(
   String state = params['state']?.first ?? '';
   String monitorType = params['monitorType']?.first ?? '';
   // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ??
+      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: MonitorListRepository()),
@@ -184,10 +186,19 @@ var monitorDetailHandler = Handler(
 var monitorHistoryDataHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   String monitorId = params['monitorId']?.first;
+  // 均值类型默认为小时数据
+  String dataType = params['dataType']?.first ?? 'hour';
+  DateTime startTime =TextUtil.isEmpty(params['startTime']?.first) ? null : DateUtil.getDateTime(params['startTime']?.first);
+  DateTime endTime = TextUtil.isEmpty(params['endTime']?.first) ? null : DateUtil.getDateTime(params['endTime']?.first);
   return BlocProvider<DetailBloc>(
     create: (BuildContext context) =>
         DetailBloc(detailRepository: MonitorHistoryDataRepository()),
-    child: MonitorTablePage(monitorId: monitorId),
+    child: MonitorTablePage(
+      monitorId: monitorId,
+      dataType: dataType,
+      startTime: startTime,
+      endTime: endTime,
+    ),
   );
 });
 
@@ -198,7 +209,8 @@ var orderListHandler = Handler(
   String state = params['state']?.first ?? '';
   String alarmLevel = params['alarmLevel']?.first ?? '';
   // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ??
+      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: OrderListRepository()),
@@ -238,7 +250,8 @@ var dischargeReportListHandler = Handler(
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
   // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ??
+      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: DischargeReportListRepository()),
@@ -271,7 +284,8 @@ var factorReportListHandler = Handler(
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
   // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ??
+      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: FactorReportListRepository()),
@@ -302,7 +316,8 @@ var longStopReportListHandler = Handler(
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
   // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ?? SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ??
+      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: LongStopReportListRepository()),
