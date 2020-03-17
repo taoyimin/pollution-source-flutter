@@ -62,6 +62,9 @@ class Constant {
   /// 解析返回数据中realName用的key
   static const String responseRealNameKey = 'realName';
 
+  /// 解析返回数据中attentionLevel用的key
+  static const String responseAttentionLevelKey = 'attentionLevel';
+
   /// *********SharedPreferences存取数据用的key*********
   /// 存取登录用户名的key
   //static const String spUsername = 'username';
@@ -94,8 +97,11 @@ class Constant {
   /// 存取运维用户登录密码的key
   static const String spOperationPassword = 'operationPassword';
 
-  /// 当前登陆人的真实姓名
+  /// 当前登陆用户的真实姓名
   static const String spRealName = 'realName';
+
+  /// 当前登录用户的关注程度
+  static const String spAttentionLevel = 'attentionLevel';
 
   /// 登录时间
   static const String spLoginTime = 'loginTime';
