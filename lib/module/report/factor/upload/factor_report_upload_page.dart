@@ -1,8 +1,10 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_model.dart';
@@ -26,6 +28,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 
@@ -62,8 +65,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     //初始化异常类型Bloc
     _alarmTypeBloc = DataDictBloc(
-        dataDictRepository:
-            DataDictRepository(HttpApi.factorReportAlarmType));
+        dataDictRepository: DataDictRepository(HttpApi.factorReportAlarmType));
     //加载异常类型
     _alarmTypeBloc.add(DataDictLoad());
     //初始化异常因子Bloc
@@ -180,9 +182,10 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                         SnackBar(
                           content: const Text('请先选择排口！'),
                           action: SnackBarAction(
-                              label: '我知道了',
-                              textColor: Colours.primary_color,
-                              onPressed: () {}),
+                            label: '我知道了',
+                            textColor: Colours.primary_color,
+                            onPressed: () {},
+                          ),
                         ),
                       );
                     } else {
@@ -224,57 +227,51 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-//                DataDictMultiWidget(
-//                  title: '异常因子',
-//                  tipText: '请先选择监控点',
-//                  content: reportUpload?.factorCode
-//                      ?.map((dataDict) => dataDict.name)
-//                      ?.join(','),
-//                  dataDictBloc: _factorCodeBloc,
-//                  selected: reportUpload?.factorCode,
-//                  onSelected: (DataDict dataDict) {
-//                    // 如果集合中已有则删除，如果没有则添加
-//                    if (reportUpload.factorCode.contains(dataDict))
-//                      reportUpload.factorCode.remove(dataDict);
-//                    else
-//                      reportUpload.factorCode.add(dataDict);
-//                    _pageBloc.add(
-//                      PageLoad(
-//                        model: reportUpload.copyWith(
-//                            factorCode: reportUpload.factorCode),
-//                      ),
-//                    );
-//                  },
-//                ),
-//                Gaps.hLine,
                 SelectRowWidget(
                   title: '异常因子',
                   content: reportUpload?.factorCode
                       ?.map((dataDict) => dataDict.name)
                       ?.join(','),
                   onTap: () {
-                    //打开BottomSheet
-                    showModalBottomSheet(
-                      context: context,
-                      elevation: 20,
-                      backgroundColor: Colors.white,
-                      builder: (BuildContext context) {
-                        return BlocBuilder<DataDictBloc, DataDictState>(
-                          bloc: _factorCodeBloc,
-                          builder: (context, state) {
-                            print(state);
-                            if (state is DataDictLoaded) {
-                              return _buildBottomSheet(
-                                  reportUpload, state.dataDictList);
-                            } else {
-                              return MessageWidget(
-                                  message: 'BlocBuilder监听到未知的的状态！state=$state');
-                            }
-                          },
-                        );
-                      },
-                    );
-                    return;
+                    if (reportUpload?.monitor == null) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('请先选择监控点！'),
+                          action: SnackBarAction(
+                            label: '我知道了',
+                            textColor: Colours.primary_color,
+                            onPressed: () {},
+                          ),
+                        ),
+                      );
+                    } else {
+                      //打开BottomSheet
+                      showModalBottomSheet(
+                        context: context,
+                        elevation: 20,
+                        backgroundColor: Colors.white,
+                        builder: (BuildContext context) {
+                          return BlocBuilder<DataDictBloc, DataDictState>(
+                            bloc: _factorCodeBloc,
+                            builder: (context, state) {
+                              if (state is DataDictLoaded) {
+                                return _buildBottomSheet(
+                                    reportUpload, state.dataDictList);
+                              }else if (state is DataDictLoading) {
+                                return _buildLoadingBottomSheet();
+                              } else if (state is DataDictError) {
+                                return _buildErrorBottomSheet(
+                                    reportUpload, state.message);
+                              } else {
+                                return MessageWidget(
+                                    message:
+                                        'BlocBuilder监听到未知的的状态！state=$state');
+                              }
+                            },
+                          );
+                        },
+                      );
+                    }
                   },
                 ),
                 Gaps.hLine,
@@ -425,8 +422,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   ));
                   _pageBloc.add(
                     PageLoad(
-                      model: reportUpload.copyWith(
-                          factorCode: []),
+                      model: reportUpload.copyWith(factorCode: []),
                     ),
                   );
                 },
@@ -500,6 +496,153 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                 ),
               );
             }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingBottomSheet() {
+    return Container(
+      height: 260,
+      color: Colors.white,
+      child: Center(
+        child: SizedBox(
+          height: 200.0,
+          width: 300.0,
+          child: Card(
+            elevation: 0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 50.0,
+                  height: 50.0,
+                  child: SpinKitFadingCube(
+                    color: Theme.of(context).primaryColor,
+                    size: 25.0,
+                  ),
+                ),
+                Container(
+                  child: Text('加载中'),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorBottomSheet(
+      FactorReportUpload reportUpload, String message) {
+    return Container(
+      height: 260,
+      padding: EdgeInsets.symmetric(horizontal: 36),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Image.asset(
+            'assets/images/image_load_error.png',
+            height: 100,
+          ),
+          const Text(
+            '异常因子加载失败，请重试！',
+            style: TextStyle(fontSize: 14),
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("错误信息"),
+                          content: SingleChildScrollView(
+                            child: Text('$message'),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: '$message'));
+                                Toast.show('复制成功！');
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("复制"),
+                            ),
+                            FlatButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("确认"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 36,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 0.5,
+                        color: Colors.red,
+                      ),
+                      color: Colors.red.withOpacity(0.3),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '错误详情',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Gaps.hGap16,
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () {
+                    // 运维系统用monitorId查，污染源系统用monitorType查
+                    _factorCodeBloc.add(DataDictLoad(params: {
+                      'monitorType': reportUpload.monitor.monitorType,
+                      'monitorId': reportUpload.monitor.monitorId
+                    }));
+                  },
+                  child: Container(
+                    height: 36,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 0.5,
+                        color: Colors.green,
+                      ),
+                      color: Colors.green.withOpacity(0.3),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '重新加载',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
