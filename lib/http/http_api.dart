@@ -144,22 +144,22 @@ class HttpApiJava {
   static const String enterToken = 'user/entpriseLogin';
   static const String adminIndex = 'appIndex/getIndexData';
   static const String enterList = 'enterprise/queryALLEnter';
-  static const String attentionLevel = 'dictionary/getAlarmTypeList?dicCode=attentionLevel';
+  static const String attentionLevel = 'dictionary/getSubListByParent?dicCode=attentionLevel';
   static const String enterDetail = 'enterprise/queryEnterByEntId?enter_id=';
   static const String dischargeList = 'tDisChargeOut/getDisChageOut';
   static const String dischargeDetail = 'tDisChargeOut/getDisChageOutById?dischargeId=';
-  static const String outletType = 'dictionary/getAlarmTypeList?dicCode=outletType';
+  static const String outletType = 'dictionary/getSubListByParent?dicCode=outletType';
   static const String monitorList = 'tDisChargeOut/getDrainInfo';
-  static const String monitorState = 'dictionary/getAlarmTypeList?dicCode=monitorRealData';
+  static const String monitorState = 'dictionary/getSubListByParent?dicCode=monitorRealData';
   static const String monitorDetail = 'tDisChargeOut/getDrainInfoById?monitorId=';
   static const String monitorHistoryData = 'monitorRealData/queryDetailHistory';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
-  static const String orderAlarmType = 'dictionary/getAlarmTypeList?dicCode=alarm_type';
-  static const String orderAlarmLevel = 'dictionary/getAlarmTypeList?dicCode=alarmLevel';
+  static const String orderAlarmType = 'dictionary/getSubListByParent?dicCode=alarm_type';
+  static const String orderAlarmLevel = 'dictionary/getSubListByParent?dicCode=alarmLevel';
   static const String orderDetail = 'Supervise/querySuperviseDetailById?orderId=';
   static const String processesUpload = 'Supervise/dealSupervise';
   static const String dischargeReportList = 'stopApply/getApplyList';
-  static const String reportValid = 'dictionary/getAlarmTypeList?dicCode=isEffect';
+  static const String reportValid = 'dictionary/getSubListByParent?dicCode=isEffect';
   static const String dischargeReportDetail =
       'stopApply/getStopApply?dataType=S&reportId=';
   static const String dischargeReportUpload = 'stopApply/addAbonrmalInfoS';
@@ -173,7 +173,7 @@ class HttpApiJava {
   static const String longStopReportUpload = 'stopApply/addAbonrmalInfoL';
   static const String licenseList = 'enterprise/getLicenseInfoById';
   static const String dischargeReportStopType = 'dictionary/getSubListByParent?dicCode=stopType';
-  static const String factorReportAlarmType = 'dictionary/getSubListByParent?dicCode=alarm_type';
+  static const String factorReportAlarmType = 'dictionary/getSubListByParent?dicCode=alarmType';
   static const String factorReportFactorList = 'stopApply/getPollutionFactor';
   static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
