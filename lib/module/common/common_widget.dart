@@ -12,6 +12,7 @@ import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
@@ -251,11 +252,11 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
       alignment: Alignment.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SizedBox(
             width: 200.0,
@@ -280,12 +281,13 @@ class MessageWidget extends StatelessWidget {
 class InkWellButton1 extends StatelessWidget {
   final double ratio;
   final Meta meta;
-  final GestureTapCallback onTap;
+
+  //final GestureTapCallback onTap;
 
   InkWellButton1({
     this.ratio = 1,
     @required this.meta,
-    @required this.onTap,
+    //@required this.onTap,
   });
 
   @override
@@ -294,7 +296,9 @@ class InkWellButton1 extends StatelessWidget {
       flex: 1,
       child: InkWellButton(
         //splashColor: this.meta.color.withOpacity(0.3),
-        onTap: this.onTap,
+        onTap: () {
+          Application.router.navigateTo(context, meta.router);
+        },
         children: <Widget>[
           Container(
             height: 60 * ratio,
@@ -1413,7 +1417,7 @@ class FactorValueWidget extends StatelessWidget {
   }
 }
 
-/// 监测因子图标数据
+/// 监测因子图表数据
 class LineChartWidget extends StatefulWidget {
   //图标数据集合
   final List<ChartData> chartDataList;
@@ -1524,7 +1528,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
                 fontSize: 14,
               );
               return LineTooltipItem(
-                  '${widget.chartDataList[touchedSpot.barIndex].factorName} ${touchedSpot.y}',
+                  '${widget.chartDataList.where((chartData) => chartData.checked).toList()[touchedSpot.barIndex].factorName} ${touchedSpot.y}',
                   textStyle);
             }).toList();
           },
@@ -1556,10 +1560,14 @@ class LineChartWidgetState extends State<LineChartWidget> {
             fontSize: 14,
           ),
           getTitles: (value) {
-            //间隔大于等于1时，Y轴坐标不保留小数位，小于1时，保留两位小数
-            return yInterval >= 1
-                ? value.toStringAsFixed(0)
-                : value.toStringAsFixed(2);
+            if (value < 9999) {
+              //间隔大于等于1时，Y轴坐标不保留小数位，小于1时，保留两位小数
+              return yInterval >= 1
+                  ? value.toStringAsFixed(0)
+                  : value.toStringAsFixed(2);
+            } else {
+              return '${(value / 10000).toStringAsFixed(0)}万';
+            }
           },
           margin: 20,
           reservedSize: 30,
@@ -2298,6 +2306,132 @@ class LoadingDialog extends Dialog {
       onWillPop: () async {
         return false;
       },
+    );
+  }
+}
+
+/// 监控点统计网格控件
+class OnlineMonitorStatisticsGrid extends StatelessWidget {
+  final List<Meta> metaList;
+
+  OnlineMonitorStatisticsGrid({
+    Key key,
+    this.metaList,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            InkWellButton1(
+              meta: metaList[0],
+            ),
+            VerticalDividerWidget(height: 40),
+            InkWellButton1(
+              meta: metaList[1],
+            ),
+            VerticalDividerWidget(height: 40),
+            InkWellButton1(
+              meta: metaList[2],
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            InkWellButton1(
+              meta: metaList[3],
+            ),
+            VerticalDividerWidget(height: 40),
+            InkWellButton1(
+              meta: metaList[4],
+            ),
+            VerticalDividerWidget(height: 40),
+            InkWellButton1(
+              meta: metaList[5],
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            InkWellButton1(
+              meta: metaList[6],
+            ),
+            VerticalDividerWidget(height: 40),
+            InkWellButton1(
+              meta: metaList[7],
+            ),
+            VerticalDividerWidget(height: 40),
+            InkWellButton1(
+              meta: metaList[8],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// 污染源企业统计网格控件
+class PollutionEnterStatisticsGrid extends StatelessWidget {
+  final List<Meta> metaList;
+
+  PollutionEnterStatisticsGrid({
+    Key key,
+    this.metaList,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            InkWellButton1(
+              meta: metaList[0],
+            ),
+            VerticalDividerWidget(height: 30),
+            InkWellButton1(
+              meta: metaList[1],
+            ),
+            VerticalDividerWidget(height: 30),
+            InkWellButton1(
+              meta: metaList[2],
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            InkWellButton1(
+              meta: metaList[3],
+            ),
+            VerticalDividerWidget(height: 30),
+            InkWellButton1(
+              meta: metaList[4],
+            ),
+            VerticalDividerWidget(height: 30),
+            InkWellButton1(
+              meta: metaList[5],
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            InkWellButton1(
+              meta: metaList[6],
+            ),
+            VerticalDividerWidget(height: 30),
+            InkWellButton1(
+              meta: metaList[7],
+            ),
+            VerticalDividerWidget(height: 30),
+            InkWellButton1(
+              meta: metaList[8],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
