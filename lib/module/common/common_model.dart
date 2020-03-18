@@ -30,18 +30,20 @@ class Label extends Equatable {
 
 /// 元数据
 class Meta extends Equatable {
-  final String title; //标题
-  final String content; //内容
-  final Color color; //颜色
-  final String imagePath; //图标路径
-  final String backgroundPath; //背景图片路径
+  final String title; // 标题
+  final String content; // 内容
+  final Color color; // 颜色
+  final String imagePath; // 图标路径
+  final String backgroundPath; // 背景图片路径
+  final String router; // 路由
 
   const Meta({
-    this.title = '标题',
-    this.content = '内容',
+    this.title,
+    this.content,
     this.color = Colours.primary_color,
-    this.imagePath = '',
-    this.backgroundPath = '',
+    this.imagePath,
+    this.backgroundPath,
+    this.router,
   });
 
   @override
@@ -51,6 +53,7 @@ class Meta extends Equatable {
         color,
         imagePath,
         backgroundPath,
+        router,
       ];
 }
 
