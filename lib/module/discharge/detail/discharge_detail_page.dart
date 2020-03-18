@@ -16,7 +16,8 @@ import 'package:pollution_source/widget/custom_header.dart';
 class DischargeDetailPage extends StatefulWidget {
   final String dischargeId;
 
-  DischargeDetailPage({@required this.dischargeId}) : assert(dischargeId != null);
+  DischargeDetailPage({@required this.dischargeId})
+      : assert(dischargeId != null);
 
   @override
   _DischargeDetailPageState createState() => _DischargeDetailPageState();
@@ -104,13 +105,26 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                     IconBaseInfoWidget(
                       content: '排口名称：${dischargeDetail.dischargeName ?? ''}',
                       icon: Icons.linked_camera,
-                      flex: 6,
                     ),
-                    Gaps.hGap10,
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '排口类型：${dischargeDetail.dischargeTypeStr ?? ''}',
-                      icon: Icons.videocam,
-                      flex: 5,
+                      content:
+                          '排口类型：${dischargeDetail.dischargeCategoryStr ?? ''}',
+                      icon: Icons.category,
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
+                      content:
+                      '标志牌安装形式：${dischargeDetail.denoterInstallTypeStr ?? ''}',
+                      icon: Icons.business_center,
                     ),
                   ],
                 ),
@@ -124,8 +138,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
-                      content: '排口类别：${dischargeDetail.dischargeCategoryStr ?? ''}',
-                      icon: Icons.category,
+                      content: '监测类型：${dischargeDetail.dischargeTypeStr ?? ''}',
+                      icon: Icons.videocam,
                       flex: 5,
                     ),
                   ],
@@ -143,51 +157,6 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                       content: '排放类型：${dischargeDetail.outTypeStr ?? ''}',
                       icon: Icons.nature,
                       flex: 5,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '标志牌安装形式：${dischargeDetail.denoterInstallTypeStr ?? ''}',
-                      icon: Icons.business_center,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '排口简称：${dischargeDetail.dischargeShortName ?? ''}',
-                      icon: Icons.view_compact,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '排口位置：${dischargeDetail.dischargeAddress ?? ''}',
-                      icon: Icons.location_on,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '排口经度：${dischargeDetail.longitude ?? ''}',
-                      icon: Icons.location_on,
-                    ),
-                  ],
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    IconBaseInfoWidget(
-                      content: '排口纬度：${dischargeDetail.latitude ?? ''}',
-                      icon: Icons.location_on,
                     ),
                   ],
                 ),
@@ -279,8 +248,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                           imagePath:
                               'assets/images/image_enter_statistics2.png'),
                       onTap: () {
-                        Application.router.navigateTo(
-                            context, '${Routes.monitorList}?dischargeId=${dischargeDetail.dischargeId}');
+                        Application.router.navigateTo(context,
+                            '${Routes.monitorList}?dischargeId=${dischargeDetail.dischargeId}');
                       },
                     ),
                   ],
