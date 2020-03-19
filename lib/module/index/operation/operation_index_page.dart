@@ -68,20 +68,20 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                         HeaderWidget(),
                         state.inspectionStatisticsList.length > 0
                             ? RoutineInspectionStatisticsWidget(
-                            metaList: state.inspectionStatisticsList)
+                                metaList: state.inspectionStatisticsList)
                             : Gaps.empty,
                         state.onlineMonitorStatisticsList.length > 0
                             ? OnlineMonitorStatisticsWidget(
-                          metaList: state.onlineMonitorStatisticsList,
-                        )
+                                metaList: state.onlineMonitorStatisticsList,
+                              )
                             : Gaps.empty,
                         state.pollutionEnterStatisticsList.length > 0
                             ? PollutionEnterStatisticsWidget(
-                            metaList: state.pollutionEnterStatisticsList)
+                                metaList: state.pollutionEnterStatisticsList)
                             : Gaps.empty,
                         state.orderStatisticsList.length > 0
                             ? OrderStatisticsWidget(
-                            metaList: state.orderStatisticsList)
+                                metaList: state.orderStatisticsList)
                             : Gaps.empty,
                       ],
                     ),
@@ -177,19 +177,11 @@ class RoutineInspectionStatisticsWidget extends StatelessWidget {
               // 待巡检任务数
               InkWellButton2(
                 meta: metaList[0],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.routineInspectionList}?state=1');
-                },
               ),
               Gaps.hGap6,
               // 超期任务数
               InkWellButton2(
                 meta: metaList[1],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.routineInspectionList}?state=2');
-                },
               ),
               Gaps.hGap6,
               // 已巡检任务数
@@ -407,72 +399,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TitleWidget(title: "在线监控点概况"),
-          Row(
-            children: <Widget>[
-              //全部
-              InkWellButton1(
-                ratio: 1.15,
-                meta: metaList[0],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              //在线
-              InkWellButton1(
-                ratio: 1.15,
-                meta: metaList[1],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=1');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              //预警
-              InkWellButton1(
-                ratio: 1.15,
-                meta: metaList[2],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=2');
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              //超标
-              InkWellButton1(
-                ratio: 1.15,
-                meta: metaList[3],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=3');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              //脱机
-              InkWellButton1(
-                ratio: 1.15,
-                meta: metaList[4],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=4');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              //异常
-              InkWellButton1(
-                ratio: 1.15,
-                meta: metaList[5],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=5');
-                },
-              ),
-            ],
-          ),
+          OnlineMonitorStatisticsGrid(metaList: metaList),
         ],
       ),
     );
@@ -507,8 +434,8 @@ class OrderStatisticsWidget extends StatelessWidget {
               InkWellButton3(
                 meta: metaList[1],
                 onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.orderList}?state=4');
+                  Application.router
+                      .navigateTo(context, '${Routes.orderList}?state=4');
                 },
               ),
               Gaps.hGap10,
@@ -541,95 +468,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TitleWidget(title: "污染源企业概况"),
-          Row(
-            children: <Widget>[
-              //全部企业
-              InkWellButton1(
-                meta: metaList[0],
-                onTap: () {
-                  Application.router.navigateTo(context, '${Routes.enterList}');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //重点企业
-              InkWellButton1(
-                meta: metaList[1],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?attentionLevel=1');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //在线企业
-              InkWellButton1(
-                meta: metaList[2],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?state=1');
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              //废水企业
-              InkWellButton1(
-                meta: metaList[3],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=2');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //废气企业
-              InkWellButton1(
-                meta: metaList[4],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=3');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //水气企业
-              InkWellButton1(
-                meta: metaList[5],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=4');
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              //废水排口
-              InkWellButton1(
-                meta: metaList[6],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType2');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //废气排口
-              InkWellButton1(
-                meta: metaList[7],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType3');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //许可证企业
-              InkWellButton1(
-                meta: metaList[8],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=5');
-                },
-              ),
-            ],
-          ),
+          PollutionEnterStatisticsGrid(metaList: metaList),
         ],
       ),
     );

@@ -652,35 +652,20 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "待办任务统计"),
+          TitleWidget(title: "报警管理单统计"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              // 待处理督办单
               InkWellButton2(
                 meta: metaList[0],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.orderList}?state=2');
-                },
               ),
               Gaps.hGap6,
-              // 超期待处理督办单
               InkWellButton2(
                 meta: metaList[1],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.orderList}?state=2&alarmLevel=3');
-                },
               ),
               Gaps.hGap6,
-              // 已办结督办单
               InkWellButton2(
                 meta: metaList[2],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.orderList}?state=5');
-                },
               ),
             ],
           ),
@@ -709,8 +694,8 @@ class ReportStatisticsWidget extends StatelessWidget {
               InkWellButton3(
                 meta: metaList[0],
                 onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.longStopReportList}?valid=0');
+                  Application.router.navigateTo(
+                      context, '${Routes.longStopReportList}?valid=0');
                 },
               ),
               Gaps.hGap10,
@@ -718,8 +703,8 @@ class ReportStatisticsWidget extends StatelessWidget {
               InkWellButton3(
                 meta: metaList[1],
                 onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.dischargeReportList}?valid=0');
+                  Application.router.navigateTo(
+                      context, '${Routes.dischargeReportList}?valid=0');
                 },
               ),
               Gaps.hGap10,
@@ -727,8 +712,8 @@ class ReportStatisticsWidget extends StatelessWidget {
               InkWellButton3(
                 meta: metaList[2],
                 onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.factorReportList}?valid=0');
+                  Application.router.navigateTo(
+                      context, '${Routes.factorReportList}?valid=0');
                 },
               ),
             ],
@@ -752,96 +737,7 @@ class OnlineMonitorStatisticsWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TitleWidget(title: "在线监控点概况"),
-          Row(
-            children: <Widget>[
-              // 全部
-              InkWellButton1(
-                meta: metaList[0],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              // 在线
-              InkWellButton1(
-                meta: metaList[1],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=1');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              // 预警
-              InkWellButton1(
-                meta: metaList[2],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=2');
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              // 超标
-              InkWellButton1(
-                meta: metaList[3],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=3');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              // 负值
-              InkWellButton1(
-                meta: metaList[4],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=4');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              // 超大值
-              InkWellButton1(
-                meta: metaList[5],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=5');
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              // 零值
-              InkWellButton1(
-                meta: metaList[6],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=6');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              // 脱机
-              InkWellButton1(
-                meta: metaList[7],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=7');
-                },
-              ),
-              VerticalDividerWidget(height: 40),
-              // 异常申报
-              InkWellButton1(
-                meta: metaList[8],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.monitorList}?state=8');
-                },
-              ),
-            ],
-          ),
+          OnlineMonitorStatisticsGrid(metaList: metaList),
         ],
       ),
     );
@@ -861,95 +757,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TitleWidget(title: "污染源企业概况"),
-          Row(
-            children: <Widget>[
-              //全部企业
-              InkWellButton1(
-                meta: metaList[0],
-                onTap: () {
-                  Application.router.navigateTo(context, '${Routes.enterList}?attentionLevel=');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //重点企业
-              InkWellButton1(
-                meta: metaList[1],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?attentionLevel=1');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //在线企业
-              InkWellButton1(
-                meta: metaList[2],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?state=1&attentionLevel=');
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              //废水企业
-              InkWellButton1(
-                meta: metaList[3],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=2&attentionLevel=');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //废气企业
-              InkWellButton1(
-                meta: metaList[4],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=3&attentionLevel=');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //水气企业
-              InkWellButton1(
-                meta: metaList[5],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=4&attentionLevel=');
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              //废水排口
-              InkWellButton1(
-                meta: metaList[6],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType2');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //废气排口
-              InkWellButton1(
-                meta: metaList[7],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType3');
-                },
-              ),
-              VerticalDividerWidget(height: 30),
-              //许可证企业
-              InkWellButton1(
-                meta: metaList[8],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=5&attentionLevel=');
-                },
-              ),
-            ],
-          ),
+          PollutionEnterStatisticsGrid(metaList: metaList),
         ],
       ),
     );
@@ -971,31 +779,16 @@ class RainEnterStatisticsWidget extends StatelessWidget {
           TitleWidget(title: "雨水企业概况"),
           Row(
             children: <Widget>[
-              //全部企业
               InkWellButton1(
                 meta: metaList[0],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.enterList}?enterType=1');
-                },
               ),
               VerticalDividerWidget(height: 30),
-              //在线企业
               InkWellButton1(
                 meta: metaList[1],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.enterList}?enterType=1&state=1');
-                },
               ),
               VerticalDividerWidget(height: 30),
-              //排口总数
               InkWellButton1(
                 meta: metaList[2],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeList}?dischargeType=outletType1');
-                },
               ),
             ],
           ),

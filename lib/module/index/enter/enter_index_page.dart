@@ -112,7 +112,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                   ),
                 ),
                 Positioned(
-                  top: 45,
+                  top: 35,
                   left: 20,
                   bottom: 15,
                   child: Column(
@@ -127,13 +127,14 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                               fontSize: 17, color: Colors.white),
                         ),
                       ),
-                      Gaps.vGap10,
                       Container(
                         width: 180,
                         child: Text(
                           '${enterDetail.enterAddress}',
                           style: const TextStyle(
-                              fontSize: 12, color: Colors.white),
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -426,57 +427,75 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         imagePath: 'assets/images/icon_monitor_all.png',
                         color: Color.fromRGBO(77, 167, 248, 1),
                         content: '${enterDetail.monitorTotalCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}',
                       ),
                       Meta(
                         title: '在线',
                         imagePath: 'assets/images/icon_monitor_online.png',
                         color: Color.fromRGBO(136, 191, 89, 1),
                         content: '${enterDetail.monitorOnlineCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1',
                       ),
                       Meta(
                         title: '预警',
                         imagePath: 'assets/images/icon_monitor_alarm.png',
                         color: Color.fromRGBO(241, 190, 67, 1),
                         content: '${enterDetail.monitorAlarmCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2',
                       ),
                       Meta(
                         title: '超标',
                         imagePath: 'assets/images/icon_monitor_over.png',
                         color: Color.fromRGBO(233, 119, 111, 1),
                         content: '${enterDetail.monitorOverCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3',
                       ),
                       Meta(
                         title: '负值',
-                        imagePath: 'assets/images/icon_monitor_negative_value.png',
+                        imagePath:
+                            'assets/images/icon_monitor_negative_value.png',
                         color: Color.fromRGBO(0, 188, 212, 1),
-                        content: '-',
+                        content: '${enterDetail.monitorNegativeCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4',
                       ),
                       Meta(
                         title: '超大值',
                         imagePath: 'assets/images/icon_monitor_large_value.png',
                         color: Color.fromRGBO(255, 87, 34, 1),
-                        content: '-',
+                        content: '${enterDetail.monitorLargeCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5',
                       ),
                       Meta(
                         title: '零值',
                         imagePath: 'assets/images/icon_monitor_zero_value.png',
                         color: Color.fromRGBO(106, 106, 255, 1),
-                        content: '-',
+                        content: '${enterDetail.monitorZeroCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=6',
                       ),
                       Meta(
                         title: '脱机',
                         imagePath: 'assets/images/icon_monitor_offline.png',
                         color: Color.fromRGBO(179, 129, 127, 1),
                         content: '${enterDetail.monitorOfflineCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=7',
                       ),
                       Meta(
                         title: '异常申报',
                         imagePath: 'assets/images/icon_monitor_stop.png',
                         color: Color.fromRGBO(137, 137, 137, 1),
                         content: '${enterDetail.monitorStopCount}',
+                        router:
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=8',
                       ),
                     ],
-                    enterId: '${enterDetail.enterId}',
                   ),
                 ),
               ],

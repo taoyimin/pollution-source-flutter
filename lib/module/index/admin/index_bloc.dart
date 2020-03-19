@@ -5,6 +5,7 @@ import 'package:pollution_source/module/index/admin/index.dart';
 import 'package:bloc/bloc.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 
 class IndexBloc extends Bloc<IndexEvent, IndexState> {
@@ -232,54 +233,63 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         color: Color.fromRGBO(77, 167, 248, 1),
         content: strings[1],
+        router: '${Routes.enterList}?attentionLevel=&hasAll=1',
       ),
       Meta(
         title: '重点企业',
         imagePath: 'assets/images/icon_pollution_point_enter.png',
         color: Color.fromRGBO(241, 190, 67, 1),
         content: strings[2],
+        router: '${Routes.enterList}?attentionLevel=1',
       ),
       Meta(
         title: '在线企业',
         imagePath: 'assets/images/icon_pollution_online_enter.png',
         color: Color.fromRGBO(136, 191, 89, 1),
         content: strings[3],
+        router: '${Routes.enterList}?state=1&attentionLevel=',
       ),
       Meta(
         title: '废水企业',
         imagePath: 'assets/images/icon_pollution_water_enter.png',
         color: Color.fromRGBO(0, 188, 212, 1),
         content: strings[4],
+        router: '${Routes.enterList}?enterType=2&attentionLevel=',
       ),
       Meta(
         title: '废气企业',
         imagePath: 'assets/images/icon_pollution_air_enter.png',
         color: Color.fromRGBO(255, 87, 34, 1),
         content: strings[5],
+        router: '${Routes.enterList}?enterType=3&attentionLevel=',
       ),
       Meta(
         title: '水气企业',
         imagePath: 'assets/images/icon_pollution_air_water.png',
         color: Color.fromRGBO(137, 137, 137, 1),
         content: strings[6],
+        router: '${Routes.enterList}?enterType=4&attentionLevel=',
       ),
       Meta(
         title: '废水排口',
         imagePath: 'assets/images/icon_pollution_water_outlet.png',
         color: Color.fromRGBO(63, 81, 181, 1),
         content: strings[7],
+        router: '${Routes.dischargeList}?dischargeType=outletType2',
       ),
       Meta(
         title: '废气排口',
         imagePath: 'assets/images/icon_pollution_air_outlet.png',
         color: Color.fromRGBO(233, 30, 99, 1),
         content: strings[8],
+        router: '${Routes.dischargeList}?dischargeType=outletType3',
       ),
       Meta(
         title: '许可证企业',
         imagePath: 'assets/images/icon_pollution_licence_enter.png',
         color: Color.fromRGBO(179, 129, 127, 1),
         content: strings[9],
+        router: '${Routes.enterList}?enterType=5&attentionLevel=',
       ),
     ];
   }
@@ -298,54 +308,63 @@ Future<List<Meta>> _convertOnlineMonitorStatistics(String string) async {
         imagePath: 'assets/images/icon_monitor_all.png',
         color: Color.fromRGBO(77, 167, 248, 1),
         content: strings[1],
+        router: '${Routes.monitorList}',
       ),
       Meta(
         title: '在线',
         imagePath: 'assets/images/icon_monitor_online.png',
         color: Color.fromRGBO(136, 191, 89, 1),
         content: strings[2],
+        router: '${Routes.monitorList}?state=1',
       ),
       Meta(
         title: '预警',
         imagePath: 'assets/images/icon_monitor_alarm.png',
         color: Color.fromRGBO(241, 190, 67, 1),
         content: strings[3],
+        router: '${Routes.monitorList}?state=2',
       ),
       Meta(
         title: '超标',
         imagePath: 'assets/images/icon_monitor_over.png',
         color: Color.fromRGBO(233, 119, 111, 1),
         content: strings[4],
+        router: '${Routes.monitorList}?state=3',
       ),
       Meta(
         title: '负值',
         imagePath: 'assets/images/icon_monitor_negative_value.png',
         color: Color.fromRGBO(0, 188, 212, 1),
         content: strings[5],
+        router: '${Routes.monitorList}?state=4',
       ),
       Meta(
         title: '超大值',
         imagePath: 'assets/images/icon_monitor_large_value.png',
         color: Color.fromRGBO(255, 87, 34, 1),
         content: strings[6],
+        router: '${Routes.monitorList}?state=5',
       ),
       Meta(
         title: '零值',
         imagePath: 'assets/images/icon_monitor_zero_value.png',
         color: Color.fromRGBO(106, 106, 255, 1),
         content: strings[7],
+        router: '${Routes.monitorList}?state=6',
       ),
       Meta(
         title: '脱机',
         imagePath: 'assets/images/icon_monitor_offline.png',
         color: Color.fromRGBO(179, 129, 127, 1),
         content: strings[8],
+        router: '${Routes.monitorList}?state=7',
       ),
       Meta(
         title: '异常申报',
         imagePath: 'assets/images/icon_monitor_stop.png',
         color: Color.fromRGBO(137, 137, 137, 1),
         content: strings[9],
+        router: '${Routes.monitorList}?state=8',
       ),
     ];
   }
@@ -363,16 +382,19 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
         title: '待处理督办单',
         imagePath: 'assets/images/button_bg_blue.png',
         content: strings[1],
+        router: '${Routes.orderList}?state=2',
       ),
       Meta(
         title: '超期待处理督办单',
         imagePath: 'assets/images/button_bg_pink.png',
         content: strings[2],
+        router: '${Routes.orderList}?state=2&alarmLevel=3',
       ),
       Meta(
         title: '已办结督办单',
         imagePath: 'assets/images/button_bg_green.png',
         content: strings[3],
+        router: '${Routes.orderList}?state=5',
       ),
     ];
   }
@@ -451,18 +473,21 @@ Future<List<Meta>> _convertRainEnterStatistics(String string) async {
         color: Color.fromRGBO(77, 167, 248, 1),
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         content: strings[1],
+        router: '${Routes.enterList}?enterType=1',
       ),
       Meta(
         title: '在线企业',
         color: Color.fromRGBO(241, 190, 67, 1),
         imagePath: 'assets/images/icon_pollution_online_enter.png',
         content: strings[2],
+        router: '${Routes.enterList}?enterType=1&state=1',
       ),
       Meta(
         title: '排口总数',
         color: Color.fromRGBO(136, 191, 89, 1),
         imagePath: 'assets/images/icon_pollution_water_outlet.png',
         content: strings[3],
+        router: '${Routes.dischargeList}?dischargeType=outletType1',
       ),
     ];
   }
