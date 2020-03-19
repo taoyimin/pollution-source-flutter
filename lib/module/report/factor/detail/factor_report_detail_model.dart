@@ -8,35 +8,37 @@ part 'factor_report_detail_model.g.dart';
 @JsonSerializable()
 class FactorReportDetail extends Equatable {
   @JsonKey(name: 'id')
-  final int reportId; //排口异常申报ID
-  final int enterId; //企业ID
+  final int reportId; // 排口异常申报ID
+  final int enterId; // 企业ID
   @JsonKey(name: 'outId')
-  final int dischargeId; //排口ID
-  final int monitorId; //监控点ID
+  final int dischargeId; // 排口ID
+  final int monitorId; // 监控点ID
   @JsonKey(name: 'enterpriseName', defaultValue: '')
-  final String enterName; //企业名称
+  final String enterName; // 企业名称
   @JsonKey(name: 'entAddress', defaultValue: '')
-  final String enterAddress; //企业地址
+  final String enterAddress; // 企业地址
   @JsonKey(name: 'disOutName', defaultValue: '')
-  final String dischargeName; //排口名称
+  final String dischargeName; // 排口名称
   @JsonKey(name: 'disMonitorName', defaultValue: '')
-  final String monitorName; //监控点名称
+  final String monitorName; // 监控点名称
   @JsonKey(defaultValue: '')
   final String cityName; // 所属市
   @JsonKey(defaultValue: '')
   final String areaName; // 所属区
   @JsonKey(name: 'updateTime', defaultValue: '')
-  final String reportTimeStr; //申报时间
+  final String reportTimeStr; // 申报时间
   @JsonKey(name: 'startTime', defaultValue: '')
-  final String startTimeStr; //开始时间
+  final String startTimeStr; // 开始时间
   @JsonKey(name: 'endTime', defaultValue: '')
-  final String endTimeStr; //结束时间
+  final String endTimeStr; // 结束时间
   @JsonKey(defaultValue: '')
-  final String alarmTypeStr; //报警类型
+  final String alarmTypeStr; // 报警类型
   @JsonKey(defaultValue: '')
-  final String exceptionReason; //异常原因
+  final String factorCodeStr; // 异常因子
+  @JsonKey(defaultValue: '')
+  final String exceptionReason; // 异常原因
   @JsonKey(name: 'attachmentList')
-  final List<Attachment> attachments; //证明材料
+  final List<Attachment> attachments; // 证明材料
 
   const FactorReportDetail({
     this.reportId,
@@ -53,6 +55,7 @@ class FactorReportDetail extends Equatable {
     this.startTimeStr,
     this.endTimeStr,
     this.alarmTypeStr,
+    this.factorCodeStr,
     this.exceptionReason,
     this.attachments,
   });
@@ -73,6 +76,7 @@ class FactorReportDetail extends Equatable {
         startTimeStr,
         endTimeStr,
         alarmTypeStr,
+        factorCodeStr,
         exceptionReason,
         attachments,
       ];

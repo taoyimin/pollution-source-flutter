@@ -106,7 +106,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                   children: <Widget>[
                     IconBaseInfoWidget(
                       content: '监控点名：${reportDetail.monitorName}',
-                      icon: Icons.linked_camera,
+                      icon: Icons.wifi_tethering,
                     ),
                   ],
                 ),
@@ -150,8 +150,17 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
+                      content: '异常因子：${reportDetail.factorCodeStr}',
+                      icon: Icons.error_outline,
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
                       content: '异常原因：${reportDetail.exceptionReason}',
-                      icon: Icons.receipt,
+                      icon: Icons.event_note,
                     ),
                   ],
                 ),
