@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/intercept.dart';
 import 'package:pollution_source/res/constant.dart';
 
@@ -35,7 +36,9 @@ class PythonDioUtils {
     _dio.interceptors.add(AuthInterceptor());
     _dio.interceptors.add(TokenInterceptor());
     _dio.interceptors.add(HandleErrorInterceptor());
-    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
+    if (!Constant.inProduction ||
+        SpUtil.getBool(Constant.spDebug, defValue: false))
+      _dio.interceptors.add(LoggingInterceptor());
   }
 }
 
@@ -59,22 +62,24 @@ class JavaDioUtils {
 
   JavaDioUtils._internal() {
     var options = BaseOptions(
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
-      responseType: ResponseType.json,
-      validateStatus: (status) {
-        return true;
-      },
-      // 正式环境
-      baseUrl: 'http://111.75.227.207:19551/'
-      // 测试环境
-      // baseUrl: 'http://182.106.189.190:9999/',
-    );
+        connectTimeout: 15000,
+        receiveTimeout: 15000,
+        responseType: ResponseType.json,
+        validateStatus: (status) {
+          return true;
+        },
+        // 正式环境
+        baseUrl: 'http://111.75.227.207:19551/'
+        // 测试环境
+        // baseUrl: 'http://182.106.189.190:9999/',
+        );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());
     _dio.interceptors.add(TokenInterceptor());
     _dio.interceptors.add(HandleErrorInterceptor());
-    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
+    if (!Constant.inProduction ||
+        SpUtil.getBool(Constant.spDebug, defValue: false))
+      _dio.interceptors.add(LoggingInterceptor());
   }
 }
 
@@ -113,7 +118,9 @@ class OperationDioUtils {
     _dio.interceptors.add(AuthInterceptor());
     _dio.interceptors.add(TokenInterceptor());
     _dio.interceptors.add(HandleErrorInterceptor());
-    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
+    if (!Constant.inProduction ||
+        SpUtil.getBool(Constant.spDebug, defValue: false))
+      _dio.interceptors.add(LoggingInterceptor());
   }
 }
 
@@ -146,6 +153,8 @@ class FileDioUtils {
       },
     );
     _dio = Dio(options);
-    if (!Constant.inProduction) _dio.interceptors.add(LoggingInterceptor());
+    if (!Constant.inProduction ||
+        SpUtil.getBool(Constant.spDebug, defValue: false))
+      _dio.interceptors.add(LoggingInterceptor());
   }
 }

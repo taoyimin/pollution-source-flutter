@@ -4,6 +4,7 @@ import 'package:pollution_source/module/login/login_repository.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 import 'package:pollution_source/util/log_utils.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 
 import 'http.dart';
 
@@ -172,19 +173,25 @@ class LoggingInterceptor extends Interceptor {
     Log.d("----------Start----------");
     if (options.queryParameters.isEmpty) {
       Log.i("RequestUrl: " + options.baseUrl + options.path);
-      //Toast.show(options.baseUrl + options.path, duration: 300000);
+      // 如果开启Debug模式则打印接口地址
+      if (SpUtil.getBool(Constant.spDebug, defValue: false)) {
+        Toast.show(options.baseUrl + options.path, duration: 300000);
+      }
     } else {
       Log.i("RequestUrl: " +
           options.baseUrl +
           options.path +
           "?" +
           Transformer.urlEncodeMap(options.queryParameters));
-//      Toast.show(
-//          options.baseUrl +
-//              options.path +
-//              "?" +
-//              Transformer.urlEncodeMap(options.queryParameters),
-//          duration: 300000);
+      // 如果开启Debug模式则打印接口地址
+      if (SpUtil.getBool(Constant.spDebug, defValue: false)) {
+        Toast.show(
+            options.baseUrl +
+                options.path +
+                "?" +
+                Transformer.urlEncodeMap(options.queryParameters),
+            duration: 300000);
+      }
     }
     Log.d("RequestMethod: " + options.method);
     Log.d("RequestHeaders:" + options.headers.toString());

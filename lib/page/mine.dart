@@ -21,7 +21,8 @@ class MinePage extends StatefulWidget {
   _MinePageState createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
+class _MinePageState extends State<MinePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -191,11 +192,25 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                               ),
                             ),
                             Gaps.vGap8,
-                            Text(
-                              '当前版本号：${version ?? '未知'}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colours.secondary_text,
+                            GestureDetector(
+                              onDoubleTap: () {
+                                SpUtil.putBool(
+                                    Constant.spDebug,
+                                    !SpUtil.getBool(Constant.spDebug,
+                                        defValue: false));
+                                if(SpUtil.getBool(Constant.spDebug,
+                                    defValue: false)){
+                                  Toast.show('已开启Debug模式');
+                                }else{
+                                  Toast.show('已关闭Debug模式');
+                                }
+                              },
+                              child: Text(
+                                '当前版本号：${version ?? '未知'}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colours.secondary_text,
+                                ),
                               ),
                             ),
                           ],
@@ -275,30 +290,40 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                                   ),
                                   InkWellButton(
                                     onTap: () async {
-                                      try{
-                                        bool hasUpdate = await SystemUtils.checkUpdate(context);
-                                        if(!hasUpdate){
+                                      try {
+                                        bool hasUpdate =
+                                            await SystemUtils.checkUpdate(
+                                                context);
+                                        if (!hasUpdate) {
                                           Scaffold.of(context).showSnackBar(
                                             SnackBar(
                                               content: const Text('已经是最新版本'),
                                               action: SnackBarAction(
-                                                  label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                                  label: '我知道了',
+                                                  textColor:
+                                                      Colours.primary_color,
+                                                  onPressed: () {}),
                                             ),
                                           );
                                         }
-                                      }catch(e){
+                                      } catch (e) {
                                         Scaffold.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text('${ExceptionHandle.handleException(e).msg}'),
+                                            content: Text(
+                                                '${ExceptionHandle.handleException(e).msg}'),
                                             action: SnackBarAction(
-                                                label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                                label: '我知道了',
+                                                textColor:
+                                                    Colours.primary_color,
+                                                onPressed: () {}),
                                           ),
                                         );
                                       }
                                     },
                                     children: <Widget>[
                                       Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: <Widget>[
                                           Image.asset(
                                             "assets/images/icon_check_update.png",
@@ -316,18 +341,21 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                                     ],
                                   ),
                                   InkWellButton(
-                                    onTap: (){
+                                    onTap: () {
                                       Scaffold.of(context).showSnackBar(
                                         SnackBar(
                                           content: Text('功能即将开放'),
                                           action: SnackBarAction(
-                                              label: '我知道了', textColor: Colours.primary_color, onPressed: () {}),
+                                              label: '我知道了',
+                                              textColor: Colours.primary_color,
+                                              onPressed: () {}),
                                         ),
                                       );
                                     },
                                     children: <Widget>[
                                       Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: <Widget>[
                                           Image.asset(
                                             "assets/images/icon_share_product.png",
@@ -375,7 +403,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                                     children: <Widget>[
                                       Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         children: <Widget>[
                                           Image.asset(
                                             "assets/images/icon_clear_cache.png",

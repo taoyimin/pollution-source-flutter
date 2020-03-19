@@ -79,6 +79,9 @@ class Constant {
     HttpApi.operationToken
   ];
 
+  /// 是否开启debug模式
+  static const String spDebug = 'debug';
+
   /// 存取环保用户登录用户名的key
   static const String spAdminUsername = 'adminUsername';
 
