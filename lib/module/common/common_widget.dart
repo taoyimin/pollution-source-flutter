@@ -282,12 +282,9 @@ class InkWellButton1 extends StatelessWidget {
   final double ratio;
   final Meta meta;
 
-  //final GestureTapCallback onTap;
-
   InkWellButton1({
     this.ratio = 1,
     @required this.meta,
-    //@required this.onTap,
   });
 
   @override
@@ -295,7 +292,6 @@ class InkWellButton1 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        //splashColor: this.meta.color.withOpacity(0.3),
         onTap: () {
           Application.router.navigateTo(context, meta.router);
         },
@@ -359,14 +355,20 @@ class InkWellButton2 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
 
-  InkWellButton2({@required this.meta, @required this.onTap});
+  InkWellButton2({
+    @required this.meta,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(6),

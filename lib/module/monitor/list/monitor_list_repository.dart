@@ -60,11 +60,11 @@ class MonitorListRepository extends ListRepository<Monitor> {
       case '3':
         return 'outrange';
       case '4':
-        return 'ultraLowerlimit';
+        return 'negativeValue';
       case '5':
         return 'ultraUpperlimit';
       case '6':
-        return 'zero';
+        return 'zeroValue';
       case '7':
         return 'offline';
       case '8':

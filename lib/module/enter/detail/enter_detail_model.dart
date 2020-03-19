@@ -39,6 +39,9 @@ class EnterDetail extends Equatable {
   final int monitorOverCount; // 监控点超标数
   final int monitorOfflineCount; // 监控点离线数
   final int monitorStopCount; // 监控点异常数
+  final int monitorZeroCount; // 监控点零值数
+  final int monitorLargeCount; // 监控点超大值数
+  final int monitorNegativeCount; // 监控点负值数
   final String licenseNumber; // 排污许可证编码
   final String buildProjectCount; // 建设项目总数
   final String sceneLawCount; // 现场执法总数
@@ -72,6 +75,9 @@ class EnterDetail extends Equatable {
     this.monitorOverCount,
     this.monitorOfflineCount,
     this.monitorStopCount,
+    this.monitorZeroCount,
+    this.monitorLargeCount,
+    this.monitorNegativeCount,
     this.licenseNumber,
     this.buildProjectCount,
     this.sceneLawCount,
@@ -107,6 +113,9 @@ class EnterDetail extends Equatable {
         monitorOverCount,
         monitorOfflineCount,
         monitorStopCount,
+        monitorZeroCount,
+        monitorLargeCount,
+        monitorNegativeCount,
         licenseNumber,
         buildProjectCount,
         sceneLawCount,
@@ -153,6 +162,9 @@ EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
       monitorOverCount: json['monitorOverCount'] as int,
       monitorOfflineCount: json['monitorOfflineCount'] as int,
       monitorStopCount: json['monitorStopCount'] as int,
+      monitorZeroCount: json['monitorZeroCount'] as int,
+      monitorLargeCount: json['monitorLargeCount'] as int,
+      monitorNegativeCount: json['monitorNegativeCount'] as int,
       licenseNumber: json['licenseNumber'] as String,
       buildProjectCount: json['buildProjectCount'] as String,
       sceneLawCount: json['sceneLawCount'] as String,
@@ -188,6 +200,9 @@ Map<String, dynamic> _$EnterDetailToJson(EnterDetail instance) =>
       'monitorOverCount': instance.monitorOverCount,
       'monitorOfflineCount': instance.monitorOfflineCount,
       'monitorStopCount': instance.monitorStopCount,
+      'monitorZeroCount': instance.monitorZeroCount,
+      'monitorLargeCount': instance.monitorLargeCount,
+      'monitorNegativeCount': instance.monitorNegativeCount,
       'licenseNumber': instance.licenseNumber,
       'buildProjectCount': instance.buildProjectCount,
       'sceneLawCount': instance.sceneLawCount,
