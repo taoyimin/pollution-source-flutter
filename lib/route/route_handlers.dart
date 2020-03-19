@@ -94,6 +94,7 @@ var enterListHandler = Handler(
       params['automaticallyImplyLeading']?.first?.toLowerCase() ??
           'true' == 'true';
   String state = params['state']?.first ?? '';
+  String hasAll = params['hasAll']?.first ?? '';
   String enterType = params['enterType']?.first ?? '';
   String attentionLevel = params['attentionLevel']?.first ??
       SpUtil.getString(Constant.spAttentionLevel, defValue: '');
@@ -104,6 +105,7 @@ var enterListHandler = Handler(
     child: EnterListPage(
       automaticallyImplyLeading: automaticallyImplyLeading,
       state: state,
+      hasAll: hasAll,
       enterType: enterType,
       attentionLevel: attentionLevel,
       type: type,

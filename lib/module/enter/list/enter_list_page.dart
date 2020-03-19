@@ -30,6 +30,7 @@ import 'package:pollution_source/module/common/common_widget.dart';
 /// 企业列表
 class EnterListPage extends StatefulWidget {
   final String state;
+  final String hasAll;
   final String enterType;
   final String attentionLevel;
   final bool automaticallyImplyLeading; //是否显示左上角返回箭头
@@ -37,6 +38,7 @@ class EnterListPage extends StatefulWidget {
 
   EnterListPage({
     this.state = '',
+    this.hasAll = '',
     this.enterType = '',
     this.attentionLevel = '',
     this.automaticallyImplyLeading = true,
@@ -120,6 +122,7 @@ class _EnterListPageState extends State<EnterListPage>
     return EnterListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
+      hasAll: widget.hasAll,
       enterName: _enterNameController.text,
       areaCode: _areaCode,
       state: _state,
