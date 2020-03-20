@@ -94,7 +94,7 @@ var enterListHandler = Handler(
       params['automaticallyImplyLeading']?.first?.toLowerCase() ??
           'true' == 'true';
   String state = params['state']?.first ?? '';
-  String hasAll = params['hasAll']?.first ?? '';
+  String hasAll = params['hasAll']?.first ?? '0';
   String enterType = params['enterType']?.first ?? '';
   String attentionLevel = params['attentionLevel']?.first ??
       SpUtil.getString(Constant.spAttentionLevel, defValue: '');
