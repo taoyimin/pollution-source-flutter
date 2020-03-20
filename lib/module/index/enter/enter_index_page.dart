@@ -12,7 +12,6 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
@@ -252,42 +251,33 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                 Row(
                   children: <Widget>[
                     InkWellButton5(
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=2');
-                      },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '待处理',
                         content: '${enterDetail.orderDealCount ?? ''}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
+                        router: '${Routes.orderList}?enterId=${widget.enterId}&state=2',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=2&alarmLevel=3');
-                      },
                       meta: Meta(
                         color: Color(0xFFFFB709),
                         title: '超期待办',
                         content: '${enterDetail.orderOverdueCount ?? ''}',
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
+                        router: '${Routes.orderList}?enterId=${widget.enterId}&state=2&alarmLevel=3',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=4');
-                      },
                       meta: Meta(
                         color: Color(0xFFFD6C6B),
                         title: '已退回',
                         content: '${enterDetail.orderReturnCount ?? ''}',
                         imagePath: 'assets/images/icon_alarm_manage_return.png',
+                        router: '${Routes.orderList}?enterId=${widget.enterId}&state=4',
                       ),
                     ),
                   ],
@@ -357,41 +347,32 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                 Row(
                   children: <Widget>[
                     InkWellButton3(
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.longStopReportList}?enterId=${enterDetail.enterId}&valid=0');
-                      },
                       meta: Meta(
                         title: '长期停产申报',
                         content: '${enterDetail.longStopReportTotalCount}',
                         imagePath: 'assets/images/button_image2.png',
                         backgroundPath: 'assets/images/button_bg_lightblue.png',
+                        router: '${Routes.longStopReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton3(
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}&valid=0');
-                      },
                       meta: Meta(
                         title: '排口异常申报',
                         content: '${enterDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
+                        router: '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton3(
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.factorReportList}?enterId=${enterDetail.enterId}&valid=0');
-                      },
                       meta: Meta(
                         title: '因子异常申报',
                         content: '${enterDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
+                        router: '${Routes.factorReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                   ],
@@ -522,11 +503,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     color: Colours.background_red,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
+                    router: '${Routes.licenseList}?enterId=${enterDetail.enterId}',
                   ),
-                  onTap: () {
-                    Application.router.navigateTo(context,
-                        '${Routes.licenseList}?enterId=${enterDetail.enterId}');
-                  },
                 ),
               ],
             ),

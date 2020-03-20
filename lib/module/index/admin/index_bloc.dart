@@ -413,18 +413,21 @@ Future<List<Meta>> _convertReportStatistics(String string) async {
         content: strings[1],
         imagePath: 'assets/images/button_image2.png',
         backgroundPath: 'assets/images/button_bg_lightblue.png',
+        router: '${Routes.longStopReportList}?valid=0',
       ),
       Meta(
         title: '排口异常申报',
         content: strings[2],
         imagePath: 'assets/images/button_image1.png',
         backgroundPath: 'assets/images/button_bg_green.png',
+        router: '${Routes.dischargeReportList}?valid=0',
       ),
       Meta(
         title: '因子异常申报',
         content: strings[3],
         imagePath: 'assets/images/button_image4.png',
         backgroundPath: 'assets/images/button_bg_pink.png',
+        router: '${Routes.factorReportList}?valid=0',
       ),
     ];
   }

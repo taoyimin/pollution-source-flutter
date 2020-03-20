@@ -9,7 +9,6 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/discharge/detail/discharge_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -123,7 +122,7 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                   children: <Widget>[
                     IconBaseInfoWidget(
                       content:
-                      '标志牌安装形式：${dischargeDetail.denoterInstallTypeStr ?? ''}',
+                          '标志牌安装形式：${dischargeDetail.denoterInstallTypeStr ?? ''}',
                       icon: Icons.business_center,
                     ),
                   ],
@@ -179,30 +178,26 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                     InkWellButton7(
                       titleFontSize: 13,
                       contentFontSize: 19,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.dischargeReportList}?dischargeId=${dischargeDetail.dischargeId}');
-                      },
                       meta: Meta(
                         title: '排口异常申报总数',
                         content: '${dischargeDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
+                        router:
+                            '${Routes.dischargeReportList}?dischargeId=${dischargeDetail.dischargeId}',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton7(
                       titleFontSize: 13,
                       contentFontSize: 19,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.factorReportList}?dischargeId=${dischargeDetail.dischargeId}');
-                      },
                       meta: Meta(
                         title: '因子异常申报总数',
                         content: '${dischargeDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
+                        router:
+                            '${Routes.factorReportList}?dischargeId=${dischargeDetail.dischargeId}',
                       ),
                     ),
                   ],
@@ -228,29 +223,23 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                   children: <Widget>[
                     InkWellButton7(
                       meta: Meta(
-                          title: '企业信息',
-                          content: '查看排口所属的企业信息',
-                          backgroundPath:
-                              'assets/images/button_bg_lightblue.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics1.png'),
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.enterDetail}/${dischargeDetail.enterId}');
-                      },
+                        title: '企业信息',
+                        content: '查看排口所属的企业信息',
+                        backgroundPath: 'assets/images/button_bg_lightblue.png',
+                        imagePath: 'assets/images/image_enter_statistics1.png',
+                        router:
+                            '${Routes.enterDetail}/${dischargeDetail.enterId}',
+                      ),
                     ),
                     Gaps.hGap10,
                     InkWellButton7(
                       meta: Meta(
-                          title: '监控点列表',
-                          content: '查看该排口的监控点列表',
-                          backgroundPath: 'assets/images/button_bg_red.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics2.png'),
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.monitorList}?dischargeId=${dischargeDetail.dischargeId}');
-                      },
+                        title: '监控点列表',
+                        content: '查看该排口的监控点列表',
+                        backgroundPath: 'assets/images/button_bg_red.png',
+                        imagePath: 'assets/images/image_enter_statistics2.png',
+                        router: '${Routes.monitorList}?dischargeId=${dischargeDetail.dischargeId}',
+                      ),
                     ),
                   ],
                 ),

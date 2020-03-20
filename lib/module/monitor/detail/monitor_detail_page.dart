@@ -145,7 +145,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监测类型：${monitorDetail.monitorTypeStr} ${monitorDetail.monitorCategoryStr}',
+                      content:
+                          '监测类型：${monitorDetail.monitorTypeStr} ${monitorDetail.monitorCategoryStr}',
                       icon: Icons.videocam,
                     ),
                   ],
@@ -288,30 +289,26 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                   children: <Widget>[
                     InkWellButton5(
                       ratio: 1.2,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&state=5');
-                      },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '已办结',
                         content: '${monitorDetail.orderCompleteCount}',
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
+                        router:
+                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&state=5',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
                       ratio: 1.2,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}');
-                      },
                       meta: Meta(
                         color: Color(0xFFFFB709),
                         title: '全部',
                         content: '${monitorDetail.orderTotalCount}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
+                        router:
+                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}',
                       ),
                     ),
                   ],
@@ -335,30 +332,26 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                     InkWellButton7(
                       titleFontSize: 13,
                       contentFontSize: 19,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.dischargeReportList}?monitorId=${monitorDetail.monitorId}');
-                      },
                       meta: Meta(
                         title: '排口异常申报总数',
                         content: '${monitorDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
+                        router:
+                            '${Routes.dischargeReportList}?monitorId=${monitorDetail.monitorId}',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton7(
                       titleFontSize: 13,
                       contentFontSize: 19,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.factorReportList}?monitorId=${monitorDetail.monitorId}');
-                      },
                       meta: Meta(
                         title: '因子异常申报总数',
                         content: '${monitorDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
+                        router:
+                            '${Routes.factorReportList}?monitorId=${monitorDetail.monitorId}',
                       ),
                     ),
                   ],
@@ -384,29 +377,23 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                   children: <Widget>[
                     InkWellButton7(
                       meta: Meta(
-                          title: '企业信息',
-                          content: '查看监控点所属的企业信息',
-                          backgroundPath:
-                              'assets/images/button_bg_lightblue.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics1.png'),
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.enterDetail}/${monitorDetail.enterId}');
-                      },
+                        title: '企业信息',
+                        content: '查看监控点所属的企业信息',
+                        backgroundPath: 'assets/images/button_bg_lightblue.png',
+                        imagePath: 'assets/images/image_enter_statistics1.png',
+                        router:
+                            '${Routes.enterDetail}/${monitorDetail.enterId}',
+                      ),
                     ),
                     Gaps.hGap10,
                     InkWellButton7(
                       meta: Meta(
-                          title: '排口信息',
-                          content: '查看该监控点所属的排口信息',
-                          backgroundPath: 'assets/images/button_bg_yellow.png',
-                          imagePath:
-                              'assets/images/image_enter_statistics2.png'),
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.dischargeDetail}/${monitorDetail.dischargeId}');
-                      },
+                        title: '排口信息',
+                        content: '查看该监控点所属的排口信息',
+                        backgroundPath: 'assets/images/button_bg_yellow.png',
+                        imagePath: 'assets/images/image_enter_statistics2.png',
+                        router: '${Routes.dischargeDetail}/${monitorDetail.dischargeId}',
+                      ),
                     ),
                   ],
                 ),

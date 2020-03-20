@@ -3,7 +3,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 
 class EnterApplicationPage extends StatefulWidget {
@@ -118,26 +117,24 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '排口信息',
-                                      content: '查询排口列表',
-                                      imagePath:
-                                          'assets/images/application_icon_enter.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                        context, '${Routes.dischargeList}?enterId=${widget.enterId}');
-                                  },
+                                    title: '排口信息',
+                                    content: '查询排口列表',
+                                    imagePath:
+                                        'assets/images/application_icon_enter.png',
+                                    router:
+                                        '${Routes.dischargeList}?enterId=${widget.enterId}',
+                                  ),
                                 ),
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '在线数据',
-                                      content: '查询在线数据',
-                                      imagePath:
-                                          'assets/images/application_icon_monitor.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                        context, '${Routes.monitorList}?enterId=${widget.enterId}&state=1');
-                                  },
+                                    title: '在线数据',
+                                    content: '查询在线数据',
+                                    imagePath:
+                                        'assets/images/application_icon_monitor.png',
+                                    router:
+                                        '${Routes.monitorList}?enterId=${widget.enterId}&state=1',
+                                  ),
                                 ),
                               ],
                             ),
@@ -156,31 +153,29 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                             ImageTitleWidget(
                                 title: '异常申报查询',
                                 imagePath:
-                                'assets/images/icon_alarm_error.png'),
+                                    'assets/images/icon_alarm_error.png'),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '排口异常',
-                                      content: '排口异常列表',
-                                      imagePath:
-                                      'assets/images/application_icon_discharge_report.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(context,
-                                        '${Routes.dischargeReportList}?enterId=${widget.enterId}');
-                                  },
+                                    title: '排口异常',
+                                    content: '排口异常列表',
+                                    imagePath:
+                                        'assets/images/application_icon_discharge_report.png',
+                                    router:
+                                        '${Routes.dischargeReportList}?enterId=${widget.enterId}',
+                                  ),
                                 ),
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '因子异常',
-                                      content: '因子异常列表',
-                                      imagePath:
-                                      'assets/images/application_icon_factor_report.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                        context, '${Routes.factorReportList}?enterId=${widget.enterId}');
-                                  },
+                                    title: '因子异常',
+                                    content: '因子异常列表',
+                                    imagePath:
+                                        'assets/images/application_icon_factor_report.png',
+                                    router:
+                                        '${Routes.factorReportList}?enterId=${widget.enterId}',
+                                  ),
                                 ),
                               ],
                             ),
@@ -188,14 +183,13 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '长期停产',
-                                      content: '长期停产列表',
-                                      imagePath:
-                                      'assets/images/application_icon_longStop_report.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(context,
-                                        '${Routes.longStopReportList}?enterId=${widget.enterId}');
-                                  },
+                                    title: '长期停产',
+                                    content: '长期停产列表',
+                                    imagePath:
+                                        'assets/images/application_icon_longStop_report.png',
+                                    router:
+                                        '${Routes.longStopReportList}?enterId=${widget.enterId}',
+                                  ),
                                 ),
                                 Gaps.hGap20,
                                 Expanded(child: Gaps.empty),
@@ -216,31 +210,28 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                             ImageTitleWidget(
                                 title: '报警管理单查询',
                                 imagePath:
-                                'assets/images/application_icon_alarm.png'),
+                                    'assets/images/application_icon_alarm.png'),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '待办督办单',
-                                      content: '查询待办督办单',
-                                      imagePath:
-                                      'assets/images/application_icon_order.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                        context, '${Routes.orderList}?enterId=${widget.enterId}&state=2');
-                                  },
+                                    title: '待办督办单',
+                                    content: '查询待办督办单',
+                                    imagePath:
+                                        'assets/images/application_icon_order.png',
+                                    router: '${Routes.orderList}?enterId=${widget.enterId}&state=2',
+                                  ),
                                 ),
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '全部督办单',
-                                      content: '查询全部督办单',
-                                      imagePath:
-                                      'assets/images/application_icon_order.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                        context, '${Routes.orderList}?enterId=${widget.enterId}');
-                                  },
+                                    title: '全部督办单',
+                                    content: '查询全部督办单',
+                                    imagePath:
+                                        'assets/images/application_icon_order.png',
+                                    router:
+                                        '${Routes.orderList}?enterId=${widget.enterId}',
+                                  ),
                                 ),
                               ],
                             ),
@@ -264,26 +255,24 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '排口异常',
-                                      content: '排口异常上报',
-                                      imagePath:
-                                          'assets/images/application_icon_discharge_report.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(context,
-                                        '${Routes.dischargeReportUpload}?enterId=${widget.enterId}');
-                                  },
+                                    title: '排口异常',
+                                    content: '排口异常上报',
+                                    imagePath:
+                                        'assets/images/application_icon_discharge_report.png',
+                                    router:
+                                        '${Routes.dischargeReportUpload}?enterId=${widget.enterId}',
+                                  ),
                                 ),
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                      title: '因子异常',
-                                      content: '因子异常上报',
-                                      imagePath:
-                                          'assets/images/application_icon_factor_report.png'),
-                                  onTap: () {
-                                    Application.router.navigateTo(context,
-                                        '${Routes.factorReportUpload}?enterId=${widget.enterId}');
-                                  },
+                                    title: '因子异常',
+                                    content: '因子异常上报',
+                                    imagePath:
+                                        'assets/images/application_icon_factor_report.png',
+                                    router:
+                                        '${Routes.factorReportUpload}?enterId=${widget.enterId}',
+                                  ),
                                 ),
                               ],
                             ),

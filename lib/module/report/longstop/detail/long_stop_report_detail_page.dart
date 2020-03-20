@@ -9,17 +9,18 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/report/longstop/detail/long_stop_report_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 class LongStopReportDetailPage extends StatefulWidget {
   final String reportId;
 
-  LongStopReportDetailPage({@required this.reportId}) : assert(reportId != null);
+  LongStopReportDetailPage({@required this.reportId})
+      : assert(reportId != null);
 
   @override
-  _LongStopReportDetailPageState createState() => _LongStopReportDetailPageState();
+  _LongStopReportDetailPageState createState() =>
+      _LongStopReportDetailPageState();
 }
 
 class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
@@ -75,7 +76,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
               } else if (state is DetailLoaded) {
                 return _buildPageLoadedDetail(state.detail);
               } else {
-                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                return ErrorSliver(
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
               }
             },
           ),
@@ -159,16 +161,14 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                     children: <Widget>[
                       InkWellButton7(
                         meta: Meta(
-                            title: '企业信息',
-                            content: '查看该申报单所属的企业信息',
-                            backgroundPath:
-                            'assets/images/button_bg_lightblue.png',
-                            imagePath:
-                            'assets/images/image_enter_statistics1.png'),
-                        onTap: () {
-                          Application.router.navigateTo(context,
-                              '${Routes.enterDetail}/${reportDetail.enterId}');
-                        },
+                          title: '企业信息',
+                          content: '查看该申报单所属的企业信息',
+                          backgroundPath:
+                              'assets/images/button_bg_lightblue.png',
+                          imagePath:
+                              'assets/images/image_enter_statistics1.png',
+                          router: '${Routes.enterDetail}/${reportDetail.enterId}',
+                        ),
                       ),
                       Gaps.hGap10,
                       Expanded(child: Gaps.empty),

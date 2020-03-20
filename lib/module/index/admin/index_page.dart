@@ -11,8 +11,6 @@ import 'dart:async';
 
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
-import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
@@ -690,31 +688,16 @@ class ReportStatisticsWidget extends StatelessWidget {
           TitleWidget(title: "异常申报(有效数)统计"),
           Row(
             children: <Widget>[
-              // 长期停产
               InkWellButton3(
                 meta: metaList[0],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.longStopReportList}?valid=0');
-                },
               ),
               Gaps.hGap10,
-              // 排口异常
               InkWellButton3(
                 meta: metaList[1],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.dischargeReportList}?valid=0');
-                },
               ),
               Gaps.hGap10,
-              // 因子异常
               InkWellButton3(
                 meta: metaList[2],
-                onTap: () {
-                  Application.router.navigateTo(
-                      context, '${Routes.factorReportList}?valid=0');
-                },
               ),
             ],
           ),
@@ -816,19 +799,16 @@ class ComprehensiveStatisticsWidget extends StatelessWidget {
               //监察执法
               InkWellButton3(
                 meta: metaList[0],
-                onTap: () {},
               ),
               Gaps.hGap10,
               //项目审批
               InkWellButton3(
                 meta: metaList[1],
-                onTap: () {},
               ),
               Gaps.hGap10,
               //信访投诉
               InkWellButton3(
                 meta: metaList[2],
-                onTap: () {},
               ),
             ],
           ),

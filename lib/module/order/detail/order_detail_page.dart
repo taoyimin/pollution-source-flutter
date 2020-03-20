@@ -413,15 +413,14 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                     children: <Widget>[
                       InkWellButton8(
                         meta: Meta(
-                            title: '历史数据',
-                            content: '查看报警单报警当天的历史数据',
-                            backgroundPath: 'assets/images/button_bg_green.png',
-                            imagePath:
-                                'assets/images/image_enter_statistics1.png'),
-                        onTap: () {
-                          Application.router.navigateTo(context,
-                              '${Routes.monitorHistoryData}?monitorId=${orderDetail.monitorId}&startTime=${orderDetail.alarmDateStr} 00:00:00&endTime=${orderDetail.alarmDateStr} 23:59:59');
-                        },
+                          title: '历史数据',
+                          content: '查看报警单报警当天的历史数据',
+                          backgroundPath: 'assets/images/button_bg_green.png',
+                          imagePath:
+                              'assets/images/image_enter_statistics1.png',
+                          router:
+                              '${Routes.monitorHistoryData}?monitorId=${orderDetail.monitorId}&startTime=${orderDetail.alarmDateStr} 00:00:00&endTime=${orderDetail.alarmDateStr} 23:59:59',
+                        ),
                       ),
                       Gaps.hGap10,
                       Expanded(
@@ -430,30 +429,28 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                           children: <Widget>[
                             InkWellButton7(
                               meta: Meta(
-                                  title: '企业信息',
-                                  content: '查看报警单所属的企业信息',
-                                  backgroundPath:
-                                      'assets/images/button_bg_lightblue.png',
-                                  imagePath:
-                                      'assets/images/image_enter_statistics3.png'),
-                              onTap: () {
-                                Application.router.navigateTo(context,
-                                    '${Routes.enterDetail}/${orderDetail.enterId}');
-                              },
+                                title: '企业信息',
+                                content: '查看报警单所属的企业信息',
+                                backgroundPath:
+                                    'assets/images/button_bg_lightblue.png',
+                                imagePath:
+                                    'assets/images/image_enter_statistics3.png',
+                                router:
+                                    '${Routes.enterDetail}/${orderDetail.enterId}',
+                              ),
                             ),
                             Gaps.vGap10,
                             InkWellButton7(
                               meta: Meta(
-                                  title: '监控点信息',
-                                  content: '查看报警单对应的监控点信息',
-                                  backgroundPath:
-                                      'assets/images/button_bg_red.png',
-                                  imagePath:
-                                      'assets/images/image_enter_statistics2.png'),
-                              onTap: () {
-                                Application.router.navigateTo(context,
-                                    '${Routes.monitorDetail}/${orderDetail.monitorId}');
-                              },
+                                title: '监控点信息',
+                                content: '查看报警单对应的监控点信息',
+                                backgroundPath:
+                                    'assets/images/button_bg_red.png',
+                                imagePath:
+                                    'assets/images/image_enter_statistics2.png',
+                                router:
+                                    '${Routes.monitorDetail}/${orderDetail.monitorId}',
+                              ),
                             ),
                           ],
                         ),

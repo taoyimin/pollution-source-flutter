@@ -44,7 +44,7 @@ class MonitorTable extends Equatable {
       return fixedRowCells.map((header) {
         return MonitorTableCell(
           value: row[header.field] ?? '',
-          alarmFlag: row[header.field.replaceAll('factor_data', 'alarm_flag')],
+          alarmFlag: row[header.field.replaceAll(RegExp('factor_data|zs_avg'), 'alarm_flag')],
         );
       }).toList();
     }).toList();
@@ -82,7 +82,7 @@ class MonitorTable extends Equatable {
 class MonitorTableCell extends Equatable {
   final String field; //表头对应的取值字段
   final dynamic value; //监测值
-  final String alarmFlag; //文字颜色 默认黑色  0:黄色(预警) 1:红色(超标)
+  final String alarmFlag; //文字颜色
 
   const MonitorTableCell({
     this.field,
@@ -97,19 +97,19 @@ class MonitorTableCell extends Equatable {
         return Colors.black;
       case '1':
         // 预警
-        return Colors.orange;
+        return Color.fromRGBO(241, 190, 67, 1);
       case '2':
         // 超标
-        return Colors.red;
+        return Color.fromRGBO(233, 119, 111, 1);
       case '3':
         // 负值（原极小值）
-        return Colors.blue;
+        return Color.fromRGBO(0, 188, 212, 1);
       case '4':
         // 超大值（原极大值）
-        return Colors.green;
+        return Color.fromRGBO(255, 87, 34, 1);
       case '5':
         // 零值
-        return Colors.deepPurple;
+        return Color.fromRGBO(106, 106, 255, 1);
       default:
         return Colors.black;
     }

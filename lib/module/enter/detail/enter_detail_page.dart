@@ -12,7 +12,6 @@ import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
@@ -204,30 +203,25 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   children: <Widget>[
                     InkWellButton5(
                       ratio: 1.2,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=5');
-                      },
                       meta: Meta(
                         color: Color(0xFF45C4FF),
                         title: '已办结',
                         content: '${enterDetail.orderCompleteCount}',
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
+                        router:
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=5',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
                       ratio: 1.2,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.orderList}?enterId=${widget.enterId}');
-                      },
                       meta: Meta(
                         color: Color(0xFFFFB709),
                         title: '全部',
                         content: '${enterDetail.orderTotalCount}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
+                        router: '${Routes.orderList}?enterId=${widget.enterId}',
                       ),
                     ),
                   ],
@@ -249,54 +243,49 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     InkWellButton3(
-                      onTap: () {
-                        if (SpUtil.getInt(Constant.spUserType) == 2) {
-                          _scaffoldKey.currentState.showSnackBar(
-                            SnackBar(
-                              content: Text('运维用户不支持查询长期停产'),
-                              action: SnackBarAction(
-                                label: '我知道了',
-                                onPressed: () {},
-                              ),
-                            ),
-                          );
-                          return;
-                        }
-                        Application.router.navigateTo(context,
-                            '${Routes.longStopReportList}?enterId=${enterDetail.enterId}&valid=0');
-                      },
+                      onTap: SpUtil.getInt(Constant.spUserType) == 2
+                          ? () {
+                              _scaffoldKey.currentState.showSnackBar(
+                                SnackBar(
+                                  content: Text('运维用户不支持查询长期停产'),
+                                  action: SnackBarAction(
+                                    label: '我知道了',
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
                       meta: Meta(
                         title: '长期停产申报',
                         content: '${enterDetail.longStopReportTotalCount}',
                         imagePath: 'assets/images/button_image2.png',
                         backgroundPath: 'assets/images/button_bg_lightblue.png',
+                        router:
+                            '${Routes.longStopReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton3(
                       titleFontSize: 13,
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}&valid=0');
-                      },
                       meta: Meta(
                         title: '排口异常申报',
                         content: '${enterDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
+                        router:
+                            '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton3(
-                      onTap: () {
-                        Application.router.navigateTo(context,
-                            '${Routes.factorReportList}?enterId=${enterDetail.enterId}&valid=0');
-                      },
                       meta: Meta(
                         title: '因子异常申报',
                         content: '${enterDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
+                        router:
+                            '${Routes.factorReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                   ],
@@ -333,7 +322,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(77, 167, 248, 1),
                         content: '${enterDetail.monitorTotalCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}',
                       ),
                       Meta(
                         title: '在线',
@@ -341,7 +330,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(136, 191, 89, 1),
                         content: '${enterDetail.monitorOnlineCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1',
                       ),
                       Meta(
                         title: '预警',
@@ -349,7 +338,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(241, 190, 67, 1),
                         content: '${enterDetail.monitorAlarmCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2',
                       ),
                       Meta(
                         title: '超标',
@@ -357,16 +346,16 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(233, 119, 111, 1),
                         content: '${enterDetail.monitorOverCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3',
                       ),
                       Meta(
                         title: '负值',
                         imagePath:
-                        'assets/images/icon_monitor_negative_value.png',
+                            'assets/images/icon_monitor_negative_value.png',
                         color: Color.fromRGBO(0, 188, 212, 1),
                         content: '${enterDetail.monitorNegativeCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4',
                       ),
                       Meta(
                         title: '超大值',
@@ -374,7 +363,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(255, 87, 34, 1),
                         content: '${enterDetail.monitorLargeCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5',
                       ),
                       Meta(
                         title: '零值',
@@ -382,7 +371,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(106, 106, 255, 1),
                         content: '${enterDetail.monitorZeroCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=6',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=6',
                       ),
                       Meta(
                         title: '脱机',
@@ -390,7 +379,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(179, 129, 127, 1),
                         content: '${enterDetail.monitorOfflineCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=7',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=7',
                       ),
                       Meta(
                         title: '异常申报',
@@ -398,7 +387,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         color: Color.fromRGBO(137, 137, 137, 1),
                         content: '${enterDetail.monitorStopCount}',
                         router:
-                        '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=8',
+                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=8',
                       ),
                     ],
                   ),
@@ -427,11 +416,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                     color: Colours.background_red,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
+                    router: '${Routes.licenseList}?enterId=${enterDetail.enterId}',
                   ),
-                  onTap: () {
-                    Application.router.navigateTo(context,
-                        '${Routes.licenseList}?enterId=${enterDetail.enterId}');
-                  },
                 ),
               ],
             ),

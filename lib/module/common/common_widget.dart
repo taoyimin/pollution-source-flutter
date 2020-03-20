@@ -281,10 +281,12 @@ class MessageWidget extends StatelessWidget {
 class InkWellButton1 extends StatelessWidget {
   final double ratio;
   final Meta meta;
+  final GestureTapCallback onTap;
 
   InkWellButton1({
     this.ratio = 1,
     @required this.meta,
+    this.onTap,
   });
 
   @override
@@ -292,7 +294,7 @@ class InkWellButton1 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: () {
+        onTap: onTap ?? () {
           Application.router.navigateTo(context, meta.router);
         },
         children: <Widget>[
@@ -420,7 +422,7 @@ class InkWellButton3 extends StatelessWidget {
 
   InkWellButton3({
     @required this.meta,
-    @required this.onTap,
+    this.onTap,
     this.ratio = 1,
     this.titleFontSize = 13,
     this.contentFontSize = 23,
@@ -432,7 +434,10 @@ class InkWellButton3 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Container(
             height: 48 * ratio + 20,
@@ -490,6 +495,7 @@ class InkWellButton3 extends StatelessWidget {
 }
 
 /// 左上标题 左下内容 右下图标 有背景图片
+@Deprecated('目前没有使用')
 class InkWellButton4 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -512,7 +518,10 @@ class InkWellButton4 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Container(
             height: 48 * ratio + 20,
@@ -577,7 +586,7 @@ class InkWellButton5 extends StatelessWidget {
 
   InkWellButton5({
     @required this.meta,
-    @required this.onTap,
+    this.onTap,
     this.ratio = 1,
   });
 
@@ -586,7 +595,9 @@ class InkWellButton5 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ?? () {
+          Application.router.navigateTo(context, meta.router);
+        },
         children: <Widget>[
           Container(
             padding: EdgeInsets.symmetric(vertical: 10 * ratio),
@@ -647,7 +658,7 @@ class InkWellButton6 extends StatelessWidget {
 
   InkWellButton6({
     @required this.meta,
-    @required this.onTap,
+    this.onTap,
     this.height = 100,
   });
 
@@ -663,7 +674,9 @@ class InkWellButton6 extends StatelessWidget {
         boxShadow: [UIUtils.getBoxShadow()],
       ),
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ?? () {
+          Application.router.navigateTo(context, meta.router);
+        },
         children: <Widget>[
           Positioned(
             bottom: -5,
@@ -729,7 +742,7 @@ class InkWellButton7 extends StatelessWidget {
 
   InkWellButton7({
     @required this.meta,
-    @required this.onTap,
+    this.onTap,
     this.titleFontSize = 16,
     this.contentFontSize = 11,
   });
@@ -739,7 +752,9 @@ class InkWellButton7 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ?? () {
+          Application.router.navigateTo(context, meta.router);
+        },
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(10),
@@ -800,7 +815,7 @@ class InkWellButton8 extends StatelessWidget {
 
   InkWellButton8({
     @required this.meta,
-    @required this.onTap,
+    this.onTap,
     this.titleFontSize = 20,
     this.contentFontSize = 14,
   });
@@ -810,7 +825,9 @@ class InkWellButton8 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ?? () {
+          Application.router.navigateTo(context, meta.router);
+        },
         children: <Widget>[
           Positioned(
             top: 0,
@@ -876,7 +893,7 @@ class InkWellButton9 extends StatelessWidget {
 
   InkWellButton9({
     @required this.meta,
-    @required this.onTap,
+    this.onTap,
   });
 
   @override
@@ -884,7 +901,9 @@ class InkWellButton9 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap,
+        onTap: onTap ?? () {
+          Application.router.navigateTo(context, meta.router);
+        },
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),

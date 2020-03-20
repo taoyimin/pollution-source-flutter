@@ -239,18 +239,21 @@ Future<List<Meta>> _convertOrderStatistics(dynamic json) async {
         imagePath: 'assets/images/button_image2.png',
         backgroundPath: 'assets/images/button_bg_lightblue.png',
         content: json['forDeal'].toString(),
+        router: '${Routes.orderList}?state=2',
       ),
       Meta(
         title: '已退回督办单',
         imagePath: 'assets/images/button_image1.png',
         backgroundPath: 'assets/images/button_bg_green.png',
         content: json['forNoPass'].toString(),
+        router: '${Routes.orderList}?state=4',
       ),
       Meta(
         title: '已办结督办单',
         imagePath: 'assets/images/button_image4.png',
         backgroundPath: 'assets/images/button_bg_pink.png',
         content: json['orderCompleteCount'].toString(),
+        router: '${Routes.orderList}?state=5',
       ),
     ];
   }

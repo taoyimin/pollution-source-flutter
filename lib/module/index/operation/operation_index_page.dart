@@ -8,8 +8,6 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/index/admin/index_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
-import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
@@ -421,31 +419,16 @@ class OrderStatisticsWidget extends StatelessWidget {
           TitleWidget(title: "报警管理单概况"),
           Row(
             children: <Widget>[
-              // 督办单待处理数
               InkWellButton3(
                 meta: metaList[0],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.orderList}?state=2');
-                },
               ),
               Gaps.hGap10,
-              // 督办单退回数
               InkWellButton3(
                 meta: metaList[1],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.orderList}?state=4');
-                },
               ),
               Gaps.hGap10,
-              // 督办单已办结数
               InkWellButton3(
                 meta: metaList[2],
-                onTap: () {
-                  Application.router
-                      .navigateTo(context, '${Routes.orderList}?state=5');
-                },
               ),
             ],
           ),

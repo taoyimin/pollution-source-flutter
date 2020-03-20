@@ -9,7 +9,6 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/report/factor/detail/factor_report_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
@@ -75,7 +74,8 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
               } else if (state is DetailLoaded) {
                 return _buildPageLoadedDetail(state.detail);
               } else {
-                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                return ErrorSliver(
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
               }
             },
           ),
@@ -217,16 +217,14 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                     children: <Widget>[
                       InkWellButton8(
                         meta: Meta(
-                            title: '企业信息',
-                            content: '查看该申报单所属的企业信息',
-                            backgroundPath:
-                            'assets/images/button_bg_lightblue.png',
-                            imagePath:
-                            'assets/images/image_enter_statistics1.png'),
-                        onTap: () {
-                          Application.router.navigateTo(context,
-                              '${Routes.enterDetail}/${reportDetail.enterId}');
-                        },
+                          title: '企业信息',
+                          content: '查看该申报单所属的企业信息',
+                          backgroundPath:
+                              'assets/images/button_bg_lightblue.png',
+                          imagePath:
+                              'assets/images/image_enter_statistics1.png',
+                          router: '${Routes.enterDetail}/${reportDetail.enterId}',
+                        ),
                       ),
                       Gaps.hGap10,
                       Expanded(
@@ -235,29 +233,28 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                           children: <Widget>[
                             InkWellButton7(
                               meta: Meta(
-                                  title: '排口信息',
-                                  content: '查看该申报单所属的排口信息',
-                                  backgroundPath: 'assets/images/button_bg_yellow.png',
-                                  imagePath:
-                                  'assets/images/image_enter_statistics3.png'),
-                              onTap: () {
-                                Application.router.navigateTo(context,
-                                    '${Routes.dischargeDetail}/${reportDetail.dischargeId}');
-                              },
+                                title: '排口信息',
+                                content: '查看该申报单所属的排口信息',
+                                backgroundPath:
+                                    'assets/images/button_bg_yellow.png',
+                                imagePath:
+                                    'assets/images/image_enter_statistics3.png',
+                                router:
+                                    '${Routes.dischargeDetail}/${reportDetail.dischargeId}',
+                              ),
                             ),
                             Gaps.vGap10,
                             InkWellButton7(
                               meta: Meta(
-                                  title: '在线数据',
-                                  content: '查看该申报单对应的在线数据',
-                                  backgroundPath:
-                                  'assets/images/button_bg_red.png',
-                                  imagePath:
-                                  'assets/images/image_enter_statistics2.png'),
-                              onTap: () {
-                                Application.router.navigateTo(context,
-                                    '${Routes.monitorDetail}/${reportDetail.monitorId}');
-                              },
+                                title: '在线数据',
+                                content: '查看该申报单对应的在线数据',
+                                backgroundPath:
+                                    'assets/images/button_bg_red.png',
+                                imagePath:
+                                    'assets/images/image_enter_statistics2.png',
+                                router:
+                                    '${Routes.monitorDetail}/${reportDetail.monitorId}',
+                              ),
                             ),
                           ],
                         ),
