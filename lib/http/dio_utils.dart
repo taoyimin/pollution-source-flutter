@@ -113,6 +113,7 @@ class OperationDioUtils {
       baseUrl: 'http://111.75.227.207:19550/',
       // 测试环境
       // baseUrl: 'http://192.168.253.3:8001/',
+      // baseUrl: 'http://192.168.43.168:8001/',
     );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());
