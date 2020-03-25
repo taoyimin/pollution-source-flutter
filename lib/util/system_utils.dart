@@ -54,7 +54,7 @@ class SystemUtils {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isAndroid) {
       if (checkVersion(
-          packageInfo.version, response.data['android']['version'])) {
+          packageInfo.buildNumber, response.data['android']['build'])) {
         String title = response.data['android']['title'];
         String describe = response.data['android']['describe'];
         String url = response.data['android']['url'];
@@ -79,8 +79,7 @@ class SystemUtils {
                     ),
                     FlatButton(
                       onPressed: () async {
-                        if (!force)
-                          Navigator.of(context).pop();
+                        if (!force) Navigator.of(context).pop();
                         ProgressDialog pr;
                         try {
                           Attachment attachment = Attachment(
@@ -150,30 +149,22 @@ class SystemUtils {
             });
       }
       return checkVersion(
-          packageInfo.version, response.data['android']['version']);
+          packageInfo.buildNumber, response.data['android']['build']);
     } else if (Platform.isIOS) {
-      if (checkVersion(packageInfo.version, response.data['ios']['version'])) {
+      if (checkVersion(
+          packageInfo.buildNumber, response.data['ios']['build'])) {
         // TODO
       }
       return checkVersion(
-          packageInfo.version, response.data['ios']['version']);
-    }else{
+          packageInfo.buildNumber, response.data['ios']['build']);
+    } else {
       return false;
     }
   }
 
   /// 检查版本号，返回是否需要更新
-  static bool checkVersion(String currentVersion, String targetVersion) {
-    List<int> current = currentVersion.split('.').map((str) {
-      return int.parse(str);
-    }).toList();
-    List<int> target = targetVersion.split('.').map((str) {
-      return int.parse(str);
-    }).toList();
-    for (int i = 0; i < current.length && i < target.length; i++) {
-      if (current[i] < target[i]) return true;
-    }
-    return false;
+  static bool checkVersion(currentBuildCode, targetBuildCode) {
+    return int.parse(currentBuildCode) < int.parse(targetBuildCode);
   }
 
   /// 调起二维码扫描页
@@ -227,14 +218,15 @@ class SystemUtils {
       keyboardBarColor: Colors.grey[200],
       nextFocus: true,
       actions: List.generate(
-          list.length,
-          (i) => KeyboardAction(
-                focusNode: list[i],
-                closeWidget: const Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: const Text("关闭"),
-                ),
-              )),
+        list.length,
+        (i) => KeyboardAction(
+          focusNode: list[i],
+          closeWidget: const Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: const Text("关闭"),
+          ),
+        ),
+      ),
     );
   }
 }
