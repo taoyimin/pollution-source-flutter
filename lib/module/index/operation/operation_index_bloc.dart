@@ -69,7 +69,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
         title: '重点企业',
         imagePath: 'assets/images/icon_pollution_point_enter.png',
         color: Color.fromRGBO(241, 190, 67, 1),
-        content: json['AttentionCount'].toString(),
+        content: json['Attention_COUNT'].toString(),
         router: '${Routes.enterList}?attentionLevel=1',
       ),
       Meta(
