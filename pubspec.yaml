@@ -74,13 +74,15 @@ dependencies:
   # 跨平台路径操作库 https://github.com/dart-lang/path
   path: ^1.6.4
   # 高德地图插件 https://github.com/best-flutter/flutter_amap_location
-  amap_location: ^0.2.0
+  # amap_location: ^0.2.0
   # 权限申请 https://github.com/Baseflow/flutter-permission-handler
   permission_handler: '^4.2.0+hotfix.3'
   # 自动变更文本大小控件 https://github.com/leisim/auto_size_text
   auto_size_text: ^2.1.0
   # 获取应用版本信息 https://github.com/flutter/plugins/tree/master/packages/package_info
   package_info: ^0.4.0+2
+  # 分享功能 https://github.com/flutter/plugins/tree/master/packages/share
+  share: ^0.6.3+6
 
 dev_dependencies:
   flutter_test:
