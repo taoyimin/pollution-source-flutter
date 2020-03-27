@@ -4,7 +4,7 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 import 'package:share/share.dart';
 
-/// 修改密码界面
+/// 分享产品界面
 class ShareProductPage extends StatefulWidget {
   @override
   _ShareProductPageState createState() => _ShareProductPageState();
@@ -34,7 +34,7 @@ class _ShareProductPageState extends State<ShareProductPage> {
               aspectRatio: 1,
               child: Image.asset(CompatUtils.getDownloadQRcode()),
             ),
-            Text(
+            const Text(
               '扫码下载或点击下方按钮进行分享',
               textAlign: TextAlign.center,
               style: TextStyle(
