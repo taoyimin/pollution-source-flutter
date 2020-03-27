@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flustars/flustars.dart';
 import 'package:package_info/package_info.dart';
@@ -198,10 +200,10 @@ class _MinePageState extends State<MinePage>
                                     Constant.spDebug,
                                     !SpUtil.getBool(Constant.spDebug,
                                         defValue: false));
-                                if(SpUtil.getBool(Constant.spDebug,
-                                    defValue: false)){
+                                if (SpUtil.getBool(Constant.spDebug,
+                                    defValue: false)) {
                                   Toast.show('已开启Debug模式');
-                                }else{
+                                } else {
                                   Toast.show('已关闭Debug模式');
                                 }
                               },
@@ -342,8 +344,21 @@ class _MinePageState extends State<MinePage>
                                   ),
                                   InkWellButton(
                                     onTap: () {
-                                      Application.router.navigateTo(
-                                          context, '${Routes.shareProduct}');
+                                      if (Platform.isAndroid) {
+                                        Application.router.navigateTo(
+                                            context, '${Routes.shareProduct}');
+                                      } else {
+                                        Scaffold.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('当前平台不支持分享产品'),
+                                            action: SnackBarAction(
+                                                label: '我知道了',
+                                                textColor:
+                                                    Colours.primary_color,
+                                                onPressed: () {}),
+                                          ),
+                                        );
+                                      }
                                     },
                                     children: <Widget>[
                                       Column(
