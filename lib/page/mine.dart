@@ -342,15 +342,8 @@ class _MinePageState extends State<MinePage>
                                   ),
                                   InkWellButton(
                                     onTap: () {
-                                      Scaffold.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('功能即将开放'),
-                                          action: SnackBarAction(
-                                              label: '我知道了',
-                                              textColor: Colours.primary_color,
-                                              onPressed: () {}),
-                                        ),
-                                      );
+                                      Application.router.navigateTo(
+                                          context, '${Routes.shareProduct}');
                                     },
                                     children: <Widget>[
                                       Column(
