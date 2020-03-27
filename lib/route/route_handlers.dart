@@ -65,6 +65,7 @@ import 'package:pollution_source/page/admin_home.dart';
 import 'package:pollution_source/page/change_password_page.dart';
 import 'package:pollution_source/page/enter_home.dart';
 import 'package:pollution_source/page/operation_home.dart';
+import 'package:pollution_source/page/share_product_page.dart';
 import 'package:pollution_source/res/constant.dart';
 
 var rootHandler = Handler(
@@ -528,4 +529,9 @@ var waterDeviceParamUploadHandler = Handler(
 var changePasswordHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return ChangePasswordPage();
+});
+
+var shareProductHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return ShareProductPage();
 });

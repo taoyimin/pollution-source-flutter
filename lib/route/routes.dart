@@ -33,6 +33,7 @@ class Routes {
   static String airDeviceCorrectUpload = "/airDeviceCorrectUpload";
   static String waterDeviceParamUpload = "/waterDeviceParamUpload";
   static String changePassword = "/changePassword";
+  static String shareProduct = "/shareProduct";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(
@@ -70,5 +71,6 @@ class Routes {
     router.define(airDeviceCorrectUpload, handler: airDeviceCorrectUploadHandler, transitionType: TransitionType.native);
     router.define(waterDeviceParamUpload, handler: waterDeviceParamUploadHandler, transitionType: TransitionType.native);
     router.define(changePassword, handler: changePasswordHandler, transitionType: TransitionType.native);
+    router.define(shareProduct, handler: shareProductHandler, transitionType: TransitionType.native);
   }
 }
