@@ -110,14 +110,14 @@ class CompatUtils {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-      //环保和企业用户
+        //环保和企业用户
         if (SpUtil.getBool(Constant.spUseJavaApi,
             defValue: Constant.defaultUseJavaApi)) {
           if (response.statusCode == ExceptionHandle.success &&
               response.data[Constant.responseCodeKey] ==
                   ExceptionHandle.success_code) {
             return response.data[Constant.responseDataKey]
-            [Constant.responseRealNameKey];
+                [Constant.responseRealNameKey];
           } else {
             throw DioError(
                 error: TokenException(
@@ -134,13 +134,13 @@ class CompatUtils {
         }
         break;
       case 2:
-      // 运维用户
+        // 运维用户
         if (response.data[Constant.responseSuccessKey]) {
           return response.data[Constant.responseRealNameKey];
         } else {
           throw DioError(
-              error:
-              TokenException('获取RealName失败！response=${response.toString()}'));
+              error: TokenException(
+                  '获取RealName失败！response=${response.toString()}'));
         }
         break;
       default:
@@ -156,14 +156,14 @@ class CompatUtils {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-      //环保和企业用户
+        //环保和企业用户
         if (SpUtil.getBool(Constant.spUseJavaApi,
             defValue: Constant.defaultUseJavaApi)) {
           if (response.statusCode == ExceptionHandle.success &&
               response.data[Constant.responseCodeKey] ==
                   ExceptionHandle.success_code) {
             return response.data[Constant.responseDataKey]
-            [Constant.responseAttentionLevelKey];
+                [Constant.responseAttentionLevelKey];
           } else {
             throw DioError(
                 error: TokenException(
@@ -180,14 +180,14 @@ class CompatUtils {
         }
         break;
       case 2:
-      // 运维用户
+        // 运维用户
         if (response.data[Constant.responseSuccessKey]) {
           // 运维用户的关注程度默认就是全部
           return '';
         } else {
           throw DioError(
-              error:
-              TokenException('获取AttentionLevel失败！response=${response.toString()}'));
+              error: TokenException(
+                  '获取AttentionLevel失败！response=${response.toString()}'));
         }
         break;
       default:
@@ -355,6 +355,38 @@ class CompatUtils {
       default:
         throw Exception(
             '获取CurrentPage失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型获取对应的下载地址二维码
+  static String getDownloadQRcode() {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+        // 环保和企业用户
+        return 'assets/images/image_pollution_download_QRcode.png';
+      case 2:
+        // 运维用户
+        return 'assets/images/iamge_operation_download_QRcode.png';
+      default:
+        throw Exception(
+            '获取下载地址二维码失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型获取对应的下载地址
+  static String getDownloadUrl() {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+      // 环保和企业用户
+        return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
+      case 2:
+      // 运维用户
+        return 'http://111.75.227.207:19550/app/pollution-source.apk';
+      default:
+        throw Exception(
+            '获取下载地址失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
   }
 
