@@ -372,12 +372,12 @@ class DataDictGrid extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       children: List.generate(
         dataDictList.length,
-            (index) {
+        (index) {
           return InkWell(
             onTap: onItemTap != null
                 ? () {
-              onItemTap(dataDictList[index].code);
-            }
+                    onItemTap(dataDictList[index].code);
+                  }
                 : () {},
             child: Container(
               decoration: BoxDecoration(
@@ -432,7 +432,7 @@ class DataDictBlocGrid extends StatelessWidget {
       bloc: dataDictBloc,
       builder: (context, state) {
         if (state is DataDictLoaded) {
-          if(addFirst){
+          if (addFirst) {
             // 默认添加一个全部的数据字典
             DataDict dataDict = DataDict(code: '', name: '全部');
             // 防止重复添加
@@ -450,12 +450,12 @@ class DataDictBlocGrid extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             children: List.generate(
               state.dataDictList.length,
-                  (index) {
+              (index) {
                 return InkWell(
                   onTap: onItemTap != null
                       ? () {
-                    onItemTap(state.dataDictList[index].code);
-                  }
+                          onItemTap(state.dataDictList[index].code);
+                        }
                       : () {},
                   child: Container(
                     decoration: BoxDecoration(
@@ -508,117 +508,120 @@ class DataDictBlocGrid extends StatelessWidget {
           );
         } else if (state is DataDictError) {
           return Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Image.asset('assets/images/image_load_error.png'),
-                ),
-                Gaps.hGap8,
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 6),
-                        child: const Text(
-                          '加载失败，请重试！',
-                          style: TextStyle(fontSize: 12),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Image.asset('assets/images/image_load_error.png'),
+                  ),
+                  Gaps.hGap8,
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 6),
+                          child: const Text(
+                            '加载失败，请重试！',
+                            style: TextStyle(fontSize: 12),
+                          ),
                         ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: InkWell(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text("错误信息"),
-                                      content: SingleChildScrollView(
-                                        child: Text('${state.message}'),
-                                      ),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          onPressed: () {
-                                            Clipboard.setData(ClipboardData(
-                                                text: '${state.message}'));
-                                            Toast.show('复制成功！');
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("复制"),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text("错误信息"),
+                                        content: SingleChildScrollView(
+                                          child: Text('${state.message}'),
                                         ),
-                                        FlatButton(
-                                          onPressed: () async {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("确认"),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 36,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: Colors.red,
-                                  ),
-                                  color: Colors.red.withOpacity(0.3),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    '错误详情',
-                                    style: TextStyle(
-                                      fontSize: 12,
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            onPressed: () {
+                                              Clipboard.setData(ClipboardData(
+                                                  text: '${state.message}'));
+                                              Toast.show('复制成功！');
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("复制"),
+                                          ),
+                                          FlatButton(
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("确认"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: 36,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 0.5,
                                       color: Colors.red,
                                     ),
+                                    color: Colors.red.withOpacity(0.3),
                                   ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Gaps.hGap8,
-                          Expanded(
-                            flex: 1,
-                            child: InkWell(
-                              onTap: () {
-                                dataDictBloc.add(DataDictLoad());
-                              },
-                              child: Container(
-                                height: 36,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: Colors.green,
-                                  ),
-                                  color: Colors.green.withOpacity(0.3),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    '重新加载',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.green,
+                                  child: const Center(
+                                    child: Text(
+                                      '错误详情',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.red,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Gaps.hGap8,
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: () {
+                                  dataDictBloc.add(DataDictLoad());
+                                },
+                                child: Container(
+                                  height: 36,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 0.5,
+                                      color: Colors.green,
+                                    ),
+                                    color: Colors.green.withOpacity(0.3),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      '重新加载',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         } else {
