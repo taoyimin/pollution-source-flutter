@@ -74,7 +74,7 @@ class _AirDeviceCorrectUploadPageState
     )));
     _lastValueBloc =
         DetailBloc(detailRepository: AirDeviceLastValueRepository());
-    _lastValueBloc.add(DetailLoad(detailId: '92774'));
+    _lastValueBloc.add(DetailLoad(detailId: task.inspectionTaskId));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
   }
