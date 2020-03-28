@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as UI;
 import 'package:common_utils/common_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -1480,7 +1481,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
     return AspectRatio(
       aspectRatio: 1.8,
       child: Container(
-        padding: EdgeInsets.only(top: 30, left: 6, bottom: 10, right: 26),
+        padding:const EdgeInsets.only(top: 30, left: 6, bottom: 10, right: 26),
         decoration: BoxDecoration(
           color: Color(0xFF203857),
           boxShadow: [UIUtils.getBoxShadow()],
@@ -1698,14 +1699,14 @@ class ClipButton extends StatelessWidget {
 }
 
 /// 自定义尖头裁剪器
-class TipClipper extends CustomClipper<Path> {
+class TipClipper extends CustomClipper<UI.Path> {
   double clipHeightRatio; // 裁剪的尖头高度占控件总高度的比率
   double clipWidthRatio; // 裁剪的尖头宽度占控件总高度的比率
 
   TipClipper({this.clipHeightRatio = 0.5, this.clipWidthRatio = 0.25});
 
   @override
-  Path getClip(Size size) {
+  UI.Path getClip(Size size) {
     double clipHeight = size.height * clipHeightRatio;
     double clipWidth = size.height * clipWidthRatio;
     double leftHeight = size.height * (1 - clipHeightRatio) / 2;
