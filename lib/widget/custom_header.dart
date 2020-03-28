@@ -75,24 +75,24 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget> {
                 ),
               ),
               Positioned(
-                top: 80,
+                top: 60,
                 left: 20,
+                bottom: 0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Container(
                       width: 110,
                       child: Text(
                         '${widget.subtitle}',
-                        style: TextStyle(fontSize: 10, color: Colors.white),
+                        style: const TextStyle(fontSize: 10, color: Colors.white),
                       ),
                     ),
-                    Gaps.vGap10,
                     Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                      decoration: BoxDecoration(
+                          const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                       ),
                       child: Text(
