@@ -4,6 +4,7 @@ import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class EnterApplicationPage extends StatefulWidget {
   final String enterId;
@@ -69,7 +70,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                               ),
                             ),
                             Positioned(
-                              top: 50,
+                              top: kIsWeb ? 40 : 50,
                               left: 20,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
