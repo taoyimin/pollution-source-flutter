@@ -529,11 +529,10 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   Widget _buildBottomSheet(
       ProcessUpload processUpload, OrderDetail orderDetail) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Gaps.vGap20,
           ImageTitleWidget(
             title: '处理督办单',
             imagePath: 'assets/images/icon_order_process.png',
@@ -697,7 +696,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
               }(),
             ],
           ),
-          Gaps.vGap20,
         ],
       ),
     );
