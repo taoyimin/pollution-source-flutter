@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ListHeaderWidget extends StatefulWidget {
   final String title;
@@ -75,7 +76,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget> {
                 ),
               ),
               Positioned(
-                top: 60,
+                top: kIsWeb ? 40 : 60,
                 left: 20,
                 bottom: 0,
                 child: Column(
