@@ -383,84 +383,96 @@ class _DeviceInspectionUploadListPageState
   }
 
   Widget _buildBottomSheet(DeviceInspectUpload deviceInspectUpload) {
-    return Container(
-      width: double.infinity,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Gaps.vGap20,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ImageTitleWidget(
-              title: '巡检上报(已选中${deviceInspectUpload?.selectedList?.length}项)',
-              imagePath: 'assets/images/icon_alarm_manage.png',
-            ),
+          ImageTitleWidget(
+            title: '巡检上报(已选中${deviceInspectUpload?.selectedList?.length}项)',
+            imagePath: 'assets/images/icon_alarm_manage.png',
           ),
           Gaps.vGap16,
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                IconCheckButton(
-                  text: '维护情况',
-                  imagePath: 'assets/images/icon_fixed.png',
-                  color: Colors.transparent,
-                  flex: 4,
-                  style: const TextStyle(
-                      color: Colours.primary_text, fontSize: 15),
-                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-                  checked: true,
-                  onTap: () {},
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              IconCheckButton(
+                text: '维护情况',
+                imagePath: 'assets/images/icon_fixed.png',
+                imageHeight: 20,
+                imageWidth: 20,
+                color: Colors.transparent,
+                flex: 4,
+                style: const TextStyle(
+                  color: Colours.primary_text,
+                  fontSize: 14,
                 ),
-                Gaps.hGap16,
-                IconCheckButton(
-                  text: '正常',
-                  imagePath: 'assets/images/icon_normal.png',
-                  color: Colors.lightBlueAccent,
-                  flex: 3,
-                  checked: deviceInspectUpload.isNormal,
-                  onTap: () {
-                    _pageBloc.add(PageLoad(
-                        model: deviceInspectUpload.copyWith(
-                            isNormal: !deviceInspectUpload.isNormal)));
-                  },
-                ),
-                Gaps.hGap6,
-                IconCheckButton(
-                  text: '不正常',
-                  imagePath: 'assets/images/icon_abnormal.png',
-                  color: Colors.orangeAccent,
-                  flex: 3,
-                  checked: !deviceInspectUpload.isNormal,
-                  onTap: () {
-                    _pageBloc.add(PageLoad(
-                        model: deviceInspectUpload.copyWith(
-                            isNormal: !deviceInspectUpload.isNormal)));
-                  },
-                ),
-              ],
-            ),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+                checked: true,
+                onTap: () {},
+              ),
+              Gaps.hGap16,
+              IconCheckButton(
+                text: '正常',
+                imagePath: 'assets/images/icon_normal.png',
+                imageHeight: 20,
+                imageWidth: 20,
+                color: Colors.lightBlueAccent,
+                flex: 3,
+                checked: deviceInspectUpload.isNormal,
+                onTap: () {
+                  _pageBloc.add(PageLoad(
+                      model: deviceInspectUpload.copyWith(
+                          isNormal: !deviceInspectUpload.isNormal)));
+                },
+              ),
+              Gaps.hGap6,
+              IconCheckButton(
+                text: '不正常',
+                imagePath: 'assets/images/icon_abnormal.png',
+                imageHeight: 20,
+                imageWidth: 20,
+                color: Colors.orangeAccent,
+                flex: 3,
+                checked: !deviceInspectUpload.isNormal,
+                onTap: () {
+                  _pageBloc.add(PageLoad(
+                      model: deviceInspectUpload.copyWith(
+                          isNormal: !deviceInspectUpload.isNormal)));
+                },
+              ),
+            ],
           ),
           Gaps.vGap10,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+          DecoratedBox(
+            decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 12),
+                  child: Image.asset(
+                    'assets/images/icon_alarm_manage.png',
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
                 Flexible(
                   child: TextField(
+                    maxLines: 3,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
                     controller: _remarkController,
                     decoration: const InputDecoration(
                       fillColor: Color(0xFFDFDFDF),
                       filled: true,
                       hintText: "请输入备注",
                       hintStyle: TextStyle(
+                        fontSize: 14,
                         color: Colours.secondary_text,
                       ),
-                      prefixIcon: Icon(Icons.event_note),
                       border: InputBorder.none,
                     ),
                   ),
@@ -469,27 +481,23 @@ class _DeviceInspectionUploadListPageState
             ),
           ),
           Gaps.vGap10,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[
-                ClipButton(
-                  text: '提交',
-                  icon: Icons.file_upload,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    //发送上传事件
-                    _uploadBloc.add(Upload(
-                        data: deviceInspectUpload.copyWith(
-                      selectedList: _selectedList,
-                      remark: _remarkController.text,
-                    )));
-                  },
-                ),
-              ],
-            ),
+          Row(
+            children: <Widget>[
+              ClipButton(
+                text: '提交',
+                icon: Icons.file_upload,
+                color: Colors.lightBlue,
+                onTap: () {
+                  //发送上传事件
+                  _uploadBloc.add(Upload(
+                      data: deviceInspectUpload.copyWith(
+                        selectedList: _selectedList,
+                        remark: _remarkController.text,
+                      )));
+                },
+              ),
+            ],
           ),
-          Gaps.vGap20,
         ],
       ),
     );
