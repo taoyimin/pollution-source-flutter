@@ -14,11 +14,15 @@ import 'package:pollution_source/util/toast_utils.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 /// 系统工具类
 ///
 /// 用于调用系统相关功能
 class SystemUtils {
+  /// 当前平台是否为Web
+  static const isWeb = kIsWeb;
+
   /// 调起拨号页
   static void launchTelURL(String phone) async {
     String url = 'tel:' + phone;
@@ -49,6 +53,8 @@ class SystemUtils {
 
   /// 检查是否需要更新
   static Future<bool> checkUpdate(context) async {
+    if(isWeb)
+      return false;
     Response response = await CompatUtils.getDio()
         .get(CompatUtils.getApi(HttpApi.checkVersion));
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
