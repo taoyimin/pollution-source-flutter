@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -62,10 +63,12 @@ class _MyAppState extends State<MyApp> {
             primaryColorBrightness: Brightness.dark,
             // 设置中文和英文的基准线一致
             textTheme: const TextTheme(
-              subhead: TextStyle(textBaseline: TextBaseline.alphabetic),
+              //subhead: TextStyle(textBaseline: TextBaseline.alphabetic),
+              subtitle1: TextStyle(textBaseline: TextBaseline.alphabetic),
             ),
           ),
-          onGenerateRoute: Application.router.generator,
+          //onGenerateRoute: Application.router.generator,
+          home: LoginPage(),
         ),
       ),
     );
