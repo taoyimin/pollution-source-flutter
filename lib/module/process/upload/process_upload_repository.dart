@@ -40,11 +40,6 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
             filename: asset.name);
       })?.toList() ??
           [])
-//      "file": await Future.wait(data.attachments?.map((asset) async {
-//            return await MultipartFile.fromFile(await asset.filePath,
-//                filename: asset.name);
-//          })?.toList() ??
-//          [])
     });
   }
 }
