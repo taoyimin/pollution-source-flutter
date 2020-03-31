@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:pollution_source/util/system_utils.dart';
 
 class ListHeaderWidget extends StatefulWidget {
   final String title;
@@ -76,7 +76,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget> {
                 ),
               ),
               Positioned(
-                top: kIsWeb ? 40 : 60,
+                top: SystemUtils.isWeb ? 40 : 60,
                 left: 20,
                 bottom: 0,
                 child: Column(
@@ -87,12 +87,13 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget> {
                       width: 110,
                       child: Text(
                         '${widget.subtitle}',
-                        style: const TextStyle(fontSize: 10, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.white),
                       ),
                     ),
                     Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 3),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                       ),
@@ -156,7 +157,8 @@ class DetailHeaderWidget extends StatelessWidget {
       backgroundColor: color,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          padding: const EdgeInsets.fromLTRB(10, 75, 10, 10),
+          padding: const EdgeInsets.fromLTRB(
+              10, SystemUtils.isWeb ? 70 : 75, 10, 10),
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
@@ -253,7 +255,7 @@ class UploadHeaderWidget extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Positioned(
-                top: 70,
+                top: SystemUtils.isWeb ? 50 : 70,
                 right: 16,
                 bottom: 10,
                 child: Image.asset(
@@ -261,7 +263,7 @@ class UploadHeaderWidget extends StatelessWidget {
                 ),
               ),
               Positioned(
-                  top: 70,
+                  top: SystemUtils.isWeb ? 50 : 70,
                   left: 20,
                   bottom: 10,
                   right: 150,

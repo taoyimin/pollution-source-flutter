@@ -2230,6 +2230,8 @@ class InfoRowWidget extends StatelessWidget {
 class IconCheckButton extends StatelessWidget {
   final String text;
   final String imagePath;
+  final double imageWidth;
+  final double imageHeight;
   final Color color;
   final bool checked;
   final TextStyle style;
@@ -2240,6 +2242,8 @@ class IconCheckButton extends StatelessWidget {
   IconCheckButton({
     this.text,
     this.imagePath,
+    this.imageWidth = 30,
+    this.imageHeight = 30,
     this.color,
     this.checked = true,
     this.style = const TextStyle(color: Colors.white, fontSize: 13),
@@ -2264,8 +2268,8 @@ class IconCheckButton extends StatelessWidget {
             children: <Widget>[
               Image.asset(
                 imagePath,
-                height: 30,
-                width: 30,
+                height: imageHeight,
+                width: imageWidth,
               ),
               Text(
                 text,
