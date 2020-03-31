@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flustars/flustars.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'license_list_model.g.dart';
@@ -7,18 +8,21 @@ part 'license_list_model.g.dart';
 @JsonSerializable()
 class License extends Equatable {
   final int licenseId; //排污许可证ID
-  @JsonKey(name: 'enterpriseName')
+  @JsonKey(name: 'enterpriseName', defaultValue: '')
   final String enterName; //企业名称
-  @JsonKey(name: 'issueUnitName')
+  @JsonKey(name: 'issueUnitName', defaultValue: '')
   final String issueUnitStr; //发证单位
   @JsonKey(name: 'issueTime', defaultValue: '')
   final String issueTimeStr; //发证时间
   @JsonKey(name: 'licenseTime', defaultValue: '')
   final String licenseTimeStr; //领证时间
+  @JsonKey(defaultValue: '')
   final String validStartTime; //有效期开始时间
+  @JsonKey(defaultValue: '')
   final String validEndTime; //有效期结束时间
-  @JsonKey(name: 'licenceManagementType')
+  @JsonKey(name: 'licenceManagementType', defaultValue: '')
   final String licenseManagerTypeStr; //许可证管理类别
+  @JsonKey(defaultValue: '')
   final String licenseNumber; //许可证编号
 
   const License({
@@ -46,8 +50,11 @@ class License extends Equatable {
         licenseNumber,
       ];
 
-  String get validTimeStr{
-    return '${this.validStartTime}至${this.validEndTime}';
+  String get validTimeStr {
+    if (TextUtil.isEmpty(validStartTime) && TextUtil.isEmpty(validEndTime))
+      return '无';
+    else
+      return '${this.validStartTime}至${this.validEndTime}';
   }
 
   factory License.fromJson(Map<String, dynamic> json) =>
