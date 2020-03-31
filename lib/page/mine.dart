@@ -37,11 +37,13 @@ class _MinePageState extends State<MinePage>
   @override
   void initState() {
     super.initState();
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      setState(() {
-        version = packageInfo.version;
+    if(!SystemUtils.isWeb) {
+      PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+        setState(() {
+          version = packageInfo.version;
+        });
       });
-    });
+    }
   }
 
   @override
