@@ -24,6 +24,7 @@ class _ShareProductPageState extends State<ShareProductPage> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('分享产品'),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 46),

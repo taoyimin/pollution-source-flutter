@@ -37,7 +37,7 @@ class _MinePageState extends State<MinePage>
   @override
   void initState() {
     super.initState();
-    if(!SystemUtils.isWeb) {
+    if (!SystemUtils.isWeb) {
       PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
         setState(() {
           version = packageInfo.version;
@@ -346,7 +346,18 @@ class _MinePageState extends State<MinePage>
                                   ),
                                   InkWellButton(
                                     onTap: () {
-                                      if (Platform.isAndroid) {
+                                      if (SystemUtils.isWeb) {
+                                        Scaffold.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Web平台不支持分享产品'),
+                                            action: SnackBarAction(
+                                                label: '我知道了',
+                                                textColor:
+                                                Colours.primary_color,
+                                                onPressed: () {}),
+                                          ),
+                                        );
+                                      } else if (Platform.isAndroid) {
                                         Application.router.navigateTo(
                                             context, '${Routes.shareProduct}');
                                       } else {
@@ -384,31 +395,47 @@ class _MinePageState extends State<MinePage>
                                   ),
                                   InkWellButton(
                                     onTap: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: const Text("清理缓存"),
-                                              content: const Text("是否确定清理缓存？"),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text("取消"),
-                                                ),
-                                                FlatButton(
-                                                  onPressed: () async {
-                                                    await FileUtils
-                                                        .clearApplicationDirectory();
-                                                    Toast.show('清理附件成功！');
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text("确定"),
-                                                ),
-                                              ],
-                                            );
-                                          });
+                                      if (SystemUtils.isWeb) {
+                                        Scaffold.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Web平台不支持清理缓存'),
+                                            action: SnackBarAction(
+                                                label: '我知道了',
+                                                textColor:
+                                                Colours.primary_color,
+                                                onPressed: () {}),
+                                          ),
+                                        );
+                                      }else {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text("清理缓存"),
+                                                content: const Text(
+                                                    "是否确定清理缓存？"),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text("取消"),
+                                                  ),
+                                                  FlatButton(
+                                                    onPressed: () async {
+                                                      await FileUtils
+                                                          .clearApplicationDirectory();
+                                                      Toast.show('清理附件成功！');
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text("确定"),
+                                                  ),
+                                                ],
+                                              );
+                                            });
+                                      }
                                     },
                                     children: <Widget>[
                                       Column(

@@ -37,6 +37,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('修改密码'),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
