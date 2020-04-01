@@ -295,9 +295,10 @@ class InkWellButton1 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap ?? () {
-          Application.router.navigateTo(context, meta.router);
-        },
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Container(
             height: 60 * ratio,
@@ -596,9 +597,10 @@ class InkWellButton5 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap ?? () {
-          Application.router.navigateTo(context, meta.router);
-        },
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Container(
             padding: EdgeInsets.symmetric(vertical: 10 * ratio),
@@ -675,9 +677,10 @@ class InkWellButton6 extends StatelessWidget {
         boxShadow: [UIUtils.getBoxShadow()],
       ),
       child: InkWellButton(
-        onTap: onTap ?? () {
-          Application.router.navigateTo(context, meta.router);
-        },
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Positioned(
             bottom: -5,
@@ -753,9 +756,10 @@ class InkWellButton7 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap ?? () {
-          Application.router.navigateTo(context, meta.router);
-        },
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(10),
@@ -826,9 +830,10 @@ class InkWellButton8 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap ?? () {
-          Application.router.navigateTo(context, meta.router);
-        },
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Positioned(
             top: 0,
@@ -902,9 +907,10 @@ class InkWellButton9 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap ?? () {
-          Application.router.navigateTo(context, meta.router);
-        },
+        onTap: onTap ??
+            () {
+              Application.router.navigateTo(context, meta.router);
+            },
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1258,7 +1264,12 @@ class ContactsWidget extends StatelessWidget {
             size: 20,
           ),
           onPressed: () {
-            SystemUtils.launchTelURL(contactsTel);
+            if (SystemUtils.isWeb) {
+              Clipboard.setData(ClipboardData(text: '$contactsTel'));
+              Toast.show('电话号码已经复制到剪贴板！');
+            } else {
+              SystemUtils.launchTelURL(contactsTel);
+            }
           },
         ),
       ],
@@ -1481,7 +1492,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
     return AspectRatio(
       aspectRatio: 1.8,
       child: Container(
-        padding:const EdgeInsets.only(top: 30, left: 6, bottom: 10, right: 26),
+        padding: const EdgeInsets.only(top: 30, left: 6, bottom: 10, right: 26),
         decoration: BoxDecoration(
           color: Color(0xFF203857),
           boxShadow: [UIUtils.getBoxShadow()],
