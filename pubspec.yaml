@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.3+4
+version: 1.0.5+6
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -70,7 +70,7 @@ dependencies:
   # 进度条dialog https://github.com/fayaz07/progress_dialog
   progress_dialog: ^1.2.0
   # 路由管理 https://github.com/theyakka/fluro
-  fluro: ^1.5.1
+  fluro: ^1.6.0
   # 跨平台路径操作库 https://github.com/dart-lang/path
   path: ^1.6.4
   # 高德地图插件 https://github.com/best-flutter/flutter_amap_location
