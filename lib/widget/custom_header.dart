@@ -53,6 +53,7 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget> {
       pinned: true,
       floating: false,
       snap: false,
+      elevation: 0,
       backgroundColor: widget.color,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
       flexibleSpace: FlexibleSpaceBar(
@@ -155,6 +156,7 @@ class DetailHeaderWidget extends StatelessWidget {
       expandedHeight: 150.0,
       pinned: true,
       backgroundColor: color,
+      elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           padding: const EdgeInsets.fromLTRB(
@@ -248,6 +250,7 @@ class UploadHeaderWidget extends StatelessWidget {
       expandedHeight: 150.0,
       pinned: true,
       backgroundColor: backgroundColor,
+      elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           height: 150,
