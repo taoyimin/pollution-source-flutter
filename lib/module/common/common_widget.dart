@@ -1516,14 +1516,10 @@ class LineChartWidgetState extends State<LineChartWidget> {
   /// 获取图表样式
   LineChartData _getLineChartData() {
     double yInterval;
-    double maxY = UIUtils.getMax(widget.chartDataList
-        .where((chartData) => chartData.checked)
-        .map((chartData) {
+    double maxY = UIUtils.getMax(widget.chartDataList.map((chartData) {
       return chartData.maxY;
     }).toList());
-    double minY = UIUtils.getMin(widget.chartDataList
-        .where((chartData) => chartData.checked)
-        .map((chartData) {
+    double minY = UIUtils.getMin(widget.chartDataList.map((chartData) {
       return chartData.minY;
     }).toList());
     if (maxY == minY) {
@@ -1535,14 +1531,10 @@ class LineChartWidgetState extends State<LineChartWidget> {
     yInterval = (maxY - minY) / (widget.yAxisCount - 1);
 
     double xInterval;
-    double maxX = UIUtils.getMax(widget.chartDataList
-        .where((chartData) => chartData.checked)
-        .map((chartData) {
+    double maxX = UIUtils.getMax(widget.chartDataList.map((chartData) {
       return chartData.maxX;
     }).toList());
-    double minX = UIUtils.getMin(widget.chartDataList
-        .where((chartData) => chartData.checked)
-        .map((chartData) {
+    double minX = UIUtils.getMin(widget.chartDataList.map((chartData) {
       return chartData.minX;
     })?.toList());
     xInterval = (maxX - minX) / (widget.xAxisCount - 1);
@@ -1561,7 +1553,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
                 fontSize: 14,
               );
               return LineTooltipItem(
-                  '${widget.chartDataList.where((chartData) => chartData.checked).toList()[touchedSpot.barIndex].factorName} ${touchedSpot.y}',
+                  '${widget.chartDataList[touchedSpot.barIndex].factorName} ${touchedSpot.y}',
                   textStyle);
             }).toList();
           },
@@ -1620,8 +1612,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
   /// 获取图表数据
   List<LineChartBarData> _getLineChartBarDataList(
       List<ChartData> chartDataList) {
-    //只取选中的因子
-    return chartDataList.where((chartData) => chartData.checked).map(
+    return chartDataList.map(
       (chartData) {
         return LineChartBarData(
           spots: chartData.points.map(
