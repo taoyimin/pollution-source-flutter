@@ -173,7 +173,7 @@ class HttpApiJava {
   static const String longStopReportUpload = 'stopApply/addAbonrmalInfoL';
   static const String licenseList = 'enterprise/getLicenseInfoById';
   static const String dischargeReportStopType = 'dictionary/getSubListByParent?dicCode=stopType';
-  static const String factorReportAlarmType = 'dictionary/getSubListByParent?dicCode=alarmType';
+  static const String factorReportAlarmType = 'dictionary/getSubListByParent?dicCode=alarm_type';
   static const String factorReportFactorList = 'stopApply/getPollutionFactor';
   static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
@@ -231,7 +231,7 @@ class HttpApiOperation {
   static const String factorReportUpload = 'archives/abnormalApply/addAbonrmalAPI';
   static const String licenseList = 'ycyd/enterpriseBas/getLicenseInfoById';
   static const String dischargeReportStopType = 'dictionary/getSubListAPI?dicCode=stopType';
-  static const String factorReportAlarmType = 'dictionary/getSubListAPI?dicCode=alarmType';
+  static const String factorReportAlarmType = 'dictionary/getSubListAPI?dicCode=alarm_type';
   static const String factorReportFactorList = 'archives/abnormalApply/selectFactorCodeByMonitorId';
   static const String routineInspectionList = 'ywmh/tInspectionTask/queryStatTasksPage';
   static const String routineInspectionDetail = 'ywmh/tInspectionTask/selectTaskCount';
