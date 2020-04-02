@@ -175,8 +175,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 ImageTitleWidget(
                   title: '监测数据',
                   content: monitorDetail.chartDataList
-                              .skipWhile((chartData) {
-                                return !chartData.checked;
+                              .where((chartData) {
+                                return chartData.checked;
                               })
                               .toList()
                               .length ==
@@ -184,8 +184,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                       ? ''
                       : DateUtil.formatDateMs(
                           monitorDetail.chartDataList
-                              .skipWhile((chartData) {
-                                return !chartData.checked;
+                              .where((chartData) {
+                                return chartData.checked;
                               })
                               .toList()[0]
                               .maxX
@@ -221,6 +221,26 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                           );
                           return;
                         }
+                        if (monitorDetail.chartDataList
+                                    .where((chartData) => chartData.checked)
+                                    .length ==
+                                1 &&
+                            monitorDetail.chartDataList
+                                    .where((chartData) => chartData.checked)
+                                    .toList()[0]
+                                    .factorName ==
+                                chartData.factorName) {
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('至少需要选中一个因子'),
+                              action: SnackBarAction(
+                                  label: '我知道了',
+                                  textColor: Colours.primary_color,
+                                  onPressed: () {}),
+                            ),
+                          );
+                          return;
+                        }
                         _monitorDetailBloc.add(
                           UpdateChartData(
                             chartData: chartData.copyWith(
@@ -233,7 +253,9 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                   }).toList(),
                 ),
                 LineChartWidget(
-                  chartDataList: monitorDetail.chartDataList,
+                  chartDataList: monitorDetail.chartDataList
+                      .where((chartData) => chartData.checked)
+                      .toList(),
                   isCurved: isCurved,
                   showDotData: showDotData,
                 ),
@@ -392,7 +414,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                         content: '查看该监控点所属的排口信息',
                         backgroundPath: 'assets/images/button_bg_yellow.png',
                         imagePath: 'assets/images/image_enter_statistics2.png',
-                        router: '${Routes.dischargeDetail}/${monitorDetail.dischargeId}',
+                        router:
+                            '${Routes.dischargeDetail}/${monitorDetail.dischargeId}',
                       ),
                     ),
                   ],
