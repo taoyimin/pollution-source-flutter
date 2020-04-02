@@ -67,6 +67,7 @@ class _LicenseListPageState extends State<LicenseListPage> {
             centerTitle: true,
             iconTheme: IconThemeData(color: Colours.primary_text),
             backgroundColor: Colors.transparent,
+            elevation: 0,
           ),
           BlocBuilder<ListBloc, ListState>(
             condition: (previousState, state) {

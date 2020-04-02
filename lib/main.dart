@@ -63,8 +63,8 @@ class _MyAppState extends State<MyApp> {
             primaryColorBrightness: Brightness.dark,
             // 设置中文和英文的基准线一致
             textTheme: const TextTheme(
-              //subhead: TextStyle(textBaseline: TextBaseline.alphabetic),
-              subtitle1: TextStyle(textBaseline: TextBaseline.alphabetic),
+              subhead: TextStyle(textBaseline: TextBaseline.alphabetic),
+              //subtitle1: TextStyle(textBaseline: TextBaseline.alphabetic),
             ),
           ),
           //onGenerateRoute: Application.router.generator,
