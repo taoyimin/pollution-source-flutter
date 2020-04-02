@@ -16,6 +16,7 @@ class MapInfoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('$title'),
+        elevation: 0,
       ),
       body: _buildBodyWidget(),
     );
