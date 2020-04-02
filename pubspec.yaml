@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.5+6
+version: 1.0.6+7
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -32,7 +32,7 @@ dependencies:
   # Google 图表库 https://github.com/google/charts
   charts_flutter: ^0.8.1
   # 图表库 https://github.com/imaNNeoFighT/fl_chart
-  fl_chart: ^0.8.1
+  fl_chart: ^0.8.7
   # 常用加载动画库 https://github.com/jogboms/flutter_spinkit
   flutter_spinkit: ^4.0.0
   # 动画库 https://github.com/2d-inc/Flare-Flutter
