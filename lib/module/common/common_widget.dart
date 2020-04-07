@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as UI;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -2273,9 +2274,13 @@ class IconCheckButton extends StatelessWidget {
                 height: imageHeight,
                 width: imageWidth,
               ),
-              Text(
-                text,
-                style: style,
+              Expanded(
+                child: AutoSizeText(
+                  text,
+                  style: style,
+                  maxLines: 1,
+                  minFontSize: 10,
+                ),
               ),
             ],
           ),
