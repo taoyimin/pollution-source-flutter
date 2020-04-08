@@ -18,6 +18,7 @@ import 'package:pollution_source/widget/login_text_field.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:pollution_source/res/colors.dart';
 
+/// 登录页
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
