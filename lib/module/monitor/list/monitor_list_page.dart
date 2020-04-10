@@ -301,28 +301,14 @@ class _MonitorListPageState extends State<MonitorListPage> {
                               ),
                             ),
                             Gaps.vGap6,
-                            LabelWrapWidget(
-                                labelList: monitorList[index].labelList),
-                            monitorList[index].labelList.length == 0
-                                ? Gaps.empty
-                                : Gaps.vGap6,
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: ListTileWidget(
-                                      '站点名称：${monitorList[index].monitorName}'),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: ListTileWidget(
-                                      '监测类别：${monitorList[index].monitorCategoryStr}'),
-                                ),
-                              ],
-                            ),
+                            ListTileWidget(
+                                '站点名称：${monitorList[index].monitorName}'),
+                            Gaps.vGap6,
+                            ListTileWidget(
+                                '监测类型：${monitorList[index].monitorCategoryStr}'),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
