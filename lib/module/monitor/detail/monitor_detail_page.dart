@@ -174,23 +174,13 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '监测数据',
-                  content: monitorDetail.chartDataList
-                              .where((chartData) {
-                                return chartData.checked;
-                              })
-                              .toList()
-                              .length ==
-                          0
-                      ? ''
-                      : DateUtil.formatDateMs(
-                          monitorDetail.chartDataList
-                              .where((chartData) {
-                                return chartData.checked;
-                              })
-                              .toList()[0]
-                              .maxX
-                              .toInt(),
-                          format: 'yyyy-MM-dd HH:mm:ss'),
+                  content: DateUtil.formatDateMs(
+                      monitorDetail.chartDataList.firstWhere((chartData) {
+                        return chartData.time != null;
+                      }, orElse: () {
+                        return null;
+                      })?.time,
+                      format: 'yyyy-MM-dd HH:mm'),
                   imagePath: 'assets/images/icon_monitor_statistics.png',
                 ),
                 GridView.count(

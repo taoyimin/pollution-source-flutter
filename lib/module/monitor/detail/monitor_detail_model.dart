@@ -3,32 +3,32 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
-//part 'monitor_detail_model.g.dart';
+// part 'monitor_detail_model.g.dart';
 
 //监控点详情
 //@JsonSerializable()
 class MonitorDetail extends Equatable {
-  final int enterId; //企业ID
+  final int enterId; // 企业ID
   @JsonKey(name: 'outId')
-  final int dischargeId; //排口ID
-  final int monitorId; //监控点ID
+  final int dischargeId; // 排口ID
+  final int monitorId; // 监控点ID
   @JsonKey(name: 'enterpriseName', defaultValue: '')
-  final String enterName; //企业名称
+  final String enterName; // 企业名称
   @JsonKey(name: 'entAddress', defaultValue: '')
-  final String enterAddress; //企业地址
+  final String enterAddress; // 企业地址
   @JsonKey(name: 'disMonitorName', defaultValue: '')
-  final String monitorName; //监控点名称
+  final String monitorName; // 监控点名称
   @JsonKey(name: 'disMonitorTypeStr', defaultValue: '')
-  final String monitorTypeStr; //监控点类型
+  final String monitorTypeStr; // 监控点类型
   @JsonKey(name: 'outletTypeStr', defaultValue: '')
-  final String monitorCategoryStr; //监控点类别
+  final String monitorCategoryStr; // 监控点类别
   @JsonKey(defaultValue: '')
-  final String mnCode; //数采仪编码
-  final String orderCompleteCount; //报警管理单已办结数量
-  final String orderTotalCount; //报警管理单全部数量
-  final String dischargeReportTotalCount; //排口异常申报单全部数量
-  final String factorReportTotalCount; //因子异常申报单全部数量
-  final List<ChartData> chartDataList; //图表数据
+  final String mnCode; // 数采仪编码
+  final String orderCompleteCount; // 报警管理单已办结数量
+  final String orderTotalCount; // 报警管理单全部数量
+  final String dischargeReportTotalCount; // 排口异常申报单全部数量
+  final String factorReportTotalCount; // 因子异常申报单全部数量
+  final List<ChartData> chartDataList; // 图表数据
 
   const MonitorDetail({
     this.enterId,
@@ -103,14 +103,23 @@ MonitorDetail _$MonitorDetailFromJson(Map<String, dynamic> json) {
       monitorTypeStr: json['disChargeMonitor']['disMonitorTypeStr'] as String,
       monitorCategoryStr: json['disChargeMonitor']['outletTypeStr'] as String,
       mnCode: json['disChargeMonitor']['mnCode'] as String,
-      orderCompleteCount: json['disChargeMonitor']['orderCompleteCount'] as String,
+      orderCompleteCount:
+          json['disChargeMonitor']['orderCompleteCount'] as String,
       orderTotalCount: json['disChargeMonitor']['orderTotalCount'] as String,
-      dischargeReportTotalCount: json['disChargeMonitor']['dischargeReportTotalCount'] as String,
-      factorReportTotalCount: json['disChargeMonitor']['factorReportTotalCount'] as String,
-      chartDataList: (json['chartDataList'] as List)
-          ?.map((e) =>
-      e == null ? null : ChartData.fromJson(e as Map<String, dynamic>))
-          ?.toList());
+      dischargeReportTotalCount:
+          json['disChargeMonitor']['dischargeReportTotalCount'] as String,
+      factorReportTotalCount:
+          json['disChargeMonitor']['factorReportTotalCount'] as String,
+      chartDataList: (json['chartDataList'] as List)?.map((chartData) {
+        Map<String, dynamic> realMonitorData =
+            (json['realMonitorData'] as List).firstWhere((item) {
+          return item['factorName'] == chartData['factorName'];
+        });
+        chartData['value'] = realMonitorData['monitorValue'] ?? '无数据';
+        chartData['time'] = realMonitorData['monitorTime'] as int;
+        chartData['alarmFlag'] = realMonitorData['alarm_flag'] as String;
+        return ChartData.fromJson(chartData as Map<String, dynamic>);
+      })?.toList());
 }
 
 Map<String, dynamic> _$MonitorDetailToJson(MonitorDetail instance) =>
