@@ -42,11 +42,14 @@ Map<String, dynamic> _$ProcessToJson(Process instance) => <String, dynamic>{
 
 PointData _$PointDataFromJson(Map<String, dynamic> json) {
   return PointData(
-      x: (json['x'] as num)?.toDouble(), y: (json['y'] as num)?.toDouble());
+      x: (json['x'] as num)?.toDouble(),
+      y: (json['y'] as num)?.toDouble());
 }
 
-Map<String, dynamic> _$PointDataToJson(PointData instance) =>
-    <String, dynamic>{'x': instance.x, 'y': instance.y};
+Map<String, dynamic> _$PointDataToJson(PointData instance) => <String, dynamic>{
+      'x': instance.x,
+      'y': instance.y
+    };
 
 DataDict _$DataDictFromJson(Map<String, dynamic> json) {
   return DataDict(

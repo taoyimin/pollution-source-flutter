@@ -167,21 +167,25 @@ class PointData extends Equatable {
 
 /// 因子监测数据 记录了一个因子在一段时间内的监测数据
 class ChartData extends Equatable {
-  final String factorName; //因子名称
-  final bool checked; //是否选中
-  final String lastValue; //最新的监测值
-  final String unit; //单位
-  final double maxX; //最大X值
-  final double minX; //最小X值
-  final double maxY; //最大Y值
-  final double minY; //最小Y值
-  final Color color; //颜色
-  final List<PointData> points; //坐标点集合
+  final String factorName; // 因子名称
+  final bool checked; // 是否选中
+  final String value; // 最新的监测值
+  final int time; // 最新的监测时间
+  final String alarmFlag; // 报警类型
+  final String unit; // 单位
+  final double maxX; // 最大X值
+  final double minX; // 最小X值
+  final double maxY; // 最大Y值
+  final double minY; // 最小Y值
+  final Color color; // 颜色
+  final List<PointData> points; // 坐标点集合
 
   const ChartData({
     @required this.factorName,
     @required this.checked,
-    @required this.lastValue,
+    @required this.value,
+    @required this.time,
+    @required this.alarmFlag,
     @required this.unit,
     @required this.color,
     @required this.maxX,
@@ -195,7 +199,9 @@ class ChartData extends Equatable {
   List<Object> get props => [
         factorName,
         checked,
-        lastValue,
+        value,
+        time,
+        alarmFlag,
         unit,
         color,
         maxX,
@@ -209,7 +215,9 @@ class ChartData extends Equatable {
     return ChartData(
       factorName: this.factorName,
       checked: checked ?? this.checked,
-      lastValue: this.lastValue,
+      value: this.value,
+      time: this.time,
+      alarmFlag: this.alarmFlag,
       unit: this.unit,
       color: this.color,
       maxX: this.maxX,
@@ -234,9 +242,11 @@ ChartData _$ChartDataFromJson(Map<String, dynamic> json) {
   return ChartData(
       factorName: json['factorName'] as String,
       unit: json['unit'] as String,
+      value: json['value'].toString(),
+      time: json['time'] as int,
+      alarmFlag: json['alarmFlag'] as String,
       checked: points.length != 0,
       color: UIUtils.getRandomColor(),
-      lastValue: points.length == 0 ? '无数据' : points[0].y.toString(),
       maxX: UIUtils.getMax(points.map((point) {
         return point.x;
       }).toList()),
@@ -255,6 +265,8 @@ ChartData _$ChartDataFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ChartDataToJson(ChartData instance) => <String, dynamic>{
       'factorName': instance.factorName,
       'unit': instance.unit,
+      'value': instance.value,
+      'time': instance.time,
       'points': instance.points
     };
 
