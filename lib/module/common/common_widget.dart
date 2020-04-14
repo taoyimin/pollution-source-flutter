@@ -1421,15 +1421,24 @@ class FactorValueWidget extends StatelessWidget {
             children: <Widget>[
               Text(
                 '${chartData.factorName}',
-                style: TextStyle(fontSize: 11.5),
+                style: TextStyle(
+                  fontSize: 11.5,
+                  color: UIUtils.getAlarmFlagColor(chartData.alarmFlag),
+                ),
               ),
               Text(
-                '${chartData.lastValue}',
-                style: TextStyle(fontSize: 11.5),
+                '${chartData.value}',
+                style: TextStyle(
+                  fontSize: 11.5,
+                  color: UIUtils.getAlarmFlagColor(chartData.alarmFlag),
+                ),
               ),
               Text(
                 '${chartData.unit}',
-                style: TextStyle(fontSize: 11.5),
+                style: TextStyle(
+                  fontSize: 11.5,
+                  color: UIUtils.getAlarmFlagColor(chartData.alarmFlag),
+                ),
               ),
             ],
           ),
@@ -1561,7 +1570,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
         ),
         handleBuiltInTouches: true,
       ),
-      gridData: const FlGridData(
+      gridData: FlGridData(
         show: false,
       ),
       titlesData: FlTitlesData(
@@ -1629,7 +1638,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: widget.showDotData,
-            dotColor: chartData.color,
+            //dotColor: chartData.color,
           ),
           belowBarData: BarAreaData(
             show: false,

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 
 class MonitorTable extends Equatable {
   final List<MonitorTableCell> fixedColCells; //左边固定列
@@ -91,28 +92,7 @@ class MonitorTableCell extends Equatable {
   });
 
   Color get textColor {
-    switch (alarmFlag) {
-      case '0':
-        // 正常
-        return Colors.black;
-      case '1':
-        // 预警
-        return Color.fromRGBO(241, 190, 67, 1);
-      case '2':
-        // 超标
-        return Color.fromRGBO(233, 119, 111, 1);
-      case '3':
-        // 负值（原极小值）
-        return Color.fromRGBO(0, 188, 212, 1);
-      case '4':
-        // 超大值（原极大值）
-        return Color.fromRGBO(255, 87, 34, 1);
-      case '5':
-        // 零值
-        return Color.fromRGBO(106, 106, 255, 1);
-      default:
-        return Colors.black;
-    }
+    return UIUtils.getAlarmFlagColor(this.alarmFlag);
   }
 
   @override
