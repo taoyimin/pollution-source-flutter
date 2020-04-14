@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:package_info/package_info.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/util/compat_utils.dart';
@@ -34,22 +34,22 @@ class SystemUtils {
   }
 
   /// 检查是否拥有定位权限
-  static Future<bool> checkLocationPermission() async {
-    PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.location);
-    if (permission != PermissionStatus.granted) {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.location]);
-      if (permissions[PermissionGroup.location] != PermissionStatus.granted) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
-  }
+//  static Future<bool> checkLocationPermission() async {
+//    PermissionStatus permission = await PermissionHandler()
+//        .checkPermissionStatus(PermissionGroup.location);
+//    if (permission != PermissionStatus.granted) {
+//      Map<PermissionGroup, PermissionStatus> permissions =
+//          await PermissionHandler()
+//              .requestPermissions([PermissionGroup.location]);
+//      if (permissions[PermissionGroup.location] != PermissionStatus.granted) {
+//        return false;
+//      } else {
+//        return true;
+//      }
+//    } else {
+//      return true;
+//    }
+//  }
 
   /// 检查是否需要更新
   static Future<bool> checkUpdate(context) async {
