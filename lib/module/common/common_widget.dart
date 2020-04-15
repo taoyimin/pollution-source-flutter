@@ -2114,6 +2114,7 @@ class DetailRowWidget<T> extends StatelessWidget {
   final String content;
   final DetailBloc detailBloc;
   final double height;
+  final Color successFontColor;
 
   /// 加载完成后触发的回调函数
   final DetailRowLoaded<T> onLoaded;
@@ -2130,6 +2131,7 @@ class DetailRowWidget<T> extends StatelessWidget {
     @required this.content,
     @required this.detailBloc,
     this.height = 46,
+    this.successFontColor = Colours.primary_text,
     @required this.onLoaded,
     this.onSuccessTap,
     this.onErrorTap,
@@ -2192,7 +2194,7 @@ class DetailRowWidget<T> extends StatelessWidget {
                             else if (state is DetailError)
                               return Colors.red;
                             else if (state is DetailLoaded)
-                              return Colours.primary_text;
+                              return successFontColor;
                             else
                               return Colors.red;
                           }(),

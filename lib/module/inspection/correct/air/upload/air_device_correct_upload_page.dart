@@ -216,6 +216,7 @@ class _AirDeviceCorrectUploadPageState
               content: airDeviceCorrectUpload?.factor?.unit,
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
+              successFontColor: Colours.primary_color,
               onSuccessTap: onSuccessTap,
               onErrorTap: () {
                 // 加载失败后点击重新加载
@@ -235,6 +236,7 @@ class _AirDeviceCorrectUploadPageState
                   '${airDeviceCorrectUpload?.factor?.measureLower} — ${airDeviceCorrectUpload?.factor?.measureUpper}',
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
+              successFontColor: Colours.primary_color,
               onSuccessTap: onSuccessTap,
               onErrorTap: () {
                 // 加载失败后点击重新加载
