@@ -14,9 +14,9 @@ class AirDeviceCorrectUploadRepository
       throw DioError(error: InvalidParamException('请先加载校验因子'));
     if (TextUtil.isEmpty(data.factor.unit))
       throw DioError(error: InvalidParamException('请先输入计量单位'));
-    if (TextUtil.isEmpty(data.factor.measureLower))
+    if (TextUtil.isEmpty(data.factor.measureLower.toString()))
       throw DioError(error: InvalidParamException('请先输入分析仪量程下限'));
-    if (TextUtil.isEmpty(data.factor.measureUpper))
+    if (TextUtil.isEmpty(data.factor.measureUpper.toString()))
       throw DioError(error: InvalidParamException('请先输入分析仪量程上限'));
     if (data.correctStartTime == null)
       throw DioError(error: InvalidParamException('请先选择校准开始时间'));

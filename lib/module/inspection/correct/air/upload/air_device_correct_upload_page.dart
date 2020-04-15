@@ -45,7 +45,7 @@ class _AirDeviceCorrectUploadPageState
   /// 加载因子信息Bloc
   DetailBloc _detailBloc;
 
-  /// 加载上次校准后测试值
+  /// 加载上次校准后测试值Bloc
   DetailBloc _lastValueBloc;
   UploadBloc _uploadBloc;
   RoutineInspectionUploadList task;
@@ -75,6 +75,7 @@ class _AirDeviceCorrectUploadPageState
     )));
     _lastValueBloc =
         DetailBloc(detailRepository: AirDeviceLastValueRepository());
+    // 加载上次校准后测试值
     _lastValueBloc.add(DetailLoad(detailId: task.inspectionTaskId));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
@@ -84,6 +85,8 @@ class _AirDeviceCorrectUploadPageState
   void dispose() {
     // 释放资源
     super.dispose();
+    _zeroCorrectValController.dispose();
+    _rangeCorrectValController.dispose();
   }
 
   @override
@@ -175,8 +178,7 @@ class _AirDeviceCorrectUploadPageState
               factor: airDeviceCorrectUpload.factor,
               changeCallBack: (RoutineInspectionUploadFactor factor) {
                 _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(
-                        factor: factor)));
+                    model: airDeviceCorrectUpload.copyWith(factor: factor)));
               },
             );
           });
@@ -311,11 +313,6 @@ class _AirDeviceCorrectUploadPageState
               title: '上次校准后测试值',
               keyboardType: TextInputType.number,
               controller: _zeroCorrectValController,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model:
-                        airDeviceCorrectUpload.copyWith(beforeZeroVal: value)));
-              },
             ),
             Gaps.hLine,
             EditRowWidget(
@@ -388,11 +385,6 @@ class _AirDeviceCorrectUploadPageState
               title: '上次校准后测试值',
               keyboardType: TextInputType.number,
               controller: _rangeCorrectValController,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(
-                        beforeRangeVal: value)));
-              },
             ),
             Gaps.hLine,
             EditRowWidget(
@@ -446,7 +438,10 @@ class _AirDeviceCorrectUploadPageState
                   color: Colors.lightBlue,
                   onTap: () {
                     _uploadBloc.add(Upload(
-                      data: airDeviceCorrectUpload,
+                      data: airDeviceCorrectUpload.copyWith(
+                        beforeZeroVal: _zeroCorrectValController.text,
+                        beforeRangeVal: _rangeCorrectValController.text,
+                      ),
                     ));
                   },
                 ),
