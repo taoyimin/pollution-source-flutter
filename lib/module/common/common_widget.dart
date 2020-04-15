@@ -2118,6 +2118,9 @@ class DetailRowWidget<T> extends StatelessWidget {
   /// 加载完成后触发的回调函数
   final DetailRowLoaded<T> onLoaded;
 
+  /// 加载成功后的点击事件
+  final GestureTapCallback onSuccessTap;
+
   /// 加载失败后的点击事件
   final GestureTapCallback onErrorTap;
 
@@ -2128,6 +2131,7 @@ class DetailRowWidget<T> extends StatelessWidget {
     @required this.detailBloc,
     this.height = 46,
     @required this.onLoaded,
+    this.onSuccessTap,
     this.onErrorTap,
   })  : assert(detailBloc != null),
         super(key: key);
@@ -2157,33 +2161,41 @@ class DetailRowWidget<T> extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: InkWell(
-                    onTap: state is DetailError ? onErrorTap : () {},
+                    onTap: () {
+                      if (state is DetailLoaded) {
+                        return onSuccessTap;
+                      } else if (state is DetailError) {
+                        return onErrorTap;
+                      } else {
+                        return () {};
+                      }
+                    }(),
                     child: Container(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        content == null || content == ''
-                            ? () {
-                                if (state is DetailLoading)
-                                  return '$title加载中';
-                                else if (state is DetailError)
-                                  return '$title加载失败';
-                                else if (state is DetailLoaded)
-                                  return '$content';
-                                else
-                                  return '未知状态，state=$state';
-                              }()
-                            : content,
+                        () {
+                          if (state is DetailLoading)
+                            return '$title加载中';
+                          else if (state is DetailError)
+                            return '$title加载失败';
+                          else if (state is DetailLoaded)
+                            return '$content';
+                          else
+                            return '未知状态，state=$state';
+                        }(),
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 15,
-                          color: content == null || content == ''
-                              ? () {
-                                  if (state is DetailError)
-                                    return Colors.red;
-                                  else
-                                    return Colours.secondary_text;
-                                }()
-                              : Colours.primary_text,
+                          color: () {
+                            if (state is DetailLoading)
+                              return Colours.secondary_text;
+                            else if (state is DetailError)
+                              return Colors.red;
+                            else if (state is DetailLoaded)
+                              return Colours.primary_text;
+                            else
+                              return Colors.red;
+                          }(),
                         ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
