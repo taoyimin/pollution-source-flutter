@@ -260,6 +260,22 @@ class _WaterDeviceCheckUploadPageState
         ),
         Gaps.hLine,
         EditRowWidget(
+          title: '标液浓度',
+          onChanged: (value) {
+            list[index] = list[index].copyWith(standardSolution: value);
+            _pageBloc.add(PageLoad(model: list));
+          },
+        ),
+        Gaps.hLine,
+        EditRowWidget(
+          title: '实测浓度',
+          onChanged: (value) {
+            list[index] = list[index].copyWith(realitySolution: value);
+            _pageBloc.add(PageLoad(model: list));
+          },
+        ),
+        Gaps.hLine,
+        EditRowWidget(
           title: '核查结果',
           onChanged: (value) {
             list[index] = list[index].copyWith(currentCheckResult: value);
