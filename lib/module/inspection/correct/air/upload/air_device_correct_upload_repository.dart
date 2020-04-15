@@ -12,6 +12,12 @@ class AirDeviceCorrectUploadRepository
   checkData(AirDeviceCorrectUpload data) {
     if (data.factor == null)
       throw DioError(error: InvalidParamException('请先加载校验因子'));
+    if (TextUtil.isEmpty(data.factor.unit))
+      throw DioError(error: InvalidParamException('请先输入计量单位'));
+    if (TextUtil.isEmpty(data.factor.measureLower))
+      throw DioError(error: InvalidParamException('请先输入分析仪量程下限'));
+    if (TextUtil.isEmpty(data.factor.measureUpper))
+      throw DioError(error: InvalidParamException('请先输入分析仪量程上限'));
     if (data.correctStartTime == null)
       throw DioError(error: InvalidParamException('请先选择校准开始时间'));
     if (data.correctEndTime == null)
@@ -49,6 +55,9 @@ class AirDeviceCorrectUploadRepository
     formData.fields
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('factorId', data.factor.factorId.toString())])
+      ..addAll([MapEntry('unit', data.factor.unit)])
+      ..addAll([MapEntry('measureLower', data.factor.measureLower.toString())])
+      ..addAll([MapEntry('measureUpper', data.factor.measureUpper.toString())])
       // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
       ..addAll([
         MapEntry(

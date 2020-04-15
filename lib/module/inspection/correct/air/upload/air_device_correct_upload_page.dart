@@ -23,6 +23,7 @@ import 'package:pollution_source/module/inspection/correct/air/upload/air_device
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/toast_utils.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 class AirDeviceCorrectUploadPage extends StatefulWidget {
@@ -165,6 +166,22 @@ class _AirDeviceCorrectUploadPageState
   }
 
   Widget _buildPageLoadedDetail(AirDeviceCorrectUpload airDeviceCorrectUpload) {
+    final GestureTapCallback onSuccessTap = () {
+      showDialog(
+          context: context, //BuildContext对象
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return RoutineInspectionUploadFactorDialog(
+              factor: airDeviceCorrectUpload.factor,
+              changeCallBack: (RoutineInspectionUploadFactor factor) {
+                _pageBloc.add(PageLoad(
+                    model: airDeviceCorrectUpload.copyWith(
+                        factor: factor)));
+              },
+            );
+          });
+    };
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -179,6 +196,7 @@ class _AirDeviceCorrectUploadPageState
                   model: airDeviceCorrectUpload.copyWith(factor: factor),
                 ));
               },
+              onSuccessTap: onSuccessTap,
               onErrorTap: () {
                 // 加载失败后点击重新加载
                 _detailBloc.add(DetailLoad(
@@ -196,6 +214,7 @@ class _AirDeviceCorrectUploadPageState
               content: airDeviceCorrectUpload?.factor?.unit,
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
+              onSuccessTap: onSuccessTap,
               onErrorTap: () {
                 // 加载失败后点击重新加载
                 _detailBloc.add(DetailLoad(
@@ -210,9 +229,11 @@ class _AirDeviceCorrectUploadPageState
             Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '分析仪量程',
-              content: airDeviceCorrectUpload?.factor?.measureRange ?? '无',
+              content:
+                  '${airDeviceCorrectUpload?.factor?.measureLower} — ${airDeviceCorrectUpload?.factor?.measureUpper}',
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
+              onSuccessTap: onSuccessTap,
               onErrorTap: () {
                 // 加载失败后点击重新加载
                 _detailBloc.add(DetailLoad(
@@ -433,6 +454,226 @@ class _AirDeviceCorrectUploadPageState
             ),
             Gaps.vGap20,
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// [RoutineInspectionUploadFactorDialog]点击修改按钮的回调函数
+typedef ChangeCallBack = void Function(RoutineInspectionUploadFactor value);
+
+class RoutineInspectionUploadFactorDialog extends StatefulWidget {
+  final RoutineInspectionUploadFactor factor;
+  final ChangeCallBack changeCallBack;
+
+  RoutineInspectionUploadFactorDialog(
+      {@required this.factor, this.changeCallBack});
+
+  @override
+  _RoutineInspectionUploadFactorDialogState createState() =>
+      _RoutineInspectionUploadFactorDialogState();
+}
+
+class _RoutineInspectionUploadFactorDialogState
+    extends State<RoutineInspectionUploadFactorDialog> {
+  TextEditingController unitController;
+  TextEditingController measureUpperController;
+  TextEditingController measureLowerController;
+
+  @override
+  void initState() {
+    super.initState();
+    unitController = TextEditingController.fromValue(
+      TextEditingValue(text: widget.factor.unit.toString()),
+    );
+    measureUpperController = TextEditingController.fromValue(
+      TextEditingValue(text: widget.factor.measureUpper.toString()),
+    );
+    measureLowerController = TextEditingController.fromValue(
+      TextEditingValue(text: widget.factor.measureLower.toString()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width / 1.3,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: ShapeDecoration(
+              color: Color(0xffffffff),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SelectRowWidget(
+                  title: '校准因子',
+                  content: '颗粒物',
+                  onTap: () {},
+                ),
+                Gaps.vGap6,
+                Container(
+                  height: 40,
+                  child: Row(
+                    children: <Widget>[
+                      Text('计量单位    '),
+                      Gaps.hGap20,
+                      Flexible(
+                        child: TextField(
+                          controller: unitController,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                          decoration: const InputDecoration(
+                            fillColor: Color(0xFFDFDFDF),
+                            filled: true,
+                            hintText: "请输入计量单位",
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gaps.vGap16,
+                Container(
+                  height: 40,
+                  child: Row(
+                    children: <Widget>[
+                      Text('分析仪量程'),
+                      Gaps.hGap20,
+                      Expanded(
+                        flex: 2,
+                        child: TextField(
+                          controller: measureLowerController,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                          decoration: const InputDecoration(
+                            fillColor: Color(0xFFDFDFDF),
+                            filled: true,
+                            hintText: "下限",
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          '—',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: TextField(
+                          controller: measureUpperController,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                          decoration: const InputDecoration(
+                            fillColor: Color(0xFFDFDFDF),
+                            filled: true,
+                            hintText: "上限",
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gaps.vGap20,
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: InkWellButton(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        children: <Widget>[
+                          Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.redAccent,
+                              boxShadow: [UIUtils.getBoxShadow()],
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '取  消',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gaps.hGap20,
+                    Expanded(
+                      flex: 1,
+                      child: InkWellButton(
+                        onTap: () {
+                          if (widget.changeCallBack != null) {
+                            (widget.changeCallBack)(widget.factor.copyWith(
+                              unit: unitController.text,
+                              measureUpper: measureUpperController.text,
+                              measureLower: measureLowerController.text,
+                            ));
+                            Navigator.pop(context);
+                          }
+                        },
+                        children: <Widget>[
+                          Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.lightGreen,
+                              boxShadow: [UIUtils.getBoxShadow()],
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '修  改',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Gaps.vGap6,
+              ],
+            ),
+          ),
         ),
       ),
     );
