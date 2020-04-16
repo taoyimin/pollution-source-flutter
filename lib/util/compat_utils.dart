@@ -478,6 +478,8 @@ class CompatUtils {
         return HttpApiJava.factorReportAlarmType;
       case HttpApi.factorReportFactorList:
         return HttpApiJava.factorReportFactorList;
+      case HttpApi.reportStopAdvanceTime:
+        return HttpApiJava.reportStopAdvanceTime;
       case HttpApi.checkVersion:
         return HttpApiJava.checkVersion;
       case HttpApi.changePassword:
@@ -602,6 +604,8 @@ class CompatUtils {
         return HttpApiOperation.factorReportAlarmType;
       case HttpApi.factorReportFactorList:
         return HttpApiOperation.factorReportFactorList;
+      case HttpApi.reportStopAdvanceTime:
+        return HttpApiOperation.reportStopAdvanceTime;
       case HttpApi.routineInspectionList:
         return HttpApiOperation.routineInspectionList;
       case HttpApi.routineInspectionDetail:
