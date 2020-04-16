@@ -102,6 +102,9 @@ enum HttpApi {
   /// 因子异常申报因子列表
   factorReportFactorList,
 
+  /// 异常申报开始时间最多滞后的小时数
+  reportStopAdvanceTime,
+
   /// 常规巡检列表
   routineInspectionList,
 
@@ -144,22 +147,31 @@ class HttpApiJava {
   static const String enterToken = 'user/entpriseLogin';
   static const String adminIndex = 'appIndex/getIndexData';
   static const String enterList = 'enterprise/queryALLEnter';
-  static const String attentionLevel = 'dictionary/getSubListByParent?dicCode=attentionLevel';
+  static const String attentionLevel =
+      'dictionary/getSubListByParent?dicCode=attentionLevel';
   static const String enterDetail = 'enterprise/queryEnterByEntId?enter_id=';
   static const String dischargeList = 'tDisChargeOut/getDisChageOut';
-  static const String dischargeDetail = 'tDisChargeOut/getDisChageOutById?dischargeId=';
-  static const String outletType = 'dictionary/getSubListByParent?dicCode=outletType';
+  static const String dischargeDetail =
+      'tDisChargeOut/getDisChageOutById?dischargeId=';
+  static const String outletType =
+      'dictionary/getSubListByParent?dicCode=outletType';
   static const String monitorList = 'tDisChargeOut/getDrainInfo';
-  static const String monitorState = 'dictionary/getSubListByParent?dicCode=monitorRealData';
-  static const String monitorDetail = 'tDisChargeOut/getDrainInfoById?monitorId=';
+  static const String monitorState =
+      'dictionary/getSubListByParent?dicCode=monitorRealData';
+  static const String monitorDetail =
+      'tDisChargeOut/getDrainInfoById?monitorId=';
   static const String monitorHistoryData = 'monitorRealData/queryDetailHistory';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
-  static const String orderAlarmType = 'dictionary/getSubListByParent?dicCode=alarm_type';
-  static const String orderAlarmLevel = 'dictionary/getSubListByParent?dicCode=alarmLevel';
-  static const String orderDetail = 'Supervise/querySuperviseDetailById?orderId=';
+  static const String orderAlarmType =
+      'dictionary/getSubListByParent?dicCode=alarm_type';
+  static const String orderAlarmLevel =
+      'dictionary/getSubListByParent?dicCode=alarmLevel';
+  static const String orderDetail =
+      'Supervise/querySuperviseDetailById?orderId=';
   static const String processesUpload = 'Supervise/dealSupervise';
   static const String dischargeReportList = 'stopApply/getApplyList';
-  static const String reportValid = 'dictionary/getSubListByParent?dicCode=isEffect';
+  static const String reportValid =
+      'dictionary/getSubListByParent?dicCode=isEffect';
   static const String dischargeReportDetail =
       'stopApply/getStopApply?dataType=S&reportId=';
   static const String dischargeReportUpload = 'stopApply/addAbonrmalInfoS';
@@ -172,9 +184,13 @@ class HttpApiJava {
       'stopApply/getStopApply?dataType=L&reportId=';
   static const String longStopReportUpload = 'stopApply/addAbonrmalInfoL';
   static const String licenseList = 'enterprise/getLicenseInfoById';
-  static const String dischargeReportStopType = 'dictionary/getSubListByParent?dicCode=stopType';
-  static const String factorReportAlarmType = 'dictionary/getSubListByParent?dicCode=alarm_type';
+  static const String dischargeReportStopType =
+      'dictionary/getSubListByParent?dicCode=stopType';
+  static const String factorReportAlarmType =
+      'dictionary/getSubListByParent?dicCode=alarm_type_abnormal';
   static const String factorReportFactorList = 'stopApply/getPollutionFactor';
+  static const String reportStopAdvanceTime =
+      'dictionary/getSysDictionary?dicCode=StopAdvanceTime';
   static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
 }
@@ -208,41 +224,70 @@ class HttpApiOperation {
   static const String operationToken = 'login';
   static const String operationIndex = 'ywmh/tInspectionTask/indexCount';
   static const String enterList = 'ycyd/enterpriseBas/api/enters';
-  static const String attentionLevel = 'dictionary/getSubListAPI?dicCode=attentionLevel';
+  static const String attentionLevel =
+      'dictionary/getSubListAPI?dicCode=attentionLevel';
   static const String enterDetail = 'ycyd/enterpriseBas/api/enters/';
   static const String dischargeList = 'ycyd/disChargeInfo/api/discharges';
-  static const String dischargeDetail = 'ycyd/disChargeInfo/api/getDisChageOutById?dischargeId=';
-  static const String outletType = 'dictionary/getSubListAPI?dicCode=outletType';
-  static const String monitorList = 'ycyd/disChargeMonitorYcyd/api/getDrainInfo';
-  static const String monitorState = 'dictionary/getSubListAPI?dicCode=monitorRealData';
-  static const String monitorDetail = 'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
-  static const String monitorHistoryData = 'pollutantsource/tMonitorRealDataView/queryDetailHistoryAPI';
+  static const String dischargeDetail =
+      'ycyd/disChargeInfo/api/getDisChageOutById?dischargeId=';
+  static const String outletType =
+      'dictionary/getSubListAPI?dicCode=outletType';
+  static const String monitorList =
+      'ycyd/disChargeMonitorYcyd/api/getDrainInfo';
+  static const String monitorState =
+      'dictionary/getSubListAPI?dicCode=monitorRealData';
+  static const String monitorDetail =
+      'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
+  static const String monitorHistoryData =
+      'pollutantsource/tMonitorRealDataView/queryDetailHistoryAPI';
   static const String orderList = 'commonSupervise/list';
-  static const String orderAlarmType = 'dictionary/getSubListAPI?dicCode=alarm_type';
-  static const String orderAlarmLevel = 'dictionary/getSubListAPI?dicCode=alarmLevel';
-  static const String orderDetail = 'commonSupervise/querySuperviseDetailByIdAPI?orderId=';
+  static const String orderAlarmType =
+      'dictionary/getSubListAPI?dicCode=alarm_type';
+  static const String orderAlarmLevel =
+      'dictionary/getSubListAPI?dicCode=alarmLevel';
+  static const String orderDetail =
+      'commonSupervise/querySuperviseDetailByIdAPI?orderId=';
   static const String processesUpload = 'commonSupervise/dealSuperviseAPI';
-  static const String dischargeReportList = 'pollutantsource/stopApply/queryPage';
+  static const String dischargeReportList =
+      'pollutantsource/stopApply/queryPage';
   static const String reportValid = 'dictionary/getSubListAPI?dicCode=isEffect';
-  static const String dischargeReportDetail = 'pollutantsource/stopApply/getDetailApi?stopApplyId=';
-  static const String dischargeReportUpload = 'pollutantsource/stopApply/addStopApply';
+  static const String dischargeReportDetail =
+      'pollutantsource/stopApply/getDetailApi?stopApplyId=';
+  static const String dischargeReportUpload =
+      'pollutantsource/stopApply/addStopApply';
   static const String factorReportList = 'archives/abnormalApply/list';
-  static const String factorReportDetail = 'archives/abnormalApply/detailInterAPI?id=';
-  static const String factorReportUpload = 'archives/abnormalApply/addAbonrmalAPI';
+  static const String factorReportDetail =
+      'archives/abnormalApply/detailInterAPI?id=';
+  static const String factorReportUpload =
+      'archives/abnormalApply/addAbonrmalAPI';
   static const String licenseList = 'ycyd/enterpriseBas/getLicenseInfoById';
-  static const String dischargeReportStopType = 'dictionary/getSubListAPI?dicCode=stopType';
-  static const String factorReportAlarmType = 'dictionary/getSubListAPI?dicCode=alarm_type';
-  static const String factorReportFactorList = 'archives/abnormalApply/selectFactorCodeByMonitorId';
-  static const String routineInspectionList = 'ywmh/tInspectionTask/queryStatTasksPage';
-  static const String routineInspectionDetail = 'ywmh/tInspectionTask/selectTaskCount';
-  static const String routineInspectionUploadList = 'ywmh/tInspectionTask/doMonitorTasksForJson';
+  static const String dischargeReportStopType =
+      'dictionary/getSubListAPI?dicCode=stopType';
+  static const String factorReportAlarmType =
+      'dictionary/getSubListAPI?dicCode=alarm_type_abnormal';
+  static const String factorReportFactorList =
+      'archives/abnormalApply/selectFactorCodeByMonitorId';
+  static const String reportStopAdvanceTime =
+      'dictionary/getSysDictionary?dicCode=StopAdvanceTime';
+  static const String routineInspectionList =
+      'ywmh/tInspectionTask/queryStatTasksPage';
+  static const String routineInspectionDetail =
+      'ywmh/tInspectionTask/selectTaskCount';
+  static const String routineInspectionUploadList =
+      'ywmh/tInspectionTask/doMonitorTasksForJson';
   static const String deviceInspectionUpload = 'ywmh/tInspectionTask/submit';
-  static const String deviceCheckUpload = 'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
-  static const String routineInspectionFactorDetail = 'ywmh/tInspectionTask/selectMonitorPoint';
-  static const String deviceCorrectUpload = 'ywmh/tInspectionTask/submitGasCmesCorrect';
-  static const String deviceCorrectLastValue = 'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
-  static const String deviceParamUpload = 'ywmh/tInspectionTask/submitWatParameter';
-  static const String deviceParamList = 'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
+  static const String deviceCheckUpload =
+      'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
+  static const String routineInspectionFactorDetail =
+      'ywmh/tInspectionTask/selectMonitorPoint';
+  static const String deviceCorrectUpload =
+      'ywmh/tInspectionTask/submitGasCmesCorrect';
+  static const String deviceCorrectLastValue =
+      'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
+  static const String deviceParamUpload =
+      'ywmh/tInspectionTask/submitWatParameter';
+  static const String deviceParamList =
+      'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
   static const String checkVersion = 'app/update.json';
   static const String changePassword = 'ywyh/updatePassword';
 }
