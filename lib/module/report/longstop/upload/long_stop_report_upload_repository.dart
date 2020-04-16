@@ -14,6 +14,8 @@ class LongStopReportUploadRepository
       throw DioError(error: InvalidParamException('请选择开始时间'));
     if (data.endTime == null)
       throw DioError(error: InvalidParamException('请选择结束时间'));
+    if (data.endTime.difference(data.startTime).inDays < 90)
+      throw DioError(error: InvalidParamException('停产时间必须大于90天'));
     if (data.remark.isEmpty)
       throw DioError(error: InvalidParamException('请输入描述'));
   }

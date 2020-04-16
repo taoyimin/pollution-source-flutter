@@ -9,6 +9,10 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/common/config/system_config_bloc.dart';
+import 'package:pollution_source/module/common/config/system_config_event.dart';
+import 'package:pollution_source/module/common/config/system_config_repository.dart';
+import 'package:pollution_source/module/common/config/system_config_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
@@ -29,6 +33,7 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 
@@ -46,7 +51,9 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
   UploadBloc _uploadBloc;
   DataDictBloc _alarmTypeBloc;
   DataDictBloc _factorCodeBloc;
+  SystemConfigBloc _stopAdvanceTimeBloc;
   TextEditingController _exceptionReasonController;
+  DateTime minStartTime = DateTime.now().add(Duration(hours: -48));
 
   /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
   Enter defaultEnter;
@@ -72,6 +79,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     _factorCodeBloc = DataDictBloc(
         dataDictRepository:
             FactorDataDictRepository(HttpApi.factorReportFactorList));
+    _stopAdvanceTimeBloc = SystemConfigBloc(
+        systemConfigRepository:
+        SystemConfigRepository(HttpApi.reportStopAdvanceTime));
+    // 加载异常申报开始时间最多滞后的小时数
+    _stopAdvanceTimeBloc.add(SystemConfigLoad());
     _exceptionReasonController = TextEditingController();
   }
 
@@ -83,6 +95,8 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
       (_alarmTypeBloc?.state as DataDictLoading).cancelToken.cancel();
     if (_factorCodeBloc?.state is DataDictLoading)
       (_factorCodeBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_stopAdvanceTimeBloc?.state is SystemConfigLoading)
+      (_stopAdvanceTimeBloc?.state as SystemConfigLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -116,6 +130,19 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                             FactorReportUpload(factorCode: List<DataDict>())));
                     // 将异常因子选择控件的状态重置为初始状态
                     _factorCodeBloc.add(DataDictReset());
+                  }
+                },
+              ),
+              BlocListener<SystemConfigBloc, SystemConfigState>(
+                bloc: _stopAdvanceTimeBloc,
+                listener: (context, state) {
+                  if (state is SystemConfigLoaded) {
+                    // 设置最小开始时间
+                    minStartTime = DateTime.now().add(Duration(
+                        hours: -int.parse(
+                            (_stopAdvanceTimeBloc?.state as SystemConfigLoaded)
+                                .systemConfig
+                                .value)));
                   }
                 },
               ),
@@ -285,6 +312,8 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                       dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
+                      initialDateTime: reportUpload?.startTime,
+                      minDateTime: minStartTime,
                       maxDateTime: reportUpload?.endTime,
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
@@ -308,7 +337,9 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                       dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
-                      minDateTime: reportUpload?.startTime,
+                      initialDateTime: reportUpload?.endTime,
+                      minDateTime: UIUtils.getMaxDateTime(
+                          reportUpload?.startTime, minStartTime),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(

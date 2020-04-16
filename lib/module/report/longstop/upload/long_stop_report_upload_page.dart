@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/module/common/config/system_config_bloc.dart';
+import 'package:pollution_source/module/common/config/system_config_event.dart';
+import 'package:pollution_source/module/common/config/system_config_repository.dart';
+import 'package:pollution_source/module/common/config/system_config_state.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -16,6 +21,7 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 class LongStopReportUploadPage extends StatefulWidget {
@@ -31,7 +37,9 @@ class LongStopReportUploadPage extends StatefulWidget {
 class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
   PageBloc _pageBloc;
   UploadBloc _uploadBloc;
+  SystemConfigBloc _stopAdvanceTimeBloc;
   TextEditingController _remarkController;
+  DateTime minStartTime = DateTime.now().add(Duration(hours: -48));
 
   /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
   Enter defaultEnter;
@@ -48,6 +56,11 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
     _pageBloc.add(PageLoad(model: LongStopReportUpload(enter: defaultEnter)));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
+    _stopAdvanceTimeBloc = SystemConfigBloc(
+        systemConfigRepository:
+        SystemConfigRepository(HttpApi.reportStopAdvanceTime));
+    // 加载异常申报开始时间最多滞后的小时数
+    _stopAdvanceTimeBloc.add(SystemConfigLoad());
     _remarkController = TextEditingController();
   }
 
@@ -55,6 +68,8 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
   void dispose() {
     // 释放资源
     _remarkController.dispose();
+    if (_stopAdvanceTimeBloc?.state is SystemConfigLoading)
+      (_stopAdvanceTimeBloc?.state as SystemConfigLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -82,6 +97,19 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                     //提交成功后重置界面
                     _remarkController.text = '';
                     _pageBloc.add(PageLoad(model: LongStopReportUpload()));
+                  }
+                },
+              ),
+              BlocListener<SystemConfigBloc, SystemConfigState>(
+                bloc: _stopAdvanceTimeBloc,
+                listener: (context, state) {
+                  if (state is SystemConfigLoaded) {
+                    // 设置最小开始时间
+                    minStartTime = DateTime.now().add(Duration(
+                        hours: -int.parse(
+                            (_stopAdvanceTimeBloc?.state as SystemConfigLoaded)
+                                .systemConfig
+                                .value)));
                   }
                 },
               ),
@@ -141,6 +169,8 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
+                      initialDateTime: reportUpload?.startTime,
+                      minDateTime: minStartTime,
                       maxDateTime: reportUpload?.endTime,
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
@@ -164,7 +194,9 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
-                      minDateTime: reportUpload?.startTime,
+                      initialDateTime: reportUpload?.endTime,
+                      minDateTime: UIUtils.getMaxDateTime(
+                          reportUpload?.startTime, minStartTime),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(
