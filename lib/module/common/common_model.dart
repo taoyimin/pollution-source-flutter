@@ -91,7 +91,7 @@ class Attachment extends Equatable {
       return "assets/images/icon_attachment_doc.png";
     } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
       return "assets/images/icon_attachment_xls.png";
-    } else if (fileName.endsWith('.pdf')) {
+    } else if (fileName.endsWith('.pdf') || fileName.endsWith('.PDF')) {
       return "assets/images/icon_attachment_pdf.png";
     } else {
       return "assets/images/icon_attachment_other.png";
