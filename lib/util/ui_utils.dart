@@ -120,39 +120,51 @@ class UIUtils {
 
   /// 判断String是否是数字
   static bool isNumeric(String str) {
-    if(str == null) {
+    if (str == null) {
       return false;
     }
     return double.tryParse(str) != null;
   }
 
-  static Color getAlarmFlagColor(String alarmFlag){
+  static Color getAlarmFlagColor(String alarmFlag) {
     switch (alarmFlag) {
       case '0':
-      // 正常
+        // 正常
         return Colors.black;
       case '1':
-      // 预警
-      // return Color.fromRGBO(241, 190, 67, 1);
+        // 预警
+        // return Color.fromRGBO(241, 190, 67, 1);
         return Colors.orangeAccent;
       case '2':
-      // 超标
-      // return Color.fromRGBO(233, 119, 111, 1);
+        // 超标
+        // return Color.fromRGBO(233, 119, 111, 1);
         return Colors.red;
       case '3':
-      // 负值（原极小值）
-      // return Color.fromRGBO(0, 188, 212, 1);
+        // 负值（原极小值）
+        // return Color.fromRGBO(0, 188, 212, 1);
         return Colors.red;
       case '4':
-      // 超大值（原极大值）
-      // return Color.fromRGBO(255, 87, 34, 1);
+        // 超大值（原极大值）
+        // return Color.fromRGBO(255, 87, 34, 1);
         return Colors.red;
       case '5':
-      // 零值
-      // return Color.fromRGBO(106, 106, 255, 1);
+        // 零值
+        // return Color.fromRGBO(106, 106, 255, 1);
         return Colors.red;
       default:
         return Colors.black;
     }
+  }
+
+  /// 获取两个时间中更小的时间
+  static DateTime getMaxDateTime(DateTime dateTime1, DateTime dateTime2) {
+    if (dateTime1 == null)
+      return dateTime2;
+    else if (dateTime2 == null)
+      return dateTime1;
+    else if (dateTime1.isAfter(dateTime2))
+      return dateTime1;
+    else
+      return dateTime2;
   }
 }
