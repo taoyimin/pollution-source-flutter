@@ -312,3 +312,28 @@ class DataDict extends Equatable {
 
   Map<String, dynamic> toJson() => _$DataDictToJson(this);
 }
+
+/// 系统配置类
+@JsonSerializable()
+class SystemConfig extends Equatable {
+  @JsonKey(name: 'dicDesc')
+  final String desc;
+  @JsonKey(name: 'dicValue')
+  final String value;
+
+  const SystemConfig({
+    @required this.desc,
+    @required this.value,
+  });
+
+  @override
+  List<Object> get props => [
+    desc,
+    value,
+  ];
+
+  factory SystemConfig.fromJson(Map<String, dynamic> json) =>
+      _$SystemConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SystemConfigToJson(this);
+}

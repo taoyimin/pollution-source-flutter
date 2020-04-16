@@ -55,3 +55,11 @@ DataDict _$DataDictFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$DataDictToJson(DataDict instance) =>
     <String, dynamic>{'dicSubCode': instance.code, 'dicSubName': instance.name};
+
+SystemConfig _$SystemConfigFromJson(Map<String, dynamic> json) {
+  return SystemConfig(
+      desc: json['dicDesc'] as String, value: json['dicValue'] as String);
+}
+
+Map<String, dynamic> _$SystemConfigToJson(SystemConfig instance) =>
+    <String, dynamic>{'dicDesc': instance.desc, 'dicValue': instance.value};
