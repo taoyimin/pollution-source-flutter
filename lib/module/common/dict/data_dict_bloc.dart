@@ -22,7 +22,8 @@ class DataDictBloc extends Bloc<DataDictEvent, DataDictState> {
     } else if (event is DataDictReset) {
       yield DataDictInitial();
     } else if (event is DataDictUpdate) {
-      yield DataDictLoaded(dataDictList: event.dataDictList, timeStamp: event.timeStamp);
+      yield DataDictLoaded(
+          dataDictList: event.dataDictList, timeStamp: event.timeStamp);
     }
   }
 
@@ -31,8 +32,10 @@ class DataDictBloc extends Bloc<DataDictEvent, DataDictState> {
     try {
       CancelToken cancelToken = CancelToken();
       yield DataDictLoading(cancelToken: cancelToken);
-      final dataDictList =
-          await dataDictRepository.request(params: event.params);
+      final dataDictList = await dataDictRepository.request(
+        params: event.params,
+        cancelToken: cancelToken,
+      );
       yield DataDictLoaded(dataDictList: dataDictList);
     } catch (e) {
       yield DataDictError(message: ExceptionHandle.handleException(e).msg);
