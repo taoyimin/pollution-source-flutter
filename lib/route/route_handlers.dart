@@ -158,6 +158,7 @@ var monitorListHandler = Handler(
   String dischargeId = params['dischargeId']?.first ?? '';
   int type = int.parse(params['type']?.first ?? '0');
   String state = params['state']?.first ?? '';
+  String outType = params['outType']?.first ?? '';
   String monitorType = params['monitorType']?.first ?? '';
   // 默认取当前登录用户的关注程度
   String attentionLevel = params['attentionLevel']?.first ??
@@ -170,6 +171,7 @@ var monitorListHandler = Handler(
       dischargeId: dischargeId,
       type: type,
       state: state,
+      outType: outType,
       monitorType: monitorType,
       attentionLevel: attentionLevel,
     ),

@@ -32,6 +32,7 @@ class MonitorListPage extends StatefulWidget {
   final String dischargeId;
   final String monitorType;
   final String state;
+  final String outType;
   final String attentionLevel;
   final int type; //页面启动类型 0：点击列表项查看详情 1：点击列表项携带数据返回上一层
 
@@ -40,6 +41,7 @@ class MonitorListPage extends StatefulWidget {
     this.dischargeId = '',
     this.monitorType = '',
     this.state = '',
+    this.outType = '',
     this.attentionLevel = '',
     this.type = 0,
   });
@@ -78,11 +80,17 @@ class _MonitorListPageState extends State<MonitorListPage> {
     dataDictRepository: DataDictRepository(HttpApi.monitorState),
   );
 
+  /// 排放类型Bloc
+  final DataDictBloc _outTypeBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.outType),
+  );
+
   /// 关注程度Bloc
   final DataDictBloc _attentionLevelBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
   );
   String _state;
+  String _outType;
   String _monitorType;
   String _attentionLevel;
   int _currentPage = Constant.defaultCurrentPage;
@@ -98,6 +106,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
     _monitorTypeBloc.add(DataDictLoad());
     // 加载监控点状态
     _stateBloc.add(DataDictLoad());
+    // 加载排放类型
+    _outTypeBloc.add(DataDictLoad());
     // 加载关注程度
     if (_showAttentionLevel) _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
@@ -122,6 +132,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
     _enterNameController.text = '';
     _monitorType = widget.monitorType;
     _state = MonitorListRepository.convertState(widget.state);
+    _outType = widget.outType;
     _attentionLevel = widget.attentionLevel;
   }
 
@@ -136,6 +147,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
       areaCode: _areaCode,
       monitorType: _monitorType,
       state: _state,
+      outType: _outType,
       attentionLevel: _attentionLevel,
     );
   }
@@ -391,6 +403,22 @@ class _MonitorListPageState extends State<MonitorListPage> {
                         onItemTap: (value) {
                           setState(() {
                             _state = value;
+                          });
+                        },
+                      ),
+                      const Text(
+                        '排放类型',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictBlocGrid(
+                        checkValue: _outType,
+                        dataDictBloc: _outTypeBloc,
+                        onItemTap: (value) {
+                          setState(() {
+                            _outType = value;
                           });
                         },
                       ),

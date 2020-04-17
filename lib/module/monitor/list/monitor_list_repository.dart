@@ -22,6 +22,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
   /// [dischargeId] 筛选某排口的所有监控点
   /// [monitorType] 监控点类型 outletType1：雨水 outletType2：废水 outletType3：废气
   /// [state] 监控点状态 all：全部 online：在线 warn：预警 outrange：超标 negativeValue：负值 ultraUpperlimit：超大值 6：零值 offline：脱机 stopline：异常申报
+  /// [outType] 排放类型
   /// [attentionLevel] 关注程度 0:非重点 1:重点
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
@@ -32,6 +33,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
     dischargeId = '',
     monitorType = '',
     state = '',
+    outType = '',
     attentionLevel = '',
   }) {
     return {
@@ -46,6 +48,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
       'outId': dischargeId,
       'monitorType': monitorType,
       'state': state,
+      'outType': outType,
       'attentionLevel': attentionLevel,
     };
   }
