@@ -35,7 +35,6 @@ import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
-import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 
 class FactorReportUploadPage extends StatefulWidget {
   final String enterId;
@@ -64,24 +63,24 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     // 初始化defaultEnter
     if (!TextUtil.isEmpty(widget.enterId))
       defaultEnter = Enter(enterId: int.parse(widget.enterId));
-    //初始化Bloc
+    // 初始化Bloc
     _pageBloc = BlocProvider.of<PageBloc>(context);
     _pageBloc.add(PageLoad(
         model: FactorReportUpload(
-            enter: defaultEnter, factorCode: List<DataDict>())));
+            enter: defaultEnter, factorCodeList: List<DataDict>())));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    //初始化异常类型Bloc
+    // 初始化异常类型Bloc
     _alarmTypeBloc = DataDictBloc(
         dataDictRepository: DataDictRepository(HttpApi.factorReportAlarmType));
-    //加载异常类型
+    // 加载异常类型
     _alarmTypeBloc.add(DataDictLoad());
-    //初始化异常因子Bloc
+    // 初始化异常因子Bloc
     _factorCodeBloc = DataDictBloc(
         dataDictRepository:
             FactorDataDictRepository(HttpApi.factorReportFactorList));
     _stopAdvanceTimeBloc = SystemConfigBloc(
         systemConfigRepository:
-        SystemConfigRepository(HttpApi.reportStopAdvanceTime));
+            SystemConfigRepository(HttpApi.reportStopAdvanceTime));
     // 加载异常申报开始时间最多滞后的小时数
     _stopAdvanceTimeBloc.add(SystemConfigLoad());
     _exceptionReasonController = TextEditingController();
@@ -126,8 +125,13 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                     //提交成功后重置界面
                     _exceptionReasonController.text = '';
                     _pageBloc.add(PageLoad(
-                        model:
-                            FactorReportUpload(factorCode: List<DataDict>())));
+                      model: FactorReportUpload(
+                        alarmTypeList: List<DataDict>(),
+                        factorCodeList: List<DataDict>(),
+                      ),
+                    ));
+                    // 将异常类型选择控件的状态重置为初始状态
+                    _alarmTypeBloc.add(DataDictReset());
                     // 将异常因子选择控件的状态重置为初始状态
                     _factorCodeBloc.add(DataDictReset());
                   }
@@ -187,10 +191,10 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                           PageLoad(
                             model: FactorReportUpload(
                               enter: enter,
-                              alarmType: reportUpload?.alarmType,
+                              alarmTypeList: reportUpload?.alarmTypeList,
                               startTime: reportUpload?.startTime,
                               endTime: reportUpload?.endTime,
-                              factorCode: List<DataDict>(),
+                              factorCodeList: List<DataDict>(),
                               attachments: reportUpload?.attachments,
                             ),
                           ),
@@ -226,7 +230,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                           PageLoad(
                             model: reportUpload.copyWith(
                               monitor: monitor,
-                              factorCode: <DataDict>[],
+                              factorCodeList: <DataDict>[],
                             ),
                           ),
                         );
@@ -241,22 +245,96 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-                DataDictWidget(
+//                DataDictWidget(
+//                  title: '异常类型',
+//                  content: reportUpload?.alarmType?.name,
+//                  dataDictBloc: _alarmTypeBloc,
+//                  onSelected: (DataDict result) {
+//                    _pageBloc.add(
+//                      PageLoad(
+//                        model: reportUpload.copyWith(alarmType: result),
+//                      ),
+//                    );
+//                  },
+//                ),
+                SelectRowWidget(
                   title: '异常类型',
-                  content: reportUpload?.alarmType?.name,
-                  dataDictBloc: _alarmTypeBloc,
-                  onSelected: (DataDict result) {
-                    _pageBloc.add(
-                      PageLoad(
-                        model: reportUpload.copyWith(alarmType: result),
-                      ),
+                  content: reportUpload?.alarmTypeList
+                      ?.map((dataDict) => dataDict.name)
+                      ?.join(','),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      elevation: 20,
+                      backgroundColor: Colors.white,
+                      builder: (BuildContext context) {
+                        return BlocBuilder<DataDictBloc, DataDictState>(
+                          bloc: _alarmTypeBloc,
+                          builder: (context, state) {
+                            if (state is DataDictLoaded) {
+                              return _buildBottomSheet(
+                                dataDictList: state.dataDictList,
+                                onItemTap: (dataDict) {
+                                  state.dataDictList[state.dataDictList
+                                          .indexOf(dataDict)] =
+                                      dataDict.copyWith(
+                                          checked: !dataDict.checked);
+                                  _alarmTypeBloc.add(DataDictUpdate(
+                                      dataDictList: state.dataDictList,
+                                      timeStamp: DateTime.now()
+                                          .millisecondsSinceEpoch));
+                                  _pageBloc.add(
+                                    PageLoad(
+                                      model: reportUpload.copyWith(
+                                          alarmTypeList: state.dataDictList
+                                              .where((dataDict) {
+                                        return dataDict.checked;
+                                      }).toList()),
+                                    ),
+                                  );
+                                },
+                                onResetTap: () {
+                                  _factorCodeBloc.add(DataDictUpdate(
+                                    dataDictList:
+                                        state.dataDictList.map((dataDict) {
+                                      return dataDict.copyWith(checked: false);
+                                    }).toList(),
+                                    timeStamp:
+                                        DateTime.now().millisecondsSinceEpoch,
+                                  ));
+                                  _pageBloc.add(
+                                    PageLoad(
+                                      model: reportUpload
+                                          .copyWith(factorCodeList: []),
+                                    ),
+                                  );
+                                },
+                              );
+                            } else if (state is DataDictLoading) {
+                              return _buildLoadingBottomSheet();
+                            } else if (state is DataDictError) {
+                              return _buildErrorBottomSheet(
+                                message: state.message,
+                                tip: '异常类型加载失败，请重试！',
+                                onReLoadTap: () {
+                                  // 重新加载
+                                  _alarmTypeBloc.add(DataDictLoad());
+                                },
+                              );
+                            } else {
+                              return MessageWidget(
+                                  message: 'BlocBuilder监听到未知的的状态！state=$state');
+                            }
+                          },
+                        );
+                      },
                     );
                   },
                 ),
                 Gaps.hLine,
                 SelectRowWidget(
                   title: '异常因子',
-                  content: reportUpload?.factorCode
+                  content: reportUpload?.factorCodeList
                       ?.map((dataDict) => dataDict.name)
                       ?.join(','),
                   onTap: () {
@@ -283,12 +361,60 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                             builder: (context, state) {
                               if (state is DataDictLoaded) {
                                 return _buildBottomSheet(
-                                    reportUpload, state.dataDictList);
-                              }else if (state is DataDictLoading) {
+                                  dataDictList: state.dataDictList,
+                                  onItemTap: (dataDict) {
+                                    state.dataDictList[state.dataDictList
+                                            .indexOf(dataDict)] =
+                                        dataDict.copyWith(
+                                            checked: !dataDict.checked);
+                                    _factorCodeBloc.add(DataDictUpdate(
+                                        dataDictList: state.dataDictList,
+                                        timeStamp: DateTime.now()
+                                            .millisecondsSinceEpoch));
+                                    _pageBloc.add(
+                                      PageLoad(
+                                        model: reportUpload.copyWith(
+                                            factorCodeList: state.dataDictList
+                                                .where((dataDict) {
+                                          return dataDict.checked;
+                                        }).toList()),
+                                      ),
+                                    );
+                                  },
+                                  onResetTap: () {
+                                    _factorCodeBloc.add(DataDictUpdate(
+                                      dataDictList:
+                                          state.dataDictList.map((dataDict) {
+                                        return dataDict.copyWith(
+                                            checked: false);
+                                      }).toList(),
+                                      timeStamp:
+                                          DateTime.now().millisecondsSinceEpoch,
+                                    ));
+                                    _pageBloc.add(
+                                      PageLoad(
+                                        model: reportUpload
+                                            .copyWith(factorCodeList: []),
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else if (state is DataDictLoading) {
                                 return _buildLoadingBottomSheet();
                               } else if (state is DataDictError) {
                                 return _buildErrorBottomSheet(
-                                    reportUpload, state.message);
+                                  message: state.message,
+                                  tip: '异常因子加载失败，请重试！',
+                                  onReLoadTap: () {
+                                    // 运维系统用monitorId查，污染源系统用monitorType查
+                                    _factorCodeBloc.add(DataDictLoad(params: {
+                                      'monitorType':
+                                          reportUpload.monitor.monitorType,
+                                      'monitorId':
+                                          reportUpload.monitor.monitorId
+                                    }));
+                                  },
+                                );
                               } else {
                                 return MessageWidget(
                                     message:
@@ -431,8 +557,12 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     );
   }
 
-  Widget _buildBottomSheet(
-      FactorReportUpload reportUpload, List<DataDict> dataDictList) {
+  Widget _buildBottomSheet({
+    FactorReportUpload reportUpload,
+    List<DataDict> dataDictList,
+    BottomSheetItemTap onItemTap,
+    GestureTapCallback onResetTap,
+  }) {
     return Container(
       width: double.infinity,
       color: Colors.white,
@@ -444,19 +574,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             children: <Widget>[
               Gaps.hGap10,
               GestureDetector(
-                onTap: () {
-                  _factorCodeBloc.add(DataDictUpdate(
-                    dataDictList: dataDictList.map((dataDict) {
-                      return dataDict.copyWith(checked: false);
-                    }).toList(),
-                    timeStamp: DateTime.now().millisecondsSinceEpoch,
-                  ));
-                  _pageBloc.add(
-                    PageLoad(
-                      model: reportUpload.copyWith(factorCode: []),
-                    ),
-                  );
-                },
+                onTap: onResetTap,
                 child: const Text(
                   '重置',
                   style: TextStyle(
@@ -488,19 +606,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             children: dataDictList.map((dataDict) {
               return InkWell(
                 onTap: () {
-                  dataDictList[dataDictList.indexOf(dataDict)] =
-                      dataDict.copyWith(checked: !dataDict.checked);
-                  _factorCodeBloc.add(DataDictUpdate(
-                      dataDictList: dataDictList,
-                      timeStamp: DateTime.now().millisecondsSinceEpoch));
-                  _pageBloc.add(
-                    PageLoad(
-                      model: reportUpload.copyWith(
-                          factorCode: dataDictList.where((dataDict) {
-                        return dataDict.checked;
-                      }).toList()),
-                    ),
-                  );
+                  onItemTap(dataDict);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),
@@ -566,8 +672,11 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     );
   }
 
-  Widget _buildErrorBottomSheet(
-      FactorReportUpload reportUpload, String message) {
+  Widget _buildErrorBottomSheet({
+    String message,
+    String tip = '加载失败，请重试！',
+    GestureTapCallback onReLoadTap,
+  }) {
     return Container(
       height: 260,
       padding: EdgeInsets.symmetric(horizontal: 36),
@@ -579,9 +688,9 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
             'assets/images/image_load_error.png',
             height: 100,
           ),
-          const Text(
-            '异常因子加载失败，请重试！',
-            style: TextStyle(fontSize: 14),
+          Text(
+            '$tip',
+            style: const TextStyle(fontSize: 14),
           ),
           Row(
             children: <Widget>[
@@ -644,13 +753,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
               Expanded(
                 flex: 1,
                 child: InkWell(
-                  onTap: () {
-                    // 运维系统用monitorId查，污染源系统用monitorType查
-                    _factorCodeBloc.add(DataDictLoad(params: {
-                      'monitorType': reportUpload.monitor.monitorType,
-                      'monitorId': reportUpload.monitor.monitorId
-                    }));
-                  },
+                  onTap: onReLoadTap,
                   child: Container(
                     height: 36,
                     width: 80,
@@ -680,3 +783,5 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     );
   }
 }
+
+typedef BottomSheetItemTap = void Function(DataDict value);

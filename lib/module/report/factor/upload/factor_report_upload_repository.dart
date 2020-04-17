@@ -12,15 +12,16 @@ class FactorReportUploadRepository
   checkData(FactorReportUpload data) {
     if (data.enter == null)
       throw DioError(error: InvalidParamException('请选择企业'));
-    if(data.monitor == null)
+    if (data.monitor == null)
       throw DioError(error: InvalidParamException('请选择监控点'));
     if (data.monitor.dischargeId == null) {
-      throw DioError(error: InvalidParamException(
-          'monitorId=${data.monitor.monitorId}的监控点没有对应的排口Id'));
+      throw DioError(
+          error: InvalidParamException(
+              'monitorId=${data.monitor.monitorId}的监控点没有对应的排口Id'));
     }
-    if (data.alarmType == null)
+    if (data.alarmTypeList == null || data.alarmTypeList.length == 0)
       throw DioError(error: InvalidParamException('请选择异常类型'));
-    if (data.factorCode.isEmpty)
+    if (data.factorCodeList == null || data.factorCodeList.length == 0)
       throw DioError(error: InvalidParamException('请选择异常因子'));
     if (data.startTime == null)
       throw DioError(error: InvalidParamException('请选择开始时间'));
@@ -43,14 +44,16 @@ class FactorReportUploadRepository
       'monitorId': data.monitor.monitorId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
-      'alarmType': data.alarmType.code,
-      'factorCode': data.factorCode.map((dataDict) => dataDict.code).join(','),
+      'alarmType':
+          data.alarmTypeList.map((dataDict) => dataDict.code).join(','),
+      'factorCode':
+          data.factorCodeList.map((dataDict) => dataDict.code).join(','),
       'exceptionReason': data.exceptionReason,
       "file": await Future.wait(data.attachments?.map((asset) async {
-        ByteData byteData = await asset.getByteData();
-        return MultipartFile.fromBytes(byteData.buffer.asUint8List(),
-            filename: asset.name);
-      })?.toList() ??
+            ByteData byteData = await asset.getByteData();
+            return MultipartFile.fromBytes(byteData.buffer.asUint8List(),
+                filename: asset.name);
+          })?.toList() ??
           [])
     });
   }
