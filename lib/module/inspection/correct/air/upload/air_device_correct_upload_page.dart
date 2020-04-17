@@ -259,14 +259,20 @@ class _AirDeviceCorrectUploadPageState
                   airDeviceCorrectUpload?.correctStartTime,
                   format: 'yyyy-MM-dd HH:mm'),
               onTap: () {
-                DatePicker.showDatePicker(context,
-                    locale: DateTimePickerLocale.zh_cn,
-                    pickerMode: DateTimePickerMode.datetime,
-                    onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                  _pageBloc.add(PageLoad(
-                      model: airDeviceCorrectUpload.copyWith(
-                          correctStartTime: dateTime)));
-                });
+                DatePicker.showDatePicker(
+                  context,
+                  dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
+                  locale: DateTimePickerLocale.zh_cn,
+                  pickerMode: DateTimePickerMode.datetime,
+                  initialDateTime: airDeviceCorrectUpload?.correctStartTime,
+                  maxDateTime: airDeviceCorrectUpload?.correctEndTime,
+                  onClose: () {},
+                  onConfirm: (dateTime, selectedIndex) {
+                    _pageBloc.add(PageLoad(
+                        model: airDeviceCorrectUpload.copyWith(
+                            correctStartTime: dateTime)));
+                  },
+                );
               },
             ),
             Gaps.hLine,
@@ -276,14 +282,20 @@ class _AirDeviceCorrectUploadPageState
                   airDeviceCorrectUpload?.correctEndTime,
                   format: 'yyyy-MM-dd HH:mm'),
               onTap: () {
-                DatePicker.showDatePicker(context,
-                    locale: DateTimePickerLocale.zh_cn,
-                    pickerMode: DateTimePickerMode.datetime,
-                    onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                  _pageBloc.add(PageLoad(
-                      model: airDeviceCorrectUpload.copyWith(
-                          correctEndTime: dateTime)));
-                });
+                DatePicker.showDatePicker(
+                  context,
+                  dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
+                  locale: DateTimePickerLocale.zh_cn,
+                  pickerMode: DateTimePickerMode.datetime,
+                  initialDateTime: airDeviceCorrectUpload?.correctEndTime,
+                  minDateTime: airDeviceCorrectUpload?.correctStartTime,
+                  onClose: () {},
+                  onConfirm: (dateTime, selectedIndex) {
+                    _pageBloc.add(PageLoad(
+                        model: airDeviceCorrectUpload.copyWith(
+                            correctEndTime: dateTime)));
+                  },
+                );
               },
             ),
             Gaps.hLine,

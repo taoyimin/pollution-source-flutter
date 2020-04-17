@@ -376,23 +376,27 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               content: DateUtil.formatDate(list[index]?.currentCheckTime,
                   format: 'MM-dd HH:mm'),
               onTap: () {
-                DatePicker.showDatePicker(context,
-                    locale: DateTimePickerLocale.zh_cn,
-                    pickerMode: DateTimePickerMode.datetime,
-                    onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-                      list[index] =
-                          list[index].copyWith(currentCheckTime: dateTime);
-                      _pageBloc.add(PageLoad(
-                          model: airDeviceCheckUpload.copyWith(
-                              airDeviceCheckRecordList: list)));
-                    });
+                DatePicker.showDatePicker(
+                  context,
+                  dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
+                  locale: DateTimePickerLocale.zh_cn,
+                  pickerMode: DateTimePickerMode.datetime,
+                  initialDateTime: list[index]?.currentCheckTime,
+                  onClose: () {},
+                  onConfirm: (dateTime, selectedIndex) {
+                    list[index] =
+                        list[index].copyWith(currentCheckTime: dateTime);
+                    _pageBloc.add(PageLoad(
+                        model: airDeviceCheckUpload.copyWith(
+                            airDeviceCheckRecordList: list)));
+                  },
+                );
               },
             ),
             EditWidget(
               key: Key('currentCheckResult$index'),
               onChanged: (value) {
-                list[index] =
-                    list[index].copyWith(currentCheckResult: value);
+                list[index] = list[index].copyWith(currentCheckResult: value);
                 _pageBloc.add(PageLoad(
                     model: airDeviceCheckUpload.copyWith(
                         airDeviceCheckRecordList: list)));
@@ -401,8 +405,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
             EditWidget(
               key: Key('currentCheckIsPass$index'),
               onChanged: (value) {
-                list[index] =
-                    list[index].copyWith(currentCheckIsPass: value);
+                list[index] = list[index].copyWith(currentCheckIsPass: value);
                 _pageBloc.add(PageLoad(
                     model: airDeviceCheckUpload.copyWith(
                         airDeviceCheckRecordList: list)));
@@ -430,8 +433,8 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                               Navigator.of(context).pop();
                               airDeviceCheckUpload.airDeviceCheckRecordList
                                   .removeAt(index);
-                              _pageBloc.add(PageLoad(model: airDeviceCheckUpload));
-                              //_pageBloc.add(PageLoad(model: airDeviceCheckUpload.copyWith(airDeviceCheckRecordList: list)));
+                              _pageBloc
+                                  .add(PageLoad(model: airDeviceCheckUpload));
                             },
                             child: const Text("确认"),
                           ),

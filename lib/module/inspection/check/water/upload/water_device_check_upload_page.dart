@@ -249,13 +249,18 @@ class _WaterDeviceCheckUploadPageState
           content: DateUtil.formatDate(list[index]?.currentCheckTime,
               format: 'yyyy-MM-dd HH:mm'),
           onTap: () {
-            DatePicker.showDatePicker(context,
-                locale: DateTimePickerLocale.zh_cn,
-                pickerMode: DateTimePickerMode.datetime,
-                onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-              list[index] = list[index].copyWith(currentCheckTime: dateTime);
-              _pageBloc.add(PageLoad(model: list));
-            });
+            DatePicker.showDatePicker(
+              context,
+              dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
+              locale: DateTimePickerLocale.zh_cn,
+              pickerMode: DateTimePickerMode.datetime,
+              initialDateTime: list[index]?.currentCheckTime,
+              onClose: () {},
+              onConfirm: (dateTime, selectedIndex) {
+                list[index] = list[index].copyWith(currentCheckTime: dateTime);
+                _pageBloc.add(PageLoad(model: list));
+              },
+            );
           },
         ),
         Gaps.hLine,
@@ -299,13 +304,19 @@ class _WaterDeviceCheckUploadPageState
           content: DateUtil.formatDate(list[index]?.currentCorrectTime,
               format: 'yyyy-MM-dd HH:mm'),
           onTap: () {
-            DatePicker.showDatePicker(context,
-                locale: DateTimePickerLocale.zh_cn,
-                pickerMode: DateTimePickerMode.datetime,
-                onClose: () {}, onConfirm: (dateTime, selectedIndex) {
-              list[index] = list[index].copyWith(currentCorrectTime: dateTime);
-              _pageBloc.add(PageLoad(model: list));
-            });
+            DatePicker.showDatePicker(
+              context,
+              dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
+              locale: DateTimePickerLocale.zh_cn,
+              pickerMode: DateTimePickerMode.datetime,
+              initialDateTime: list[index]?.currentCorrectTime,
+              onClose: () {},
+              onConfirm: (dateTime, selectedIndex) {
+                list[index] =
+                    list[index].copyWith(currentCorrectTime: dateTime);
+                _pageBloc.add(PageLoad(model: list));
+              },
+            );
           },
         ),
         Gaps.hLine,
