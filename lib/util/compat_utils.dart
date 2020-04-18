@@ -436,6 +436,8 @@ class CompatUtils {
         return HttpApiJava.monitorList;
       case HttpApi.monitorState:
         return HttpApiJava.monitorState;
+      case HttpApi.outType:
+        return HttpApiJava.outType;
       case HttpApi.monitorDetail:
         return HttpApiJava.monitorDetail;
       case HttpApi.monitorHistoryData:
@@ -568,6 +570,8 @@ class CompatUtils {
         return HttpApiOperation.monitorList;
       case HttpApi.monitorState:
         return HttpApiOperation.monitorState;
+      case HttpApi.outType:
+        return HttpApiOperation.outType;
       case HttpApi.monitorDetail:
         return HttpApiOperation.monitorDetail;
       case HttpApi.monitorHistoryData:
