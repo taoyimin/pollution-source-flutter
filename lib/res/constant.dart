@@ -126,6 +126,9 @@ class Constant {
   /// 存取登录用户类型的key
   static const String spUserType = 'userType';
 
+  /// 存取企业用户的企业ID
+  static const String spEnterId = 'enterId';
+
   /// 存取登录用户token的key
   static const String spToken = 'token';
 
