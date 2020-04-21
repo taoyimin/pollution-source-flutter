@@ -19,6 +19,8 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
       throw DioError(error: InvalidParamException('操作类型为空'));
     if (TextUtil.isEmpty(data.operateDesc))
       throw DioError(error: InvalidParamException('请输入操作描述'));
+    if (data.attachments == null || data.attachments.length == 0)
+      throw DioError(error: InvalidParamException('请选择附件上传'));
   }
 
   @override
