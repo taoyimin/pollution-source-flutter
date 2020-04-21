@@ -39,38 +39,162 @@ class Routes {
     router.notFoundHandler = Handler(
         // ignore: missing_return
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-          print("ROUTE WAS NOT FOUND !!!");
-        });
-    router.define(root, handler: rootHandler,  transitionType: TransitionType.native);
-    router.define(adminHome, handler: adminHomeHandler, transitionType: TransitionType.native);
-    router.define('$enterHome/:id', handler: enterHomeHandler, transitionType: TransitionType.native);
-    router.define(operationHome, handler: operationHomeHandler, transitionType: TransitionType.native);
-    router.define(enterList, handler: enterListHandler, transitionType: TransitionType.native);
-    router.define('$enterDetail/:id', handler: enterDetailHandler, transitionType: TransitionType.native);
-    router.define(dischargeList, handler: dischargeListHandler, transitionType: TransitionType.native);
-    router.define('$dischargeDetail/:id', handler: dischargeDetailHandler, transitionType: TransitionType.native);
-    router.define(monitorList, handler: monitorListHandler, transitionType: TransitionType.native);
-    router.define('$monitorDetail/:id', handler: monitorDetailHandler, transitionType: TransitionType.native);
-    router.define(monitorHistoryData, handler: monitorHistoryDataHandler, transitionType: TransitionType.native);
-    router.define(orderList, handler: orderListHandler, transitionType: TransitionType.native);
-    router.define('$orderDetail/:id', handler: orderDetailHandler, transitionType: TransitionType.native);
-    router.define(dischargeReportList, handler: dischargeReportListHandler, transitionType: TransitionType.native);
-    router.define('$dischargeReportDetail/:id', handler: dischargeReportDetailHandler, transitionType: TransitionType.native);
-    router.define(factorReportList, handler: factorReportListHandler, transitionType: TransitionType.native);
-    router.define('$factorReportDetail/:id', handler: factorReportDetailHandler, transitionType: TransitionType.native);
-    router.define(longStopReportList, handler: longStopReportListHandler, transitionType: TransitionType.native);
-    router.define('$longStopReportDetail/:id', handler: longStopReportDetailHandler, transitionType: TransitionType.native);
-    router.define(dischargeReportUpload, handler: dischargeReportUploadHandler, transitionType: TransitionType.native);
-    router.define(factorReportUpload, handler: factorReportUploadHandler, transitionType: TransitionType.native);
-    router.define(longStopReportUpload, handler: longStopReportUploadHandler, transitionType: TransitionType.native);
-    router.define(licenseList, handler: licenseListHandler, transitionType: TransitionType.native);
-    router.define(routineInspectionList, handler: routineInspectionListHandler, transitionType: TransitionType.native);
-    router.define('$routineInspectionDetail/:id', handler: routineInspectionDetailHandler, transitionType: TransitionType.native);
-    router.define(waterDeviceCheckUpload, handler: waterDeviceCheckUploadHandler, transitionType: TransitionType.native);
-    router.define(airDeviceCheckUpload, handler: airDeviceCheckUploadHandler, transitionType: TransitionType.native);
-    router.define(airDeviceCorrectUpload, handler: airDeviceCorrectUploadHandler, transitionType: TransitionType.native);
-    router.define(waterDeviceParamUpload, handler: waterDeviceParamUploadHandler, transitionType: TransitionType.native);
-    router.define(changePassword, handler: changePasswordHandler, transitionType: TransitionType.native);
-    router.define(shareProduct, handler: shareProductHandler, transitionType: TransitionType.native);
+      print("ROUTE WAS NOT FOUND !!!");
+    });
+    router.define(
+      root,
+      handler: rootHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      adminHome,
+      handler: adminHomeHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$enterHome/:id',
+      handler: enterHomeHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      operationHome,
+      handler: operationHomeHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      enterList,
+      handler: enterListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$enterDetail/:id',
+      handler: enterDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      dischargeList,
+      handler: dischargeListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$dischargeDetail/:id',
+      handler: dischargeDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      monitorList,
+      handler: monitorListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$monitorDetail/:id',
+      handler: monitorDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      monitorHistoryData,
+      handler: monitorHistoryDataHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      orderList,
+      handler: orderListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$orderDetail/:id',
+      handler: orderDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      dischargeReportList,
+      handler: dischargeReportListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$dischargeReportDetail/:id',
+      handler: dischargeReportDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      factorReportList,
+      handler: factorReportListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$factorReportDetail/:id',
+      handler: factorReportDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      longStopReportList,
+      handler: longStopReportListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$longStopReportDetail/:id',
+      handler: longStopReportDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      dischargeReportUpload,
+      handler: dischargeReportUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      factorReportUpload,
+      handler: factorReportUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      longStopReportUpload,
+      handler: longStopReportUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      licenseList,
+      handler: licenseListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      routineInspectionList,
+      handler: routineInspectionListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$routineInspectionDetail/:id',
+      handler: routineInspectionDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      waterDeviceCheckUpload,
+      handler: waterDeviceCheckUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      airDeviceCheckUpload,
+      handler: airDeviceCheckUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      airDeviceCorrectUpload,
+      handler: airDeviceCorrectUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      waterDeviceParamUpload,
+      handler: waterDeviceParamUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      changePassword,
+      handler: changePasswordHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      shareProduct,
+      handler: shareProductHandler,
+      transitionType: TransitionType.native,
+    );
   }
 }
