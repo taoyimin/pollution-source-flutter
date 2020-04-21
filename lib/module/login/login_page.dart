@@ -89,7 +89,8 @@ class _LoginPageState extends State<LoginPage> {
       SpUtil.putInt(Constant.spUserType, _userType);
       SpUtil.putString(
           Constant.spRealName, CompatUtils.getResponseRealName(response));
-      SpUtil.putString(Constant.spAttentionLevel, CompatUtils.getResponseAttentionLevel(response));
+      SpUtil.putString(Constant.spAttentionLevel,
+          CompatUtils.getResponseAttentionLevel(response));
       SpUtil.putString(Constant.spLoginTime, DateUtil.getDateStrByDateTime(
           DateTime.now(), format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE));
       SpUtil.putString(
@@ -106,9 +107,11 @@ class _LoginPageState extends State<LoginPage> {
               context, '${Routes.adminHome}', clearStack: true);
           break;
         case 1:
+          int enterId = CompatUtils.getResponseEnterId(response);
+          SpUtil.putInt(Constant.spEnterId, enterId);
           Application.router.navigateTo(context,
-              '${Routes.enterHome}/${CompatUtils.getResponseEnterId(response)}',
-              clearStack: true);
+            '${Routes.enterHome}/$enterId',
+            clearStack: true);
           break;
         case 2:
           Application.router.navigateTo(
