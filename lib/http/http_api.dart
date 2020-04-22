@@ -48,6 +48,9 @@ enum HttpApi {
   /// 监控点历史数据
   monitorHistoryData,
 
+  /// 监控点统计
+  monitorStatistics,
+
   /// 报警管理单列表
   orderList,
 
@@ -166,6 +169,7 @@ class HttpApiJava {
   static const String monitorDetail =
       'tDisChargeOut/getDrainInfoById?monitorId=';
   static const String monitorHistoryData = 'monitorRealData/queryDetailHistory';
+  static const String monitorStatistics = 'appIndex/getMonitorStatistics';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
   static const String orderAlarmType =
       'dictionary/getSubListByParent?dicCode=alarm_type';
@@ -247,6 +251,7 @@ class HttpApiOperation {
       'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
   static const String monitorHistoryData =
       'pollutantsource/tMonitorRealDataView/queryDetailHistoryAPI';
+  static const String monitorStatistics = '暂无';
   static const String orderList = 'commonSupervise/list';
   static const String orderAlarmType =
       'dictionary/getSubListAPI?dicCode=alarm_type';
