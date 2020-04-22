@@ -5,10 +5,11 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/common/config/system_config_bloc.dart';
-import 'package:pollution_source/module/common/config/system_config_event.dart';
-import 'package:pollution_source/module/common/config/system_config_repository.dart';
-import 'package:pollution_source/module/common/config/system_config_state.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_model.dart';
+import 'package:pollution_source/module/common/dict/data_dict_state.dart';
+import 'package:pollution_source/module/common/dict/system/system_config_repository.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -18,6 +19,7 @@ import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -37,9 +39,10 @@ class LongStopReportUploadPage extends StatefulWidget {
 class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
   PageBloc _pageBloc;
   UploadBloc _uploadBloc;
-  SystemConfigBloc _stopAdvanceTimeBloc;
+  DataDictBloc _stopAdvanceTimeBloc;
   TextEditingController _remarkController;
-  DateTime minStartTime = DateTime.now().add(Duration(hours: -48));
+  DateTime minStartTime =
+      DateTime.now().add(Duration(hours: -Constant.defaultStopAdvanceTime));
 
   /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
   Enter defaultEnter;
@@ -56,11 +59,11 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
     _pageBloc.add(PageLoad(model: LongStopReportUpload(enter: defaultEnter)));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    _stopAdvanceTimeBloc = SystemConfigBloc(
-        systemConfigRepository:
-        SystemConfigRepository(HttpApi.reportStopAdvanceTime));
+    _stopAdvanceTimeBloc = DataDictBloc(
+        dataDictRepository:
+            SystemConfigRepository(HttpApi.reportStopAdvanceTime));
     // 加载异常申报开始时间最多滞后的小时数
-    _stopAdvanceTimeBloc.add(SystemConfigLoad());
+    _stopAdvanceTimeBloc.add(DataDictLoad());
     _remarkController = TextEditingController();
   }
 
@@ -68,8 +71,8 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
   void dispose() {
     // 释放资源
     _remarkController.dispose();
-    if (_stopAdvanceTimeBloc?.state is SystemConfigLoading)
-      (_stopAdvanceTimeBloc?.state as SystemConfigLoading).cancelToken.cancel();
+    if (_stopAdvanceTimeBloc?.state is DataDictLoading)
+      (_stopAdvanceTimeBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -100,16 +103,18 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                   }
                 },
               ),
-              BlocListener<SystemConfigBloc, SystemConfigState>(
+              BlocListener<DataDictBloc, DataDictState>(
                 bloc: _stopAdvanceTimeBloc,
                 listener: (context, state) {
-                  if (state is SystemConfigLoaded) {
-                    // 设置最小开始时间
-                    minStartTime = DateTime.now().add(Duration(
-                        hours: -int.parse(
-                            (_stopAdvanceTimeBloc?.state as SystemConfigLoaded)
-                                .systemConfig
-                                .value)));
+                  if (state is DataDictLoaded) {
+                    List<DataDict> dataDictList =
+                        (_stopAdvanceTimeBloc?.state as DataDictLoaded)
+                            .dataDictList;
+                    if (dataDictList.length != 0) {
+                      // 设置最小开始时间
+                      minStartTime = DateTime.now().add(
+                          Duration(hours: -int.parse(dataDictList[0].code)));
+                    }
                   }
                 },
               ),
@@ -196,7 +201,8 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       pickerMode: DateTimePickerMode.datetime,
                       initialDateTime: reportUpload?.endTime,
                       minDateTime: UIUtils.getMaxDateTime(
-                          reportUpload?.startTime, minStartTime).add(Duration(days: 90)),
+                              reportUpload?.startTime, minStartTime)
+                          .add(Duration(days: 90)),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(

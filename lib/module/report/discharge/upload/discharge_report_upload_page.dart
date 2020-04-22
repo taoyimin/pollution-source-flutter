@@ -6,15 +6,12 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/common/config/system_config_bloc.dart';
-import 'package:pollution_source/module/common/config/system_config_event.dart';
-import 'package:pollution_source/module/common/config/system_config_repository.dart';
-import 'package:pollution_source/module/common/config/system_config_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_state.dart';
+import 'package:pollution_source/module/common/dict/system/system_config_repository.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -25,6 +22,7 @@ import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -47,9 +45,10 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
   PageBloc _pageBloc;
   UploadBloc _uploadBloc;
   DataDictBloc _stopTypeBloc;
-  SystemConfigBloc _stopAdvanceTimeBloc;
+  DataDictBloc _stopAdvanceTimeBloc;
   TextEditingController _stopReasonController;
-  DateTime minStartTime = DateTime.now().add(Duration(hours: -48));
+  DateTime minStartTime =
+      DateTime.now().add(Duration(hours: -Constant.defaultStopAdvanceTime));
 
   /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
   Enter defaultEnter;
@@ -72,11 +71,11 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
             DataDictRepository(HttpApi.dischargeReportStopType));
     // 加载停产类型
     _stopTypeBloc.add(DataDictLoad());
-    _stopAdvanceTimeBloc = SystemConfigBloc(
-        systemConfigRepository:
+    _stopAdvanceTimeBloc = DataDictBloc(
+        dataDictRepository:
             SystemConfigRepository(HttpApi.reportStopAdvanceTime));
     // 加载异常申报开始时间最多滞后的小时数
-    _stopAdvanceTimeBloc.add(SystemConfigLoad());
+    _stopAdvanceTimeBloc.add(DataDictLoad());
     _stopReasonController = TextEditingController();
   }
 
@@ -86,8 +85,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
     _stopReasonController.dispose();
     if (_stopTypeBloc?.state is DataDictLoading)
       (_stopAdvanceTimeBloc?.state as DataDictLoading).cancelToken.cancel();
-    if (_stopAdvanceTimeBloc?.state is SystemConfigLoading)
-      (_stopAdvanceTimeBloc?.state as SystemConfigLoading).cancelToken.cancel();
+    if (_stopAdvanceTimeBloc?.state is DataDictLoading)
+      (_stopAdvanceTimeBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -120,16 +119,18 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   }
                 },
               ),
-              BlocListener<SystemConfigBloc, SystemConfigState>(
+              BlocListener<DataDictBloc, DataDictState>(
                 bloc: _stopAdvanceTimeBloc,
                 listener: (context, state) {
-                  if (state is SystemConfigLoaded) {
-                    // 设置最小开始时间
-                    minStartTime = DateTime.now().add(Duration(
-                        hours: -int.parse(
-                            (_stopAdvanceTimeBloc?.state as SystemConfigLoaded)
-                                .systemConfig
-                                .value)));
+                  if (state is DataDictLoaded) {
+                    List<DataDict> dataDictList =
+                        (_stopAdvanceTimeBloc?.state as DataDictLoaded)
+                            .dataDictList;
+                    if (dataDictList.length != 0) {
+                      // 设置最小开始时间
+                      minStartTime = DateTime.now().add(
+                          Duration(hours: -int.parse(dataDictList[0].code)));
+                    }
                   }
                 },
               ),
