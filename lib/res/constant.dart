@@ -18,6 +18,9 @@ class Constant {
   /// 请求列表时默认每页数据量
   static const int defaultPageSize = 20;
 
+  /// 异常申报开始时间允许的滞后小时数
+  static const int defaultStopAdvanceTime = 48;
+
   /// ****************网络请求用的key***************
   /// Java接口header中token的key
   static const String requestHeaderTokenKey = 'token';
