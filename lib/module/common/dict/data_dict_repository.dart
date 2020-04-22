@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/http_api.dart';
-import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/util/compat_utils.dart';
+
+import 'data_dict_model.dart';
 
 /// 数据字典存储库
 class DataDictRepository {

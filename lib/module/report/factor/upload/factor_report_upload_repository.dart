@@ -29,6 +29,8 @@ class FactorReportUploadRepository
       throw DioError(error: InvalidParamException('请选择结束时间'));
     if (data.exceptionReason.isEmpty)
       throw DioError(error: InvalidParamException('请输入异常原因'));
+    if (data.attachments == null || data.attachments.length == 0)
+      throw DioError(error: InvalidParamException('请选择附件上传'));
   }
 
   @override

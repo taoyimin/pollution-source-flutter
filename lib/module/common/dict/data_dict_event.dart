@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:pollution_source/module/common/common_model.dart';
+
+import 'data_dict_model.dart';
 
 abstract class DataDictEvent extends Equatable {
   const DataDictEvent();

@@ -196,7 +196,7 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       pickerMode: DateTimePickerMode.datetime,
                       initialDateTime: reportUpload?.endTime,
                       minDateTime: UIUtils.getMaxDateTime(
-                          reportUpload?.startTime, minStartTime),
+                          reportUpload?.startTime, minStartTime).add(Duration(days: 90)),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(

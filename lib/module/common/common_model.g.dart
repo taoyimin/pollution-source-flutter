@@ -48,14 +48,6 @@ PointData _$PointDataFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$PointDataToJson(PointData instance) =>
     <String, dynamic>{'x': instance.x, 'y': instance.y};
 
-DataDict _$DataDictFromJson(Map<String, dynamic> json) {
-  return DataDict(
-      code: json['dicSubCode'] as String, name: json['dicSubName'] as String);
-}
-
-Map<String, dynamic> _$DataDictToJson(DataDict instance) =>
-    <String, dynamic>{'dicSubCode': instance.code, 'dicSubName': instance.name};
-
 SystemConfig _$SystemConfigFromJson(Map<String, dynamic> json) {
   return SystemConfig(
       desc: json['dicDesc'] as String, value: json['dicValue'] as String);

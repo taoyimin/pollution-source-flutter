@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:pollution_source/module/common/common_model.dart';
+
+import 'data_dict_model.dart';
 
 abstract class DataDictState extends Equatable {
   const DataDictState();
