@@ -61,6 +61,7 @@ class _DeviceInspectionUploadListPageState
   PersistentBottomSheetController _bottomSheetController;
   IconData _actionIcon = Icons.edit;
   final List<RoutineInspectionUploadList> _selectedList = [];
+  final EasyRefreshController _refreshController = EasyRefreshController();
 
   @override
   void initState() {
@@ -68,7 +69,7 @@ class _DeviceInspectionUploadListPageState
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
-    _listBloc.add(ListLoad(params: getRequestParam()));
+    _listBloc.add(ListLoad(params: _getRequestParam()));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _pageBloc = PageBloc();
     // 首次加载
@@ -93,6 +94,7 @@ class _DeviceInspectionUploadListPageState
   @override
   void dispose() {
     // 释放资源
+    _refreshController.dispose();
     _remarkController.dispose();
     _animateController.dispose();
     // 取消正在进行的请求
@@ -102,7 +104,7 @@ class _DeviceInspectionUploadListPageState
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return RoutineInspectionUploadListRepository.createParams(
       monitorId: widget.monitorId,
       itemInspectType: widget.itemInspectType,
@@ -117,6 +119,7 @@ class _DeviceInspectionUploadListPageState
       backgroundColor: Colors.transparent,
       floatingActionButton: _buildFloatingActionButton(context),
       body: EasyRefresh.custom(
+        controller: _refreshController,
         header: UIUtils.getRefreshClassicalHeader(),
         slivers: <Widget>[
           MultiBlocListener(
@@ -207,20 +210,25 @@ class _DeviceInspectionUploadListPageState
                 } else if (state is ListEmpty) {
                   return EmptySliver(message: '没有任务需要处理');
                 } else if (state is ListError) {
-                  return ErrorSliver(errorMessage: state.message);
+                  return ErrorSliver(
+                    errorMessage: state.message,
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 } else if (state is ListLoaded) {
                   return _buildPageLoadedList(
                       RoutineInspectionUploadList.convert(state.list));
                 } else {
                   return ErrorSliver(
-                      errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 }
               },
             ),
           ),
         ],
         onRefresh: () async {
-          _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+          _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
           return _refreshCompleter.future;
         },
       ),
@@ -407,8 +415,7 @@ class _DeviceInspectionUploadListPageState
                   color: Colours.primary_text,
                   fontSize: 14,
                 ),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
                 checked: true,
                 onTap: () {},
               ),
@@ -491,9 +498,9 @@ class _DeviceInspectionUploadListPageState
                   //发送上传事件
                   _uploadBloc.add(Upload(
                       data: deviceInspectUpload.copyWith(
-                        selectedList: _selectedList,
-                        remark: _remarkController.text,
-                      )));
+                    selectedList: _selectedList,
+                    remark: _remarkController.text,
+                  )));
                 },
               ),
             ],

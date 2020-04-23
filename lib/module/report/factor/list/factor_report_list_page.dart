@@ -58,6 +58,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
   final DataDictBloc _validBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.reportValid),
   );
+
   /// 关注程度Bloc
   final DataDictBloc _attentionLevelBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
@@ -81,7 +82,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
-    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+    _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
 
   @override
@@ -103,7 +104,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return FactorReportListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
@@ -182,7 +183,10 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
                     } else if (state is ListEmpty) {
                       return EmptySliver();
                     } else if (state is ListError) {
-                      return ErrorSliver(errorMessage: state.message);
+                      return ErrorSliver(
+                        errorMessage: state.message,
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     } else if (state is ListLoaded) {
                       if (!state.hasNextPage) {
                         _refreshController.finishLoad(
@@ -191,7 +195,9 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
-                          errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                        errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     }
                   },
                 ),
@@ -203,7 +209,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
               // 刷新事件
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: getRequestParam(),
+                params: _getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
@@ -214,7 +220,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
               else
                 _currentPage = Constant.defaultCurrentPage;
               // 加载事件
-              _listBloc.add(ListLoad(params: getRequestParam()));
+              _listBloc.add(ListLoad(params: _getRequestParam()));
               return _refreshCompleter.future;
             },
           ),

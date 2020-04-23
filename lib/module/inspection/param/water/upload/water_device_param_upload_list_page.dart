@@ -46,6 +46,7 @@ class _WaterDeviceParamUploadListPageState
   /// 用于刷新常规巡检详情（上报成功后刷新header中的数据条数）
   DetailBloc _detailBloc;
   Completer<void> _refreshCompleter;
+  final EasyRefreshController _refreshController = EasyRefreshController();
 
   @override
   void initState() {
@@ -54,19 +55,21 @@ class _WaterDeviceParamUploadListPageState
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
-    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+    _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
 
   @override
   void dispose() {
-    //取消正在进行的请求
+    // 释放资源
+    _refreshController.dispose();
+    // 取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return RoutineInspectionUploadListRepository.createParams(
       monitorId: widget.monitorId,
       itemInspectType: widget.itemInspectType,
@@ -80,6 +83,7 @@ class _WaterDeviceParamUploadListPageState
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: EasyRefresh.custom(
+        controller: _refreshController,
         header: UIUtils.getRefreshClassicalHeader(),
         slivers: <Widget>[
           BlocListener<ListBloc, ListState>(
@@ -103,20 +107,25 @@ class _WaterDeviceParamUploadListPageState
                 } else if (state is ListEmpty) {
                   return EmptySliver(message: '没有任务需要处理');
                 } else if (state is ListError) {
-                  return ErrorSliver(errorMessage: state.message);
+                  return ErrorSliver(
+                    errorMessage: state.message,
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 } else if (state is ListLoaded) {
                   return _buildPageLoadedList(
                       RoutineInspectionUploadList.convert(state.list));
                 } else {
                   return ErrorSliver(
-                      errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 }
               },
             ),
           ),
         ],
         onRefresh: () async {
-          _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+          _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
           return _refreshCompleter.future;
         },
       ),

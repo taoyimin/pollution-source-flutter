@@ -30,15 +30,20 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
   void initState() {
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _detailBloc.add(DetailLoad(detailId: widget.reportId));
+    _loadData();
   }
 
   @override
   void dispose() {
-    //取消正在进行的请求
+    // 取消正在进行的请求
     final currentState = _detailBloc?.state;
     if (currentState is DetailLoading) currentState.cancelToken?.cancel();
     super.dispose();
+  }
+
+  /// 加载数据
+  _loadData() {
+    _detailBloc.add(DetailLoad(detailId: widget.reportId));
   }
 
   @override
@@ -72,12 +77,17 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
               if (state is DetailLoading) {
                 return LoadingSliver();
               } else if (state is DetailError) {
-                return ErrorSliver(errorMessage: state.message);
+                return ErrorSliver(
+                  errorMessage: state.message,
+                  onReloadTap: () => _loadData(),
+                );
               } else if (state is DetailLoaded) {
                 return _buildPageLoadedDetail(state.detail);
               } else {
                 return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                  errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                  onReloadTap: () => _loadData(),
+                );
               }
             },
           ),
@@ -167,7 +177,8 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                               'assets/images/button_bg_lightblue.png',
                           imagePath:
                               'assets/images/image_enter_statistics1.png',
-                          router: '${Routes.enterDetail}/${reportDetail.enterId}',
+                          router:
+                              '${Routes.enterDetail}/${reportDetail.enterId}',
                         ),
                       ),
                       Gaps.hGap10,

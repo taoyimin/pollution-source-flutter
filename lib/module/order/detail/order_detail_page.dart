@@ -61,17 +61,16 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   void initState() {
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    //首次加载
-    _detailBloc.add(DetailLoad(detailId: widget.orderId));
+    _loadData();
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     _pageBloc = PageBloc();
-    //首次加载
+    // 首次加载
     _pageBloc.add(PageLoad(model: ProcessUpload(orderId: widget.orderId)));
-    //初始化编辑框控制器
+    // 初始化编辑框控制器
     _operatePersonController =
         TextEditingController(text: '${SpUtil.getString(Constant.spRealName)}');
     _operateDescController = TextEditingController();
-    //初始化fab颜色渐变动画
+    // 初始化fab颜色渐变动画
     controller = AnimationController(
       duration: Duration(milliseconds: 500),
       vsync: this,
@@ -93,6 +92,11 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     final currentState = _detailBloc?.state;
     if (currentState is DetailLoading) currentState.cancelToken?.cancel();
     super.dispose();
+  }
+
+  /// 加载数据
+  _loadData() {
+    _detailBloc.add(DetailLoad(detailId: widget.orderId));
   }
 
   @override
@@ -176,12 +180,17 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 if (state is DetailLoading) {
                   return LoadingSliver();
                 } else if (state is DetailError) {
-                  return ErrorSliver(errorMessage: state.message);
+                  return ErrorSliver(
+                    errorMessage: state.message,
+                    onReloadTap: () => _loadData(),
+                  );
                 } else if (state is DetailLoaded) {
                   return _buildPageLoadedDetail(state.detail);
                 } else {
                   return ErrorSliver(
-                      errorMessage: 'BlocBuilder监听到未知的的状态!state=$state');
+                    errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                    onReloadTap: () => _loadData(),
+                  );
                 }
               },
             ),

@@ -15,13 +15,11 @@ class IndexLoading extends IndexState {}
 /// 首页加载完成状态
 class IndexLoaded extends IndexState {
   final pollutionEnterStatisticsList;
-  final onlineMonitorStatisticsList;
   final orderStatisticsList;
   final inspectionStatisticsList;
 
   const IndexLoaded({
     @required this.pollutionEnterStatisticsList,
-    @required this.onlineMonitorStatisticsList,
     @required this.orderStatisticsList,
     @required this.inspectionStatisticsList,
   });

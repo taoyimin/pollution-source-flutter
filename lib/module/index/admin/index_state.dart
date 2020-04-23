@@ -18,7 +18,6 @@ class IndexLoaded extends IndexState {
   final aqiExamineList;
   final waterStatisticsList;
   final pollutionEnterStatisticsList;
-  final onlineMonitorStatisticsList;
   final todoTaskStatisticsList;
   final reportStatisticsList;
   final comprehensiveStatisticsList;
@@ -29,7 +28,6 @@ class IndexLoaded extends IndexState {
     @required this.aqiExamineList,
     @required this.waterStatisticsList,
     @required this.pollutionEnterStatisticsList,
-    @required this.onlineMonitorStatisticsList,
     @required this.todoTaskStatisticsList,
     @required this.reportStatisticsList,
     @required this.comprehensiveStatisticsList,

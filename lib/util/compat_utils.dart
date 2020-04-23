@@ -8,7 +8,7 @@ import 'package:pollution_source/res/constant.dart';
 /// 兼容工具类
 ///
 /// 根据不同用户类型和不同配置返回对应的数据
-/// 为了同时兼容污染源系统（Java/Python）和运维系统
+/// 为了同时兼容污染源系统和运维系统
 class CompatUtils {
   /// 根据不同的用户类型返回不同的dio实例
   static Dio getDio() {
@@ -16,11 +16,7 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
-          return JavaDioUtils.instance.getDio();
-        else
-          return PythonDioUtils.instance.getDio();
+        return JavaDioUtils.instance.getDio();
         break;
       case 2:
         //运维用户
@@ -38,12 +34,7 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
-          options.headers[Constant.requestHeaderTokenKey] = accessToken;
-        else
-          options.headers[Constant.requestHeaderAuthorizationKey] =
-              'Bearer $accessToken';
+        options.headers[Constant.requestHeaderTokenKey] = accessToken;
         break;
       case 2:
         // 运维用户
@@ -64,26 +55,11 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户登录后去返回数据中取token
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi)) {
-          if (response.statusCode == ExceptionHandle.success &&
-              response.data[Constant.responseCodeKey] ==
-                  ExceptionHandle.success_code) {
-            return response.data[Constant.responseDataKey]
-                [Constant.responseTokenKey];
-          } else {
-            throw DioError(
-                error: TokenException(
-                    '获取Token失败！response=${response.toString()}'));
-          }
-        } else {
-          if (response.statusCode == ExceptionHandle.success) {
-            return response.data[Constant.responseTokenKey];
-          } else {
-            throw DioError(
-                error: TokenException(
-                    '获取Token失败！response=${response.toString()}'));
-          }
+        if (response.statusCode == ExceptionHandle.success &&
+            response.data[Constant.responseCodeKey] ==
+                ExceptionHandle.success_code) {
+          return response.data[Constant.responseDataKey]
+              [Constant.responseTokenKey];
         }
         break;
       case 2:
@@ -91,16 +67,14 @@ class CompatUtils {
         if (response.data[Constant.responseSuccessKey]) {
           return response.headers.map[Constant.requestHeaderauthorizationKey]
               [0];
-        } else {
-          throw DioError(
-              error:
-                  TokenException('获取Token失败！response=${response.toString()}'));
         }
         break;
       default:
         throw Exception(
             '获取Token失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
+    throw DioError(
+        error: TokenException('获取Token失败！response=${response.toString()}'));
   }
 
   /// 根据不同的用户类型解析json中的realName
@@ -111,42 +85,26 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi)) {
-          if (response.statusCode == ExceptionHandle.success &&
-              response.data[Constant.responseCodeKey] ==
-                  ExceptionHandle.success_code) {
-            return response.data[Constant.responseDataKey]
-                [Constant.responseRealNameKey];
-          } else {
-            throw DioError(
-                error: TokenException(
-                    '获取RealName失败！response=${response.toString()}'));
-          }
-        } else {
-          if (response.statusCode == ExceptionHandle.success) {
-            return response.data[Constant.responseRealNameKey];
-          } else {
-            throw DioError(
-                error: TokenException(
-                    '获取RealName失败！response=${response.toString()}'));
-          }
+        if (response.statusCode == ExceptionHandle.success &&
+            response.data[Constant.responseCodeKey] ==
+                ExceptionHandle.success_code) {
+          return response.data[Constant.responseDataKey]
+              [Constant.responseRealNameKey];
         }
         break;
       case 2:
         // 运维用户
         if (response.data[Constant.responseSuccessKey]) {
-          return response.data[Constant.responseRealNameKey];
-        } else {
-          throw DioError(
-              error: TokenException(
-                  '获取RealName失败！response=${response.toString()}'));
+          return response.data[Constant.responsePrincipalKey]
+              [Constant.responseChineseNameKey];
         }
         break;
       default:
         throw Exception(
             '获取RealName失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
+    throw DioError(
+        error: TokenException('获取RealName失败！response=${response.toString()}'));
   }
 
   /// 根据不同的用户类型解析json中的attentionLevel
@@ -157,26 +115,11 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi)) {
-          if (response.statusCode == ExceptionHandle.success &&
-              response.data[Constant.responseCodeKey] ==
-                  ExceptionHandle.success_code) {
-            return response.data[Constant.responseDataKey]
-                [Constant.responseAttentionLevelKey];
-          } else {
-            throw DioError(
-                error: TokenException(
-                    '获取AttentionLevel失败！response=${response.toString()}'));
-          }
-        } else {
-          if (response.statusCode == ExceptionHandle.success) {
-            return response.data[Constant.responseAttentionLevelKey];
-          } else {
-            throw DioError(
-                error: TokenException(
-                    '获取AttentionLevel失败！response=${response.toString()}'));
-          }
+        if (response.statusCode == ExceptionHandle.success &&
+            response.data[Constant.responseCodeKey] ==
+                ExceptionHandle.success_code) {
+          return response.data[Constant.responseDataKey]
+              [Constant.responseAttentionLevelKey];
         }
         break;
       case 2:
@@ -184,34 +127,45 @@ class CompatUtils {
         if (response.data[Constant.responseSuccessKey]) {
           // 运维用户的关注程度默认就是全部
           return '';
-        } else {
-          throw DioError(
-              error: TokenException(
-                  '获取AttentionLevel失败！response=${response.toString()}'));
         }
         break;
       default:
         throw Exception(
             '获取AttentionLevel失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
+    throw DioError(
+        error: TokenException(
+            '获取AttentionLevel失败！response=${response.toString()}'));
   }
 
-  /// 企业用户登录时，根据不同用户类型解析response中的enterId
-  static getResponseEnterId(response) {
+  /// 用户登录时，根据不同用户类型解析response中的userId
+  static getResponseUserId(response) {
+    if (response == null)
+      throw DioError(error: TokenException('获取UserId失败！response为空！'));
     switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
       case 1:
-        //企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
+        // 环保与企业用户
+        if (response.statusCode == ExceptionHandle.success &&
+            response.data[Constant.responseCodeKey] ==
+                ExceptionHandle.success_code) {
           return response.data[Constant.responseDataKey]
               [Constant.responseIdKey];
-        else
-          return response.data[Constant.responseEnterIdKey];
+        }
+        break;
+      case 2:
+        // 运维用户
+        if (response.data[Constant.responseSuccessKey]) {
+          return response.data[Constant.responsePrincipalKey]
+              [Constant.responseIdKey];
+        }
         break;
       default:
         throw Exception(
-            '获取企业id失败，当前用户不是企业用户！userType=${SpUtil.getInt(Constant.spUserType)}');
+            '获取userId失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
+    throw DioError(
+        error: TokenException('获取UserId失败！response=${response.toString()}'));
   }
 
   /// 根据不同的用户类型解析json中的data（有的数据最外层包了一层code，message，data）
@@ -220,12 +174,7 @@ class CompatUtils {
       case 0:
       case 1:
         // 环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
-          return response.data[Constant.responseDataKey];
-        else
-          return response.data;
-        break;
+        return response.data[Constant.responseDataKey];
       case 2:
         // 如果是List则直接返回
         if (response.data is List<dynamic>)
@@ -245,12 +194,7 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
-          return response.data[Constant.responseMessageKey];
-        else
-          return response.data;
-        break;
+        return response.data[Constant.responseMessageKey];
       case 2:
         if (response.data.containsKey(Constant.responseMsgKey))
           return response.data[Constant.responseMsgKey];
@@ -319,12 +263,7 @@ class CompatUtils {
       case 0:
       case 1:
         // 环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
-          return json[Constant.responseHasNextPageKey];
-        else
-          return json[Constant.responseHasNextKey];
-        break;
+        return json[Constant.responseHasNextPageKey];
       case 2:
         return json[Constant.responseStartKey] +
                 json[Constant.responseLengthKey] <
@@ -341,12 +280,7 @@ class CompatUtils {
       case 0:
       case 1:
         // 环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
-          return json[Constant.responsePageNumKey];
-        else
-          return json[Constant.responseCurrentPageKey];
-        break;
+        return json[Constant.responsePageNumKey];
       case 2:
         // 运维用户（向下取整加1）
         return json[Constant.responseStartKey] ~/
@@ -379,10 +313,10 @@ class CompatUtils {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-      // 环保和企业用户
+        // 环保和企业用户
         return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
       case 2:
-      // 运维用户
+        // 运维用户
         return 'http://111.75.227.207:19550/app/pollution-source.apk';
       default:
         throw Exception(
@@ -396,12 +330,7 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi))
-          return getJavaApi(httpApi);
-        else
-          return getPythonApi(httpApi);
-        break;
+        return getJavaApi(httpApi);
       case 2:
         //运维用户
         return getOperationApi(httpApi);
@@ -492,60 +421,6 @@ class CompatUtils {
         throw DioError(
             type: DioErrorType.DEFAULT,
             error: NotFoundException('HttpApiJava中没有对应的接口'));
-    }
-  }
-
-  /// 根据传入的枚举类型返回对应的Python接口
-  static String getPythonApi(httpApi) {
-    switch (httpApi) {
-      case HttpApi.adminIndex:
-        return HttpApiPython.adminIndex;
-      case HttpApi.adminToken:
-        return HttpApiPython.adminToken;
-      case HttpApi.enterToken:
-        return HttpApiPython.enterToken;
-      case HttpApi.enterList:
-        return HttpApiPython.enterList;
-      case HttpApi.enterDetail:
-        return HttpApiPython.enterDetail;
-      case HttpApi.dischargeList:
-        return HttpApiPython.dischargeList;
-      case HttpApi.dischargeDetail:
-        return HttpApiPython.dischargeDetail;
-      case HttpApi.monitorList:
-        return HttpApiPython.monitorList;
-      case HttpApi.monitorDetail:
-        return HttpApiPython.monitorDetail;
-      case HttpApi.orderList:
-        return HttpApiPython.orderList;
-      case HttpApi.orderDetail:
-        return HttpApiPython.orderDetail;
-      case HttpApi.processesUpload:
-        return HttpApiPython.processesUpload;
-      case HttpApi.dischargeReportList:
-        return HttpApiPython.dischargeReportList;
-      case HttpApi.dischargeReportDetail:
-        return HttpApiPython.dischargeReportDetail;
-      case HttpApi.dischargeReportUpload:
-        return HttpApiPython.dischargeReportUpload;
-      case HttpApi.factorReportList:
-        return HttpApiPython.factorReportList;
-      case HttpApi.factorReportDetail:
-        return HttpApiPython.factorReportDetail;
-      case HttpApi.factorReportUpload:
-        return HttpApiPython.factorReportUpload;
-      case HttpApi.longStopReportList:
-        return HttpApiPython.longStopReportList;
-      case HttpApi.longStopReportDetail:
-        return HttpApiPython.longStopReportDetail;
-      case HttpApi.longStopReportUpload:
-        return HttpApiPython.longStopReportUpload;
-      case HttpApi.licenseList:
-        return HttpApiPython.licenseList;
-      default:
-        throw DioError(
-            type: DioErrorType.DEFAULT,
-            error: NotFoundException('HttpApiPython中没有对应的接口'));
     }
   }
 

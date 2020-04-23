@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:common_utils/common_utils.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
+import 'package:pollution_source/module/common/collection/monitor/monitor_statistics_repository.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
@@ -11,10 +15,10 @@ import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
-import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 
 class EnterIndexPage extends StatefulWidget {
@@ -34,6 +38,11 @@ class _EnterIndexPageState extends State<EnterIndexPage>
   DetailBloc _detailBloc;
   Completer<void> _refreshCompleter;
 
+  /// 监控点统计Bloc
+  final CollectionBloc monitorStatisticsBloc =
+      CollectionBloc(collectionRepository: MonitorStatisticsRepository());
+  final EasyRefreshController _refreshController = EasyRefreshController();
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +53,19 @@ class _EnterIndexPageState extends State<EnterIndexPage>
 
   @override
   void dispose() {
+    // 释放资源
+    _refreshController.dispose();
     super.dispose();
+  }
+
+  /// 获取监控点统计接口请求参数
+  Map<String, dynamic> _getRequestParam() {
+    return MonitorStatisticsRepository.createParams(
+      userType: '2',
+      enterId: widget.enterId,
+      outType: '0',
+      attentionLevel: '${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+    );
   }
 
   @override
@@ -52,6 +73,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
     super.build(context);
     return Scaffold(
       body: EasyRefresh.custom(
+        controller: _refreshController,
         header: SpaceHeader(),
         firstRefresh: true,
         firstRefreshWidget: Gaps.empty,
@@ -74,12 +96,17 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                 if (state is DetailLoading) {
                   return LoadingSliver();
                 } else if (state is DetailError) {
-                  return ErrorSliver(errorMessage: state.message);
+                  return ErrorSliver(
+                    errorMessage: state.message,
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 } else if (state is DetailLoaded) {
                   return _buildPageLoadedDetail(state.detail);
                 } else {
                   return ErrorSliver(
-                      errorMessage: 'BlocBuilder监听到未知的的状态!state=$state');
+                    errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 }
               },
             ),
@@ -87,6 +114,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
         ],
         onRefresh: () async {
           _detailBloc.add(DetailLoad(detailId: widget.enterId));
+          // 加载监控点统计信息
+          monitorStatisticsBloc.add(CollectionLoad(params: _getRequestParam()));
           return _refreshCompleter.future;
         },
       ),
@@ -146,7 +175,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 10,
+              vertical: 10
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,10 +265,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
           ),
           //报警管理单
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -256,7 +282,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         title: '待处理',
                         content: '${enterDetail.orderDealCount ?? ''}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
-                        router: '${Routes.orderList}?enterId=${widget.enterId}&state=2',
+                        router:
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=2',
                       ),
                     ),
                     Gaps.hGap10,
@@ -267,7 +294,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         content: '${enterDetail.orderOverdueCount ?? ''}',
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
-                        router: '${Routes.orderList}?enterId=${widget.enterId}&state=2&alarmLevel=3',
+                        router:
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=2&alarmLevel=3',
                       ),
                     ),
                     Gaps.hGap10,
@@ -277,7 +305,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         title: '已退回',
                         content: '${enterDetail.orderReturnCount ?? ''}',
                         imagePath: 'assets/images/icon_alarm_manage_return.png',
-                        router: '${Routes.orderList}?enterId=${widget.enterId}&state=4',
+                        router:
+                            '${Routes.orderList}?enterId=${widget.enterId}&state=4',
                       ),
                     ),
                   ],
@@ -285,55 +314,6 @@ class _EnterIndexPageState extends State<EnterIndexPage>
               ],
             ),
           ),
-//          Padding(
-//            padding: const EdgeInsets.symmetric(
-//              horizontal: 20,
-//              vertical: 10,
-//            ),
-//            child: Column(
-//              crossAxisAlignment: CrossAxisAlignment.start,
-//              children: <Widget>[
-//                ImageTitleWidget(
-//                  title: '报警管理单',
-//                  imagePath: 'assets/images/icon_alarm_manage.png',
-//                ),
-//                Gaps.vGap10,
-//                Row(
-//                  children: <Widget>[
-//                    InkWellButton5(
-//                      ratio: 1.2,
-//                      onTap: () {
-//                        Application.router.navigateTo(
-//                            context, '${Routes.orderList}?enterId=${widget.enterId}&state=5');
-//                      },
-//                      meta: Meta(
-//                        color: Color(0xFF45C4FF),
-//                        title: '已办结',
-//                        content: '${enterDetail.orderCompleteCount}',
-//                        imagePath:
-//                            'assets/images/icon_alarm_manage_complete.png',
-//                      ),
-//                    ),
-//                    Gaps.hGap10,
-//                    InkWellButton5(
-//                      ratio: 1.2,
-//                      onTap: () {
-//                        Application.router.navigateTo(
-//                            context, '${Routes.orderList}?enterId=${widget.enterId}');
-//                      },
-//                      meta: Meta(
-//                        color: Color(0xFFFFB709),
-//                        title: '全部',
-//                        content: '${enterDetail.orderTotalCount}',
-//                        imagePath: 'assets/images/icon_alarm_manage_all.png',
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ],
-//            ),
-//          ),
-          //异常申报信息
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -352,7 +332,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         content: '${enterDetail.longStopReportTotalCount}',
                         imagePath: 'assets/images/button_image2.png',
                         backgroundPath: 'assets/images/button_bg_lightblue.png',
-                        router: '${Routes.longStopReportList}?enterId=${enterDetail.enterId}&valid=0',
+                        router:
+                            '${Routes.longStopReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                     Gaps.hGap10,
@@ -362,7 +343,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         content: '${enterDetail.dischargeReportTotalCount}',
                         imagePath: 'assets/images/button_image1.png',
                         backgroundPath: 'assets/images/button_bg_green.png',
-                        router: '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}&valid=0',
+                        router:
+                            '${Routes.dischargeReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                     Gaps.hGap10,
@@ -372,7 +354,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         content: '${enterDetail.factorReportTotalCount}',
                         imagePath: 'assets/images/button_image4.png',
                         backgroundPath: 'assets/images/button_bg_pink.png',
-                        router: '${Routes.factorReportList}?enterId=${enterDetail.enterId}&valid=0',
+                        router:
+                            '${Routes.factorReportList}?enterId=${enterDetail.enterId}&valid=0',
                       ),
                     ),
                   ],
@@ -382,111 +365,20 @@ class _EnterIndexPageState extends State<EnterIndexPage>
           ),
           //监控点信息
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ImageTitleWidget(
-                  title: '监控点信息',
-                  imagePath: 'assets/images/icon_monitor_info.png',
-                ),
-                Gaps.vGap10,
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      UIUtils.getBoxShadow(),
-                    ],
-                  ),
-                  child: OnlineMonitorStatisticsGrid(
-                    metaList: [
-                      Meta(
-                        title: '全部',
-                        imagePath: 'assets/images/icon_monitor_all.png',
-                        color: Color.fromRGBO(77, 167, 248, 1),
-                        content: '${enterDetail.monitorTotalCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}',
-                      ),
-                      Meta(
-                        title: '在线',
-                        imagePath: 'assets/images/icon_monitor_online.png',
-                        color: Color.fromRGBO(136, 191, 89, 1),
-                        content: '${enterDetail.monitorOnlineCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=1',
-                      ),
-                      Meta(
-                        title: '预警',
-                        imagePath: 'assets/images/icon_monitor_alarm.png',
-                        color: Color.fromRGBO(241, 190, 67, 1),
-                        content: '${enterDetail.monitorAlarmCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=2',
-                      ),
-                      Meta(
-                        title: '超标',
-                        imagePath: 'assets/images/icon_monitor_over.png',
-                        color: Color.fromRGBO(233, 119, 111, 1),
-                        content: '${enterDetail.monitorOverCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=3',
-                      ),
-                      Meta(
-                        title: '负值',
-                        imagePath:
-                            'assets/images/icon_monitor_negative_value.png',
-                        color: Color.fromRGBO(0, 188, 212, 1),
-                        content: '${enterDetail.monitorNegativeCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=4',
-                      ),
-                      Meta(
-                        title: '超大值',
-                        imagePath: 'assets/images/icon_monitor_large_value.png',
-                        color: Color.fromRGBO(255, 87, 34, 1),
-                        content: '${enterDetail.monitorLargeCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=5',
-                      ),
-                      Meta(
-                        title: '零值',
-                        imagePath: 'assets/images/icon_monitor_zero_value.png',
-                        color: Color.fromRGBO(106, 106, 255, 1),
-                        content: '${enterDetail.monitorZeroCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=6',
-                      ),
-                      Meta(
-                        title: '脱机',
-                        imagePath: 'assets/images/icon_monitor_offline.png',
-                        color: Color.fromRGBO(179, 129, 127, 1),
-                        content: '${enterDetail.monitorOfflineCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=7',
-                      ),
-                      Meta(
-                        title: '异常申报',
-                        imagePath: 'assets/images/icon_monitor_stop.png',
-                        color: Color.fromRGBO(137, 137, 137, 1),
-                        content: '${enterDetail.monitorStopCount}',
-                        router:
-                            '${Routes.monitorList}?enterId=${enterDetail.enterId}&state=8',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: MonitorStatisticsCard(
+              collectionBloc: monitorStatisticsBloc,
+              onReloadTap: () {
+                monitorStatisticsBloc
+                    .add(CollectionLoad(params: _getRequestParam()));
+              },
             ),
           ),
           //排污许可证信息
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 10,
+              vertical: 10
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -503,7 +395,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     color: Colours.background_red,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
-                    router: '${Routes.licenseList}?enterId=${enterDetail.enterId}',
+                    router:
+                        '${Routes.licenseList}?enterId=${enterDetail.enterId}',
                   ),
                 ),
               ],

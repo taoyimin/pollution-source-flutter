@@ -85,43 +85,46 @@ class _LoginPageState extends State<LoginPage> {
         userName: _nameController.text,
         passWord: _passwordController.text,
       );
-      //登录成功
+      // 登录成功
       SpUtil.putInt(Constant.spUserType, _userType);
+      // 储存userId
+      SpUtil.putInt(Constant.spUserId, CompatUtils.getResponseUserId(response));
+      // 储存用户名
       SpUtil.putString(
           Constant.spRealName, CompatUtils.getResponseRealName(response));
       SpUtil.putString(Constant.spAttentionLevel,
           CompatUtils.getResponseAttentionLevel(response));
-      SpUtil.putString(Constant.spLoginTime, DateUtil.getDateStrByDateTime(
-          DateTime.now(), format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE));
+      // 储存登录时间
+      SpUtil.putString(
+          Constant.spLoginTime,
+          DateUtil.getDateStrByDateTime(DateTime.now(),
+              format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE));
+      // 储存账号
       SpUtil.putString(
           Constant.spUsernameList[_userType], _nameController.text);
+      // 存储密码
       SpUtil.putString(
           Constant.spPasswordList[_userType], _passwordController.text);
-      SpUtil.putString(
-          Constant.spPasswordList[_userType], _passwordController.text);
+      // 存储token
       SpUtil.putString(
           Constant.spToken, CompatUtils.getResponseToken(response));
       switch (_userType) {
         case 0:
-          Application.router.navigateTo(
-              context, '${Routes.adminHome}', clearStack: true);
+          Application.router
+              .navigateTo(context, '${Routes.adminHome}', clearStack: true);
           break;
         case 1:
-          int enterId = CompatUtils.getResponseEnterId(response);
-          SpUtil.putInt(Constant.spEnterId, enterId);
           Application.router.navigateTo(context,
-            '${Routes.enterHome}/$enterId',
-            clearStack: true);
+              '${Routes.enterHome}/${SpUtil.getInt(Constant.spUserId)}',
+              clearStack: true);
           break;
         case 2:
-          Application.router.navigateTo(
-              context, '${Routes.operationHome}', clearStack: true);
+          Application.router
+              .navigateTo(context, '${Routes.operationHome}', clearStack: true);
           break;
       }
     } catch (e) {
-      Toast.show(ExceptionHandle
-          .handleException(e)
-          .msg);
+      Toast.show(ExceptionHandle.handleException(e).msg);
     }
   }
 
@@ -130,24 +133,18 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: defaultTargetPlatform == TargetPlatform.iOS
           ? FormKeyboardActions(
-        child: _buildBody(),
-      )
+              child: _buildBody(),
+            )
           : SingleChildScrollView(
-        child: _buildBody(),
-      ),
+              child: _buildBody(),
+            ),
     );
   }
 
   _buildBody() {
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
@@ -159,20 +156,9 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.only(left: 26.0, right: 26.0, top: 50.0),
       child: Column(
         children: <Widget>[
-          GestureDetector(
-            onDoubleTap: () {
-              SpUtil.putBool(
-                  Constant.spUseJavaApi,
-                  !SpUtil.getBool(Constant.spUseJavaApi,
-                      defValue: Constant.defaultUseJavaApi));
-              SpUtil.getBool(Constant.spUseJavaApi)
-                  ? Toast.show('使用Java后台')
-                  : Toast.show('使用Python后台');
-            },
-            child: Image.asset(
-              "assets/images/login_logo.png",
-              height: 200,
-            ),
+          Image.asset(
+            "assets/images/login_logo.png",
+            height: 200,
           ),
           Container(
             margin: EdgeInsets.only(top: 16),

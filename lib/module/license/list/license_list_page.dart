@@ -27,6 +27,7 @@ class LicenseListPage extends StatefulWidget {
 class _LicenseListPageState extends State<LicenseListPage> {
   ListBloc _listBloc;
   int _currentPage = Constant.defaultCurrentPage;
+  final EasyRefreshController _refreshController = EasyRefreshController();
 
   @override
   void initState() {
@@ -34,11 +35,11 @@ class _LicenseListPageState extends State<LicenseListPage> {
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
-    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+    _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return LicenseListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
@@ -48,7 +49,9 @@ class _LicenseListPageState extends State<LicenseListPage> {
 
   @override
   void dispose() {
-    //取消正在进行的请求
+    // 释放资源
+    _refreshController.dispose();
+    // 取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
@@ -58,6 +61,7 @@ class _LicenseListPageState extends State<LicenseListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: EasyRefresh.custom(
+        controller: _refreshController,
         slivers: <Widget>[
           SliverAppBar(
             title: const Text(
@@ -83,12 +87,17 @@ class _LicenseListPageState extends State<LicenseListPage> {
               } else if (state is ListEmpty) {
                 return EmptySliver();
               } else if (state is ListError) {
-                return ErrorSliver(errorMessage: state.message);
+                return ErrorSliver(
+                  errorMessage: state.message,
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
               } else if (state is ListLoaded) {
                 return _buildPageLoadedList(state.list);
               } else {
                 return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                  errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
               }
             },
           ),

@@ -54,11 +54,6 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             await _convertPollutionEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.pollutionEnterStatisticsKey]);
-        // 在线监控点统计
-        List<Meta> onlineMonitorStatisticsList =
-            await _convertOnlineMonitorStatistics(
-                response.data[Constant.responseDataKey]
-                    [Constant.onlineMonitorStatisticsKey]);
         // 代办任务统计
         List<Meta> todoTaskStatisticsList = await _convertTodoTaskStatistics(
             response.data[Constant.responseDataKey]
@@ -81,7 +76,6 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
           aqiExamineList: aqiExamineList,
           waterStatisticsList: waterStatisticsList,
           pollutionEnterStatisticsList: pollutionEnterStatisticsList,
-          onlineMonitorStatisticsList: onlineMonitorStatisticsList,
           todoTaskStatisticsList: todoTaskStatisticsList,
           reportStatisticsList: reportStatisticsList,
           comprehensiveStatisticsList: comprehensiveStatisticsList,
@@ -290,81 +284,6 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         color: Color.fromRGBO(179, 129, 127, 1),
         content: strings[9],
         router: '${Routes.enterList}?enterType=5&attentionLevel=',
-      ),
-    ];
-  }
-}
-
-//格式化在线监控点概况
-Future<List<Meta>> _convertOnlineMonitorStatistics(String string) async {
-  List<String> strings = string.split(',');
-  bool show = strings[0] == '1' ? true : false;
-  if (!show) {
-    return [];
-  } else {
-    return [
-      Meta(
-        title: '全部',
-        imagePath: 'assets/images/icon_monitor_all.png',
-        color: Color.fromRGBO(77, 167, 248, 1),
-        content: strings[1],
-        router: '${Routes.monitorList}',
-      ),
-      Meta(
-        title: '在线',
-        imagePath: 'assets/images/icon_monitor_online.png',
-        color: Color.fromRGBO(136, 191, 89, 1),
-        content: strings[2],
-        router: '${Routes.monitorList}?state=1',
-      ),
-      Meta(
-        title: '预警',
-        imagePath: 'assets/images/icon_monitor_alarm.png',
-        color: Color.fromRGBO(241, 190, 67, 1),
-        content: strings[3],
-        router: '${Routes.monitorList}?state=2',
-      ),
-      Meta(
-        title: '超标',
-        imagePath: 'assets/images/icon_monitor_over.png',
-        color: Color.fromRGBO(233, 119, 111, 1),
-        content: strings[4],
-        router: '${Routes.monitorList}?state=3',
-      ),
-      Meta(
-        title: '负值',
-        imagePath: 'assets/images/icon_monitor_negative_value.png',
-        color: Color.fromRGBO(0, 188, 212, 1),
-        content: strings[5],
-        router: '${Routes.monitorList}?state=4',
-      ),
-      Meta(
-        title: '超大值',
-        imagePath: 'assets/images/icon_monitor_large_value.png',
-        color: Color.fromRGBO(255, 87, 34, 1),
-        content: strings[6],
-        router: '${Routes.monitorList}?state=5',
-      ),
-      Meta(
-        title: '零值',
-        imagePath: 'assets/images/icon_monitor_zero_value.png',
-        color: Color.fromRGBO(106, 106, 255, 1),
-        content: strings[7],
-        router: '${Routes.monitorList}?state=6',
-      ),
-      Meta(
-        title: '脱机',
-        imagePath: 'assets/images/icon_monitor_offline.png',
-        color: Color.fromRGBO(179, 129, 127, 1),
-        content: strings[8],
-        router: '${Routes.monitorList}?state=7',
-      ),
-      Meta(
-        title: '异常申报',
-        imagePath: 'assets/images/icon_monitor_stop.png',
-        color: Color.fromRGBO(137, 137, 137, 1),
-        content: strings[9],
-        router: '${Routes.monitorList}?state=8',
       ),
     ];
   }

@@ -9,8 +9,6 @@ class Constant {
       const bool.fromEnvironment("dart.vm.product");
 
   /// ****************app的一些默认配置***************
-  /// 污染源系统是否默认使用java后台
-  static const bool defaultUseJavaApi = true;
 
   /// 请求列表时默认页数
   static const int defaultCurrentPage = 1;
@@ -22,16 +20,17 @@ class Constant {
   static const int defaultStopAdvanceTime = 48;
 
   /// ****************网络请求用的key***************
-  /// Java接口header中token的key
+  /// 污染源接口header中token的key
   static const String requestHeaderTokenKey = 'token';
 
-  /// Python接口header中token的key
+  /// 运维接口header中token的key
   static const String requestHeaderAuthorizationKey = 'Authorization';
 
   /// 运维登录接口中取token的key
   static const String requestHeaderauthorizationKey = 'authorization';
 
   /// ****************解析接口数据用的key***************
+
   /// 解析返回数据用的key
   static const String responseCodeKey = 'code';
   static const String responseMessageKey = 'message';
@@ -40,17 +39,14 @@ class Constant {
   static const String responseDataKey = 'data';
   static const String responseIdKey = 'id';
   static const String responseEnterIdKey = 'enterId';
+  static const String responsePrincipalKey = 'principal';
 
   /// 解析list用的key
   static const String responseListKey = 'list';
   static const String responseTotalKey = 'total';
   static const String responsePageSizeKey = 'pageSize';
 
-  /// 解析python后台返回的list用这个key
-  static const String responseCurrentPageKey = 'currentPage';
-  static const String responseHasNextKey = 'hasNext';
-
-  /// 解析java后台返回的list用这个key
+  /// 解析污染源后台返回的list用这个key
   static const String responsePageNumKey = 'pageNum';
   static const String responseHasNextPageKey = 'hasNextPage';
 
@@ -62,18 +58,16 @@ class Constant {
   /// 解析返回数据中token用的key
   static const String responseTokenKey = 'token';
 
-  /// 解析返回数据中realName用的key
+  /// 解析污染源返回数据中realName用的key
   static const String responseRealNameKey = 'realName';
+
+  /// 解析运维返回数据中realName用的key
+  static const String responseChineseNameKey = 'chineseName';
 
   /// 解析返回数据中attentionLevel用的key
   static const String responseAttentionLevelKey = 'attentionLevel';
 
   /// *********SharedPreferences存取数据用的key*********
-  /// 存取登录用户名的key
-  //static const String spUsername = 'username';
-
-  /// 存取登录密码的key
-  //static const String spPassword = 'password';
 
   /// 登录接口集合
   static const List<HttpApi> loginApis = [
@@ -129,8 +123,8 @@ class Constant {
   /// 存取登录用户类型的key
   static const String spUserType = 'userType';
 
-  /// 存取企业用户的企业ID
-  static const String spEnterId = 'enterId';
+  /// 存取用户的id
+  static const String spUserId = 'userId';
 
   /// 存取登录用户token的key
   static const String spToken = 'token';
@@ -141,10 +135,8 @@ class Constant {
   /// 存取在线数据图表是否显示数据点的key
   static const String spShowDotData = 'showDotData';
 
-  /// 存取污染源系统是否使用java后台的key
-  static const String spUseJavaApi = 'useJavaApi';
-
   /// *********环保用户首页取数据用的key*********
+
   /// aqi统计
   static const String aqiStatisticsKey = '10';
 

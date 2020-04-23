@@ -1,15 +1,18 @@
 import 'dart:async';
 
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
+import 'package:pollution_source/module/common/collection/monitor/monitor_statistics_repository.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/index/admin/index_page.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/system_utils.dart';
-import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 
 import 'operation_index_bloc.dart';
@@ -30,6 +33,11 @@ class _OperationIndexPageState extends State<OperationIndexPage>
   Completer<void> _refreshCompleter;
   IndexBloc _indexBloc;
 
+  /// 监控点统计Bloc
+  final CollectionBloc monitorStatisticsBloc =
+      CollectionBloc(collectionRepository: MonitorStatisticsRepository());
+  final EasyRefreshController _refreshController = EasyRefreshController();
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +48,19 @@ class _OperationIndexPageState extends State<OperationIndexPage>
 
   @override
   void dispose() {
+    // 释放资源
+    _refreshController.dispose();
     super.dispose();
+  }
+
+  /// 获取监控点统计接口请求参数
+  Map<String, dynamic> _getRequestParam() {
+    return MonitorStatisticsRepository.createParams(
+      userType: '3',
+      userId: '${SpUtil.getInt(Constant.spUserId)}',
+      outType: '0',
+      attentionLevel: '${SpUtil.getString(Constant.spAttentionLevel)}',
+    );
   }
 
   @override
@@ -48,6 +68,7 @@ class _OperationIndexPageState extends State<OperationIndexPage>
     super.build(context);
     return Scaffold(
       body: EasyRefresh.custom(
+        controller: _refreshController,
         header: SpaceHeader(),
         firstRefresh: true,
         firstRefreshWidget: Gaps.empty,
@@ -68,11 +89,13 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                             ? RoutineInspectionStatisticsWidget(
                                 metaList: state.inspectionStatisticsList)
                             : Gaps.empty,
-                        state.onlineMonitorStatisticsList.length > 0
-                            ? OnlineMonitorStatisticsWidget(
-                                metaList: state.onlineMonitorStatisticsList,
-                              )
-                            : Gaps.empty,
+                        MonitorStatisticsWidget(
+                          collectionBloc: monitorStatisticsBloc,
+                          onReloadTap: () {
+                            monitorStatisticsBloc.add(
+                                CollectionLoad(params: _getRequestParam()));
+                          },
+                        ),
                         state.pollutionEnterStatisticsList.length > 0
                             ? PollutionEnterStatisticsWidget(
                                 metaList: state.pollutionEnterStatisticsList)
@@ -87,9 +110,15 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                 } else if (state is IndexLoading) {
                   return LoadingSliver();
                 } else if (state is IndexError) {
-                  return ErrorSliver(errorMessage: state.errorMessage);
+                  return ErrorSliver(
+                    errorMessage: state.errorMessage,
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 } else {
-                  return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
+                  return ErrorSliver(
+                    errorMessage: 'BlocBuilder监听到未知的的状态',
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 }
               },
             ),
@@ -97,6 +126,7 @@ class _OperationIndexPageState extends State<OperationIndexPage>
         ],
         onRefresh: () async {
           _indexBloc.add(Load());
+          monitorStatisticsBloc.add(CollectionLoad(params: _getRequestParam()));
           return _refreshCompleter.future;
         },
       ),
@@ -206,204 +236,6 @@ class RoutineInspectionStatisticsWidget extends StatelessWidget {
   }
 }
 
-@deprecated
-class RoutineInspectionTabViewWidget extends StatefulWidget {
-  @override
-  _RoutineInspectionTabViewWidgetState createState() =>
-      _RoutineInspectionTabViewWidgetState();
-}
-
-@deprecated
-class _RoutineInspectionTabViewWidgetState
-    extends State<RoutineInspectionTabViewWidget>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        TabBar(
-          indicatorColor: Colours.primary_color,
-          labelColor: Colours.primary_color,
-          unselectedLabelColor: Colours.primary_color.withOpacity(0.5),
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(
-              text: '离我最近',
-            ),
-            Tab(
-              text: '即将截止',
-            ),
-          ],
-        ),
-        Container(
-          height: 250,
-          child: TabBarView(
-            controller: _tabController,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        UIUtils.getBoxShadow(),
-                      ],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Gaps.hGap10,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Text(
-                                  '企业名称企业名称企业名称企业',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                              Gaps.vGap6,
-                              Row(
-                                children: <Widget>[
-                                  ListTileWidget('地址：企业名称企业名称企业名称'),
-                                  ListTileWidget('距离我500米'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Gaps.vGap6,
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        UIUtils.getBoxShadow(),
-                      ],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Gaps.hGap10,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Text(
-                                  '企业名称企业名称企业名称企业',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                              Gaps.vGap6,
-                              Row(
-                                children: <Widget>[
-                                  ListTileWidget('地址：企业名称企业名称企业名称'),
-                                  ListTileWidget('距离我500米'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Gaps.vGap6,
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        UIUtils.getBoxShadow(),
-                      ],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Gaps.hGap10,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Text(
-                                  '企业名称企业名称企业名称企业',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                              Gaps.vGap6,
-                              Row(
-                                children: <Widget>[
-                                  ListTileWidget('地址：企业名称企业名称企业名称'),
-                                  ListTileWidget('距离我500米'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                height: 100,
-                width: 200,
-                child: Text('222'),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// 在线监控点概况
-class OnlineMonitorStatisticsWidget extends StatelessWidget {
-  final List<Meta> metaList;
-
-  OnlineMonitorStatisticsWidget({Key key, this.metaList}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Column(
-        children: <Widget>[
-          TitleWidget(title: "在线监控点概况"),
-          OnlineMonitorStatisticsGrid(metaList: metaList),
-        ],
-      ),
-    );
-  }
-}
-
 /// 督办单统计
 class OrderStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
@@ -451,7 +283,7 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TitleWidget(title: "污染源企业概况"),
-          PollutionEnterStatisticsGrid(metaList: metaList),
+          InkWellButtonGrid(metaList: metaList),
         ],
       ),
     );

@@ -95,7 +95,7 @@ class _EnterListPageState extends State<EnterListPage>
     _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshCompleter = Completer<void>();
     // 首次加载
-    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+    _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
 
   @override
@@ -118,7 +118,7 @@ class _EnterListPageState extends State<EnterListPage>
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return EnterListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
@@ -213,7 +213,10 @@ class _EnterListPageState extends State<EnterListPage>
                     } else if (state is ListEmpty) {
                       return EmptySliver();
                     } else if (state is ListError) {
-                      return ErrorSliver(errorMessage: state.message);
+                      return ErrorSliver(
+                        errorMessage: state.message,
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     } else if (state is ListLoaded) {
                       if (!state.hasNextPage) {
                         _refreshController.finishLoad(
@@ -222,7 +225,9 @@ class _EnterListPageState extends State<EnterListPage>
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
-                          errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                        errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     }
                   },
                 ),
@@ -233,7 +238,7 @@ class _EnterListPageState extends State<EnterListPage>
               _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: getRequestParam(),
+                params: _getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
@@ -243,7 +248,7 @@ class _EnterListPageState extends State<EnterListPage>
                 _currentPage = currentState.currentPage + 1;
               else
                 _currentPage = Constant.defaultCurrentPage;
-              _listBloc.add(ListLoad(params: getRequestParam()));
+              _listBloc.add(ListLoad(params: _getRequestParam()));
               return _refreshCompleter.future;
             },
           ),

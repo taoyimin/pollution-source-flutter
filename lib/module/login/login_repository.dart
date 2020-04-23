@@ -44,19 +44,10 @@ class LoginRepository {
       case 0:
       case 1:
         //环保和企业用户
-        if (SpUtil.getBool(Constant.spUseJavaApi,
-            defValue: Constant.defaultUseJavaApi)) {
-          return FormData.fromMap({
-            'userName': userName,
-            'password': passWord,
-          });
-        } else {
-          return FormData.fromMap({
-            'userName': userName,
-            'passWord': passWord,
-          });
-        }
-        break;
+        return FormData.fromMap({
+          'userName': userName,
+          'password': passWord,
+        });
       case 2:
         //运维用户账号密码放在header中，isEncryption为false表示登录不需要加密解密
         return FormData.fromMap({

@@ -64,7 +64,12 @@ class _MonitorTableState extends State<MonitorTablePage> {
     super.initState();
     initParam();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _detailBloc.add(DetailLoad(params: getRequestParam()));
+    _loadData();
+  }
+
+  /// 加载数据
+  _loadData() {
+    _detailBloc.add(DetailLoad(params: _getRequestParam()));
   }
 
   /// 初始化查询参数
@@ -82,7 +87,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return MonitorHistoryDataRepository.createParams(
       monitorId: widget.monitorId,
       dataType: _dataType,
@@ -140,7 +145,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                         try {
                           currentPage = 0;
                           _detailBloc
-                              .add(DetailLoad(params: getRequestParam()));
+                              .add(DetailLoad(params: _getRequestParam()));
                         } catch (e) {
                           _scaffoldKey.currentState.showSnackBar(
                             SnackBar(
@@ -176,7 +181,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                         try {
                           currentPage = 0;
                           _detailBloc
-                              .add(DetailLoad(params: getRequestParam()));
+                              .add(DetailLoad(params: _getRequestParam()));
                         } catch (e) {
                           _scaffoldKey.currentState.showSnackBar(
                             SnackBar(
@@ -226,15 +231,20 @@ class _MonitorTableState extends State<MonitorTablePage> {
                     if (state is DetailLoading) {
                       return LoadingWidget();
                     } else if (state is DetailError) {
-                      return ErrorMessageWidget(errorMessage: state.message);
+                      return ColumnErrorWidget(
+                        errorMessage: state.message,
+                        onReloadTap: () => _loadData(),
+                      );
                     } else if (state is DetailLoaded) {
                       if (state.detail.fixedColCells.length == 0) {
                         return EmptyWidget(message: '没有数据');
                       }
                       return _buildPageLoadedDetail(state.detail);
                     } else {
-                      return ErrorMessageWidget(
-                          errorMessage: 'BlocBuilder监听到未知的的状态!state=$state');
+                      return ColumnErrorWidget(
+                        errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                        onReloadTap: () => _loadData(),
+                      );
                     }
                   },
                 ),
@@ -307,7 +317,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                     try {
                       currentPage = 0;
                       _detailBloc.add(DetailLoad(
-                        params: getRequestParam(),
+                        params: _getRequestParam(),
                       ));
                     } catch (e) {
                       _scaffoldKey.currentState.showSnackBar(

@@ -50,19 +50,27 @@ class _RoutineInspectionDetailPageState
   void initState() {
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _detailBloc.add(DetailLoad(
-      params: RoutineInspectionDetailRepository.createParams(
-        monitorId: widget.monitorId,
-        state: widget.state,
-      ),
-    ));
+    _loadData();
+  }
+
+  /// 加载数据
+  _loadData() {
+    _detailBloc.add(DetailLoad(params: _getRequestParam()));
+  }
+
+  /// 获取请求参数
+  Map<String, dynamic> _getRequestParam() {
+    return RoutineInspectionDetailRepository.createParams(
+      monitorId: widget.monitorId,
+      state: widget.state,
+    );
   }
 
   @override
   void dispose() {
     // _tabController是在请求完成之后初始化的，所以页面销毁时可能为null
     _tabController?.dispose();
-    //取消正在进行的请求
+    // 取消正在进行的请求
     final currentState = _detailBloc?.state;
     if (currentState is DetailLoading) currentState.cancelToken?.cancel();
     super.dispose();
@@ -183,7 +191,8 @@ class _RoutineInspectionDetailPageState
                                                   : '没有巡检项目',
                                               style: const TextStyle(
                                                 fontSize: 10,
-                                                color: Colours.background_light_blue,
+                                                color: Colours
+                                                    .background_light_blue,
                                               ),
                                             ),
                                           ),
@@ -256,7 +265,10 @@ class _RoutineInspectionDetailPageState
             if (state is DetailLoading) {
               return LoadingWidget();
             } else if (state is DetailError) {
-              return ErrorMessageWidget(errorMessage: state.message);
+              return ColumnErrorWidget(
+                errorMessage: state.message,
+                onReloadTap: () => _loadData(),
+              );
             } else if (state is DetailLoaded) {
               if (state.detail.length == 0) {
                 return EmptyWidget(message: '没有巡检需要处理');
@@ -264,7 +276,10 @@ class _RoutineInspectionDetailPageState
                 return _buildPageLoadedDetail(state.detail);
               }
             } else {
-              return ErrorMessageWidget(errorMessage: 'BlocBuilder监听到未知的的状态');
+              return ColumnErrorWidget(
+                errorMessage: 'BlocBuilder监听到未知的的状态',
+                onReloadTap: () => _loadData(),
+              );
             }
           },
         ),

@@ -78,7 +78,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
-    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+    _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
 
   @override
@@ -100,7 +100,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return LongStopReportListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
@@ -177,7 +177,10 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
                     } else if (state is ListEmpty) {
                       return EmptySliver();
                     } else if (state is ListError) {
-                      return ErrorSliver(errorMessage: state.message);
+                      return ErrorSliver(
+                        errorMessage: state.message,
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     } else if (state is ListLoaded) {
                       if (!state.hasNextPage) {
                         _refreshController.finishLoad(
@@ -186,7 +189,9 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
-                          errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                        errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     }
                   },
                 ),
@@ -198,7 +203,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
               // 刷新事件
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: getRequestParam(),
+                params: _getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
@@ -209,7 +214,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
               else
                 _currentPage = Constant.defaultCurrentPage;
               // 加载事件
-              _listBloc.add(ListLoad(params: getRequestParam()));
+              _listBloc.add(ListLoad(params: _getRequestParam()));
               return _refreshCompleter.future;
             },
           ),

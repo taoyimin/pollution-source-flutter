@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_state.dart';
@@ -487,152 +487,20 @@ class DataDictBlocGrid extends StatelessWidget {
             ),
           );
         } else if (state is DataDictLoading) {
-          return Center(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 50.0,
-                  height: 50.0,
-                  child: SpinKitFadingCube(
-                    color: Theme.of(context).primaryColor,
-                    size: 20.0,
-                  ),
-                ),
-                Container(
-                  child: const Text(
-                    '加载中',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                )
-              ],
-            ),
-          );
+          return LoadingWidget();
         } else if (state is DataDictError) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Image.asset('assets/images/image_load_error.png'),
-                  ),
-                  Gaps.hGap8,
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 6),
-                          child: const Text(
-                            '加载失败，请重试！',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text("错误信息"),
-                                        content: SingleChildScrollView(
-                                          child: Text('${state.message}'),
-                                        ),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            onPressed: () {
-                                              Clipboard.setData(ClipboardData(
-                                                  text: '${state.message}'));
-                                              Toast.show('复制成功！');
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text("复制"),
-                                          ),
-                                          FlatButton(
-                                            onPressed: () async {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text("确认"),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  height: 36,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Colors.red,
-                                    ),
-                                    color: Colors.red.withOpacity(0.3),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '错误详情',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Gaps.hGap8,
-                            Expanded(
-                              flex: 1,
-                              child: InkWell(
-                                onTap: () {
-                                  dataDictBloc.add(DataDictLoad());
-                                },
-                                child: Container(
-                                  height: 36,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Colors.green,
-                                    ),
-                                    color: Colors.green.withOpacity(0.3),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '重新加载',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return RowErrorWidget(
+            errorMessage: state.message,
+            onReloadTap: () {
+              dataDictBloc.add(DataDictLoad());
+            },
           );
         } else {
-          return Center(
-            child: Text(
-              'BlocBuilder监听到未知的的状态！state=$state',
-              style: const TextStyle(
-                fontSize: 12,
-              ),
-            ),
+          return RowErrorWidget(
+            errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+            onReloadTap: () {
+              dataDictBloc.add(DataDictLoad());
+            },
           );
         }
       },

@@ -113,7 +113,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
     _refreshCompleter = Completer<void>();
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
-    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+    _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
 
   @override
@@ -131,13 +131,13 @@ class _MonitorListPageState extends State<MonitorListPage> {
   initParam() {
     _enterNameController.text = '';
     _monitorType = widget.monitorType;
-    _state = MonitorListRepository.convertState(widget.state);
+    _state = widget.state;
     _outType = widget.outType;
     _attentionLevel = widget.attentionLevel;
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return MonitorListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
@@ -216,7 +216,10 @@ class _MonitorListPageState extends State<MonitorListPage> {
                     } else if (state is ListEmpty) {
                       return EmptySliver();
                     } else if (state is ListError) {
-                      return ErrorSliver(errorMessage: state.message);
+                      return ErrorSliver(
+                        errorMessage: state.message,
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     } else if (state is ListLoaded) {
                       if (!state.hasNextPage) {
                         _refreshController.finishLoad(
@@ -225,7 +228,9 @@ class _MonitorListPageState extends State<MonitorListPage> {
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
-                          errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                        errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     }
                   },
                 ),
@@ -236,7 +241,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
               _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: getRequestParam(),
+                params: _getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
@@ -246,7 +251,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
                 _currentPage = currentState.currentPage + 1;
               else
                 _currentPage = Constant.defaultCurrentPage;
-              _listBloc.add(ListLoad(params: getRequestParam()));
+              _listBloc.add(ListLoad(params: _getRequestParam()));
               return _refreshCompleter.future;
             },
           ),

@@ -52,28 +52,4 @@ class MonitorListRepository extends ListRepository<Monitor> {
       'attentionLevel': attentionLevel,
     };
   }
-
-  /// [state] 监控点状态 1：在线 2：预警 3：超标 4：负值 5：超大值 6：零值 7：脱机 8：异常申报
-  static String convertState(String state){
-    switch (state) {
-      case '1':
-        return 'online';
-      case '2':
-        return 'warn';
-      case '3':
-        return 'outrange';
-      case '4':
-        return 'negativeValue';
-      case '5':
-        return 'ultraUpperlimit';
-      case '6':
-        return 'zeroValue';
-      case '7':
-        return 'offline';
-      case '8':
-        return 'stopline';
-      default:
-        return 'all';
-    }
-  }
 }

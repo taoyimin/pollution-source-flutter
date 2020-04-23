@@ -30,7 +30,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
   void initState() {
     super.initState();
     _monitorDetailBloc = BlocProvider.of<MonitorDetailBloc>(context);
-    _monitorDetailBloc.add(MonitorDetailLoad(monitorId: widget.monitorId));
+    _loadData();
   }
 
   @override
@@ -40,6 +40,11 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
     if (currentState is MonitorDetailLoading)
       currentState.cancelToken?.cancel();
     super.dispose();
+  }
+
+  /// 加载数据
+  _loadData() {
+    _monitorDetailBloc.add(MonitorDetailLoad(monitorId: widget.monitorId));
   }
 
   @override
@@ -100,12 +105,18 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               } else if (state is MonitorDetailEmpty) {
                 return EmptySliver();
               } else if (state is MonitorDetailError) {
-                return ErrorSliver(errorMessage: state.errorMessage);
+                return ErrorSliver(
+                  errorMessage: state.errorMessage,
+                  onReloadTap: () => _loadData(),
+                );
               } else if (state is MonitorDetailLoaded) {
                 return _buildPageLoadedDetail(context, state.monitorDetail,
                     state.isCurved, state.showDotData);
               } else {
-                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(
+                  errorMessage: 'BlocBuilder监听到未知的的状态',
+                  onReloadTap: () => _loadData(),
+                );
               }
             },
           ),

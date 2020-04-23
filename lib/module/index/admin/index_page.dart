@@ -1,15 +1,19 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_svg/svg.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
+import 'package:pollution_source/module/common/collection/monitor/monitor_statistics_repository.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'dart:ui';
-import 'dart:math';
 import 'dart:async';
 
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
@@ -28,20 +32,40 @@ class _AdminIndexPageState extends State<AdminIndexPage>
   @override
   bool get wantKeepAlive => true;
 
+  /// 首页Bloc
   IndexBloc _indexBloc;
+
+  /// 监控点统计Bloc
+  final CollectionBloc monitorStatisticsBloc =
+      CollectionBloc(collectionRepository: MonitorStatisticsRepository());
+  final EasyRefreshController _refreshController = EasyRefreshController();
   Completer<void> _refreshCompleter;
 
   @override
   void initState() {
     super.initState();
+    // 初始化首页Bloc
     _indexBloc = BlocProvider.of<IndexBloc>(context);
     _refreshCompleter = Completer<void>();
+    // 检查更新
     SystemUtils.checkUpdate(context);
   }
 
   @override
   void dispose() {
+    // 释放资源
+    _refreshController.dispose();
     super.dispose();
+  }
+
+  /// 获取监控点统计接口请求参数
+  Map<String, dynamic> _getRequestParam() {
+    return MonitorStatisticsRepository.createParams(
+      userType: '1',
+      userId: '${SpUtil.getInt(Constant.spUserId)}',
+      outType: '0',
+      attentionLevel: '${SpUtil.getString(Constant.spAttentionLevel)}',
+    );
   }
 
   @override
@@ -49,6 +73,7 @@ class _AdminIndexPageState extends State<AdminIndexPage>
     super.build(context);
     return Scaffold(
       body: EasyRefresh.custom(
+        controller: _refreshController,
         header: SpaceHeader(),
         firstRefresh: true,
         firstRefreshWidget: Gaps.empty,
@@ -79,11 +104,13 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                             : Gaps.empty,
                         //WeekTrendWidget(),
                         //AlarmListWidget(),
-                        state.onlineMonitorStatisticsList.length > 0
-                            ? OnlineMonitorStatisticsWidget(
-                                metaList: state.onlineMonitorStatisticsList,
-                              )
-                            : Gaps.empty,
+                        MonitorStatisticsWidget(
+                          collectionBloc: monitorStatisticsBloc,
+                          onReloadTap: () {
+                            monitorStatisticsBloc.add(
+                                CollectionLoad(params: _getRequestParam()));
+                          },
+                        ),
                         state.waterStatisticsList.length > 0
                             ? WaterStatisticsWidget(
                                 waterStatisticsList: state.waterStatisticsList,
@@ -113,9 +140,15 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                 } else if (state is IndexLoading) {
                   return LoadingSliver();
                 } else if (state is IndexError) {
-                  return ErrorSliver(errorMessage: state.errorMessage);
+                  return ErrorSliver(
+                    errorMessage: state.errorMessage,
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 } else {
-                  return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
+                  return ErrorSliver(
+                    errorMessage: 'BlocBuilder监听到未知的的状态',
+                    onReloadTap: () => _refreshController.callRefresh(),
+                  );
                 }
               },
             ),
@@ -123,6 +156,7 @@ class _AdminIndexPageState extends State<AdminIndexPage>
         ],
         onRefresh: () async {
           _indexBloc.add(Load());
+          monitorStatisticsBloc.add(CollectionLoad(params: _getRequestParam()));
           return _refreshCompleter.future;
         },
       ),
@@ -130,51 +164,7 @@ class _AdminIndexPageState extends State<AdminIndexPage>
   }
 }
 
-//模块标题
-class TitleWidget extends StatelessWidget {
-  final String title;
-  final Color color;
-
-  TitleWidget(
-      {Key key, @required this.title, this.color: Colours.primary_color})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image.asset(
-            "assets/images/icon_card_title.png",
-            height: 12,
-            color: color,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: color,
-              ),
-            ),
-          ),
-          Transform.rotate(
-            angle: pi,
-            child: Image.asset(
-              "assets/images/icon_card_title.png",
-              height: 12,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-//空气质量统计
+/// 空气质量统计
 class AqiStatisticsWidget extends StatelessWidget {
   final AqiStatistics aqiStatistics;
 
@@ -183,7 +173,7 @@ class AqiStatisticsWidget extends StatelessWidget {
 
   Widget _getAqiStatisticsRowItem(factorName, factorValue) {
     return Expanded(
-      flex: 1, //设置一个宽度，防止宽度不同无法对齐
+      flex: 1, // 设置一个宽度，防止宽度不同无法对齐
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -432,7 +422,7 @@ class HeaderWidget extends StatelessWidget {
   }
 }
 
-//空气质量考核达标
+/// 空气质量考核达标
 class AqiExamineWidget extends StatelessWidget {
   final List<AqiExamine> aqiExamineList;
 
@@ -544,7 +534,7 @@ class AqiExamineWidget extends StatelessWidget {
   }
 }
 
-//水环境质量情况
+/// 水环境质量情况
 class WaterStatisticsWidget extends StatelessWidget {
   final List<WaterStatistics> waterStatisticsList;
 
@@ -707,27 +697,7 @@ class ReportStatisticsWidget extends StatelessWidget {
   }
 }
 
-//在线监控点概况
-class OnlineMonitorStatisticsWidget extends StatelessWidget {
-  final List<Meta> metaList;
-
-  OnlineMonitorStatisticsWidget({Key key, this.metaList}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Column(
-        children: <Widget>[
-          TitleWidget(title: "在线监控点概况"),
-          OnlineMonitorStatisticsGrid(metaList: metaList),
-        ],
-      ),
-    );
-  }
-}
-
-//污染源企业概况
+/// 污染源企业概况
 class PollutionEnterStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
 
@@ -740,14 +710,14 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TitleWidget(title: "污染源企业概况"),
-          PollutionEnterStatisticsGrid(metaList: metaList),
+          InkWellButtonGrid(metaList: metaList),
         ],
       ),
     );
   }
 }
 
-//雨水企业概况
+/// 雨水企业概况
 class RainEnterStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
 
@@ -781,7 +751,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
   }
 }
 
-//综合统计信息
+/// 综合统计信息
 class ComprehensiveStatisticsWidget extends StatelessWidget {
   final List<Meta> metaList;
 

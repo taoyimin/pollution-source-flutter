@@ -17,6 +17,7 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
@@ -2469,69 +2470,6 @@ class TitleWidget extends StatelessWidget {
   }
 }
 
-/// 监控点统计网格控件
-class OnlineMonitorStatisticsGrid extends StatelessWidget {
-  final List<Meta> metaList;
-
-  OnlineMonitorStatisticsGrid({
-    Key key,
-    this.metaList,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            InkWellButton1(
-              meta: metaList[0],
-            ),
-            VerticalDividerWidget(height: 40),
-            InkWellButton1(
-              meta: metaList[1],
-            ),
-            VerticalDividerWidget(height: 40),
-            InkWellButton1(
-              meta: metaList[2],
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            InkWellButton1(
-              meta: metaList[3],
-            ),
-            VerticalDividerWidget(height: 40),
-            InkWellButton1(
-              meta: metaList[4],
-            ),
-            VerticalDividerWidget(height: 40),
-            InkWellButton1(
-              meta: metaList[5],
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            InkWellButton1(
-              meta: metaList[6],
-            ),
-            VerticalDividerWidget(height: 40),
-            InkWellButton1(
-              meta: metaList[7],
-            ),
-            VerticalDividerWidget(height: 40),
-            InkWellButton1(
-              meta: metaList[8],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
 /// 监控点统计控件
 class MonitorStatisticsWidget extends StatelessWidget {
   final CollectionBloc collectionBloc;
@@ -2564,7 +2502,7 @@ class MonitorStatisticsWidget extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   TitleWidget(title: "监控点(出口)概况"),
-                  OnlineMonitorStatisticsGrid(
+                  InkWellButtonGrid(
                     metaList: state.collection.map(
                       (monitorStatistics) {
                         return Meta(
@@ -2572,7 +2510,8 @@ class MonitorStatisticsWidget extends StatelessWidget {
                           content: '${monitorStatistics.count}',
                           color: monitorStatistics.color,
                           imagePath: monitorStatistics.imagePath,
-                          router: monitorStatistics.router,
+                          router:
+                              '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
                         );
                       },
                     ).toList(),
@@ -2596,11 +2535,85 @@ class MonitorStatisticsWidget extends StatelessWidget {
   }
 }
 
-/// 污染源企业统计网格控件
-class PollutionEnterStatisticsGrid extends StatelessWidget {
+/// 监控点统计卡片
+class MonitorStatisticsCard extends StatelessWidget {
+  final CollectionBloc collectionBloc;
+  final GestureTapCallback onReloadTap;
+
+  MonitorStatisticsCard({
+    Key key,
+    this.collectionBloc,
+    this.onReloadTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      bloc: collectionBloc,
+      builder: (context, state) {
+        if (state is CollectionInitial || state is CollectionLoading) {
+          return LoadingWidget();
+        } else if (state is CollectionError) {
+          return RowErrorWidget(
+            tipMessage: '监控点信息加载失败，请重试！',
+            errorMessage: state.message,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            onReloadTap: onReloadTap,
+          );
+        } else if (state is CollectionLoaded) {
+          if (state.collection.length != 0) {
+            return Column(
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '监控点(出口)信息',
+                  imagePath: 'assets/images/icon_monitor_info.png',
+                ),
+                Gaps.vGap10,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      UIUtils.getBoxShadow(),
+                    ],
+                  ),
+                  child: InkWellButtonGrid(
+                    metaList: state.collection.map(
+                      (monitorStatistics) {
+                        return Meta(
+                          title: monitorStatistics.name,
+                          content: '${monitorStatistics.count}',
+                          color: monitorStatistics.color,
+                          imagePath: monitorStatistics.imagePath,
+                          router:
+                              '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Gaps.empty;
+          }
+        } else {
+          return RowErrorWidget(
+            tipMessage: '监控点信息加载失败，请重试！',
+            errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            onReloadTap: onReloadTap,
+          );
+        }
+      },
+    );
+  }
+}
+
+/// InkWellButton网格控件
+class InkWellButtonGrid extends StatelessWidget {
   final List<Meta> metaList;
 
-  PollutionEnterStatisticsGrid({
+  InkWellButtonGrid({
     Key key,
     this.metaList,
   }) : super(key: key);
@@ -2608,53 +2621,16 @@ class PollutionEnterStatisticsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            InkWellButton1(
-              meta: metaList[0],
-            ),
-            VerticalDividerWidget(height: 30),
-            InkWellButton1(
-              meta: metaList[1],
-            ),
-            VerticalDividerWidget(height: 30),
-            InkWellButton1(
-              meta: metaList[2],
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            InkWellButton1(
-              meta: metaList[3],
-            ),
-            VerticalDividerWidget(height: 30),
-            InkWellButton1(
-              meta: metaList[4],
-            ),
-            VerticalDividerWidget(height: 30),
-            InkWellButton1(
-              meta: metaList[5],
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            InkWellButton1(
-              meta: metaList[6],
-            ),
-            VerticalDividerWidget(height: 30),
-            InkWellButton1(
-              meta: metaList[7],
-            ),
-            VerticalDividerWidget(height: 30),
-            InkWellButton1(
-              meta: metaList[8],
-            ),
-          ],
-        ),
-      ],
-    );
+        children: List.generate((metaList.length / 3).ceil(), (columnIndex) {
+      return Row(
+          children: List.generate(3, (rowIndex) {
+        int index = columnIndex * 3 + rowIndex;
+        if (index < metaList.length) {
+          return InkWellButton1(meta: metaList[index]);
+        } else {
+          return Expanded(flex: 1, child: Gaps.empty);
+        }
+      }));
+    }));
   }
 }

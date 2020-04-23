@@ -118,7 +118,7 @@ class _OrderListPageState extends State<OrderListPage> {
     _alarmLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
     // 首次加载
-    _listBloc.add(ListLoad(isRefresh: true, params: getRequestParam()));
+    _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
 
   @override
@@ -144,7 +144,7 @@ class _OrderListPageState extends State<OrderListPage> {
   }
 
   /// 获取请求参数
-  Map<String, dynamic> getRequestParam() {
+  Map<String, dynamic> _getRequestParam() {
     return OrderListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
@@ -225,7 +225,10 @@ class _OrderListPageState extends State<OrderListPage> {
                     } else if (state is ListEmpty) {
                       return EmptySliver();
                     } else if (state is ListError) {
-                      return ErrorSliver(errorMessage: state.message);
+                      return ErrorSliver(
+                        errorMessage: state.message,
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     } else if (state is ListLoaded) {
                       if (!state.hasNextPage) {
                         _refreshController.finishLoad(
@@ -234,7 +237,9 @@ class _OrderListPageState extends State<OrderListPage> {
                       return _buildPageLoadedList(state.list);
                     } else {
                       return ErrorSliver(
-                          errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                        errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
                     }
                   },
                 ),
@@ -245,7 +250,7 @@ class _OrderListPageState extends State<OrderListPage> {
               _refreshController.resetLoadState();
               _listBloc.add(ListLoad(
                 isRefresh: true,
-                params: getRequestParam(),
+                params: _getRequestParam(),
               ));
               return _refreshCompleter.future;
             },
@@ -255,7 +260,7 @@ class _OrderListPageState extends State<OrderListPage> {
                 _currentPage = currentState.currentPage + 1;
               else
                 _currentPage = Constant.defaultCurrentPage;
-              _listBloc.add(ListLoad(params: getRequestParam()));
+              _listBloc.add(ListLoad(params: _getRequestParam()));
               return _refreshCompleter.future;
             },
           ),
@@ -329,8 +334,7 @@ class _OrderListPageState extends State<OrderListPage> {
                         ],
                       ),
                       Gaps.vGap6,
-                      ListTileWidget(
-                          '报警描述：${orderList[index].alarmRemark}'),
+                      ListTileWidget('报警描述：${orderList[index].alarmRemark}'),
                     ],
                   ),
                 ),
@@ -438,7 +442,8 @@ class _OrderListPageState extends State<OrderListPage> {
                                   context,
                                   dateFormat: 'yyyy年-MM月-dd日',
                                   initialDateTime: _startTime,
-                                  maxDateTime: _endTime ?? DateTime.now().add(Duration(days: -1)),
+                                  maxDateTime: _endTime ??
+                                      DateTime.now().add(Duration(days: -1)),
                                   locale: DateTimePickerLocale.zh_cn,
                                   onClose: () {},
                                   onConfirm: (dateTime, selectedIndex) {
@@ -498,7 +503,8 @@ class _OrderListPageState extends State<OrderListPage> {
                                   dateFormat: 'yyyy年-MM月-dd日',
                                   initialDateTime: _endTime,
                                   minDateTime: _startTime,
-                                  maxDateTime: DateTime.now().add(Duration(days: -1)),
+                                  maxDateTime:
+                                      DateTime.now().add(Duration(days: -1)),
                                   locale: DateTimePickerLocale.zh_cn,
                                   onClose: () {},
                                   onConfirm: (dateTime, selectedIndex) {

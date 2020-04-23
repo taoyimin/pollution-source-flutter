@@ -28,11 +28,6 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
         List<Meta> pollutionEnterStatisticsList =
             await _convertPollutionEnterStatistics(response
                 .data[Constant.responseDataKey]['enterpriseCountMonitorCount']);
-        // 在线监控点统计
-        List<Meta> onlineMonitorStatisticsList =
-            await _convertOnlineMonitorStatistics(
-                response.data[Constant.responseDataKey]
-                    ['enterPriseMonitorStatusCount']);
         Response orderResponse =
             await CompatUtils.getDio().get('commonSupervise/superviseCount');
         // 报警管理单统计
@@ -40,7 +35,7 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             await _convertOrderStatistics(orderResponse.data);
         yield IndexLoaded(
           pollutionEnterStatisticsList: pollutionEnterStatisticsList,
-          onlineMonitorStatisticsList: onlineMonitorStatisticsList,
+          //onlineMonitorStatisticsList: onlineMonitorStatisticsList,
           orderStatisticsList: orderStatisticsList,
           inspectionStatisticsList: inspectionStatisticsList,
         );
@@ -120,80 +115,6 @@ Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
         color: Color.fromRGBO(179, 129, 127, 1),
         content: json['licenseCount'].toString(),
         router: '${Routes.enterList}?enterType=5&attentionLevel=',
-      ),
-    ];
-  }
-}
-
-//格式化在线监控点概况
-Future<List<Meta>> _convertOnlineMonitorStatistics(dynamic json) async {
-  bool show = true;
-  if (!show) {
-    return [];
-  } else {
-    return [
-      Meta(
-        title: '总数',
-        imagePath: 'assets/images/icon_monitor_all.png',
-        color: Color.fromRGBO(77, 167, 248, 1),
-        content: json['总数'].toString(),
-        router: '${Routes.monitorList}',
-      ),
-      Meta(
-        title: '在线',
-        imagePath: 'assets/images/icon_monitor_online.png',
-        color: Color.fromRGBO(136, 191, 89, 1),
-        content: json['在线'].toString(),
-        router: '${Routes.monitorList}?state=1',
-      ),
-      Meta(
-        title: '预警',
-        imagePath: 'assets/images/icon_monitor_alarm.png',
-        color: Color.fromRGBO(241, 190, 67, 1),
-        content: json['预警'].toString(),
-        router: '${Routes.monitorList}?state=2',
-      ),
-      Meta(
-        title: '超标',
-        imagePath: 'assets/images/icon_monitor_over.png',
-        color: Color.fromRGBO(233, 119, 111, 1),
-        content: json['超标'].toString(),
-        router: '${Routes.monitorList}?state=3',
-      ),
-      Meta(
-        title: '负值',
-        imagePath: 'assets/images/icon_monitor_negative_value.png',
-        color: Color.fromRGBO(0, 188, 212, 1),
-        content: json['超量程-极小值'].toString(),
-        router: '${Routes.monitorList}?state=4',
-      ),
-      Meta(
-        title: '超大值',
-        imagePath: 'assets/images/icon_monitor_large_value.png',
-        color: Color.fromRGBO(255, 87, 34, 1),
-        content: json['超量程-极大值'].toString(),
-        router: '${Routes.monitorList}?state=5',
-      ),
-      Meta(
-        title: '零值',
-        imagePath: 'assets/images/icon_monitor_zero_value.png',
-        color: Color.fromRGBO(106, 106, 255, 1),
-        content: json['零值'].toString(),
-        router: '${Routes.monitorList}?state=6',
-      ),
-      Meta(
-        title: '脱机',
-        imagePath: 'assets/images/icon_monitor_offline.png',
-        color: Color.fromRGBO(179, 129, 127, 1),
-        content: json['脱机'].toString(),
-        router: '${Routes.monitorList}?state=7',
-      ),
-      Meta(
-        title: '异常申报',
-        imagePath: 'assets/images/icon_monitor_stop.png',
-        color: Color.fromRGBO(137, 137, 137, 1),
-        content: json['停产'].toString(),
-        router: '${Routes.monitorList}?state=8',
       ),
     ];
   }

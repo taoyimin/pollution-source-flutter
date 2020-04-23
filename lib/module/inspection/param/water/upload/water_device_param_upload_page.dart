@@ -54,7 +54,7 @@ class _WaterDeviceParamUploadPageState
     )));
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 加载待巡检参数
-    _listBloc.add(ListLoad(isRefresh: true));
+    _loadData();
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
   }
@@ -63,6 +63,11 @@ class _WaterDeviceParamUploadPageState
   void dispose() {
     // 释放资源
     super.dispose();
+  }
+
+  /// 加载数据
+  _loadData() {
+    _listBloc.add(ListLoad(isRefresh: true));
   }
 
   @override
@@ -159,50 +164,55 @@ class _WaterDeviceParamUploadPageState
                   ),
                 );
               } else if (state is ListError) {
-                return Container(
-                  height: 300,
-                  child: ErrorMessageWidget(errorMessage: state.message),
+                return ColumnErrorWidget(
+                  errorMessage: state.message,
+                  onReloadTap: () => _loadData(),
                 );
               } else if (state is ListLoaded) {
                 return Column(
-                  children: waterDeviceParamUpload?.waterDeviceParamTypeList
-                          ?.asMap()
-                          ?.map(
-                              (i, WaterDeviceParamType waterDeviceParamType) =>
-                                  MapEntry(
+                  children: <Widget>[
+                    ...(waterDeviceParamUpload?.waterDeviceParamTypeList
+                            ?.asMap()
+                            ?.map((i,
+                                    WaterDeviceParamType
+                                        waterDeviceParamType) =>
+                                MapEntry(
+                                    i,
+                                    _buildPageParamType(
                                       i,
-                                      _buildPageParamType(
-                                        i,
-                                        waterDeviceParamUpload
-                                            .waterDeviceParamTypeList,
-                                        waterDeviceParamUpload,
-                                      )))
-                          ?.values
-                          ?.toList() ??
-                      [],
+                                      waterDeviceParamUpload
+                                          .waterDeviceParamTypeList,
+                                      waterDeviceParamUpload,
+                                    )))
+                            ?.values
+                            ?.toList() ??
+                        []),
+                    Gaps.vGap10,
+                    Row(
+                      children: <Widget>[
+                        ClipButton(
+                          text: '提交',
+                          icon: Icons.file_upload,
+                          color: Colors.lightBlue,
+                          onTap: () {
+                            _uploadBloc.add(Upload(
+                              data: waterDeviceParamUpload,
+                            ));
+                          },
+                        ),
+                      ],
+                    ),
+                    Gaps.vGap20,
+                  ],
                 );
               } else {
-                return Container(height: 300, child: ErrorMessageWidget(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state'),);
+                return ColumnErrorWidget(
+                  errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                  onReloadTap: () => _loadData(),
+                );
               }
             },
           ),
-          Gaps.vGap10,
-          Row(
-            children: <Widget>[
-              ClipButton(
-                text: '提交',
-                icon: Icons.file_upload,
-                color: Colors.lightBlue,
-                onTap: () {
-                  _uploadBloc.add(Upload(
-                    data: waterDeviceParamUpload,
-                  ));
-                },
-              ),
-            ],
-          ),
-          Gaps.vGap20,
         ],
       ),
     ));

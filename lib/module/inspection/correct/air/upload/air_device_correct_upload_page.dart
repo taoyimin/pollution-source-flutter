@@ -158,7 +158,8 @@ class _AirDeviceCorrectUploadPageState
                   return _buildPageLoadedDetail(state.model);
                 } else {
                   return ErrorSliver(
-                      errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                  );
                 }
               },
             ),

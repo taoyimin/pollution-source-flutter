@@ -29,15 +29,20 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
   void initState() {
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _detailBloc.add(DetailLoad(detailId: widget.dischargeId));
+    _loadData();
   }
 
   @override
   void dispose() {
-    //取消正在进行的请求
+    // 取消正在进行的请求
     final currentState = _detailBloc?.state;
     if (currentState is DetailLoading) currentState.cancelToken?.cancel();
     super.dispose();
+  }
+
+  /// 加载数据
+  _loadData() {
+    _detailBloc.add(DetailLoad(detailId: widget.dischargeId));
   }
 
   @override
@@ -68,11 +73,17 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
               if (state is DetailLoading) {
                 return LoadingSliver();
               } else if (state is DetailError) {
-                return ErrorSliver(errorMessage: state.message);
+                return ErrorSliver(
+                  errorMessage: state.message,
+                  onReloadTap: () => _loadData(),
+                );
               } else if (state is DetailLoaded) {
                 return _buildPageLoadedDetail(state.detail);
               } else {
-                return ErrorSliver(errorMessage: 'BlocBuilder监听到未知的的状态');
+                return ErrorSliver(
+                  errorMessage: 'BlocBuilder监听到未知的的状态',
+                  onReloadTap: () => _loadData(),
+                );
               }
             },
           ),
@@ -238,7 +249,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
                         content: '查看该排口的监控点列表',
                         backgroundPath: 'assets/images/button_bg_red.png',
                         imagePath: 'assets/images/image_enter_statistics2.png',
-                        router: '${Routes.monitorList}?dischargeId=${dischargeDetail.dischargeId}',
+                        router:
+                            '${Routes.monitorList}?dischargeId=${dischargeDetail.dischargeId}',
                       ),
                     ),
                   ],

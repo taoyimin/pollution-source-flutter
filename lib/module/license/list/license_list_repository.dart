@@ -1,4 +1,3 @@
-import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/license/list/license_list_model.dart';
@@ -23,22 +22,12 @@ class LicenseListRepository extends ListRepository<License> {
     pageSize = Constant.defaultPageSize,
     enterId = '',
   }) {
-    if (SpUtil.getBool(Constant.spUseJavaApi, defValue: Constant.defaultUseJavaApi)) {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'start': (currentPage - 1) * pageSize,
-        'length': pageSize,
-        'enterId': enterId,
-      };
-    } else {
-      return {
-        'currentPage': currentPage,
-        'pageSize': pageSize,
-        'start': (currentPage - 1) * pageSize,
-        'length': pageSize,
-        'enterId': enterId,
-      };
-    }
+    return {
+      'currentPage': currentPage,
+      'pageSize': pageSize,
+      'start': (currentPage - 1) * pageSize,
+      'length': pageSize,
+      'enterId': enterId,
+    };
   }
 }
