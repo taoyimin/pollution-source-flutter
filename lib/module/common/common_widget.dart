@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui' as UI;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:common_utils/common_utils.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:open_file/open_file.dart';
 import 'package:pollution_source/http/dio_utils.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -21,6 +23,7 @@ import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+import 'collection/collection_state.dart';
 import 'common_model.dart';
 
 ///一些通用的小组件
@@ -32,37 +35,7 @@ class LoadingSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,
-        child: Center(
-          child: SizedBox(
-            height: 200.0,
-            width: 300.0,
-            child: Card(
-              elevation: 0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 50.0,
-                    height: 50.0,
-                    child: SpinKitFadingCube(
-                      color: Theme.of(context).primaryColor,
-                      size: 25.0,
-                    ),
-                  ),
-                  Container(
-                    child: Text('加载中'),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      child: LoadingWidget(),
     );
   }
 }
@@ -71,35 +44,19 @@ class LoadingSliver extends StatelessWidget {
 class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.white,
-      child: Center(
-        child: SizedBox(
-          height: 200.0,
-          width: 300.0,
-          child: Card(
-            elevation: 0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 50.0,
-                  height: 50.0,
-                  child: SpinKitFadingCube(
-                    color: Theme.of(context).primaryColor,
-                    size: 25.0,
-                  ),
-                ),
-                Container(
-                  child: Text('加载中'),
-                )
-              ],
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: 50.0,
+            height: 50.0,
+            child: SpinKitFadingCube(
+              color: Theme.of(context).primaryColor,
+              size: 25.0,
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -114,28 +71,7 @@ class EmptySliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
-      child: Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: 200.0,
-              height: 200.0,
-              child: Image.asset('assets/images/image_load_error.png'),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 60),
-              child: Text(
-                '$message',
-                style: const TextStyle(
-                    fontSize: 16.0, color: Colours.secondary_text),
-              ),
-            ),
-          ],
-        ),
-      ),
+      child: EmptyWidget(message: message),
     );
   }
 }
@@ -175,34 +111,145 @@ class EmptyWidget extends StatelessWidget {
 
 /// 页面加载错误的Sliver
 class ErrorSliver extends StatelessWidget {
+  final String tipMessage;
   final String errorMessage;
+  final GestureTapCallback onReloadTap;
 
-  ErrorSliver({this.errorMessage});
+  ErrorSliver({
+    this.tipMessage = '加载失败，请重试！',
+    this.errorMessage,
+    this.onReloadTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
-      child: Container(
-        height: double.infinity,
-        alignment: Alignment.center,
+      child: ColumnErrorWidget(
+        tipMessage: tipMessage,
+        errorMessage: errorMessage,
+        onReloadTap: onReloadTap,
+      ),
+    );
+  }
+}
+
+/// 竖向排列的页面加载错误控件
+class ColumnErrorWidget extends StatelessWidget {
+  final String tipMessage;
+  final String errorMessage;
+  final GestureTapCallback onReloadTap;
+
+  ColumnErrorWidget({
+    this.tipMessage = '加载失败，请重试！',
+    this.errorMessage,
+    this.onReloadTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 36),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             SizedBox(
               width: 200.0,
               height: 200.0,
               child: Image.asset('assets/images/image_load_error.png'),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 60),
-              child: Text(
-                '$errorMessage',
-                style: const TextStyle(
-                    fontSize: 16.0, color: Colours.secondary_text),
-              ),
+            Text(
+              '$tipMessage',
+              style: const TextStyle(
+                  fontSize: 16.0, color: Colours.secondary_text),
             ),
             Gaps.vGap30,
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("错误信息"),
+                            content: SingleChildScrollView(
+                              child: Text('$errorMessage'),
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  Clipboard.setData(
+                                      ClipboardData(text: '$errorMessage'));
+                                  Toast.show('复制成功！');
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("复制"),
+                              ),
+                              FlatButton(
+                                onPressed: () async {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("确认"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 36,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 0.5,
+                          color: Colors.red,
+                        ),
+                        color: Colors.red.withOpacity(0.3),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '错误详情',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Gaps.hGap16,
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: onReloadTap,
+                    child: Container(
+                      height: 36,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 0.5,
+                          color: Colors.green,
+                        ),
+                        color: Colors.green.withOpacity(0.3),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '重新加载',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -210,36 +257,135 @@ class ErrorSliver extends StatelessWidget {
   }
 }
 
-/// 页面加载错误的widget
-class ErrorMessageWidget extends StatelessWidget {
+/// 横向排列的页面加载错误控件
+class RowErrorWidget extends StatelessWidget {
+  final String tipMessage;
   final String errorMessage;
+  final EdgeInsetsGeometry padding;
+  final GestureTapCallback onReloadTap;
 
-  ErrorMessageWidget({this.errorMessage});
+  RowErrorWidget({
+    this.tipMessage = '加载失败，请重试！',
+    this.errorMessage,
+    this.padding = const EdgeInsets.symmetric(vertical: 10),
+    this.onReloadTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            width: 200.0,
-            height: 200.0,
-            child: Image.asset('assets/images/image_load_error.png'),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60),
-            child: Text(
-              '$errorMessage',
-              style: const TextStyle(
-                  fontSize: 16.0, color: Colours.secondary_text),
+    return Center(
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Image.asset('assets/images/image_load_error.png'),
             ),
-          ),
-          Gaps.vGap30,
-        ],
+            Gaps.hGap8,
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      tipMessage,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text("错误信息"),
+                                  content: SingleChildScrollView(
+                                    child: Text('$errorMessage'),
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () {
+                                        Clipboard.setData(ClipboardData(
+                                            text: '$errorMessage'));
+                                        Toast.show('复制成功！');
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("复制"),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("确认"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            height: 36,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 0.5,
+                                color: Colors.red,
+                              ),
+                              color: Colors.red.withOpacity(0.3),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                '错误详情',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Gaps.hGap8,
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: onReloadTap,
+                          child: Container(
+                            height: 36,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 0.5,
+                                color: Colors.green,
+                              ),
+                              color: Colors.green.withOpacity(0.3),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                '重新加载',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -964,31 +1110,6 @@ class ListTileWidget extends StatelessWidget {
         color: Colours.secondary_text,
         fontSize: 12,
       ),
-    );
-  }
-}
-
-/// list展示信息(多行)
-@Deprecated('已弃用')
-class ListTileMultiRowWidget extends StatelessWidget {
-  final String content;
-
-  ListTileMultiRowWidget(this.content);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(
-            content,
-            style: const TextStyle(
-              color: Colours.secondary_text,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -1983,68 +2104,6 @@ class RadioRowWidget extends StatelessWidget {
   }
 }
 
-/// 单行文本输入控件
-@Deprecated('已被DataDictWidget替代，后续将删除')
-class EditRowWidget3 extends StatelessWidget {
-  final String title;
-  final String hintText;
-  final bool readOnly;
-  final TextEditingController controller;
-  final GestureTapCallback onTap;
-  final Widget popupMenuButton;
-
-  EditRowWidget3({
-    Key key,
-    @required this.title,
-    this.hintText = '请输入',
-    this.readOnly = false,
-    @required this.controller,
-    this.onTap,
-    this.popupMenuButton,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 46,
-      child: Row(
-        children: <Widget>[
-          Text(
-            '$title',
-            style: TextStyle(fontSize: 15),
-          ),
-          Gaps.hGap20,
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                TextField(
-                  onTap: onTap,
-                  controller: controller,
-                  readOnly: readOnly,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(fontSize: 15),
-                  decoration: InputDecoration(
-                    hintText: '$hintText',
-                    hintStyle: TextStyle(fontSize: 15),
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  child: popupMenuButton ?? Gaps.empty,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// 多行文本输入控件
 class TextAreaWidget extends StatelessWidget {
   final String title;
@@ -2366,6 +2425,50 @@ class LoadingDialog extends Dialog {
   }
 }
 
+/// 模块标题
+class TitleWidget extends StatelessWidget {
+  final String title;
+  final Color color;
+
+  TitleWidget(
+      {Key key, @required this.title, this.color: Colours.primary_color})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.asset(
+            "assets/images/icon_card_title.png",
+            height: 12,
+            color: color,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: color,
+              ),
+            ),
+          ),
+          Transform.rotate(
+            angle: pi,
+            child: Image.asset(
+              "assets/images/icon_card_title.png",
+              height: 12,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// 监控点统计网格控件
 class OnlineMonitorStatisticsGrid extends StatelessWidget {
   final List<Meta> metaList;
@@ -2425,6 +2528,70 @@ class OnlineMonitorStatisticsGrid extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// 监控点统计控件
+class MonitorStatisticsWidget extends StatelessWidget {
+  final CollectionBloc collectionBloc;
+  final GestureTapCallback onReloadTap;
+
+  MonitorStatisticsWidget({
+    Key key,
+    this.collectionBloc,
+    this.onReloadTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      bloc: collectionBloc,
+      builder: (context, state) {
+        if (state is CollectionInitial || state is CollectionLoading) {
+          return LoadingWidget();
+        } else if (state is CollectionError) {
+          return RowErrorWidget(
+            tipMessage: '监控点概况加载失败，请重试！',
+            errorMessage: state.message,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            onReloadTap: onReloadTap,
+          );
+        } else if (state is CollectionLoaded) {
+          if (state.collection.length != 0) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Column(
+                children: <Widget>[
+                  TitleWidget(title: "监控点(出口)概况"),
+                  OnlineMonitorStatisticsGrid(
+                    metaList: state.collection.map(
+                      (monitorStatistics) {
+                        return Meta(
+                          title: monitorStatistics.name,
+                          content: '${monitorStatistics.count}',
+                          color: monitorStatistics.color,
+                          imagePath: monitorStatistics.imagePath,
+                          router: monitorStatistics.router,
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Gaps.empty;
+          }
+        } else {
+          return RowErrorWidget(
+            tipMessage: '监控点概况加载失败，请重试！',
+            errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            onReloadTap: onReloadTap,
+          );
+        }
+      },
     );
   }
 }
