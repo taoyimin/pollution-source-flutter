@@ -5,45 +5,6 @@ import 'package:pollution_source/res/constant.dart';
 
 /// Dio工具类，使用单例模式
 ///
-/// 用于访问污染源Python后台接口
-/// debug地址：http://taoyimin.iok.la:58213/api/
-class PythonDioUtils {
-  static final PythonDioUtils _singleton = PythonDioUtils._internal();
-
-  static PythonDioUtils get instance => PythonDioUtils();
-
-  factory PythonDioUtils() {
-    return _singleton;
-  }
-
-  static Dio _dio;
-
-  Dio getDio() {
-    return _dio;
-  }
-
-  PythonDioUtils._internal() {
-    var options = BaseOptions(
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
-      responseType: ResponseType.json,
-      validateStatus: (status) {
-        return true;
-      },
-      baseUrl: 'http://118.89.20.44:80/api/',
-    );
-    _dio = Dio(options);
-    _dio.interceptors.add(AuthInterceptor());
-    _dio.interceptors.add(TokenInterceptor());
-    _dio.interceptors.add(HandleErrorInterceptor());
-    if (!Constant.inProduction ||
-        SpUtil.getBool(Constant.spDebug, defValue: false))
-      _dio.interceptors.add(LoggingInterceptor());
-  }
-}
-
-/// Dio工具类，使用单例模式
-///
 /// 用于访问污染源Java后台接口
 class JavaDioUtils {
   static final JavaDioUtils _singleton = JavaDioUtils._internal();
@@ -62,17 +23,17 @@ class JavaDioUtils {
 
   JavaDioUtils._internal() {
     var options = BaseOptions(
-        connectTimeout: 15000,
-        receiveTimeout: 15000,
-        responseType: ResponseType.json,
-        validateStatus: (status) {
-          return true;
-        },
-        // 正式环境
-        baseUrl: 'http://111.75.227.207:19551/'
-        // 测试环境
-        // baseUrl: 'http://182.106.189.190:9999/',
-        );
+      connectTimeout: 15000,
+      receiveTimeout: 15000,
+      responseType: ResponseType.json,
+      validateStatus: (status) {
+        return true;
+      },
+      // 正式环境
+      baseUrl: 'http://111.75.227.207:19551/'
+      // 测试环境
+      // baseUrl: 'http://182.106.189.190:9999/',
+    );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());
     _dio.interceptors.add(TokenInterceptor());
@@ -110,9 +71,9 @@ class OperationDioUtils {
         return true;
       },
       // 正式环境
-      baseUrl: 'http://111.75.227.207:19550/',
+      // baseUrl: 'http://111.75.227.207:19550/',
       // 测试环境
-      // baseUrl: 'http://192.168.253.3:8001/',
+      baseUrl: 'http://192.168.253.3:8001/',
       // baseUrl: 'http://192.168.43.168:8001/',
     );
     _dio = Dio(options);

@@ -204,31 +204,6 @@ class HttpApiJava {
   static const String changePassword = 'user/changePwd';
 }
 
-class HttpApiPython {
-  static const String adminToken = 'admin/token';
-  static const String enterToken = 'enter/token';
-  static const String adminIndex = 'index';
-  static const String enterList = 'enters';
-  static const String enterDetail = 'enters/';
-  static const String dischargeList = 'discharges';
-  static const String dischargeDetail = 'discharges/';
-  static const String monitorList = 'monitors';
-  static const String monitorDetail = 'monitors/';
-  static const String orderList = 'orders';
-  static const String orderDetail = 'orders/';
-  static const String processesUpload = 'processes';
-  static const String dischargeReportList = 'dischargeReports';
-  static const String dischargeReportDetail = 'dischargeReports/';
-  static const String dischargeReportUpload = 'dischargeReports';
-  static const String factorReportList = 'factorReports';
-  static const String factorReportDetail = 'factorReports/';
-  static const String factorReportUpload = 'factorReports';
-  static const String longStopReportList = 'longStopReports';
-  static const String longStopReportDetail = 'longStopReports/';
-  static const String longStopReportUpload = 'longStopReports';
-  static const String licenseList = 'licenses';
-}
-
 class HttpApiOperation {
   static const String operationToken = 'login';
   static const String operationIndex = 'ywmh/tInspectionTask/indexCount';
