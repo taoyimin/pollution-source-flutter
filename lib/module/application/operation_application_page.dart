@@ -129,7 +129,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                     content: '查询在线数据',
                                     imagePath:
                                         'assets/images/application_icon_monitor.png',
-                                    router: '${Routes.monitorList}?state=1',
+                                    router: '${Routes.monitorList}?state=online',
                                   ),
                                 ),
                               ],

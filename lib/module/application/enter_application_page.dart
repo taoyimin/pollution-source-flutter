@@ -134,7 +134,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                     imagePath:
                                         'assets/images/application_icon_monitor.png',
                                     router:
-                                        '${Routes.monitorList}?enterId=${widget.enterId}&state=1',
+                                        '${Routes.monitorList}?enterId=${widget.enterId}&state=online',
                                   ),
                                 ),
                               ],
