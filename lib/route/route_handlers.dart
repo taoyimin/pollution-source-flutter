@@ -158,7 +158,8 @@ var monitorListHandler = Handler(
   String dischargeId = params['dischargeId']?.first ?? '';
   int type = int.parse(params['type']?.first ?? '0');
   String state = params['state']?.first ?? '';
-  String outType = params['outType']?.first ?? '';
+  // 排放类型默认查询出口
+  String outType = params['outType']?.first ?? '0';
   String monitorType = params['monitorType']?.first ?? '';
   // 默认取当前登录用户的关注程度
   String attentionLevel = params['attentionLevel']?.first ??
