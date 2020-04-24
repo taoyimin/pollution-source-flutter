@@ -226,7 +226,7 @@ class HttpApiOperation {
       'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
   static const String monitorHistoryData =
       'pollutantsource/tMonitorRealDataView/queryDetailHistoryAPI';
-  static const String monitorStatistics = '暂无';
+  static const String monitorStatistics = 'statistics/queryMonitorRealDataCountByCondition';
   static const String orderList = 'commonSupervise/list';
   static const String orderAlarmType =
       'dictionary/getSubListAPI?dicCode=alarm_type';
