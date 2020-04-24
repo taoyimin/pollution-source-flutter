@@ -169,7 +169,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(context, FactorReportUpload reportUpload) {
+  Widget _buildPageLoadedDetail(context1, FactorReportUpload reportUpload) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -247,18 +247,6 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-//                DataDictWidget(
-//                  title: '异常类型',
-//                  content: reportUpload?.alarmType?.name,
-//                  dataDictBloc: _alarmTypeBloc,
-//                  onSelected: (DataDict result) {
-//                    _pageBloc.add(
-//                      PageLoad(
-//                        model: reportUpload.copyWith(alarmType: result),
-//                      ),
-//                    );
-//                  },
-//                ),
                 SelectRowWidget(
                   title: '异常类型',
                   content: reportUpload?.alarmTypeList
@@ -277,6 +265,39 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                               return _buildBottomSheet(
                                 dataDictList: state.dataDictList,
                                 onItemTap: (dataDict) {
+                                  if (dataDict.code == 'fault') {
+                                    // 点击了设备故障
+                                    if (!dataDict.checked) {
+                                      // 当前操作是选中
+                                      if (state.dataDictList.where((dataDict) {
+                                            return dataDict.checked;
+                                          }).length >
+                                          0) {
+                                        Toast.show(
+                                            '当选中其他异常类型时，不能再选中${dataDict.name}');
+                                        return;
+                                      }
+                                    }
+                                  } else {
+                                    // 点击了除设备故障之外的异常类型
+                                    if (!dataDict.checked) {
+                                      // 当前操作是选中
+                                      DataDict faultDataDict = state
+                                          .dataDictList
+                                          .firstWhere((dataDict) {
+                                        return dataDict.checked &&
+                                            dataDict.code == 'fault';
+                                      }, orElse: () {
+                                        return null;
+                                      });
+                                      if (faultDataDict != null) {
+                                        Toast.show(
+                                            '当选中${faultDataDict
+                                                .name}时，不能再选中其他异常类型');
+                                        return;
+                                      }
+                                    }
+                                  }
                                   state.dataDictList[state.dataDictList
                                           .indexOf(dataDict)] =
                                       dataDict.copyWith(
@@ -296,7 +317,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                                   );
                                 },
                                 onResetTap: () {
-                                  _factorCodeBloc.add(DataDictUpdate(
+                                  _alarmTypeBloc.add(DataDictUpdate(
                                     dataDictList:
                                         state.dataDictList.map((dataDict) {
                                       return dataDict.copyWith(checked: false);
@@ -307,7 +328,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                                   _pageBloc.add(
                                     PageLoad(
                                       model: reportUpload
-                                          .copyWith(factorCodeList: []),
+                                          .copyWith(alarmTypeList: []),
                                     ),
                                   );
                                 },
