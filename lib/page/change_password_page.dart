@@ -3,11 +3,9 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
-import 'package:pollution_source/route/application.dart';
-import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/compat_utils.dart';
-import 'package:pollution_source/util/toast_utils.dart';
 
 /// 修改密码界面
 class ChangePasswordPage extends StatefulWidget {
@@ -111,16 +109,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         CompatUtils.getApi(HttpApi.changePassword),
                         queryParameters: {
                           // 污染源参数
-                          'pwdOld': oldPasswordController.text.toString(),
-                          'pwdNew': newPasswordController.text.toString(),
+                          'pwdOld': oldPasswordController.text,
+                          'pwdNew': newPasswordController.text,
                           // 运维参数
-                          'password': oldPasswordController.text.toString(),
-                          'oldPassword': newPasswordController.text.toString(),
+                          'password': oldPasswordController.text,
+                          'oldPassword': newPasswordController.text,
                         },
                       );
-                      Toast.show('密码修改成功，请重新登录！');
-                      Application.router.navigateTo(context, '${Routes.root}',
-                          clearStack: true);
+                      SpUtil.putString(Constant.spPasswordList[SpUtil.getInt(Constant.spUserType)], newPasswordController.text);
+                      Navigator.pop(context);
                     } catch (e) {
                       _scaffoldKey.currentState.showSnackBar(SnackBar(
                         content:
@@ -131,7 +128,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         ),
                       ));
                     } finally{
-                      Navigator.pop(context);
+                      Navigator.pop(context, true);
                     }
                   },
                 ),

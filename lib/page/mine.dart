@@ -268,9 +268,22 @@ class _MinePageState extends State<MinePage>
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   InkWellButton(
-                                    onTap: () {
-                                      Application.router.navigateTo(
-                                          context, '${Routes.changePassword}');
+                                    onTap: () async {
+                                      bool success = await Application.router
+                                          .navigateTo(context,
+                                              '${Routes.changePassword}');
+                                      if (success != null && success) {
+                                        Scaffold.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: const Text('密码修改成功！'),
+                                            action: SnackBarAction(
+                                                label: '我知道了',
+                                                textColor:
+                                                    Colours.primary_color,
+                                                onPressed: () {}),
+                                          ),
+                                        );
+                                      }
                                     },
                                     children: <Widget>[
                                       Column(
@@ -353,7 +366,7 @@ class _MinePageState extends State<MinePage>
                                             action: SnackBarAction(
                                                 label: '我知道了',
                                                 textColor:
-                                                Colours.primary_color,
+                                                    Colours.primary_color,
                                                 onPressed: () {}),
                                           ),
                                         );
@@ -402,18 +415,18 @@ class _MinePageState extends State<MinePage>
                                             action: SnackBarAction(
                                                 label: '我知道了',
                                                 textColor:
-                                                Colours.primary_color,
+                                                    Colours.primary_color,
                                                 onPressed: () {}),
                                           ),
                                         );
-                                      }else {
+                                      } else {
                                         showDialog(
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
                                                 title: const Text("清理缓存"),
-                                                content: const Text(
-                                                    "是否确定清理缓存？"),
+                                                content:
+                                                    const Text("是否确定清理缓存？"),
                                                 actions: <Widget>[
                                                   FlatButton(
                                                     onPressed: () {
