@@ -26,8 +26,8 @@ import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/system_utils.dart';
-import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 
@@ -270,7 +270,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
                       initialDateTime: reportUpload?.endTime,
-                      minDateTime: UIUtils.getMaxDateTime(
+                      minDateTime: CommonUtils.getMaxDateTime(
                           reportUpload?.startTime, minStartTime),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
