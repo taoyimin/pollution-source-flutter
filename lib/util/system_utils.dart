@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:package_info/package_info.dart';
+
 //import 'package:permission_handler/permission_handler.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
@@ -51,10 +55,49 @@ class SystemUtils {
 //    }
 //  }
 
+  /// 检查是否有通知权限
+  static void checkNotification(context) async {
+    JPush jpush = JPush();
+    if (!await jpush.isNotificationEnabled() &&
+        !SpUtil.getBool(Constant.spNotificationNoLonger, defValue: false)) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('权限申请'),
+            content: Text('您还未打开消息推送权限，是否现在就去打开？'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  SpUtil.putBool(Constant.spNotificationNoLonger, true);
+                  Navigator.of(context).pop();
+                },
+                child: const Text("不再提示"),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("取消"),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  jpush.openSettingsForNotification();
+                  Navigator.of(context).pop();
+                },
+                child: const Text("确定"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   /// 检查是否需要更新
   static Future<bool> checkUpdate(context) async {
-    if(isWeb)
-      return false;
+    if (isWeb) return false;
     Response response = await CompatUtils.getDio()
         .get(CompatUtils.getApi(HttpApi.checkVersion));
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -66,98 +109,100 @@ class SystemUtils {
         String url = response.data['android']['url'];
         bool force = response.data['android']['force'];
         showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return WillPopScope(
-                child: AlertDialog(
-                  title: Text('$title'),
-                  content: Text('$describe'),
-                  actions: <Widget>[
-                    Offstage(
-                      offstage: force,
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("取消"),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () async {
-                        if (!force) Navigator.of(context).pop();
-                        ProgressDialog pr;
-                        try {
-                          Attachment attachment = Attachment(
-                            fileName: FileUtils.getFileNameByUrl(url),
-                            url: url,
-                            size: null,
-                          );
-                          String localPath = await FileUtils
-                              .getAttachmentLocalPathByAttachment(attachment);
-                          if (await File(localPath).exists()) {
-                            // 安装包已经存在,先删除
-                            File(localPath).deleteSync();
-                          }
-                          pr = ProgressDialog(
-                            context,
-                            type: ProgressDialogType.Download,
-                            isDismissible: true,
-                            showLogs: true,
-                          );
-                          pr.style(
-                            message: '正在下载安装包...',
-                            borderRadius: 10.0,
-                            backgroundColor: Colors.white,
-                            elevation: 10.0,
-                            insetAnimCurve: Curves.easeInOut,
-                            progress: 0.0,
-                            maxProgress: 100.0,
-                            progressTextStyle: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            messageTextStyle: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 19.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          );
-                          pr.show();
-                          await FileDioUtils.instance
-                              .getDio()
-                              .download("${attachment.url}", localPath,
-                                  onReceiveProgress: (int count, int total) {
-                            pr.update(
-                              progress: double.parse(
-                                  (count * 100 / total).toStringAsFixed(2)),
-                            );
-                          });
-                          OpenFile.open(localPath);
-                        } catch (e) {
-                          Toast.show(e.toString());
-                        }
-                        if (pr?.isShowing() ?? false) {
-                          pr.hide().then((isHidden) {});
-                        }
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return WillPopScope(
+              child: AlertDialog(
+                title: Text('$title'),
+                content: Text('$describe'),
+                actions: <Widget>[
+                  Offstage(
+                    offstage: force,
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
                       },
-                      child: const Text("确定"),
+                      child: const Text("取消"),
                     ),
-                  ],
-                ),
-                onWillPop: () async {
-                  return false;
-                },
-              );
-            });
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      if (!force) Navigator.of(context).pop();
+                      ProgressDialog pr;
+                      try {
+                        Attachment attachment = Attachment(
+                          fileName: FileUtils.getFileNameByUrl(url),
+                          url: url,
+                          size: null,
+                        );
+                        String localPath =
+                            await FileUtils.getAttachmentLocalPathByAttachment(
+                                attachment);
+                        if (await File(localPath).exists()) {
+                          // 安装包已经存在,先删除
+                          File(localPath).deleteSync();
+                        }
+                        pr = ProgressDialog(
+                          context,
+                          type: ProgressDialogType.Download,
+                          isDismissible: true,
+                          showLogs: true,
+                        );
+                        pr.style(
+                          message: '正在下载安装包...',
+                          borderRadius: 10.0,
+                          backgroundColor: Colors.white,
+                          elevation: 10.0,
+                          insetAnimCurve: Curves.easeInOut,
+                          progress: 0.0,
+                          maxProgress: 100.0,
+                          progressTextStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          messageTextStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 19.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        );
+                        pr.show();
+                        await FileDioUtils.instance
+                            .getDio()
+                            .download("${attachment.url}", localPath,
+                                onReceiveProgress: (int count, int total) {
+                          pr.update(
+                            progress: double.parse(
+                                (count * 100 / total).toStringAsFixed(2)),
+                          );
+                        });
+                        OpenFile.open(localPath);
+                      } catch (e) {
+                        Toast.show(e.toString());
+                      }
+                      if (pr?.isShowing() ?? false) {
+                        pr.hide().then((isHidden) {});
+                      }
+                    },
+                    child: const Text("确定"),
+                  ),
+                ],
+              ),
+              onWillPop: () async {
+                return false;
+              },
+            );
+          },
+        );
       }
       return checkVersion(
           packageInfo.buildNumber, response.data['android']['build']);
     } else if (Platform.isIOS) {
       if (checkVersion(
           packageInfo.buildNumber, response.data['ios']['build'])) {
-        // TODO
+        // TODO IOS版本更新
       }
       return checkVersion(
           packageInfo.buildNumber, response.data['ios']['build']);
@@ -207,7 +252,7 @@ class SystemUtils {
         ),
       );
     } on NoImagesSelectedException {
-      //Toast.show('没有选择任何图片');
+      // 没有选择任何图片
       return selectedAssets;
     } on Exception catch (e) {
       Toast.show('选择图片错误！错误信息：$e');
