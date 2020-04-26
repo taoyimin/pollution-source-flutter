@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/util/common_utils.dart';
 
 class FileUtils {
   /// 获取app根目录
@@ -43,6 +44,30 @@ class FileUtils {
   /// 清空缓存文件
   static Future<void> clearApplicationDirectory() async {
     String appDocDir = await getApplicationDirectory();
-    File(appDocDir).deleteSync(recursive: true);
+    Directory(appDocDir).deleteSync(recursive: true);
+  }
+
+  /// 获取缓存文件夹大小
+  static Future<String> getApplicationDirectorySize() async {
+    String appDocDir = await getApplicationDirectory();
+    return CommonUtils.formatSize(await getTotalSizeOfFilesInDir(Directory(appDocDir)));
+  }
+
+  /// 递归计算文件或文件夹的大小
+  static Future<double> getTotalSizeOfFilesInDir(
+      final FileSystemEntity file) async {
+    if (file is File) {
+      int length = await file.length();
+      return double.parse(length.toString());
+    }
+    if (file is Directory) {
+      final List<FileSystemEntity> children = file.listSync();
+      double total = 0;
+      if (children != null)
+        for (final FileSystemEntity child in children)
+          total += await getTotalSizeOfFilesInDir(child);
+      return total;
+    }
+    return 0;
   }
 }
