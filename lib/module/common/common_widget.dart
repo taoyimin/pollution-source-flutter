@@ -18,6 +18,7 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
@@ -1648,10 +1649,10 @@ class LineChartWidgetState extends State<LineChartWidget> {
   /// 获取图表样式
   LineChartData _getLineChartData() {
     double yInterval;
-    double maxY = UIUtils.getMax(widget.chartDataList.map((chartData) {
+    double maxY = CommonUtils.getMax(widget.chartDataList.map((chartData) {
       return chartData.maxY;
     }).toList());
-    double minY = UIUtils.getMin(widget.chartDataList.map((chartData) {
+    double minY = CommonUtils.getMin(widget.chartDataList.map((chartData) {
       return chartData.minY;
     }).toList());
     if (maxY == minY) {
@@ -1663,10 +1664,10 @@ class LineChartWidgetState extends State<LineChartWidget> {
     yInterval = (maxY - minY) / (widget.yAxisCount - 1);
 
     double xInterval;
-    double maxX = UIUtils.getMax(widget.chartDataList.map((chartData) {
+    double maxX = CommonUtils.getMax(widget.chartDataList.map((chartData) {
       return chartData.maxX;
     }).toList());
-    double minX = UIUtils.getMin(widget.chartDataList.map((chartData) {
+    double minX = CommonUtils.getMin(widget.chartDataList.map((chartData) {
       return chartData.minX;
     })?.toList());
     xInterval = (maxX - minX) / (widget.xAxisCount - 1);
@@ -2632,5 +2633,30 @@ class InkWellButtonGrid extends StatelessWidget {
         }
       }));
     }));
+  }
+}
+
+/// 清理缓存Dialog显示的文字
+class CacheTextWidget extends StatefulWidget {
+  @override
+  CacheTextState createState() => CacheTextState();
+}
+
+class CacheTextState extends State<CacheTextWidget> {
+  String cacheSize = '缓存大小计算中...';
+
+  @override
+  void initState() {
+    super.initState();
+    FileUtils.getApplicationDirectorySize().then((String value) {
+      setState(() {
+        cacheSize = '发现$value缓存';
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$cacheSize\n是否确定清理缓存？');
   }
 }
