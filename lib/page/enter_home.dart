@@ -1,9 +1,13 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:pollution_source/module/application/enter_application_page.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_repository.dart';
 import 'package:pollution_source/module/index/enter/enter_index_page.dart';
+import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/system_utils.dart';
 
 import 'mine.dart';
 
@@ -38,6 +42,14 @@ class _EnterHomePageState extends State<EnterHomePage> {
       ),
       MinePage(),
     ];
+    // 检查推送权限
+    SystemUtils.checkNotification(context);
+    // 检查版本更新
+    SystemUtils.checkUpdate(context);
+    // 设置别名和标签
+    JPush jpush = JPush();
+    jpush.setAlias(SpUtil.getInt(Constant.spUserId).toString());
+    jpush.setTags([Constant.userTags[SpUtil.getInt(Constant.spUserType)]]);
   }
 
   void onPageChanged(int index) {

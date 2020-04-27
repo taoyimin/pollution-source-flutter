@@ -1,12 +1,14 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:pollution_source/module/application/admin_application_page.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/index/admin/index.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/system_utils.dart';
 
 import 'mine.dart';
 
@@ -20,7 +22,6 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    //IndexPage(),
     BlocProvider(
       create: (context) => IndexBloc(),
       child: AdminIndexPage(),
@@ -37,7 +38,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     MinePage(),
   ];
 
-  final pageController = PageController();
+  final PageController pageController = PageController();
 
   void onPageChanged(int index) {
     setState(() {
@@ -47,6 +48,19 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   void _onItemTapped(int index) {
     pageController.jumpToPage(index);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 检查推送权限
+    SystemUtils.checkNotification(context);
+    // 检查版本更新
+    SystemUtils.checkUpdate(context);
+    // 设置别名和标签
+    JPush jpush = JPush();
+    jpush.setAlias(SpUtil.getInt(Constant.spUserId).toString());
+    jpush.setTags([Constant.userTags[SpUtil.getInt(Constant.spUserType)]]);
   }
 
   @override

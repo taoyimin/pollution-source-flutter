@@ -1,6 +1,7 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:pollution_source/module/application/operation_application_page.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
@@ -8,6 +9,7 @@ import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/index/operation/operation_index_bloc.dart';
 import 'package:pollution_source/module/index/operation/operation_index_page.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/system_utils.dart';
 
 import 'mine.dart';
 
@@ -47,6 +49,19 @@ class _OperationHomePageState extends State<OperationHomePage> {
 
   void _onItemTapped(int index) {
     pageController.jumpToPage(index);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 检查推送权限
+    SystemUtils.checkNotification(context);
+    // 检查版本更新
+    SystemUtils.checkUpdate(context);
+    // 设置别名和标签
+    JPush jpush = JPush();
+    jpush.setAlias(SpUtil.getInt(Constant.spUserId).toString());
+    jpush.setTags([Constant.userTags[SpUtil.getInt(Constant.spUserType)]]);
   }
 
   @override
