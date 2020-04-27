@@ -148,7 +148,7 @@ enum HttpApi {
   changePassword,
 }
 
-class HttpApiJava {
+class HttpApiPollution {
   static const String adminToken = 'user/login';
   static const String enterToken = 'user/entpriseLogin';
   static const String adminIndex = 'appIndex/getIndexData';

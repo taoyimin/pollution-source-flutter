@@ -4,7 +4,7 @@ import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_model.dart';
-import 'package:pollution_source/util/ui_utils.dart';
+import 'package:pollution_source/util/common_utils.dart';
 
 class AirDeviceCheckUploadRepository
     extends UploadRepository<AirDeviceCheckUpload, String> {
@@ -19,12 +19,12 @@ class AirDeviceCheckUploadRepository
         throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的监测时间'));
       if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckResult))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的参比方法测量值'));
-      if (!UIUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckResult))
-        throw DioError(error: InvalidParamException('第${i + 1}条记录的参比方法测量值是非法值'));
+      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckResult))
+        throw DioError(error: InvalidParamException('第${i + 1}条记录的参比方法测量值是无效值'));
       if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckIsPass))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的CEMS测量值'));
-      if (!UIUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckIsPass))
-        throw DioError(error: InvalidParamException('第${i + 1}条记录的CEMS测量值是非法值'));
+      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckIsPass))
+        throw DioError(error: InvalidParamException('第${i + 1}条记录的CEMS测量值是无效值'));
     }
   }
 

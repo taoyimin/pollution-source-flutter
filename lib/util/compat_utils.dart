@@ -16,7 +16,7 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        return JavaDioUtils.instance.getDio();
+        return PollutionDioUtils.instance.getDio();
         break;
       case 2:
         //运维用户
@@ -330,7 +330,7 @@ class CompatUtils {
       case 0:
       case 1:
         //环保和企业用户
-        return getJavaApi(httpApi);
+        return getPollutionApi(httpApi);
       case 2:
         //运维用户
         return getOperationApi(httpApi);
@@ -340,87 +340,87 @@ class CompatUtils {
     }
   }
 
-  /// 根据传入的枚举类型返回对应的Java接口
-  static String getJavaApi(httpApi) {
+  /// 根据传入的枚举类型返回对应的污染源接口
+  static String getPollutionApi(httpApi) {
     switch (httpApi) {
       case HttpApi.adminIndex:
-        return HttpApiJava.adminIndex;
+        return HttpApiPollution.adminIndex;
       case HttpApi.adminToken:
-        return HttpApiJava.adminToken;
+        return HttpApiPollution.adminToken;
       case HttpApi.enterToken:
-        return HttpApiJava.enterToken;
+        return HttpApiPollution.enterToken;
       case HttpApi.enterList:
-        return HttpApiJava.enterList;
+        return HttpApiPollution.enterList;
       case HttpApi.attentionLevel:
-        return HttpApiJava.attentionLevel;
+        return HttpApiPollution.attentionLevel;
       case HttpApi.enterDetail:
-        return HttpApiJava.enterDetail;
+        return HttpApiPollution.enterDetail;
       case HttpApi.dischargeList:
-        return HttpApiJava.dischargeList;
+        return HttpApiPollution.dischargeList;
       case HttpApi.dischargeDetail:
-        return HttpApiJava.dischargeDetail;
+        return HttpApiPollution.dischargeDetail;
       case HttpApi.outletType:
-        return HttpApiJava.outletType;
+        return HttpApiPollution.outletType;
       case HttpApi.monitorList:
-        return HttpApiJava.monitorList;
+        return HttpApiPollution.monitorList;
       case HttpApi.monitorState:
-        return HttpApiJava.monitorState;
+        return HttpApiPollution.monitorState;
       case HttpApi.outType:
-        return HttpApiJava.outType;
+        return HttpApiPollution.outType;
       case HttpApi.monitorDetail:
-        return HttpApiJava.monitorDetail;
+        return HttpApiPollution.monitorDetail;
       case HttpApi.monitorHistoryData:
-        return HttpApiJava.monitorHistoryData;
+        return HttpApiPollution.monitorHistoryData;
       case HttpApi.monitorStatistics:
-        return HttpApiJava.monitorStatistics;
+        return HttpApiPollution.monitorStatistics;
       case HttpApi.orderList:
-        return HttpApiJava.orderList;
+        return HttpApiPollution.orderList;
       case HttpApi.orderAlarmType:
-        return HttpApiJava.orderAlarmType;
+        return HttpApiPollution.orderAlarmType;
       case HttpApi.orderAlarmLevel:
-        return HttpApiJava.orderAlarmLevel;
+        return HttpApiPollution.orderAlarmLevel;
       case HttpApi.orderDetail:
-        return HttpApiJava.orderDetail;
+        return HttpApiPollution.orderDetail;
       case HttpApi.processesUpload:
-        return HttpApiJava.processesUpload;
+        return HttpApiPollution.processesUpload;
       case HttpApi.dischargeReportList:
-        return HttpApiJava.dischargeReportList;
+        return HttpApiPollution.dischargeReportList;
       case HttpApi.reportValid:
-        return HttpApiJava.reportValid;
+        return HttpApiPollution.reportValid;
       case HttpApi.dischargeReportDetail:
-        return HttpApiJava.dischargeReportDetail;
+        return HttpApiPollution.dischargeReportDetail;
       case HttpApi.dischargeReportUpload:
-        return HttpApiJava.dischargeReportUpload;
+        return HttpApiPollution.dischargeReportUpload;
       case HttpApi.factorReportList:
-        return HttpApiJava.factorReportList;
+        return HttpApiPollution.factorReportList;
       case HttpApi.factorReportDetail:
-        return HttpApiJava.factorReportDetail;
+        return HttpApiPollution.factorReportDetail;
       case HttpApi.factorReportUpload:
-        return HttpApiJava.factorReportUpload;
+        return HttpApiPollution.factorReportUpload;
       case HttpApi.longStopReportList:
-        return HttpApiJava.longStopReportList;
+        return HttpApiPollution.longStopReportList;
       case HttpApi.longStopReportDetail:
-        return HttpApiJava.longStopReportDetail;
+        return HttpApiPollution.longStopReportDetail;
       case HttpApi.longStopReportUpload:
-        return HttpApiJava.longStopReportUpload;
+        return HttpApiPollution.longStopReportUpload;
       case HttpApi.licenseList:
-        return HttpApiJava.licenseList;
+        return HttpApiPollution.licenseList;
       case HttpApi.dischargeReportStopType:
-        return HttpApiJava.dischargeReportStopType;
+        return HttpApiPollution.dischargeReportStopType;
       case HttpApi.factorReportAlarmType:
-        return HttpApiJava.factorReportAlarmType;
+        return HttpApiPollution.factorReportAlarmType;
       case HttpApi.factorReportFactorList:
-        return HttpApiJava.factorReportFactorList;
+        return HttpApiPollution.factorReportFactorList;
       case HttpApi.reportStopAdvanceTime:
-        return HttpApiJava.reportStopAdvanceTime;
+        return HttpApiPollution.reportStopAdvanceTime;
       case HttpApi.checkVersion:
-        return HttpApiJava.checkVersion;
+        return HttpApiPollution.checkVersion;
       case HttpApi.changePassword:
-        return HttpApiJava.changePassword;
+        return HttpApiPollution.changePassword;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
-            error: NotFoundException('HttpApiJava中没有对应的接口'));
+            error: NotFoundException('HttpApiPollution中没有对应的接口'));
     }
   }
 

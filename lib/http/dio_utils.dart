@@ -5,13 +5,13 @@ import 'package:pollution_source/res/constant.dart';
 
 /// Dio工具类，使用单例模式
 ///
-/// 用于访问污染源Java后台接口
-class JavaDioUtils {
-  static final JavaDioUtils _singleton = JavaDioUtils._internal();
+/// 用于访问污染源后台接口
+class PollutionDioUtils {
+  static final PollutionDioUtils _singleton = PollutionDioUtils._internal();
 
-  static JavaDioUtils get instance => JavaDioUtils();
+  static PollutionDioUtils get instance => PollutionDioUtils();
 
-  factory JavaDioUtils() {
+  factory PollutionDioUtils() {
     return _singleton;
   }
 
@@ -21,7 +21,7 @@ class JavaDioUtils {
     return _dio;
   }
 
-  JavaDioUtils._internal() {
+  PollutionDioUtils._internal() {
     var options = BaseOptions(
       connectTimeout: 15000,
       receiveTimeout: 15000,

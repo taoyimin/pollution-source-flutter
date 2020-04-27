@@ -18,7 +18,6 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
-import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 
 class EnterIndexPage extends StatefulWidget {
@@ -48,7 +47,6 @@ class _EnterIndexPageState extends State<EnterIndexPage>
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _refreshCompleter = Completer<void>();
-    SystemUtils.checkUpdate(context);
   }
 
   @override

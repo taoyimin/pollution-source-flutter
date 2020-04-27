@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
 part 'common_model.g.dart';
@@ -247,16 +248,16 @@ ChartData _$ChartDataFromJson(Map<String, dynamic> json) {
       alarmFlag: json['alarmFlag'] as String,
       checked: points.length != 0,
       color: UIUtils.getRandomColor(),
-      maxX: UIUtils.getMax(points.map((point) {
+      maxX: CommonUtils.getMax(points.map((point) {
         return point.x;
       }).toList()),
-      minX: UIUtils.getMin(points.map((point) {
+      minX: CommonUtils.getMin(points.map((point) {
         return point.x;
       }).toList()),
-      maxY: UIUtils.getMax(points.map((point) {
+      maxY: CommonUtils.getMax(points.map((point) {
         return point.y;
       }).toList()),
-      minY: UIUtils.getMin(points.map((point) {
+      minY: CommonUtils.getMin(points.map((point) {
         return point.y;
       }).toList()),
       points: points);
