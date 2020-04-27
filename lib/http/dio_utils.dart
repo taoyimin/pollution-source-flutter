@@ -7,7 +7,7 @@ import 'package:pollution_source/res/constant.dart';
 ///
 /// 用于访问污染源后台接口
 class PollutionDioUtils {
-  static final PollutionDioUtils _singleton = PollutionDioUtils._internal();
+  static final PollutionDioUtils _singleton = PollutionDioUtils.internal();
 
   static PollutionDioUtils get instance => PollutionDioUtils();
 
@@ -21,7 +21,7 @@ class PollutionDioUtils {
     return _dio;
   }
 
-  PollutionDioUtils._internal() {
+  PollutionDioUtils.internal() {
     var options = BaseOptions(
       connectTimeout: 15000,
       receiveTimeout: 15000,
@@ -48,7 +48,7 @@ class PollutionDioUtils {
 ///
 /// 用于访问运维后台接口
 class OperationDioUtils {
-  static final OperationDioUtils _singleton = OperationDioUtils._internal();
+  static final OperationDioUtils _singleton = OperationDioUtils.internal();
 
   static OperationDioUtils get instance => OperationDioUtils();
 
@@ -62,7 +62,7 @@ class OperationDioUtils {
     return _dio;
   }
 
-  OperationDioUtils._internal() {
+  OperationDioUtils.internal() {
     var options = BaseOptions(
       connectTimeout: 15000,
       receiveTimeout: 15000,
