@@ -19,6 +19,9 @@ class Constant {
   /// 异常申报开始时间允许的滞后小时数
   static const int defaultStopAdvanceTime = 48;
 
+  /// 推送用TAG标签
+  static const List<String> userTags = ['hb', 'qy', 'yw'];
+
   /// ****************网络请求用的key***************
   /// 污染源接口header中token的key
   static const String requestHeaderTokenKey = 'token';
@@ -69,13 +72,6 @@ class Constant {
 
   /// *********SharedPreferences存取数据用的key*********
 
-  /// 登录接口集合
-  static const List<HttpApi> loginApis = [
-    HttpApi.adminToken,
-    HttpApi.enterToken,
-    HttpApi.operationToken
-  ];
-
   /// 是否开启debug模式
   static const String spDebug = 'debug';
 
@@ -106,20 +102,6 @@ class Constant {
   /// 登录时间
   static const String spLoginTime = 'loginTime';
 
-  /// 登录用户名key集合
-  static const List<String> spUsernameList = [
-    Constant.spAdminUsername,
-    Constant.spEnterUsername,
-    Constant.spOperationUsername
-  ];
-
-  /// 登录密码key集合
-  static const List<String> spPasswordList = [
-    Constant.spAdminPassword,
-    Constant.spEnterPassword,
-    Constant.spOperationPassword
-  ];
-
   /// 存取登录用户类型的key
   static const String spUserType = 'userType';
 
@@ -134,6 +116,30 @@ class Constant {
 
   /// 存取在线数据图表是否显示数据点的key
   static const String spShowDotData = 'showDotData';
+
+  /// 申请通知权限是否不再提示
+  static const String spNotificationNoLonger = 'spNotificationNoLonger';
+
+  /// 登录接口集合
+  static const List<HttpApi> loginApis = [
+    HttpApi.adminToken,
+    HttpApi.enterToken,
+    HttpApi.operationToken
+  ];
+
+  /// 登录用户名key集合
+  static const List<String> spUsernameList = [
+    Constant.spAdminUsername,
+    Constant.spEnterUsername,
+    Constant.spOperationUsername
+  ];
+
+  /// 登录密码key集合
+  static const List<String> spPasswordList = [
+    Constant.spAdminPassword,
+    Constant.spEnterPassword,
+    Constant.spOperationPassword
+  ];
 
   /// *********环保用户首页取数据用的key*********
 
