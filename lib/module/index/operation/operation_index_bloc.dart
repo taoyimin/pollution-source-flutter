@@ -35,7 +35,6 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             await _convertOrderStatistics(orderResponse.data);
         yield IndexLoaded(
           pollutionEnterStatisticsList: pollutionEnterStatisticsList,
-          //onlineMonitorStatisticsList: onlineMonitorStatisticsList,
           orderStatisticsList: orderStatisticsList,
           inspectionStatisticsList: inspectionStatisticsList,
         );
@@ -46,7 +45,7 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
   }
 }
 
-//格式化污染源企业统计
+/// 格式化污染源企业统计
 Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
   bool show = true;
   if (!show) {
@@ -120,7 +119,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
   }
 }
 
-//格式化巡检任务统计
+/// 格式化巡检任务统计
 Future<List<Meta>> _convertInspectionStatistics(dynamic json) async {
   bool show = true;
   if (!show) {
@@ -148,7 +147,7 @@ Future<List<Meta>> _convertInspectionStatistics(dynamic json) async {
   }
 }
 
-//格式化督办单任务统计
+/// 格式化督办单任务统计
 Future<List<Meta>> _convertOrderStatistics(dynamic json) async {
   bool show = true;
   if (!show) {
