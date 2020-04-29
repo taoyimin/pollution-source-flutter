@@ -54,6 +54,9 @@ enum HttpApi {
   /// 报警管理单列表
   orderList,
 
+  /// 报警管理单状态数据字典
+  orderState,
+
   /// 报警管理单报警类型数据字典
   orderAlarmType,
 
@@ -62,6 +65,9 @@ enum HttpApi {
 
   /// 报警管理单详情
   orderDetail,
+
+  /// 报警管理单报警原因
+  orderAlarmCause,
 
   /// 报警管理单处理流程上报
   processesUpload,
@@ -164,19 +170,22 @@ class HttpApiPollution {
   static const String monitorList = 'tDisChargeOut/getDrainInfo';
   static const String monitorState =
       'dictionary/getSubListByParent?dicCode=monitorRealData';
-  static const String outType =
-      'dictionary/getSubListByParent?dicCode=outType';
+  static const String outType = 'dictionary/getSubListByParent?dicCode=outType';
   static const String monitorDetail =
       'tDisChargeOut/getDrainInfoById?monitorId=';
   static const String monitorHistoryData = 'monitorRealData/queryDetailHistory';
   static const String monitorStatistics = 'appIndex/getMonitorStatistics';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
+  static const String orderState =
+      'dictionary/getSubListByParent?dicCode=orderStatus';
   static const String orderAlarmType =
       'dictionary/getSubListByParent?dicCode=alarm_type';
   static const String orderAlarmLevel =
       'dictionary/getSubListByParent?dicCode=alarmLevel';
   static const String orderDetail =
       'Supervise/querySuperviseDetailById?orderId=';
+  static const String orderAlarmCause =
+      'dictionary/getSubListByParent?dicCode=alarm_cause';
   static const String processesUpload = 'Supervise/dealSupervise';
   static const String dischargeReportList = 'stopApply/getApplyList';
   static const String reportValid =
@@ -220,20 +229,24 @@ class HttpApiOperation {
       'ycyd/disChargeMonitorYcyd/api/getDrainInfo';
   static const String monitorState =
       'dictionary/getSubListAPI?dicCode=monitorRealData';
-  static const String outType =
-      'dictionary/getSubListAPI?dicCode=outType';
+  static const String outType = 'dictionary/getSubListAPI?dicCode=outType';
   static const String monitorDetail =
       'ycyd/disChargeMonitorYcyd/api/getDrainInfoById?monitorId=';
   static const String monitorHistoryData =
       'pollutantsource/tMonitorRealDataView/queryDetailHistoryAPI';
-  static const String monitorStatistics = 'statistics/queryMonitorRealDataCountByCondition';
+  static const String monitorStatistics =
+      'statistics/queryMonitorRealDataCountByCondition';
   static const String orderList = 'commonSupervise/list';
+  static const String orderState =
+      'dictionary/getSubListAPI?dicCode=orderStatus';
   static const String orderAlarmType =
       'dictionary/getSubListAPI?dicCode=alarm_type';
   static const String orderAlarmLevel =
       'dictionary/getSubListAPI?dicCode=alarmLevel';
   static const String orderDetail =
       'commonSupervise/querySuperviseDetailByIdAPI?orderId=';
+  static const String orderAlarmCause =
+      'dictionary/getSubListAPI?dicCode=alarm_cause';
   static const String processesUpload = 'commonSupervise/dealSuperviseAPI';
   static const String dischargeReportList =
       'pollutantsource/stopApply/queryPage';

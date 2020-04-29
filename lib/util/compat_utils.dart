@@ -375,12 +375,16 @@ class CompatUtils {
         return HttpApiPollution.monitorStatistics;
       case HttpApi.orderList:
         return HttpApiPollution.orderList;
+      case HttpApi.orderState:
+        return HttpApiPollution.orderState;
       case HttpApi.orderAlarmType:
         return HttpApiPollution.orderAlarmType;
       case HttpApi.orderAlarmLevel:
         return HttpApiPollution.orderAlarmLevel;
       case HttpApi.orderDetail:
         return HttpApiPollution.orderDetail;
+      case HttpApi.orderAlarmCause:
+        return HttpApiPollution.orderAlarmCause;
       case HttpApi.processesUpload:
         return HttpApiPollution.processesUpload;
       case HttpApi.dischargeReportList:
@@ -457,12 +461,16 @@ class CompatUtils {
         return HttpApiOperation.monitorStatistics;
       case HttpApi.orderList:
         return HttpApiOperation.orderList;
+      case HttpApi.orderState:
+        return HttpApiOperation.orderState;
       case HttpApi.orderAlarmType:
         return HttpApiOperation.orderAlarmType;
       case HttpApi.orderAlarmLevel:
         return HttpApiOperation.orderAlarmLevel;
       case HttpApi.orderDetail:
         return HttpApiOperation.orderDetail;
+      case HttpApi.orderAlarmCause:
+        return HttpApiOperation.orderAlarmCause;
       case HttpApi.processesUpload:
         return HttpApiOperation.processesUpload;
       case HttpApi.dischargeReportList:
