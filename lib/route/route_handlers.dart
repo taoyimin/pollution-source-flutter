@@ -194,8 +194,12 @@ var monitorHistoryDataHandler = Handler(
   String monitorId = params['monitorId']?.first;
   // 均值类型默认为小时数据
   String dataType = params['dataType']?.first ?? 'hour';
-  DateTime startTime =TextUtil.isEmpty(params['startTime']?.first) ? null : DateUtil.getDateTime(params['startTime']?.first);
-  DateTime endTime = TextUtil.isEmpty(params['endTime']?.first) ? null : DateUtil.getDateTime(params['endTime']?.first);
+  DateTime startTime = TextUtil.isEmpty(params['startTime']?.first)
+      ? null
+      : DateUtil.getDateTime(params['startTime']?.first);
+  DateTime endTime = TextUtil.isEmpty(params['endTime']?.first)
+      ? null
+      : DateUtil.getDateTime(params['endTime']?.first);
   return BlocProvider<DetailBloc>(
     create: (BuildContext context) =>
         DetailBloc(detailRepository: MonitorHistoryDataRepository()),
@@ -212,7 +216,7 @@ var orderListHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   String enterId = params['enterId']?.first ?? '';
   String monitorId = params['monitorId']?.first ?? '';
-  String state = params['state']?.first ?? '';
+  String alarmState = params['alarmState']?.first ?? '';
   String alarmLevel = params['alarmLevel']?.first ?? '';
   // 默认取当前登录用户的关注程度
   String attentionLevel = params['attentionLevel']?.first ??
@@ -223,7 +227,7 @@ var orderListHandler = Handler(
     child: OrderListPage(
       enterId: enterId,
       monitorId: monitorId,
-      state: state,
+      alarmState: alarmState,
       alarmLevel: alarmLevel,
       attentionLevel: attentionLevel,
     ),
@@ -235,13 +239,16 @@ var orderDetailHandler = Handler(
   String orderId = params['id']?.first;
   return MultiBlocProvider(
     providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: ProcessUploadRepository()),
-      ),
       BlocProvider<DetailBloc>(
         create: (BuildContext context) =>
             DetailBloc(detailRepository: OrderDetailRepository()),
+      ),
+      BlocProvider<PageBloc>(
+        create: (BuildContext context) => PageBloc(),
+      ),
+      BlocProvider<UploadBloc>(
+        create: (BuildContext context) =>
+            UploadBloc(uploadRepository: ProcessUploadRepository()),
       ),
     ],
     child: OrderDetailPage2(orderId: orderId),
