@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.0+11
+version: 1.1.1+12
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -19,12 +19,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # cupertino_icons: ^0.1.2
   # 多语言支持
   flutter_localizations:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
-  json_annotation: ^2.0.0
-  cupertino_icons: ^0.1.2
+  # 格式化json https://github.com/dart-lang/json_serializable
+  json_annotation: ^3.0.1
   # 下拉刷新上拉加载库 https://github.com/xuelongqy/flutter_easyrefresh
   flutter_easyrefresh: ^2.0.8
   # 扩展嵌套滚动视图 https://github.com/fluttercandies/extended_nested_scroll_view
@@ -60,7 +61,7 @@ dependencies:
   # 选择时间插件 https://github.com/dylanwuzh/flutter-cupertino-date-picker
   flutter_cupertino_date_picker: ^1.0.12
   # 下拉筛选菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
-  gzx_dropdown_menu : ^1.0.1
+  gzx_dropdown_menu: ^1.0.1
   # 图片选择器 https://github.com/Sh1d0w/multi_image_picker
   multi_image_picker: ^4.6.6
   # 获取系统文件路径 https://github.com/flutter/plugins/tree/master/packages/path_provider
@@ -84,7 +85,9 @@ dependencies:
   # 分享功能 https://github.com/flutter/plugins/tree/master/packages/share
   share: ^0.6.3+6
   # 极光推送插件 https://github.com/jpush/jpush-flutter-plugin
-  jpush_flutter: 0.5.3
+  jpush_flutter: ^0.5.3
+  # 二维码扫描插件 https://github.com/mintware-de/flutter_barcode_reader
+  barcode_scan: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -93,7 +96,8 @@ dev_dependencies:
   #一次性生成 flutter packages pub run build_runner build
   #持续性生成 flutter packages pub run build_runner watch
   build_runner: ^1.0.0
-  json_serializable: ^2.0.0
+  # 格式化json https://github.com/dart-lang/json_serializable
+  json_serializable: ^3.3.0
 
 
 # For information on the generic Dart part of this file, see the
