@@ -78,34 +78,68 @@ class Order extends Equatable {
         case '超标异常':
           return Label(
               name: string,
-              imagePath: 'assets/images/icon_alarm_type_factor_outrange.png',
-              color: Colors.blue);
-        case '排放流量异常':
+              imagePath: 'assets/images/icon_alarm_type_outrange_error.png',
+              color: Colors.red);
         case '超大值':
           return Label(
               name: string,
-              imagePath: 'assets/images/icon_alarm_type_discharge_abnormal.png',
-              color: Colors.red);
-        case '数采仪掉线':
-          return Label(
-              name: string,
-              imagePath: 'assets/images/icon_alarm_type_device_offline.png',
-              color: Colors.teal);
-        case '无数据上传':
-          return Label(
-              name: string,
-              imagePath: 'assets/images/icon_alarm_type_no_upload.png',
-              color: Colors.orange);
+              imagePath: 'assets/images/icon_alarm_type_large_value.png',
+              color: Colors.pink);
         case '联网异常':
           return Label(
               name: string,
-              imagePath: 'assets/images/icon_alarm_type_no_upload.png',
+              imagePath: 'assets/images/icon_alarm_type_connect_error.png',
               color: Colors.orange);
         case '零值':
           return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_zero_value.png',
               color: Colors.blue);
+        case '负值':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_type_negative_value.png',
+              color: Colors.purpleAccent);
+        case '设备故障':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_device_error.png',
+              color: Colors.red);
+        case '设备校准':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_correct.png',
+              color: Colors.lightGreen);
+        case '接口松动':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_device_offline.png',
+              color: Colors.deepOrangeAccent);
+        case '超低排放':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_pollution_water_outlet.png',
+              color: Colors.purpleAccent);
+        case '低于检出限':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_lower_limit.png',
+              color: Colors.lightBlueAccent);
+        case '停产':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_stopline.png',
+              color: Colors.pinkAccent);
+        case '停电':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_power_failure.png',
+              color: Colors.amber);
+        case '网络故障':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_net_error.png',
+              color: Colors.grey);
         default:
           return Label(
               name: string,
