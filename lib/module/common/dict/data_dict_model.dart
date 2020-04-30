@@ -24,8 +24,8 @@ class DataDict extends Equatable {
 
   @override
   List<Object> get props => [
+        // 不去比较name，只要code相同就视为同一对象
         code,
-        name,
         checked,
       ];
 
