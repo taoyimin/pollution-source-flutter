@@ -169,7 +169,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
     );
   }
 
-  Widget _buildPageLoadedDetail(context1, FactorReportUpload reportUpload) {
+  Widget _buildPageLoadedDetail(context, FactorReportUpload reportUpload) {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -213,7 +213,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                     if (reportUpload?.enter == null) {
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text('请先选择排口！'),
+                          content: const Text('请先选择企业！'),
                           action: SnackBarAction(
                             label: '我知道了',
                             textColor: Colours.primary_color,
