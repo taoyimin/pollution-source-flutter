@@ -232,7 +232,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
                         router:
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=5',
+                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=50',
                       ),
                     ),
                     Gaps.hGap10,

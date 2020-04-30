@@ -8,14 +8,15 @@ part of 'monitor_statistics_model.dart';
 
 MonitorStatistics _$MonitorStatisticsFromJson(Map<String, dynamic> json) {
   return MonitorStatistics(
-      name: json['name'] as String,
-      code: json['code'] as String,
-      count: json['cnt'] as int);
+    name: json['name'] as String,
+    code: json['code'] as String,
+    count: json['cnt'] as int,
+  );
 }
 
 Map<String, dynamic> _$MonitorStatisticsToJson(MonitorStatistics instance) =>
     <String, dynamic>{
       'name': instance.name,
       'code': instance.code,
-      'cnt': instance.count
+      'cnt': instance.count,
     };

@@ -1,31 +1,37 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
 part 'order_list_model.g.dart';
 
-//报警管理单列表
+/// 报警管理单列表
 @JsonSerializable()
 class Order extends Equatable {
   @JsonKey(name: 'id')
   final int orderId; // 报警管理单ID
-  @JsonKey(name: 'enterpriseName')
+  @JsonKey(name: 'enterpriseName', defaultValue: '')
   final String enterName; // 企业名称
-  @JsonKey(name: 'disMonitorName')
+  @JsonKey(name: 'disMonitorName', defaultValue: '')
   final String monitorName; // 监控点名称
-  @JsonKey(name: 'alarmDate')
+  @JsonKey(name: 'alarmDate', defaultValue: '')
   final String alarmDateStr; // 报警时间
+  @JsonKey(defaultValue: '')
   final String cityName; // 所属市
+  @JsonKey(defaultValue: '')
   final String areaName; // 所属区
-  final String orderStateStr; // 状态
-  @JsonKey(name: 'alarmDesc')
-  final String alarmRemark; // 报警描述
+  @JsonKey(defaultValue: '')
+  final String alarmStateStr; // 报警单状态
+  @JsonKey(defaultValue: '')
+  final String alarmDesc; // 报警描述
+  @JsonKey(defaultValue: '')
   final String alarmTypeStr; // 报警类型
+  @JsonKey(defaultValue: '')
+  final String alarmCauseStr; // 报警类型
+  @JsonKey(defaultValue: '')
   final String alarmLevel; // 报警级别
-  final String superviseStatus; // 报警级别描述
+  @JsonKey(defaultValue: '')
+  final String alarmLevelName; // 报警级别描述
 
   const Order({
     this.orderId,
@@ -34,11 +40,12 @@ class Order extends Equatable {
     this.alarmDateStr,
     this.cityName,
     this.areaName,
-    this.orderStateStr,
-    this.alarmRemark,
+    this.alarmStateStr,
+    this.alarmDesc,
     this.alarmTypeStr,
+    this.alarmCauseStr,
     this.alarmLevel,
-    this.superviseStatus,
+    this.alarmLevelName,
   });
 
   @override
@@ -49,31 +56,19 @@ class Order extends Equatable {
         alarmDateStr,
         cityName,
         areaName,
-        orderStateStr,
-        alarmRemark,
+        alarmStateStr,
+        alarmDesc,
         alarmTypeStr,
+        alarmCauseStr,
         alarmLevel,
-        superviseStatus,
+        alarmLevelName,
       ];
 
   List<Label> get labelList {
-    return TextUtil.isEmpty(alarmTypeStr)
-        ? const []
-        : _getLabelList(alarmTypeStr);
-  }
-
-  // 所属区域
-  String get districtName {
-    return '${cityName ?? ''}${areaName ?? ''}';
-  }
-
-  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
-
-  Map<String, dynamic> toJson() => _$OrderToJson(this);
-
-  //将报警类型string转化成List
-  static List<Label> _getLabelList(String string) {
-    return string.trimLeft().trimRight().split(' ').map((string) {
+    return '${alarmTypeStr.trim()} ${alarmCauseStr.trim()}'
+        .trim()
+        .split(' ')
+        .map((string) {
       switch (string) {
         case '连续恒值':
           return Label(
@@ -119,4 +114,13 @@ class Order extends Equatable {
       }
     }).toList();
   }
+
+  // 所属区域
+  String get districtName {
+    return '${cityName ?? ''}${areaName ?? ''}';
+  }
+
+  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OrderToJson(this);
 }

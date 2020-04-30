@@ -8,8 +8,13 @@ part of 'system_config_model.dart';
 
 SystemConfig _$SystemConfigFromJson(Map<String, dynamic> json) {
   return SystemConfig(
-      name: json['dicDesc'] as String, code: json['dicValue'] as String);
+    name: json['dicDesc'] as String,
+    code: json['dicValue'] as String,
+  );
 }
 
 Map<String, dynamic> _$SystemConfigToJson(SystemConfig instance) =>
-    <String, dynamic>{'dicDesc': instance.name, 'dicValue': instance.code};
+    <String, dynamic>{
+      'dicDesc': instance.name,
+      'dicValue': instance.code,
+    };

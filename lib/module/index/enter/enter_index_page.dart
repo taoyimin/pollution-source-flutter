@@ -281,30 +281,31 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         content: '${enterDetail.orderDealCount ?? ''}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
                         router:
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=2',
-                      ),
-                    ),
-                    Gaps.hGap10,
-                    InkWellButton5(
-                      meta: Meta(
-                        color: Color(0xFFFFB709),
-                        title: '超期待办',
-                        content: '${enterDetail.orderOverdueCount ?? ''}',
-                        imagePath:
-                            'assets/images/icon_alarm_manage_complete.png',
-                        router:
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=2&alarmLevel=3',
+                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20',
                       ),
                     ),
                     Gaps.hGap10,
                     InkWellButton5(
                       meta: Meta(
                         color: Color(0xFFFD6C6B),
-                        title: '已退回',
-                        content: '${enterDetail.orderReturnCount ?? ''}',
-                        imagePath: 'assets/images/icon_alarm_manage_return.png',
+                        title: '超期待办',
+                        content: '${enterDetail.orderOverdueCount ?? ''}',
+                        imagePath:
+                            'assets/images/icon_alarm_manage_return.png',
                         router:
-                            '${Routes.orderList}?enterId=${widget.enterId}&state=4',
+                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20&alarmLevel=3',
+                      ),
+                    ),
+                    Gaps.hGap10,
+                    InkWellButton5(
+                      meta: Meta(
+                        color: Color(0xFF45C4FF),
+                        title: '已办结',
+                        content: '${enterDetail.orderCompleteCount ?? ''}',
+                        imagePath:
+                        'assets/images/icon_alarm_manage_complete.png',
+                        router:
+                        '${Routes.orderList}?enterId=${widget.enterId}&alarmState=50',
                       ),
                     ),
                   ],

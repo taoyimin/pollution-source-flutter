@@ -9,9 +9,10 @@ part of 'routine_inspection_detail_model.dart';
 RoutineInspectionDetail _$RoutineInspectionDetailFromJson(
     Map<String, dynamic> json) {
   return RoutineInspectionDetail(
-      itemInspectTypeName: json['itemInspectTypeName'] as String,
-      itemInspectType: json['itemInspectType'] as String,
-      taskCount: json['cnt'] as int);
+    itemInspectTypeName: json['itemInspectTypeName'] as String,
+    itemInspectType: json['itemInspectType'] as String,
+    taskCount: json['cnt'] as int,
+  );
 }
 
 Map<String, dynamic> _$RoutineInspectionDetailToJson(
@@ -19,5 +20,5 @@ Map<String, dynamic> _$RoutineInspectionDetailToJson(
     <String, dynamic>{
       'itemInspectTypeName': instance.itemInspectTypeName,
       'itemInspectType': instance.itemInspectType,
-      'cnt': instance.taskCount
+      'cnt': instance.taskCount,
     };

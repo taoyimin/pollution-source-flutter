@@ -8,12 +8,13 @@ part of 'enter_list_model.dart';
 
 Enter _$EnterFromJson(Map<String, dynamic> json) {
   return Enter(
-      enterId: json['enterId'] as int,
-      enterName: json['enterpriseName'] as String,
-      enterAddress: json['entAddress'] as String,
-      attentionLevel: json['attentionLevel'] as String,
-      industryTypeStr: json['industryTypeStr'] as String,
-      enterType: json['enterpriseType'] as String);
+    enterId: json['enterId'] as int,
+    enterName: json['enterpriseName'] as String,
+    enterAddress: json['entAddress'] as String,
+    attentionLevel: json['attentionLevel'] as String,
+    industryTypeStr: json['industryTypeStr'] as String,
+    enterType: json['enterpriseType'] as String,
+  );
 }
 
 Map<String, dynamic> _$EnterToJson(Enter instance) => <String, dynamic>{
@@ -22,5 +23,5 @@ Map<String, dynamic> _$EnterToJson(Enter instance) => <String, dynamic>{
       'entAddress': instance.enterAddress,
       'attentionLevel': instance.attentionLevel,
       'industryTypeStr': instance.industryTypeStr,
-      'enterpriseType': instance.enterType
+      'enterpriseType': instance.enterType,
     };

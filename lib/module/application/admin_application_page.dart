@@ -211,7 +211,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '查询待办督办单',
                                     imagePath:
                                         'assets/images/application_icon_order.png',
-                                    router: '${Routes.orderList}?state=2',
+                                    router: '${Routes.orderList}?alarmState=20',
                                   ),
                                 ),
                                 Gaps.hGap20,

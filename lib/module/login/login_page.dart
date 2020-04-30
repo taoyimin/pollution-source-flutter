@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
         passWord: _passwordController.text,
       );
       // 登录成功
+      // 储存userType
       SpUtil.putInt(Constant.spUserType, _userType);
       // 储存userId
       SpUtil.putInt(Constant.spUserId, CompatUtils.getResponseUserId(response));

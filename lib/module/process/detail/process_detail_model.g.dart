@@ -10,6 +10,7 @@ Process _$ProcessFromJson(Map<String, dynamic> json) {
   return Process(
     operateTypeStr: json['dicSubName'] as String ?? '',
     operatePerson: json['operatePersonName'] as String ?? '',
+    alarmCauseStr: json['alarmCauseStr'] as String ?? '',
     operateTimeStr: json['operateTime'] as String ?? '',
     operateDesc: json['operateDesc'] as String ?? '',
     attachments: (json['attachmentList'] as List)
@@ -23,8 +24,9 @@ Process _$ProcessFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ProcessToJson(Process instance) => <String, dynamic>{
       'dicSubName': instance.operateTypeStr,
-      'operatePersonName': instance.operatePerson,
       'operateTime': instance.operateTimeStr,
+      'operatePersonName': instance.operatePerson,
+      'alarmCauseStr': instance.alarmCauseStr,
       'operateDesc': instance.operateDesc,
       'attachmentList': instance.attachments,
     };

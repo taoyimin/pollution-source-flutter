@@ -239,7 +239,7 @@ class _DeviceInspectionUploadListPageState
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          //创建列表项
+          // 创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
@@ -335,7 +335,7 @@ class _DeviceInspectionUploadListPageState
         backgroundColor: _animation.value,
         onPressed: () {
           if (_bottomSheetController != null) {
-            //已经处于打开状态
+            // 已经处于打开状态
             _bottomSheetController.close();
             return;
           }
@@ -351,18 +351,18 @@ class _DeviceInspectionUploadListPageState
             );
             return;
           }
-          //fab由蓝变红
+          // fab由蓝变红
           _animateController.forward();
           setState(() {
             _actionIcon = Icons.close;
           });
-          //打开BottomSheet
+          // 打开BottomSheet
           _bottomSheetController = showBottomSheet(
             context: context,
             elevation: 20,
             backgroundColor: Colors.white,
             builder: (BuildContext context) {
-              //生成流程上报界面
+              // 生成流程上报界面
               return BlocBuilder<PageBloc, PageState>(
                 bloc: _pageBloc,
                 builder: (context, state) {
@@ -376,9 +376,9 @@ class _DeviceInspectionUploadListPageState
               );
             },
           );
-          //监听BottomSheet关闭
+          // 监听BottomSheet关闭
           _bottomSheetController.closed.then((value) {
-            //fab由红变蓝
+            // fab由红变蓝
             _animateController.reverse();
             setState(() {
               _bottomSheetController = null;
@@ -495,7 +495,7 @@ class _DeviceInspectionUploadListPageState
                 icon: Icons.file_upload,
                 color: Colors.lightBlue,
                 onTap: () {
-                  //发送上传事件
+                  // 发送上传事件
                   _uploadBloc.add(Upload(
                       data: deviceInspectUpload.copyWith(
                     selectedList: _selectedList,

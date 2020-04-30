@@ -19,7 +19,7 @@ class OrderListRepository extends ListRepository<Order> {
   ///
   /// [enterName] 按企业名称搜索
   /// [areaCode] 按区域搜索
-  /// [state] 状态 0：全部 1：待督办 2：待处理 3：待审核 4：审核不通过 5：已办结
+  /// [alarmState] 状态 0：全部 1：待督办 2：待处理 3：待审核 4：审核不通过 5：已办结
   /// [enterId] 筛选某企业的所有报警管理单
   /// [monitorId] 筛选某监控点的所有报警管理单
   /// [alarmLevel] 报警级别 0：正常 1：黄色预警 2：橙色预警 3：红色预警
@@ -32,7 +32,7 @@ class OrderListRepository extends ListRepository<Order> {
     pageSize = Constant.defaultPageSize,
     enterName = '',
     areaCode = '',
-    state = '',
+    alarmState = '',
     enterId = '',
     monitorId = '',
     alarmLevel = '',
@@ -58,22 +58,7 @@ class OrderListRepository extends ListRepository<Order> {
           format: DateFormat.YEAR_MONTH_DAY) ?? '',
       'alarmEndTime': DateUtil.getDateStrByDateTime(endTime,
           format: DateFormat.YEAR_MONTH_DAY) ?? '',
-      'orderState': () {
-        switch (state) {
-          case '1':
-            return '10';
-          case '2':
-            return '20';
-          case '3':
-            return '30';
-          case '4':
-            return '40';
-          case '5':
-            return '50';
-          default:
-            return '';
-        }
-      }(),
+      'alarmState': alarmState,
     };
   }
 }

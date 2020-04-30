@@ -10,7 +10,6 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
-import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
@@ -31,14 +30,14 @@ import 'package:pollution_source/widget/label_widget.dart';
 
 /// 报警管理单列表界面
 class OrderListPage extends StatefulWidget {
-  final String state;
+  final String alarmState;
   final String alarmLevel;
   final String attentionLevel;
   final String enterId;
   final String monitorId;
 
   OrderListPage({
-    this.state = '',
+    this.alarmState = '',
     this.alarmLevel = '',
     this.attentionLevel = '',
     this.enterId = '',
@@ -54,13 +53,10 @@ class _OrderListPageState extends State<OrderListPage> {
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
 
-  /// 报警单状态菜单
-  final List<DataDict> _stateList = [
-    DataDict(name: '全部', code: ''),
-    DataDict(name: '待处理', code: '2'),
-    DataDict(name: '已退回', code: '4'),
-    DataDict(name: '已办结', code: '5'),
-  ];
+  /// 报警单状态Bloc
+  final DataDictBloc _alarmStateBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.orderState),
+  );
 
   /// 关注程度Bloc
   final DataDictBloc _attentionLevelBloc = DataDictBloc(
@@ -78,7 +74,7 @@ class _OrderListPageState extends State<OrderListPage> {
   );
 
   /// 报警单状态
-  String _state;
+  String _alarmState;
 
   /// 关注程度
   String _attentionLevel;
@@ -110,6 +106,8 @@ class _OrderListPageState extends State<OrderListPage> {
     _initParam();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
+    // 加载报警管理单状态
+    _alarmStateBloc.add(DataDictLoad());
     // 加载关注程度
     _attentionLevelBloc.add(DataDictLoad());
     // 加载报警类型
@@ -139,7 +137,7 @@ class _OrderListPageState extends State<OrderListPage> {
     _endTime = null;
     _alarmType = '';
     _alarmLevel = widget.alarmLevel;
-    _state = widget.state;
+    _alarmState = widget.alarmState;
     _attentionLevel = widget.attentionLevel;
   }
 
@@ -152,7 +150,7 @@ class _OrderListPageState extends State<OrderListPage> {
       monitorId: widget.monitorId,
       enterName: _enterNameController.text,
       areaCode: _areaCode,
-      state: _state,
+      alarmState: _alarmState,
       alarmLevel: _alarmLevel,
       alarmType: _alarmType,
       attentionLevel: _attentionLevel,
@@ -314,7 +312,7 @@ class _OrderListPageState extends State<OrderListPage> {
                           Expanded(
                             flex: 1,
                             child: ListTileWidget(
-                                '报警单状态：${orderList[index].orderStateStr}'),
+                                '报警单状态：${orderList[index].alarmStateStr}'),
                           ),
                         ],
                       ),
@@ -334,7 +332,7 @@ class _OrderListPageState extends State<OrderListPage> {
                         ],
                       ),
                       Gaps.vGap6,
-                      ListTileWidget('报警描述：${orderList[index].alarmRemark}'),
+                      ListTileWidget('报警描述：${orderList[index].alarmDesc}'),
                     ],
                   ),
                 ),
@@ -343,7 +341,7 @@ class _OrderListPageState extends State<OrderListPage> {
                       orderList[index].alarmLevel == '0',
                   child: LabelView(
                     Size.fromHeight(80),
-                    labelText: '${orderList[index].superviseStatus}',
+                    labelText: '${orderList[index].alarmLevelName}',
                     labelColor: () {
                       switch (orderList[index].alarmLevel) {
                         case '1':
@@ -415,12 +413,12 @@ class _OrderListPageState extends State<OrderListPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      DataDictGrid(
-                        checkValue: _state,
-                        dataDictList: _stateList,
+                      DataDictBlocGrid(
+                        checkValue: _alarmState,
+                        dataDictBloc: _alarmStateBloc,
                         onItemTap: (value) {
                           setState(() {
-                            _state = value;
+                            _alarmState = value;
                           });
                         },
                       ),

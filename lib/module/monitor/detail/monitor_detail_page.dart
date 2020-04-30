@@ -319,7 +319,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
                         router:
-                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&state=5',
+                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&alarmState=50',
                       ),
                     ),
                     Gaps.hGap10,

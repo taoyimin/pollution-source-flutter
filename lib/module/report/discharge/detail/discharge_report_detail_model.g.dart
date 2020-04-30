@@ -9,25 +9,26 @@ part of 'discharge_report_detail_model.dart';
 DischargeReportDetail _$DischargeReportDetailFromJson(
     Map<String, dynamic> json) {
   return DischargeReportDetail(
-      reportId: json['stopApplyId'] as int,
-      enterId: json['enterId'] as int,
-      dischargeId: json['outId'] as int,
-      monitorId: json['monitorId'] as int,
-      enterName: json['enterpriseName'] as String,
-      enterAddress: json['entAddress'] as String,
-      dischargeName: json['disOutName'] as String,
-      monitorName: json['disMonitorName'] as String,
-      cityName: json['cityName'] as String,
-      areaName: json['areaName'] as String,
-      reportTimeStr: json['applayTimeStr'] as String,
-      startTimeStr: json['startTimeStr'] as String,
-      endTimeStr: json['endTimeStr'] as String,
-      stopTypeStr: json['stopTypeStr'] as String,
-      stopReason: json['stopReason'] as String,
-      attachments: (json['attachmentList'] as List)
-          ?.map((e) =>
-              e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))
-          ?.toList());
+    reportId: json['stopApplyId'] as int,
+    enterId: json['enterId'] as int,
+    dischargeId: json['outId'] as int,
+    monitorId: json['monitorId'] as int,
+    enterName: json['enterpriseName'] as String,
+    enterAddress: json['entAddress'] as String,
+    dischargeName: json['disOutName'] as String,
+    monitorName: json['disMonitorName'] as String,
+    cityName: json['cityName'] as String,
+    areaName: json['areaName'] as String,
+    reportTimeStr: json['applayTimeStr'] as String,
+    startTimeStr: json['startTimeStr'] as String,
+    endTimeStr: json['endTimeStr'] as String,
+    stopTypeStr: json['stopTypeStr'] as String,
+    stopReason: json['stopReason'] as String,
+    attachments: (json['attachmentList'] as List)
+        ?.map((e) =>
+            e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
 }
 
 Map<String, dynamic> _$DischargeReportDetailToJson(
@@ -48,5 +49,5 @@ Map<String, dynamic> _$DischargeReportDetailToJson(
       'endTimeStr': instance.endTimeStr,
       'stopTypeStr': instance.stopTypeStr,
       'stopReason': instance.stopReason,
-      'attachmentList': instance.attachments
+      'attachmentList': instance.attachments,
     };
