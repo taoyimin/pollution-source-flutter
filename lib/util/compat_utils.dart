@@ -421,6 +421,8 @@ class CompatUtils {
         return HttpApiPollution.checkVersion;
       case HttpApi.changePassword:
         return HttpApiPollution.changePassword;
+      case HttpApi.notificationList:
+        return HttpApiPollution.notificationList;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
@@ -521,6 +523,8 @@ class CompatUtils {
         return HttpApiOperation.checkVersion;
       case HttpApi.changePassword:
         return HttpApiOperation.changePassword;
+      case HttpApi.notificationList:
+        return HttpApiOperation.notificationList;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
