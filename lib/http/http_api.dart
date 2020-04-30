@@ -152,6 +152,9 @@ enum HttpApi {
 
   /// 修改密码
   changePassword,
+
+  /// 消息通知列表
+  notificationList,
 }
 
 class HttpApiPollution {
@@ -183,7 +186,7 @@ class HttpApiPollution {
   static const String orderAlarmLevel =
       'dictionary/getSubListByParent?dicCode=alarmLevel';
   static const String orderDetail =
-      'Supervise/querySuperviseDetailById?orderId=';
+      'Supervise/querySuperviseDetailById?id=';
   static const String orderAlarmCause =
       'dictionary/getSubListByParent?dicCode=alarm_cause';
   static const String processesUpload = 'Supervise/dealSupervise';
@@ -211,6 +214,7 @@ class HttpApiPollution {
       'dictionary/getSysDictionary?dicCode=StopAdvanceTime';
   static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
+  static const String notificationList = 'pushMessage/getPushMessageHistory';
 }
 
 class HttpApiOperation {
@@ -244,7 +248,7 @@ class HttpApiOperation {
   static const String orderAlarmLevel =
       'dictionary/getSubListAPI?dicCode=alarmLevel';
   static const String orderDetail =
-      'commonSupervise/querySuperviseDetailByIdAPI?orderId=';
+      'commonSupervise/querySuperviseDetailByIdAPI?id=';
   static const String orderAlarmCause =
       'dictionary/getSubListAPI?dicCode=alarm_cause';
   static const String processesUpload = 'commonSupervise/dealSuperviseAPI';
@@ -290,4 +294,5 @@ class HttpApiOperation {
       'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
   static const String checkVersion = 'app/update.json';
   static const String changePassword = 'ywyh/updatePassword';
+  static const String notificationList = '暂无';
 }
