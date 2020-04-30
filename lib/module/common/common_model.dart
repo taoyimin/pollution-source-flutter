@@ -81,18 +81,17 @@ class Attachment extends Equatable {
 
   String get imagePath {
     if (fileName == null) return "assets/images/icon_attachment_other.png";
-    if (fileName.endsWith('.jpg') ||
-        fileName.endsWith('.png') ||
-        fileName.endsWith('.jpeg') ||
-        fileName.endsWith('.JPG') ||
-        fileName.endsWith('.PNG') ||
-        fileName.endsWith('.JPEG')) {
+    if (fileName.toLowerCase().endsWith('.jpg') ||
+        fileName.toLowerCase().endsWith('.png') ||
+        fileName.toLowerCase().endsWith('.jpeg')) {
       return "assets/images/icon_attachment_image.png";
-    } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+    } else if (fileName.toLowerCase().endsWith('.doc') ||
+        fileName.toLowerCase().endsWith('.docx')) {
       return "assets/images/icon_attachment_doc.png";
-    } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+    } else if (fileName.toLowerCase().endsWith('.xls') ||
+        fileName.toLowerCase().endsWith('.xlsx')) {
       return "assets/images/icon_attachment_xls.png";
-    } else if (fileName.endsWith('.pdf') || fileName.endsWith('.PDF')) {
+    } else if (fileName.toLowerCase().endsWith('.pdf')) {
       return "assets/images/icon_attachment_pdf.png";
     } else {
       return "assets/images/icon_attachment_other.png";
@@ -100,50 +99,13 @@ class Attachment extends Equatable {
   }
 
   String get fileSize {
-    if (int.parse(size) < 1024 * 1024) {
-      //小于1M
-      return '${(double.parse(size) / (1024)).toStringAsFixed(2)}KB';
-    } else {
-      return '${(double.parse(size) / (1024 * 1024)).toStringAsFixed(2)}M';
-    }
+    return CommonUtils.formatSize(double.parse(size));
   }
 
   factory Attachment.fromJson(Map<String, dynamic> json) =>
       _$AttachmentFromJson(json);
 
   Map<String, dynamic> toJson() => _$AttachmentToJson(this);
-}
-
-//处理流程
-@JsonSerializable()
-class Process extends Equatable {
-  final String operateTypeStr; //操作类型
-  final String operatePerson; //操作人
-  final String operateTimeStr; //操作时间
-  final String operateDesc; //操作描述
-  final List<Attachment> attachments; //附件
-
-  const Process({
-    @required this.operateTypeStr,
-    @required this.operatePerson,
-    @required this.operateTimeStr,
-    @required this.operateDesc,
-    @required this.attachments,
-  });
-
-  @override
-  List<Object> get props => [
-        operateTypeStr,
-        operatePerson,
-        operateTimeStr,
-        operateDesc,
-        attachments,
-      ];
-
-  factory Process.fromJson(Map<String, dynamic> json) =>
-      _$ProcessFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ProcessToJson(this);
 }
 
 /// 坐标点信息 用于记录因子在某个时间的监测值
@@ -286,9 +248,9 @@ class SystemConfig extends Equatable {
 
   @override
   List<Object> get props => [
-    desc,
-    value,
-  ];
+        desc,
+        value,
+      ];
 
   factory SystemConfig.fromJson(Map<String, dynamic> json) =>
       _$SystemConfigFromJson(json);
