@@ -155,6 +155,9 @@ enum HttpApi {
 
   /// 消息通知列表
   notificationList,
+
+  /// 移动执法列表
+  mobileLawList,
 }
 
 class HttpApiPollution {
@@ -215,6 +218,7 @@ class HttpApiPollution {
   static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
   static const String notificationList = 'pushMessage/getPushMessageHistory';
+  static const String mobileLawList = 'Supervise/getEnforcementsById';
 }
 
 class HttpApiOperation {
@@ -295,4 +299,5 @@ class HttpApiOperation {
   static const String checkVersion = 'app/update.json';
   static const String changePassword = 'ywyh/updatePassword';
   static const String notificationList = '暂无';
+  static const String mobileLawList = '暂无';
 }
