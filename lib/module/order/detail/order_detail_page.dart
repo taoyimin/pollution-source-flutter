@@ -425,6 +425,14 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                       "报警原因：${orderDetail.processes[index].alarmCauseStr}",
                                       style: const TextStyle(fontSize: 12),
                                     ),
+                                    Offstage(
+                                      offstage: TextUtil.isEmpty(orderDetail
+                                          .processes[index].operateResult),
+                                      child: Text(
+                                        "处理结果：${orderDetail.processes[index].operateResult}",
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ),
                                     Text(
                                       "核实情况：${orderDetail.processes[index].operateDesc}",
                                       style: const TextStyle(fontSize: 12),
@@ -589,295 +597,297 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
 
   Widget _buildBottomSheet(
       ProcessUpload processUpload, OrderDetail orderDetail) {
-    return SingleChildScrollView(child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ImageTitleWidget(
-            title: '处理督办单',
-            imagePath: 'assets/images/icon_order_process.png',
-          ),
-          Gaps.vGap16,
-          Container(
-            height: 46,
-            color: Color(0xFFDFDFDF),
-            child: Row(
-              children: <Widget>[
-                Gaps.hGap16,
-                Image.asset(
-                  'assets/images/icon_enter_contacts.png',
-                  height: 20,
-                  width: 20,
-                ),
-                Flexible(
-                  child: TextField(
-                    controller: _operatePersonController,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                    decoration: const InputDecoration(
-                      fillColor: Color(0xFFDFDFDF),
-                      filled: true,
-                      hintText: "请输入反馈人",
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: Colours.secondary_text,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ImageTitleWidget(
+              title: '处理督办单',
+              imagePath: 'assets/images/icon_order_process.png',
             ),
-          ),
-          Gaps.vGap10,
-          BlocBuilder<DataDictBloc, DataDictState>(
-            bloc: alarmCauseBloc,
-            builder: (context, state) {
-              if (state is DataDictLoading) {
-                return LoadingWidget();
-              } else if (state is DataDictError) {
-                return RowErrorWidget(
-                  tipMessage: '报警原因加载失败，请重试！',
-                  errorMessage: state.message,
-                  onReloadTap: () => _loadData(),
-                );
-              } else if (state is DataDictLoaded) {
-                return GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context, //BuildCont
-                      builder: (BuildContext context) {
-                        return DataDictDialog(
-                          dataDictList: state.dataDictList,
-                          checkList: processUpload.alarmCauseList,
-                          confirmCallBack: (dataDictList) {
-                            _pageBloc.add(PageLoad(
-                                model: processUpload.copyWith(
-                                    alarmCauseList: dataDictList)));
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    height: 46,
-                    color: Color(0xFFDFDFDF),
-                    child: Row(
-                      children: <Widget>[
-                        Gaps.hGap16,
-                        Image.asset(
-                          'assets/images/icon_alarm_error.png',
-                          height: 20,
-                          width: 20,
-                        ),
-                        Flexible(
-                          child: TextField(
-                            controller: TextEditingController(
-                                text: processUpload.alarmCauseList
-                                    .map((dataDict) {
-                                  return dataDict.name;
-                                }).join(' ')),
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                            enabled: false,
-                            decoration: const InputDecoration(
-                              fillColor: Color(0xFFDFDFDF),
-                              filled: true,
-                              hintText: "请选择报警原因",
-                              hintStyle: TextStyle(
-                                fontSize: 14,
-                                color: Colours.secondary_text,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              } else {
-                return RowErrorWidget(
-                  errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
-                  onReloadTap: () => _loadData(),
-                );
-              }
-            },
-          ),
-          Gaps.vGap10,
-          DecoratedBox(
-            decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 12),
-                  child: Image.asset(
-                    'assets/images/icon_alarm_manage.png',
+            Gaps.vGap16,
+            Container(
+              height: 46,
+              color: Color(0xFFDFDFDF),
+              child: Row(
+                children: <Widget>[
+                  Gaps.hGap16,
+                  Image.asset(
+                    'assets/images/icon_enter_contacts.png',
                     height: 20,
                     width: 20,
                   ),
-                ),
-                Flexible(
-                  child: TextField(
-                    maxLines: 3,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                    controller: _operateDescController,
-                    decoration: const InputDecoration(
-                      fillColor: Color(0xFFDFDFDF),
-                      filled: true,
-                      hintText: "请输入核实情况",
-                      hintStyle: TextStyle(
+                  Flexible(
+                    child: TextField(
+                      controller: _operatePersonController,
+                      style: const TextStyle(
                         fontSize: 14,
-                        color: Colours.secondary_text,
                       ),
-                      border: InputBorder.none,
+                      decoration: const InputDecoration(
+                        fillColor: Color(0xFFDFDFDF),
+                        filled: true,
+                        hintText: "请输入反馈人",
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          color: Colours.secondary_text,
+                        ),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Gaps.vGap5,
-          //没有选取附件则隐藏GridView
-          Offstage(
-            offstage: processUpload.attachments == null ||
-                processUpload.attachments.length == 0,
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 4,
-              childAspectRatio: 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              padding: const EdgeInsets.symmetric(
-                vertical: 5,
+                ],
               ),
-              children: List.generate(
-                processUpload.attachments == null
-                    ? 0
-                    : processUpload.attachments.length,
-                    (index) {
-                  Asset asset = processUpload.attachments[index];
-                  return AssetThumb(
-                    asset: asset,
-                    width: 300,
-                    height: 300,
+            ),
+            Gaps.vGap10,
+            BlocBuilder<DataDictBloc, DataDictState>(
+              bloc: alarmCauseBloc,
+              builder: (context, state) {
+                if (state is DataDictLoading) {
+                  return LoadingWidget();
+                } else if (state is DataDictError) {
+                  return RowErrorWidget(
+                    tipMessage: '报警原因加载失败，请重试！',
+                    errorMessage: state.message,
+                    onReloadTap: () => _loadData(),
                   );
-                },
+                } else if (state is DataDictLoaded) {
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context, //BuildCont
+                        builder: (BuildContext context) {
+                          return DataDictDialog(
+                            dataDictList: state.dataDictList,
+                            checkList: processUpload.alarmCauseList,
+                            confirmCallBack: (dataDictList) {
+                              _pageBloc.add(PageLoad(
+                                  model: processUpload.copyWith(
+                                      alarmCauseList: dataDictList)));
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 46,
+                      color: Color(0xFFDFDFDF),
+                      child: Row(
+                        children: <Widget>[
+                          Gaps.hGap16,
+                          Image.asset(
+                            'assets/images/icon_alarm_error.png',
+                            height: 20,
+                            width: 20,
+                          ),
+                          Flexible(
+                            child: TextField(
+                              controller: TextEditingController(
+                                  text: processUpload.alarmCauseList
+                                      .map((dataDict) {
+                                return dataDict.name;
+                              }).join(' ')),
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                              enabled: false,
+                              decoration: const InputDecoration(
+                                fillColor: Color(0xFFDFDFDF),
+                                filled: true,
+                                hintText: "请选择报警原因",
+                                hintStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: Colours.secondary_text,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return RowErrorWidget(
+                    errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                    onReloadTap: () => _loadData(),
+                  );
+                }
+              },
+            ),
+            Gaps.vGap10,
+            DecoratedBox(
+              decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, top: 12),
+                    child: Image.asset(
+                      'assets/images/icon_alarm_manage.png',
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
+                  Flexible(
+                    child: TextField(
+                      maxLines: 3,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                      controller: _operateDescController,
+                      decoration: const InputDecoration(
+                        fillColor: Color(0xFFDFDFDF),
+                        filled: true,
+                        hintText: "请输入核实情况",
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          color: Colours.secondary_text,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          Gaps.vGap3,
-          Offstage(
-            offstage: orderDetail.audit != 'T',
-            child: Row(
-              children: <Widget>[
-                Container(
-                  height: 46,
-                  width: 46,
-                  child: RaisedButton(
-                    padding: const EdgeInsets.all(0),
-                    color: Colors.white,
-                    onPressed: () async {
+            Gaps.vGap5,
+            //没有选取附件则隐藏GridView
+            Offstage(
+              offstage: processUpload.attachments == null ||
+                  processUpload.attachments.length == 0,
+              child: GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 4,
+                childAspectRatio: 1,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5,
+                ),
+                children: List.generate(
+                  processUpload.attachments == null
+                      ? 0
+                      : processUpload.attachments.length,
+                  (index) {
+                    Asset asset = processUpload.attachments[index];
+                    return AssetThumb(
+                      asset: asset,
+                      width: 300,
+                      height: 300,
+                    );
+                  },
+                ),
+              ),
+            ),
+            Gaps.vGap3,
+            Offstage(
+              offstage: orderDetail.audit != 'T',
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    height: 46,
+                    width: 46,
+                    child: RaisedButton(
+                      padding: const EdgeInsets.all(0),
+                      color: Colors.white,
+                      onPressed: () async {
+                        // 选取图片后重新加载界面
+                        _pageBloc.add(PageLoad(
+                            model: processUpload.copyWith(
+                                attachments: await SystemUtils.loadAssets(
+                                    processUpload.attachments))));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Gaps.hGap10,
+                  ClipButton(
+                    text: '不通过',
+                    icon: Icons.clear,
+                    color: Colors.redAccent,
+                    onTap: () {
+                      // 发送上传事件
+                      _uploadBloc.add(
+                        Upload(
+                          data: processUpload.copyWith(
+                            operateType: '1',
+                            operatePerson: _operatePersonController.text,
+                            operateDesc: _operateDescController.text,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  Gaps.hGap10,
+                  ClipButton(
+                    text: '通过',
+                    icon: Icons.check,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      // 发送上传事件
+                      _uploadBloc.add(
+                        Upload(
+                          data: processUpload.copyWith(
+                            operateType: '0',
+                            operatePerson: _operatePersonController.text,
+                            operateDesc: _operateDescController.text,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Gaps.vGap3,
+            Offstage(
+              offstage: orderDetail.deal != 'T',
+              child: Row(
+                children: <Widget>[
+                  ClipButton(
+                    text: '选择图片',
+                    icon: Icons.image,
+                    color: Colors.green,
+                    onTap: () async {
                       // 选取图片后重新加载界面
                       _pageBloc.add(PageLoad(
                           model: processUpload.copyWith(
                               attachments: await SystemUtils.loadAssets(
                                   processUpload.attachments))));
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Icon(
-                        Icons.image,
-                        color: Colors.green,
-                      ),
-                    ),
                   ),
-                ),
-                Gaps.hGap10,
-                ClipButton(
-                  text: '不通过',
-                  icon: Icons.clear,
-                  color: Colors.redAccent,
-                  onTap: () {
-                    // 发送上传事件
-                    _uploadBloc.add(
-                      Upload(
-                        data: processUpload.copyWith(
-                          operateType: '1',
-                          operatePerson: _operatePersonController.text,
-                          operateDesc: _operateDescController.text,
+                  Gaps.hGap20,
+                  ClipButton(
+                    text: '处理',
+                    icon: Icons.file_upload,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      // 发送上传事件
+                      _uploadBloc.add(
+                        Upload(
+                          data: processUpload.copyWith(
+                            operateType: '-1',
+                            operatePerson: _operatePersonController.text,
+                            operateDesc: _operateDescController.text,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-                Gaps.hGap10,
-                ClipButton(
-                  text: '通过',
-                  icon: Icons.check,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    // 发送上传事件
-                    _uploadBloc.add(
-                      Upload(
-                        data: processUpload.copyWith(
-                          operateType: '0',
-                          operatePerson: _operatePersonController.text,
-                          operateDesc: _operateDescController.text,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          Gaps.vGap3,
-          Offstage(
-            offstage: orderDetail.deal != 'T',
-            child: Row(
-              children: <Widget>[
-                ClipButton(
-                  text: '选择图片',
-                  icon: Icons.image,
-                  color: Colors.green,
-                  onTap: () async {
-                    // 选取图片后重新加载界面
-                    _pageBloc.add(PageLoad(
-                        model: processUpload.copyWith(
-                            attachments: await SystemUtils.loadAssets(
-                                processUpload.attachments))));
-                  },
-                ),
-                Gaps.hGap20,
-                ClipButton(
-                  text: '处理',
-                  icon: Icons.file_upload,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    // 发送上传事件
-                    _uploadBloc.add(
-                      Upload(
-                        data: processUpload.copyWith(
-                          operateType: '-1',
-                          operatePerson: _operatePersonController.text,
-                          operateDesc: _operateDescController.text,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),);
+    );
   }
 }

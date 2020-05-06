@@ -16,8 +16,10 @@ class Process extends Equatable {
   final String operatePerson; // 反馈人
   @JsonKey(defaultValue: '')
   final String alarmCauseStr; // 报警原因
+  @JsonKey(defaultValue: '')
+  final String operateResult; // 处理结果
   @JsonKey(name: 'operateDesc', defaultValue: '')
-  final String operateDesc; // 核时情况
+  final String operateDesc; // 核实情况
   @JsonKey(name: 'attachmentList', defaultValue: [])
   final List<Attachment> attachments; // 附件
 
@@ -25,6 +27,7 @@ class Process extends Equatable {
     @required this.operateTypeStr,
     @required this.operatePerson,
     @required this.alarmCauseStr,
+    @required this.operateResult,
     @required this.operateTimeStr,
     @required this.operateDesc,
     @required this.attachments,
@@ -35,6 +38,7 @@ class Process extends Equatable {
         operateTypeStr,
         operatePerson,
         alarmCauseStr,
+        operateResult,
         operateTimeStr,
         operateDesc,
         attachments,
