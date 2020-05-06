@@ -23,8 +23,8 @@ class CollectionLoading extends CollectionState {
 }
 
 /// 加载完成状态
-class CollectionLoaded extends CollectionState {
-  final List collection;
+class CollectionLoaded<T> extends CollectionState {
+  final List<T> collection;
   final Map<String, dynamic> params;
 
   const CollectionLoaded({@required this.collection, this.params});
@@ -32,6 +32,9 @@ class CollectionLoaded extends CollectionState {
   @override
   List<Object> get props => [collection, params];
 }
+
+/// 没有数据状态
+class CollectionEmpty<T> extends CollectionState {}
 
 /// 发生错误状态
 class CollectionError extends CollectionState {
