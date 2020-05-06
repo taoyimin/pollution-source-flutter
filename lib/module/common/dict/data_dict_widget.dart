@@ -513,13 +513,17 @@ class DataDictBlocGrid extends StatelessWidget {
 typedef ConfirmCallBack = void Function(List<DataDict> dataDictList);
 
 class DataDictDialog extends StatefulWidget {
+  final String title;
+  final String imagePath;
   final List<DataDict> dataDictList;
   final List<DataDict> checkList;
   final ConfirmCallBack confirmCallBack;
 
   DataDictDialog({
+    this.title = '',
+    this.imagePath = '',
     @required this.dataDictList,
-    @required this.checkList,
+    this.checkList = const [],
     this.confirmCallBack,
   });
 
@@ -560,13 +564,13 @@ class _DataDictDialogState extends State<DataDictDialog> {
                 Row(
                   children: <Widget>[
                     Image.asset(
-                      'assets/images/icon_alarm_error.png',
+                      widget.imagePath,
                       height: 24,
                       width: 24,
                     ),
                     Gaps.hGap10,
                     Text(
-                      '报警原因',
+                      widget.title,
                       style: TextStyle(fontSize: 17),
                     ),
                   ],
@@ -583,9 +587,9 @@ class _DataDictDialogState extends State<DataDictDialog> {
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          if(checkList.contains(dataDict))
+                          if (checkList.contains(dataDict))
                             checkList.remove(dataDict);
-                          else{
+                          else {
                             checkList.add(dataDict);
                           }
                         });
@@ -671,6 +675,206 @@ class _DataDictDialogState extends State<DataDictDialog> {
                   ],
                 ),
                 Gaps.vGap6,
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+@Deprecated('暂未使用')
+class DataDictBlocDialog extends StatefulWidget {
+  final String title;
+  final String imagePath;
+  final DataDictBloc dataDictBloc;
+  final List<DataDict> checkList;
+  final ConfirmCallBack confirmCallBack;
+
+  DataDictBlocDialog({
+    this.title = '',
+    this.imagePath = '',
+    @required this.dataDictBloc,
+    this.checkList = const [],
+    this.confirmCallBack,
+  });
+
+  @override
+  _DataDictBlocDialogState createState() => _DataDictBlocDialogState();
+}
+
+@Deprecated('暂未使用')
+class _DataDictBlocDialogState extends State<DataDictBlocDialog> {
+  final List<DataDict> checkList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    widget.dataDictBloc.add(DataDictLoad());
+    checkList.addAll(widget.checkList);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width / 1.3,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: ShapeDecoration(
+              color: Color(0xFFFFFFFF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                BlocBuilder<DataDictBloc, DataDictState>(
+                  bloc: widget.dataDictBloc,
+                  builder: (context, state) {
+                    if (state is DataDictLoading) {
+                      return LoadingWidget();
+                    } else if (state is DataDictError) {
+                      return RowErrorWidget(
+                        tipMessage: '${widget.title}加载失败，请重试！',
+                        errorMessage: state.message,
+                        onReloadTap: () =>
+                            widget.dataDictBloc.add(DataDictLoad()),
+                      );
+                    } else if (state is DataDictLoaded) {
+                      return Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Image.asset(
+                                widget.imagePath,
+                                height: 24,
+                                width: 24,
+                              ),
+                              Gaps.hGap10,
+                              Text(
+                                widget.title,
+                                style: TextStyle(fontSize: 17),
+                              ),
+                            ],
+                          ),
+                          Gaps.vGap16,
+                          GridView.count(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2.5,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            children: state.dataDictList.map<Widget>((dataDict) {
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (checkList.contains(dataDict))
+                                      checkList.remove(dataDict);
+                                    else {
+                                      checkList.add(dataDict);
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: checkList.contains(dataDict)
+                                        ? Colors.lightBlueAccent
+                                        : Colours.divider_color,
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${dataDict.name}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: checkList.contains(dataDict)
+                                            ? Colors.white
+                                            : Colours.secondary_text,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          Gaps.vGap16,
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: InkWellButton(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  children: <Widget>[
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.redAccent,
+                                        boxShadow: [UIUtils.getBoxShadow()],
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '取  消',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Gaps.hGap10,
+                              Expanded(
+                                flex: 1,
+                                child: InkWellButton(
+                                  onTap: () {
+                                    if (widget.confirmCallBack != null) {
+                                      (widget.confirmCallBack)(checkList);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  children: <Widget>[
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.lightGreen,
+                                        boxShadow: [UIUtils.getBoxShadow()],
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '确  定',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Gaps.vGap6,
+                        ],
+                      );
+                    } else {
+                      return RowErrorWidget(
+                        errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                        onReloadTap: () => widget.dataDictBloc.add(DataDictLoad()),
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           ),
