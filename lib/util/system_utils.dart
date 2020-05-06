@@ -249,6 +249,7 @@ class SystemUtils {
           useDetailsView: true,
           selectCircleStrokeColor: '#FFFFFF',
           selectionLimitReachedText: '已达到可选图片最大数',
+          textOnNothingSelected: '您还没有选中任何图片',
         ),
       );
     } on NoImagesSelectedException {

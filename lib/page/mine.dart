@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flustars/flustars.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:package_info/package_info.dart';
+import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -132,38 +134,6 @@ class _MinePageState extends State<MinePage>
                           ),
                         ),
                       ),
-//                      Positioned(
-//                        bottom: 130,
-//                        left: 0,
-//                        right: 0,
-//                        child: Stack(
-//                          children: <Widget>[
-//                            Align(
-//                              alignment: Alignment.center,
-//                              child: Container(
-//                                height: 90,
-//                                width: 90,
-//                                child: CircleAvatar(
-//                                  backgroundImage: AssetImage(
-//                                      "assets/images/mine_user_header.png"),
-//                                ),
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//                      ),
-//                      Positioned(
-//                        bottom: 80,
-//                        left: 56,
-//                        right: 56,
-//                        child: Center(
-//                          child: AutoSizeText(
-//                            '${SpUtil.getString(Constant.spRealName)}',
-//                            style: TextStyle(fontSize: 23),
-//                            maxLines: 1,
-//                          ),
-//                        ),
-//                      ),
                       Positioned(
                         top: _headerHeight -
                             _cardMarginBottom -
@@ -208,6 +178,8 @@ class _MinePageState extends State<MinePage>
                                 } else {
                                   Toast.show('已关闭Debug模式');
                                 }
+                                PollutionDioUtils.internal();
+                                OperationDioUtils.internal();
                               },
                               child: Text(
                                 '当前版本号：${version ?? '未知'}',
@@ -223,21 +195,26 @@ class _MinePageState extends State<MinePage>
 //                      Positioned(
 //                        bottom: 140,
 //                        right: 50,
-//                        child: Image.asset(
-//                          "assets/images/icon_QR_code.png",
-//                          width: 30,
-//                          height: 30,
-//                          fit: BoxFit.cover,
+//                        child: GestureDetector(
+//                          onTap: () async {
+//                            await BarcodeScanner.scan();
+//                          },
+//                          child: Image.asset(
+//                            "assets/images/icon_QR_code.png",
+//                            width: 23,
+//                            height: 23,
+//                            fit: BoxFit.cover,
+//                          ),
 //                        ),
 //                      ),
-//                      Positioned(
-//                        top: 36,
-//                        left: 16,
-//                        child: Icon(
-//                          Icons.notifications_none,
-//                          color: Colors.white,
-//                        ),
-//                      ),
+                      Positioned(
+                        top: SystemUtils.isWeb ? 16 : 36,
+                        left: 16,
+                        child: Icon(
+                          Icons.notifications_none,
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                   Container(
@@ -421,33 +398,31 @@ class _MinePageState extends State<MinePage>
                                         );
                                       } else {
                                         showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: const Text("清理缓存"),
-                                                content:
-                                                    const Text("是否确定清理缓存？"),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text("取消"),
-                                                  ),
-                                                  FlatButton(
-                                                    onPressed: () async {
-                                                      await FileUtils
-                                                          .clearApplicationDirectory();
-                                                      Toast.show('清理附件成功！');
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text("确定"),
-                                                  ),
-                                                ],
-                                              );
-                                            });
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text('清理缓存'),
+                                              content: CacheTextWidget(),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('取消'),
+                                                ),
+                                                FlatButton(
+                                                  onPressed: () async {
+                                                    await FileUtils
+                                                        .clearApplicationDirectory();
+                                                    Toast.show('清理附件成功！');
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('确定'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       }
                                     },
                                     children: <Widget>[
@@ -495,6 +470,31 @@ class _MinePageState extends State<MinePage>
                                                 ),
                                                 FlatButton(
                                                   onPressed: () async {
+                                                    // 清空密码
+                                                    SpUtil.remove(Constant
+                                                            .spPasswordList[
+                                                        SpUtil.getInt(Constant
+                                                            .spUserType)]);
+                                                    // 清空用户名
+                                                    SpUtil.remove(
+                                                        Constant.spRealName);
+                                                    // 清空userId
+                                                    SpUtil.remove(
+                                                        Constant.spUserId);
+                                                    // 清空token
+                                                    SpUtil.remove(
+                                                        Constant.spToken);
+                                                    // 清空登录时间
+                                                    SpUtil.remove(
+                                                        Constant.spLoginTime);
+                                                    // 删除别名和标签
+                                                    JPush jpush = JPush();
+                                                    jpush.deleteAlias();
+                                                    jpush.deleteTags([
+                                                      Constant.userTags[
+                                                          SpUtil.getInt(Constant
+                                                              .spUserType)]
+                                                    ]);
                                                     Navigator.of(context).pop();
                                                     Application.router
                                                         .navigateTo(context,
