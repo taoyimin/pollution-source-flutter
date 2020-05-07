@@ -38,6 +38,8 @@ import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_repository.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_page.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_repository.dart';
+import 'package:pollution_source/module/notice/list/notice_list_page.dart';
+import 'package:pollution_source/module/notice/list/notice_list_repository.dart';
 import 'package:pollution_source/module/order/detail/order_detail_page.dart';
 import 'package:pollution_source/module/order/detail/order_detail_repository.dart';
 import 'package:pollution_source/module/order/list/order_list_page.dart';
@@ -544,4 +546,13 @@ var changePasswordHandler = Handler(
 var shareProductHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return ShareProductPage();
+});
+
+var noticeListHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return BlocProvider<ListBloc>(
+    create: (BuildContext context) =>
+        ListBloc(listRepository: NoticeListRepository()),
+    child: NoticeListPage(),
+  );
 });
