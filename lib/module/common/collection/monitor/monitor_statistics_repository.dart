@@ -4,14 +4,14 @@ import 'package:pollution_source/module/common/collection/collection_repository.
 
 import 'monitor_statistics_model.dart';
 
-class MonitorStatisticsRepository extends CollectionRepository {
+class MonitorStatisticsRepository extends CollectionRepository<MonitorStatistics> {
   @override
   HttpApi createApi() {
     return HttpApi.monitorStatistics;
   }
 
   @override
-  fromJson(json) {
+  MonitorStatistics fromJson(json) {
     return MonitorStatistics.fromJson(json);
   }
 
