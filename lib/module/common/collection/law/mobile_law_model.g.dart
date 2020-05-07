@@ -15,6 +15,7 @@ MobileLaw _$MobileLawFromJson(Map<String, dynamic> json) {
     lawPersonStr: json['jcr'] as String ?? '',
     startTimeStr: json['kssj'] as String ?? '',
     endTimeStr: json['jssj'] as String ?? '',
+    summary: json['lhbjcxj'] as String ?? '',
   );
 }
 
@@ -26,4 +27,5 @@ Map<String, dynamic> _$MobileLawToJson(MobileLaw instance) => <String, dynamic>{
       'jcr': instance.lawPersonStr,
       'kssj': instance.startTimeStr,
       'jssj': instance.endTimeStr,
+      'lhbjcxj': instance.summary,
     };
