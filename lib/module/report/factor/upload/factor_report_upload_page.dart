@@ -87,7 +87,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
 
   @override
   void dispose() {
-    //释放资源
+    // 释放资源
     _exceptionReasonController.dispose();
     if (_alarmTypeBloc?.state is DataDictLoading)
       (_alarmTypeBloc?.state as DataDictLoading).cancelToken.cancel();
@@ -734,7 +734,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                               onPressed: () {
                                 Clipboard.setData(
                                     ClipboardData(text: '$message'));
-                                Toast.show('复制成功！');
+                                Toast.show('复制到剪贴板成功！');
                                 Navigator.of(context).pop();
                               },
                               child: const Text("复制"),

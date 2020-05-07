@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flustars/flustars.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pollution_source/module/common/collection/law/mobile_law_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/process/detail/process_detail_model.dart';
 
@@ -26,6 +27,7 @@ class OrderDetail extends Equatable {
   final List<Process> processes; // 处理流程集合
   final String deal; // 是否可以处理
   final String audit; // 是否可以审核
+  final List<MobileLaw> mobileLawList; // 移动执法
 
   const OrderDetail({
     this.orderId,
@@ -45,6 +47,7 @@ class OrderDetail extends Equatable {
     this.processes,
     this.deal,
     this.audit,
+    this.mobileLawList,
   });
 
   @override
@@ -66,6 +69,7 @@ class OrderDetail extends Equatable {
         processes,
         deal,
         audit,
+        mobileLawList,
       ];
 
   factory OrderDetail.fromJson(Map<String, dynamic> json) =>
@@ -75,7 +79,8 @@ class OrderDetail extends Equatable {
 
   /// 获取默认选中的报警原因数据字典
   List<DataDict> get alarmCauseList {
-    if (!TextUtil.isEmpty(alarmCauseStr.trim()) && !TextUtil.isEmpty(alarmCause)) {
+    if (!TextUtil.isEmpty(alarmCauseStr.trim()) &&
+        !TextUtil.isEmpty(alarmCause)) {
       List<String> nameList = alarmCauseStr.trim().split(' ');
       List<String> codeList = alarmCause.split(',');
       return List.generate(nameList.length, (index) {
@@ -100,14 +105,22 @@ OrderDetail _$OrderDetailFromJson(Map<String, dynamic> json) {
     alarmStateStr: json['commonSuperviseOrder']['alarmStateStr'] as String,
     alarmTypeStr: json['commonSuperviseOrder']['alarmTypeStr'] as String,
     alarmCause: json['commonSuperviseOrder']['alarmCause'] as String ?? '',
-    alarmCauseStr: json['commonSuperviseOrder']['alarmCauseStr'] as String ?? '',
+    alarmCauseStr:
+        json['commonSuperviseOrder']['alarmCauseStr'] as String ?? '',
     alarmDesc: json['commonSuperviseOrder']['alarmDesc'] as String,
     processes: (json['processes'] as List)
         ?.map((e) =>
-    e == null ? null : Process.fromJson(e as Map<String, dynamic>))
+            e == null ? null : Process.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     deal: json['commonSuperviseOrder']['hasDeal'] as String,
     audit: json['commonSuperviseOrder']['hasAudit'] as String,
+    mobileLawList: json.containsKey('enforcement')
+        ? (json['enforcement'] as List)
+            ?.map((e) => e == null
+                ? null
+                : MobileLaw.fromJson(e as Map<String, dynamic>))
+            ?.toList()
+        : [],
   );
 }
 

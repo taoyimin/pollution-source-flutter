@@ -16,7 +16,7 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
     if (TextUtil.isEmpty(data.alarmState))
       throw DioError(error: InvalidParamException('报警管理单状态为空'));
     if (TextUtil.isEmpty(data.operatePerson))
-      throw DioError(error: InvalidParamException('请输入操作人'));
+      throw DioError(error: InvalidParamException('请输入反馈人'));
     if (TextUtil.isEmpty(data.operateType))
       throw DioError(error: InvalidParamException('操作类型为空'));
     if (data.alarmCauseList == null || data.alarmCauseList.length == 0)
@@ -40,7 +40,8 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
       'alarmState': data.alarmState,
       'operatePerson': data.operatePerson,
       'audit': data.operateType,
-      'alarmCause': data.alarmCauseList.map((dataDict) => dataDict.code).join(','),
+      'alarmCause': data.alarmCauseList?.map((dataDict) => dataDict.code)?.join(',') ?? '',
+      'checkId': data.mobileLawList?.map((mobileLaw) => mobileLaw.id)?.join(',') ?? '',
       'operateDesc': data.operateDesc,
       "file": await Future.wait(data.attachments?.map((asset) async {
         ByteData byteData = await asset.getByteData();

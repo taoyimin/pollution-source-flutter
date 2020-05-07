@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:pollution_source/module/common/collection/law/mobile_law_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 
 /// 报警管理单流程上报
@@ -9,6 +10,7 @@ class ProcessUpload extends Equatable {
   final String operatePerson; // 操作人
   final String operateType; // 操作类型 -1:处理 0:审核通过 1:审核不通过
   final List<DataDict> alarmCauseList; // 报警原因
+  final List<MobileLaw> mobileLawList; // 移动执法
   final String operateDesc; // 操作描述
   final List<Asset> attachments; // 附件
 
@@ -17,9 +19,10 @@ class ProcessUpload extends Equatable {
     this.alarmState,
     this.operatePerson,
     this.operateType,
-    this.alarmCauseList,
+    this.alarmCauseList = const <DataDict>[],
+    this.mobileLawList = const <MobileLaw>[],
     this.operateDesc,
-    this.attachments,
+    this.attachments = const <Asset>[],
   });
 
   @override
@@ -29,6 +32,7 @@ class ProcessUpload extends Equatable {
         operatePerson,
         operateType,
         alarmCauseList,
+        mobileLawList,
         operateDesc,
         attachments,
       ];
@@ -39,6 +43,7 @@ class ProcessUpload extends Equatable {
     String operatePerson,
     String operateType,
     List<DataDict> alarmCauseList,
+    List<MobileLaw> mobileLawList,
     String operateDesc,
     List<Asset> attachments,
   }) {
@@ -48,6 +53,7 @@ class ProcessUpload extends Equatable {
       operatePerson: operatePerson ?? this.operatePerson,
       operateType: operateType ?? this.operateType,
       alarmCauseList: alarmCauseList ?? this.alarmCauseList,
+      mobileLawList: mobileLawList ?? this.mobileLawList,
       operateDesc: operateDesc ?? this.operateDesc,
       attachments: attachments ?? this.attachments,
     );

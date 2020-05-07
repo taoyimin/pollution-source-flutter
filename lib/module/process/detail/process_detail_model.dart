@@ -9,9 +9,9 @@ part 'process_detail_model.g.dart';
 @JsonSerializable()
 class Process extends Equatable {
   @JsonKey(name: 'dicSubName', defaultValue: '')
-  final String operateTypeStr; // 操作类型
+  final String operateTypeStr; // 处理类型
   @JsonKey(name: 'operateTime', defaultValue: '')
-  final String operateTimeStr; // 操作时间
+  final String operateTimeStr; // 处理时间
   @JsonKey(name: 'operatePersonName', defaultValue: '')
   final String operatePerson; // 反馈人
   @JsonKey(defaultValue: '')
@@ -48,4 +48,14 @@ class Process extends Equatable {
       _$ProcessFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProcessToJson(this);
+
+  Map<String, dynamic> getMapInfo() => <String, dynamic>{
+        '处理类型': this.operateTypeStr,
+        '处理时间': this.operateTimeStr,
+        '处理结果': this.operateResult,
+        '反馈人': this.operatePerson,
+        '报警原因': this.alarmCauseStr,
+        '核实情况': this.operateDesc,
+        '附件地址': this.attachments?.map((attachment) => attachment.url)?.join('\n') ?? '',
+      };
 }

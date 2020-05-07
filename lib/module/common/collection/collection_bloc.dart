@@ -7,7 +7,7 @@ import 'collection_event.dart';
 import 'collection_repository.dart';
 import 'collection_state.dart';
 
-class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
+class CollectionBloc<T> extends Bloc<CollectionEvent, CollectionState> {
   final CollectionRepository collectionRepository;
 
   CollectionBloc({@required this.collectionRepository})
@@ -24,15 +24,19 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   }
 
   /// 处理加载数据集事件
-  Stream<CollectionState> _mapCollectionLoadToState(CollectionLoad event) async* {
+  Stream<CollectionState> _mapCollectionLoadToState(
+      CollectionLoad event) async* {
     try {
       CancelToken cancelToken = CancelToken();
       yield CollectionLoading(cancelToken: cancelToken);
-      final collection = await collectionRepository.request(
+      final List<T> collection = await collectionRepository.request(
         params: event.params,
         cancelToken: cancelToken,
       );
-      yield CollectionLoaded(collection: collection, params: event.params);
+      if (collection.length == 0)
+        yield CollectionEmpty();
+      else
+        yield CollectionLoaded<T>(collection: collection, params: event.params);
     } catch (e) {
       yield CollectionError(message: ExceptionHandle.handleException(e).msg);
     }

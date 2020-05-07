@@ -185,7 +185,7 @@ class ColumnErrorWidget extends StatelessWidget {
                                 onPressed: () {
                                   Clipboard.setData(
                                       ClipboardData(text: '$errorMessage'));
-                                  Toast.show('复制成功！');
+                                  Toast.show('复制到剪贴板成功！');
                                   Navigator.of(context).pop();
                                 },
                                 child: const Text("复制"),
@@ -316,7 +316,7 @@ class RowErrorWidget extends StatelessWidget {
                                       onPressed: () {
                                         Clipboard.setData(ClipboardData(
                                             text: '$errorMessage'));
-                                        Toast.show('复制成功！');
+                                        Toast.show('复制到剪贴板成功！');
                                         Navigator.of(context).pop();
                                       },
                                       child: const Text("复制"),
@@ -2496,33 +2496,31 @@ class MonitorStatisticsWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             onReloadTap: onReloadTap,
           );
+        } else if (state is CollectionEmpty) {
+          return Gaps.empty;
         } else if (state is CollectionLoaded) {
-          if (state.collection.length != 0) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Column(
-                children: <Widget>[
-                  TitleWidget(title: "监控点(出口)概况"),
-                  InkWellButtonGrid(
-                    metaList: state.collection.map(
-                      (monitorStatistics) {
-                        return Meta(
-                          title: monitorStatistics.name,
-                          content: '${monitorStatistics.count}',
-                          color: monitorStatistics.color,
-                          imagePath: monitorStatistics.imagePath,
-                          router:
-                              '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Gaps.empty;
-          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+              children: <Widget>[
+                TitleWidget(title: "监控点(出口)概况"),
+                InkWellButtonGrid(
+                  metaList: state.collection.map(
+                        (monitorStatistics) {
+                      return Meta(
+                        title: monitorStatistics.name,
+                        content: '${monitorStatistics.count}',
+                        color: monitorStatistics.color,
+                        imagePath: monitorStatistics.imagePath,
+                        router:
+                        '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
+                      );
+                    },
+                  ).toList(),
+                ),
+              ],
+            ),
+          );
         } else {
           return RowErrorWidget(
             tipMessage: '监控点概况加载失败，请重试！',
@@ -2561,42 +2559,41 @@ class MonitorStatisticsCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             onReloadTap: onReloadTap,
           );
-        } else if (state is CollectionLoaded) {
-          if (state.collection.length != 0) {
-            return Column(
-              children: <Widget>[
-                ImageTitleWidget(
-                  title: '监控点(出口)信息',
-                  imagePath: 'assets/images/icon_monitor_info.png',
+        }else if(state is CollectionEmpty){
+          return Gaps.empty;
+        }
+        else if (state is CollectionLoaded) {
+          return Column(
+            children: <Widget>[
+              ImageTitleWidget(
+                title: '监控点(出口)信息',
+                imagePath: 'assets/images/icon_monitor_info.png',
+              ),
+              Gaps.vGap10,
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    UIUtils.getBoxShadow(),
+                  ],
                 ),
-                Gaps.vGap10,
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      UIUtils.getBoxShadow(),
-                    ],
-                  ),
-                  child: InkWellButtonGrid(
-                    metaList: state.collection.map(
-                      (monitorStatistics) {
-                        return Meta(
-                          title: monitorStatistics.name,
-                          content: '${monitorStatistics.count}',
-                          color: monitorStatistics.color,
-                          imagePath: monitorStatistics.imagePath,
-                          router:
-                              '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
-                        );
-                      },
-                    ).toList(),
-                  ),
+                child: InkWellButtonGrid(
+                  metaList: state.collection.map(
+                        (monitorStatistics) {
+                      return Meta(
+                        title: monitorStatistics.name,
+                        content: '${monitorStatistics.count}',
+                        color: monitorStatistics.color,
+                        imagePath: monitorStatistics.imagePath,
+                        router:
+                        '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
+                      );
+                    },
+                  ).toList(),
                 ),
-              ],
-            );
-          } else {
-            return Gaps.empty;
-          }
+              ),
+            ],
+          );
         } else {
           return RowErrorWidget(
             tipMessage: '监控点信息加载失败，请重试！',
