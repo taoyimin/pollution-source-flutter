@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/http/http.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
+import 'package:pollution_source/module/common/collection/collection_state.dart';
+import 'package:pollution_source/module/common/collection/collection_widget.dart';
+import 'package:pollution_source/module/common/collection/law/mobile_law_model.dart';
+import 'package:pollution_source/module/common/collection/law/mobile_law_repository.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
@@ -13,6 +19,7 @@ import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
+import 'package:pollution_source/module/common/map_info_page.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
 import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
@@ -57,8 +64,12 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   UploadBloc _uploadBloc;
 
   /// 报警原因数据字典Bloc
-  final DataDictBloc alarmCauseBloc = DataDictBloc(
+  final DataDictBloc _alarmCauseBloc = DataDictBloc(
       dataDictRepository: DataDictRepository(HttpApi.orderAlarmCause));
+
+  /// 移动执法Bloc
+  final CollectionBloc<MobileLaw> _mobileLawBloc =
+      CollectionBloc<MobileLaw>(collectionRepository: MobileLawRepository());
 
   /// 上报界面操作人输入框
   final TextEditingController _operatePersonController =
@@ -68,10 +79,10 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   final TextEditingController _operateDescController = TextEditingController();
 
   /// 图标渐变动画控制器
-  AnimationController controller;
+  AnimationController _controller;
 
   /// 图标渐变动画
-  Animation animation;
+  Animation _animation;
 
   /// 上报BottomSheet控制器
   PersistentBottomSheetController _bottomSheetController;
@@ -87,13 +98,13 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     _pageBloc = BlocProvider.of<PageBloc>(context);
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
     // 初始化fab颜色渐变动画
-    controller = AnimationController(
+    _controller = AnimationController(
       duration: Duration(milliseconds: 500),
       vsync: this,
     );
-    animation = ColorTween(begin: Colors.lightBlue, end: Colors.redAccent)
-        .animate(controller);
-    controller.addListener(() {
+    _animation = ColorTween(begin: Colors.lightBlue, end: Colors.redAccent)
+        .animate(_controller);
+    _controller.addListener(() {
       setState(() {});
     });
   }
@@ -103,16 +114,31 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     // 释放资源
     _operatePersonController.dispose();
     _operateDescController.dispose();
-    controller.dispose();
+    _controller.dispose();
     // 取消正在进行的请求
-    final currentState = _detailBloc?.state;
-    if (currentState is DetailLoading) currentState.cancelToken?.cancel();
+    if (_detailBloc?.state is DetailLoading)
+      (_detailBloc?.state as DetailLoading).cancelToken.cancel();
+    if (_alarmCauseBloc?.state is DataDictLoading)
+      (_alarmCauseBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_mobileLawBloc?.state is CollectionLoading)
+      (_mobileLawBloc?.state as CollectionLoading).cancelToken.cancel();
     super.dispose();
   }
 
   /// 加载数据
   _loadData() {
     _detailBloc.add(DetailLoad(detailId: widget.orderId));
+  }
+
+  /// 加载报警原因
+  _loadAlarmCause() {
+    _alarmCauseBloc.add(DataDictLoad());
+  }
+
+  /// 加载移动执法
+  _loadMobileLaw() {
+    _mobileLawBloc.add(CollectionLoad(
+        params: MobileLawRepository.createParams(orderId: widget.orderId)));
   }
 
   @override
@@ -199,7 +225,9 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                       ),
                     ));
                     // 加载报警原因数据字典
-                    alarmCauseBloc.add(DataDictLoad());
+                    _loadAlarmCause();
+                    // 加载移动执法
+                    _loadMobileLaw();
                   }
                 },
               ),
@@ -417,25 +445,46 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      "反馈人：${orderDetail.processes[index].operatePerson}",
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                    Text(
-                                      "报警原因：${orderDetail.processes[index].alarmCauseStr}",
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                    Offstage(
-                                      offstage: TextUtil.isEmpty(orderDetail
-                                          .processes[index].operateResult),
-                                      child: Text(
-                                        "处理结果：${orderDetail.processes[index].operateResult}",
-                                        style: const TextStyle(fontSize: 12),
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return MapInfoPage(
+                                                title: '处理流程详情',
+                                                mapInfo: orderDetail.processes[index].getMapInfo(),
+                                              );
+                                            }));
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            "反馈人：${orderDetail.processes[index].operatePerson}",
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                          Text(
+                                            "报警原因：${orderDetail.processes[index].alarmCauseStr}",
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                          Offstage(
+                                            offstage: TextUtil.isEmpty(
+                                                orderDetail.processes[index]
+                                                    .operateResult),
+                                            child: Text(
+                                              "处理结果：${orderDetail.processes[index].operateResult}",
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            ),
+                                          ),
+                                          Text(
+                                            "核实情况：${orderDetail.processes[index].operateDesc}",
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Text(
-                                      "核实情况：${orderDetail.processes[index].operateDesc}",
-                                      style: const TextStyle(fontSize: 12),
                                     ),
                                     Gaps.vGap3,
                                     Column(
@@ -460,6 +509,89 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         },
                       ),
               ],
+            ),
+          ),
+          // 移动执法
+          Offstage(
+            offstage: orderDetail.mobileLawList == null ||
+                orderDetail.mobileLawList.length == 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  ImageTitleWidget(
+                    title: '移动执法',
+                    imagePath: 'assets/images/icon_mobile_law.png',
+                  ),
+                  Gaps.vGap10,
+                  ListView.separated(
+                    itemCount: orderDetail.mobileLawList.length,
+                    shrinkWrap: true,
+                    primary: false,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 0,
+                    ),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Gaps.vGap10;
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      final MobileLaw mobileLaw =
+                          orderDetail.mobileLawList[index];
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return MapInfoPage(
+                              title: '移动执法详情',
+                              mapInfo: mobileLaw.getMapInfo(),
+                            );
+                          }));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              '${mobileLaw.lawId}',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  '检查人：${mobileLaw.lawPersonStr}',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                Expanded(child: Gaps.empty),
+                                Text(
+                                  '开始时间：${mobileLaw.startTimeStr}',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  '任务类型：${mobileLaw.taskTypeStr}',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                Expanded(child: Gaps.empty),
+                                Text(
+                                  '结束时间：${mobileLaw.endTimeStr}',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           // 快速链接
@@ -549,7 +681,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             color: Colors.white,
           ),
         ),
-        backgroundColor: animation.value,
+        backgroundColor: _animation.value,
         onPressed: () {
           if (_bottomSheetController != null) {
             // 已经处于打开状态
@@ -557,7 +689,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             return;
           }
           // fab由蓝变红
-          controller.forward();
+          _controller.forward();
           setState(() {
             _actionIcon = Icons.close;
           });
@@ -584,7 +716,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
           // 监听BottomSheet关闭
           _bottomSheetController.closed.then((value) {
             // fab由红变蓝
-            controller.reverse();
+            _controller.reverse();
             setState(() {
               _bottomSheetController = null;
               _actionIcon = Icons.add;
@@ -642,7 +774,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             ),
             Gaps.vGap10,
             BlocBuilder<DataDictBloc, DataDictState>(
-              bloc: alarmCauseBloc,
+              bloc: _alarmCauseBloc,
               builder: (context, state) {
                 if (state is DataDictLoading) {
                   return LoadingWidget();
@@ -650,7 +782,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                   return RowErrorWidget(
                     tipMessage: '报警原因加载失败，请重试！',
                     errorMessage: state.message,
-                    onReloadTap: () => _loadData(),
+                    onReloadTap: () => _loadAlarmCause(),
                   );
                 } else if (state is DataDictLoaded) {
                   return GestureDetector(
@@ -659,6 +791,8 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         context: context, //BuildCont
                         builder: (BuildContext context) {
                           return DataDictDialog(
+                            title: '报警原因',
+                            imagePath: 'assets/images/icon_alarm_error.png',
                             dataDictList: state.dataDictList,
                             checkList: processUpload.alarmCauseList,
                             confirmCallBack: (dataDictList) {
@@ -711,12 +845,110 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 } else {
                   return RowErrorWidget(
                     errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
-                    onReloadTap: () => _loadData(),
+                    onReloadTap: () => _loadAlarmCause(),
                   );
                 }
               },
             ),
             Gaps.vGap10,
+            Offstage(
+              offstage: orderDetail.audit != 'T',
+              child: Column(
+                children: <Widget>[
+                  BlocBuilder<CollectionBloc, CollectionState>(
+                    bloc: _mobileLawBloc,
+                    builder: (context, state) {
+                      if (state is CollectionLoading) {
+                        return LoadingWidget();
+                      } else if (state is CollectionError) {
+                        return RowErrorWidget(
+                          tipMessage: '移动执法加载失败，请重试！',
+                          errorMessage: state.message,
+                          onReloadTap: () => _loadMobileLaw(),
+                        );
+                      } else if (state is CollectionEmpty) {
+                        return Gaps.empty;
+                      } else if (state is CollectionLoaded) {
+                        return GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context, //BuildCont
+                              builder: (BuildContext context) {
+                                return CollectionDialog<MobileLaw>(
+                                  title: '移动执法',
+                                  imagePath:
+                                      'assets/images/icon_mobile_law.png',
+                                  collection: state.collection,
+                                  checkList: processUpload.mobileLawList,
+                                  confirmCallBack: (mobileLawList) {
+                                    _pageBloc.add(PageLoad(
+                                        model: processUpload.copyWith(
+                                            mobileLawList: mobileLawList)));
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            height: 46,
+                            color: Color(0xFFDFDFDF),
+                            child: Row(
+                              children: <Widget>[
+                                Gaps.hGap16,
+                                Image.asset(
+                                  'assets/images/icon_mobile_law.png',
+                                  height: 20,
+                                  width: 20,
+                                ),
+                                Flexible(
+                                  child: TextField(
+                                    controller: TextEditingController(
+                                        text: processUpload
+                                                    .mobileLawList.length ==
+                                                0
+                                            ? ''
+                                            : '已关联${processUpload.mobileLawList.length}条移动执法记录'),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                    enabled: false,
+                                    decoration: const InputDecoration(
+                                      fillColor: Color(0xFFDFDFDF),
+                                      filled: true,
+                                      hintText: "选择关联移动执法",
+                                      hintStyle: TextStyle(
+                                        fontSize: 14,
+                                        color: Colours.secondary_text,
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return RowErrorWidget(
+                          errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                          onReloadTap: () => _loadMobileLaw(),
+                        );
+                      }
+                    },
+                  ),
+                  BlocBuilder<CollectionBloc, CollectionState>(
+                    bloc: _mobileLawBloc,
+                    builder: (context, state) {
+                      if (state is CollectionEmpty) {
+                        return Gaps.empty;
+                      } else {
+                        return Gaps.vGap10;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
             DecoratedBox(
               decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
               child: Row(
