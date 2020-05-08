@@ -35,6 +35,8 @@ class Routes {
   static String changePassword = "/changePassword";
   static String shareProduct = "/shareProduct";
   static String noticeList = "/noticeList";
+  static String warnList = "/warnList";
+  static String warnDetail = "/warnDetail";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(
@@ -200,6 +202,16 @@ class Routes {
     router.define(
       noticeList,
       handler: noticeListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      warnList,
+      handler: warnListHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      '$warnDetail/:id',
+      handler: warnDetailHandler,
       transitionType: TransitionType.native,
     );
   }

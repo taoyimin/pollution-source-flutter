@@ -63,6 +63,10 @@ import 'package:pollution_source/module/report/longstop/list/long_stop_report_li
 import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_repository.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_page.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_repository.dart';
+import 'package:pollution_source/module/warn/detail/warn_detail_page.dart';
+import 'package:pollution_source/module/warn/detail/warn_detail_repository.dart';
+import 'package:pollution_source/module/warn/list/warn_list_page.dart';
+import 'package:pollution_source/module/warn/list/warn_list_repository.dart';
 import 'package:pollution_source/page/admin_home.dart';
 import 'package:pollution_source/page/change_password_page.dart';
 import 'package:pollution_source/page/enter_home.dart';
@@ -554,5 +558,24 @@ var noticeListHandler = Handler(
     create: (BuildContext context) =>
         ListBloc(listRepository: NoticeListRepository()),
     child: NoticeListPage(),
+  );
+});
+
+var warnListHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return BlocProvider<ListBloc>(
+    create: (BuildContext context) =>
+        ListBloc(listRepository: WarnListRepository()),
+    child: WarnListPage(),
+  );
+});
+
+var warnDetailHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  String warnId = params['id']?.first;
+  return BlocProvider<DetailBloc>(
+    create: (BuildContext context) =>
+        DetailBloc(detailRepository: WarnDetailRepository()),
+    child: WarnDetailPage(warnId: warnId),
   );
 });
