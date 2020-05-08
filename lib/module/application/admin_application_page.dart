@@ -96,7 +96,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                           ],
                         ),
                       ),
-                      //基础数据查询
+                      // 基础数据查询
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -136,7 +136,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                           ],
                         ),
                       ),
-                      //异常申报查询
+                      // 异常申报查询
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -190,7 +190,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                           ],
                         ),
                       ),
-                      //报警管理单查询
+                      // 报警管理单查询
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -226,10 +226,33 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                 ),
                               ],
                             ),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '实时预警单',
+                                    content: '查询实时预警单',
+                                    imagePath:
+                                    'assets/images/application_icon_enter.png',
+                                    router: '${Routes.warnList}',
+                                  ),
+                                ),
+                                Gaps.hGap20,
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '历史预警消息',
+                                    content: '查询历史推送',
+                                    imagePath:
+                                    'assets/images/application_icon_monitor.png',
+                                    router: '${Routes.noticeList}',
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
-                      //异常申报上报
+                      // 异常申报上报
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,

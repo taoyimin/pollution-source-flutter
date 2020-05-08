@@ -215,6 +215,29 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                 ),
                               ],
                             ),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '实时预警单',
+                                    content: '查询实时预警单',
+                                    imagePath:
+                                    'assets/images/application_icon_enter.png',
+                                    router: '${Routes.warnList}',
+                                  ),
+                                ),
+                                Gaps.hGap20,
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '历史预警消息',
+                                    content: '查询历史推送',
+                                    imagePath:
+                                    'assets/images/application_icon_monitor.png',
+                                    router: '${Routes.noticeList}',
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
