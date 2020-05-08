@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-//配置打包签名文件
+// 配置打包签名文件
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -40,19 +40,31 @@ android {
 
     defaultConfig {
         applicationId "com.jxtele.pollution_source"
-        //为了使用图片选择器插件 minSdkVersion改成19
+        // 为了使用图片选择器插件 minSdkVersion改成19
         minSdkVersion 19
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        //配置高德地图key
+        // 配置高德地图key
+//        manifestPlaceholders = [
+//                AMAP_KEY: "bb6c7889ea5d6acb04939c73b59d227d",
+//        ]
+
+        ndk {
+            // 选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'x86_64', 'mips', 'mips64', 'arm64-v8a'
+        }
+
+        // 极光推送配置
         manifestPlaceholders = [
-                AMAP_KEY: "bb6c7889ea5d6acb04939c73b59d227d",
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "eb5a21dcceead742e52f47a5", // NOTE: JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }
 
-    //签名配置
+    // 签名配置
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
@@ -77,6 +89,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    //注意这里需要在主项目增加一条依赖，否则可能发生编译不通过的情况(高德地图)
-    //implementation 'com.amap.api:location:latest.integration'
+    // 注意这里需要在主项目增加一条依赖，否则可能发生编译不通过的情况(高德地图)
+    // implementation 'com.amap.api:location:latest.integration'
 }
