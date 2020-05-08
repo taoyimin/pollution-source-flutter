@@ -10,7 +10,6 @@ Notice _$NoticeFromJson(Map<String, dynamic> json) {
   return Notice(
     title: json['title'] as String ?? '',
     text: json['text'] as String ?? '',
-    content: json['content'] as String ?? '',
     time: json['updateTime'] as String ?? '',
   );
 }
@@ -18,6 +17,5 @@ Notice _$NoticeFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$NoticeToJson(Notice instance) => <String, dynamic>{
       'title': instance.title,
       'text': instance.text,
-      'content': instance.content,
       'updateTime': instance.time,
     };

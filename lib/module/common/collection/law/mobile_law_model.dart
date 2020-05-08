@@ -57,6 +57,6 @@ class MobileLaw extends Equatable {
         '任务类型': this.taskTypeStr,
         '开始时间': this.startTimeStr,
         '结束时间': this.endTimeStr,
-        '留痕表监察小结': this.summary,
+        '留痕表监察小结\n': this.summary,
       };
 }

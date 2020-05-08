@@ -20,6 +20,12 @@ Process _$ProcessFromJson(Map<String, dynamic> json) {
                 : Attachment.fromJson(e as Map<String, dynamic>))
             ?.toList() ??
         [],
+    mobileLawList: (json['enforcements'] as List)
+            ?.map((e) => e == null
+                ? null
+                : MobileLaw.fromJson(e as Map<String, dynamic>))
+            ?.toList() ??
+        [],
   );
 }
 
@@ -31,4 +37,5 @@ Map<String, dynamic> _$ProcessToJson(Process instance) => <String, dynamic>{
       'operateResult': instance.operateResult,
       'operateDesc': instance.operateDesc,
       'attachmentList': instance.attachments,
+      'enforcements': instance.mobileLawList,
     };

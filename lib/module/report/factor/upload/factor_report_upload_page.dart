@@ -34,6 +34,7 @@ import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 因子异常上报界面
 class FactorReportUploadPage extends StatefulWidget {
   final String enterId;
 

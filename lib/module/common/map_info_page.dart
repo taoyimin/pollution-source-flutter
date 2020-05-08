@@ -39,7 +39,7 @@ class MapInfoPage extends StatelessWidget {
             Clipboard.setData(ClipboardData(text: '$content'));
             Scaffold.of(context).showSnackBar(
               SnackBar(
-                content: Text('$title已复制到剪贴板'),
+                content: Text('${title.replaceAll('\n', '')}已复制到剪贴板'),
                 action: SnackBarAction(
                     label: '我知道了',
                     textColor: Colours.primary_color,
@@ -51,12 +51,13 @@ class MapInfoPage extends StatelessWidget {
             if (TextUtil.isEmpty(content)) {
               // 不显示内容为空的项
               return Gaps.empty;
-            } else if ('$content'.length > 50) {
-              // 内容过长使用多行显示
+            } else if ('$title'.endsWith('\n')) {
+              // 换行显示内容
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   InfoRowWidget(
-                    title: '$title',
+                    title: '${title.replaceAll('\n', '')}',
                     content: '',
                   ),
                   Text(

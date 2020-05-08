@@ -291,10 +291,17 @@ class _OrderListPageState extends State<OrderListPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        '${orderList[index].enterName}',
-                        style: const TextStyle(
-                          fontSize: 15,
+                      Padding(
+                        padding: EdgeInsets.only(
+                            right: orderList[index].alarmLevel == null ||
+                                    orderList[index].alarmLevel == '0'
+                                ? 0
+                                : 13),
+                        child: Text(
+                          '${orderList[index].enterName}',
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                       Gaps.vGap6,

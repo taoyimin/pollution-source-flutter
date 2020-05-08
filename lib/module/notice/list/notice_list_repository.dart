@@ -23,8 +23,8 @@ class NoticeListRepository extends ListRepository<Notice> {
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
-    startTime = '',
-    endTime = '',
+    DateTime startTime,
+    DateTime endTime,
   }) {
     return {
       'currentPage': currentPage,
@@ -32,10 +32,10 @@ class NoticeListRepository extends ListRepository<Notice> {
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
       'startTime': DateUtil.getDateStrByDateTime(startTime,
-              format: DateFormat.YEAR_MONTH_DAY) ??
+              format: DateFormat.NORMAL) ??
           '',
-      'endTime': DateUtil.getDateStrByDateTime(endTime,
-              format: DateFormat.YEAR_MONTH_DAY) ??
+      'endTime': DateUtil.getDateStrByDateTime(endTime?.add(Duration(hours: 23, minutes: 59, seconds: 59)),
+              format: DateFormat.NORMAL) ??
           '',
       'userType': Constant.userTags[SpUtil.getInt(Constant.spUserType)],
     };

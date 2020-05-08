@@ -1168,15 +1168,18 @@ class VerticalDividerWidget extends StatelessWidget {
 class InkWellButton extends StatelessWidget {
   final GestureTapCallback onTap;
   final List<Widget> children;
+  final AlignmentGeometry alignment;
 
   InkWellButton({
     @required this.onTap,
     @required this.children,
+    this.alignment = AlignmentDirectional.topStart,
   });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: alignment,
       children: () {
         this.children.add(
               Positioned.fill(

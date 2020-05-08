@@ -43,9 +43,6 @@ class EnterDetail extends Equatable {
   final int monitorLargeCount; // 监控点超大值数
   final int monitorNegativeCount; // 监控点负值数
   final String licenseNumber; // 排污许可证编码
-  final String buildProjectCount; // 建设项目总数
-  final String sceneLawCount; // 现场执法总数
-  final String environmentVisitCount; // 环境信访总数
 
   EnterDetail({
     this.enterId,
@@ -79,9 +76,6 @@ class EnterDetail extends Equatable {
     this.monitorLargeCount,
     this.monitorNegativeCount,
     this.licenseNumber,
-    this.buildProjectCount,
-    this.sceneLawCount,
-    this.environmentVisitCount,
   });
 
   @override
@@ -117,9 +111,6 @@ class EnterDetail extends Equatable {
         monitorLargeCount,
         monitorNegativeCount,
         licenseNumber,
-        buildProjectCount,
-        sceneLawCount,
-        environmentVisitCount,
       ];
 
   // 所属区域
@@ -136,18 +127,18 @@ class EnterDetail extends Equatable {
 EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
   return EnterDetail(
       enterId: json['enterprise']['enterId'] as int,
-      enterName: json['enterprise']['enterpriseName'] as String,
-      enterAddress: json['enterprise']['entAddress'] as String,
-      enterTel: json['enterprise']['entLinkPhone'] as String,
-      contactPerson: json['enterprise']['envirLinkMan'] as String,
-      contactPersonTel: json['enterprise']['envirLinkPhone'] as String,
-      legalPerson: json['enterprise']['legalPerson'] as String,
-      legalPersonTel: json['enterprise']['legalLinkPhone'] as String,
-      attentionLevelStr: json['enterprise']['attentionLevelStr'] as String,
-      cityName: json['enterprise']['cityName'] as String,
-      areaName: json['enterprise']['areaName'] as String,
-      industryTypeStr: json['enterprise']['industryTypeStr'] as String,
-      creditCode: json['enterprise']['legalPersonCode'] as String,
+      enterName: json['enterprise']['enterpriseName'] as String ?? '',
+      enterAddress: json['enterprise']['entAddress'] as String ?? '',
+      enterTel: json['enterprise']['entLinkPhone'] as String ?? '',
+      contactPerson: json['enterprise']['envirLinkMan'] as String ?? '',
+      contactPersonTel: json['enterprise']['envirLinkPhone'] as String ?? '',
+      legalPerson: json['enterprise']['legalPerson'] as String ?? '',
+      legalPersonTel: json['enterprise']['legalLinkPhone'] as String ?? '',
+      attentionLevelStr: json['enterprise']['attentionLevelStr'] as String ?? '',
+      cityName: json['enterprise']['cityName'] as String ?? '',
+      areaName: json['enterprise']['areaName'] as String ?? '',
+      industryTypeStr: json['enterprise']['industryTypeStr'] as String ?? '',
+      creditCode: json['enterprise']['legalPersonCode'] as String ?? '',
       orderCompleteCount: json['orderCompleteCount'] as int,
       orderTotalCount: json['orderTotalCount'] as int,
       orderDealCount: json['orderDealCount'] as int,
@@ -165,10 +156,7 @@ EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
       monitorZeroCount: json['monitorZeroCount'] as int,
       monitorLargeCount: json['monitorLargeCount'] as int,
       monitorNegativeCount: json['monitorNegativeCount'] as int,
-      licenseNumber: json['licenseNumber'] as String,
-      buildProjectCount: json['buildProjectCount'] as String,
-      sceneLawCount: json['sceneLawCount'] as String,
-      environmentVisitCount: json['environmentVisitCount'] as String);
+      licenseNumber: json['licenseNumber'] as String ?? '');
 }
 
 Map<String, dynamic> _$EnterDetailToJson(EnterDetail instance) =>
@@ -203,8 +191,5 @@ Map<String, dynamic> _$EnterDetailToJson(EnterDetail instance) =>
       'monitorZeroCount': instance.monitorZeroCount,
       'monitorLargeCount': instance.monitorLargeCount,
       'monitorNegativeCount': instance.monitorNegativeCount,
-      'licenseNumber': instance.licenseNumber,
-      'buildProjectCount': instance.buildProjectCount,
-      'sceneLawCount': instance.sceneLawCount,
-      'environmentVisitCount': instance.environmentVisitCount
+      'licenseNumber': instance.licenseNumber
     };

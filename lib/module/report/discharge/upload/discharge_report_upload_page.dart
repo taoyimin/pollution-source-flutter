@@ -31,6 +31,7 @@ import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 
+/// 排口异常上报界面
 class DischargeReportUploadPage extends StatefulWidget {
   final String enterId;
 

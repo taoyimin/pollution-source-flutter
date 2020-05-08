@@ -224,10 +224,16 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         alarmCauseList: state.detail.alarmCauseList,
                       ),
                     ));
-                    // 加载报警原因数据字典
-                    _loadAlarmCause();
-                    // 加载移动执法
-                    _loadMobileLaw();
+                    if(state.detail.deal == 'T'){
+                      // 加载报警原因数据字典
+                      _loadAlarmCause();
+                    }
+                    if(state.detail.audit == 'T'){
+                      // 加载报警原因数据字典
+                      _loadAlarmCause();
+                      // 加载移动执法
+                      _loadMobileLaw();
+                    }
                   }
                 },
               ),
@@ -446,17 +452,21 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     InkWell(
-                                      onTap: (){
+                                      onTap: () {
                                         Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) {
-                                              return MapInfoPage(
-                                                title: '处理流程详情',
-                                                mapInfo: orderDetail.processes[index].getMapInfo(),
-                                              );
-                                            }));
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return MapInfoPage(
+                                            title: '处理流程详情',
+                                            mapInfo: orderDetail
+                                                .processes[index]
+                                                .getMapInfo(),
+                                          );
+                                        }));
                                       },
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
                                             "反馈人：${orderDetail.processes[index].operatePerson}",
@@ -487,6 +497,87 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                       ),
                                     ),
                                     Gaps.vGap3,
+                                    Offstage(
+                                      offstage: orderDetail.processes[index]
+                                                  .mobileLawList ==
+                                              null ||
+                                          orderDetail.processes[index]
+                                                  .mobileLawList.length ==
+                                              0,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Gaps.vGap6,
+                                          Text(
+                                            '已关联${orderDetail.processes[index].mobileLawList.length}条移动执法记录：',
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                          Gaps.vGap3,
+                                          ListView.separated(
+                                            itemCount: orderDetail
+                                                .processes[index]
+                                                .mobileLawList
+                                                .length,
+                                            shrinkWrap: true,
+                                            primary: false,
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 0,
+                                            ),
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                    int index) {
+                                              return Gaps.vGap6;
+                                            },
+                                            itemBuilder: (BuildContext context,
+                                                int listIndex) {
+                                              final MobileLaw mobileLaw =
+                                                  orderDetail.processes[index]
+                                                      .mobileLawList[listIndex];
+                                              return InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return MapInfoPage(
+                                                          title: '移动执法详情',
+                                                          mapInfo: mobileLaw
+                                                              .getMapInfo(),
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      '${mobileLaw.lawId}',
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                    Text(
+                                                      '开始时间：${mobileLaw.startTimeStr}',
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                    Text(
+                                                      '结束时间：${mobileLaw.endTimeStr}',
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          Gaps.vGap10,
+                                        ],
+                                      ),
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -509,89 +600,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         },
                       ),
               ],
-            ),
-          ),
-          // 移动执法
-          Offstage(
-            offstage: orderDetail.mobileLawList == null ||
-                orderDetail.mobileLawList.length == 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ImageTitleWidget(
-                    title: '移动执法',
-                    imagePath: 'assets/images/icon_mobile_law.png',
-                  ),
-                  Gaps.vGap10,
-                  ListView.separated(
-                    itemCount: orderDetail.mobileLawList.length,
-                    shrinkWrap: true,
-                    primary: false,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 0,
-                    ),
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Gaps.vGap10;
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      final MobileLaw mobileLaw =
-                          orderDetail.mobileLawList[index];
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return MapInfoPage(
-                              title: '移动执法详情',
-                              mapInfo: mobileLaw.getMapInfo(),
-                            );
-                          }));
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              '${mobileLaw.lawId}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  '检查人：${mobileLaw.lawPersonStr}',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                                Expanded(child: Gaps.empty),
-                                Text(
-                                  '开始时间：${mobileLaw.startTimeStr}',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  '任务类型：${mobileLaw.taskTypeStr}',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                                Expanded(child: Gaps.empty),
-                                Text(
-                                  '结束时间：${mobileLaw.endTimeStr}',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
             ),
           ),
           // 快速链接

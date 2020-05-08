@@ -70,7 +70,7 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                     ),
                     Gaps.hGap10,
                     Text(
-                      widget.title,
+                      '${widget.title}(已选中${checkList.length}项)',
                       style: TextStyle(fontSize: 17),
                     ),
                   ],

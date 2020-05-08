@@ -18,6 +18,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 企业详情页面
 class EnterDetailPage extends StatefulWidget {
   final String enterId;
 
@@ -78,21 +79,24 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
+              String districtName = '';
               if (state is DetailLoaded) {
-                enterName = state.detail.enterName ?? '';
-                enterAddress = state.detail.enterAddress ?? '';
+                enterName = state.detail.enterName;
+                enterAddress = state.detail.enterAddress;
+                districtName = state.detail.districtName;
               }
               return DetailHeaderWidget(
                 title: '企业详情',
-                subTitle1: '$enterName',
-                subTitle2: '$enterAddress',
+                subTitle1: '$districtName',
+                subTitle2: '$enterName',
+                subTitle3: '$enterAddress',
                 imagePath: 'assets/images/enter_detail_bg_image.svg',
                 backgroundPath: 'assets/images/button_bg_lightblue.png',
                 color: Colours.background_light_blue,
               );
             },
           ),
-          //生成body
+          // 生成body
           BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
               if (state is DetailLoading) {
@@ -121,7 +125,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
-          //基本信息
+          // 基本信息
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -135,15 +139,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '关注程度：${enterDetail.attentionLevelStr ?? ''}',
+                      content: '关注程度：${enterDetail.attentionLevelStr}',
                       icon: Icons.star,
-                      flex: 4,
-                    ),
-                    Gaps.hGap10,
-                    IconBaseInfoWidget(
-                      content: '所属区域：${enterDetail.districtName ?? ''}',
-                      icon: Icons.location_on,
-                      flex: 5,
                     ),
                   ],
                 ),
@@ -151,7 +148,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '行业类别：${enterDetail.industryTypeStr ?? ''}',
+                      content: '行业类别：${enterDetail.industryTypeStr}',
                       icon: Icons.work,
                     ),
                   ],
@@ -160,7 +157,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '信用代码：${enterDetail.creditCode ?? ''}',
+                      content: '信用代码：${enterDetail.creditCode}',
                       icon: Icons.mail,
                     ),
                   ],
@@ -168,7 +165,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               ],
             ),
           ),
-          //联系人 没有联系人则隐藏
+          // 联系人 没有联系人则隐藏
           Offstage(
             offstage: TextUtil.isEmpty(enterDetail.enterTel) &&
                 TextUtil.isEmpty(enterDetail.contactPersonTel) &&
@@ -193,7 +190,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.contactPersonTel),
                     child: ContactsWidget(
-                      contactsName: '${enterDetail.contactPerson ?? ''}(联系人)',
+                      contactsName: '${enterDetail.contactPerson}(联系人)',
                       contactsTel: '${enterDetail.contactPersonTel}',
                       imagePath: 'assets/images/enter_contacts_tel_header.png',
                     ),
@@ -201,7 +198,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.legalPersonTel),
                     child: ContactsWidget(
-                      contactsName: '${enterDetail.legalPerson ?? ''}(法人)',
+                      contactsName: '${enterDetail.legalPerson}(法人)',
                       contactsTel: '${enterDetail.legalPersonTel}',
                       imagePath: 'assets/images/enter_legal_tel_header.png',
                     ),
@@ -210,7 +207,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               ),
             ),
           ),
-          //报警管理单
+          // 报警管理单
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -251,7 +248,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               ],
             ),
           ),
-          //异常申报信息
+          // 异常申报信息
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -315,7 +312,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               ],
             ),
           ),
-          //监控点信息
+          // 监控点信息
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: MonitorStatisticsCard(
@@ -326,7 +323,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               },
             ),
           ),
-          //排污许可证信息
+          // 排污许可证信息
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -340,7 +337,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 InkWellButton6(
                   meta: Meta(
                     title: '许可证编号',
-                    content: '${enterDetail.licenseNumber ?? ''}',
+                    content: '${enterDetail.licenseNumber}',
                     color: Colours.background_red,
                     imagePath: 'assets/images/discharge_permit.png',
                     backgroundPath: 'assets/images/button_bg_red.png',
@@ -351,56 +348,6 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               ],
             ),
           ),
-          //其他信息 赣州才有
-          /*Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ImageTitleWidget(
-                  title: '其他信息统计',
-                  imagePath: 'assets/images/icon_enter_other_info.png',
-                ),
-                Gaps.vGap10,
-                Row(
-                  children: <Widget>[
-                    //监察执法
-                    InkWellButton3(
-                      meta: Meta(
-                        title: "建设项目",
-                        content: '${enterDetail.buildProjectCount??''}',
-                        backgroundPath: "assets/images/button_bg_lightblue.png",
-                        imagePath: "assets/images/button_image2.png",
-                      ),
-                      onTap: () {},
-                    ),
-                    Gaps.hGap10,
-                    //项目审批
-                    InkWellButton3(
-                      meta: Meta(
-                        title: "现场执法",
-                        content: '${enterDetail.sceneLawCount??''}',
-                        backgroundPath: "assets/images/button_bg_red.png",
-                        imagePath: "assets/images/button_image1.png",
-                      ),
-                      onTap: () {},
-                    ),
-                    Gaps.hGap10,
-                    //信访投诉
-                    InkWellButton3(
-                      meta: Meta(
-                        title: '环境信访',
-                        content: '${enterDetail.environmentVisitCount??''}',
-                        backgroundPath: "assets/images/button_bg_yellow.png",
-                        imagePath: "assets/images/button_image3.png",
-                      ),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),*/
         ],
       ),
     );

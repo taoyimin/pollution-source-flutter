@@ -12,6 +12,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 排口异常申报详细界面
 class DischargeReportDetailPage extends StatefulWidget {
   final String reportId;
 

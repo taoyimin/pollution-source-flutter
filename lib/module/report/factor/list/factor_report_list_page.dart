@@ -24,7 +24,7 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
-/// 因子异常申报列表
+/// 因子异常申报列表界面
 class FactorReportListPage extends StatefulWidget {
   final String enterId;
   final String dischargeId;

@@ -12,6 +12,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 因子异常申报详情界面
 class FactorReportDetailPage extends StatefulWidget {
   final String reportId;
 

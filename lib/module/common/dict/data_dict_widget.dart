@@ -408,7 +408,7 @@ class _DataDictDialogState extends State<DataDictDialog> {
                     ),
                     Gaps.hGap10,
                     Text(
-                      widget.title,
+                      '${widget.title}(已选中${checkList.length}项)',
                       style: TextStyle(fontSize: 17),
                     ),
                   ],
@@ -602,7 +602,7 @@ class _DataDictBlocDialogState extends State<DataDictBlocDialog> {
                               ),
                               Gaps.hGap10,
                               Text(
-                                widget.title,
+                                '${widget.title}(已选中${checkList.length}项)',
                                 style: TextStyle(fontSize: 17),
                               ),
                             ],

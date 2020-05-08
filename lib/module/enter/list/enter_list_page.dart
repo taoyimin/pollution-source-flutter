@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/http/http_api.dart';
@@ -88,7 +87,7 @@ class _EnterListPageState extends State<EnterListPage>
   @override
   void initState() {
     super.initState();
-    initParam();
+    _initParam();
     // 加载关注程度
     _attentionLevelBloc.add(DataDictLoad());
     // 初始化列表Bloc
@@ -100,17 +99,17 @@ class _EnterListPageState extends State<EnterListPage>
 
   @override
   void dispose() {
-    //释放资源
+    // 释放资源
     _enterNameController.dispose();
     _refreshController.dispose();
-    //取消正在进行的请求
+    // 取消正在进行的请求
     final currentState = _listBloc?.state;
     if (currentState is ListLoading) currentState.cancelToken?.cancel();
     super.dispose();
   }
 
   /// 初始化查询参数
-  initParam() {
+  _initParam() {
     _enterNameController.text = '';
     _enterType = widget.enterType;
     _state = widget.state;
@@ -194,14 +193,14 @@ class _EnterListPageState extends State<EnterListPage>
             slivers: <Widget>[
               BlocListener<ListBloc, ListState>(
                 listener: (context, state) {
-                  //刷新状态不触发_refreshCompleter
+                  // 刷新状态不触发_refreshCompleter
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
                 child: BlocBuilder<ListBloc, ListState>(
                   condition: (previousState, state) {
-                    //刷新状态不重构Widget
+                    // 刷新状态不重构Widget
                     if (state is ListLoading)
                       return false;
                     else
@@ -261,7 +260,7 @@ class _EnterListPageState extends State<EnterListPage>
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          //创建列表项
+          // 创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
@@ -306,7 +305,8 @@ class _EnterListPageState extends State<EnterListPage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.only(
+                                  right: enterList[index].isImportant ? 13 : 0),
                               child: Text(
                                 '${enterList[index].enterName}',
                                 style: TextStyle(
@@ -454,7 +454,7 @@ class _EnterListPageState extends State<EnterListPage>
                     color: Colors.orange,
                     onTap: () {
                       setState(() {
-                        initParam();
+                        _initParam();
                       });
                     },
                   ),

@@ -26,6 +26,7 @@ import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 长期停产上报界面
 class LongStopReportUploadPage extends StatefulWidget {
   final String enterId;
 

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extended;
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
@@ -13,6 +15,7 @@ import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/widget/custom_header.dart';
 
 import 'notice_list_model.dart';
 import 'notice_list_repository.dart';
@@ -26,6 +29,7 @@ class NoticeListPage extends StatefulWidget {
 }
 
 class _NoticeListPageState extends State<NoticeListPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final EasyRefreshController _refreshController = EasyRefreshController();
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
@@ -50,6 +54,7 @@ class _NoticeListPageState extends State<NoticeListPage> {
 
   @override
   void dispose() {
+    // 释放资源
     _refreshController.dispose();
     // 取消正在进行的请求
     final currentState = _listBloc?.state;
@@ -76,83 +81,107 @@ class _NoticeListPageState extends State<NoticeListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('消息通知列表'),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            ),
-          ),
-        ],
-      ),
+      key: _scaffoldKey,
       endDrawer: _buildEndDrawer(),
-      body: EasyRefresh.custom(
-        controller: _refreshController,
-        header: UIUtils.getRefreshClassicalHeader(),
-        footer: UIUtils.getLoadClassicalFooter(),
-        slivers: <Widget>[
-          BlocListener<ListBloc, ListState>(
-            listener: (context, state) {
-              // 刷新状态不触发_refreshCompleter
-              if (state is ListLoading) return;
-              _refreshCompleter?.complete();
-              _refreshCompleter = Completer();
-            },
-            child: BlocBuilder<ListBloc, ListState>(
-              condition: (previousState, state) {
-                // 刷新状态不重构Widget
-                if (state is ListLoading)
-                  return false;
-                else
-                  return true;
-              },
+      body: extended.NestedScrollView(
+        pinnedHeaderSliverHeightBuilder: () {
+          return MediaQuery.of(context).padding.top + kToolbarHeight;
+        },
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            BlocBuilder<ListBloc, ListState>(
               builder: (context, state) {
-                if (state is ListInitial) {
-                  return LoadingSliver();
-                } else if (state is ListEmpty) {
-                  return EmptySliver();
-                } else if (state is ListError) {
-                  return ErrorSliver(
-                    errorMessage: state.message,
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                } else if (state is ListLoaded) {
-                  if (!state.hasNextPage) {
-                    _refreshController.finishLoad(
-                        noMore: !state.hasNextPage, success: true);
-                  }
-                  return _buildPageLoadedList(state.list);
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                }
+                String subtitle2 = '';
+                if (state is ListLoading)
+                  subtitle2 = '数据加载中';
+                else if (state is ListLoaded)
+                  subtitle2 = '共${state.total}条数据';
+                else if (state is ListEmpty)
+                  subtitle2 = '共0条数据';
+                else if (state is ListError) subtitle2 = '数据加载错误';
+                return ListHeaderWidget(
+                  title: '历史预警消息列表',
+                  subtitle: '展示历史预警消息列表，点击列表项查看该预警消息的详细信息',
+                  subtitle2: subtitle2,
+                  background: 'assets/images/button_bg_yellow.png',
+                  image: 'assets/images/discharge_list_bg_image.png',
+                  color: Colours.background_yellow,
+                  onSearchTap: () {
+                    _scaffoldKey.currentState.openEndDrawer();
+                  },
+                );
               },
             ),
+          ];
+        },
+        body: extended.NestedScrollViewInnerScrollPositionKeyWidget(
+          Key('list'),
+          EasyRefresh.custom(
+            controller: _refreshController,
+            header: UIUtils.getRefreshClassicalHeader(),
+            footer: UIUtils.getLoadClassicalFooter(),
+            slivers: <Widget>[
+              BlocListener<ListBloc, ListState>(
+                listener: (context, state) {
+                  // 刷新状态不触发_refreshCompleter
+                  if (state is ListLoading) return;
+                  _refreshCompleter?.complete();
+                  _refreshCompleter = Completer();
+                },
+                child: BlocBuilder<ListBloc, ListState>(
+                  condition: (previousState, state) {
+                    // 刷新状态不重构Widget
+                    if (state is ListLoading)
+                      return false;
+                    else
+                      return true;
+                  },
+                  builder: (context, state) {
+                    if (state is ListInitial) {
+                      return LoadingSliver();
+                    } else if (state is ListEmpty) {
+                      return EmptySliver();
+                    } else if (state is ListError) {
+                      return ErrorSliver(
+                        errorMessage: state.message,
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
+                    } else if (state is ListLoaded) {
+                      if (!state.hasNextPage) {
+                        _refreshController.finishLoad(
+                            noMore: !state.hasNextPage, success: true);
+                      }
+                      return _buildPageLoadedList(state.list);
+                    } else {
+                      return ErrorSliver(
+                        errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                        onReloadTap: () => _refreshController.callRefresh(),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+            onRefresh: () async {
+              _currentPage = Constant.defaultCurrentPage;
+              _refreshController.resetLoadState();
+              _listBloc.add(ListLoad(
+                isRefresh: true,
+                params: _getRequestParam(),
+              ));
+              return _refreshCompleter.future;
+            },
+            onLoad: () async {
+              final currentState = _listBloc.state;
+              if (currentState is ListLoaded)
+                _currentPage = currentState.currentPage + 1;
+              else
+                _currentPage = Constant.defaultCurrentPage;
+              _listBloc.add(ListLoad(params: _getRequestParam()));
+              return _refreshCompleter.future;
+            },
           ),
-        ],
-        onRefresh: () async {
-          _currentPage = Constant.defaultCurrentPage;
-          _refreshController.resetLoadState();
-          _listBloc.add(ListLoad(
-            isRefresh: true,
-            params: _getRequestParam(),
-          ));
-          return _refreshCompleter.future;
-        },
-        onLoad: () async {
-          final currentState = _listBloc.state;
-          if (currentState is ListLoaded)
-            _currentPage = currentState.currentPage + 1;
-          else
-            _currentPage = Constant.defaultCurrentPage;
-          _listBloc.add(ListLoad(params: _getRequestParam()));
-          return _refreshCompleter.future;
-        },
+        ),
       ),
     );
   }
@@ -162,46 +191,51 @@ class _NoticeListPageState extends State<NoticeListPage> {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           // 创建列表项
-          return InkWellButton(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return MapInfoPage(
-                      title: '消息通知详情',
-                      mapInfo: noticeList[index].getMapInfo(),
-                    );
-                  },
-                ),
-              );
-            },
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border:
-                      Border(bottom: BorderSide(color: Colours.divider_color)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '${noticeList[index].title}',
-                      style: TextStyle(
-                        fontSize: 15,
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            child: InkWellButton(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MapInfoPage(
+                        title: '消息通知详情',
+                        mapInfo: noticeList[index].getMapInfo(),
+                      );
+                    },
+                  ),
+                );
+              },
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      UIUtils.getBoxShadow(),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '${noticeList[index].title}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    Gaps.vGap6,
-                    ListTileWidget('${noticeList[index].text}'),
-                    Gaps.vGap6,
-                    ListTileWidget('${noticeList[index].time}'),
-                  ],
+                      Gaps.vGap6,
+                      ListTileWidget('${noticeList[index].text}'),
+                      Gaps.vGap6,
+                      ListTileWidget('${noticeList[index].time}'),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
         childCount: noticeList.length,
@@ -225,7 +259,7 @@ class _NoticeListPageState extends State<NoticeListPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const Text(
-                        '报警时间',
+                        '推送时间',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

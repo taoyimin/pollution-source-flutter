@@ -149,7 +149,7 @@ class Order extends Equatable {
     }).toList();
   }
 
-  // 所属区域
+  /// 所属区域
   String get districtName {
     return '${cityName ?? ''}${areaName ?? ''}';
   }

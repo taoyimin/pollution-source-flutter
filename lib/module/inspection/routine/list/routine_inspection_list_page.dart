@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
@@ -269,13 +268,10 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Text(
-                                '${routineInspectionList[index].enterName}',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
+                            Text(
+                              '${routineInspectionList[index].enterName}',
+                              style: TextStyle(
+                                fontSize: 15,
                               ),
                             ),
                             Gaps.vGap6,

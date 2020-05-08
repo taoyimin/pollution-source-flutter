@@ -12,6 +12,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 长期停产详情界面
 class LongStopReportDetailPage extends StatefulWidget {
   final String reportId;
 
@@ -100,7 +101,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
-          //基本信息
+          // 基本信息
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
@@ -152,7 +153,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
               ],
             ),
           ),
-          //快速链接
+          // 快速链接
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,

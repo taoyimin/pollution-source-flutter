@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:pollution_source/module/common/collection/law/mobile_law_model.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 
 part 'process_detail_model.g.dart';
@@ -22,6 +23,8 @@ class Process extends Equatable {
   final String operateDesc; // 核实情况
   @JsonKey(name: 'attachmentList', defaultValue: [])
   final List<Attachment> attachments; // 附件
+  @JsonKey(name: 'enforcements', defaultValue: [])
+  final List<MobileLaw> mobileLawList; // 移动执法
 
   const Process({
     @required this.operateTypeStr,
@@ -31,6 +34,7 @@ class Process extends Equatable {
     @required this.operateTimeStr,
     @required this.operateDesc,
     @required this.attachments,
+    @required this.mobileLawList,
   });
 
   @override
@@ -42,6 +46,7 @@ class Process extends Equatable {
         operateTimeStr,
         operateDesc,
         attachments,
+        mobileLawList,
       ];
 
   factory Process.fromJson(Map<String, dynamic> json) =>
@@ -55,7 +60,8 @@ class Process extends Equatable {
         '处理结果': this.operateResult,
         '反馈人': this.operatePerson,
         '报警原因': this.alarmCauseStr,
-        '核实情况': this.operateDesc,
-        '附件地址': this.attachments?.map((attachment) => attachment.url)?.join('\n') ?? '',
-      };
+        '核实情况\n': this.operateDesc,
+      }..addAll(Map.fromIterable(attachments,
+          key: (e) => '附件${attachments.indexOf(e) + 1}下载地址：\n',
+          value: (e) => e.url));
 }
