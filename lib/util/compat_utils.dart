@@ -425,6 +425,10 @@ class CompatUtils {
         return HttpApiPollution.notificationList;
       case HttpApi.mobileLawList:
         return HttpApiPollution.mobileLawList;
+      case HttpApi.warnList:
+        return HttpApiPollution.warnList;
+      case HttpApi.warnDetail:
+        return HttpApiPollution.warnDetail;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
@@ -529,6 +533,10 @@ class CompatUtils {
         return HttpApiOperation.notificationList;
       case HttpApi.mobileLawList:
         return HttpApiOperation.mobileLawList;
+      case HttpApi.warnList:
+        return HttpApiOperation.warnList;
+      case HttpApi.warnDetail:
+        return HttpApiOperation.warnDetail;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,

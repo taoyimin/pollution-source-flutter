@@ -158,6 +158,12 @@ enum HttpApi {
 
   /// 移动执法列表
   mobileLawList,
+
+  /// 实时预警单列表
+  warnList,
+
+  /// 实时预警单详情
+  warnDetail,
 }
 
 class HttpApiPollution {
@@ -219,6 +225,8 @@ class HttpApiPollution {
   static const String changePassword = 'user/changePwd';
   static const String notificationList = 'pushMessage/getPushMessageHistory';
   static const String mobileLawList = 'Supervise/getEnforcementsById';
+  static const String warnList = 'pushMessage/realWarnList';
+  static const String warnDetail = 'pushMessage/getRealWarnById?id=';
 }
 
 class HttpApiOperation {
@@ -298,6 +306,8 @@ class HttpApiOperation {
       'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
   static const String checkVersion = 'app/update.json';
   static const String changePassword = 'ywyh/updatePassword';
-  static const String notificationList = '暂无';
+  static const String notificationList = 'pushMessage/getPushMessageHistory';
   static const String mobileLawList = '暂无';
+  static const String warnList = 'pushMessage/realWarnList';
+  static const String warnDetail = 'pushMessage/getRealWarnById?id=';
 }
