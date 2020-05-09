@@ -120,6 +120,9 @@ class Constant {
   /// 申请通知权限是否不再提示
   static const String spNotificationNoLonger = 'spNotificationNoLonger';
 
+  /// 设别别名
+  static const String spAlias = 'spAlias';
+
   /// 登录接口集合
   static const List<HttpApi> loginApis = [
     HttpApi.adminToken,
