@@ -510,7 +510,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                         children: <Widget>[
                                           Gaps.vGap6,
                                           Text(
-                                            '已关联${orderDetail.processes[index].mobileLawList.length}条移动执法记录：',
+                                            '已关联${orderDetail.processes[index].mobileLawList.length}条现场检查情况：',
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           ),
@@ -542,7 +542,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                                     MaterialPageRoute(
                                                       builder: (context) {
                                                         return MapInfoPage(
-                                                          title: '移动执法详情',
+                                                          title: '现场检查情况详情',
                                                           mapInfo: mobileLaw
                                                               .getMapInfo(),
                                                         );
@@ -870,7 +870,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         return LoadingWidget();
                       } else if (state is CollectionError) {
                         return RowErrorWidget(
-                          tipMessage: '移动执法加载失败，请重试！',
+                          tipMessage: '现场检查情况加载失败，请重试！',
                           errorMessage: state.message,
                           onReloadTap: () => _loadMobileLaw(),
                         );
@@ -883,7 +883,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                               context: context, //BuildCont
                               builder: (BuildContext context) {
                                 return CollectionDialog<MobileLaw>(
-                                  title: '移动执法',
+                                  title: '现场检查情况',
                                   imagePath:
                                       'assets/images/icon_mobile_law.png',
                                   collection: state.collection,
@@ -915,7 +915,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                                     .mobileLawList.length ==
                                                 0
                                             ? ''
-                                            : '已关联${processUpload.mobileLawList.length}条移动执法记录'),
+                                            : '已关联${processUpload.mobileLawList.length}条现场检查情况'),
                                     style: const TextStyle(
                                       fontSize: 14,
                                     ),
@@ -923,7 +923,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                                     decoration: const InputDecoration(
                                       fillColor: Color(0xFFDFDFDF),
                                       filled: true,
-                                      hintText: "选择关联移动执法",
+                                      hintText: "选择关联现场检查情况",
                                       hintStyle: TextStyle(
                                         fontSize: 14,
                                         color: Colours.secondary_text,
