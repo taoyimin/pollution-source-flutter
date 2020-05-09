@@ -23,8 +23,8 @@ class PollutionDioUtils {
 
   PollutionDioUtils.internal() {
     var options = BaseOptions(
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
+      connectTimeout: 20000,
+      receiveTimeout: 20000,
       responseType: ResponseType.json,
       validateStatus: (status) {
         return true;
@@ -64,8 +64,8 @@ class OperationDioUtils {
 
   OperationDioUtils.internal() {
     var options = BaseOptions(
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
+      connectTimeout: 20000,
+      receiveTimeout: 20000,
       responseType: ResponseType.json,
       validateStatus: (status) {
         return true;

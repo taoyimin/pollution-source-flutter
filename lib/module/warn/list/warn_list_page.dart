@@ -195,8 +195,8 @@ class _WarnListPageState extends State<WarnListPage> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                Application.router.navigateTo(context,
-                    '${Routes.warnDetail}/${warnList[index].warnId}');
+                Application.router.navigateTo(
+                    context, '${Routes.warnDetail}/${warnList[index].warnId}');
               },
               children: <Widget>[
                 Container(
@@ -209,38 +209,60 @@ class _WarnListPageState extends State<WarnListPage> {
                     ],
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        '${warnList[index].enterName}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Gaps.vGap6,
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '监控点名称：${warnList[index].monitorName}'),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: ListTileWidget(
-                                '所属区域：${warnList[index].districtName}'),
-                          ),
-                        ],
-                      ),
-                      Gaps.vGap6,
-                      ListTileWidget('生成时间：${warnList[index].createTimeStr}'),
-                      Gaps.vGap6,
-                      ListTileWidget('预警标题：${warnList[index].title}'),
-                      Gaps.vGap6,
-                      ListTileWidget('预警详情：${warnList[index].text}'),
-                    ],
-                  ),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: () {
+                        if (SpUtil.getInt(Constant.spUserType) == 1) {
+                          // 企业用户
+                          return <Widget>[
+                            Text(
+                              '${warnList[index].title}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Gaps.vGap6,
+                            ListTileWidget(
+                                '监控点名：${warnList[index].monitorName}'),
+                            Gaps.vGap6,
+                            ListTileWidget(
+                                '生成时间：${warnList[index].createTimeStr}'),
+                            Gaps.vGap6,
+                            ListTileWidget('预警详情：${warnList[index].text}'),
+                          ];
+                        } else {
+                          return <Widget>[
+                            Text(
+                              '${warnList[index].enterName}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Gaps.vGap6,
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 5,
+                                  child: ListTileWidget(
+                                      '监控点名：${warnList[index].monitorName}'),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: ListTileWidget(
+                                      '所属区域：${warnList[index].districtName}'),
+                                ),
+                              ],
+                            ),
+                            Gaps.vGap6,
+                            ListTileWidget(
+                                '生成时间：${warnList[index].createTimeStr}'),
+                            Gaps.vGap6,
+                            ListTileWidget('预警标题：${warnList[index].title}'),
+                            Gaps.vGap6,
+                            ListTileWidget('预警详情：${warnList[index].text}'),
+                          ];
+                        }
+                      }()),
                 ),
               ],
             ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flustars/flustars.dart';
+import 'package:flutter/services.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:pollution_source/http/dio_utils.dart';
@@ -19,7 +20,7 @@ import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
-/// 个人中心页面
+/// 个人中心界面
 class MinePage extends StatefulWidget {
   @override
   _MinePageState createState() => _MinePageState();
@@ -97,24 +98,6 @@ class _MinePageState extends State<MinePage>
                           ),
                         ),
                       ),
-                      // 名字
-//                      Container(
-//                        margin: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-//                        child: Center(
-//                          child: Text(
-//                            '${SpUtil.getString(Constant.spRealName)}',
-//                            style: TextStyle(
-//                              fontSize:
-//                                  '${SpUtil.getString(Constant.spRealName)}'
-//                                              .length <=
-//                                          12
-//                                      ? 25
-//                                      : 18,
-//                              color: Colors.white,
-//                            ),
-//                          ),
-//                        ),
-//                      ),
                       Positioned(
                         bottom: _cardMarginBottom,
                         right: 10,
@@ -167,7 +150,7 @@ class _MinePageState extends State<MinePage>
                             ),
                             Gaps.vGap8,
                             GestureDetector(
-                              onDoubleTap: () {
+                              onDoubleTap: () async {
                                 SpUtil.putBool(
                                     Constant.spDebug,
                                     !SpUtil.getBool(Constant.spDebug,
@@ -175,9 +158,46 @@ class _MinePageState extends State<MinePage>
                                 if (SpUtil.getBool(Constant.spDebug,
                                     defValue: false)) {
                                   Toast.show('已开启Debug模式');
+                                  try {
+                                    JPush jpush = JPush();
+                                    bool isNotificationEnabled =
+                                        await jpush.isNotificationEnabled();
+                                    Map tags = await jpush.getAllTags();
+                                    String configInfo = '''推送权限：${isNotificationEnabled ? '已开启' : '未开启'}
+设备别名：${SpUtil.getString(Constant.spAlias, defValue: '')}
+设备标签：${tags['tags']}''';
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('配置信息'),
+                                          content: Text(configInfo),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              onPressed: () {
+                                                Clipboard.setData(ClipboardData(text: configInfo));
+                                                Toast.show('复制到剪贴板成功！');
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("复制"),
+                                            ),
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("确定"),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } catch (e) {
+                                    Toast.show('获取推送配置信息失败！错误信息：$e');
+                                  }
                                 } else {
                                   Toast.show('已关闭Debug模式');
                                 }
+                                // 重新创建Dio实例
                                 PollutionDioUtils.internal();
                                 OperationDioUtils.internal();
                               },
@@ -207,14 +227,14 @@ class _MinePageState extends State<MinePage>
 //                          ),
 //                        ),
 //                      ),
-                      Positioned(
-                        top: SystemUtils.isWeb ? 16 : 36,
-                        left: 16,
-                        child: Icon(
-                          Icons.notifications_none,
-                          color: Colors.white,
-                        ),
-                      ),
+//                      Positioned(
+//                        top: SystemUtils.isWeb ? 16 : 36,
+//                        left: 16,
+//                        child: Icon(
+//                          Icons.notifications_none,
+//                          color: Colors.white,
+//                        ),
+//                      ),
                     ],
                   ),
                   Container(
@@ -230,8 +250,7 @@ class _MinePageState extends State<MinePage>
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                         Gaps.vGap10,
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
+                        DecoratedBox(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -240,9 +259,15 @@ class _MinePageState extends State<MinePage>
                           ),
                           child: Column(
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                              GridView(
+                                shrinkWrap: true,
+                                primary: false,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                ),
                                 children: <Widget>[
                                   InkWellButton(
                                     onTap: () async {
@@ -263,26 +288,30 @@ class _MinePageState extends State<MinePage>
                                       }
                                     },
                                     children: <Widget>[
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Image.asset(
-                                            "assets/images/icon_change_password.png",
-                                            width: 30,
-                                            height: 30,
-                                          ),
-                                          const Text(
-                                            "修改密码",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colours.secondary_text),
-                                          ),
-                                        ],
+                                      Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Image.asset(
+                                              "assets/images/icon_change_password.png",
+                                              width: 30,
+                                              height: 30,
+                                            ),
+                                            const Text(
+                                              "修改密码",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color:
+                                                      Colours.secondary_text),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                   InkWellButton(
+                                    alignment: Alignment.center,
                                     onTap: () async {
                                       try {
                                         bool hasUpdate =
@@ -335,11 +364,12 @@ class _MinePageState extends State<MinePage>
                                     ],
                                   ),
                                   InkWellButton(
+                                    alignment: Alignment.center,
                                     onTap: () {
                                       if (SystemUtils.isWeb) {
                                         Scaffold.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text('Web平台不支持分享产品'),
+                                            content: const Text('Web平台不支持分享产品'),
                                             action: SnackBarAction(
                                                 label: '我知道了',
                                                 textColor:
@@ -353,7 +383,7 @@ class _MinePageState extends State<MinePage>
                                       } else {
                                         Scaffold.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text('当前平台不支持分享产品'),
+                                            content: const Text('当前平台不支持分享产品'),
                                             action: SnackBarAction(
                                                 label: '我知道了',
                                                 textColor:
@@ -384,11 +414,12 @@ class _MinePageState extends State<MinePage>
                                     ],
                                   ),
                                   InkWellButton(
+                                    alignment: Alignment.center,
                                     onTap: () {
                                       if (SystemUtils.isWeb) {
                                         Scaffold.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text('Web平台不支持清理缓存'),
+                                            content: const Text('Web平台不支持清理缓存'),
                                             action: SnackBarAction(
                                                 label: '我知道了',
                                                 textColor:
@@ -445,14 +476,8 @@ class _MinePageState extends State<MinePage>
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                              Gaps.vGap20,
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
                                   InkWellButton(
+                                    alignment: Alignment.center,
                                     onTap: () {
                                       showDialog(
                                           context: context,
@@ -487,14 +512,25 @@ class _MinePageState extends State<MinePage>
                                                     // 清空登录时间
                                                     SpUtil.remove(
                                                         Constant.spLoginTime);
-                                                    // 删除别名和标签
-                                                    JPush jpush = JPush();
-                                                    jpush.deleteAlias();
-                                                    jpush.deleteTags([
-                                                      Constant.userTags[
-                                                          SpUtil.getInt(Constant
-                                                              .spUserType)]
-                                                    ]);
+                                                    try {
+                                                      // 删除别名和标签
+                                                      JPush jpush = JPush();
+                                                      jpush
+                                                          .deleteAlias()
+                                                          .then((map) {
+                                                        SpUtil.putString(
+                                                            Constant.spAlias,
+                                                            map['alias']);
+                                                      });
+                                                      jpush.deleteTags([
+                                                        Constant.userTags[SpUtil
+                                                            .getInt(Constant
+                                                                .spUserType)]
+                                                      ]);
+                                                    } catch (e) {
+                                                      Toast.show(
+                                                          '删除别名和标签失败！错误信息：$e');
+                                                    }
                                                     Navigator.of(context).pop();
                                                     Application.router
                                                         .navigateTo(context,
@@ -527,71 +563,6 @@ class _MinePageState extends State<MinePage>
                                       ),
                                     ],
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "                ",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "                ",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "                ",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colours.secondary_text),
-                                      ),
-                                    ],
-                                  ),
-                                  //                                  Column(
-//                                    mainAxisAlignment: MainAxisAlignment.center,
-//                                    children: <Widget>[
-//                                      Image.asset(
-//                                        "assets/images/icon_feedback.png",
-//                                        width: 30,
-//                                        height: 30,
-//                                      ),
-//                                      const Text(
-//                                        "问题反馈",
-//                                        style: TextStyle(
-//                                            fontSize: 12,
-//                                            color: Colours.secondary_text),
-//                                      ),
-//                                    ],
-//                                  ),
-                                  //                                  Column(
-//                                    mainAxisAlignment: MainAxisAlignment.center,
-//                                    children: <Widget>[
-//                                      Image.asset(
-//                                        "assets/images/icon_help_book.png",
-//                                        width: 30,
-//                                        height: 30,
-//                                      ),
-//                                      const Text(
-//                                        "帮助手册",
-//                                        style: TextStyle(
-//                                            fontSize: 12,
-//                                            color: Colours.secondary_text),
-//                                      ),
-//                                    ],
-//                                  ),
                                 ],
                               ),
                             ],
@@ -610,7 +581,7 @@ class _MinePageState extends State<MinePage>
   }
 }
 
-// 顶部栏裁剪
+/// 个人中心顶部栏裁剪
 class TopBarClipper extends CustomClipper<Path> {
   // 宽高
   double width;
@@ -634,6 +605,7 @@ class TopBarClipper extends CustomClipper<Path> {
   }
 }
 
+/// 个人中心顶部Card裁剪
 class TopCardClipper extends CustomClipper<Path> {
   // 宽高
   double width;

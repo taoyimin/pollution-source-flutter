@@ -9,6 +9,7 @@ import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/index/admin/index.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/system_utils.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 
 import 'mine.dart';
 
@@ -58,9 +59,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
     // 检查版本更新
     SystemUtils.checkUpdate(context);
     // 设置别名和标签
-    JPush jpush = JPush();
-    jpush.setAlias(SpUtil.getInt(Constant.spUserId).toString());
-    jpush.setTags([Constant.userTags[SpUtil.getInt(Constant.spUserType)]]);
+    try{
+      JPush jpush = JPush();
+      jpush.setAlias(SpUtil.getInt(Constant.spUserId).toString()).then((map){
+        SpUtil.putString(Constant.spAlias, map['alias']);
+      });
+      jpush.setTags([Constant.userTags[SpUtil.getInt(Constant.spUserType)]]);
+    }catch(e){
+      Toast.show('配置推送信息失败！错误信息：$e');
+    }
   }
 
   @override

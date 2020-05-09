@@ -62,6 +62,6 @@ class Process extends Equatable {
         '报警原因': this.alarmCauseStr,
         '核实情况\n': this.operateDesc,
       }..addAll(Map.fromIterable(attachments,
-          key: (e) => '附件${attachments.indexOf(e) + 1}下载地址：\n',
+          key: (e) => '附件${attachments.indexOf(e) + 1}下载地址\n',
           value: (e) => e.url));
 }
