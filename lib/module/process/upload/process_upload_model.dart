@@ -7,7 +7,6 @@ import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 class ProcessUpload extends Equatable {
   final int orderId; // 报警管理单单Id
   final String alarmState; // 报警管理单状态
-  final String operatePerson; // 操作人
   final String operateType; // 操作类型 -1:处理 0:审核通过 1:审核不通过
   final List<DataDict> alarmCauseList; // 报警原因
   final List<MobileLaw> mobileLawList; // 移动执法
@@ -17,7 +16,6 @@ class ProcessUpload extends Equatable {
   const ProcessUpload({
     this.orderId,
     this.alarmState,
-    this.operatePerson,
     this.operateType,
     this.alarmCauseList = const <DataDict>[],
     this.mobileLawList = const <MobileLaw>[],
@@ -29,7 +27,6 @@ class ProcessUpload extends Equatable {
   List<Object> get props => [
         orderId,
         alarmState,
-        operatePerson,
         operateType,
         alarmCauseList,
         mobileLawList,
@@ -40,7 +37,6 @@ class ProcessUpload extends Equatable {
   ProcessUpload copyWith({
     int orderId,
     String alarmState,
-    String operatePerson,
     String operateType,
     List<DataDict> alarmCauseList,
     List<MobileLaw> mobileLawList,
@@ -50,7 +46,6 @@ class ProcessUpload extends Equatable {
     return ProcessUpload(
       orderId: orderId ?? this.orderId,
       alarmState: alarmState ?? this.alarmState,
-      operatePerson: operatePerson ?? this.operatePerson,
       operateType: operateType ?? this.operateType,
       alarmCauseList: alarmCauseList ?? this.alarmCauseList,
       mobileLawList: mobileLawList ?? this.mobileLawList,

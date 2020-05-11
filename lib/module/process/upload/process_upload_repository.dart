@@ -3,10 +3,12 @@ import 'dart:typed_data';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
 import 'package:pollution_source/module/process/upload/process_upload_model.dart';
+import 'package:pollution_source/res/constant.dart';
 
 class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
   @override
@@ -15,8 +17,6 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
       throw DioError(error: InvalidParamException('报警管理单Id为空'));
     if (TextUtil.isEmpty(data.alarmState))
       throw DioError(error: InvalidParamException('报警管理单状态为空'));
-    if (TextUtil.isEmpty(data.operatePerson))
-      throw DioError(error: InvalidParamException('请输入反馈人'));
     if (TextUtil.isEmpty(data.operateType))
       throw DioError(error: InvalidParamException('操作类型为空'));
     if (data.alarmCauseList == null || data.alarmCauseList.length == 0)
@@ -38,7 +38,7 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
     return FormData.fromMap({
       'id': data.orderId.toString(),
       'alarmState': data.alarmState,
-      'operatePerson': data.operatePerson,
+      'operatePerson': '${SpUtil.getString(Constant.spRealName)}',
       'audit': data.operateType,
       'alarmCause': data.alarmCauseList?.map((dataDict) => dataDict.code)?.join(',') ?? '',
       'checkId': data.mobileLawList?.map((mobileLaw) => mobileLaw.id)?.join(',') ?? '',

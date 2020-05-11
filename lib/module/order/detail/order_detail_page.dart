@@ -29,7 +29,6 @@ import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/order/detail/order_detail_model.dart';
 import 'package:pollution_source/module/process/upload/process_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -71,10 +70,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   final CollectionBloc<MobileLaw> _mobileLawBloc =
       CollectionBloc<MobileLaw>(collectionRepository: MobileLawRepository());
 
-  /// 上报界面操作人输入框
-  final TextEditingController _operatePersonController =
-      TextEditingController(text: '${SpUtil.getString(Constant.spRealName)}');
-
   /// 上报界面操作描述输入框
   final TextEditingController _operateDescController = TextEditingController();
 
@@ -112,7 +107,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   @override
   void dispose() {
     // 释放资源
-    _operatePersonController.dispose();
     _operateDescController.dispose();
     _controller.dispose();
     // 取消正在进行的请求
@@ -748,39 +742,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
               imagePath: 'assets/images/icon_order_process.png',
             ),
             Gaps.vGap16,
-            Container(
-              height: 46,
-              color: Color(0xFFDFDFDF),
-              child: Row(
-                children: <Widget>[
-                  Gaps.hGap16,
-                  Image.asset(
-                    'assets/images/icon_enter_contacts.png',
-                    height: 20,
-                    width: 20,
-                  ),
-                  Flexible(
-                    child: TextField(
-                      controller: _operatePersonController,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                      decoration: const InputDecoration(
-                        fillColor: Color(0xFFDFDFDF),
-                        filled: true,
-                        hintText: "请输入反馈人",
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: Colours.secondary_text,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Gaps.vGap10,
             BlocBuilder<DataDictBloc, DataDictState>(
               bloc: _alarmCauseBloc,
               builder: (context, state) {
@@ -1059,7 +1020,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         Upload(
                           data: processUpload.copyWith(
                             operateType: '1',
-                            operatePerson: _operatePersonController.text,
                             operateDesc: _operateDescController.text,
                           ),
                         ),
@@ -1077,7 +1037,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         Upload(
                           data: processUpload.copyWith(
                             operateType: '0',
-                            operatePerson: _operatePersonController.text,
                             operateDesc: _operateDescController.text,
                           ),
                         ),
@@ -1115,7 +1074,6 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                         Upload(
                           data: processUpload.copyWith(
                             operateType: '-1',
-                            operatePerson: _operatePersonController.text,
                             operateDesc: _operateDescController.text,
                           ),
                         ),
