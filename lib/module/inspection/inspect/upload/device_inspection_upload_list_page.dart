@@ -122,90 +122,82 @@ class _DeviceInspectionUploadListPageState
         controller: _refreshController,
         header: UIUtils.getRefreshClassicalHeader(),
         slivers: <Widget>[
-          MultiBlocListener(
-            listeners: [
-              BlocListener<ListBloc, ListState>(
-                listener: (context, state) {
-                  //刷新状态不触发_refreshCompleter
-                  if (state is ListLoading) return;
-                  _refreshCompleter?.complete();
-                  _refreshCompleter = Completer();
-                },
-              ),
-              BlocListener<UploadBloc, UploadState>(
-                listener: (context, state) {
-                  if (state is Uploading) {
-                    showDialog<bool>(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) => GifDialog(
-                        onCancelTap: () {
-                          state.cancelToken.cancel('取消上传');
-                        },
-                      ),
-                    );
-                  } else if (state is UploadSuccess) {
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('${state.message}'),
-                        action: SnackBarAction(
-                            label: '我知道了',
-                            textColor: Colours.primary_color,
-                            onPressed: () {}),
-                      ),
-                    );
-                    Application.router.pop(context);
-                    // 关闭BottomSheet
-                    _bottomSheetController?.close();
-                    // 重置已选中任务
-                    _selectedList.clear();
-                    // 刷新列表页面
-                    _listBloc.add(ListLoad(
-                        isRefresh: true,
-                        params:
-                            RoutineInspectionUploadListRepository.createParams(
-                          monitorId: widget.monitorId,
-                          itemInspectType: widget.itemInspectType,
-                          state: widget.state,
-                        )));
-                    // 清空上报界面
-                    _pageBloc.add(PageLoad(
-                        model:
-                            DeviceInspectUpload(selectedList: _selectedList)));
-                    _remarkController.text = '';
-                    // 刷新常规巡检详情界面header中的任务条数
-                    _detailBloc.add(DetailLoad(
-                      params: RoutineInspectionDetailRepository.createParams(
-                        monitorId: widget.monitorId,
-                        state: widget.state,
-                      ),
-                    ));
-                  } else if (state is UploadFail) {
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        content: Text('${state.message}'),
-                        action: SnackBarAction(
-                            label: '我知道了',
-                            textColor: Colours.primary_color,
-                            onPressed: () {}),
-                      ),
-                    );
-                    Application.router.pop(context);
-                  }
-                },
-              ),
-            ],
-            child: BlocBuilder<ListBloc, ListState>(
-              condition: (previousState, state) {
-                //刷新状态不重构Widget
-                if (state is ListLoading)
+          BlocListener<UploadBloc, UploadState>(
+            listener: (context, state) {
+              if (state is Uploading) {
+                showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => GifDialog(
+                    onCancelTap: () {
+                      state.cancelToken.cancel('取消上传');
+                    },
+                  ),
+                );
+              } else if (state is UploadSuccess) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${state.message}'),
+                    action: SnackBarAction(
+                        label: '我知道了',
+                        textColor: Colours.primary_color,
+                        onPressed: () {}),
+                  ),
+                );
+                Application.router.pop(context);
+                // 关闭BottomSheet
+                _bottomSheetController?.close();
+                // 重置已选中任务
+                _selectedList.clear();
+                // 刷新列表页面
+                _listBloc.add(ListLoad(
+                    isRefresh: true,
+                    params:
+                    RoutineInspectionUploadListRepository.createParams(
+                      monitorId: widget.monitorId,
+                      itemInspectType: widget.itemInspectType,
+                      state: widget.state,
+                    )));
+                // 清空上报界面
+                _pageBloc.add(PageLoad(
+                    model:
+                    DeviceInspectUpload(selectedList: _selectedList)));
+                _remarkController.text = '';
+                // 刷新常规巡检详情界面header中的任务条数
+                _detailBloc.add(DetailLoad(
+                  params: RoutineInspectionDetailRepository.createParams(
+                    monitorId: widget.monitorId,
+                    state: widget.state,
+                  ),
+                ));
+              } else if (state is UploadFail) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text('${state.message}'),
+                    action: SnackBarAction(
+                        label: '我知道了',
+                        textColor: Colours.primary_color,
+                        onPressed: () {}),
+                  ),
+                );
+                Application.router.pop(context);
+              }
+            },
+            child: BlocConsumer<ListBloc, ListState>(
+              listener: (context, state) {
+                if (state is ListLoading) return;
+                _refreshCompleter?.complete();
+                _refreshCompleter = Completer();
+              },
+              buildWhen: (previous, current){
+                if (current is ListLoading)
                   return false;
                 else
                   return true;
               },
               builder: (context, state) {
-                if (state is ListInitial) {
+                if (state is ListInitial || state is ListLoading) {
                   return LoadingSliver();
                 } else if (state is ListEmpty) {
                   return EmptySliver(message: '没有任务需要处理');
@@ -239,7 +231,6 @@ class _DeviceInspectionUploadListPageState
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          // 创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
@@ -404,8 +395,9 @@ class _DeviceInspectionUploadListPageState
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Gaps.hGap16,
               IconCheckButton(
-                text: '维护情况',
+                text: '    维护情况',
                 imagePath: 'assets/images/icon_fixed.png',
                 imageHeight: 20,
                 imageWidth: 20,
@@ -421,10 +413,10 @@ class _DeviceInspectionUploadListPageState
               ),
               Gaps.hGap16,
               IconCheckButton(
-                text: '正常',
+                text: '    正常',
                 imagePath: 'assets/images/icon_normal.png',
-                imageHeight: 20,
-                imageWidth: 20,
+                imageHeight: 28,
+                imageWidth: 28,
                 color: Colors.lightBlueAccent,
                 flex: 3,
                 checked: deviceInspectUpload.isNormal,
@@ -436,10 +428,10 @@ class _DeviceInspectionUploadListPageState
               ),
               Gaps.hGap6,
               IconCheckButton(
-                text: '不正常',
+                text: '    不正常',
                 imagePath: 'assets/images/icon_abnormal.png',
-                imageHeight: 20,
-                imageWidth: 20,
+                imageHeight: 28,
+                imageWidth: 28,
                 color: Colors.orangeAccent,
                 flex: 3,
                 checked: !deviceInspectUpload.isNormal,

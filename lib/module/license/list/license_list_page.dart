@@ -75,14 +75,13 @@ class _LicenseListPageState extends State<LicenseListPage> {
           ),
           BlocBuilder<ListBloc, ListState>(
             condition: (previousState, state) {
-              //刷新状态不重构Widget
               if (state is ListLoading)
                 return false;
               else
                 return true;
             },
             builder: (context, state) {
-              if (state is ListInitial) {
+              if (state is ListInitial || state is ListLoading) {
                 return LoadingSliver();
               } else if (state is ListEmpty) {
                 return EmptySliver();
@@ -110,7 +109,6 @@ class _LicenseListPageState extends State<LicenseListPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          //创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: InkWellButton(
@@ -141,9 +139,6 @@ class _LicenseListPageState extends State<LicenseListPage> {
                           Image.asset(
                               'assets/images/license_list_item_logo.png',
                               width: 40),
-                          /*CircleAvatar(
-                            backgroundImage: AssetImage('assets/images/license_list_logo.png'),
-                          ),*/
                           Gaps.hGap10,
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

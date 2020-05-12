@@ -86,42 +86,38 @@ class _WaterDeviceParamUploadListPageState
         controller: _refreshController,
         header: UIUtils.getRefreshClassicalHeader(),
         slivers: <Widget>[
-          BlocListener<ListBloc, ListState>(
+          BlocConsumer<ListBloc, ListState>(
             listener: (context, state) {
-              //刷新状态不触发_refreshCompleter
               if (state is ListLoading) return;
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
-            child: BlocBuilder<ListBloc, ListState>(
-              condition: (previousState, state) {
-                //刷新状态不重构Widget
-                if (state is ListLoading)
-                  return false;
-                else
-                  return true;
-              },
-              builder: (context, state) {
-                if (state is ListInitial) {
-                  return LoadingSliver();
-                } else if (state is ListEmpty) {
-                  return EmptySliver(message: '没有任务需要处理');
-                } else if (state is ListError) {
-                  return ErrorSliver(
-                    errorMessage: state.message,
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                } else if (state is ListLoaded) {
-                  return _buildPageLoadedList(
-                      RoutineInspectionUploadList.convert(state.list));
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                }
-              },
-            ),
+            buildWhen: (previous, current){
+              if (current is ListLoading)
+                return false;
+              else
+                return true;
+            },
+            builder: (context, state) {
+              if (state is ListInitial || state is ListLoading) {
+                return LoadingSliver();
+              } else if (state is ListEmpty) {
+                return EmptySliver(message: '没有任务需要处理');
+              } else if (state is ListError) {
+                return ErrorSliver(
+                  errorMessage: state.message,
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              } else if (state is ListLoaded) {
+                return _buildPageLoadedList(
+                    RoutineInspectionUploadList.convert(state.list));
+              } else {
+                return ErrorSliver(
+                  errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              }
+            },
           ),
         ],
         onRefresh: () async {
@@ -136,7 +132,6 @@ class _WaterDeviceParamUploadListPageState
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          //创建列表项
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(

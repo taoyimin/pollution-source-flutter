@@ -89,27 +89,15 @@ class _NoticeListPageState extends State<NoticeListPage> {
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            BlocBuilder<ListBloc, ListState>(
-              builder: (context, state) {
-                String subtitle2 = '';
-                if (state is ListLoading)
-                  subtitle2 = '数据加载中';
-                else if (state is ListLoaded)
-                  subtitle2 = '共${state.total}条数据';
-                else if (state is ListEmpty)
-                  subtitle2 = '共0条数据';
-                else if (state is ListError) subtitle2 = '数据加载错误';
-                return ListHeaderWidget(
-                  title: '历史预警消息列表',
-                  subtitle: '展示历史预警消息列表，点击列表项查看该预警消息的详细信息',
-                  subtitle2: subtitle2,
-                  background: 'assets/images/button_bg_yellow.png',
-                  image: 'assets/images/discharge_list_bg_image.png',
-                  color: Colours.background_yellow,
-                  onSearchTap: () {
-                    _scaffoldKey.currentState.openEndDrawer();
-                  },
-                );
+            ListHeaderWidget(
+              listBloc: _listBloc,
+              title: '历史预警消息列表',
+              subtitle: '展示历史预警消息列表，点击列表项查看该预警消息的详细信息',
+              background: 'assets/images/button_bg_yellow.png',
+              image: 'assets/images/discharge_list_bg_image.png',
+              color: Colours.background_yellow,
+              onSearchTap: () {
+                _scaffoldKey.currentState.openEndDrawer();
               },
             ),
           ];
@@ -121,45 +109,42 @@ class _NoticeListPageState extends State<NoticeListPage> {
             header: UIUtils.getRefreshClassicalHeader(),
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
-              BlocListener<ListBloc, ListState>(
+              BlocConsumer<ListBloc, ListState>(
                 listener: (context, state) {
                   // 刷新状态不触发_refreshCompleter
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
-                child: BlocBuilder<ListBloc, ListState>(
-                  condition: (previousState, state) {
-                    // 刷新状态不重构Widget
-                    if (state is ListLoading)
-                      return false;
-                    else
-                      return true;
-                  },
-                  builder: (context, state) {
-                    if (state is ListInitial) {
-                      return LoadingSliver();
-                    } else if (state is ListEmpty) {
-                      return EmptySliver();
-                    } else if (state is ListError) {
-                      return ErrorSliver(
-                        errorMessage: state.message,
-                        onReloadTap: () => _refreshController.callRefresh(),
-                      );
-                    } else if (state is ListLoaded) {
-                      if (!state.hasNextPage) {
-                        _refreshController.finishLoad(
-                            noMore: !state.hasNextPage, success: true);
-                      }
-                      return _buildPageLoadedList(state.list);
-                    } else {
-                      return ErrorSliver(
-                        errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                        onReloadTap: () => _refreshController.callRefresh(),
-                      );
+                buildWhen: (previous, current){
+                  if (current is ListLoading)
+                    return false;
+                  else
+                    return true;
+                },
+                builder: (context, state) {
+                  if (state is ListInitial || state is ListLoading) {
+                    return LoadingSliver();
+                  } else if (state is ListEmpty) {
+                    return EmptySliver();
+                  } else if (state is ListError) {
+                    return ErrorSliver(
+                      errorMessage: state.message,
+                      onReloadTap: () => _refreshController.callRefresh(),
+                    );
+                  } else if (state is ListLoaded) {
+                    if (!state.hasNextPage) {
+                      _refreshController.finishLoad(
+                          noMore: !state.hasNextPage, success: true);
                     }
-                  },
-                ),
+                    return _buildPageLoadedList(state.list);
+                  } else {
+                    return ErrorSliver(
+                      errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                      onReloadTap: () => _refreshController.callRefresh(),
+                    );
+                  }
+                },
               ),
             ],
             onRefresh: () async {

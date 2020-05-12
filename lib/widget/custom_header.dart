@@ -1,14 +1,17 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pollution_source/module/common/list/list_bloc.dart';
+import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/system_utils.dart';
 
 class ListHeaderWidget extends StatefulWidget {
+  final ListBloc listBloc;
   final String title;
   final String subtitle;
-  final String subtitle2;
   final String background;
   final String image;
   final Color color;
@@ -18,9 +21,9 @@ class ListHeaderWidget extends StatefulWidget {
   final VoidCallback onSearchTap;
 
   ListHeaderWidget({
+    this.listBloc,
     this.title = '标题',
     this.subtitle = '副标题',
-    this.subtitle2 = '副标题2',
     this.background = 'assets/images/button_bg_green.png',
     this.image = 'assets/images/order_list_bg_image.png',
     this.color = Colours.primary_color,
@@ -98,12 +101,27 @@ class _ListHeaderWidgetState extends State<ListHeaderWidget> {
                       decoration: const BoxDecoration(
                         color: Colors.white,
                       ),
-                      child: Text(
-                        '${widget.subtitle2}',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: widget.color,
-                        ),
+                      child:BlocBuilder<ListBloc, ListState>(
+                        builder: (context, state) {
+                          String tip = '';
+                          if (state is ListLoading)
+                            tip = '数据加载中';
+                          else if (state is ListLoaded)
+                            tip = '共${state.total}条数据';
+                          else if (state is ListEmpty)
+                            tip = '共0条数据';
+                          else if (state is ListError)
+                            tip = '数据加载错误';
+                          else
+                            tip = 'BlocBuilder监听到未知的的状态！state=$state';
+                          return Text(
+                            '$tip',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: widget.color,
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
