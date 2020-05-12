@@ -15,7 +15,6 @@ import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/space_header.dart';
@@ -61,8 +60,8 @@ class _EnterIndexPageState extends State<EnterIndexPage>
     return MonitorStatisticsRepository.createParams(
       userType: '2',
       enterId: widget.enterId,
-      outType: '0',
-      attentionLevel: '${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+      outType: '',
+      attentionLevel: '',
     );
   }
 
@@ -366,6 +365,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: MonitorStatisticsCard(
+              title: '监控点概况',
               collectionBloc: monitorStatisticsBloc,
               onReloadTap: () {
                 monitorStatisticsBloc

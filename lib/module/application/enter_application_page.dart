@@ -220,7 +220,8 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                     content: '查询待办督办单',
                                     imagePath:
                                         'assets/images/application_icon_order.png',
-                                    router: '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20',
+                                    router:
+                                        '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -243,7 +244,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                     title: '实时预警单',
                                     content: '查询实时预警单',
                                     imagePath:
-                                    'assets/images/application_icon_enter.png',
+                                        'assets/images/application_icon_enter.png',
                                     router: '${Routes.warnList}',
                                   ),
                                 ),
@@ -253,7 +254,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                     title: '历史预警消息',
                                     content: '查询历史推送',
                                     imagePath:
-                                    'assets/images/application_icon_monitor.png',
+                                        'assets/images/application_icon_monitor.png',
                                     router: '${Routes.noticeList}',
                                   ),
                                 ),

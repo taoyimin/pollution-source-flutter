@@ -72,7 +72,6 @@ import 'package:pollution_source/page/change_password_page.dart';
 import 'package:pollution_source/page/enter_home.dart';
 import 'package:pollution_source/page/operation_home.dart';
 import 'package:pollution_source/page/share_product_page.dart';
-import 'package:pollution_source/res/constant.dart';
 
 var rootHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -103,8 +102,7 @@ var enterListHandler = Handler(
   String state = params['state']?.first ?? '';
   String hasAll = params['hasAll']?.first ?? '0';
   String enterType = params['enterType']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ??
-      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ?? '';
   int type = int.parse(params['type']?.first ?? '0');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
@@ -164,12 +162,9 @@ var monitorListHandler = Handler(
   String dischargeId = params['dischargeId']?.first ?? '';
   int type = int.parse(params['type']?.first ?? '0');
   String state = params['state']?.first ?? '';
-  // 排放类型默认查询出口
-  String outType = params['outType']?.first ?? '0';
+  String outType = params['outType']?.first ?? '';
   String monitorType = params['monitorType']?.first ?? '';
-  // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ??
-      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: MonitorListRepository()),
@@ -224,9 +219,7 @@ var orderListHandler = Handler(
   String monitorId = params['monitorId']?.first ?? '';
   String alarmState = params['alarmState']?.first ?? '';
   String alarmLevel = params['alarmLevel']?.first ?? '';
-  // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ??
-      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: OrderListRepository()),
@@ -268,9 +261,7 @@ var dischargeReportListHandler = Handler(
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
-  // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ??
-      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: DischargeReportListRepository()),
@@ -302,9 +293,7 @@ var factorReportListHandler = Handler(
   String monitorId = params['monitorId']?.first ?? '';
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
-  // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ??
-      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: FactorReportListRepository()),
@@ -334,9 +323,7 @@ var longStopReportListHandler = Handler(
   String enterId = params['enterId']?.first ?? '';
   String state = params['state']?.first ?? '';
   String valid = params['valid']?.first ?? '';
-  // 默认取当前登录用户的关注程度
-  String attentionLevel = params['attentionLevel']?.first ??
-      SpUtil.getString(Constant.spAttentionLevel, defValue: '');
+  String attentionLevel = params['attentionLevel']?.first ?? '';
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: LongStopReportListRepository()),

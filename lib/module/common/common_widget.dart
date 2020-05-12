@@ -1041,7 +1041,7 @@ class InkWellButton8 extends StatelessWidget {
   }
 }
 
-/// 应用页功能按钮 左上标题 左下内容 右边图标 默认一行两个
+/// 应用页功能按钮 右上标题 右下内容 左边图标 默认一行两个
 class InkWellButton9 extends StatelessWidget {
   final Meta meta;
   final GestureTapCallback onTap;
@@ -1482,7 +1482,7 @@ class AttachmentWidget extends StatelessWidget {
         }
       },
       child: Container(
-        height: 44,
+        height: 46,
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Row(
           children: <Widget>[
@@ -2476,11 +2476,13 @@ class TitleWidget extends StatelessWidget {
 
 /// 监控点统计控件
 class MonitorStatisticsWidget extends StatelessWidget {
+  final String title;
   final CollectionBloc collectionBloc;
   final GestureTapCallback onReloadTap;
 
   MonitorStatisticsWidget({
     Key key,
+    this.title,
     this.collectionBloc,
     this.onReloadTap,
   }) : super(key: key);
@@ -2494,7 +2496,7 @@ class MonitorStatisticsWidget extends StatelessWidget {
           return LoadingWidget();
         } else if (state is CollectionError) {
           return RowErrorWidget(
-            tipMessage: '监控点概况加载失败，请重试！',
+            tipMessage: '$title加载失败，请重试！',
             errorMessage: state.message,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             onReloadTap: onReloadTap,
@@ -2506,7 +2508,7 @@ class MonitorStatisticsWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               children: <Widget>[
-                TitleWidget(title: "监控点(出口)概况"),
+                TitleWidget(title: '$title'),
                 InkWellButtonGrid(
                   metaList: state.collection.map(
                         (monitorStatistics) {
@@ -2526,7 +2528,7 @@ class MonitorStatisticsWidget extends StatelessWidget {
           );
         } else {
           return RowErrorWidget(
-            tipMessage: '监控点概况加载失败，请重试！',
+            tipMessage: '$title加载失败，请重试！',
             errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             onReloadTap: onReloadTap,
@@ -2539,11 +2541,13 @@ class MonitorStatisticsWidget extends StatelessWidget {
 
 /// 监控点统计卡片
 class MonitorStatisticsCard extends StatelessWidget {
+  final String title;
   final CollectionBloc collectionBloc;
   final GestureTapCallback onReloadTap;
 
   MonitorStatisticsCard({
     Key key,
+    this.title,
     this.collectionBloc,
     this.onReloadTap,
   }) : super(key: key);
@@ -2557,7 +2561,7 @@ class MonitorStatisticsCard extends StatelessWidget {
           return LoadingWidget();
         } else if (state is CollectionError) {
           return RowErrorWidget(
-            tipMessage: '监控点信息加载失败，请重试！',
+            tipMessage: '$title失败，请重试！',
             errorMessage: state.message,
             padding: const EdgeInsets.symmetric(vertical: 10),
             onReloadTap: onReloadTap,
@@ -2569,7 +2573,7 @@ class MonitorStatisticsCard extends StatelessWidget {
           return Column(
             children: <Widget>[
               ImageTitleWidget(
-                title: '监控点(出口)信息',
+                title: '$title',
                 imagePath: 'assets/images/icon_monitor_info.png',
               ),
               Gaps.vGap10,
@@ -2599,7 +2603,7 @@ class MonitorStatisticsCard extends StatelessWidget {
           );
         } else {
           return RowErrorWidget(
-            tipMessage: '监控点信息加载失败，请重试！',
+            tipMessage: '$title加载失败，请重试！',
             errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
             padding: const EdgeInsets.symmetric(vertical: 10),
             onReloadTap: onReloadTap,

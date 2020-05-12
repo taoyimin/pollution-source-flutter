@@ -56,8 +56,8 @@ class _OperationIndexPageState extends State<OperationIndexPage>
     return MonitorStatisticsRepository.createParams(
       userType: '3',
       userId: '${SpUtil.getInt(Constant.spUserId)}',
-      outType: '0',
-      attentionLevel: '${SpUtil.getString(Constant.spAttentionLevel)}',
+      outType: '',
+      attentionLevel: '',
     );
   }
 
@@ -88,6 +88,7 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                                 metaList: state.inspectionStatisticsList)
                             : Gaps.empty,
                         MonitorStatisticsWidget(
+                          title: '监控点概况',
                           collectionBloc: monitorStatisticsBloc,
                           onReloadTap: () {
                             monitorStatisticsBloc.add(

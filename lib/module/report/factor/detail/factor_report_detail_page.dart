@@ -223,7 +223,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
                 ),
                 Gaps.vGap10,
                 Container(
-                  height: 158,
+                  height: 160,
                   child: Row(
                     children: <Widget>[
                       InkWellButton8(

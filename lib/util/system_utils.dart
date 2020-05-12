@@ -8,14 +8,14 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:package_info/package_info.dart';
 
-//import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 import 'package:pollution_source/util/file_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
+// import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -262,23 +262,23 @@ class SystemUtils {
   }
 
   /// IOS平台键盘配置
-  static KeyboardActionsConfig getKeyboardActionsConfig(List<FocusNode> list) {
-    return KeyboardActionsConfig(
-      keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
-      keyboardBarColor: Colors.grey[200],
-      nextFocus: true,
-      actions: List.generate(
-        list.length,
-        (i) => KeyboardAction(
-          focusNode: list[i],
-          closeWidget: const Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: const Text("关闭"),
-          ),
-        ),
-      ),
-    );
-  }
+//  static KeyboardActionsConfig getKeyboardActionsConfig(List<FocusNode> list) {
+//    return KeyboardActionsConfig(
+//      keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
+//      keyboardBarColor: Colors.grey[200],
+//      nextFocus: true,
+//      actions: List.generate(
+//        list.length,
+//        (i) => KeyboardAction(
+//          focusNode: list[i],
+//          closeWidget: const Padding(
+//            padding: const EdgeInsets.all(5.0),
+//            child: const Text("关闭"),
+//          ),
+//        ),
+//      ),
+//    );
+//  }
 }
 
 /// 默认dialog背景色为半透明黑色，这里修改源码改为透明

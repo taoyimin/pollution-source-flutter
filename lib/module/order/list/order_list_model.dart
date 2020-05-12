@@ -99,12 +99,12 @@ class Order extends Equatable {
           return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_type_negative_value.png',
-              color: Colors.purpleAccent);
+              color: Colors.cyan);
         case '设备故障':
           return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_cause_device_error.png',
-              color: Colors.red);
+              color: Colors.deepOrangeAccent);
         case '设备校准':
           return Label(
               name: string,
@@ -114,7 +114,7 @@ class Order extends Equatable {
           return Label(
               name: string,
               imagePath: 'assets/images/icon_alarm_cause_device_offline.png',
-              color: Colors.deepOrangeAccent);
+              color: Colors.brown);
         case '超低排放':
           return Label(
               name: string,
@@ -140,6 +140,11 @@ class Order extends Equatable {
               name: string,
               imagePath: 'assets/images/icon_alarm_cause_net_error.png',
               color: Colors.grey);
+        case '稳定排放':
+          return Label(
+              name: string,
+              imagePath: 'assets/images/icon_alarm_cause_stable_discharge.png',
+              color: Colors.teal);
         default:
           return Label(
               name: string,

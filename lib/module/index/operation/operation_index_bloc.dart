@@ -57,7 +57,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         color: Color.fromRGBO(77, 167, 248, 1),
         content: json['enterCount'].toString(),
-        router: '${Routes.enterList}?attentionLevel=&hasAll=1',
+        router: '${Routes.enterList}?hasAll=1',
       ),
       Meta(
         title: '重点企业',
@@ -71,28 +71,28 @@ Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
         imagePath: 'assets/images/icon_pollution_online_enter.png',
         color: Color.fromRGBO(136, 191, 89, 1),
         content: json['onlineCount'].toString(),
-        router: '${Routes.enterList}?state=1&attentionLevel=',
+        router: '${Routes.enterList}?state=1',
       ),
       Meta(
         title: '废水企业',
         imagePath: 'assets/images/icon_pollution_water_enter.png',
         color: Color.fromRGBO(0, 188, 212, 1),
         content: json['waterCount'].toString(),
-        router: '${Routes.enterList}?enterType=2&attentionLevel=',
+        router: '${Routes.enterList}?enterType=2',
       ),
       Meta(
         title: '废气企业',
         imagePath: 'assets/images/icon_pollution_air_enter.png',
         color: Color.fromRGBO(255, 87, 34, 1),
         content: json['airCount'].toString(),
-        router: '${Routes.enterList}?enterType=3&attentionLevel=',
+        router: '${Routes.enterList}?enterType=3',
       ),
       Meta(
         title: '水气企业',
         imagePath: 'assets/images/icon_pollution_air_water.png',
         color: Color.fromRGBO(137, 137, 137, 1),
         content: json['waterAirCount'].toString(),
-        router: '${Routes.enterList}?enterType=4&attentionLevel=',
+        router: '${Routes.enterList}?enterType=4',
       ),
       Meta(
         title: '废水排口',
@@ -113,7 +113,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
         imagePath: 'assets/images/icon_pollution_licence_enter.png',
         color: Color.fromRGBO(179, 129, 127, 1),
         content: json['licenseCount'].toString(),
-        router: '${Routes.enterList}?enterType=5&attentionLevel=',
+        router: '${Routes.enterList}?enterType=5',
       ),
     ];
   }

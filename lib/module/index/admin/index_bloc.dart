@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/index/admin/index.dart';
 import 'package:bloc/bloc.dart';
@@ -227,7 +228,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         color: Color.fromRGBO(77, 167, 248, 1),
         content: strings[1],
-        router: '${Routes.enterList}?attentionLevel=&hasAll=1',
+        router: '${Routes.enterList}?hasAll=1',
       ),
       Meta(
         title: '重点企业',
@@ -241,28 +242,28 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         imagePath: 'assets/images/icon_pollution_online_enter.png',
         color: Color.fromRGBO(136, 191, 89, 1),
         content: strings[3],
-        router: '${Routes.enterList}?state=1&attentionLevel=',
+        router: '${Routes.enterList}?state=1',
       ),
       Meta(
         title: '废水企业',
         imagePath: 'assets/images/icon_pollution_water_enter.png',
         color: Color.fromRGBO(0, 188, 212, 1),
         content: strings[4],
-        router: '${Routes.enterList}?enterType=2&attentionLevel=',
+        router: '${Routes.enterList}?enterType=2',
       ),
       Meta(
         title: '废气企业',
         imagePath: 'assets/images/icon_pollution_air_enter.png',
         color: Color.fromRGBO(255, 87, 34, 1),
         content: strings[5],
-        router: '${Routes.enterList}?enterType=3&attentionLevel=',
+        router: '${Routes.enterList}?enterType=3',
       ),
       Meta(
         title: '水气企业',
         imagePath: 'assets/images/icon_pollution_air_water.png',
         color: Color.fromRGBO(137, 137, 137, 1),
         content: strings[6],
-        router: '${Routes.enterList}?enterType=4&attentionLevel=',
+        router: '${Routes.enterList}?enterType=4',
       ),
       Meta(
         title: '废水排口',
@@ -283,7 +284,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         imagePath: 'assets/images/icon_pollution_licence_enter.png',
         color: Color.fromRGBO(179, 129, 127, 1),
         content: strings[9],
-        router: '${Routes.enterList}?enterType=5&attentionLevel=',
+        router: '${Routes.enterList}?enterType=5',
       ),
     ];
   }
@@ -301,19 +302,19 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
         title: '待处理督办单',
         imagePath: 'assets/images/button_bg_blue.png',
         content: strings[1],
-        router: '${Routes.orderList}?alarmState=20',
+        router: '${Routes.orderList}?alarmState=20&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '超期待处理督办单',
         imagePath: 'assets/images/button_bg_pink.png',
         content: strings[2],
-        router: '${Routes.orderList}?alarmState=20&alarmLevel=3',
+        router: '${Routes.orderList}?alarmState=20&alarmLevel=3&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '已办结督办单',
         imagePath: 'assets/images/button_bg_green.png',
         content: strings[3],
-        router: '${Routes.orderList}?alarmState=50',
+        router: '${Routes.orderList}?alarmState=50&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
     ];
   }
@@ -332,21 +333,21 @@ Future<List<Meta>> _convertReportStatistics(String string) async {
         content: strings[1],
         imagePath: 'assets/images/button_image2.png',
         backgroundPath: 'assets/images/button_bg_lightblue.png',
-        router: '${Routes.longStopReportList}?valid=0',
+        router: '${Routes.longStopReportList}?valid=0&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '排口异常申报',
         content: strings[2],
         imagePath: 'assets/images/button_image1.png',
         backgroundPath: 'assets/images/button_bg_green.png',
-        router: '${Routes.dischargeReportList}?valid=0',
+        router: '${Routes.dischargeReportList}?valid=0&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '因子异常申报',
         content: strings[3],
         imagePath: 'assets/images/button_image4.png',
         backgroundPath: 'assets/images/button_bg_pink.png',
-        router: '${Routes.factorReportList}?valid=0',
+        router: '${Routes.factorReportList}?valid=0&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
     ];
   }
@@ -395,7 +396,7 @@ Future<List<Meta>> _convertRainEnterStatistics(String string) async {
         color: Color.fromRGBO(77, 167, 248, 1),
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         content: strings[1],
-        router: '${Routes.enterList}?enterType=1',
+        router: '${Routes.enterList}?enterType=1&hasAll=1',
       ),
       Meta(
         title: '在线企业',

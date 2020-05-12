@@ -29,7 +29,6 @@ class EnterDetail extends Equatable {
   final int orderTotalCount; // 报警管理单总数
   final int orderDealCount; // 报警管理单待处理数
   final int orderOverdueCount; // 报警管理单待处理超期数
-  final int orderReturnCount; // 报警管理单已退回数
   final int longStopReportTotalCount; // 长期停产申报总数
   final int dischargeReportTotalCount; // 排口异常申报总数
   final int factorReportTotalCount; // 因子异常申报总数
@@ -62,7 +61,6 @@ class EnterDetail extends Equatable {
     this.orderTotalCount,
     this.orderDealCount,
     this.orderOverdueCount,
-    this.orderReturnCount,
     this.longStopReportTotalCount,
     this.dischargeReportTotalCount,
     this.factorReportTotalCount,
@@ -97,7 +95,6 @@ class EnterDetail extends Equatable {
         orderTotalCount,
         orderDealCount,
         orderOverdueCount,
-        orderReturnCount,
         longStopReportTotalCount,
         dischargeReportTotalCount,
         factorReportTotalCount,
@@ -143,7 +140,6 @@ EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
       orderTotalCount: json['orderTotalCount'] as int,
       orderDealCount: json['orderDealCount'] as int,
       orderOverdueCount: json['orderOverdueCount'] as int,
-      orderReturnCount: json['orderReturnCount'] as int,
       longStopReportTotalCount: json['longStopReportTotalCount'] as int,
       dischargeReportTotalCount: json['dischargeReportTotalCount'] as int,
       factorReportTotalCount: json['factorReportTotalCount'] as int,
@@ -178,7 +174,6 @@ Map<String, dynamic> _$EnterDetailToJson(EnterDetail instance) =>
       'orderTotalCount': instance.orderTotalCount,
       'orderDealCount': instance.orderDealCount,
       'orderOverdueCount': instance.orderOverdueCount,
-      'orderReturnCount': instance.orderReturnCount,
       'longStopReportTotalCount': instance.longStopReportTotalCount,
       'dischargeReportTotalCount': instance.dischargeReportTotalCount,
       'factorReportTotalCount': instance.factorReportTotalCount,

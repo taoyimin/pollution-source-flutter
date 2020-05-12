@@ -25,6 +25,7 @@ class CollectionLoading extends CollectionState {
 /// 加载完成状态
 class CollectionLoaded<T> extends CollectionState {
   final List<T> collection;
+  /// 加载时使用的参数
   final Map<String, dynamic> params;
 
   const CollectionLoaded({@required this.collection, this.params});

@@ -165,6 +165,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
           return <Widget>[
             BlocBuilder<ListBloc, ListState>(
               builder: (context, state) {
+                final String title = widget.type == 0 ? '在线数据' : '监控点';
                 String subtitle2 = '';
                 if (state is ListLoading)
                   subtitle2 = '数据加载中';
@@ -174,8 +175,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
                   subtitle2 = '共0条数据';
                 else if (state is ListError) subtitle2 = '数据加载错误';
                 return ListHeaderWidget(
-                  title: '在线数据列表',
-                  subtitle: '展示在线数据列表，点击列表项查看该在线数据的详细信息',
+                  title: '$title列表',
+                  subtitle: '展示$title列表，点击列表项查看该$title的详细信息',
                   subtitle2: subtitle2,
                   background: 'assets/images/button_bg_red.png',
                   image: 'assets/images/monitor_list_bg_image.png',

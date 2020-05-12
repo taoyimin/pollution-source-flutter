@@ -64,8 +64,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
     return MonitorStatisticsRepository.createParams(
       userType: '2',
       enterId: widget.enterId,
-      outType: '0',
-      attentionLevel: '${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+      outType: '',
+      attentionLevel: '',
     );
   }
 
@@ -316,6 +316,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: MonitorStatisticsCard(
+              title: '监控点概况',
               collectionBloc: monitorStatisticsBloc,
               onReloadTap: () {
                 monitorStatisticsBloc

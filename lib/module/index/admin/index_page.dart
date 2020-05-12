@@ -102,6 +102,7 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                         //WeekTrendWidget(),
                         //AlarmListWidget(),
                         MonitorStatisticsWidget(
+                          title: '监控点(出口)概况',
                           collectionBloc: monitorStatisticsBloc,
                           onReloadTap: () {
                             monitorStatisticsBloc.add(

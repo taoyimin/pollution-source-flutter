@@ -12,10 +12,10 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
-import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/login_button.dart';
 import 'package:pollution_source/widget/login_text_field.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
+
+// import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:pollution_source/res/colors.dart';
 
 /// 登录页
@@ -29,7 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
-  KeyboardActionsConfig _config;
+
+  // KeyboardActionsConfig _config;
   bool _isClick = false;
 
   /// 当前选中用户类型 0：环保 1：企业 2：运维
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     //监听输入改变
     _nameController.addListener(_verify);
     _passwordController.addListener(_verify);
-    _config = SystemUtils.getKeyboardActionsConfig([_nodeText1, _nodeText2]);
+    // _config = SystemUtils.getKeyboardActionsConfig([_nodeText1, _nodeText2]);
     _userType = SpUtil.getInt(Constant.spUserType, defValue: 0);
     //初始化输入框
     _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
@@ -132,13 +133,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: defaultTargetPlatform == TargetPlatform.iOS
-          ? FormKeyboardActions(
-              child: _buildBody(),
-            )
-          : SingleChildScrollView(
-              child: _buildBody(),
-            ),
+      body: SingleChildScrollView(
+        child: _buildBody(),
+      ),
+//      body: defaultTargetPlatform == TargetPlatform.iOS
+//          ? FormKeyboardActions(
+//              child: _buildBody(),
+//            )
+//          : SingleChildScrollView(
+//              child: _buildBody(),
+//            ),
     );
   }
 
@@ -186,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
             key: const Key('password'),
             keyName: 'password',
             focusNode: _nodeText2,
-            config: _config,
+            // config: _config,
             isInputPwd: true,
             controller: _passwordController,
             maxLength: 16,

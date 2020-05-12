@@ -1,7 +1,9 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/system_utils.dart';
@@ -118,7 +120,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '查询企业列表',
                                     imagePath:
                                         'assets/images/application_icon_enter.png',
-                                    router: '${Routes.enterList}',
+                                    router:
+                                        '${Routes.enterList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -128,7 +131,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '查询在线数据',
                                     imagePath:
                                         'assets/images/application_icon_monitor.png',
-                                    router: '${Routes.monitorList}?state=online',
+                                    router:
+                                        '${Routes.monitorList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&outType=0&state=online',
                                   ),
                                 ),
                               ],
@@ -157,7 +161,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '排口异常列表',
                                     imagePath:
                                         'assets/images/application_icon_discharge_report.png',
-                                    router: '${Routes.dischargeReportList}',
+                                    router: '${Routes.dischargeReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -167,7 +171,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '因子异常列表',
                                     imagePath:
                                         'assets/images/application_icon_factor_report.png',
-                                    router: '${Routes.factorReportList}',
+                                    router: '${Routes.factorReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                               ],
@@ -180,7 +184,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '长期停产列表',
                                     imagePath:
                                         'assets/images/application_icon_longStop_report.png',
-                                    router: '${Routes.longStopReportList}',
+                                    router: '${Routes.longStopReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -211,7 +215,8 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '查询待办督办单',
                                     imagePath:
                                         'assets/images/application_icon_order.png',
-                                    router: '${Routes.orderList}?alarmState=20',
+                                    router:
+                                        '${Routes.orderList}?alarmState=20&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -221,7 +226,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '查询全部督办单',
                                     imagePath:
                                         'assets/images/application_icon_order.png',
-                                    router: '${Routes.orderList}',
+                                    router: '${Routes.orderList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                               ],
@@ -233,7 +238,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     title: '实时预警单',
                                     content: '查询实时预警单',
                                     imagePath:
-                                    'assets/images/application_icon_enter.png',
+                                        'assets/images/application_icon_enter.png',
                                     router: '${Routes.warnList}',
                                   ),
                                 ),
@@ -243,7 +248,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     title: '历史预警消息',
                                     content: '查询历史推送',
                                     imagePath:
-                                    'assets/images/application_icon_monitor.png',
+                                        'assets/images/application_icon_monitor.png',
                                     router: '${Routes.noticeList}',
                                   ),
                                 ),
