@@ -25,6 +25,7 @@ class EnterDetail extends Equatable {
   final String industryTypeStr; // 行业类别
   // @JsonKey(name: 'legalPersonCode')
   final String creditCode; // 信用代码
+  final int orderIncompleteCount; // 报警管理单未办结个数
   final int orderCompleteCount; // 报警管理单已办结个数
   final int orderTotalCount; // 报警管理单总数
   final int orderDealCount; // 报警管理单待处理数
@@ -57,6 +58,7 @@ class EnterDetail extends Equatable {
     this.areaName,
     this.industryTypeStr,
     this.creditCode,
+    this.orderIncompleteCount,
     this.orderCompleteCount,
     this.orderTotalCount,
     this.orderDealCount,
@@ -91,6 +93,7 @@ class EnterDetail extends Equatable {
         areaName,
         industryTypeStr,
         creditCode,
+    orderIncompleteCount,
         orderCompleteCount,
         orderTotalCount,
         orderDealCount,
@@ -136,6 +139,7 @@ EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
       areaName: json['enterprise']['areaName'] as String ?? '',
       industryTypeStr: json['enterprise']['industryTypeStr'] as String ?? '',
       creditCode: json['enterprise']['legalPersonCode'] as String ?? '',
+      orderIncompleteCount: json['orderIncompleteCount'] as int,
       orderCompleteCount: json['orderCompleteCount'] as int,
       orderTotalCount: json['orderTotalCount'] as int,
       orderDealCount: json['orderDealCount'] as int,
@@ -170,6 +174,7 @@ Map<String, dynamic> _$EnterDetailToJson(EnterDetail instance) =>
       'areaName': instance.areaName,
       'industryTypeStr': instance.industryTypeStr,
       'legalPersonCode': instance.creditCode,
+      'orderIncompleteCount': instance.orderIncompleteCount,
       'orderCompleteCount': instance.orderCompleteCount,
       'orderTotalCount': instance.orderTotalCount,
       'orderDealCount': instance.orderDealCount,

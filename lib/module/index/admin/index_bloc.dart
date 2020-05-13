@@ -89,7 +89,7 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
   }
 }
 
-//格式化空气质量统计
+/// 格式化空气质量统计
 Future<AqiStatistics> _convertAqiStatistics(String string) async {
   List<String> strings = string.split(',');
   return AqiStatistics(
@@ -109,7 +109,7 @@ Future<AqiStatistics> _convertAqiStatistics(String string) async {
   );
 }
 
-//格式化空气质量考核
+/// 格式化空气质量考核
 Future<AqiExamine> _convertAqiExamine(String key, String string) async {
   List<String> strings = string.split(',');
   switch (key) {
@@ -146,7 +146,7 @@ Future<AqiExamine> _convertAqiExamine(String key, String string) async {
   }
 }
 
-//格式化水环境质量情况
+/// 格式化水环境质量情况
 Future<WaterStatistics> _convertSurfaceWater(String key, String string) async {
   List<String> strings = string.split(',');
   switch (key) {
@@ -215,7 +215,7 @@ Future<WaterStatistics> _convertSurfaceWater(String key, String string) async {
   }
 }
 
-//格式化污染源企业统计
+/// 格式化污染源企业统计
 Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -290,7 +290,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
   }
 }
 
-//格式化代办任务统计
+/// 格式化代办任务统计
 Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -299,19 +299,19 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
   } else {
     return [
       Meta(
-        title: '待处理督办单',
+        title: '未办结',
         imagePath: 'assets/images/button_bg_blue.png',
         content: strings[1],
-        router: '${Routes.orderList}?alarmState=20&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+        router: '${Routes.orderList}?alarmState=00&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
-        title: '超期待处理督办单',
+        title: '超期待处理',
         imagePath: 'assets/images/button_bg_pink.png',
         content: strings[2],
         router: '${Routes.orderList}?alarmState=20&alarmLevel=3&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
-        title: '已办结督办单',
+        title: '已办结',
         imagePath: 'assets/images/button_bg_green.png',
         content: strings[3],
         router: '${Routes.orderList}?alarmState=50&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
@@ -320,7 +320,7 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
   }
 }
 
-//格式化异常申报统计统计
+/// 格式化异常申报统计统计
 Future<List<Meta>> _convertReportStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -353,7 +353,7 @@ Future<List<Meta>> _convertReportStatistics(String string) async {
   }
 }
 
-//综合统计信息
+/// 综合统计信息
 Future<List<Meta>> _convertComprehensiveStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;
@@ -383,7 +383,7 @@ Future<List<Meta>> _convertComprehensiveStatistics(String string) async {
   }
 }
 
-//雨水企业统计
+/// 雨水企业统计
 Future<List<Meta>> _convertRainEnterStatistics(String string) async {
   List<String> strings = string.split(',');
   bool show = strings[0] == '1' ? true : false;

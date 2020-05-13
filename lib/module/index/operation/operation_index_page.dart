@@ -71,56 +71,54 @@ class _OperationIndexPageState extends State<OperationIndexPage>
         firstRefresh: true,
         firstRefreshWidget: Gaps.empty,
         slivers: <Widget>[
-          BlocListener<IndexBloc, IndexState>(
+          BlocConsumer<IndexBloc, IndexState>(
             listener: (context, state) {
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
-            child: BlocBuilder<IndexBloc, IndexState>(
-              builder: (context, state) {
-                if (state is IndexLoaded) {
-                  return SliverToBoxAdapter(
-                    child: Column(
-                      children: <Widget>[
-                        HeaderWidget(),
-                        state.inspectionStatisticsList.length > 0
-                            ? RoutineInspectionStatisticsWidget(
-                                metaList: state.inspectionStatisticsList)
-                            : Gaps.empty,
-                        MonitorStatisticsWidget(
-                          title: '监控点概况',
-                          collectionBloc: monitorStatisticsBloc,
-                          onReloadTap: () {
-                            monitorStatisticsBloc.add(
-                                CollectionLoad(params: _getRequestParam()));
-                          },
-                        ),
-                        state.pollutionEnterStatisticsList.length > 0
-                            ? PollutionEnterStatisticsWidget(
-                                metaList: state.pollutionEnterStatisticsList)
-                            : Gaps.empty,
-                        state.orderStatisticsList.length > 0
-                            ? OrderStatisticsWidget(
-                                metaList: state.orderStatisticsList)
-                            : Gaps.empty,
-                      ],
-                    ),
-                  );
-                } else if (state is IndexLoading) {
-                  return LoadingSliver();
-                } else if (state is IndexError) {
-                  return ErrorSliver(
-                    errorMessage: state.errorMessage,
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态',
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                }
-              },
-            ),
+            builder: (context, state) {
+              if (state is IndexLoaded) {
+                return SliverToBoxAdapter(
+                  child: Column(
+                    children: <Widget>[
+                      HeaderWidget(),
+                      state.inspectionStatisticsList.length > 0
+                          ? RoutineInspectionStatisticsWidget(
+                          metaList: state.inspectionStatisticsList)
+                          : Gaps.empty,
+                      MonitorStatisticsWidget(
+                        title: '监控点概况',
+                        collectionBloc: monitorStatisticsBloc,
+                        onReloadTap: () {
+                          monitorStatisticsBloc.add(
+                              CollectionLoad(params: _getRequestParam()));
+                        },
+                      ),
+                      state.pollutionEnterStatisticsList.length > 0
+                          ? PollutionEnterStatisticsWidget(
+                          metaList: state.pollutionEnterStatisticsList)
+                          : Gaps.empty,
+                      state.orderStatisticsList.length > 0
+                          ? OrderStatisticsWidget(
+                          metaList: state.orderStatisticsList)
+                          : Gaps.empty,
+                    ],
+                  ),
+                );
+              } else if (state is IndexLoading) {
+                return LoadingSliver();
+              } else if (state is IndexError) {
+                return ErrorSliver(
+                  errorMessage: state.errorMessage,
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              } else {
+                return ErrorSliver(
+                  errorMessage: 'BlocBuilder监听到未知的的状态',
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              }
+            },
           ),
         ],
         onRefresh: () async {

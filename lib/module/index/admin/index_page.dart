@@ -75,81 +75,79 @@ class _AdminIndexPageState extends State<AdminIndexPage>
         firstRefresh: true,
         firstRefreshWidget: Gaps.empty,
         slivers: <Widget>[
-          BlocListener<IndexBloc, IndexState>(
+          BlocConsumer<IndexBloc, IndexState>(
             listener: (context, state) {
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
-            child: BlocBuilder<IndexBloc, IndexState>(
-              builder: (context, state) {
-                if (state is IndexLoaded) {
-                  return SliverToBoxAdapter(
-                    child: Column(
-                      children: <Widget>[
-                        state.aqiStatistics.show
-                            ? AqiStatisticsWidget(
-                                aqiStatistics: state.aqiStatistics)
-                            : HeaderWidget(),
-                        state.todoTaskStatisticsList.length > 0
-                            ? TodoTaskStatisticsWidget(
-                                metaList: state.todoTaskStatisticsList,
-                              )
-                            : Gaps.empty,
-                        state.aqiExamineList.length > 0
-                            ? AqiExamineWidget(
-                                aqiExamineList: state.aqiExamineList)
-                            : Gaps.empty,
-                        //WeekTrendWidget(),
-                        //AlarmListWidget(),
-                        MonitorStatisticsWidget(
-                          title: '监控点(出口)概况',
-                          collectionBloc: monitorStatisticsBloc,
-                          onReloadTap: () {
-                            monitorStatisticsBloc.add(
-                                CollectionLoad(params: _getRequestParam()));
-                          },
-                        ),
-                        state.waterStatisticsList.length > 0
-                            ? WaterStatisticsWidget(
-                                waterStatisticsList: state.waterStatisticsList,
-                              )
-                            : Gaps.empty,
-                        state.pollutionEnterStatisticsList.length > 0
-                            ? PollutionEnterStatisticsWidget(
-                                metaList: state.pollutionEnterStatisticsList)
-                            : Gaps.empty,
-                        state.rainEnterStatisticsList.length > 0
-                            ? RainEnterStatisticsWidget(
-                                metaList: state.rainEnterStatisticsList)
-                            : Gaps.empty,
-                        state.reportStatisticsList.length > 0
-                            ? ReportStatisticsWidget(
-                                metaList: state.reportStatisticsList,
-                              )
-                            : Gaps.empty,
-                        state.comprehensiveStatisticsList.length > 0
-                            ? ComprehensiveStatisticsWidget(
-                                metaList: state.comprehensiveStatisticsList,
-                              )
-                            : Gaps.empty,
-                      ],
-                    ),
-                  );
-                } else if (state is IndexLoading) {
-                  return LoadingSliver();
-                } else if (state is IndexError) {
-                  return ErrorSliver(
-                    errorMessage: state.errorMessage,
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态',
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                }
-              },
-            ),
+            builder: (context, state) {
+              if (state is IndexLoaded) {
+                return SliverToBoxAdapter(
+                  child: Column(
+                    children: <Widget>[
+                      state.aqiStatistics.show
+                          ? AqiStatisticsWidget(
+                          aqiStatistics: state.aqiStatistics)
+                          : HeaderWidget(),
+                      state.todoTaskStatisticsList.length > 0
+                          ? TodoTaskStatisticsWidget(
+                        metaList: state.todoTaskStatisticsList,
+                      )
+                          : Gaps.empty,
+                      state.aqiExamineList.length > 0
+                          ? AqiExamineWidget(
+                          aqiExamineList: state.aqiExamineList)
+                          : Gaps.empty,
+                      //WeekTrendWidget(),
+                      //AlarmListWidget(),
+                      MonitorStatisticsWidget(
+                        title: '监控点(出口)概况',
+                        collectionBloc: monitorStatisticsBloc,
+                        onReloadTap: () {
+                          monitorStatisticsBloc.add(
+                              CollectionLoad(params: _getRequestParam()));
+                        },
+                      ),
+                      state.waterStatisticsList.length > 0
+                          ? WaterStatisticsWidget(
+                        waterStatisticsList: state.waterStatisticsList,
+                      )
+                          : Gaps.empty,
+                      state.pollutionEnterStatisticsList.length > 0
+                          ? PollutionEnterStatisticsWidget(
+                          metaList: state.pollutionEnterStatisticsList)
+                          : Gaps.empty,
+                      state.rainEnterStatisticsList.length > 0
+                          ? RainEnterStatisticsWidget(
+                          metaList: state.rainEnterStatisticsList)
+                          : Gaps.empty,
+                      state.reportStatisticsList.length > 0
+                          ? ReportStatisticsWidget(
+                        metaList: state.reportStatisticsList,
+                      )
+                          : Gaps.empty,
+                      state.comprehensiveStatisticsList.length > 0
+                          ? ComprehensiveStatisticsWidget(
+                        metaList: state.comprehensiveStatisticsList,
+                      )
+                          : Gaps.empty,
+                    ],
+                  ),
+                );
+              } else if (state is IndexLoading) {
+                return LoadingSliver();
+              } else if (state is IndexError) {
+                return ErrorSliver(
+                  errorMessage: state.errorMessage,
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              } else {
+                return ErrorSliver(
+                  errorMessage: 'BlocBuilder监听到未知的的状态',
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              }
+            },
           ),
         ],
         onRefresh: () async {

@@ -252,6 +252,7 @@ class DataDictBlocGrid extends StatelessWidget {
   final String checkValue;
   final DataDictGridItemTap onItemTap;
   final bool addFirst;
+  final DataDict defaultDataDict;
 
   DataDictBlocGrid({
     Key key,
@@ -259,6 +260,7 @@ class DataDictBlocGrid extends StatelessWidget {
     this.checkValue,
     this.onItemTap,
     this.addFirst = true,
+    this.defaultDataDict,
   })  : assert(dataDictBloc != null),
         super(key: key);
 
@@ -268,11 +270,18 @@ class DataDictBlocGrid extends StatelessWidget {
       bloc: dataDictBloc,
       builder: (context, state) {
         if (state is DataDictLoaded) {
+          if (defaultDataDict != null) {
+            // 默认添加一个数据字典
+            if (!state.dataDictList.contains(defaultDataDict)) {
+              // 防止重复添加
+              state.dataDictList.insert(0, defaultDataDict);
+            }
+          }
           if (addFirst) {
             // 默认添加一个全部的数据字典
             DataDict dataDict = DataDict(code: '', name: '全部');
-            // 防止重复添加
             if (!state.dataDictList.contains(dataDict)) {
+              // 防止重复添加
               state.dataDictList.insert(0, dataDict);
             }
           }

@@ -75,38 +75,35 @@ class _EnterIndexPageState extends State<EnterIndexPage>
         firstRefresh: true,
         firstRefreshWidget: Gaps.empty,
         slivers: <Widget>[
-          BlocListener<DetailBloc, DetailState>(
+          BlocConsumer<DetailBloc, DetailState>(
             listener: (context, state) {
+              if (state is DetailLoading) return;
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
-            //生成body
-            child: BlocBuilder<DetailBloc, DetailState>(
-              condition: (previousState, state) {
-                //刷新时，不重构Widget，因为header已经有加载动画了
-                if (state is DetailLoading)
-                  return false;
-                else
-                  return true;
-              },
-              builder: (context, state) {
-                if (state is DetailLoading) {
-                  return LoadingSliver();
-                } else if (state is DetailError) {
-                  return ErrorSliver(
-                    errorMessage: state.message,
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                } else if (state is DetailLoaded) {
-                  return _buildPageLoadedDetail(state.detail);
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
-                    onReloadTap: () => _refreshController.callRefresh(),
-                  );
-                }
-              },
-            ),
+            buildWhen: (previous, current) {
+              if (current is DetailLoading)
+                return false;
+              else
+                return true;
+            },
+            builder: (context, state) {
+              if (state is DetailLoading) {
+                return LoadingSliver();
+              } else if (state is DetailError) {
+                return ErrorSliver(
+                  errorMessage: state.message,
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              } else if (state is DetailLoaded) {
+                return _buildPageLoadedDetail(state.detail);
+              } else {
+                return ErrorSliver(
+                  errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                  onReloadTap: () => _refreshController.callRefresh(),
+                );
+              }
+            },
           ),
         ],
         onRefresh: () async {

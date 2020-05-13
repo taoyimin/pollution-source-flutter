@@ -189,7 +189,7 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                       child: InkWellButton(
                         onTap: () {
                           if (widget.confirmCallBack != null) {
-                            (widget.confirmCallBack)(checkList);
+                            widget.confirmCallBack(checkList);
                             Navigator.pop(context);
                           }
                         },

@@ -40,12 +40,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    //监听输入改变
+    // 监听输入改变
     _nameController.addListener(_verify);
     _passwordController.addListener(_verify);
     // _config = SystemUtils.getKeyboardActionsConfig([_nodeText1, _nodeText2]);
     _userType = SpUtil.getInt(Constant.spUserType, defValue: 0);
-    //初始化输入框
+    // 初始化输入框
     _nameController.text = SpUtil.getString(Constant.spUsernameList[_userType]);
     _passwordController.text =
         SpUtil.getString(Constant.spPasswordList[_userType]);
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
     if (password.isEmpty) {
       isClick = false;
     }
-    //状态不一样在刷新，避免重复不必要的setState
+    // 状态不一样在刷新，避免重复不必要的setState
     if (isClick != _isClick) {
       setState(() {
         _isClick = isClick;

@@ -18,7 +18,7 @@ class ListBloc extends Bloc<ListEvent, ListState> {
   @override
   Stream<ListState> mapEventToState(ListEvent event) async* {
     if (event is ListLoad) {
-      //加载列表
+      // 加载列表
       yield* _mapListLoadToState(event);
     } else if (event is ListUpdate) {
       yield* _mapListUpdateToState(event);
@@ -30,10 +30,10 @@ class ListBloc extends Bloc<ListEvent, ListState> {
       CancelToken cancelToken = CancelToken();
       yield ListLoading(cancelToken: cancelToken);
       final currentState = state;
+      final ListPage listPage = await listRepository.request(
+          params: event.params, cancelToken: cancelToken);
       if (!event.isRefresh && currentState is ListLoaded) {
-        //加载更多
-        final ListPage listPage = await listRepository.request(
-            params: event.params, cancelToken: cancelToken);
+        // 加载更多
         yield ListLoaded(
           list: currentState.list + listPage.list,
           currentPage: listPage.currentPage,
@@ -41,11 +41,9 @@ class ListBloc extends Bloc<ListEvent, ListState> {
           total: listPage.total,
         );
       } else {
-        //首次加载或刷新
-        final ListPage listPage = await listRepository.request(
-            params: event.params, cancelToken: cancelToken);
+        // 首次加载或刷新
         if (listPage.list.length == 0) {
-          //没有数据
+          // 没有数据
           yield ListEmpty();
         } else {
           yield ListLoaded(
