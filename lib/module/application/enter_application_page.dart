@@ -216,12 +216,12 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                    title: '待办督办单',
-                                    content: '查询待办督办单',
+                                    title: '未办结督办单',
+                                    content: '查询未办结督办单',
                                     imagePath:
                                         'assets/images/application_icon_order.png',
                                     router:
-                                        '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20',
+                                        '${Routes.orderList}?enterId=${widget.enterId}&alarmState=00',
                                   ),
                                 ),
                                 Gaps.hGap20,

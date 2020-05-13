@@ -211,12 +211,12 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                    title: '待办督办单',
-                                    content: '查询待办督办单',
+                                    title: '未办结督办单',
+                                    content: '查询未办结督办单',
                                     imagePath:
                                         'assets/images/application_icon_order.png',
                                     router:
-                                        '${Routes.orderList}?alarmState=20&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                        '${Routes.orderList}?alarmState=00&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                                 Gaps.hGap20,
