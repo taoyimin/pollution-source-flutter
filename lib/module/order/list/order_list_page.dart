@@ -10,18 +10,19 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
+import 'package:pollution_source/module/common/list/list_widget.dart';
 import 'package:pollution_source/module/order/list/order_list_model.dart';
 import 'package:pollution_source/module/order/list/order_list_repository.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
-import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
@@ -404,6 +405,7 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                       ),
                       DataDictBlocGrid(
+                        defaultDataDict: DataDict(name: '未办结', code: '00'),
                         checkValue: _alarmState,
                         dataDictBloc: _alarmStateBloc,
                         onItemTap: (value) {

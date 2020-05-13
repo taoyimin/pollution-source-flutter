@@ -9,13 +9,13 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
+import 'package:pollution_source/module/common/list/list_widget.dart';
 import 'package:pollution_source/module/common/map_info_page.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/widget/custom_header.dart';
 
 import 'notice_list_model.dart';
 import 'notice_list_repository.dart';

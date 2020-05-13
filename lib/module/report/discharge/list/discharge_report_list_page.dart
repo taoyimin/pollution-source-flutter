@@ -11,6 +11,7 @@ import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
+import 'package:pollution_source/module/common/list/list_widget.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_model.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_repository.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -22,7 +23,6 @@ import 'package:pollution_source/util/ui_utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/widget/custom_header.dart';
 
 /// 排口异常申报列表界面
 class DischargeReportListPage extends StatefulWidget {
