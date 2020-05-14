@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 
 /// UI工具类
 ///
@@ -94,6 +95,91 @@ class UIUtils {
         return Colors.red;
       default:
         return Colors.black;
+    }
+  }
+
+  static Label getOrderAlarmIcon(String string) {
+    switch (string) {
+      case '连续恒值':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_type_constant_value.png',
+            color: Colors.green);
+      case '超标异常':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_type_outrange_error.png',
+            color: Colors.red);
+      case '超大值':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_type_large_value.png',
+            color: Colors.pink);
+      case '联网异常':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_type_connect_error.png',
+            color: Colors.orange);
+      case '零值':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_type_zero_value.png',
+            color: Colors.blue);
+      case '负值':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_type_negative_value.png',
+            color: Colors.cyan);
+      case '设备故障':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_device_error.png',
+            color: Colors.deepOrangeAccent);
+      case '设备校准':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_correct.png',
+            color: Colors.lightGreen);
+      case '接口松动':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_device_offline.png',
+            color: Colors.brown);
+      case '超低排放':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_pollution_water_outlet.png',
+            color: Colors.purpleAccent);
+      case '低于检出限':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_lower_limit.png',
+            color: Colors.lightBlueAccent);
+      case '停产':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_stopline.png',
+            color: Colors.pinkAccent);
+      case '停电':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_power_failure.png',
+            color: Colors.amber);
+      case '网络故障':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_net_error.png',
+            color: Colors.grey);
+      case '稳定排放':
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_cause_stable_discharge.png',
+            color: Colors.teal);
+      default:
+        return Label(
+            name: string,
+            imagePath: 'assets/images/icon_alarm_type_unknow.png',
+            color: Colors.grey);
     }
   }
 }
