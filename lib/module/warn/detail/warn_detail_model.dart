@@ -12,11 +12,11 @@ class WarnDetail extends Equatable {
   final String enterName; // 企业名
   @JsonKey(defaultValue: '')
   final String monitorName; // 监控点名
-  @JsonKey(name:'createDate', defaultValue: '')
+  @JsonKey(name: 'createDate', defaultValue: '')
   final String createTimeStr; // 生成时间
-  @JsonKey(name:'startTime', defaultValue: '')
+  @JsonKey(name: 'startTime', defaultValue: '')
   final String startTimeStr; // 开始时间
-  @JsonKey(name:'endTime', defaultValue: '')
+  @JsonKey(name: 'endTime', defaultValue: '')
   final String endTimeStr; // 结束时间
   @JsonKey(defaultValue: '')
   final String title; // 预警标题
@@ -28,6 +28,8 @@ class WarnDetail extends Equatable {
   final String areaName; // 区名称
   @JsonKey(defaultValue: '')
   final String attentionLevelStr; // 关注程度
+  @JsonKey(name: 'alarmTypeName', defaultValue: '')
+  final String alarmTypeStr; // 报警原因
 
   WarnDetail({
     this.enterId,
@@ -42,6 +44,7 @@ class WarnDetail extends Equatable {
     this.cityName,
     this.areaName,
     this.attentionLevelStr,
+    this.alarmTypeStr,
   });
 
   @override
@@ -58,6 +61,7 @@ class WarnDetail extends Equatable {
         cityName,
         areaName,
         attentionLevelStr,
+        alarmTypeStr,
       ];
 
   /// 所属区域

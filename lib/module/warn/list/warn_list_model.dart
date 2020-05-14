@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:flustars/flustars.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 
 part 'warn_list_model.g.dart';
 
@@ -22,6 +25,8 @@ class Warn extends Equatable {
   final String cityName; // 市名称
   @JsonKey(defaultValue: '')
   final String areaName; // 区名称
+  @JsonKey(name: 'alarmTypeName', defaultValue: '')
+  final String alarmTypeStr; // 报警原因
 
   const Warn({
     this.warnId,
@@ -32,27 +37,39 @@ class Warn extends Equatable {
     this.text,
     this.cityName,
     this.areaName,
+    this.alarmTypeStr,
   });
 
   @override
   List<Object> get props => [
-    warnId,
-    enterName,
-    monitorName,
-    createTimeStr,
-    title,
-    text,
-    cityName,
-    areaName,
-  ];
+        warnId,
+        enterName,
+        monitorName,
+        createTimeStr,
+        title,
+        text,
+        cityName,
+        areaName,
+        alarmTypeStr,
+      ];
 
   /// 所属区域
   String get districtName {
     return '${cityName ?? ''}${areaName ?? ''}';
   }
 
-  factory Warn.fromJson(Map<String, dynamic> json) =>
-      _$WarnFromJson(json);
+  List<Label> get labelList {
+    final String labelStr = alarmTypeStr.trim();
+    if (TextUtil.isEmpty(labelStr)) {
+      return [];
+    } else {
+      return labelStr.split(' ').map((string) {
+        return UIUtils.getOrderAlarmIcon(string);
+      }).toList();
+    }
+  }
+
+  factory Warn.fromJson(Map<String, dynamic> json) => _$WarnFromJson(json);
 
   Map<String, dynamic> toJson() => _$WarnToJson(this);
 }

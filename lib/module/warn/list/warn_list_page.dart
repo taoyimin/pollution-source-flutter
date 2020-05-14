@@ -6,6 +6,11 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
+import 'package:pollution_source/module/common/dict/data_dict_event.dart';
+import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
+import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
@@ -35,6 +40,14 @@ class _WarnListPageState extends State<WarnListPage> {
   Completer<void> _refreshCompleter;
   int _currentPage = Constant.defaultCurrentPage;
 
+  /// 报警类型Bloc
+  final DataDictBloc _alarmTypeBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.orderAlarmType),
+  );
+
+  /// 报警类型
+  String _alarmType;
+
   /// 开始时间
   DateTime _startTime;
 
@@ -47,6 +60,8 @@ class _WarnListPageState extends State<WarnListPage> {
     _initParam();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
+    // 加载报警类型
+    _alarmTypeBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
@@ -64,6 +79,7 @@ class _WarnListPageState extends State<WarnListPage> {
 
   /// 初始化查询参数
   _initParam() {
+    _alarmType = '';
     _startTime = null;
     _endTime = null;
   }
@@ -73,6 +89,7 @@ class _WarnListPageState extends State<WarnListPage> {
     return WarnListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
+      alarmType: _alarmType,
       startTime: _startTime,
       endTime: _endTime,
     );
@@ -205,6 +222,10 @@ class _WarnListPageState extends State<WarnListPage> {
                               ),
                             ),
                             Gaps.vGap6,
+                            LabelWrapWidget(labelList: warnList[index].labelList),
+                            warnList[index].labelList.length == 0
+                                ? Gaps.empty
+                                : Gaps.vGap6,
                             ListTileWidget(
                                 '监控点名：${warnList[index].monitorName}'),
                             Gaps.vGap6,
@@ -222,6 +243,10 @@ class _WarnListPageState extends State<WarnListPage> {
                               ),
                             ),
                             Gaps.vGap6,
+                            LabelWrapWidget(labelList: warnList[index].labelList),
+                            warnList[index].labelList.length == 0
+                                ? Gaps.empty
+                                : Gaps.vGap6,
                             Row(
                               children: <Widget>[
                                 Expanded(
@@ -389,6 +414,23 @@ class _WarnListPageState extends State<WarnListPage> {
                             ),
                           ),
                         ],
+                      ),
+                      Gaps.vGap20,
+                      const Text(
+                        '报警类型',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictBlocGrid(
+                        checkValue: _alarmType,
+                        dataDictBloc: _alarmTypeBloc,
+                        onItemTap: (value) {
+                          setState(() {
+                            _alarmType = value;
+                          });
+                        },
                       ),
                     ],
                   ),

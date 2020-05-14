@@ -131,6 +131,15 @@ class _WarnDetailPageState extends State<WarnDetailPage> {
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
+                      content: '报警类型：${warnDetail.alarmTypeStr}',
+                      icon: Icons.alarm,
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    IconBaseInfoWidget(
                       content: '生成时间：${warnDetail.createTimeStr}',
                       icon: Icons.date_range,
                     ),

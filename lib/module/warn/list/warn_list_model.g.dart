@@ -16,6 +16,7 @@ Warn _$WarnFromJson(Map<String, dynamic> json) {
     text: json['text'] as String ?? '',
     cityName: json['cityName'] as String ?? '',
     areaName: json['areaName'] as String ?? '',
+    alarmTypeStr: json['alarmTypeName'] as String ?? '',
   );
 }
 
@@ -28,4 +29,5 @@ Map<String, dynamic> _$WarnToJson(Warn instance) => <String, dynamic>{
       'text': instance.text,
       'cityName': instance.cityName,
       'areaName': instance.areaName,
+      'alarmTypeName': instance.alarmTypeStr,
     };
