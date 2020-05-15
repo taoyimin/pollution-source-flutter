@@ -25,6 +25,7 @@ class OrderListRepository extends ListRepository<Order> {
   /// [alarmLevel] 报警级别 0：正常 1：黄色预警 2：橙色预警 3：红色预警
   /// [attentionLevel] 关注程度 0:非重点 1:重点
   /// [alarmType] 报警类型
+  /// [alarmCause] 报警原因
   /// [startTime] 报警开始时间
   /// [endTime] 报警结束时间
   static Map<String, dynamic> createParams({
@@ -38,6 +39,7 @@ class OrderListRepository extends ListRepository<Order> {
     alarmLevel = '',
     attentionLevel = '',
     alarmType = '',
+    alarmCause = '',
     startTime,
     endTime,
   }) {
@@ -52,6 +54,7 @@ class OrderListRepository extends ListRepository<Order> {
       'enterId': enterId,
       'monitorId': monitorId,
       'alarmLevel': alarmLevel,
+      'alarmCause': alarmCause,
       'attentionLevel': attentionLevel,
       'alarmType': alarmType,
       'alarmBeginTime': DateUtil.getDateStrByDateTime(startTime,

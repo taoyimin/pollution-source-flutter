@@ -69,6 +69,11 @@ class _OrderListPageState extends State<OrderListPage> {
     dataDictRepository: DataDictRepository(HttpApi.orderAlarmType),
   );
 
+  /// 报警原因Bloc
+  final DataDictBloc _alarmCauseBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.orderAlarmCause),
+  );
+
   /// 报警级别Bloc
   final DataDictBloc _alarmLevelBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.orderAlarmLevel),
@@ -82,6 +87,9 @@ class _OrderListPageState extends State<OrderListPage> {
 
   /// 报警类型
   String _alarmType;
+
+  /// 报警原因
+  String _alarmCause;
 
   /// 报警级别
   String _alarmLevel;
@@ -113,6 +121,8 @@ class _OrderListPageState extends State<OrderListPage> {
     _attentionLevelBloc.add(DataDictLoad());
     // 加载报警类型
     _alarmTypeBloc.add(DataDictLoad());
+    // 加载报警原因
+    _alarmCauseBloc.add(DataDictLoad());
     // 加载报警级别
     _alarmLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
@@ -137,6 +147,7 @@ class _OrderListPageState extends State<OrderListPage> {
     _startTime = null;
     _endTime = null;
     _alarmType = '';
+    _alarmCause = '';
     _alarmLevel = widget.alarmLevel;
     _alarmState = widget.alarmState;
     _attentionLevel = widget.attentionLevel;
@@ -154,6 +165,7 @@ class _OrderListPageState extends State<OrderListPage> {
       alarmState: _alarmState,
       alarmLevel: _alarmLevel,
       alarmType: _alarmType,
+      alarmCause: _alarmCause,
       attentionLevel: _attentionLevel,
       startTime: _startTime,
       endTime: _endTime,
@@ -550,6 +562,23 @@ class _OrderListPageState extends State<OrderListPage> {
                         onItemTap: (value) {
                           setState(() {
                             _alarmType = value;
+                          });
+                        },
+                      ),
+                      Gaps.vGap10,
+                      const Text(
+                        '报警原因',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      DataDictBlocGrid(
+                        checkValue: _alarmCause,
+                        dataDictBloc: _alarmCauseBloc,
+                        onItemTap: (value) {
+                          setState(() {
+                            _alarmCause = value;
                           });
                         },
                       ),
