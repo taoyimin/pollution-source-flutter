@@ -47,6 +47,7 @@ dependencies:
   # 城市选择控件 https://github.com/hanxu317317/city_pickers
   # city_pickers: ^0.1.30
   # 业务逻辑与界面分离 https://github.com/felangel/bloc
+  bloc: ^4.0.0
   flutter_bloc: ^4.0.0
   # 简化实例比较 https://github.com/felangel/equatable
   equatable: ^1.1.1
