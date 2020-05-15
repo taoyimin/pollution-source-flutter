@@ -197,7 +197,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                 InkWellButton9(
                                   meta: Meta(
                                     title: '未办结督办单',
-                                    content: '查询未办结督办单',
+                                    content: '查询待办督办单',
                                     imagePath:
                                         'assets/images/application_icon_order.png',
                                     router: '${Routes.orderList}?alarmState=00',
