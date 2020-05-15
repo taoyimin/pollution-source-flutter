@@ -1,24 +1,27 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pollution_source/module/common/common_model.dart';
 
 part 'long_stop_report_detail_model.g.dart';
 
-//异常申报单详情
+/// 异常申报单详情
 @JsonSerializable()
 class LongStopReportDetail extends Equatable {
   @JsonKey(name: 'id')
-  final int reportId; //排口异常申报ID
-  final int enterId; //企业ID
+  final int reportId; // 排口异常申报ID
+  final int enterId; // 企业ID
   @JsonKey(name: 'enterpriseName')
-  final String enterName; //企业名称
+  final String enterName; // 企业名称
   @JsonKey(name: 'entAddress')
-  final String enterAddress; //企业地址
+  final String enterAddress; // 企业地址
   final String cityName; // 所属市
   final String areaName; // 所属区
-  final String reportTimeStr; //申报时间
-  final String startTimeStr; //开始时间
-  final String endTimeStr; //结束时间
-  final String remark; //备注
+  final String reportTimeStr; // 申报时间
+  final String startTimeStr; // 开始时间
+  final String endTimeStr; // 结束时间
+  final String remark; // 备注
+  @JsonKey(name: 'attachmentList', defaultValue: [])
+  final List<Attachment> attachments; // 证明材料
 
   const LongStopReportDetail({
     this.reportId,
@@ -31,6 +34,7 @@ class LongStopReportDetail extends Equatable {
     this.startTimeStr,
     this.endTimeStr,
     this.remark,
+    this.attachments,
   });
 
   @override
@@ -45,10 +49,11 @@ class LongStopReportDetail extends Equatable {
         startTimeStr,
         endTimeStr,
         remark,
+        attachments,
       ];
 
   String get districtName {
-    return '${cityName??''}${areaName??''}';
+    return '${cityName ?? ''}${areaName ?? ''}';
   }
 
   factory LongStopReportDetail.fromJson(Map<String, dynamic> json) =>

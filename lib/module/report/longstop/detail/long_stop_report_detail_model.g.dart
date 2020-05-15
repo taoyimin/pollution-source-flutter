@@ -18,6 +18,12 @@ LongStopReportDetail _$LongStopReportDetailFromJson(Map<String, dynamic> json) {
     startTimeStr: json['startTimeStr'] as String,
     endTimeStr: json['endTimeStr'] as String,
     remark: json['remark'] as String,
+    attachments: (json['attachmentList'] as List)
+            ?.map((e) => e == null
+                ? null
+                : Attachment.fromJson(e as Map<String, dynamic>))
+            ?.toList() ??
+        [],
   );
 }
 
@@ -34,4 +40,5 @@ Map<String, dynamic> _$LongStopReportDetailToJson(
       'startTimeStr': instance.startTimeStr,
       'endTimeStr': instance.endTimeStr,
       'remark': instance.remark,
+      'attachmentList': instance.attachments,
     };

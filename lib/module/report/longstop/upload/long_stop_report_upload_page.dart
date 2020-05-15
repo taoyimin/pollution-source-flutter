@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
@@ -24,6 +25,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/common_utils.dart';
+import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 /// 长期停产上报界面
@@ -203,8 +205,7 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       pickerMode: DateTimePickerMode.datetime,
                       initialDateTime: reportUpload?.endTime,
                       minDateTime: CommonUtils.getMaxDateTime(
-                              reportUpload?.startTime, minStartTime)
-                          .add(Duration(days: 90)),
+                              reportUpload?.startTime, minStartTime),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         _pageBloc.add(
@@ -222,30 +223,70 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                   hintText: '请输入备注',
                   controller: _remarkController,
                 ),
-              ],
-            ),
-          ),
-          Gaps.vGap10,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[
-                ClipButton(
-                  text: '提交',
-                  icon: Icons.file_upload,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    _uploadBloc.add(Upload(
-                      data: reportUpload.copyWith(
-                        remark: _remarkController.text,
-                      ),
-                    ));
-                  },
+                Gaps.vGap5,
+                // 没有附件则隐藏GridView
+                Offstage(
+                  offstage: reportUpload?.attachments == null ||
+                      reportUpload.attachments.length == 0,
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 4,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    children: List.generate(
+                      reportUpload?.attachments == null
+                          ? 0
+                          : reportUpload.attachments.length,
+                      (index) {
+                        Asset asset = reportUpload.attachments[index];
+                        return AssetThumb(
+                          asset: asset,
+                          width: 300,
+                          height: 300,
+                        );
+                      },
+                    ),
+                  ),
                 ),
+                Gaps.vGap5,
+                Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '选择图片',
+                      icon: Icons.image,
+                      color: Colors.green,
+                      onTap: () async {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(
+                              attachments: await SystemUtils.loadAssets(
+                                  reportUpload.attachments),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Gaps.hGap20,
+                    ClipButton(
+                      text: '提交',
+                      icon: Icons.file_upload,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        _uploadBloc.add(Upload(
+                          data: reportUpload.copyWith(
+                            remark: _remarkController.text,
+                          ),
+                        ));
+                      },
+                    ),
+                  ],
+                ),
+                Gaps.vGap20,
               ],
             ),
           ),
-          Gaps.vGap20,
         ],
       ),
     );

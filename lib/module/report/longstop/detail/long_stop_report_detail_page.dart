@@ -153,6 +153,36 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
               ],
             ),
           ),
+          // 证明材料
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '证明材料',
+                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                ),
+                Gaps.vGap10,
+                reportDetail.attachments.length == 0
+                    ? const Text(
+                  '没有上传证明材料',
+                  style: TextStyle(fontSize: 13),
+                )
+                    : Column(
+                  children: () {
+                    return reportDetail.attachments.map((attachment) {
+                      return AttachmentWidget(
+                          attachment: attachment, onTap: () {});
+                    }).toList();
+                  }(),
+                )
+              ],
+            ),
+          ),
           // 快速链接
           Padding(
             padding: const EdgeInsets.symmetric(
