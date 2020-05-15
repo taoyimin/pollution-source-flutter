@@ -4,7 +4,7 @@ import 'package:pollution_source/module/common/common_model.dart';
 
 part 'discharge_report_detail_model.g.dart';
 
-//排口异常申报单详情
+/// 排口异常申报单详情
 @JsonSerializable()
 class DischargeReportDetail extends Equatable {
   @JsonKey(name: 'stopApplyId')
@@ -29,7 +29,7 @@ class DischargeReportDetail extends Equatable {
   final String endTimeStr; // 结束时间
   final String stopTypeStr; // 异常类型
   final String stopReason; // 停产原因
-  @JsonKey(name: 'attachmentList')
+  @JsonKey(name: 'attachmentList', defaultValue: [])
   final List<Attachment> attachments; // 证明材料
 
   const DischargeReportDetail({
@@ -71,7 +71,7 @@ class DischargeReportDetail extends Equatable {
         attachments,
       ];
 
-  // 所属区域
+  /// 所属区域
   String get districtName {
     return '${cityName ?? ''}${areaName ?? ''}';
   }

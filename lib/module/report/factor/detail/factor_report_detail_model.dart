@@ -4,7 +4,7 @@ import 'package:pollution_source/module/common/common_model.dart';
 
 part 'factor_report_detail_model.g.dart';
 
-//因子异常申报单详情
+/// 因子异常申报单详情
 @JsonSerializable()
 class FactorReportDetail extends Equatable {
   @JsonKey(name: 'id')
@@ -37,7 +37,7 @@ class FactorReportDetail extends Equatable {
   final String factorCodeStr; // 异常因子
   @JsonKey(defaultValue: '')
   final String exceptionReason; // 异常原因
-  @JsonKey(name: 'attachmentList')
+  @JsonKey(name: 'attachmentList', defaultValue: [])
   final List<Attachment> attachments; // 证明材料
 
   const FactorReportDetail({
@@ -81,7 +81,7 @@ class FactorReportDetail extends Equatable {
         attachments,
       ];
 
-  // 所属区域
+  /// 所属区域
   String get districtName {
     return '${cityName ?? ''}${areaName ?? ''}';
   }

@@ -4,16 +4,16 @@ import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 
-//异常申报单详情
+/// 异常申报单详情
 class FactorReportUpload extends Equatable {
-  final Enter enter; //企业
-  final Monitor monitor; //监控点
-  final List<DataDict> factorCodeList; //异常因子
-  final DateTime startTime; //开始时间
-  final DateTime endTime; //结束时间
-  final List<DataDict> alarmTypeList; //异常类型
-  final String exceptionReason; //异常原因
-  final List<Asset> attachments; //证明材料
+  final Enter enter; // 企业
+  final Monitor monitor; // 监控点
+  final List<DataDict> factorCodeList; // 异常因子
+  final DateTime startTime; // 开始时间
+  final DateTime endTime; // 结束时间
+  final List<DataDict> alarmTypeList; // 异常类型
+  final String exceptionReason; // 异常原因
+  final List<Asset> attachments; // 证明材料
 
   const FactorReportUpload({
     this.enter,

@@ -25,9 +25,11 @@ FactorReportDetail _$FactorReportDetailFromJson(Map<String, dynamic> json) {
     factorCodeStr: json['factorCodeStr'] as String ?? '',
     exceptionReason: json['exceptionReason'] as String ?? '',
     attachments: (json['attachmentList'] as List)
-        ?.map((e) =>
-            e == null ? null : Attachment.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+            ?.map((e) => e == null
+                ? null
+                : Attachment.fromJson(e as Map<String, dynamic>))
+            ?.toList() ??
+        [],
   );
 }
 

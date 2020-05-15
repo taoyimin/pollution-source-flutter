@@ -290,76 +290,70 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   hintText: '请使用一句话简单概括异常的原因',
                   controller: _stopReasonController,
                 ),
+                Gaps.vGap5,
+                // 没有附件则隐藏GridView
+                Offstage(
+                  offstage: reportUpload?.attachments == null ||
+                      reportUpload.attachments.length == 0,
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 4,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    children: List.generate(
+                      reportUpload?.attachments == null
+                          ? 0
+                          : reportUpload.attachments.length,
+                      (index) {
+                        Asset asset = reportUpload.attachments[index];
+                        return AssetThumb(
+                          asset: asset,
+                          width: 300,
+                          height: 300,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Gaps.vGap5,
+                Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '选择图片',
+                      icon: Icons.image,
+                      color: Colors.green,
+                      onTap: () async {
+                        _pageBloc.add(
+                          PageLoad(
+                            model: reportUpload.copyWith(
+                              attachments: await SystemUtils.loadAssets(
+                                  reportUpload.attachments),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Gaps.hGap20,
+                    ClipButton(
+                      text: '提交',
+                      icon: Icons.file_upload,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        _uploadBloc.add(Upload(
+                            data: reportUpload.copyWith(
+                              //enterId: widget.enterId,
+                              stopReason: _stopReasonController.text,
+                            )));
+                      },
+                    ),
+                  ],
+                ),
+                Gaps.vGap20,
               ],
             ),
           ),
-          Gaps.vGap5,
-          // 没有附件则隐藏GridView
-          Offstage(
-            offstage: reportUpload?.attachments == null ||
-                reportUpload.attachments.length == 0,
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 4,
-              childAspectRatio: 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 5,
-              ),
-              children: List.generate(
-                reportUpload?.attachments == null
-                    ? 0
-                    : reportUpload.attachments.length,
-                (index) {
-                  Asset asset = reportUpload.attachments[index];
-                  return AssetThumb(
-                    asset: asset,
-                    width: 300,
-                    height: 300,
-                  );
-                },
-              ),
-            ),
-          ),
-          Gaps.vGap5,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[
-                ClipButton(
-                  text: '选择图片',
-                  icon: Icons.image,
-                  color: Colors.green,
-                  onTap: () async {
-                    _pageBloc.add(
-                      PageLoad(
-                        model: reportUpload.copyWith(
-                          attachments: await SystemUtils.loadAssets(
-                              reportUpload.attachments),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                Gaps.hGap20,
-                ClipButton(
-                  text: '提交',
-                  icon: Icons.file_upload,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    _uploadBloc.add(Upload(
-                        data: reportUpload.copyWith(
-                      //enterId: widget.enterId,
-                      stopReason: _stopReasonController.text,
-                    )));
-                  },
-                ),
-              ],
-            ),
-          ),
-          Gaps.vGap20,
         ],
       ),
     );

@@ -173,7 +173,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
               ],
             ),
           ),
-          //证明材料
+          // 证明材料
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
@@ -203,7 +203,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
               ],
             ),
           ),
-          //快速链接
+          // 快速链接
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
