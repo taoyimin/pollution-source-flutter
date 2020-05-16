@@ -110,14 +110,14 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '基本信息',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_baseinfo.png',
                 ),
                 Gaps.vGap10,
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
                       content: '监控点名：${reportDetail.monitorName}',
-                      icon: Icons.wifi_tethering,
+                      icon: Icons.linked_camera,
                     ),
                   ],
                 ),
@@ -189,7 +189,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '证明材料',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_attachment.png',
                 ),
                 Gaps.vGap10,
                 reportDetail.attachments.length == 0

@@ -112,7 +112,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '基本信息',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_baseinfo.png',
                 ),
                 Gaps.vGap10,
                 Row(
@@ -164,7 +164,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '证明材料',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_attachment.png',
                 ),
                 Gaps.vGap10,
                 reportDetail.attachments.length == 0
