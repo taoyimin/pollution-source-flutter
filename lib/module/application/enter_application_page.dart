@@ -112,7 +112,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                             ImageTitleWidget(
                                 title: '基础数据查询',
                                 imagePath:
-                                    'assets/images/icon_enter_other_info.png'),
+                                    'assets/images/icon_data_query.png'),
                             //Gaps.vGap10,
                             Row(
                               children: <Widget>[

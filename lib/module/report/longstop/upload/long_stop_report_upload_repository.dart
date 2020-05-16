@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
@@ -32,6 +34,12 @@ class LongStopReportUploadRepository
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
       'remark': data.remark,
+      "file": await Future.wait(data.attachments?.map((asset) async {
+        ByteData byteData = await asset.getByteData();
+        return MultipartFile.fromBytes(byteData.buffer.asUint8List(),
+            filename: asset.name);
+      })?.toList() ??
+          [])
     });
   }
 }

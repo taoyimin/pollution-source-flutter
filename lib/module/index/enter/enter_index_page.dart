@@ -176,7 +176,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
               children: <Widget>[
                 ImageTitleWidget(
                   title: '基本信息',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_baseinfo.png',
                 ),
                 Gaps.vGap10,
                 Row(
@@ -227,7 +227,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                 children: <Widget>[
                   ImageTitleWidget(
                     title: '企业联系人',
-                    imagePath: 'assets/images/icon_enter_contacts.png',
+                    imagePath: 'assets/images/icon_contacts.png',
                   ),
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.enterTel),
@@ -273,11 +273,11 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     InkWellButton5(
                       meta: Meta(
                         color: Color(0xFF45C4FF),
-                        title: '待处理',
-                        content: '${enterDetail.orderDealCount ?? ''}',
+                        title: '未办结',
+                        content: '${enterDetail.orderIncompleteCount ?? ''}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
                         router:
-                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20',
+                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=00',
                       ),
                     ),
                     Gaps.hGap10,
@@ -295,7 +295,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     Gaps.hGap10,
                     InkWellButton5(
                       meta: Meta(
-                        color: Color(0xFF45C4FF),
+                        color: Colors.orange,
                         title: '已办结',
                         content: '${enterDetail.orderCompleteCount ?? ''}',
                         imagePath:

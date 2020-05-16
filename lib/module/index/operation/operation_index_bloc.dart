@@ -155,21 +155,21 @@ Future<List<Meta>> _convertOrderStatistics(dynamic json) async {
   } else {
     return [
       Meta(
-        title: '待处理督办单',
+        title: '未办结',
         imagePath: 'assets/images/button_image2.png',
         backgroundPath: 'assets/images/button_bg_lightblue.png',
-        content: json['forDeal'].toString(),
-        router: '${Routes.orderList}?alarmState=20',
+        content: json['orderIncompleteCount'].toString(),
+        router: '${Routes.orderList}?alarmState=00',
       ),
       Meta(
-        title: '已办结督办单',
+        title: '已办结',
         imagePath: 'assets/images/button_image1.png',
         backgroundPath: 'assets/images/button_bg_green.png',
         content: json['orderCompleteCount'].toString(),
         router: '${Routes.orderList}?alarmState=50',
       ),
       Meta(
-        title: '全部督办单',
+        title: '全部',
         imagePath: 'assets/images/button_image4.png',
         backgroundPath: 'assets/images/button_bg_pink.png',
         content: json['superviseCount'].toString(),

@@ -133,7 +133,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '基本信息',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_baseinfo.png',
                 ),
                 Gaps.vGap10,
                 Row(
@@ -177,7 +177,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
                 children: <Widget>[
                   ImageTitleWidget(
                     title: '企业联系人',
-                    imagePath: 'assets/images/icon_enter_contacts.png',
+                    imagePath: 'assets/images/icon_contacts.png',
                   ),
                   Offstage(
                     offstage: TextUtil.isEmpty(enterDetail.enterTel),

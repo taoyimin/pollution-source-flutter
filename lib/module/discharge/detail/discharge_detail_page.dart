@@ -107,7 +107,7 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '基本信息',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_baseinfo.png',
                 ),
                 Gaps.vGap10,
                 Row(

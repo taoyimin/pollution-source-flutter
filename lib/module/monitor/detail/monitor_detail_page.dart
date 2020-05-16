@@ -141,7 +141,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               children: <Widget>[
                 ImageTitleWidget(
                   title: '基本信息',
-                  imagePath: 'assets/images/icon_enter_baseinfo.png',
+                  imagePath: 'assets/images/icon_baseinfo.png',
                 ),
                 Gaps.vGap10,
                 Row(
