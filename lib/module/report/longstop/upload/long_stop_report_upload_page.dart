@@ -155,7 +155,7 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                     onTap: () async {
                       // 打开企业选择界面并等待结果返回
                       Enter enter = await Application.router
-                          .navigateTo(context, '${Routes.enterList}?type=1');
+                          .navigateTo(context, '${Routes.enterList}?type=1&state=1');
                       if (enter != null) {
                         // 设置已经选中的企业
                         _pageBloc.add(

@@ -186,7 +186,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                     onTap: () async {
                       // 打开排口选择界面并等待结果返回
                       Enter enter = await Application.router
-                          .navigateTo(context, '${Routes.enterList}?type=1');
+                          .navigateTo(context, '${Routes.enterList}?type=1&state=1');
                       if (enter != null) {
                         // 设置已经选中的企业，重置已经选中的排口和监控点
                         // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数

@@ -169,7 +169,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                     onTap: () async {
                       // 打开企业选择界面并等待结果返回
                       Enter enter = await Application.router
-                          .navigateTo(context, '${Routes.enterList}?type=1');
+                          .navigateTo(context, '${Routes.enterList}?type=1&state=1');
                       if (enter != null) {
                         // 设置已经选中的企业，重置已经选中的监控点
                         // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
