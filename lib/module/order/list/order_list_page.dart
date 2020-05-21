@@ -36,6 +36,7 @@ class OrderListPage extends StatefulWidget {
   final String attentionLevel;
   final String enterId;
   final String monitorId;
+  final DateTime startTime;
 
   OrderListPage({
     this.alarmState = '',
@@ -43,6 +44,7 @@ class OrderListPage extends StatefulWidget {
     this.attentionLevel = '',
     this.enterId = '',
     this.monitorId = '',
+    this.startTime,
   });
 
   @override
@@ -144,7 +146,7 @@ class _OrderListPageState extends State<OrderListPage> {
   /// 初始化查询参数
   _initParam() {
     _enterNameController.text = '';
-    _startTime = null;
+    _startTime = widget.startTime;
     _endTime = null;
     _alarmType = '';
     _alarmCause = '';

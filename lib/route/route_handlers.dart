@@ -220,6 +220,7 @@ var orderListHandler = Handler(
   String alarmState = params['alarmState']?.first ?? '';
   String alarmLevel = params['alarmLevel']?.first ?? '';
   String attentionLevel = params['attentionLevel']?.first ?? '';
+  DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
   return BlocProvider<ListBloc>(
     create: (BuildContext context) =>
         ListBloc(listRepository: OrderListRepository()),
@@ -229,6 +230,7 @@ var orderListHandler = Handler(
       alarmState: alarmState,
       alarmLevel: alarmLevel,
       attentionLevel: attentionLevel,
+      startTime: startTime,
     ),
   );
 });
