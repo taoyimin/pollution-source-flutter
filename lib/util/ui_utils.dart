@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/res/gaps.dart';
 
 /// UI工具类
 ///
@@ -26,10 +27,11 @@ class UIUtils {
   static Widget getSelectView(IconData icon, String text, String id) {
     return PopupMenuItem<String>(
       value: id,
-      child: new Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Icon(icon, color: Colors.blue),
+          Gaps.hGap6,
           Text(text),
         ],
       ),

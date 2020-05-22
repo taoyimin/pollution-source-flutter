@@ -21,7 +21,7 @@ class FixedDataTable<T> extends StatefulWidget {
     this.cellBuilder,
     this.fixedColWidth = 76.0,
     this.cellHeight = 50.0,
-    this.cellWidth = 60.0,
+    this.cellWidth = 70.0,
     this.cellMargin = 0.0,
     this.cellSpacing = 0.0,
   });
