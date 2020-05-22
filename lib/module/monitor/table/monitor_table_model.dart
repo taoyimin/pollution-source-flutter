@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
 class MonitorTable extends Equatable {
@@ -34,18 +36,37 @@ class MonitorTable extends Equatable {
         field: header['field'],
       );
     }).toList();
+    // 是否要显示接收时间
+    if (SpUtil.getBool(Constant.spShowReceiveTime, defValue: true)) {
+      fixedRowCells.insert(
+          0,
+          MonitorTableCell(
+            value: '接收时间',
+            field: 'create_date',
+          ));
+    }
     List<MonitorTableCell> fixedColCells =
-        json['times'].map<MonitorTableCell>((time) {
+        json['datas'].map<MonitorTableCell>((row) {
       return MonitorTableCell(
-        value: DateUtil.formatDateMs(time, format: '  yyyy-MM-dd HH:mm:ss'),
+        value: DateUtil.formatDate(DateUtil.getDateTime(row['monitor_time']),
+            format: '  yyyy-MM-dd HH:mm:ss'),
       );
     }).toList();
     List<List<MonitorTableCell>> rowsCells =
         json['datas'].map<List<MonitorTableCell>>((row) {
       return fixedRowCells.map((header) {
         return MonitorTableCell(
-          value: row[header.field] ?? '',
-          alarmFlag: row[header.field.replaceAll(RegExp('factor_data|zs_avg'), 'alarm_flag')],
+          value: () {
+            if ('create_date' == header.field) {
+              return DateUtil.formatDate(
+                  DateUtil.getDateTime(row[header.field]),
+                  format: 'yyyy-MM-dd HH:mm:ss');
+            } else {
+              return row[header.field] ?? '';
+            }
+          }(),
+          alarmFlag: row[header.field
+              .replaceAll(RegExp('factor_data|zs_avg'), 'alarm_flag')],
         );
       }).toList();
     }).toList();

@@ -123,6 +123,9 @@ class Constant {
   /// 设别别名
   static const String spAlias = 'spAlias';
 
+  /// 历史数据列表是否显示接收时间
+  static const String spShowReceiveTime = 'showReceiveTime';
+
   /// 登录接口集合
   static const List<HttpApi> loginApis = [
     HttpApi.adminToken,

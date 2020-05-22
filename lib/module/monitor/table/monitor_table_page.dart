@@ -1,4 +1,5 @@
 import 'package:common_utils/common_utils.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
@@ -11,7 +12,9 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_repository.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/fixed_data_table.dart';
 
 import 'monitor_table_model.dart';
@@ -102,6 +105,33 @@ class _MonitorTableState extends State<MonitorTablePage> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('历史在线数据'),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+              () {
+                if (SpUtil.getBool(Constant.spShowReceiveTime,
+                    defValue: true)) {
+                  return UIUtils.getSelectView(
+                      Icons.timer_off, '隐藏接收时间', 'showReceiveTime');
+                } else {
+                  return UIUtils.getSelectView(
+                      Icons.timer, '显示接收时间', 'showReceiveTime');
+                }
+              }(),
+            ],
+            onSelected: (String action) {
+              switch (action) {
+                case 'showReceiveTime':
+                  SpUtil.putBool(
+                      Constant.spShowReceiveTime,
+                      !SpUtil.getBool(Constant.spShowReceiveTime,
+                          defValue: true));
+                  _loadData();
+                  break;
+              }
+            },
+          ),
+        ],
       ),
       body: Stack(
         key: _stackKey,
