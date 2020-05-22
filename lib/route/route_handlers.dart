@@ -100,7 +100,6 @@ var enterListHandler = Handler(
       params['automaticallyImplyLeading']?.first?.toLowerCase() ??
           'true' == 'true';
   String state = params['state']?.first ?? '';
-  String hasAll = params['hasAll']?.first ?? '0';
   String enterType = params['enterType']?.first ?? '';
   String attentionLevel = params['attentionLevel']?.first ?? '';
   int type = int.parse(params['type']?.first ?? '0');
@@ -110,7 +109,6 @@ var enterListHandler = Handler(
     child: EnterListPage(
       automaticallyImplyLeading: automaticallyImplyLeading,
       state: state,
-      hasAll: hasAll,
       enterType: enterType,
       attentionLevel: attentionLevel,
       type: type,

@@ -228,7 +228,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         color: Color.fromRGBO(77, 167, 248, 1),
         content: strings[1],
-        router: '${Routes.enterList}?hasAll=1',
+        router: '${Routes.enterList}',
       ),
       Meta(
         title: '重点企业',
@@ -402,7 +402,7 @@ Future<List<Meta>> _convertRainEnterStatistics(String string) async {
         color: Color.fromRGBO(77, 167, 248, 1),
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         content: strings[1],
-        router: '${Routes.enterList}?enterType=1&hasAll=1',
+        router: '${Routes.enterList}?enterType=1',
       ),
       Meta(
         title: '在线企业',

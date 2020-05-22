@@ -57,7 +57,7 @@ Future<List<Meta>> _convertPollutionEnterStatistics(dynamic json) async {
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         color: Color.fromRGBO(77, 167, 248, 1),
         content: json['enterCount'].toString(),
-        router: '${Routes.enterList}?hasAll=1',
+        router: '${Routes.enterList}',
       ),
       Meta(
         title: '重点企业',

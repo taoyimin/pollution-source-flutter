@@ -21,7 +21,6 @@ class EnterListRepository extends ListRepository<Enter> {
   /// [state] 1：在线
   /// [enterType] 企业类型 1:雨水企业 2:废水企业 3:废气企业 4:水气企业 5:许可证企业
   /// [attentionLevel] 关注程度 0:非重点 1:重点
-  /// [hasAll] 是否查询真实的全部企业 1:是
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -30,7 +29,6 @@ class EnterListRepository extends ListRepository<Enter> {
     state = '',
     enterType = '',
     attentionLevel = '',
-    hasAll = '',
   }) {
     return {
       'currentPage': currentPage,
@@ -58,8 +56,6 @@ class EnterListRepository extends ListRepository<Enter> {
         }
       }(),
       'attentionLevel': attentionLevel,
-      // 传1查询真实的全部企业，污染源企业统计查询全部企业时会用到该字段，
-      'hasAll': hasAll,
     };
   }
 }
