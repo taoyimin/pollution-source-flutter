@@ -1206,22 +1206,23 @@ class LabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 18,
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
       decoration: BoxDecoration(
         color: this.label.color.withOpacity(0.2),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           TextUtil.isEmpty(this.label.imagePath)
               ? Gaps.empty
               : Image.asset(
                   this.label.imagePath,
-                  width: 10,
-                  height: 10,
+                  width: 12,
+                  height: 12,
                   color: this.label.color,
                 ),
+          Gaps.hGap3,
           Text(
             '${this.label.name}',
             style: TextStyle(color: this.label.color, fontSize: 10),
