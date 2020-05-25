@@ -164,6 +164,9 @@ enum HttpApi {
 
   /// 实时预警单详情
   warnDetail,
+
+  /// 获取区域列表
+  areaList,
 }
 
 class HttpApiPollution {
@@ -227,6 +230,7 @@ class HttpApiPollution {
   static const String mobileLawList = 'Supervise/getEnforcementsById';
   static const String warnList = 'pushMessage/realWarnList';
   static const String warnDetail = 'pushMessage/getRealWarnById?id=';
+  static const String areaList = 'tree/getAreaList';
 }
 
 class HttpApiOperation {

@@ -429,6 +429,8 @@ class CompatUtils {
         return HttpApiPollution.warnList;
       case HttpApi.warnDetail:
         return HttpApiPollution.warnDetail;
+      case HttpApi.areaList:
+        return HttpApiPollution.areaList;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
