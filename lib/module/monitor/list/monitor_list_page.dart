@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:city_pickers/modal/result.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +7,15 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/collection/area/area_repository.dart';
+import 'package:pollution_source/module/common/collection/area/area_widget.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
+import 'package:pollution_source/module/common/collection/collection_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
+import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -69,6 +76,10 @@ class _MonitorListPageState extends State<MonitorListPage> {
 //    DataDict(name: '脱机', code: '7'),
 //    DataDict(name: '异常申报', code: '8'),
 //  ];
+  /// 区域Bloc
+  final CollectionBloc _areaBloc = CollectionBloc(
+    collectionRepository: AreaRepository(),
+  );
 
   /// 监控点类型Bloc
   final DataDictBloc _monitorTypeBloc = DataDictBloc(
@@ -89,6 +100,9 @@ class _MonitorListPageState extends State<MonitorListPage> {
   final DataDictBloc _attentionLevelBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
   );
+
+  /// 区域信息
+  Result _areaResult;
   String _state;
   String _outType;
   String _monitorType;
@@ -96,12 +110,13 @@ class _MonitorListPageState extends State<MonitorListPage> {
   int _currentPage = Constant.defaultCurrentPage;
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
-  String _areaCode = '';
 
   @override
   void initState() {
     super.initState();
     initParam();
+    // 加载区域信息
+    _areaBloc.add(CollectionLoad());
     // 加载监控点类型
     _monitorTypeBloc.add(DataDictLoad());
     // 加载监控点状态
@@ -122,14 +137,25 @@ class _MonitorListPageState extends State<MonitorListPage> {
     _refreshController.dispose();
     _enterNameController.dispose();
     // 取消正在进行的请求
-    final currentState = _listBloc?.state;
-    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
+    if (_areaBloc?.state is CollectionLoading)
+      (_areaBloc?.state as CollectionLoading).cancelToken.cancel();
+    if (_monitorTypeBloc?.state is DataDictLoading)
+      (_monitorTypeBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_stateBloc?.state is DataDictLoading)
+      (_stateBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_outTypeBloc?.state is DataDictLoading)
+      (_outTypeBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_attentionLevelBloc?.state is DataDictLoading)
+      (_attentionLevelBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
   /// 初始化查询参数
   initParam() {
     _enterNameController.text = '';
+    _areaResult = null;
     _monitorType = widget.monitorType;
     _state = widget.state;
     _outType = widget.outType;
@@ -144,7 +170,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
       enterId: widget.enterId,
       dischargeId: widget.dischargeId,
       enterName: _enterNameController.text,
-      areaCode: _areaCode,
+      cityCode: _areaResult?.cityId ?? '',
+      areaCode: _areaResult?.areaId ?? '',
       monitorType: _monitorType,
       state: _state,
       outType: _outType,
@@ -190,7 +217,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
-                buildWhen: (previous, current){
+                buildWhen: (previous, current) {
                   if (current is ListLoading)
                     return false;
                   else
@@ -323,155 +350,172 @@ class _MonitorListPageState extends State<MonitorListPage> {
   }
 
   Widget _buildEndDrawer() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Drawer(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        '企业名称',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Gaps.vGap10,
-                      Container(
-                        height: 36,
-                        child: TextField(
-                          controller: _enterNameController,
-                          style: const TextStyle(fontSize: 13),
-                          decoration: const InputDecoration(
-                            fillColor: Colours.grey_color,
-                            filled: true,
-                            hintText: "请输入企业名称",
-                            hintStyle: TextStyle(
-                              color: Colours.secondary_text,
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Container(
+          width: UIUtils.getDrawerWidth(context, orientation),
+          child: Drawer(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16, 56, 16, 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            '企业名称',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
-                            border: InputBorder.none,
                           ),
-                        ),
-                      ),
-                      Gaps.vGap30,
-                      const Text(
-                        '监控点类型',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      DataDictBlocGrid(
-                        checkValue: _monitorType,
-                        dataDictBloc: _monitorTypeBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _monitorType = value;
-                          });
-                        },
-                      ),
-                      const Text(
-                        '监控点状态',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      DataDictBlocGrid(
-                        addFirst: false,
-                        checkValue: _state,
-                        dataDictBloc: _stateBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _state = value;
-                          });
-                        },
-                      ),
-                      const Text(
-                        '排放类型',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      DataDictBlocGrid(
-                        checkValue: _outType,
-                        dataDictBloc: _outTypeBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _outType = value;
-                          });
-                        },
-                      ),
-                      Offstage(
-                        offstage: !_showAttentionLevel,
-                        child: const Text(
-                          '关注程度',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                          Gaps.vGap10,
+                          Container(
+                            height: UIUtils.getSearchItemHeight(
+                                context, orientation),
+                            child: TextField(
+                              controller: _enterNameController,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: const InputDecoration(
+                                fillColor: Colours.grey_color,
+                                filled: true,
+                                hintText: "请输入企业名称",
+                                hintStyle: TextStyle(
+                                  color: Colours.secondary_text,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
                           ),
-                        ),
+                          Gaps.vGap20,
+                          AreaWidget(
+                            itemHeight: UIUtils.getSearchItemHeight(
+                                context, orientation),
+                            initialResult: _areaResult,
+                            collectionBloc: _areaBloc,
+                            confirmCallBack: (Result result) {
+                              setState(() {
+                                _areaResult = result;
+                              });
+                            },
+                          ),
+                          Gaps.vGap20,
+                          const Text(
+                            '监控点类型',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          DataDictBlocGrid(
+                            checkValue: _monitorType,
+                            dataDictBloc: _monitorTypeBloc,
+                            onItemTap: (value) {
+                              setState(() {
+                                _monitorType = value;
+                              });
+                            },
+                          ),
+                          const Text(
+                            '监控点状态',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          DataDictBlocGrid(
+                            addFirst: false,
+                            checkValue: _state,
+                            dataDictBloc: _stateBloc,
+                            onItemTap: (value) {
+                              setState(() {
+                                _state = value;
+                              });
+                            },
+                          ),
+                          const Text(
+                            '排放类型',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          DataDictBlocGrid(
+                            checkValue: _outType,
+                            dataDictBloc: _outTypeBloc,
+                            onItemTap: (value) {
+                              setState(() {
+                                _outType = value;
+                              });
+                            },
+                          ),
+                          Offstage(
+                            offstage: !_showAttentionLevel,
+                            child: const Text(
+                              '关注程度',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Offstage(
+                            offstage: !_showAttentionLevel,
+                            child: DataDictBlocGrid(
+                              checkValue: _attentionLevel,
+                              dataDictBloc: _attentionLevelBloc,
+                              onItemTap: (value) {
+                                setState(() {
+                                  _attentionLevel = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      Offstage(
-                        offstage: !_showAttentionLevel,
-                        child: DataDictBlocGrid(
-                          checkValue: _attentionLevel,
-                          dataDictBloc: _attentionLevelBloc,
-                          onItemTap: (value) {
-                            setState(() {
-                              _attentionLevel = value;
-                            });
-                          },
-                        ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                  child: Row(
+                    children: <Widget>[
+                      ClipButton(
+                        text: '重置',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.refresh,
+                        color: Colors.orange,
+                        onTap: () {
+                          setState(() {
+                            initParam();
+                          });
+                        },
+                      ),
+                      Gaps.hGap10,
+                      ClipButton(
+                        text: '搜索',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.search,
+                        color: Colors.lightBlue,
+                        onTap: () {
+                          Navigator.pop(context);
+                          _refreshController.callRefresh();
+                        },
                       ),
                     ],
                   ),
-                ),
-              ),
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-              child: Row(
-                children: <Widget>[
-                  ClipButton(
-                    text: '重置',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.refresh,
-                    color: Colors.orange,
-                    onTap: () {
-                      setState(() {
-                        initParam();
-                      });
-                    },
-                  ),
-                  Gaps.hGap10,
-                  ClipButton(
-                    text: '搜索',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.search,
-                    color: Colors.lightBlue,
-                    onTap: () {
-                      Navigator.pop(context);
-                      _refreshController.callRefresh();
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

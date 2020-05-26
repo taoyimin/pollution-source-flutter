@@ -1,15 +1,22 @@
 import 'dart:async';
 
+import 'package:city_pickers/modal/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/collection/area/area_repository.dart';
+import 'package:pollution_source/module/common/collection/area/area_widget.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
+import 'package:pollution_source/module/common/collection/collection_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
+import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -56,6 +63,11 @@ class _EnterListPageState extends State<EnterListPage>
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
 
+  /// 区域Bloc
+  final CollectionBloc _areaBloc = CollectionBloc(
+    collectionRepository: AreaRepository(),
+  );
+
   /// 企业类型菜单
   final List<DataDict> _enterTypeList = [
     DataDict(name: '全部', code: ''),
@@ -78,16 +90,20 @@ class _EnterListPageState extends State<EnterListPage>
   );
   ListBloc _listBloc;
   Completer<void> _refreshCompleter;
+
+  /// 区域信息
+  Result _areaResult;
   String _enterType;
   String _state;
   String _attentionLevel;
   int _currentPage = Constant.defaultCurrentPage;
-  String _areaCode = '';
 
   @override
   void initState() {
     super.initState();
     _initParam();
+    // 加载区域信息
+    _areaBloc.add(CollectionLoad());
     // 加载关注程度
     _attentionLevelBloc.add(DataDictLoad());
     // 初始化列表Bloc
@@ -103,14 +119,19 @@ class _EnterListPageState extends State<EnterListPage>
     _enterNameController.dispose();
     _refreshController.dispose();
     // 取消正在进行的请求
-    final currentState = _listBloc?.state;
-    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
+    if (_areaBloc?.state is CollectionLoading)
+      (_areaBloc?.state as CollectionLoading).cancelToken.cancel();
+    if (_attentionLevelBloc?.state is DataDictLoading)
+      (_attentionLevelBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
   /// 初始化查询参数
   _initParam() {
     _enterNameController.text = '';
+    _areaResult = null;
     _enterType = widget.enterType;
     _state = widget.state;
     _attentionLevel = widget.attentionLevel;
@@ -122,7 +143,8 @@ class _EnterListPageState extends State<EnterListPage>
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
       enterName: _enterNameController.text,
-      areaCode: _areaCode,
+      cityCode: _areaResult?.cityId ?? '',
+      areaCode: _areaResult?.areaId ?? '',
       state: _state,
       enterType: _enterType,
       attentionLevel: _attentionLevel,
@@ -331,132 +353,151 @@ class _EnterListPageState extends State<EnterListPage>
   }
 
   Widget _buildEndDrawer() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Drawer(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        '企业名称',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Gaps.vGap10,
-                      Container(
-                        height: 36,
-                        child: TextField(
-                          controller: _enterNameController,
-                          style: const TextStyle(fontSize: 13),
-                          decoration: const InputDecoration(
-                            fillColor: Colours.grey_color,
-                            filled: true,
-                            hintText: "请输入企业名称",
-                            hintStyle: TextStyle(
-                              color: Colours.secondary_text,
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Container(
+          width: UIUtils.getDrawerWidth(context, orientation),
+          child: Drawer(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            '企业名称',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
-                            border: InputBorder.none,
                           ),
-                        ),
+                          Gaps.vGap10,
+                          Container(
+                            height: UIUtils.getSearchItemHeight(
+                                context, orientation),
+                            child: TextField(
+                              controller: _enterNameController,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: const InputDecoration(
+                                fillColor: Colours.grey_color,
+                                filled: true,
+                                hintText: "请输入企业名称",
+                                hintStyle: TextStyle(
+                                  color: Colours.secondary_text,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          Gaps.vGap20,
+                          AreaWidget(
+                            itemHeight: UIUtils.getSearchItemHeight(
+                                context, orientation),
+                            initialResult: _areaResult,
+                            collectionBloc: _areaBloc,
+                            confirmCallBack: (Result result) {
+                              setState(() {
+                                _areaResult = result;
+                              });
+                            },
+                          ),
+                          Gaps.vGap20,
+                          const Text(
+                            '企业类型',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          DataDictGrid(
+                            checkValue: _enterType,
+                            dataDictList: _enterTypeList,
+                            onItemTap: (value) {
+                              setState(() {
+                                _enterType = value;
+                              });
+                            },
+                          ),
+                          Gaps.vGap10,
+                          const Text(
+                            '是否安装在线',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          DataDictGrid(
+                            checkValue: _state,
+                            dataDictList: _stateList,
+                            onItemTap: (value) {
+                              setState(() {
+                                _state = value;
+                              });
+                            },
+                          ),
+                          Gaps.vGap10,
+                          const Text(
+                            '关注程度',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          DataDictBlocGrid(
+                            checkValue: _attentionLevel,
+                            dataDictBloc: _attentionLevelBloc,
+                            onItemTap: (value) {
+                              setState(() {
+                                _attentionLevel = value;
+                              });
+                            },
+                          ),
+                        ],
                       ),
-                      Gaps.vGap30,
-                      const Text(
-                        '企业类型',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      DataDictGrid(
-                        checkValue: _enterType,
-                        dataDictList: _enterTypeList,
-                        onItemTap: (value) {
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                  child: Row(
+                    children: <Widget>[
+                      ClipButton(
+                        text: '重置',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.refresh,
+                        color: Colors.orange,
+                        onTap: () {
                           setState(() {
-                            _enterType = value;
+                            _initParam();
                           });
                         },
                       ),
-                      const Text(
-                        '是否安装在线',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      DataDictGrid(
-                        checkValue: _state,
-                        dataDictList: _stateList,
-                        onItemTap: (value) {
-                          setState(() {
-                            _state = value;
-                          });
-                        },
-                      ),
-                      const Text(
-                        '关注程度',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      DataDictBlocGrid(
-                        checkValue: _attentionLevel,
-                        dataDictBloc: _attentionLevelBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _attentionLevel = value;
-                          });
+                      Gaps.hGap10,
+                      ClipButton(
+                        text: '搜索',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.search,
+                        color: Colors.lightBlue,
+                        onTap: () {
+                          Navigator.pop(context);
+                          _refreshController.callRefresh();
                         },
                       ),
                     ],
                   ),
-                ),
-              ),
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-              child: Row(
-                children: <Widget>[
-                  ClipButton(
-                    text: '重置',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.refresh,
-                    color: Colors.orange,
-                    onTap: () {
-                      setState(() {
-                        _initParam();
-                      });
-                    },
-                  ),
-                  Gaps.hGap10,
-                  ClipButton(
-                    text: '搜索',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.search,
-                    color: Colors.lightBlue,
-                    onTap: () {
-                      Navigator.pop(context);
-                      _refreshController.callRefresh();
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -715,7 +756,7 @@ class _EnterListPageState extends State<EnterListPage>
                       ),
                       Gaps.vGap10,
                       Container(
-                        height: 36,
+                        height: UIUtils.getSearchItemHeight(context, orientation),,
                         child: TextField(
                           controller: _enterNameController,
                           style: const TextStyle(fontSize: 13),

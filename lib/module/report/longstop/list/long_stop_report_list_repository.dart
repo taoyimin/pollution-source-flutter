@@ -17,7 +17,8 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
   /// 生成请求所需的参数
   ///
   /// [enterName] 按企业名称搜索
-  /// [areaCode] 按区域搜索
+  /// [cityCode] 按城市搜索
+  /// [areaCode] 按县区搜索
   /// [enterId] 筛选某企业的所有长期停产申报单
   /// [state] 状态 0：待审核 1：审核通过 2：审核不通过（目前只要上报成功就默认审核通过，暂时不用该参数）
   /// [valid] 是否生效 0：生效中 1：已失效
@@ -26,6 +27,7 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
+    cityCode = '',
     areaCode = '',
     enterId = '',
     state = '',
@@ -38,6 +40,7 @@ class LongStopReportListRepository extends ListRepository<LongStopReport> {
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
       'enterName': enterName,
+      'cityCode': cityCode,
       'areaCode': areaCode,
       'enterId': enterId,
       'dataType': 'L',

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:city_pickers/modal/result.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,16 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/collection/area/area_repository.dart';
+import 'package:pollution_source/module/common/collection/area/area_widget.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
+import 'package:pollution_source/module/common/collection/collection_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
+import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
@@ -56,6 +63,11 @@ class _OrderListPageState extends State<OrderListPage> {
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
 
+  /// 区域Bloc
+  final CollectionBloc _areaBloc = CollectionBloc(
+    collectionRepository: AreaRepository(),
+  );
+
   /// 报警单状态Bloc
   final DataDictBloc _alarmStateBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.orderState),
@@ -80,6 +92,9 @@ class _OrderListPageState extends State<OrderListPage> {
   final DataDictBloc _alarmLevelBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.orderAlarmLevel),
   );
+
+  /// 区域信息
+  Result _areaResult;
 
   /// 报警单状态
   String _alarmState;
@@ -109,7 +124,6 @@ class _OrderListPageState extends State<OrderListPage> {
   ListBloc _listBloc;
 
   Completer<void> _refreshCompleter;
-  String _areaCode = '';
 
   @override
   void initState() {
@@ -117,6 +131,8 @@ class _OrderListPageState extends State<OrderListPage> {
     _initParam();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
+    // 加载区域信息
+    _areaBloc.add(CollectionLoad());
     // 加载报警管理单状态
     _alarmStateBloc.add(DataDictLoad());
     // 加载关注程度
@@ -138,14 +154,27 @@ class _OrderListPageState extends State<OrderListPage> {
     _enterNameController.dispose();
     _refreshController.dispose();
     // 取消正在进行的请求
-    final currentState = _listBloc?.state;
-    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
+    if (_areaBloc?.state is CollectionLoading)
+      (_areaBloc?.state as CollectionLoading).cancelToken.cancel();
+    if (_alarmStateBloc?.state is DataDictLoading)
+      (_alarmStateBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_attentionLevelBloc?.state is DataDictLoading)
+      (_attentionLevelBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_alarmTypeBloc?.state is DataDictLoading)
+      (_alarmTypeBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_alarmCauseBloc?.state is DataDictLoading)
+      (_alarmCauseBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_alarmLevelBloc?.state is DataDictLoading)
+      (_alarmLevelBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
   /// 初始化查询参数
   _initParam() {
     _enterNameController.text = '';
+    _areaResult = null;
     _startTime = widget.startTime;
     _endTime = null;
     _alarmType = '';
@@ -163,7 +192,8 @@ class _OrderListPageState extends State<OrderListPage> {
       enterId: widget.enterId,
       monitorId: widget.monitorId,
       enterName: _enterNameController.text,
-      areaCode: _areaCode,
+      cityCode: _areaResult?.cityId ?? '',
+      areaCode: _areaResult?.areaId ?? '',
       alarmState: _alarmState,
       alarmLevel: _alarmLevel,
       alarmType: _alarmType,
@@ -211,7 +241,7 @@ class _OrderListPageState extends State<OrderListPage> {
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
-                buildWhen: (previous, current){
+                buildWhen: (previous, current) {
                   if (current is ListLoading)
                     return false;
                   else
@@ -372,291 +402,304 @@ class _OrderListPageState extends State<OrderListPage> {
   }
 
   Widget _buildEndDrawer() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Drawer(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 46, 16, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        '企业名称',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Gaps.vGap10,
-                      Container(
-                        height: 36,
-                        child: TextField(
-                          controller: _enterNameController,
-                          style: const TextStyle(fontSize: 13),
-                          decoration: const InputDecoration(
-                            fillColor: Colours.grey_color,
-                            filled: true,
-                            hintText: "请输入企业名称",
-                            hintStyle: TextStyle(
-                              color: Colours.secondary_text,
-                            ),
-                            border: InputBorder.none,
+    return OrientationBuilder(builder: (context, orientation){
+      return Container(
+        width: UIUtils.getDrawerWidth(context, orientation),
+        child: Drawer(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 46, 16, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          '企业名称',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      Gaps.vGap20,
-                      const Text(
-                        '报警单状态',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                        Gaps.vGap10,
+                        Container(
+                          height: UIUtils.getSearchItemHeight(context, orientation),
+                          child: TextField(
+                            controller: _enterNameController,
+                            style: const TextStyle(fontSize: 13),
+                            decoration: const InputDecoration(
+                              fillColor: Colours.grey_color,
+                              filled: true,
+                              hintText: "请输入企业名称",
+                              hintStyle: TextStyle(
+                                color: Colours.secondary_text,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
                         ),
-                      ),
-                      DataDictBlocGrid(
-                        defaultDataDict: DataDict(name: '未办结', code: '00'),
-                        checkValue: _alarmState,
-                        dataDictBloc: _alarmStateBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _alarmState = value;
-                          });
-                        },
-                      ),
-                      Gaps.vGap10,
-                      const Text(
-                        '报警时间',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                        Gaps.vGap20,
+                        AreaWidget(
+                          itemHeight: UIUtils.getSearchItemHeight(context, orientation),
+                          initialResult: _areaResult,
+                          collectionBloc: _areaBloc,
+                          confirmCallBack: (Result result){
+                            setState(() {
+                              _areaResult = result;
+                            });
+                          },
                         ),
-                      ),
-                      Gaps.vGap10,
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                DatePicker.showDatePicker(
-                                  context,
-                                  dateFormat: 'yyyy年-MM月-dd日',
-                                  initialDateTime: _startTime,
-                                  maxDateTime: _endTime ??
-                                      DateTime.now().add(Duration(days: -1)),
-                                  locale: DateTimePickerLocale.zh_cn,
-                                  onClose: () {},
-                                  onConfirm: (dateTime, selectedIndex) {
-                                    setState(() {
-                                      _startTime = dateTime;
-                                    });
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: _startTime != null
-                                        ? Colours.primary_color
-                                        : Colours.divider_color,
-                                  ),
-                                  color: _startTime != null
-                                      ? Colours.primary_color.withOpacity(0.3)
-                                      : Colours.divider_color,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    DateUtil.getDateStrByDateTime(_startTime,
-                                            format:
-                                                DateFormat.ZH_YEAR_MONTH_DAY) ??
-                                        '开始时间',
-                                    style: TextStyle(
-                                      fontSize: 12,
+                        Gaps.vGap20,
+                        const Text(
+                          '报警时间',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gaps.vGap10,
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  DatePicker.showDatePicker(
+                                    context,
+                                    dateFormat: 'yyyy年-MM月-dd日',
+                                    initialDateTime: _startTime,
+                                    maxDateTime: _endTime ??
+                                        DateTime.now().add(Duration(days: -1)),
+                                    locale: DateTimePickerLocale.zh_cn,
+                                    onClose: () {},
+                                    onConfirm: (dateTime, selectedIndex) {
+                                      setState(() {
+                                        _startTime = dateTime;
+                                      });
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: UIUtils.getSearchItemHeight(context, orientation),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 0.5,
                                       color: _startTime != null
                                           ? Colours.primary_color
-                                          : Colours.secondary_text,
+                                          : Colours.divider_color,
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 40,
-                            child: const Center(
-                              child: Text(
-                                '至',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colours.secondary_text,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                DatePicker.showDatePicker(
-                                  context,
-                                  dateFormat: 'yyyy年-MM月-dd日',
-                                  initialDateTime: _endTime,
-                                  minDateTime: _startTime,
-                                  maxDateTime:
-                                      DateTime.now().add(Duration(days: -1)),
-                                  locale: DateTimePickerLocale.zh_cn,
-                                  onClose: () {},
-                                  onConfirm: (dateTime, selectedIndex) {
-                                    setState(() {
-                                      _endTime = dateTime;
-                                    });
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: _endTime != null
-                                        ? Colours.primary_color
+                                    color: _startTime != null
+                                        ? Colours.primary_color.withOpacity(0.3)
                                         : Colours.divider_color,
                                   ),
-                                  color: _endTime != null
-                                      ? Colours.primary_color.withOpacity(0.3)
-                                      : Colours.divider_color,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    DateUtil.getDateStrByDateTime(_endTime,
-                                            format:
-                                                DateFormat.ZH_YEAR_MONTH_DAY) ??
-                                        '结束时间',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: _endTime != null
-                                          ? Colours.primary_color
-                                          : Colours.secondary_text,
+                                  child: Center(
+                                    child: Text(
+                                      DateUtil.getDateStrByDateTime(_startTime,
+                                          format:
+                                          DateFormat.ZH_YEAR_MONTH_DAY) ??
+                                          '开始时间',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: _startTime != null
+                                            ? Colours.primary_color
+                                            : Colours.secondary_text,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+                            Container(
+                              width: 40,
+                              child: const Center(
+                                child: Text(
+                                  '至',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colours.secondary_text,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  DatePicker.showDatePicker(
+                                    context,
+                                    dateFormat: 'yyyy年-MM月-dd日',
+                                    initialDateTime: _endTime,
+                                    minDateTime: _startTime,
+                                    maxDateTime:
+                                    DateTime.now().add(Duration(days: -1)),
+                                    locale: DateTimePickerLocale.zh_cn,
+                                    onClose: () {},
+                                    onConfirm: (dateTime, selectedIndex) {
+                                      setState(() {
+                                        _endTime = dateTime;
+                                      });
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: UIUtils.getSearchItemHeight(context, orientation),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 0.5,
+                                      color: _endTime != null
+                                          ? Colours.primary_color
+                                          : Colours.divider_color,
+                                    ),
+                                    color: _endTime != null
+                                        ? Colours.primary_color.withOpacity(0.3)
+                                        : Colours.divider_color,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      DateUtil.getDateStrByDateTime(_endTime,
+                                          format:
+                                          DateFormat.ZH_YEAR_MONTH_DAY) ??
+                                          '结束时间',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: _endTime != null
+                                            ? Colours.primary_color
+                                            : Colours.secondary_text,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gaps.vGap20,
+                        const Text(
+                          '报警单状态',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
-                      Gaps.vGap20,
-                      const Text(
-                        '报警类型',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      DataDictBlocGrid(
-                        checkValue: _alarmType,
-                        dataDictBloc: _alarmTypeBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _alarmType = value;
-                          });
-                        },
-                      ),
-                      Gaps.vGap10,
-                      const Text(
-                        '报警原因',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                        DataDictBlocGrid(
+                          defaultDataDict: DataDict(name: '未办结', code: '00'),
+                          checkValue: _alarmState,
+                          dataDictBloc: _alarmStateBloc,
+                          onItemTap: (value) {
+                            setState(() {
+                              _alarmState = value;
+                            });
+                          },
                         ),
-                      ),
-                      DataDictBlocGrid(
-                        checkValue: _alarmCause,
-                        dataDictBloc: _alarmCauseBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _alarmCause = value;
-                          });
-                        },
-                      ),
-                      Gaps.vGap10,
-                      const Text(
-                        '报警级别',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                        Gaps.vGap10,
+                        const Text(
+                          '报警类型',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      DataDictBlocGrid(
-                        checkValue: _alarmLevel,
-                        dataDictBloc: _alarmLevelBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _alarmLevel = value;
-                          });
-                        },
-                      ),
-                      Gaps.vGap10,
-                      const Text(
-                        '关注程度',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                        DataDictBlocGrid(
+                          checkValue: _alarmType,
+                          dataDictBloc: _alarmTypeBloc,
+                          onItemTap: (value) {
+                            setState(() {
+                              _alarmType = value;
+                            });
+                          },
                         ),
-                      ),
-                      DataDictBlocGrid(
-                        checkValue: _attentionLevel,
-                        dataDictBloc: _attentionLevelBloc,
-                        onItemTap: (value) {
-                          setState(() {
-                            _attentionLevel = value;
-                          });
-                        },
-                      ),
-                    ],
+                        Gaps.vGap10,
+                        const Text(
+                          '报警原因',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictBlocGrid(
+                          checkValue: _alarmCause,
+                          dataDictBloc: _alarmCauseBloc,
+                          onItemTap: (value) {
+                            setState(() {
+                              _alarmCause = value;
+                            });
+                          },
+                        ),
+                        Gaps.vGap10,
+                        const Text(
+                          '报警级别',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictBlocGrid(
+                          checkValue: _alarmLevel,
+                          dataDictBloc: _alarmLevelBloc,
+                          onItemTap: (value) {
+                            setState(() {
+                              _alarmLevel = value;
+                            });
+                          },
+                        ),
+                        Gaps.vGap10,
+                        const Text(
+                          '关注程度',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        DataDictBlocGrid(
+                          checkValue: _attentionLevel,
+                          dataDictBloc: _attentionLevelBloc,
+                          onItemTap: (value) {
+                            setState(() {
+                              _attentionLevel = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-              child: Row(
-                children: <Widget>[
-                  ClipButton(
-                    text: '重置',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.refresh,
-                    color: Colors.orange,
-                    onTap: () {
-                      setState(() {
-                        _initParam();
-                      });
-                    },
-                  ),
-                  Gaps.hGap10,
-                  ClipButton(
-                    text: '搜索',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.search,
-                    color: Colors.lightBlue,
-                    onTap: () {
-                      Navigator.pop(context);
-                      _refreshController.callRefresh();
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                child: Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '重置',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.refresh,
+                      color: Colors.orange,
+                      onTap: () {
+                        setState(() {
+                          _initParam();
+                        });
+                      },
+                    ),
+                    Gaps.hGap10,
+                    ClipButton(
+                      text: '搜索',
+                      height: 40,
+                      fontSize: 13,
+                      icon: Icons.search,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        Navigator.pop(context);
+                        _refreshController.callRefresh();
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -17,7 +17,8 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
   /// 生成请求所需的参数
   ///
   /// [enterName] 按企业名称搜索
-  /// [areaCode] 按区域搜索
+  /// [cityCode] 按城市搜索
+  /// [areaCode] 按县区搜索
   /// [enterId] 筛选某企业的所有因子异常申报单
   /// [dischargeId] 筛选某排口的所有因子异常申报单
   /// [monitorId] 筛选某监控点的所有因子异常申报单
@@ -28,6 +29,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
+    cityCode = '',
     areaCode = '',
     enterId = '',
     dischargeId = '',
@@ -43,6 +45,7 @@ class FactorReportListRepository extends ListRepository<FactorReport> {
       'length': pageSize,
       'enterName': enterName,
       'enterpriseName': enterName,
+      'cityCode': cityCode,
       'areaCode': areaCode,
       'enterId': enterId,
       'dischargeId': dischargeId,

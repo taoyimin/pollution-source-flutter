@@ -17,7 +17,8 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
   /// 生成请求所需的参数
   ///
   /// [enterName] 按企业名称搜索
-  /// [areaCode] 按区域搜索
+  /// [cityCode] 按城市搜索
+  /// [areaCode] 按县区搜索
   /// [enterId] 筛选某企业的排口异常申报
   /// [dischargeId] 筛选某排口的排口异常申报
   /// [monitorId] 筛选某监控点的排口异常申报
@@ -28,6 +29,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
+    cityCode = '',
     areaCode = '',
     enterId = '',
     dischargeId = '',
@@ -43,6 +45,7 @@ class DischargeReportListRepository extends ListRepository<DischargeReport> {
       'length': pageSize,
       'enterName': enterName,
       'enterpriseName': enterName,
+      'cityCode': cityCode,
       'areaCode': areaCode,
       'enterId': enterId,
       'dischargeId': dischargeId,

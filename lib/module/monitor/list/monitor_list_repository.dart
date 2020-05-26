@@ -17,7 +17,8 @@ class MonitorListRepository extends ListRepository<Monitor> {
   /// 生成请求所需的参数
   ///
   /// [enterName] 按企业名称搜索
-  /// [areaCode] 按区域搜索
+  /// [cityCode] 按城市搜索
+  /// [areaCode] 按县区搜索
   /// [enterId] 筛选某企业的所有监控点
   /// [dischargeId] 筛选某排口的所有监控点
   /// [monitorType] 监控点类型 outletType1：雨水 outletType2：废水 outletType3：废气
@@ -28,6 +29,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
+    cityCode = '',
     areaCode = '',
     enterId = '',
     dischargeId = '',
@@ -43,6 +45,7 @@ class MonitorListRepository extends ListRepository<Monitor> {
       'length': pageSize,
       'enterpriseName': enterName,
       'enterName': enterName,
+      'cityCode': cityCode,
       'areaCode': areaCode,
       'enterId': enterId,
       'outId': dischargeId,

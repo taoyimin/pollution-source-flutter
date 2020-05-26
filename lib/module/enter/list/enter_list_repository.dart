@@ -17,7 +17,8 @@ class EnterListRepository extends ListRepository<Enter> {
   /// 生成请求所需的参数
   ///
   /// [enterName] 按企业名称搜索
-  /// [areaCode] 按区域搜索
+  /// [cityCode] 按城市搜索
+  /// [areaCode] 按县区搜索
   /// [state] 1：在线
   /// [enterType] 企业类型 1:雨水企业 2:废水企业 3:废气企业 4:水气企业 5:许可证企业
   /// [attentionLevel] 关注程度 0:非重点 1:重点
@@ -25,6 +26,7 @@ class EnterListRepository extends ListRepository<Enter> {
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
     enterName = '',
+    cityCode = '',
     areaCode = '',
     state = '',
     enterType = '',
@@ -37,6 +39,7 @@ class EnterListRepository extends ListRepository<Enter> {
       'length': pageSize,
       'enterpriseName': enterName,
       'enterName': enterName,
+      'cityCode': cityCode,
       'areaCode': areaCode,
       'state': state == '1' ? 'online' : '',
       'enterpriseType': () {

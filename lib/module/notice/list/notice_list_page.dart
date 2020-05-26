@@ -116,7 +116,7 @@ class _NoticeListPageState extends State<NoticeListPage> {
                   _refreshCompleter?.complete();
                   _refreshCompleter = Completer();
                 },
-                buildWhen: (previous, current){
+                buildWhen: (previous, current) {
                   if (current is ListLoading)
                     return false;
                   else
@@ -229,178 +229,187 @@ class _NoticeListPageState extends State<NoticeListPage> {
   }
 
   Widget _buildEndDrawer() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Drawer(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 46, 16, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        '推送时间',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Gaps.vGap10,
-                      Row(
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Container(
+          width: UIUtils.getDrawerWidth(context, orientation),
+          child: Drawer(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 46, 16, 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                DatePicker.showDatePicker(
-                                  context,
-                                  dateFormat: 'yyyy年-MM月-dd日',
-                                  initialDateTime: _startTime,
-                                  maxDateTime: _endTime ?? DateTime.now(),
-                                  locale: DateTimePickerLocale.zh_cn,
-                                  onClose: () {},
-                                  onConfirm: (dateTime, selectedIndex) {
-                                    setState(() {
-                                      _startTime = dateTime;
-                                    });
+                          const Text(
+                            '推送时间',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Gaps.vGap10,
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    DatePicker.showDatePicker(
+                                      context,
+                                      dateFormat: 'yyyy年-MM月-dd日',
+                                      initialDateTime: _startTime,
+                                      maxDateTime: _endTime ?? DateTime.now(),
+                                      locale: DateTimePickerLocale.zh_cn,
+                                      onClose: () {},
+                                      onConfirm: (dateTime, selectedIndex) {
+                                        setState(() {
+                                          _startTime = dateTime;
+                                        });
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                              child: Container(
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: _startTime != null
-                                        ? Colours.primary_color
-                                        : Colours.divider_color,
-                                  ),
-                                  color: _startTime != null
-                                      ? Colours.primary_color.withOpacity(0.3)
-                                      : Colours.divider_color,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    DateUtil.getDateStrByDateTime(_startTime,
-                                            format:
-                                                DateFormat.ZH_YEAR_MONTH_DAY) ??
-                                        '开始时间',
-                                    style: TextStyle(
-                                      fontSize: 12,
+                                  child: Container(
+                                    height: UIUtils.getSearchItemHeight(
+                                        context, orientation),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 0.5,
+                                        color: _startTime != null
+                                            ? Colours.primary_color
+                                            : Colours.divider_color,
+                                      ),
                                       color: _startTime != null
                                           ? Colours.primary_color
-                                          : Colours.secondary_text,
+                                              .withOpacity(0.3)
+                                          : Colours.divider_color,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        DateUtil.getDateStrByDateTime(
+                                                _startTime,
+                                                format: DateFormat
+                                                    .ZH_YEAR_MONTH_DAY) ??
+                                            '开始时间',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: _startTime != null
+                                              ? Colours.primary_color
+                                              : Colours.secondary_text,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Container(
-                            width: 40,
-                            child: const Center(
-                              child: Text(
-                                '至',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colours.secondary_text,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                DatePicker.showDatePicker(
-                                  context,
-                                  dateFormat: 'yyyy年-MM月-dd日',
-                                  initialDateTime: _endTime,
-                                  minDateTime: _startTime,
-                                  maxDateTime: DateTime.now(),
-                                  locale: DateTimePickerLocale.zh_cn,
-                                  onClose: () {},
-                                  onConfirm: (dateTime, selectedIndex) {
-                                    setState(() {
-                                      _endTime = dateTime;
-                                    });
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: _endTime != null
-                                        ? Colours.primary_color
-                                        : Colours.divider_color,
-                                  ),
-                                  color: _endTime != null
-                                      ? Colours.primary_color.withOpacity(0.3)
-                                      : Colours.divider_color,
-                                ),
-                                child: Center(
+                              Container(
+                                width: 40,
+                                child: const Center(
                                   child: Text(
-                                    DateUtil.getDateStrByDateTime(_endTime,
-                                            format:
-                                                DateFormat.ZH_YEAR_MONTH_DAY) ??
-                                        '结束时间',
+                                    '至',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: _endTime != null
-                                          ? Colours.primary_color
-                                          : Colours.secondary_text,
+                                      color: Colours.secondary_text,
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    DatePicker.showDatePicker(
+                                      context,
+                                      dateFormat: 'yyyy年-MM月-dd日',
+                                      initialDateTime: _endTime,
+                                      minDateTime: _startTime,
+                                      maxDateTime: DateTime.now(),
+                                      locale: DateTimePickerLocale.zh_cn,
+                                      onClose: () {},
+                                      onConfirm: (dateTime, selectedIndex) {
+                                        setState(() {
+                                          _endTime = dateTime;
+                                        });
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    height: UIUtils.getSearchItemHeight(
+                                        context, orientation),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 0.5,
+                                        color: _endTime != null
+                                            ? Colours.primary_color
+                                            : Colours.divider_color,
+                                      ),
+                                      color: _endTime != null
+                                          ? Colours.primary_color
+                                              .withOpacity(0.3)
+                                          : Colours.divider_color,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        DateUtil.getDateStrByDateTime(_endTime,
+                                                format: DateFormat
+                                                    .ZH_YEAR_MONTH_DAY) ??
+                                            '结束时间',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: _endTime != null
+                                              ? Colours.primary_color
+                                              : Colours.secondary_text,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                  child: Row(
+                    children: <Widget>[
+                      ClipButton(
+                        text: '重置',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.refresh,
+                        color: Colors.orange,
+                        onTap: () {
+                          setState(() {
+                            _initParam();
+                          });
+                        },
+                      ),
+                      Gaps.hGap10,
+                      ClipButton(
+                        text: '搜索',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.search,
+                        color: Colors.lightBlue,
+                        onTap: () {
+                          Navigator.pop(context);
+                          _refreshController.callRefresh();
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-              child: Row(
-                children: <Widget>[
-                  ClipButton(
-                    text: '重置',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.refresh,
-                    color: Colors.orange,
-                    onTap: () {
-                      setState(() {
-                        _initParam();
-                      });
-                    },
-                  ),
-                  Gaps.hGap10,
-                  ClipButton(
-                    text: '搜索',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.search,
-                    color: Colors.lightBlue,
-                    onTap: () {
-                      Navigator.pop(context);
-                      _refreshController.callRefresh();
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

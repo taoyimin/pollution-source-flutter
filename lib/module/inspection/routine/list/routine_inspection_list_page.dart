@@ -279,100 +279,105 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
   }
 
   Widget _buildEndDrawer() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Drawer(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        '企业名称',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Gaps.vGap10,
-                      Container(
-                        height: 36,
-                        child: TextField(
-                          controller: _enterNameController,
-                          style: const TextStyle(fontSize: 13),
-                          decoration: const InputDecoration(
-                            fillColor: Colours.grey_color,
-                            filled: true,
-                            hintText: "请输入企业名称",
-                            hintStyle: TextStyle(
-                              color: Colours.secondary_text,
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Container(
+          width: UIUtils.getDrawerWidth(context, orientation),
+          child: Drawer(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 56, 16, 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            '企业名称',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
-                            border: InputBorder.none,
                           ),
-                        ),
+                          Gaps.vGap10,
+                          Container(
+                            height: UIUtils.getSearchItemHeight(
+                                context, orientation),
+                            child: TextField(
+                              controller: _enterNameController,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: const InputDecoration(
+                                fillColor: Colours.grey_color,
+                                filled: true,
+                                hintText: "请输入企业名称",
+                                hintStyle: TextStyle(
+                                  color: Colours.secondary_text,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          Gaps.vGap30,
+                          const Text(
+                            '巡检状态',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          DataDictGrid(
+                            checkValue: _state,
+                            dataDictList: _stateList,
+                            onItemTap: (value) {
+                              setState(() {
+                                _state = value;
+                              });
+                            },
+                          ),
+                        ],
                       ),
-                      Gaps.vGap30,
-                      const Text(
-                        '巡检状态',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      DataDictGrid(
-                        checkValue: _state,
-                        dataDictList: _stateList,
-                        onItemTap: (value) {
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16, 20, 16, 20),
+                  child: Row(
+                    children: <Widget>[
+                      ClipButton(
+                        text: '重置',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.refresh,
+                        color: Colors.orange,
+                        onTap: () {
                           setState(() {
-                            _state = value;
+                            initParam();
                           });
+                        },
+                      ),
+                      Gaps.hGap10,
+                      ClipButton(
+                        text: '搜索',
+                        height: 40,
+                        fontSize: 13,
+                        icon: Icons.search,
+                        color: Colors.lightBlue,
+                        onTap: () {
+                          Navigator.pop(context);
+                          _refreshController.callRefresh();
                         },
                       ),
                     ],
                   ),
-                ),
-              ),
+                )
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, 20, 16, 20),
-              child: Row(
-                children: <Widget>[
-                  ClipButton(
-                    text: '重置',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.refresh,
-                    color: Colors.orange,
-                    onTap: () {
-                      setState(() {
-                        initParam();
-                      });
-                    },
-                  ),
-                  Gaps.hGap10,
-                  ClipButton(
-                    text: '搜索',
-                    height: 40,
-                    fontSize: 13,
-                    icon: Icons.search,
-                    color: Colors.lightBlue,
-                    onTap: () {
-                      Navigator.pop(context);
-                      _refreshController.callRefresh();
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
