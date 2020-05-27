@@ -8,6 +8,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:open_file/open_file.dart';
 import 'package:pollution_source/http/dio_utils.dart';
@@ -2512,14 +2513,14 @@ class MonitorStatisticsWidget extends StatelessWidget {
                 TitleWidget(title: '$title'),
                 InkWellButtonGrid(
                   metaList: state.collection.map(
-                        (monitorStatistics) {
+                    (monitorStatistics) {
                       return Meta(
                         title: monitorStatistics.name,
                         content: '${monitorStatistics.count}',
                         color: monitorStatistics.color,
                         imagePath: monitorStatistics.imagePath,
                         router:
-                        '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
+                            '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
                       );
                     },
                   ).toList(),
@@ -2567,10 +2568,9 @@ class MonitorStatisticsCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             onReloadTap: onReloadTap,
           );
-        }else if(state is CollectionEmpty){
+        } else if (state is CollectionEmpty) {
           return Gaps.empty;
-        }
-        else if (state is CollectionLoaded) {
+        } else if (state is CollectionLoaded) {
           return Column(
             children: <Widget>[
               ImageTitleWidget(
@@ -2587,14 +2587,14 @@ class MonitorStatisticsCard extends StatelessWidget {
                 ),
                 child: InkWellButtonGrid(
                   metaList: state.collection.map(
-                        (monitorStatistics) {
+                    (monitorStatistics) {
                       return Meta(
                         title: monitorStatistics.name,
                         content: '${monitorStatistics.count}',
                         color: monitorStatistics.color,
                         imagePath: monitorStatistics.imagePath,
                         router:
-                        '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
+                            '${Routes.monitorList}?enterId=${state.params['enterId']}&state=${monitorStatistics.code}&outType=${state.params['outType']}&attentionLevel=${state.params['attenLevel']}',
                       );
                     },
                   ).toList(),
@@ -2663,5 +2663,190 @@ class CacheTextState extends State<CacheTextWidget> {
   @override
   Widget build(BuildContext context) {
     return Text('$cacheSize\n是否确定清理缓存？');
+  }
+}
+
+/// 企业名称搜索控件
+class EnterNameWidget extends StatelessWidget {
+  final double height;
+  final TextEditingController controller;
+
+  EnterNameWidget({this.height, this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text(
+          '企业名称',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Gaps.vGap10,
+        Container(
+          height: height,
+          child: TextField(
+            controller: controller,
+            style: const TextStyle(fontSize: 12),
+            decoration: const InputDecoration(
+              fillColor: Colours.grey_color,
+              filled: true,
+              hintText: "请输入企业名称",
+              hintStyle: TextStyle(
+                color: Colours.secondary_text,
+              ),
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+        Gaps.vGap20,
+      ],
+    );
+  }
+}
+
+typedef DateValueCallback(DateTime dateTime, List<int> selectedIndex);
+
+class DateTimeWidget extends StatelessWidget {
+  final String title;
+  final double height;
+  final DateTime startTime;
+  final DateTime endTime;
+  final DateTime maxStartTime;
+  final DateTime maxEndTime;
+  final DateValueCallback onStartTimeConfirm;
+  final DateValueCallback onEndTimeConfirm;
+
+  DateTimeWidget({
+    this.title,
+    this.height,
+    this.startTime,
+    this.endTime,
+    this.maxStartTime,
+    this.maxEndTime,
+    this.onStartTimeConfirm,
+    this.onEndTimeConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          '$title',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Gaps.vGap10,
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  DatePicker.showDatePicker(
+                    context,
+                    dateFormat: 'yyyy年-MM月-dd日',
+                    initialDateTime: startTime,
+                    maxDateTime: maxStartTime ?? endTime ?? DateTime.now(),
+                    locale: DateTimePickerLocale.zh_cn,
+                    onClose: () {},
+                    onConfirm: onStartTimeConfirm,
+                  );
+                },
+                child: Container(
+                  height: height,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.5,
+                      color: startTime != null
+                          ? Colours.primary_color
+                          : Colours.divider_color,
+                    ),
+                    color: startTime != null
+                        ? Colours.primary_color.withOpacity(0.3)
+                        : Colours.divider_color,
+                  ),
+                  child: Center(
+                    child: Text(
+                      DateUtil.getDateStrByDateTime(startTime,
+                              format: DateFormat.ZH_YEAR_MONTH_DAY) ??
+                          '开始时间',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: startTime != null
+                            ? Colours.primary_color
+                            : Colours.secondary_text,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: 40,
+              child: const Center(
+                child: Text(
+                  '至',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colours.secondary_text,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  DatePicker.showDatePicker(
+                    context,
+                    dateFormat: 'yyyy年-MM月-dd日',
+                    initialDateTime: endTime,
+                    minDateTime: startTime,
+                    maxDateTime: maxEndTime ?? DateTime.now(),
+                    locale: DateTimePickerLocale.zh_cn,
+                    onClose: () {},
+                    onConfirm: onEndTimeConfirm,
+                  );
+                },
+                child: Container(
+                  height: height,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.5,
+                      color: endTime != null
+                          ? Colours.primary_color
+                          : Colours.divider_color,
+                    ),
+                    color: endTime != null
+                        ? Colours.primary_color.withOpacity(0.3)
+                        : Colours.divider_color,
+                  ),
+                  child: Center(
+                    child: Text(
+                      DateUtil.getDateStrByDateTime(endTime,
+                              format: DateFormat.ZH_YEAR_MONTH_DAY) ??
+                          '结束时间',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: endTime != null
+                            ? Colours.primary_color
+                            : Colours.secondary_text,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Gaps.vGap20,
+      ],
+    );
   }
 }
