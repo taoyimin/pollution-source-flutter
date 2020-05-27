@@ -379,7 +379,6 @@ class _DischargeListPageState extends State<DischargeListPage> {
                               });
                             },
                           ),
-                          Gaps.vGap20,
                           const Text(
                             '排口类型',
                             style: TextStyle(

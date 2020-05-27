@@ -382,7 +382,6 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
                               });
                             },
                           ),
-                          Gaps.vGap20,
                           const Text(
                             '是否生效',
                             style: TextStyle(

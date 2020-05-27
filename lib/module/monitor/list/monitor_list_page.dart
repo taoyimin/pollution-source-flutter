@@ -403,7 +403,6 @@ class _MonitorListPageState extends State<MonitorListPage> {
                               });
                             },
                           ),
-                          Gaps.vGap20,
                           const Text(
                             '监控点类型',
                             style: TextStyle(

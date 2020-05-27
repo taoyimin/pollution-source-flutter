@@ -44,7 +44,7 @@ class AreaWidget extends StatelessWidget {
       builder: (context, state) {
         if (state is CollectionLoaded) {
           return Offstage(
-            // 既不是省用户也不是市用户
+            // 非环保用户或既不是省用户也不是市用户则隐藏
             offstage: SpUtil.getInt(Constant.spUserType) != 0 || state.collection[0].level != '0' &&
                 state.collection[0].level != '1',
             child: Column(
@@ -154,6 +154,7 @@ class AreaWidget extends StatelessWidget {
                     ),
                   ],
                 ),
+                Gaps.vGap20,
               ],
             ),
           );

@@ -406,7 +406,6 @@ class _EnterListPageState extends State<EnterListPage>
                               });
                             },
                           ),
-                          Gaps.vGap20,
                           const Text(
                             '企业类型',
                             style: TextStyle(

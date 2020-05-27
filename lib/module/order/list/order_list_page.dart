@@ -452,7 +452,6 @@ class _OrderListPageState extends State<OrderListPage> {
                             });
                           },
                         ),
-                        Gaps.vGap20,
                         const Text(
                           '报警时间',
                           style: TextStyle(

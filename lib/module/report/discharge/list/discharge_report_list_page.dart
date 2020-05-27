@@ -379,7 +379,6 @@ class _DischargeReportListPageState extends State<DischargeReportListPage> {
                               });
                             },
                           ),
-                          Gaps.vGap20,
                           const Text(
                             '是否生效',
                             style: TextStyle(

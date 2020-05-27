@@ -355,7 +355,6 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
                               });
                             },
                           ),
-                          Gaps.vGap20,
                           const Text(
                             '是否生效',
                             style: TextStyle(
