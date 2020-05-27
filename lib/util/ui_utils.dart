@@ -184,4 +184,21 @@ class UIUtils {
             color: Colors.grey);
     }
   }
+
+  /// 获取侧滑抽屉宽度
+  static double getDrawerWidth(BuildContext context, Orientation orientation) {
+    if (orientation == Orientation.portrait) {
+      return MediaQuery.of(context).size.width * 0.75;
+    } else if (orientation == Orientation.landscape) {
+      return MediaQuery.of(context).size.width * 0.45;
+    } else {
+      return MediaQuery.of(context).size.width * 0.75;
+    }
+  }
+
+  /// 获取搜索抽屉界面item的高度
+  static double getSearchItemHeight(
+      BuildContext context, Orientation orientation) {
+    return (getDrawerWidth(context, orientation) - 16 - 32) / 6;
+  }
 }
