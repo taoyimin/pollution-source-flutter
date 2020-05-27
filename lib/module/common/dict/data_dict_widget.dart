@@ -12,14 +12,14 @@ import 'package:pollution_source/util/ui_utils.dart';
 
 import 'data_dict_model.dart';
 
-/// 数据字典选择控件
+/// 数据字典弹出菜单控件
 ///
 /// 通过传入[title]和[content]设置标题和内容，标题居左，内容居右，根据[DataDictBloc]
 /// 处于不同的状态以及[content]是否为null或空字符串来判断当前是否有选项被选中，[content]
 /// 的点击事件和文字与样式也会有所不同。[tipText]为提示文字，当[DataDictBloc]处于未初始
 /// 化状态时，点击[content]将弹出[SnackBarAction]提示用户。通过传入[onSelected]函数，
 /// 可以在外部监听选中的选项，控件高度默认46
-class DataDictWidget extends StatelessWidget {
+class DataDictPopupMenuWidget extends StatelessWidget {
   final String title;
   final String content;
   final String tipText;
@@ -27,7 +27,7 @@ class DataDictWidget extends StatelessWidget {
   final PopupMenuItemSelected<DataDict> onSelected;
   final double height;
 
-  DataDictWidget({
+  DataDictPopupMenuWidget({
     Key key,
     @required this.title,
     @required this.content,
@@ -184,7 +184,7 @@ class DataDictWidget extends StatelessWidget {
 /// [DataDictGrid] item点击的回调函数
 typedef DataDictGridItemTap = void Function(String value);
 
-/// 网格布局的数据字典
+/// 网格布局的数据字典控件
 class DataDictGrid extends StatelessWidget {
   final List<DataDict> dataDictList;
   final String checkValue;
@@ -246,7 +246,44 @@ class DataDictGrid extends StatelessWidget {
   }
 }
 
-/// 网格布局的数据字典（通过Bloc获取数据字典的内容）
+/// 带标题的网格布局数据字典控件
+class DataDictGridWidget extends StatelessWidget {
+  final String title;
+  final List<DataDict> dataDictList;
+  final String checkValue;
+  final DataDictGridItemTap onItemTap;
+
+  DataDictGridWidget({
+    @required this.title,
+    @required this.dataDictList,
+    @required this.checkValue,
+    this.onItemTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          '$title',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        DataDictGrid(
+          checkValue: checkValue,
+          dataDictList: dataDictList,
+          onItemTap: onItemTap,
+        ),
+        Gaps.vGap10,
+      ],
+    );
+  }
+}
+
+/// 网格布局的数据字典控件（通过Bloc获取数据字典的内容）
 class DataDictBlocGrid extends StatelessWidget {
   final DataDictBloc dataDictBloc;
   final String checkValue;
@@ -348,6 +385,52 @@ class DataDictBlocGrid extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+/// 带标题的网格布局数据字典控件（通过Bloc获取数据字典的内容）
+class DataDictBlocGridWidget extends StatelessWidget {
+  final String title;
+  final DataDictBloc dataDictBloc;
+  final String checkValue;
+  final DataDictGridItemTap onItemTap;
+  final bool addFirst;
+  final DataDict defaultDataDict;
+
+  DataDictBlocGridWidget({
+    Key key,
+    @required this.title,
+    @required this.dataDictBloc,
+    this.checkValue,
+    this.onItemTap,
+    this.addFirst = true,
+    this.defaultDataDict,
+  })  : assert(dataDictBloc != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          '$title',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        DataDictBlocGrid(
+          key: key,
+          checkValue: checkValue,
+          dataDictBloc: dataDictBloc,
+          onItemTap: onItemTap,
+          addFirst: addFirst,
+          defaultDataDict: defaultDataDict,
+        ),
+        Gaps.vGap10,
+      ],
     );
   }
 }
