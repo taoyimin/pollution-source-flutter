@@ -61,6 +61,9 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
   /// 运维用户隐藏关注程度相关布局
   final bool _showAttentionLevel = SpUtil.getInt(Constant.spUserType) != 2;
 
+  /// 环保用户显示选择区域相关布局
+  final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
     collectionRepository: AreaRepository(),
@@ -89,7 +92,7 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
     super.initState();
     initParam();
     // 加载区域信息
-    _areaBloc.add(CollectionLoad());
+    if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载是否生效
     _validBloc.add(DataDictLoad());
     // 加载关注程度
@@ -371,16 +374,19 @@ class _FactorReportListPageState extends State<FactorReportListPage> {
                             ),
                           ),
                           Gaps.vGap20,
-                          AreaWidget(
-                            itemHeight: UIUtils.getSearchItemHeight(
-                                context, orientation),
-                            initialResult: _areaResult,
-                            collectionBloc: _areaBloc,
-                            confirmCallBack: (Result result) {
-                              setState(() {
-                                _areaResult = result;
-                              });
-                            },
+                          Offstage(
+                            offstage: !_showArea,
+                            child: AreaWidget(
+                              itemHeight: UIUtils.getSearchItemHeight(
+                                  context, orientation),
+                              initialResult: _areaResult,
+                              collectionBloc: _areaBloc,
+                              confirmCallBack: (Result result) {
+                                setState(() {
+                                  _areaResult = result;
+                                });
+                              },
+                            ),
                           ),
                           const Text(
                             '是否生效',

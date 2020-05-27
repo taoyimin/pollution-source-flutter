@@ -65,17 +65,9 @@ class _MonitorListPageState extends State<MonitorListPage> {
   /// 运维用户隐藏关注程度相关布局
   final bool _showAttentionLevel = SpUtil.getInt(Constant.spUserType) != 2;
 
-//  final List<DataDict> _stateList = [
-//    DataDict(name: '全部', code: ''),
-//    DataDict(name: '在线', code: '1'),
-//    DataDict(name: '预警', code: '2'),
-//    DataDict(name: '超标', code: '3'),
-//    DataDict(name: '负值', code: '4'),
-//    DataDict(name: '超大值', code: '5'),
-//    DataDict(name: '零值', code: '6'),
-//    DataDict(name: '脱机', code: '7'),
-//    DataDict(name: '异常申报', code: '8'),
-//  ];
+  /// 环保用户显示选择区域相关布局
+  final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
     collectionRepository: AreaRepository(),
@@ -116,7 +108,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
     super.initState();
     initParam();
     // 加载区域信息
-    _areaBloc.add(CollectionLoad());
+    if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载监控点类型
     _monitorTypeBloc.add(DataDictLoad());
     // 加载监控点状态
@@ -392,16 +384,19 @@ class _MonitorListPageState extends State<MonitorListPage> {
                             ),
                           ),
                           Gaps.vGap20,
-                          AreaWidget(
-                            itemHeight: UIUtils.getSearchItemHeight(
-                                context, orientation),
-                            initialResult: _areaResult,
-                            collectionBloc: _areaBloc,
-                            confirmCallBack: (Result result) {
-                              setState(() {
-                                _areaResult = result;
-                              });
-                            },
+                          Offstage(
+                            offstage: !_showArea,
+                            child: AreaWidget(
+                              itemHeight: UIUtils.getSearchItemHeight(
+                                  context, orientation),
+                              initialResult: _areaResult,
+                              collectionBloc: _areaBloc,
+                              confirmCallBack: (Result result) {
+                                setState(() {
+                                  _areaResult = result;
+                                });
+                              },
+                            ),
                           ),
                           const Text(
                             '监控点类型',

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:city_pickers/modal/result.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -63,6 +64,9 @@ class _EnterListPageState extends State<EnterListPage>
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
 
+  /// 环保用户显示选择区域相关布局
+  final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
     collectionRepository: AreaRepository(),
@@ -103,12 +107,12 @@ class _EnterListPageState extends State<EnterListPage>
     super.initState();
     _initParam();
     // 加载区域信息
-    _areaBloc.add(CollectionLoad());
+    if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载关注程度
     _attentionLevelBloc.add(DataDictLoad());
+    _refreshCompleter = Completer<void>();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
-    _refreshCompleter = Completer<void>();
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -395,16 +399,19 @@ class _EnterListPageState extends State<EnterListPage>
                             ),
                           ),
                           Gaps.vGap20,
-                          AreaWidget(
-                            itemHeight: UIUtils.getSearchItemHeight(
-                                context, orientation),
-                            initialResult: _areaResult,
-                            collectionBloc: _areaBloc,
-                            confirmCallBack: (Result result) {
-                              setState(() {
-                                _areaResult = result;
-                              });
-                            },
+                          Offstage(
+                            offstage: !_showArea,
+                            child: AreaWidget(
+                              itemHeight: UIUtils.getSearchItemHeight(
+                                  context, orientation),
+                              initialResult: _areaResult,
+                              collectionBloc: _areaBloc,
+                              confirmCallBack: (Result result) {
+                                setState(() {
+                                  _areaResult = result;
+                                });
+                              },
+                            ),
                           ),
                           const Text(
                             '企业类型',

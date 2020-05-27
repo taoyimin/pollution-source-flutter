@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:city_pickers/modal/result.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -55,6 +56,9 @@ class _DischargeListPageState extends State<DischargeListPage> {
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
 
+  /// 环保用户显示选择区域相关布局
+  final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
     collectionRepository: AreaRepository(),
@@ -83,7 +87,7 @@ class _DischargeListPageState extends State<DischargeListPage> {
     super.initState();
     initParam();
     // 加载区域信息
-    _areaBloc.add(CollectionLoad());
+    if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载排口类型
     _dischargeTypeBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
@@ -368,16 +372,19 @@ class _DischargeListPageState extends State<DischargeListPage> {
                             ),
                           ),
                           Gaps.vGap20,
-                          AreaWidget(
-                            itemHeight: UIUtils.getSearchItemHeight(
-                                context, orientation),
-                            initialResult: _areaResult,
-                            collectionBloc: _areaBloc,
-                            confirmCallBack: (Result result) {
-                              setState(() {
-                                _areaResult = result;
-                              });
-                            },
+                          Offstage(
+                            offstage: !_showArea,
+                            child: AreaWidget(
+                              itemHeight: UIUtils.getSearchItemHeight(
+                                  context, orientation),
+                              initialResult: _areaResult,
+                              collectionBloc: _areaBloc,
+                              confirmCallBack: (Result result) {
+                                setState(() {
+                                  _areaResult = result;
+                                });
+                              },
+                            ),
                           ),
                           const Text(
                             '排口类型',

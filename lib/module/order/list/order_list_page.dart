@@ -63,6 +63,9 @@ class _OrderListPageState extends State<OrderListPage> {
   final EasyRefreshController _refreshController = EasyRefreshController();
   final TextEditingController _enterNameController = TextEditingController();
 
+  /// 环保用户显示选择区域相关布局
+  final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
     collectionRepository: AreaRepository(),
@@ -129,10 +132,8 @@ class _OrderListPageState extends State<OrderListPage> {
   void initState() {
     super.initState();
     _initParam();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 加载区域信息
-    _areaBloc.add(CollectionLoad());
+    if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载报警管理单状态
     _alarmStateBloc.add(DataDictLoad());
     // 加载关注程度
@@ -144,6 +145,8 @@ class _OrderListPageState extends State<OrderListPage> {
     // 加载报警级别
     _alarmLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
+    // 初始化列表Bloc
+    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -402,7 +405,7 @@ class _OrderListPageState extends State<OrderListPage> {
   }
 
   Widget _buildEndDrawer() {
-    return OrientationBuilder(builder: (context, orientation){
+    return OrientationBuilder(builder: (context, orientation) {
       return Container(
         width: UIUtils.getDrawerWidth(context, orientation),
         child: Drawer(
@@ -426,7 +429,8 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                         Gaps.vGap10,
                         Container(
-                          height: UIUtils.getSearchItemHeight(context, orientation),
+                          height:
+                              UIUtils.getSearchItemHeight(context, orientation),
                           child: TextField(
                             controller: _enterNameController,
                             style: const TextStyle(fontSize: 13),
@@ -442,15 +446,19 @@ class _OrderListPageState extends State<OrderListPage> {
                           ),
                         ),
                         Gaps.vGap20,
-                        AreaWidget(
-                          itemHeight: UIUtils.getSearchItemHeight(context, orientation),
-                          initialResult: _areaResult,
-                          collectionBloc: _areaBloc,
-                          confirmCallBack: (Result result){
-                            setState(() {
-                              _areaResult = result;
-                            });
-                          },
+                        Offstage(
+                          offstage: !_showArea,
+                          child: AreaWidget(
+                            itemHeight: UIUtils.getSearchItemHeight(
+                                context, orientation),
+                            initialResult: _areaResult,
+                            collectionBloc: _areaBloc,
+                            confirmCallBack: (Result result) {
+                              setState(() {
+                                _areaResult = result;
+                              });
+                            },
+                          ),
                         ),
                         const Text(
                           '报警时间',
@@ -481,7 +489,8 @@ class _OrderListPageState extends State<OrderListPage> {
                                   );
                                 },
                                 child: Container(
-                                  height: UIUtils.getSearchItemHeight(context, orientation),
+                                  height: UIUtils.getSearchItemHeight(
+                                      context, orientation),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 0.5,
@@ -496,8 +505,8 @@ class _OrderListPageState extends State<OrderListPage> {
                                   child: Center(
                                     child: Text(
                                       DateUtil.getDateStrByDateTime(_startTime,
-                                          format:
-                                          DateFormat.ZH_YEAR_MONTH_DAY) ??
+                                              format: DateFormat
+                                                  .ZH_YEAR_MONTH_DAY) ??
                                           '开始时间',
                                       style: TextStyle(
                                         fontSize: 12,
@@ -531,7 +540,7 @@ class _OrderListPageState extends State<OrderListPage> {
                                     initialDateTime: _endTime,
                                     minDateTime: _startTime,
                                     maxDateTime:
-                                    DateTime.now().add(Duration(days: -1)),
+                                        DateTime.now().add(Duration(days: -1)),
                                     locale: DateTimePickerLocale.zh_cn,
                                     onClose: () {},
                                     onConfirm: (dateTime, selectedIndex) {
@@ -542,7 +551,8 @@ class _OrderListPageState extends State<OrderListPage> {
                                   );
                                 },
                                 child: Container(
-                                  height: UIUtils.getSearchItemHeight(context, orientation),
+                                  height: UIUtils.getSearchItemHeight(
+                                      context, orientation),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 0.5,
@@ -557,8 +567,8 @@ class _OrderListPageState extends State<OrderListPage> {
                                   child: Center(
                                     child: Text(
                                       DateUtil.getDateStrByDateTime(_endTime,
-                                          format:
-                                          DateFormat.ZH_YEAR_MONTH_DAY) ??
+                                              format: DateFormat
+                                                  .ZH_YEAR_MONTH_DAY) ??
                                           '结束时间',
                                       style: TextStyle(
                                         fontSize: 12,

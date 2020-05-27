@@ -1,11 +1,9 @@
 import 'package:city_pickers/city_pickers.dart';
 import 'package:city_pickers/modal/result.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/common/collection/collection_bloc.dart';
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 
 import '../../common_widget.dart';
@@ -44,8 +42,8 @@ class AreaWidget extends StatelessWidget {
       builder: (context, state) {
         if (state is CollectionLoaded) {
           return Offstage(
-            // 非环保用户或既不是省用户也不是市用户则隐藏
-            offstage: SpUtil.getInt(Constant.spUserType) != 0 || state.collection[0].level != '0' &&
+            // 非省厅用户或地市用户则隐藏
+            offstage: state.collection[0].level != '0' &&
                 state.collection[0].level != '1',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
