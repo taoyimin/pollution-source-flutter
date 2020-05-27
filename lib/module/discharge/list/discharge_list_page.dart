@@ -346,32 +346,11 @@ class _DischargeListPageState extends State<DischargeListPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text(
-                            '企业名称',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Gaps.vGap10,
-                          Container(
+                          EnterNameWidget(
                             height: UIUtils.getSearchItemHeight(
                                 context, orientation),
-                            child: TextField(
-                              controller: _enterNameController,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: const InputDecoration(
-                                fillColor: Colours.grey_color,
-                                filled: true,
-                                hintText: "请输入企业名称",
-                                hintStyle: TextStyle(
-                                  color: Colours.secondary_text,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
+                            controller: _enterNameController,
                           ),
-                          Gaps.vGap20,
                           Offstage(
                             offstage: !_showArea,
                             child: AreaWidget(
@@ -386,14 +365,8 @@ class _DischargeListPageState extends State<DischargeListPage> {
                               },
                             ),
                           ),
-                          const Text(
-                            '排口类型',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictBlocGrid(
+                          DataDictBlocGridWidget(
+                            title: '排口类型',
                             checkValue: _dischargeType,
                             dataDictBloc: _dischargeTypeBloc,
                             onItemTap: (value) {

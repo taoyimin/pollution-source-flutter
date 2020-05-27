@@ -222,7 +222,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
-                DataDictWidget(
+                DataDictPopupMenuWidget(
                   title: '异常类型',
                   content: reportUpload?.stopType?.name,
                   dataDictBloc: _stopTypeBloc,

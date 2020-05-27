@@ -358,32 +358,11 @@ class _MonitorListPageState extends State<MonitorListPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text(
-                            '企业名称',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Gaps.vGap10,
-                          Container(
+                          EnterNameWidget(
                             height: UIUtils.getSearchItemHeight(
                                 context, orientation),
-                            child: TextField(
-                              controller: _enterNameController,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: const InputDecoration(
-                                fillColor: Colours.grey_color,
-                                filled: true,
-                                hintText: "请输入企业名称",
-                                hintStyle: TextStyle(
-                                  color: Colours.secondary_text,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
+                            controller: _enterNameController,
                           ),
-                          Gaps.vGap20,
                           Offstage(
                             offstage: !_showArea,
                             child: AreaWidget(
@@ -398,14 +377,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
                               },
                             ),
                           ),
-                          const Text(
-                            '监控点类型',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictBlocGrid(
+                          DataDictBlocGridWidget(
+                            title: '监控点类型',
                             checkValue: _monitorType,
                             dataDictBloc: _monitorTypeBloc,
                             onItemTap: (value) {
@@ -414,14 +387,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
                               });
                             },
                           ),
-                          const Text(
-                            '监控点状态',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictBlocGrid(
+                          DataDictBlocGridWidget(
+                            title: '监控点状态',
                             addFirst: false,
                             checkValue: _state,
                             dataDictBloc: _stateBloc,
@@ -431,14 +398,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
                               });
                             },
                           ),
-                          const Text(
-                            '排放类型',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictBlocGrid(
+                          DataDictBlocGridWidget(
+                            title: '排放类型',
                             checkValue: _outType,
                             dataDictBloc: _outTypeBloc,
                             onItemTap: (value) {
@@ -449,17 +410,8 @@ class _MonitorListPageState extends State<MonitorListPage> {
                           ),
                           Offstage(
                             offstage: !_showAttentionLevel,
-                            child: const Text(
-                              '关注程度',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Offstage(
-                            offstage: !_showAttentionLevel,
-                            child: DataDictBlocGrid(
+                            child: DataDictBlocGridWidget(
+                              title: '关注程度',
                               checkValue: _attentionLevel,
                               dataDictBloc: _attentionLevelBloc,
                               onItemTap: (value) {

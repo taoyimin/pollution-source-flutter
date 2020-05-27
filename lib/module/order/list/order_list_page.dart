@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:city_pickers/modal/result.dart';
-import 'package:common_utils/common_utils.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
@@ -420,32 +418,11 @@ class _OrderListPageState extends State<OrderListPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text(
-                          '企业名称',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        EnterNameWidget(
+                          height: UIUtils.getSearchItemHeight(
+                              context, orientation),
+                          controller: _enterNameController,
                         ),
-                        Gaps.vGap10,
-                        Container(
-                          height:
-                              UIUtils.getSearchItemHeight(context, orientation),
-                          child: TextField(
-                            controller: _enterNameController,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: const InputDecoration(
-                              fillColor: Colours.grey_color,
-                              filled: true,
-                              hintText: "请输入企业名称",
-                              hintStyle: TextStyle(
-                                color: Colours.secondary_text,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        Gaps.vGap20,
                         Offstage(
                           offstage: !_showArea,
                           child: AreaWidget(
@@ -460,138 +437,27 @@ class _OrderListPageState extends State<OrderListPage> {
                             },
                           ),
                         ),
-                        const Text(
-                          '报警时间',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        DateTimeWidget(
+                          title: '报警时间',
+                          height: UIUtils.getSearchItemHeight(context, orientation),
+                          startTime: _startTime,
+                          endTime: _endTime,
+                          maxStartTime: _endTime ??
+                              DateTime.now().add(Duration(days: -1)),
+                          maxEndTime: DateTime.now().add(Duration(days: -1)),
+                          onStartTimeConfirm: (dateTime, selectedIndex) {
+                            setState(() {
+                              _startTime = dateTime;
+                            });
+                          },
+                          onEndTimeConfirm: (dateTime, selectedIndex) {
+                            setState(() {
+                              _endTime = dateTime;
+                            });
+                          },
                         ),
-                        Gaps.vGap10,
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  DatePicker.showDatePicker(
-                                    context,
-                                    dateFormat: 'yyyy年-MM月-dd日',
-                                    initialDateTime: _startTime,
-                                    maxDateTime: _endTime ??
-                                        DateTime.now().add(Duration(days: -1)),
-                                    locale: DateTimePickerLocale.zh_cn,
-                                    onClose: () {},
-                                    onConfirm: (dateTime, selectedIndex) {
-                                      setState(() {
-                                        _startTime = dateTime;
-                                      });
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  height: UIUtils.getSearchItemHeight(
-                                      context, orientation),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: _startTime != null
-                                          ? Colours.primary_color
-                                          : Colours.divider_color,
-                                    ),
-                                    color: _startTime != null
-                                        ? Colours.primary_color.withOpacity(0.3)
-                                        : Colours.divider_color,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      DateUtil.getDateStrByDateTime(_startTime,
-                                              format: DateFormat
-                                                  .ZH_YEAR_MONTH_DAY) ??
-                                          '开始时间',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: _startTime != null
-                                            ? Colours.primary_color
-                                            : Colours.secondary_text,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              child: const Center(
-                                child: Text(
-                                  '至',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colours.secondary_text,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  DatePicker.showDatePicker(
-                                    context,
-                                    dateFormat: 'yyyy年-MM月-dd日',
-                                    initialDateTime: _endTime,
-                                    minDateTime: _startTime,
-                                    maxDateTime:
-                                        DateTime.now().add(Duration(days: -1)),
-                                    locale: DateTimePickerLocale.zh_cn,
-                                    onClose: () {},
-                                    onConfirm: (dateTime, selectedIndex) {
-                                      setState(() {
-                                        _endTime = dateTime;
-                                      });
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  height: UIUtils.getSearchItemHeight(
-                                      context, orientation),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: _endTime != null
-                                          ? Colours.primary_color
-                                          : Colours.divider_color,
-                                    ),
-                                    color: _endTime != null
-                                        ? Colours.primary_color.withOpacity(0.3)
-                                        : Colours.divider_color,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      DateUtil.getDateStrByDateTime(_endTime,
-                                              format: DateFormat
-                                                  .ZH_YEAR_MONTH_DAY) ??
-                                          '结束时间',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: _endTime != null
-                                            ? Colours.primary_color
-                                            : Colours.secondary_text,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Gaps.vGap20,
-                        const Text(
-                          '报警单状态',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictBlocGrid(
+                        DataDictBlocGridWidget(
+                          title: '报警单状态',
                           defaultDataDict: DataDict(name: '未办结', code: '00'),
                           checkValue: _alarmState,
                           dataDictBloc: _alarmStateBloc,
@@ -601,15 +467,8 @@ class _OrderListPageState extends State<OrderListPage> {
                             });
                           },
                         ),
-                        Gaps.vGap10,
-                        const Text(
-                          '报警类型',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictBlocGrid(
+                        DataDictBlocGridWidget(
+                          title: '报警类型',
                           checkValue: _alarmType,
                           dataDictBloc: _alarmTypeBloc,
                           onItemTap: (value) {
@@ -618,15 +477,8 @@ class _OrderListPageState extends State<OrderListPage> {
                             });
                           },
                         ),
-                        Gaps.vGap10,
-                        const Text(
-                          '报警原因',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictBlocGrid(
+                        DataDictBlocGridWidget(
+                          title: '报警原因',
                           checkValue: _alarmCause,
                           dataDictBloc: _alarmCauseBloc,
                           onItemTap: (value) {
@@ -635,15 +487,8 @@ class _OrderListPageState extends State<OrderListPage> {
                             });
                           },
                         ),
-                        Gaps.vGap10,
-                        const Text(
-                          '报警级别',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictBlocGrid(
+                        DataDictBlocGridWidget(
+                          title: '报警级别',
                           checkValue: _alarmLevel,
                           dataDictBloc: _alarmLevelBloc,
                           onItemTap: (value) {
@@ -652,15 +497,8 @@ class _OrderListPageState extends State<OrderListPage> {
                             });
                           },
                         ),
-                        Gaps.vGap10,
-                        const Text(
-                          '关注程度',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        DataDictBlocGrid(
+                        DataDictBlocGridWidget(
+                          title: '关注程度',
                           checkValue: _attentionLevel,
                           dataDictBloc: _attentionLevelBloc,
                           onItemTap: (value) {

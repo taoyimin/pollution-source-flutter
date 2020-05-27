@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
@@ -245,129 +243,21 @@ class _NoticeListPageState extends State<NoticeListPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text(
-                            '推送时间',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Gaps.vGap10,
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    DatePicker.showDatePicker(
-                                      context,
-                                      dateFormat: 'yyyy年-MM月-dd日',
-                                      initialDateTime: _startTime,
-                                      maxDateTime: _endTime ?? DateTime.now(),
-                                      locale: DateTimePickerLocale.zh_cn,
-                                      onClose: () {},
-                                      onConfirm: (dateTime, selectedIndex) {
-                                        setState(() {
-                                          _startTime = dateTime;
-                                        });
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    height: UIUtils.getSearchItemHeight(
-                                        context, orientation),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 0.5,
-                                        color: _startTime != null
-                                            ? Colours.primary_color
-                                            : Colours.divider_color,
-                                      ),
-                                      color: _startTime != null
-                                          ? Colours.primary_color
-                                              .withOpacity(0.3)
-                                          : Colours.divider_color,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        DateUtil.getDateStrByDateTime(
-                                                _startTime,
-                                                format: DateFormat
-                                                    .ZH_YEAR_MONTH_DAY) ??
-                                            '开始时间',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: _startTime != null
-                                              ? Colours.primary_color
-                                              : Colours.secondary_text,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 40,
-                                child: const Center(
-                                  child: Text(
-                                    '至',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colours.secondary_text,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    DatePicker.showDatePicker(
-                                      context,
-                                      dateFormat: 'yyyy年-MM月-dd日',
-                                      initialDateTime: _endTime,
-                                      minDateTime: _startTime,
-                                      maxDateTime: DateTime.now(),
-                                      locale: DateTimePickerLocale.zh_cn,
-                                      onClose: () {},
-                                      onConfirm: (dateTime, selectedIndex) {
-                                        setState(() {
-                                          _endTime = dateTime;
-                                        });
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    height: UIUtils.getSearchItemHeight(
-                                        context, orientation),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 0.5,
-                                        color: _endTime != null
-                                            ? Colours.primary_color
-                                            : Colours.divider_color,
-                                      ),
-                                      color: _endTime != null
-                                          ? Colours.primary_color
-                                              .withOpacity(0.3)
-                                          : Colours.divider_color,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        DateUtil.getDateStrByDateTime(_endTime,
-                                                format: DateFormat
-                                                    .ZH_YEAR_MONTH_DAY) ??
-                                            '结束时间',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: _endTime != null
-                                              ? Colours.primary_color
-                                              : Colours.secondary_text,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          DateTimeWidget(
+                            title: '推送时间',
+                            height: UIUtils.getSearchItemHeight(context, orientation),
+                            startTime: _startTime,
+                            endTime: _endTime,
+                            onStartTimeConfirm: (dateTime, selectedIndex) {
+                              setState(() {
+                                _startTime = dateTime;
+                              });
+                            },
+                            onEndTimeConfirm: (dateTime, selectedIndex) {
+                              setState(() {
+                                _endTime = dateTime;
+                              });
+                            },
                           ),
                         ],
                       ),

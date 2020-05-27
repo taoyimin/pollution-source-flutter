@@ -373,32 +373,11 @@ class _EnterListPageState extends State<EnterListPage>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text(
-                            '企业名称',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Gaps.vGap10,
-                          Container(
+                          EnterNameWidget(
                             height: UIUtils.getSearchItemHeight(
                                 context, orientation),
-                            child: TextField(
-                              controller: _enterNameController,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: const InputDecoration(
-                                fillColor: Colours.grey_color,
-                                filled: true,
-                                hintText: "请输入企业名称",
-                                hintStyle: TextStyle(
-                                  color: Colours.secondary_text,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
+                            controller: _enterNameController,
                           ),
-                          Gaps.vGap20,
                           Offstage(
                             offstage: !_showArea,
                             child: AreaWidget(
@@ -413,14 +392,8 @@ class _EnterListPageState extends State<EnterListPage>
                               },
                             ),
                           ),
-                          const Text(
-                            '企业类型',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictGrid(
+                          DataDictGridWidget(
+                            title: '企业类型',
                             checkValue: _enterType,
                             dataDictList: _enterTypeList,
                             onItemTap: (value) {
@@ -429,15 +402,8 @@ class _EnterListPageState extends State<EnterListPage>
                               });
                             },
                           ),
-                          Gaps.vGap10,
-                          const Text(
-                            '是否安装在线',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictGrid(
+                          DataDictGridWidget(
+                            title: '是否安装在线',
                             checkValue: _state,
                             dataDictList: _stateList,
                             onItemTap: (value) {
@@ -446,15 +412,8 @@ class _EnterListPageState extends State<EnterListPage>
                               });
                             },
                           ),
-                          Gaps.vGap10,
-                          const Text(
-                            '关注程度',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictBlocGrid(
+                          DataDictBlocGridWidget(
+                            title: '关注程度',
                             checkValue: _attentionLevel,
                             dataDictBloc: _attentionLevelBloc,
                             onItemTap: (value) {

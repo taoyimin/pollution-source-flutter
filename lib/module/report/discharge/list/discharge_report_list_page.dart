@@ -345,32 +345,11 @@ class _DischargeReportListPageState extends State<DischargeReportListPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text(
-                            '企业名称',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Gaps.vGap10,
-                          Container(
+                          EnterNameWidget(
                             height: UIUtils.getSearchItemHeight(
                                 context, orientation),
-                            child: TextField(
-                              controller: _enterNameController,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: const InputDecoration(
-                                fillColor: Colours.grey_color,
-                                filled: true,
-                                hintText: "请输入企业名称",
-                                hintStyle: TextStyle(
-                                  color: Colours.secondary_text,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
+                            controller: _enterNameController,
                           ),
-                          Gaps.vGap20,
                           Offstage(
                             offstage: !_showArea,
                             child: AreaWidget(
@@ -385,14 +364,8 @@ class _DischargeReportListPageState extends State<DischargeReportListPage> {
                               },
                             ),
                           ),
-                          const Text(
-                            '是否生效',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DataDictBlocGrid(
+                          DataDictBlocGridWidget(
+                            title: '是否生效',
                             checkValue: _valid,
                             dataDictBloc: _validBloc,
                             onItemTap: (value) {
@@ -401,20 +374,10 @@ class _DischargeReportListPageState extends State<DischargeReportListPage> {
                               });
                             },
                           ),
-                          Gaps.vGap10,
                           Offstage(
                             offstage: !_showAttentionLevel,
-                            child: const Text(
-                              '关注程度',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Offstage(
-                            offstage: !_showAttentionLevel,
-                            child: DataDictBlocGrid(
+                            child: DataDictBlocGridWidget(
+                              title: '关注程度',
                               checkValue: _attentionLevel,
                               dataDictBloc: _attentionLevelBloc,
                               onItemTap: (value) {
