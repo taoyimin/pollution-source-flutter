@@ -62,7 +62,7 @@ class _MinePageState extends State<MinePage>
                 Expanded(
                   flex: 1,
                   child: Container(
-                    color: Color(0xFFFFEE5F),
+                    color: Color(0xFFFFEB5E),
                   ),
                 ),
                 Expanded(

@@ -1198,7 +1198,7 @@ class InkWellButton extends StatelessWidget {
   }
 }
 
-/// 标签widget
+/// 标签控件
 class LabelWidget extends StatelessWidget {
   final Label label;
 
@@ -1207,7 +1207,7 @@ class LabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+      padding: const EdgeInsets.fromLTRB(5, 2, 5, 4),
       decoration: BoxDecoration(
         color: this.label.color.withOpacity(0.2),
       ),
@@ -1217,11 +1217,14 @@ class LabelWidget extends StatelessWidget {
         children: <Widget>[
           TextUtil.isEmpty(this.label.imagePath)
               ? Gaps.empty
-              : Image.asset(
-                  this.label.imagePath,
-                  width: 12,
-                  height: 12,
-                  color: this.label.color,
+              : Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Image.asset(
+                    this.label.imagePath,
+                    width: 12,
+                    height: 12,
+                    color: this.label.color,
+                  ),
                 ),
           Gaps.hGap3,
           Text(
@@ -2710,6 +2713,7 @@ class EnterNameWidget extends StatelessWidget {
 
 typedef DateValueCallback(DateTime dateTime, List<int> selectedIndex);
 
+/// 选择开始时间与结束时间控件
 class DateTimeWidget extends StatelessWidget {
   final String title;
   final double height;
