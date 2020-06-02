@@ -141,6 +141,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.2"
+  city_pickers:
+    dependency: "direct main"
+    description:
+      name: city_pickers
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.30"
   code_builder:
     dependency: transitive
     description:
@@ -292,7 +299,7 @@ packages:
       name: flutter_cupertino_date_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.24"
+    version: "1.0.26"
   flutter_cupertino_localizations:
     dependency: "direct main"
     description:
@@ -441,6 +448,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.11.3+2"
+  lpinyin:
+    dependency: transitive
+    description:
+      name: lpinyin
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.9"
   matcher:
     dependency: transitive
     description:

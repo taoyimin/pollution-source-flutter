@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.2+13
+version: 1.1.4+15
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -45,7 +45,7 @@ dependencies:
   # 启动URL的插件 https://github.com/flutter/plugins/tree/master/packages/url_launcher
   url_launcher: ^5.4.5
   # 城市选择控件 https://github.com/hanxu317317/city_pickers
-  # city_pickers: ^0.1.30
+  city_pickers: ^0.1.30
   # 业务逻辑与界面分离 https://github.com/felangel/bloc
   bloc: ^4.0.0
   flutter_bloc: ^4.0.0
@@ -60,7 +60,7 @@ dependencies:
   # Toast插件 https://github.com/OpenFlutter/flutter_oktoast
   oktoast: ^2.3.2
   # 选择时间插件 https://github.com/dylanwuzh/flutter-cupertino-date-picker
-  flutter_cupertino_date_picker: ^1.0.24
+  flutter_cupertino_date_picker: ^1.0.26
   # 下拉筛选菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
   gzx_dropdown_menu: ^2.0.0
   # 图片选择器 https://github.com/Sh1d0w/multi_image_picker
