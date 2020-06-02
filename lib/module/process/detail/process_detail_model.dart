@@ -19,6 +19,8 @@ class Process extends Equatable {
   final String alarmCauseStr; // 报警原因
   @JsonKey(defaultValue: '')
   final String operateResult; // 处理结果
+  @JsonKey(defaultValue: '')
+  final String dataSource; // 数据来源
   @JsonKey(name: 'operateDesc', defaultValue: '')
   final String operateDesc; // 核实情况
   @JsonKey(name: 'attachmentList', defaultValue: [])
@@ -31,6 +33,7 @@ class Process extends Equatable {
     @required this.operatePerson,
     @required this.alarmCauseStr,
     @required this.operateResult,
+    @required this.dataSource,
     @required this.operateTimeStr,
     @required this.operateDesc,
     @required this.attachments,
@@ -43,6 +46,7 @@ class Process extends Equatable {
         operatePerson,
         alarmCauseStr,
         operateResult,
+    dataSource,
         operateTimeStr,
         operateDesc,
         attachments,
@@ -60,6 +64,7 @@ class Process extends Equatable {
         '处理结果': this.operateResult,
         '反馈人': this.operatePerson,
         '报警原因': this.alarmCauseStr,
+        '数据来源': this.dataSource,
         '核实情况\n': this.operateDesc,
       }..addAll(Map.fromIterable(attachments,
           key: (e) => '附件${attachments.indexOf(e) + 1}下载地址\n',
