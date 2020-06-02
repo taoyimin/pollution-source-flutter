@@ -17,12 +17,16 @@ class WarnListRepository extends ListRepository<Warn> {
 
   /// 生成请求所需的参数
   ///
+  /// [cityCode] 按城市搜索
+  /// [areaCode] 按县区搜索
   /// [alarmType] 报警类型
   /// [startTime] 开始时间
   /// [endTime] 结束时间
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
+    cityCode = '',
+    areaCode = '',
     alarmType = '',
     DateTime startTime,
     DateTime endTime,
@@ -33,6 +37,8 @@ class WarnListRepository extends ListRepository<Warn> {
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
       'alarmType': alarmType,
+      'cityCode': cityCode,
+      'areaCode': areaCode,
       'startTime':
           DateUtil.getDateStrByDateTime(startTime, format: DateFormat.NORMAL) ??
               '',

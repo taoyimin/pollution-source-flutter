@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:city_pickers/modal/result.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,10 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:pollution_source/http/http_api.dart';
+import 'package:pollution_source/module/common/collection/area/area_repository.dart';
+import 'package:pollution_source/module/common/collection/area/area_widget.dart';
+import 'package:pollution_source/module/common/collection/collection_bloc.dart';
+import 'package:pollution_source/module/common/collection/collection_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_bloc.dart';
 import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
@@ -39,10 +44,21 @@ class _WarnListPageState extends State<WarnListPage> {
   Completer<void> _refreshCompleter;
   int _currentPage = Constant.defaultCurrentPage;
 
+  /// 环保用户显示选择区域相关布局
+  final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
+  /// 区域Bloc
+  final CollectionBloc _areaBloc = CollectionBloc(
+    collectionRepository: AreaRepository(),
+  );
+
   /// 报警类型Bloc
   final DataDictBloc _alarmTypeBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.orderAlarmType),
   );
+
+  /// 区域信息
+  Result _areaResult;
 
   /// 报警类型
   String _alarmType;
@@ -57,11 +73,13 @@ class _WarnListPageState extends State<WarnListPage> {
   void initState() {
     super.initState();
     _initParam();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
+    // 加载区域信息
+    if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载报警类型
     _alarmTypeBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
+    // 初始化列表Bloc
+    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -78,6 +96,7 @@ class _WarnListPageState extends State<WarnListPage> {
 
   /// 初始化查询参数
   _initParam() {
+    _areaResult = null;
     _alarmType = '';
     _startTime = null;
     _endTime = null;
@@ -88,6 +107,8 @@ class _WarnListPageState extends State<WarnListPage> {
     return WarnListRepository.createParams(
       currentPage: _currentPage,
       pageSize: Constant.defaultPageSize,
+      cityCode: _areaResult?.cityId ?? '',
+      areaCode: _areaResult?.areaId ?? '',
       alarmType: _alarmType,
       startTime: _startTime,
       endTime: _endTime,
@@ -299,6 +320,20 @@ class _WarnListPageState extends State<WarnListPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          Offstage(
+                            offstage: !_showArea,
+                            child: AreaWidget(
+                              itemHeight: UIUtils.getSearchItemHeight(
+                                  context, orientation),
+                              initialResult: _areaResult,
+                              collectionBloc: _areaBloc,
+                              confirmCallBack: (Result result) {
+                                setState(() {
+                                  _areaResult = result;
+                                });
+                              },
+                            ),
+                          ),
                           DateTimeWidget(
                             title: '生成时间',
                             height: UIUtils.getSearchItemHeight(context, orientation),
