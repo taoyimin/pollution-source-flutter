@@ -82,10 +82,11 @@ class _EnterListPageState extends State<EnterListPage>
     DataDict(name: '许可证企业', code: '5'),
   ];
 
-  /// 是否在线菜单
+  /// 是否安装在线菜单
   final List<DataDict> _stateList = [
     DataDict(name: '全部', code: ''),
-    DataDict(name: '在线', code: '1'),
+    DataDict(name: '已安装', code: '1'),
+    DataDict(name: '未安装', code: '2'),
   ];
 
   /// 关注程度Bloc
