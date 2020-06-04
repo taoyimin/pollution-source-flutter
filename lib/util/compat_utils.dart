@@ -413,6 +413,8 @@ class CompatUtils {
         return HttpApiPollution.dischargeReportStopType;
       case HttpApi.factorReportAlarmType:
         return HttpApiPollution.factorReportAlarmType;
+      case HttpApi.factorReportLimitDay:
+        return HttpApiPollution.factorReportLimitDay;
       case HttpApi.factorReportFactorList:
         return HttpApiPollution.factorReportFactorList;
       case HttpApi.reportStopAdvanceTime:
@@ -503,6 +505,8 @@ class CompatUtils {
         return HttpApiOperation.dischargeReportStopType;
       case HttpApi.factorReportAlarmType:
         return HttpApiOperation.factorReportAlarmType;
+      case HttpApi.factorReportLimitDay:
+        return HttpApiOperation.factorReportLimitDay;
       case HttpApi.factorReportFactorList:
         return HttpApiOperation.factorReportFactorList;
       case HttpApi.reportStopAdvanceTime:

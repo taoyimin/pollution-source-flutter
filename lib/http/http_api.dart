@@ -111,6 +111,9 @@ enum HttpApi {
   /// 因子异常申报异常类型数据字典
   factorReportAlarmType,
 
+  /// 因子异常申报异常类型为设备故障时限制时间
+  factorReportLimitDay,
+
   /// 因子异常申报因子列表
   factorReportFactorList,
 
@@ -221,6 +224,8 @@ class HttpApiPollution {
       'dictionary/getSubListByParent?dicCode=stopType';
   static const String factorReportAlarmType =
       'dictionary/getSubListByParent?dicCode=alarm_type_abnormal';
+  static const String factorReportLimitDay =
+      'dictionary/getSysDictionary?dicCode=limitDay';
   static const String factorReportFactorList = 'stopApply/getPollutionFactor';
   static const String reportStopAdvanceTime =
       'dictionary/getSysDictionary?dicCode=StopAdvanceTime';
@@ -285,6 +290,8 @@ class HttpApiOperation {
       'dictionary/getSubListAPI?dicCode=stopType';
   static const String factorReportAlarmType =
       'dictionary/getSubListAPI?dicCode=alarm_type_abnormal';
+  static const String factorReportLimitDay =
+      'dictionary/getSysDictionary?dicCode=limitDay';
   static const String factorReportFactorList =
       'archives/abnormalApply/selectFactorCodeByMonitorId';
   static const String reportStopAdvanceTime =
