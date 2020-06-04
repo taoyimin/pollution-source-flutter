@@ -11,6 +11,7 @@ class DischargeReportUpload extends Equatable {
   final DateTime startTime; //开始时间
   final DateTime endTime; //结束时间
   final DataDict stopType; //异常类型
+  final bool isShutdown; // 是否关停设备
   final String stopReason; //停产原因
   final List<Asset> attachments; //证明材料
 
@@ -20,6 +21,7 @@ class DischargeReportUpload extends Equatable {
     this.startTime,
     this.endTime,
     this.stopType,
+    this.isShutdown,
     this.stopReason,
     this.attachments,
   });
@@ -31,6 +33,7 @@ class DischargeReportUpload extends Equatable {
         startTime,
         endTime,
         stopType,
+        isShutdown,
         stopReason,
         attachments,
       ];
@@ -42,6 +45,7 @@ class DischargeReportUpload extends Equatable {
     DateTime startTime,
     DateTime endTime,
     DataDict stopType,
+    bool isShutdown,
     String stopReason,
     List<Asset> attachments,
   }) {
@@ -52,6 +56,7 @@ class DischargeReportUpload extends Equatable {
       endTime: endTime ?? this.endTime,
       stopType: stopType ?? this.stopType,
       stopReason: stopReason ?? this.stopReason,
+      isShutdown: isShutdown ?? this.isShutdown,
       attachments: attachments ?? this.attachments,
     );
   }

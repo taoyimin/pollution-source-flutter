@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -162,6 +163,22 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                   ],
                 ),
                 Gaps.vGap10,
+                Offstage(
+                  offstage: TextUtil.isEmpty(reportDetail.isShutdownStr),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          IconBaseInfoWidget(
+                            content: '是否关停设备：${reportDetail.isShutdownStr ?? ''}',
+                            icon: Icons.do_not_disturb,
+                          ),
+                        ],
+                      ),
+                      Gaps.vGap10,
+                    ],
+                  ),
+                ),
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(

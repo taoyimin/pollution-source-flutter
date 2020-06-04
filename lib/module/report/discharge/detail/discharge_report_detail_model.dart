@@ -13,21 +13,29 @@ class DischargeReportDetail extends Equatable {
   @JsonKey(name: 'outId')
   final int dischargeId; // 排口ID
   final int monitorId; // 监控点ID
-  @JsonKey(name: 'enterpriseName')
+  @JsonKey(name: 'enterpriseName', defaultValue: '')
   final String enterName; // 企业名称
-  @JsonKey(name: 'entAddress')
+  @JsonKey(name: 'entAddress', defaultValue: '')
   final String enterAddress; // 企业地址
-  @JsonKey(name: 'disOutName')
+  @JsonKey(name: 'disOutName', defaultValue: '')
   final String dischargeName; // 排口名称
-  @JsonKey(name: 'disMonitorName')
+  @JsonKey(name: 'disMonitorName', defaultValue: '')
   final String monitorName; // 监控点名称
+  @JsonKey(defaultValue: '')
   final String cityName; // 所属市
+  @JsonKey(defaultValue: '')
   final String areaName; // 所属区
-  @JsonKey(name: 'applayTimeStr')
+  @JsonKey(name: 'applayTimeStr', defaultValue: '')
   final String reportTimeStr; // 申报时间
+  @JsonKey(defaultValue: '')
   final String startTimeStr; // 开始时间
+  @JsonKey(defaultValue: '')
   final String endTimeStr; // 结束时间
+  @JsonKey(defaultValue: '')
   final String stopTypeStr; // 异常类型
+  @JsonKey(name: 'hasShutdown', defaultValue: '')
+  final String isShutdownStr; // 是否关停设备
+  @JsonKey(defaultValue: '')
   final String stopReason; // 停产原因
   @JsonKey(name: 'attachmentList', defaultValue: [])
   final List<Attachment> attachments; // 证明材料
@@ -47,6 +55,7 @@ class DischargeReportDetail extends Equatable {
     this.startTimeStr,
     this.endTimeStr,
     this.stopTypeStr,
+    this.isShutdownStr,
     this.stopReason,
     this.attachments,
   });
@@ -67,6 +76,7 @@ class DischargeReportDetail extends Equatable {
         startTimeStr,
         endTimeStr,
         stopTypeStr,
+        isShutdownStr,
         stopReason,
         attachments,
       ];

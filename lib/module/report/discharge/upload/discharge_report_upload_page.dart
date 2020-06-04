@@ -43,11 +43,25 @@ class DischargeReportUploadPage extends StatefulWidget {
 }
 
 class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
+  /// 页面Bloc
   PageBloc _pageBloc;
+
+  /// 上报Bloc
   UploadBloc _uploadBloc;
-  DataDictBloc _stopTypeBloc;
-  DataDictBloc _stopAdvanceTimeBloc;
-  TextEditingController _stopReasonController;
+
+  /// 停产类型Bloc
+  final DataDictBloc _stopTypeBloc = DataDictBloc(
+      dataDictRepository: DataDictRepository(HttpApi.dischargeReportStopType));
+
+  /// 开始时间最多滞后的小时数Bloc
+  final DataDictBloc _stopAdvanceTimeBloc = DataDictBloc(
+      dataDictRepository:
+          SystemConfigRepository(HttpApi.reportStopAdvanceTime));
+
+  /// 异常类型编辑器
+  final TextEditingController _stopReasonController = TextEditingController();
+
+  /// 最小开始时间
   DateTime minStartTime =
       DateTime.now().add(Duration(hours: -Constant.defaultStopAdvanceTime));
 
@@ -66,23 +80,15 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
     _pageBloc.add(PageLoad(model: DischargeReportUpload(enter: defaultEnter)));
     // 初始化上报Bloc
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    // 初始化停产类型Bloc
-    _stopTypeBloc = DataDictBloc(
-        dataDictRepository:
-            DataDictRepository(HttpApi.dischargeReportStopType));
     // 加载停产类型
     _stopTypeBloc.add(DataDictLoad());
-    _stopAdvanceTimeBloc = DataDictBloc(
-        dataDictRepository:
-            SystemConfigRepository(HttpApi.reportStopAdvanceTime));
     // 加载异常申报开始时间最多滞后的小时数
     _stopAdvanceTimeBloc.add(DataDictLoad());
-    _stopReasonController = TextEditingController();
   }
 
   @override
   void dispose() {
-    //释放资源
+    /// 释放资源
     _stopReasonController.dispose();
     if (_stopTypeBloc?.state is DataDictLoading)
       (_stopAdvanceTimeBloc?.state as DataDictLoading).cancelToken.cancel();
@@ -168,8 +174,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                     content: reportUpload?.enter?.enterName,
                     onTap: () async {
                       // 打开企业选择界面并等待结果返回
-                      Enter enter = await Application.router
-                          .navigateTo(context, '${Routes.enterList}?type=1&state=1');
+                      Enter enter = await Application.router.navigateTo(
+                          context, '${Routes.enterList}?type=1&state=1');
                       if (enter != null) {
                         // 设置已经选中的企业，重置已经选中的监控点
                         // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
@@ -235,6 +241,26 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                   },
                 ),
                 Gaps.hLine,
+                Offstage(
+                  offstage: (reportUpload?.stopType?.code ?? '') != '1',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      RadioRowWidget(
+                        title: '是否关停设备',
+                        trueText: '关停',
+                        falseText: '不关停',
+                        checked: reportUpload?.isShutdown ?? true,
+                        onChanged: (value) {
+                          _pageBloc.add(PageLoad(
+                              model: reportUpload.copyWith(isShutdown: value)));
+                        },
+                      ),
+                      Gaps.hLine,
+                    ],
+                  ),
+                ),
                 SelectRowWidget(
                   title: '开始时间',
                   content: DateUtil.formatDate(reportUpload?.startTime,
@@ -343,9 +369,9 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       onTap: () {
                         _uploadBloc.add(Upload(
                             data: reportUpload.copyWith(
-                              //enterId: widget.enterId,
-                              stopReason: _stopReasonController.text,
-                            )));
+                          //enterId: widget.enterId,
+                          stopReason: _stopReasonController.text,
+                        )));
                       },
                     ),
                   ],
