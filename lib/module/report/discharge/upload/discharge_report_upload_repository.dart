@@ -51,7 +51,14 @@ class DischargeReportUploadRepository
       'alarmType': data.stopType.code,
       // 运维系统的停产类型
       'stopType': data.stopType.code,
-      'hasShutdown': data.stopType.code != '1' ?  '' : data.isShutdown,
+      'hasShutdown': (){
+        // 如果异常类型不是停产则传空
+        if(data.stopType.code != '1'){
+          return '';
+        }else{
+          return data.isShutdown ? '1' : '0';
+        }
+      }(),
       'stopReason': data.stopReason,
       "file": await Future.wait(data.attachments?.map((asset) async {
             ByteData byteData = await asset.getByteData();

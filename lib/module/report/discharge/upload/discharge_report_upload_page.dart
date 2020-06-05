@@ -251,7 +251,7 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                         title: '是否关停设备',
                         trueText: '关停',
                         falseText: '不关停',
-                        checked: reportUpload?.isShutdown ?? true,
+                        checked: reportUpload?.isShutdown,
                         onChanged: (value) {
                           _pageBloc.add(PageLoad(
                               model: reportUpload.copyWith(isShutdown: value)));
