@@ -12,6 +12,7 @@ class FactorReportUpload extends Equatable {
   final DateTime startTime; // 开始时间
   final DateTime endTime; // 结束时间
   final List<DataDict> alarmTypeList; // 异常类型
+  final int limitDay; // 因子异常申报异常类型为设备故障时限制时间
   final String exceptionReason; // 异常原因
   final List<Asset> attachments; // 证明材料
 
@@ -22,6 +23,7 @@ class FactorReportUpload extends Equatable {
     this.startTime,
     this.endTime,
     this.alarmTypeList,
+    this.limitDay,
     this.exceptionReason,
     this.attachments,
   });
@@ -34,6 +36,7 @@ class FactorReportUpload extends Equatable {
         startTime,
         endTime,
         alarmTypeList,
+        limitDay,
         exceptionReason,
         attachments,
         // 传入时间戳，使得每次选择完异常类型和异常因子都触发状态改变
@@ -47,6 +50,7 @@ class FactorReportUpload extends Equatable {
     DateTime startTime,
     DateTime endTime,
     List<DataDict> alarmTypeList,
+    int limitDay,
     String exceptionReason,
     List<Asset> attachments,
   }) {
@@ -57,6 +61,7 @@ class FactorReportUpload extends Equatable {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       alarmTypeList: alarmTypeList ?? this.alarmTypeList,
+      limitDay: limitDay ?? this.limitDay,
       exceptionReason: exceptionReason ?? this.exceptionReason,
       attachments: attachments ?? this.attachments,
     );

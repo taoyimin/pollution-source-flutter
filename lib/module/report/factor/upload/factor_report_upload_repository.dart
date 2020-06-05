@@ -27,6 +27,8 @@ class FactorReportUploadRepository
       throw DioError(error: InvalidParamException('请选择开始时间'));
     if (data.endTime == null)
       throw DioError(error: InvalidParamException('请选择结束时间'));
+    if (data.alarmTypeList.length == 1 && data.alarmTypeList[0].code == 'fault' && data.endTime.difference(data.startTime).inMinutes > data.limitDay * 24 * 60)
+      throw DioError(error: InvalidParamException('当异常类型为${data.alarmTypeList[0].name}时,开始时间和结束时间间隔不能超过${data.limitDay}天'));
     if (data.exceptionReason.isEmpty)
       throw DioError(error: InvalidParamException('请输入异常原因'));
     if (data.attachments == null || data.attachments.length == 0)

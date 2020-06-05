@@ -45,14 +45,40 @@ class FactorReportUploadPage extends StatefulWidget {
 }
 
 class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
+  /// 界面Bloc
   PageBloc _pageBloc;
+
+  /// 上报Bloc
   UploadBloc _uploadBloc;
-  DataDictBloc _alarmTypeBloc;
-  DataDictBloc _factorCodeBloc;
-  DataDictBloc _stopAdvanceTimeBloc;
-  TextEditingController _exceptionReasonController;
+
+  /// 异常类型Bloc
+  DataDictBloc _alarmTypeBloc = DataDictBloc(
+      dataDictRepository: DataDictRepository(HttpApi.factorReportAlarmType));
+
+  /// 异常因子Bloc
+  final DataDictBloc _factorCodeBloc = DataDictBloc(
+      dataDictRepository:
+          FactorDataDictRepository(HttpApi.factorReportFactorList));
+
+  /// 开始时间最多滞后的小时数Bloc
+  final DataDictBloc _stopAdvanceTimeBloc = DataDictBloc(
+      dataDictRepository:
+          SystemConfigRepository(HttpApi.reportStopAdvanceTime));
+
+  /// 因子异常申报异常类型为设备故障时限制时间Bloc
+  final DataDictBloc _limitDayBloc = DataDictBloc(
+      dataDictRepository: SystemConfigRepository(HttpApi.factorReportLimitDay));
+
+  /// 异常原因编辑器
+  final TextEditingController _exceptionReasonController =
+      TextEditingController();
+
+  /// 最小开始时间
   DateTime minStartTime =
       DateTime.now().add(Duration(hours: -Constant.defaultStopAdvanceTime));
+
+  /// 默认限制天数
+  int limitDay = 5;
 
   /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
   Enter defaultEnter;
@@ -69,26 +95,17 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
         model: FactorReportUpload(
             enter: defaultEnter, factorCodeList: List<DataDict>())));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    // 初始化异常类型Bloc
-    _alarmTypeBloc = DataDictBloc(
-        dataDictRepository: DataDictRepository(HttpApi.factorReportAlarmType));
     // 加载异常类型
     _alarmTypeBloc.add(DataDictLoad());
-    // 初始化异常因子Bloc
-    _factorCodeBloc = DataDictBloc(
-        dataDictRepository:
-            FactorDataDictRepository(HttpApi.factorReportFactorList));
-    _stopAdvanceTimeBloc = DataDictBloc(
-        dataDictRepository:
-            SystemConfigRepository(HttpApi.reportStopAdvanceTime));
     // 加载异常申报开始时间最多滞后的小时数
     _stopAdvanceTimeBloc.add(DataDictLoad());
-    _exceptionReasonController = TextEditingController();
+    // 加载因子异常申报异常类型为设备故障时的限制时间
+    _limitDayBloc.add(DataDictLoad());
   }
 
   @override
   void dispose() {
-    // 释放资源
+    /// 释放资源
     _exceptionReasonController.dispose();
     if (_alarmTypeBloc?.state is DataDictLoading)
       (_alarmTypeBloc?.state as DataDictLoading).cancelToken.cancel();
@@ -96,6 +113,8 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
       (_factorCodeBloc?.state as DataDictLoading).cancelToken.cancel();
     if (_stopAdvanceTimeBloc?.state is DataDictLoading)
       (_stopAdvanceTimeBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_limitDayBloc?.state is DataDictLoading)
+      (_limitDayBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -152,6 +171,19 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                   }
                 },
               ),
+              BlocListener<DataDictBloc, DataDictState>(
+                bloc: _limitDayBloc,
+                listener: (context, state) {
+                  if (state is DataDictLoaded) {
+                    List<DataDict> dataDictList =
+                        (_limitDayBloc?.state as DataDictLoaded).dataDictList;
+                    if (dataDictList.length != 0) {
+                      // 设置限制时间
+                      limitDay = int.parse(dataDictList[0].code);
+                    }
+                  }
+                },
+              ),
             ],
             child: BlocBuilder<PageBloc, PageState>(
               builder: (context, state) {
@@ -185,8 +217,8 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                     content: reportUpload?.enter?.enterName,
                     onTap: () async {
                       // 打开排口选择界面并等待结果返回
-                      Enter enter = await Application.router
-                          .navigateTo(context, '${Routes.enterList}?type=1&state=1');
+                      Enter enter = await Application.router.navigateTo(
+                          context, '${Routes.enterList}?type=1&state=1');
                       if (enter != null) {
                         // 设置已经选中的企业，重置已经选中的排口和监控点
                         // 使用构造方法而不用copyWith方法，因为copyWith方法默认忽略值为null的参数
@@ -545,7 +577,8 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                           PageLoad(
                             model: reportUpload.copyWith(
                               attachments: await SystemUtils.loadAssets(
-                                  reportUpload.attachments),
+                                reportUpload.attachments,
+                              ),
                             ),
                           ),
                         );
@@ -557,10 +590,14 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
                       icon: Icons.file_upload,
                       color: Colors.lightBlue,
                       onTap: () {
-                        _uploadBloc.add(Upload(
+                        _uploadBloc.add(
+                          Upload(
                             data: reportUpload.copyWith(
-                          exceptionReason: _exceptionReasonController.text,
-                        )));
+                              limitDay: limitDay,
+                              exceptionReason: _exceptionReasonController.text,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],
