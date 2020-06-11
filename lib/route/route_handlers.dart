@@ -15,13 +15,9 @@ import 'package:pollution_source/module/enter/detail/enter_detail_repository.dar
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_page.dart';
-import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_repository.dart';
 import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_page.dart';
-import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_repository.dart';
-import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_repository.dart';
 import 'package:pollution_source/module/inspection/common/water_device_param_list_repository.dart';
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_page.dart';
-import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_repository.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_page.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_repository.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_page.dart';
@@ -74,495 +70,484 @@ import 'package:pollution_source/page/operation_home.dart';
 import 'package:pollution_source/page/share_product_page.dart';
 
 var rootHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return LoginPage();
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return LoginPage();
+  },
+);
 
 var adminHomeHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return AdminHomePage();
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return AdminHomePage();
+  },
+);
 
 var enterHomeHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['id']?.first;
-  return EnterHomePage(enterId: enterId);
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['id']?.first;
+    return EnterHomePage(enterId: enterId);
+  },
+);
 
 var operationHomeHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return OperationHomePage();
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return OperationHomePage();
+  },
+);
 
 var enterListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  bool automaticallyImplyLeading =
-      params['automaticallyImplyLeading']?.first?.toLowerCase() ??
-          'true' == 'true';
-  String state = params['state']?.first ?? '';
-  String enterType = params['enterType']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
-  int type = int.parse(params['type']?.first ?? '0');
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: EnterListRepository()),
-    child: EnterListPage(
-      automaticallyImplyLeading: automaticallyImplyLeading,
-      state: state,
-      enterType: enterType,
-      attentionLevel: attentionLevel,
-      type: type,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    bool automaticallyImplyLeading =
+        params['automaticallyImplyLeading']?.first?.toLowerCase() ??
+            'true' == 'true';
+    String state = params['state']?.first ?? '';
+    String enterType = params['enterType']?.first ?? '';
+    String attentionLevel = params['attentionLevel']?.first ?? '';
+    int type = int.parse(params['type']?.first ?? '0');
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: EnterListRepository()),
+      child: EnterListPage(
+        automaticallyImplyLeading: automaticallyImplyLeading,
+        state: state,
+        enterType: enterType,
+        attentionLevel: attentionLevel,
+        type: type,
+      ),
+    );
+  },
+);
 
 var enterDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['id']?.first;
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: EnterDetailRepository()),
-    child: EnterDetailPage(enterId: enterId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['id']?.first;
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: EnterDetailRepository()),
+      child: EnterDetailPage(enterId: enterId),
+    );
+  },
+);
 
 var dischargeListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  String state = params['state']?.first ?? '';
-  int type = int.parse(params['type']?.first ?? '0');
-  String dischargeType = params['dischargeType']?.first ?? '';
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: DischargeListRepository()),
-    child: DischargeListPage(
-      enterId: enterId,
-      state: state,
-      type: type,
-      dischargeType: dischargeType,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    String state = params['state']?.first ?? '';
+    int type = int.parse(params['type']?.first ?? '0');
+    String dischargeType = params['dischargeType']?.first ?? '';
+    String attentionLevel = params['attentionLevel']?.first ?? '';
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: DischargeListRepository()),
+      child: DischargeListPage(
+        enterId: enterId,
+        state: state,
+        type: type,
+        dischargeType: dischargeType,
+        attentionLevel: attentionLevel,
+      ),
+    );
+  },
+);
 
 var dischargeDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String dischargeId = params['id']?.first;
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: DischargeDetailRepository()),
-    child: DischargeDetailPage(dischargeId: dischargeId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String dischargeId = params['id']?.first;
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: DischargeDetailRepository()),
+      child: DischargeDetailPage(dischargeId: dischargeId),
+    );
+  },
+);
 
 var monitorListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  String dischargeId = params['dischargeId']?.first ?? '';
-  int type = int.parse(params['type']?.first ?? '0');
-  String state = params['state']?.first ?? '';
-  String outType = params['outType']?.first ?? '';
-  String monitorType = params['monitorType']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: MonitorListRepository()),
-    child: MonitorListPage(
-      enterId: enterId,
-      dischargeId: dischargeId,
-      type: type,
-      state: state,
-      outType: outType,
-      monitorType: monitorType,
-      attentionLevel: attentionLevel,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    String dischargeId = params['dischargeId']?.first ?? '';
+    int type = int.parse(params['type']?.first ?? '0');
+    String state = params['state']?.first ?? '';
+    String outType = params['outType']?.first ?? '';
+    String monitorType = params['monitorType']?.first ?? '';
+    String attentionLevel = params['attentionLevel']?.first ?? '';
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: MonitorListRepository()),
+      child: MonitorListPage(
+        enterId: enterId,
+        dischargeId: dischargeId,
+        type: type,
+        state: state,
+        outType: outType,
+        monitorType: monitorType,
+        attentionLevel: attentionLevel,
+      ),
+    );
+  },
+);
 
 var monitorDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String monitorId = params['id']?.first;
-  return BlocProvider<MonitorDetailBloc>(
-    create: (BuildContext context) =>
-        MonitorDetailBloc(detailRepository: MonitorDetailRepository()),
-    child: MonitorDetailPage(monitorId: monitorId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String monitorId = params['id']?.first;
+    return BlocProvider<MonitorDetailBloc>(
+      create: (BuildContext context) =>
+          MonitorDetailBloc(detailRepository: MonitorDetailRepository()),
+      child: MonitorDetailPage(monitorId: monitorId),
+    );
+  },
+);
 
 var monitorHistoryDataHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String monitorId = params['monitorId']?.first;
-  // 均值类型默认为小时数据
-  String dataType = params['dataType']?.first ?? 'hour';
-  DateTime startTime = TextUtil.isEmpty(params['startTime']?.first)
-      ? null
-      : DateUtil.getDateTime(params['startTime']?.first);
-  DateTime endTime = TextUtil.isEmpty(params['endTime']?.first)
-      ? null
-      : DateUtil.getDateTime(params['endTime']?.first);
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: MonitorHistoryDataRepository()),
-    child: MonitorTablePage(
-      monitorId: monitorId,
-      dataType: dataType,
-      startTime: startTime,
-      endTime: endTime,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String monitorId = params['monitorId']?.first;
+    // 均值类型默认为小时数据
+    String dataType = params['dataType']?.first ?? 'hour';
+    DateTime startTime = TextUtil.isEmpty(params['startTime']?.first)
+        ? null
+        : DateUtil.getDateTime(params['startTime']?.first);
+    DateTime endTime = TextUtil.isEmpty(params['endTime']?.first)
+        ? null
+        : DateUtil.getDateTime(params['endTime']?.first);
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: MonitorHistoryDataRepository()),
+      child: MonitorTablePage(
+        monitorId: monitorId,
+        dataType: dataType,
+        startTime: startTime,
+        endTime: endTime,
+      ),
+    );
+  },
+);
 
 var orderListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  String monitorId = params['monitorId']?.first ?? '';
-  String alarmState = params['alarmState']?.first ?? '';
-  String alarmLevel = params['alarmLevel']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
-  DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: OrderListRepository()),
-    child: OrderListPage(
-      enterId: enterId,
-      monitorId: monitorId,
-      alarmState: alarmState,
-      alarmLevel: alarmLevel,
-      attentionLevel: attentionLevel,
-      startTime: startTime,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    String monitorId = params['monitorId']?.first ?? '';
+    String alarmState = params['alarmState']?.first ?? '';
+    String alarmLevel = params['alarmLevel']?.first ?? '';
+    String attentionLevel = params['attentionLevel']?.first ?? '';
+    DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: OrderListRepository()),
+      child: OrderListPage(
+        enterId: enterId,
+        monitorId: monitorId,
+        alarmState: alarmState,
+        alarmLevel: alarmLevel,
+        attentionLevel: attentionLevel,
+        startTime: startTime,
+      ),
+    );
+  },
+);
 
 var orderDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String orderId = params['id']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<DetailBloc>(
-        create: (BuildContext context) =>
-            DetailBloc(detailRepository: OrderDetailRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: ProcessUploadRepository()),
-      ),
-    ],
-    child: OrderDetailPage2(orderId: orderId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String orderId = params['id']?.first;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DetailBloc>(
+          create: (BuildContext context) =>
+              DetailBloc(detailRepository: OrderDetailRepository()),
+        ),
+        BlocProvider<PageBloc>(
+          create: (BuildContext context) => PageBloc(),
+        ),
+        BlocProvider<UploadBloc>(
+          create: (BuildContext context) =>
+              UploadBloc(uploadRepository: ProcessUploadRepository()),
+        ),
+      ],
+      child: OrderDetailPage2(orderId: orderId),
+    );
+  },
+);
 
 var dischargeReportListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  String dischargeId = params['dischargeId']?.first ?? '';
-  String monitorId = params['monitorId']?.first ?? '';
-  String state = params['state']?.first ?? '';
-  String valid = params['valid']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: DischargeReportListRepository()),
-    child: DischargeReportListPage(
-      enterId: enterId,
-      dischargeId: dischargeId,
-      monitorId: monitorId,
-      state: state,
-      valid: valid,
-      attentionLevel: attentionLevel,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    String dischargeId = params['dischargeId']?.first ?? '';
+    String monitorId = params['monitorId']?.first ?? '';
+    String state = params['state']?.first ?? '';
+    String valid = params['valid']?.first ?? '';
+    String attentionLevel = params['attentionLevel']?.first ?? '';
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: DischargeReportListRepository()),
+      child: DischargeReportListPage(
+        enterId: enterId,
+        dischargeId: dischargeId,
+        monitorId: monitorId,
+        state: state,
+        valid: valid,
+        attentionLevel: attentionLevel,
+      ),
+    );
+  },
+);
 
 var dischargeReportDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String reportId = params['id']?.first;
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: DischargeReportDetailRepository()),
-    child: DischargeReportDetailPage(reportId: reportId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String reportId = params['id']?.first;
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: DischargeReportDetailRepository()),
+      child: DischargeReportDetailPage(reportId: reportId),
+    );
+  },
+);
 
 var factorReportListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  String dischargeId = params['dischargeId']?.first ?? '';
-  String monitorId = params['monitorId']?.first ?? '';
-  String state = params['state']?.first ?? '';
-  String valid = params['valid']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: FactorReportListRepository()),
-    child: FactorReportListPage(
-      enterId: enterId,
-      dischargeId: dischargeId,
-      monitorId: monitorId,
-      state: state,
-      valid: valid,
-      attentionLevel: attentionLevel,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    String dischargeId = params['dischargeId']?.first ?? '';
+    String monitorId = params['monitorId']?.first ?? '';
+    String state = params['state']?.first ?? '';
+    String valid = params['valid']?.first ?? '';
+    String attentionLevel = params['attentionLevel']?.first ?? '';
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: FactorReportListRepository()),
+      child: FactorReportListPage(
+        enterId: enterId,
+        dischargeId: dischargeId,
+        monitorId: monitorId,
+        state: state,
+        valid: valid,
+        attentionLevel: attentionLevel,
+      ),
+    );
+  },
+);
 
 var factorReportDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String reportId = params['id']?.first;
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: FactorReportDetailRepository()),
-    child: FactorReportDetailPage(reportId: reportId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String reportId = params['id']?.first;
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: FactorReportDetailRepository()),
+      child: FactorReportDetailPage(reportId: reportId),
+    );
+  },
+);
 
 var longStopReportListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  String state = params['state']?.first ?? '';
-  String valid = params['valid']?.first ?? '';
-  String attentionLevel = params['attentionLevel']?.first ?? '';
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: LongStopReportListRepository()),
-    child: LongStopReportListPage(
-      enterId: enterId,
-      state: state,
-      valid: valid,
-      attentionLevel: attentionLevel,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    String state = params['state']?.first ?? '';
+    String valid = params['valid']?.first ?? '';
+    String attentionLevel = params['attentionLevel']?.first ?? '';
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: LongStopReportListRepository()),
+      child: LongStopReportListPage(
+        enterId: enterId,
+        state: state,
+        valid: valid,
+        attentionLevel: attentionLevel,
+      ),
+    );
+  },
+);
 
 var longStopReportDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String reportId = params['id']?.first;
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: LongStopReportDetailRepository()),
-    child: LongStopReportDetailPage(reportId: reportId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String reportId = params['id']?.first;
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: LongStopReportDetailRepository()),
+      child: LongStopReportDetailPage(reportId: reportId),
+    );
+  },
+);
 
 var dischargeReportUploadHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: DischargeReportUploadRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-    ],
-    child: DischargeReportUploadPage(enterId: enterId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UploadBloc>(
+          create: (BuildContext context) =>
+              UploadBloc(uploadRepository: DischargeReportUploadRepository()),
+        ),
+        BlocProvider<PageBloc>(
+          create: (BuildContext context) => PageBloc(),
+        ),
+      ],
+      child: DischargeReportUploadPage(enterId: enterId),
+    );
+  },
+);
 
 var factorReportUploadHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: FactorReportUploadRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-    ],
-    child: FactorReportUploadPage(enterId: enterId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UploadBloc>(
+          create: (BuildContext context) =>
+              UploadBloc(uploadRepository: FactorReportUploadRepository()),
+        ),
+        BlocProvider<PageBloc>(
+          create: (BuildContext context) => PageBloc(),
+        ),
+      ],
+      child: FactorReportUploadPage(enterId: enterId),
+    );
+  },
+);
 
 var longStopReportUploadHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: LongStopReportUploadRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-    ],
-    child: LongStopReportUploadPage(enterId: enterId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UploadBloc>(
+          create: (BuildContext context) =>
+              UploadBloc(uploadRepository: LongStopReportUploadRepository()),
+        ),
+        BlocProvider<PageBloc>(
+          create: (BuildContext context) => PageBloc(),
+        ),
+      ],
+      child: LongStopReportUploadPage(enterId: enterId),
+    );
+  },
+);
 
 var licenseListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: LicenseListRepository()),
-    child: LicenseListPage(
-      enterId: enterId,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: LicenseListRepository()),
+      child: LicenseListPage(
+        enterId: enterId,
+      ),
+    );
+  },
+);
 
 var routineInspectionListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String enterId = params['enterId']?.first ?? '';
-  String monitorId = params['monitorId']?.first ?? '';
-  String state = params['state']?.first ?? '';
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: RoutineInspectionListRepository()),
-    child: RoutineInspectionListPage(
-      enterId: enterId,
-      monitorId: monitorId,
-      state: state,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String enterId = params['enterId']?.first ?? '';
+    String monitorId = params['monitorId']?.first ?? '';
+    String state = params['state']?.first ?? '';
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: RoutineInspectionListRepository()),
+      child: RoutineInspectionListPage(
+        enterId: enterId,
+        monitorId: monitorId,
+        state: state,
+      ),
+    );
+  },
+);
 
 var routineInspectionDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String id = params['id']?.first;
-  String monitorType = params['monitorType']?.first;
-  String state = params['state']?.first ?? '';
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: RoutineInspectionDetailRepository()),
-    child: RoutineInspectionDetailPage(
-      monitorId: id,
-      monitorType: monitorType,
-      state: state,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String id = params['id']?.first;
+    String monitorType = params['monitorType']?.first;
+    String state = params['state']?.first ?? '';
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: RoutineInspectionDetailRepository()),
+      child: RoutineInspectionDetailPage(
+        monitorId: id,
+        monitorType: monitorType,
+        state: state,
+      ),
+    );
+  },
+);
 
 var waterDeviceCheckUploadHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String json = params['json']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: WaterDeviceUploadRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-    ],
-    child: WaterDeviceCheckUploadPage(
-      json: json,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String json = params['json']?.first;
+    return WaterDeviceCheckUploadPage(taskJson: json);
+  },
+);
 
 var airDeviceCheckUploadHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String json = params['json']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: AirDeviceCheckUploadRepository()),
-      ),
-      BlocProvider<DetailBloc>(
-        create: (BuildContext context) => DetailBloc(
-            detailRepository: RoutineInspectionUploadFactorRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-    ],
-    child: AirDeviceCheckUploadPage(
-      json: json,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String json = params['json']?.first;
+    return AirDeviceCheckUploadPage(taskJson: json);
+  },
+);
 
 var airDeviceCorrectUploadHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String json = params['json']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: AirDeviceCorrectUploadRepository()),
-      ),
-      BlocProvider<DetailBloc>(
-        create: (BuildContext context) => DetailBloc(
-            detailRepository: RoutineInspectionUploadFactorRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-    ],
-    child: AirDeviceCorrectUploadPage(
-      json: json,
-    ),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String json = params['json']?.first;
+    return AirDeviceCorrectUploadPage(taskJson: json);
+  },
+);
 
 var waterDeviceParamUploadHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String json = params['json']?.first;
-  return MultiBlocProvider(
-    providers: [
-      BlocProvider<UploadBloc>(
-        create: (BuildContext context) =>
-            UploadBloc(uploadRepository: WaterDeviceParamUploadRepository()),
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String json = params['json']?.first;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UploadBloc>(
+          create: (BuildContext context) =>
+              UploadBloc(uploadRepository: WaterDeviceParamUploadRepository()),
+        ),
+        BlocProvider<ListBloc>(
+          create: (BuildContext context) =>
+              ListBloc(listRepository: WaterDeviceParamListRepository()),
+        ),
+        BlocProvider<PageBloc>(
+          create: (BuildContext context) => PageBloc(),
+        ),
+      ],
+      child: WaterDeviceParamUploadPage(
+        json: json,
       ),
-      BlocProvider<ListBloc>(
-        create: (BuildContext context) =>
-            ListBloc(listRepository: WaterDeviceParamListRepository()),
-      ),
-      BlocProvider<PageBloc>(
-        create: (BuildContext context) => PageBloc(),
-      ),
-    ],
-    child: WaterDeviceParamUploadPage(
-      json: json,
-    ),
-  );
-});
+    );
+  },
+);
 
 var changePasswordHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return ChangePasswordPage();
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return ChangePasswordPage();
+  },
+);
 
 var shareProductHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return ShareProductPage();
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return ShareProductPage();
+  },
+);
 
 var noticeListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: NoticeListRepository()),
-    child: NoticeListPage(),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: NoticeListRepository()),
+      child: NoticeListPage(),
+    );
+  },
+);
 
 var warnListHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return BlocProvider<ListBloc>(
-    create: (BuildContext context) =>
-        ListBloc(listRepository: WarnListRepository()),
-    child: WarnListPage(),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return BlocProvider<ListBloc>(
+      create: (BuildContext context) =>
+          ListBloc(listRepository: WarnListRepository()),
+      child: WarnListPage(),
+    );
+  },
+);
 
 var warnDetailHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  String warnId = params['id']?.first;
-  return BlocProvider<DetailBloc>(
-    create: (BuildContext context) =>
-        DetailBloc(detailRepository: WarnDetailRepository()),
-    child: WarnDetailPage(warnId: warnId),
-  );
-});
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String warnId = params['id']?.first;
+    return BlocProvider<DetailBloc>(
+      create: (BuildContext context) =>
+          DetailBloc(detailRepository: WarnDetailRepository()),
+      child: WarnDetailPage(warnId: warnId),
+    );
+  },
+);

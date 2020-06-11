@@ -22,6 +22,7 @@ class DischargeListRepository extends ListRepository<Discharge> {
   /// [enterId] 筛选某企业的所有排口
   /// [dischargeType] 排口类型 outletType1：雨水 outletType2：废水 outletType3：废气
   /// [state] 排口状态 （暂未使用）
+  /// [attentionLevel] 关注程度 0:非重点 1:重点
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -31,6 +32,7 @@ class DischargeListRepository extends ListRepository<Discharge> {
     enterId = '',
     dischargeType = '',
     state = '',
+    attentionLevel = '',
   }) {
     return {
       'currentPage': currentPage,
@@ -44,6 +46,7 @@ class DischargeListRepository extends ListRepository<Discharge> {
       'enterId': enterId,
       'dischargeType': dischargeType,
       'disOutType': dischargeType,
+      'attentionLevel': attentionLevel,
     };
   }
 }

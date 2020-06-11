@@ -38,12 +38,14 @@ class DischargeListPage extends StatefulWidget {
   final String enterId;
   final String dischargeType;
   final String state;
+  final String attentionLevel;
   final int type; //启用页面的类型 0：点击列表项查看详情 1：点击列表项返回上一层与排口信息
 
   DischargeListPage({
     this.enterId = '',
     this.dischargeType = '',
     this.state = '',
+    this.attentionLevel = '',
     this.type = 0,
   });
 
@@ -64,16 +66,24 @@ class _DischargeListPageState extends State<DischargeListPage> {
     collectionRepository: AreaRepository(),
   );
 
-  /// 监控点类型Bloc
+  /// 排口类型Bloc
   final DataDictBloc _dischargeTypeBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.outletType),
+  );
+
+  /// 关注程度Bloc
+  final DataDictBloc _attentionLevelBloc = DataDictBloc(
+    dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
   );
 
   /// 区域信息
   Result _areaResult;
 
-  /// 排口类型下标
+  /// 排口类型
   String _dischargeType;
+
+  /// 关注程度
+  String _attentionLevel;
 
   /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
@@ -90,6 +100,8 @@ class _DischargeListPageState extends State<DischargeListPage> {
     if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载排口类型
     _dischargeTypeBloc.add(DataDictLoad());
+    // 加载关注程度
+    _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
     // 初始化列表Bloc
     _listBloc = BlocProvider.of<ListBloc>(context);
@@ -109,6 +121,8 @@ class _DischargeListPageState extends State<DischargeListPage> {
       (_areaBloc?.state as CollectionLoading).cancelToken.cancel();
     if (_dischargeTypeBloc?.state is DataDictLoading)
       (_dischargeTypeBloc?.state as DataDictLoading).cancelToken.cancel();
+    if (_attentionLevelBloc?.state is DataDictLoading)
+      (_attentionLevelBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -117,6 +131,7 @@ class _DischargeListPageState extends State<DischargeListPage> {
     _enterNameController.text = '';
     _areaResult = null;
     _dischargeType = widget.dischargeType;
+    _attentionLevel = widget.attentionLevel;
   }
 
   /// 获取请求参数
@@ -130,6 +145,7 @@ class _DischargeListPageState extends State<DischargeListPage> {
       areaCode: _areaResult?.areaId ?? '',
       dischargeType: _dischargeType,
       state: widget.state,
+      attentionLevel: widget.attentionLevel,
     );
   }
 
@@ -372,6 +388,16 @@ class _DischargeListPageState extends State<DischargeListPage> {
                             onItemTap: (value) {
                               setState(() {
                                 _dischargeType = value;
+                              });
+                            },
+                          ),
+                          DataDictBlocGridWidget(
+                            title: '关注程度',
+                            checkValue: _attentionLevel,
+                            dataDictBloc: _attentionLevelBloc,
+                            onItemTap: (value) {
+                              setState(() {
+                                _attentionLevel = value;
                               });
                             },
                           ),
