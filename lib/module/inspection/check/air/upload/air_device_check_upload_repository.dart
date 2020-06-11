@@ -76,15 +76,15 @@ class AirDeviceCheckUploadRepository
       // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
       ..addAll([
         MapEntry('paramRemark',
-            TextUtil.isEmpty(data.paramRemark) ? ' ' : data.paramRemark)
+            TextUtil.isEmpty(data.paramRemark.text) ? ' ' : data.paramRemark.text)
       ])
       ..addAll([
         MapEntry('changeRemark',
-            TextUtil.isEmpty(data.changeRemark) ? ' ' : data.changeRemark)
+            TextUtil.isEmpty(data.changeRemark.text) ? ' ' : data.changeRemark.text)
       ])
       ..addAll([
         MapEntry('checkResult',
-            TextUtil.isEmpty(data.checkResult) ? ' ' : data.checkResult)
+            TextUtil.isEmpty(data.checkResult.text) ? ' ' : data.checkResult.text)
       ]);
     return formData;
   }

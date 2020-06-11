@@ -21,24 +21,13 @@ class AirDeviceCheckUpload {
   List<AirDeviceCheckRecord> airDeviceCheckRecordList;
 
   /// 如校验合格前对系统进行过处理、调整、参数修改，请说明
-  String paramRemark;
+  final TextEditingController paramRemark = TextEditingController();
 
   /// 如校验后，颗粒物测量仪、流速仪的原校正系统改动，请说明
-  String changeRemark;
+  final TextEditingController changeRemark = TextEditingController();
 
   /// 总体校验是否合格
-  String checkResult;
-
-  AirDeviceCheckUpload({
-    this.inspectionTaskId,
-    this.itemType,
-    this.baiduLocation,
-    this.factor,
-    this.airDeviceCheckRecordList,
-    this.paramRemark = '',
-    this.changeRemark = '',
-    this.checkResult = '',
-  });
+  final TextEditingController checkResult = TextEditingController();
 
   /// 获取参比方法测量值平均值
   String get compareAvgVal {
@@ -89,8 +78,8 @@ class AirDeviceCheckRecord {
   DateTime currentCheckTime;
 
   /// 参比方法测量值
-  TextEditingController currentCheckResult = TextEditingController();
+  final TextEditingController currentCheckResult = TextEditingController();
 
   /// CEMS测量值
-  TextEditingController currentCheckIsPass = TextEditingController();
+  final TextEditingController currentCheckIsPass = TextEditingController();
 }

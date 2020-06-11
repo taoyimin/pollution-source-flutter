@@ -316,11 +316,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               ),
               TextAreaWidget(
                 maxLines: 3,
-                onChanged: (value) {
-                  setState(() {
-                    airDeviceCheckUpload.paramRemark = value;
-                  });
-                },
+                controller: airDeviceCheckUpload.paramRemark,
               ),
               Gaps.hLine,
               Padding(
@@ -329,11 +325,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               ),
               TextAreaWidget(
                 maxLines: 3,
-                onChanged: (value) {
-                  setState(() {
-                    airDeviceCheckUpload.changeRemark = value;
-                  });
-                },
+                controller: airDeviceCheckUpload.changeRemark,
               ),
               Gaps.hLine,
               Padding(
@@ -342,11 +334,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               ),
               TextAreaWidget(
                 maxLines: 3,
-                onChanged: (value) {
-                  setState(() {
-                    airDeviceCheckUpload.checkResult = value;
-                  });
-                },
+                controller: airDeviceCheckUpload.checkResult,
               ),
             ],
           ),
