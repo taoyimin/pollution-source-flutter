@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 
 /// UI工具类
@@ -200,5 +202,10 @@ class UIUtils {
   static double getSearchItemHeight(
       BuildContext context, Orientation orientation) {
     return (getDrawerWidth(context, orientation) - 16 - 32) / 6;
+  }
+
+  /// 根据用户关注程度获取标题
+  static String getAttentionLevelTitle({String defaultTitle}) {
+    return '1' == SpUtil.getString(Constant.spAttentionLevel) ? '重点排污单位' : defaultTitle ?? '';
   }
 }
