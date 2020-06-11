@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,6 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_event.dart';
 import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
@@ -26,9 +26,7 @@ import 'package:pollution_source/widget/custom_header.dart';
 class AirDeviceCheckUploadPage extends StatefulWidget {
   final String json;
 
-  AirDeviceCheckUploadPage({
-    this.json,
-  });
+  AirDeviceCheckUploadPage({this.json});
 
   @override
   _AirDeviceCheckUploadPageState createState() =>
@@ -36,32 +34,34 @@ class AirDeviceCheckUploadPage extends StatefulWidget {
 }
 
 class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
-  PageBloc _pageBloc;
-
   /// 加载因子信息Bloc
   DetailBloc _detailBloc;
+
+  /// 上报Bloc
   UploadBloc _uploadBloc;
+
+  /// 运维任务
   RoutineInspectionUploadList task;
+
+  final AirDeviceCheckUpload _airDeviceCheckUpload = AirDeviceCheckUpload();
 
   @override
   void initState() {
     super.initState();
+    // 初始化运维任务
     task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
-    // 初始化页面Bloc
-    _pageBloc = BlocProvider.of<PageBloc>(context);
-    // 加载界面(默认有一条记录)
-    _pageBloc.add(PageLoad(
-        model: AirDeviceCheckUpload(
-      inspectionTaskId: task.inspectionTaskId,
-      itemType: task.itemType,
-      airDeviceCheckRecordList: [
-        AirDeviceCheckRecord(),
-        AirDeviceCheckRecord(),
-        AirDeviceCheckRecord(),
-        AirDeviceCheckRecord(),
-        AirDeviceCheckRecord(),
-      ],
-    )));
+    // 初始化界面
+    _airDeviceCheckUpload.inspectionTaskId = task.inspectionTaskId;
+    _airDeviceCheckUpload.itemType = task.itemType;
+    // 默认五条校准记录
+    _airDeviceCheckUpload.airDeviceCheckRecordList = [
+      AirDeviceCheckRecord(),
+      AirDeviceCheckRecord(),
+      AirDeviceCheckRecord(),
+      AirDeviceCheckRecord(),
+      AirDeviceCheckRecord(),
+    ];
+    // 初始化监测因子Bloc
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     // 加载该设备的监测因子
     _detailBloc.add(DetailLoad(
@@ -77,6 +77,11 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
   @override
   void dispose() {
     // 释放资源
+    _airDeviceCheckUpload.airDeviceCheckRecordList
+        .forEach((airDeviceCheckRecord) {
+      airDeviceCheckRecord.currentCheckIsPass.dispose();
+      airDeviceCheckRecord.currentCheckResult.dispose();
+    });
     super.dispose();
   }
 
@@ -126,17 +131,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                 },
               ),
             ],
-            child: BlocBuilder<PageBloc, PageState>(
-              builder: (context, state) {
-                if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model);
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                  );
-                }
-              },
-            ),
+            child: _buildPageLoadedDetail(_airDeviceCheckUpload),
           ),
         ],
       ),
@@ -149,14 +144,22 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: <Widget>[
+          LocationWidget(
+            locationCallback: (BaiduLocation baiduLocation) {
+              setState(() {
+                airDeviceCheckUpload.baiduLocation = baiduLocation;
+              });
+            },
+          ),
+          Gaps.hLine,
           DetailRowWidget<RoutineInspectionUploadFactor>(
             title: '校验因子',
             content: airDeviceCheckUpload?.factor?.factorName,
             detailBloc: _detailBloc,
             onLoaded: (RoutineInspectionUploadFactor factor) {
-              _pageBloc.add(PageLoad(
-                model: airDeviceCheckUpload.copyWith(factor: factor),
-              ));
+              setState(() {
+                airDeviceCheckUpload.factor = factor;
+              });
             },
             onErrorTap: () {
               _detailBloc.add(DetailLoad(
@@ -230,7 +233,6 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                             _buildPageListItem(
                               i,
                               airDeviceCheckUpload.airDeviceCheckRecordList,
-                              airDeviceCheckUpload,
                             )))
                     ?.values
                     ?.toList() ??
@@ -288,9 +290,10 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               Gaps.hGap10,
               InkWell(
                 onTap: () {
-                  airDeviceCheckUpload.airDeviceCheckRecordList
-                      .add(AirDeviceCheckRecord());
-                  _pageBloc.add(PageLoad(model: airDeviceCheckUpload));
+                  setState(() {
+                    airDeviceCheckUpload.airDeviceCheckRecordList
+                        .add(AirDeviceCheckRecord());
+                  });
                 },
                 child: const Text(
                   '点击新增',
@@ -314,9 +317,9 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               TextAreaWidget(
                 maxLines: 3,
                 onChanged: (value) {
-                  _pageBloc.add(PageLoad(
-                      model:
-                          airDeviceCheckUpload.copyWith(paramRemark: value)));
+                  setState(() {
+                    airDeviceCheckUpload.paramRemark = value;
+                  });
                 },
               ),
               Gaps.hLine,
@@ -327,9 +330,9 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               TextAreaWidget(
                 maxLines: 3,
                 onChanged: (value) {
-                  _pageBloc.add(PageLoad(
-                      model:
-                          airDeviceCheckUpload.copyWith(changeRemark: value)));
+                  setState(() {
+                    airDeviceCheckUpload.changeRemark = value;
+                  });
                 },
               ),
               Gaps.hLine,
@@ -340,9 +343,9 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               TextAreaWidget(
                 maxLines: 3,
                 onChanged: (value) {
-                  _pageBloc.add(PageLoad(
-                      model:
-                          airDeviceCheckUpload.copyWith(checkResult: value)));
+                  setState(() {
+                    airDeviceCheckUpload.checkResult = value;
+                  });
                 },
               ),
             ],
@@ -367,8 +370,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
     ));
   }
 
-  Widget _buildPageListItem(int index, List<AirDeviceCheckRecord> list,
-      AirDeviceCheckUpload airDeviceCheckUpload) {
+  Widget _buildPageListItem(int index, List<AirDeviceCheckRecord> list) {
     return Column(
       children: <Widget>[
         Row(
@@ -385,32 +387,18 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                   initialDateTime: list[index]?.currentCheckTime,
                   onClose: () {},
                   onConfirm: (dateTime, selectedIndex) {
-                    list[index] =
-                        list[index].copyWith(currentCheckTime: dateTime);
-                    _pageBloc.add(PageLoad(
-                        model: airDeviceCheckUpload.copyWith(
-                            airDeviceCheckRecordList: list)));
+                    setState(() {
+                      list[index].currentCheckTime = dateTime;
+                    });
                   },
                 );
               },
             ),
             EditWidget(
-              key: Key('currentCheckResult$index'),
-              onChanged: (value) {
-                list[index] = list[index].copyWith(currentCheckResult: value);
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCheckUpload.copyWith(
-                        airDeviceCheckRecordList: list)));
-              },
+              controller: list[index].currentCheckResult,
             ),
             EditWidget(
-              key: Key('currentCheckIsPass$index'),
-              onChanged: (value) {
-                list[index] = list[index].copyWith(currentCheckIsPass: value);
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCheckUpload.copyWith(
-                        airDeviceCheckRecordList: list)));
-              },
+              controller: list[index].currentCheckIsPass,
             ),
             Offstage(
               offstage: list.length <= 5,
@@ -432,10 +420,9 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                           FlatButton(
                             onPressed: () async {
                               Navigator.of(context).pop();
-                              airDeviceCheckUpload.airDeviceCheckRecordList
-                                  .removeAt(index);
-                              _pageBloc
-                                  .add(PageLoad(model: airDeviceCheckUpload));
+                              setState(() {
+                                list.removeAt(index);
+                              });
                             },
                             child: const Text("确认"),
                           ),

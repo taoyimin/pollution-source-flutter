@@ -1,37 +1,44 @@
-import 'package:common_utils/common_utils.dart';
-import 'package:equatable/equatable.dart';
+import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
+import 'package:flutter/material.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_model.dart';
+import 'package:pollution_source/util/common_utils.dart';
 
-// 废气监测设备校验上报
-class AirDeviceCheckUpload extends Equatable {
-  final String inspectionTaskId;
-  final String itemType;
-  final RoutineInspectionUploadFactor factor;
-  final List<AirDeviceCheckRecord> airDeviceCheckRecordList;
-  final String paramRemark;
-  final String changeRemark;
-  final String checkResult;
+/// 废气监测设备校验上报
+class AirDeviceCheckUpload {
+  /// 任务id
+  String inspectionTaskId;
 
-  const AirDeviceCheckUpload({
+  /// 任务类型
+  String itemType;
+
+  /// 位置信息
+  BaiduLocation baiduLocation;
+
+  /// 校验因子
+  RoutineInspectionUploadFactor factor;
+
+  /// 校验记录
+  List<AirDeviceCheckRecord> airDeviceCheckRecordList;
+
+  /// 如校验合格前对系统进行过处理、调整、参数修改，请说明
+  String paramRemark;
+
+  /// 如校验后，颗粒物测量仪、流速仪的原校正系统改动，请说明
+  String changeRemark;
+
+  /// 总体校验是否合格
+  String checkResult;
+
+  AirDeviceCheckUpload({
     this.inspectionTaskId,
     this.itemType,
+    this.baiduLocation,
     this.factor,
     this.airDeviceCheckRecordList,
     this.paramRemark = '',
     this.changeRemark = '',
     this.checkResult = '',
   });
-
-  @override
-  List<Object> get props => [
-        inspectionTaskId,
-        itemType,
-        factor,
-        airDeviceCheckRecordList,
-        paramRemark,
-        changeRemark,
-        checkResult,
-      ];
 
   /// 获取参比方法测量值平均值
   String get compareAvgVal {
@@ -40,12 +47,12 @@ class AirDeviceCheckUpload extends Equatable {
         return '';
       }
       var tempList = airDeviceCheckRecordList
-          .where((item) => !TextUtil.isEmpty(item.currentCheckResult));
+          .where((item) => CommonUtils.isNumeric(item.currentCheckResult.text));
       if (tempList.length == 0) {
         return '';
       }
       return (tempList
-                  .map((item) => double.parse(item.currentCheckResult))
+                  .map((item) => double.tryParse(item.currentCheckResult.text))
                   .reduce((a, b) => a + b) /
               tempList.length)
           .toStringAsFixed(4);
@@ -61,12 +68,12 @@ class AirDeviceCheckUpload extends Equatable {
         return '';
       }
       var tempList = airDeviceCheckRecordList
-          .where((item) => !TextUtil.isEmpty(item.currentCheckIsPass));
+          .where((item) => CommonUtils.isNumeric(item.currentCheckIsPass.text));
       if (tempList.length == 0) {
         return '';
       }
       return (tempList
-                  .map((item) => double.parse(item.currentCheckIsPass))
+                  .map((item) => double.tryParse(item.currentCheckIsPass.text))
                   .reduce((a, b) => a + b) /
               tempList.length)
           .toStringAsFixed(4);
@@ -74,54 +81,16 @@ class AirDeviceCheckUpload extends Equatable {
       return '';
     }
   }
-
-  AirDeviceCheckUpload copyWith({
-    RoutineInspectionUploadFactor factor,
-    List<AirDeviceCheckRecord> airDeviceCheckRecordList,
-    String paramRemark,
-    String changeRemark,
-    String checkResult,
-  }) {
-    return AirDeviceCheckUpload(
-      inspectionTaskId: this.inspectionTaskId,
-      itemType: this.itemType,
-      factor: factor ?? this.factor,
-      airDeviceCheckRecordList:
-          airDeviceCheckRecordList ?? this.airDeviceCheckRecordList,
-      paramRemark: paramRemark ?? this.paramRemark,
-      changeRemark: changeRemark ?? this.changeRemark,
-      checkResult: checkResult ?? this.checkResult,
-    );
-  }
 }
 
-class AirDeviceCheckRecord extends Equatable {
-  final DateTime currentCheckTime;
-  final String currentCheckResult;
-  final String currentCheckIsPass;
+/// 废气监测设备校验记录
+class AirDeviceCheckRecord {
+  /// 监测时间
+  DateTime currentCheckTime;
 
-  AirDeviceCheckRecord({
-    this.currentCheckTime,
-    this.currentCheckResult = '',
-    this.currentCheckIsPass = '',
-  });
+  /// 参比方法测量值
+  TextEditingController currentCheckResult = TextEditingController();
 
-  @override
-  List<Object> get props => [
-        currentCheckTime,
-        currentCheckResult,
-        currentCheckIsPass,
-      ];
-
-  AirDeviceCheckRecord copyWith({
-    DateTime currentCheckTime,
-    String currentCheckResult,
-    String currentCheckIsPass,
-  }) {
-    return AirDeviceCheckRecord(
-      currentCheckTime: currentCheckTime ?? this.currentCheckTime,
-      currentCheckResult: currentCheckResult ?? this.currentCheckResult,
-      currentCheckIsPass: currentCheckIsPass ?? this.currentCheckIsPass,
-    );
-  }
+  /// CEMS测量值
+  TextEditingController currentCheckIsPass = TextEditingController();
 }

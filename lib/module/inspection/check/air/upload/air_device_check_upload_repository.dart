@@ -10,20 +10,22 @@ class AirDeviceCheckUploadRepository
     extends UploadRepository<AirDeviceCheckUpload, String> {
   @override
   checkData(AirDeviceCheckUpload data) {
-    if (data.factor == null)
+    if (data.baiduLocation == null)
+      throw DioError(error: InvalidParamException('请先获取位置信息'));
+    else if (data.factor == null)
       throw DioError(error: InvalidParamException('请先加载校验因子'));
     else if (data.airDeviceCheckRecordList.length < 5)
       throw DioError(error: InvalidParamException('请至少上传五条记录'));
     for (int i = 0; i < data.airDeviceCheckRecordList.length; i++) {
       if (data.airDeviceCheckRecordList[i].currentCheckTime == null)
         throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的监测时间'));
-      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckResult))
+      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckResult.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的参比方法测量值'));
-      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckResult))
+      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckResult.text))
         throw DioError(error: InvalidParamException('第${i + 1}条记录的参比方法测量值是无效值'));
-      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckIsPass))
+      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的CEMS测量值'));
-      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckIsPass))
+      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
         throw DioError(error: InvalidParamException('第${i + 1}条记录的CEMS测量值是无效值'));
     }
   }
@@ -37,6 +39,8 @@ class AirDeviceCheckUploadRepository
   Future<FormData> createFormData(AirDeviceCheckUpload data) async {
     FormData formData = FormData();
     formData.fields
+      ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
+      ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('itemType', data.itemType)])
       ..addAll([MapEntry('factorId', data.factor.factorId.toString())])
@@ -64,10 +68,10 @@ class AirDeviceCheckUploadRepository
             DateUtil.getDateStrByDateTime(item.currentCheckTime));
       }))
       ..addAll(data.airDeviceCheckRecordList.map((item) {
-        return MapEntry('currentCheckResult', item.currentCheckResult);
+        return MapEntry('currentCheckResult', item.currentCheckResult.text);
       }))
       ..addAll(data.airDeviceCheckRecordList.map((item) {
-        return MapEntry('currentCheckIsPass', item.currentCheckIsPass);
+        return MapEntry('currentCheckIsPass', item.currentCheckIsPass.text);
       }))
       // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
       ..addAll([
