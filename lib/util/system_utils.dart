@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bdmap_location_flutter_plugin/bdmap_location_flutter_plugin.dart';
 import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
@@ -38,22 +39,10 @@ class SystemUtils {
   }
 
   /// 检查是否拥有定位权限
-//  static Future<bool> checkLocationPermission() async {
-//    PermissionStatus permission = await PermissionHandler()
-//        .checkPermissionStatus(PermissionGroup.location);
-//    if (permission != PermissionStatus.granted) {
-//      Map<PermissionGroup, PermissionStatus> permissions =
-//          await PermissionHandler()
-//              .requestPermissions([PermissionGroup.location]);
-//      if (permissions[PermissionGroup.location] != PermissionStatus.granted) {
-//        return false;
-//      } else {
-//        return true;
-//      }
-//    } else {
-//      return true;
-//    }
-//  }
+  static void checkLocation() async {
+    final LocationFlutterPlugin locationPlugin = LocationFlutterPlugin();
+    locationPlugin.requestPermission();
+  }
 
   /// 检查是否有通知权限
   static void checkNotification(context) async {
