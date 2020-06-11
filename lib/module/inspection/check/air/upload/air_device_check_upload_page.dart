@@ -9,8 +9,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
@@ -23,33 +21,40 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
-class AirDeviceCheckUploadPage extends StatefulWidget {
-  final String json;
+import 'air_device_check_upload_repository.dart';
 
-  AirDeviceCheckUploadPage({this.json});
+class AirDeviceCheckUploadPage extends StatefulWidget {
+  final String taskJson;
+
+  AirDeviceCheckUploadPage({this.taskJson});
 
   @override
   _AirDeviceCheckUploadPageState createState() =>
-      _AirDeviceCheckUploadPageState();
+      _AirDeviceCheckUploadPageState(
+        task: RoutineInspectionUploadList.fromJson(json.decode(taskJson)),
+      );
 }
 
 class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
-  /// 加载因子信息Bloc
-  DetailBloc _detailBloc;
+  /// 运维任务
+  final RoutineInspectionUploadList task;
 
   /// 上报Bloc
-  UploadBloc _uploadBloc;
+  final UploadBloc _uploadBloc =
+      UploadBloc(uploadRepository: AirDeviceCheckUploadRepository());
 
-  /// 运维任务
-  RoutineInspectionUploadList task;
+  /// 加载因子信息Bloc
+  final DetailBloc _detailBloc =
+      DetailBloc(detailRepository: RoutineInspectionUploadFactorRepository());
 
+  /// 废气监测设备校验类
   final AirDeviceCheckUpload _airDeviceCheckUpload = AirDeviceCheckUpload();
+
+  _AirDeviceCheckUploadPageState({this.task});
 
   @override
   void initState() {
     super.initState();
-    // 初始化运维任务
-    task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
     // 初始化界面
     _airDeviceCheckUpload.inspectionTaskId = task.inspectionTaskId;
     _airDeviceCheckUpload.itemType = task.itemType;
@@ -61,17 +66,14 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
       AirDeviceCheckRecord(),
       AirDeviceCheckRecord(),
     ];
-    // 初始化监测因子Bloc
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     // 加载该设备的监测因子
     _detailBloc.add(DetailLoad(
-        params: RoutineInspectionUploadFactorRepository.createParams(
-      factorCode: task.factorCode,
-      deviceId: task.deviceId,
-      monitorId: task.monitorId,
-    )));
-    // 初始化上报Bloc
-    _uploadBloc = BlocProvider.of<UploadBloc>(context);
+      params: RoutineInspectionUploadFactorRepository.createParams(
+        factorCode: task.factorCode,
+        deviceId: task.deviceId,
+        monitorId: task.monitorId,
+      ),
+    ));
   }
 
   @override
@@ -90,39 +92,25 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
     return Scaffold(
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<PageBloc, PageState>(
-            builder: (context, state) {
-              String enterName = '';
-              String monitorName = '';
-              String deviceName = '';
-              String inspectionStartTime = '';
-              String inspectionEndTime = '';
-              if (state is PageLoaded) {
-                enterName = task?.enterName ?? '';
-                monitorName = task?.monitorName ?? '';
-                deviceName = task?.deviceName ?? '';
-                inspectionStartTime = task?.inspectionStartTime ?? '';
-                inspectionEndTime = task?.inspectionEndTime ?? '';
-              }
-              return UploadHeaderWidget(
-                title: '废气监测设备校验',
-                subTitle: '''$enterName
-监控点名：$monitorName
-设备名称：$deviceName
-开始日期：$inspectionStartTime
-截至日期：$inspectionEndTime''',
-                imagePath:
-                    'assets/images/long_stop_report_upload_header_image.png',
-                backgroundColor: Colours.primary_color,
-              );
-            },
+          UploadHeaderWidget(
+            title: '废气监测设备校验',
+            subTitle: '''${task.enterName}
+监控点名：${task.monitorName}
+设备名称：${task.deviceName}
+开始日期：${task.inspectionStartTime}
+截至日期：${task.inspectionEndTime}''',
+            imagePath:
+            'assets/images/long_stop_report_upload_header_image.png',
+            backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
             listeners: [
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: uploadListener,
               ),
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: (context, state) {
                   if (state is UploadSuccess) {
                     Toast.show(state.message);
@@ -140,222 +128,223 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
 
   Widget _buildPageLoadedDetail(AirDeviceCheckUpload airDeviceCheckUpload) {
     return SliverToBoxAdapter(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: <Widget>[
-          LocationWidget(
-            locationCallback: (BaiduLocation baiduLocation) {
-              setState(() {
-                airDeviceCheckUpload.baiduLocation = baiduLocation;
-              });
-            },
-          ),
-          Gaps.hLine,
-          DetailRowWidget<RoutineInspectionUploadFactor>(
-            title: '校验因子',
-            content: airDeviceCheckUpload?.factor?.factorName,
-            detailBloc: _detailBloc,
-            onLoaded: (RoutineInspectionUploadFactor factor) {
-              setState(() {
-                airDeviceCheckUpload.factor = factor;
-              });
-            },
-            onErrorTap: () {
-              _detailBloc.add(DetailLoad(
-                  params: RoutineInspectionUploadFactorRepository.createParams(
-                factorCode: task.factorCode,
-                deviceId: task.deviceId,
-                monitorId: task.monitorId,
-              )));
-            },
-          ),
-          Gaps.hLine,
-          DetailRowWidget<RoutineInspectionUploadFactor>(
-            title: '测量单位',
-            content: airDeviceCheckUpload?.factor?.unit,
-            detailBloc: _detailBloc,
-            onLoaded: (RoutineInspectionUploadFactor factor) {},
-            onErrorTap: () {
-              _detailBloc.add(DetailLoad(
-                  params: RoutineInspectionUploadFactorRepository.createParams(
-                factorCode: task.factorCode,
-                deviceId: task.deviceId,
-                monitorId: task.monitorId,
-              )));
-            },
-          ),
-          Gaps.hLine,
-          Container(
-            height: 46,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      '监测时间',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      '参比方法测量值',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      'CEMS测量值',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-              ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: <Widget>[
+            LocationWidget(
+              locationCallback: (BaiduLocation baiduLocation) {
+                setState(() {
+                  airDeviceCheckUpload.baiduLocation = baiduLocation;
+                });
+              },
             ),
-          ),
-          Gaps.hLine,
-          Column(
-            children: airDeviceCheckUpload?.airDeviceCheckRecordList
-                    ?.asMap()
-                    ?.map((i, AirDeviceCheckRecord airDeviceCheckRecord) =>
-                        MapEntry(
-                            i,
-                            _buildPageListItem(
-                              i,
-                              airDeviceCheckUpload.airDeviceCheckRecordList,
-                            )))
-                    ?.values
-                    ?.toList() ??
-                [],
-          ),
-          Container(
-            height: 46,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      '平均测量值',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
+            Gaps.hLine,
+            DetailRowWidget<RoutineInspectionUploadFactor>(
+              title: '校验因子',
+              content: airDeviceCheckUpload?.factor?.factorName,
+              detailBloc: _detailBloc,
+              onLoaded: (RoutineInspectionUploadFactor factor) {
+                setState(() {
+                  airDeviceCheckUpload.factor = factor;
+                });
+              },
+              onErrorTap: () {
+                _detailBloc.add(DetailLoad(
+                  params: RoutineInspectionUploadFactorRepository.createParams(
+                    factorCode: task.factorCode,
+                    deviceId: task.deviceId,
+                    monitorId: task.monitorId,
                   ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      '${airDeviceCheckUpload?.compareAvgVal}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      '${airDeviceCheckUpload?.cemsAvgVal}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-              ],
+                ));
+              },
             ),
-          ),
-          Gaps.hLine,
-          Gaps.vGap10,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                '备注：至少上传五条记录',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colours.secondary_text,
-                ),
+            Gaps.hLine,
+            DetailRowWidget<RoutineInspectionUploadFactor>(
+              title: '测量单位',
+              content: airDeviceCheckUpload?.factor?.unit,
+              detailBloc: _detailBloc,
+              onLoaded: (RoutineInspectionUploadFactor factor) {},
+              onErrorTap: () {
+                _detailBloc.add(DetailLoad(
+                  params: RoutineInspectionUploadFactorRepository.createParams(
+                    factorCode: task.factorCode,
+                    deviceId: task.deviceId,
+                    monitorId: task.monitorId,
+                  ),
+                ));
+              },
+            ),
+            Gaps.hLine,
+            Container(
+              height: 46,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        '监测时间',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        '参比方法测量值',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        'CEMS测量值',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Gaps.hGap10,
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    airDeviceCheckUpload.airDeviceCheckRecordList
-                        .add(AirDeviceCheckRecord());
-                  });
-                },
-                child: const Text(
-                  '点击新增',
+            ),
+            Gaps.hLine,
+            Column(
+              children: airDeviceCheckUpload?.airDeviceCheckRecordList
+                      ?.asMap()
+                      ?.map((i, AirDeviceCheckRecord airDeviceCheckRecord) =>
+                          MapEntry(
+                              i,
+                              _buildPageListItem(
+                                i,
+                                airDeviceCheckUpload.airDeviceCheckRecordList,
+                              )))
+                      ?.values
+                      ?.toList() ??
+                  [],
+            ),
+            Container(
+              height: 46,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        '平均测量值',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        '${airDeviceCheckUpload?.compareAvgVal}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        '${airDeviceCheckUpload?.cemsAvgVal}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Gaps.hLine,
+            Gaps.vGap10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  '备注：至少上传五条记录',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colours.primary_color,
+                    color: Colours.secondary_text,
                   ),
                 ),
-              )
-            ],
-          ),
-          Gaps.vGap10,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Gaps.hLine,
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: const Text('如校验合格前对系统进行过处理、调整、参数修改，请说明:'),
-              ),
-              TextAreaWidget(
-                maxLines: 3,
-                controller: airDeviceCheckUpload.paramRemark,
-              ),
-              Gaps.hLine,
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: const Text('如校验后，颗粒物测量仪、流速仪的原校正系统改动，请说明:'),
-              ),
-              TextAreaWidget(
-                maxLines: 3,
-                controller: airDeviceCheckUpload.changeRemark,
-              ),
-              Gaps.hLine,
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: const Text('总体校验是否合格:'),
-              ),
-              TextAreaWidget(
-                maxLines: 3,
-                controller: airDeviceCheckUpload.checkResult,
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              ClipButton(
-                text: '提交',
-                icon: Icons.file_upload,
-                color: Colors.lightBlue,
-                onTap: () {
-                  _uploadBloc.add(Upload(
-                    data: airDeviceCheckUpload,
-                  ));
-                },
-              ),
-            ],
-          ),
-          Gaps.vGap20,
-        ],
+                Gaps.hGap10,
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      airDeviceCheckUpload.airDeviceCheckRecordList
+                          .add(AirDeviceCheckRecord());
+                    });
+                  },
+                  child: const Text(
+                    '点击新增',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colours.primary_color,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Gaps.vGap10,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Gaps.hLine,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: const Text('如校验合格前对系统进行过处理、调整、参数修改，请说明:'),
+                ),
+                TextAreaWidget(
+                  maxLines: 3,
+                  controller: airDeviceCheckUpload.paramRemark,
+                ),
+                Gaps.hLine,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: const Text('如校验后，颗粒物测量仪、流速仪的原校正系统改动，请说明:'),
+                ),
+                TextAreaWidget(
+                  maxLines: 3,
+                  controller: airDeviceCheckUpload.changeRemark,
+                ),
+                Gaps.hLine,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: const Text('总体校验是否合格:'),
+                ),
+                TextAreaWidget(
+                  maxLines: 3,
+                  controller: airDeviceCheckUpload.checkResult,
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                ClipButton(
+                  text: '提交',
+                  icon: Icons.file_upload,
+                  color: Colors.lightBlue,
+                  onTap: () {
+                    _uploadBloc.add(Upload(data: airDeviceCheckUpload));
+                  },
+                ),
+              ],
+            ),
+            Gaps.vGap20,
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Widget _buildPageListItem(int index, List<AirDeviceCheckRecord> list) {

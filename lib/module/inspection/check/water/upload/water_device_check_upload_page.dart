@@ -6,9 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_event.dart';
-import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
@@ -19,44 +16,53 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
-class WaterDeviceCheckUploadPage extends StatefulWidget {
-  final String json;
+import 'water_device_check_upload_repository.dart';
 
-  WaterDeviceCheckUploadPage({
-    this.json,
-  });
+/// 废水监测设备校验上报页面
+class WaterDeviceCheckUploadPage extends StatefulWidget {
+  final String taskJson;
+
+  WaterDeviceCheckUploadPage({this.taskJson});
 
   @override
   _WaterDeviceCheckUploadPageState createState() =>
-      _WaterDeviceCheckUploadPageState();
+      _WaterDeviceCheckUploadPageState(
+        task: RoutineInspectionUploadList.fromJson(json.decode(taskJson)),
+      );
 }
 
 class _WaterDeviceCheckUploadPageState
     extends State<WaterDeviceCheckUploadPage> {
-  PageBloc _pageBloc;
-  UploadBloc _uploadBloc;
-  RoutineInspectionUploadList task;
+  /// 运维任务
+  final RoutineInspectionUploadList task;
+
+  /// 上报Bloc
+  final UploadBloc _uploadBloc =
+      UploadBloc(uploadRepository: WaterDeviceUploadRepository());
+
+  /// 废水监测设备校验类集合
+  final List<WaterDeviceCheckUpload> _waterDeviceCheckUploadList = [];
+
+  _WaterDeviceCheckUploadPageState({this.task});
 
   @override
   void initState() {
     super.initState();
-    task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
-    // 初始化页面Bloc
-    _pageBloc = BlocProvider.of<PageBloc>(context);
     // 加载界面(默认有一条记录)
-    _pageBloc.add(PageLoad(model: [
-      WaterDeviceCheckUpload(
-        inspectionTaskId: task.inspectionTaskId,
-        itemType: task.itemType,
-      )
-    ]));
-    // 初始化上报Bloc
-    _uploadBloc = BlocProvider.of<UploadBloc>(context);
+    _waterDeviceCheckUploadList.add(WaterDeviceCheckUpload(
+      inspectionTaskId: task.inspectionTaskId,
+      itemType: task.itemType,
+    ));
   }
 
   @override
   void dispose() {
-    // 释放资源
+    /// 释放资源
+    _waterDeviceCheckUploadList.forEach((waterDeviceCheckUpload) {
+      waterDeviceCheckUpload.standardSolution.dispose();
+      waterDeviceCheckUpload.realitySolution.dispose();
+      waterDeviceCheckUpload.currentCheckResult.dispose();
+    });
     super.dispose();
   }
 
@@ -65,39 +71,25 @@ class _WaterDeviceCheckUploadPageState
     return Scaffold(
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<PageBloc, PageState>(
-            builder: (context, state) {
-              String enterName = '';
-              String monitorName = '';
-              String deviceName = '';
-              String inspectionStartTime = '';
-              String inspectionEndTime = '';
-              if (state is PageLoaded) {
-                enterName = task?.enterName ?? '';
-                monitorName = task?.monitorName ?? '';
-                deviceName = task?.deviceName ?? '';
-                inspectionStartTime = task?.inspectionStartTime ?? '';
-                inspectionEndTime = task?.inspectionEndTime ?? '';
-              }
-              return UploadHeaderWidget(
-                title: '废水监测设备校验',
-                subTitle: '''$enterName
-监控点名：$monitorName
-设备名称：$deviceName
-开始日期：$inspectionStartTime
-截至日期：$inspectionEndTime''',
-                imagePath:
-                    'assets/images/long_stop_report_upload_header_image.png',
-                backgroundColor: Colours.primary_color,
-              );
-            },
+          UploadHeaderWidget(
+            title: '废水监测设备校验',
+            subTitle: '''${task.enterName}
+监控点名：${task.monitorName}
+设备名称：${task.deviceName}
+开始日期：${task.inspectionStartTime}
+截至日期：${task.inspectionEndTime}''',
+            imagePath:
+            'assets/images/long_stop_report_upload_header_image.png',
+            backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
             listeners: [
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: uploadListener,
               ),
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: (context, state) {
                   if (state is UploadSuccess) {
                     Toast.show('${state.message}');
@@ -106,17 +98,7 @@ class _WaterDeviceCheckUploadPageState
                 },
               ),
             ],
-            child: BlocBuilder<PageBloc, PageState>(
-              builder: (context, state) {
-                if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model);
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                  );
-                }
-              },
-            ),
+            child: _buildPageLoadedDetail(_waterDeviceCheckUploadList),
           ),
         ],
       ),
@@ -158,10 +140,12 @@ class _WaterDeviceCheckUploadPageState
                   icon: Icons.add,
                   color: Colors.lightGreen,
                   onTap: () {
-                    list.add(WaterDeviceCheckUpload(
+                    setState(() {
+                      list.add(WaterDeviceCheckUpload(
                         inspectionTaskId: task.inspectionTaskId,
-                        itemType: task.itemType));
-                    _pageBloc.add(PageLoad(model: list));
+                        itemType: task.itemType,
+                      ));
+                    });
                   },
                 ),
                 Gaps.hGap20,
@@ -170,9 +154,7 @@ class _WaterDeviceCheckUploadPageState
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    _uploadBloc.add(Upload(
-                      data: list,
-                    ));
+                    _uploadBloc.add(Upload(data: list));
                   },
                 ),
               ],
@@ -229,8 +211,9 @@ class _WaterDeviceCheckUploadPageState
                             FlatButton(
                               onPressed: () async {
                                 Navigator.of(context).pop();
-                                list.removeAt(index);
-                                _pageBloc.add(PageLoad(model: list));
+                                setState(() {
+                                  list.removeAt(index);
+                                });
                               },
                               child: const Text("确认"),
                             ),
@@ -258,8 +241,9 @@ class _WaterDeviceCheckUploadPageState
               initialDateTime: list[index]?.currentCheckTime,
               onClose: () {},
               onConfirm: (dateTime, selectedIndex) {
-                list[index] = list[index].copyWith(currentCheckTime: dateTime);
-                _pageBloc.add(PageLoad(model: list));
+                setState(() {
+                  list[index].currentCheckTime = dateTime;
+                });
               },
             );
           },
@@ -267,26 +251,17 @@ class _WaterDeviceCheckUploadPageState
         Gaps.hLine,
         EditRowWidget(
           title: '标液浓度',
-          onChanged: (value) {
-            list[index] = list[index].copyWith(standardSolution: value);
-            _pageBloc.add(PageLoad(model: list));
-          },
+          controller: list[index].standardSolution,
         ),
         Gaps.hLine,
         EditRowWidget(
           title: '实测浓度',
-          onChanged: (value) {
-            list[index] = list[index].copyWith(realitySolution: value);
-            _pageBloc.add(PageLoad(model: list));
-          },
+          controller: list[index].realitySolution,
         ),
         Gaps.hLine,
         EditRowWidget(
           title: '核查结果',
-          onChanged: (value) {
-            list[index] = list[index].copyWith(currentCheckResult: value);
-            _pageBloc.add(PageLoad(model: list));
-          },
+          controller: list[index].currentCheckResult,
         ),
         Gaps.hLine,
         RadioRowWidget(
@@ -295,8 +270,9 @@ class _WaterDeviceCheckUploadPageState
           falseText: '不合格',
           checked: list[index].currentCheckIsPass,
           onChanged: (value) {
-            list[index] = list[index].copyWith(currentCheckIsPass: value);
-            _pageBloc.add(PageLoad(model: list));
+            setState(() {
+              list[index].currentCheckIsPass = value;
+            });
           },
         ),
         Gaps.hLine,
@@ -313,9 +289,9 @@ class _WaterDeviceCheckUploadPageState
               initialDateTime: list[index]?.currentCorrectTime,
               onClose: () {},
               onConfirm: (dateTime, selectedIndex) {
-                list[index] =
-                    list[index].copyWith(currentCorrectTime: dateTime);
-                _pageBloc.add(PageLoad(model: list));
+                setState(() {
+                  list[index].currentCorrectTime = dateTime;
+                });
               },
             );
           },
@@ -327,8 +303,9 @@ class _WaterDeviceCheckUploadPageState
           falseText: '不通过',
           checked: list[index].currentCorrectIsPass,
           onChanged: (value) {
-            list[index] = list[index].copyWith(currentCorrectIsPass: value);
-            _pageBloc.add(PageLoad(model: list));
+            setState(() {
+              list[index].currentCorrectIsPass = value;
+            });
           },
         ),
         Gaps.hLine,

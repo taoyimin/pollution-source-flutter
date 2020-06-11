@@ -22,25 +22,25 @@ class AirDeviceCorrectUploadRepository
       throw DioError(error: InvalidParamException('请先选择校准开始时间'));
     if (data.correctEndTime == null)
       throw DioError(error: InvalidParamException('请先选择校准结束时间'));
-    if (TextUtil.isEmpty(data.zeroVal))
+    if (TextUtil.isEmpty(data.zeroVal.text))
       throw DioError(error: InvalidParamException('请先输入零气浓度值(零点漂移校准)'));
-    if (TextUtil.isEmpty(data.beforeZeroVal))
+    if (TextUtil.isEmpty(data.beforeZeroVal.text))
       throw DioError(error: InvalidParamException('请先输入上次校准后测试值(零点漂移校准)'));
-    if (TextUtil.isEmpty(data.correctZeroVal))
+    if (TextUtil.isEmpty(data.correctZeroVal.text))
       throw DioError(error: InvalidParamException('请先输入上次校前测试值(零点漂移校准)'));
-    if (TextUtil.isEmpty(data.zeroPercent))
+    if (TextUtil.isEmpty(data.zeroPercent.text))
       throw DioError(error: InvalidParamException('请先输入零点漂移 %F.S.(零点漂移校准)'));
-    if (TextUtil.isEmpty(data.zeroCorrectVal))
+    if (TextUtil.isEmpty(data.zeroCorrectVal.text))
       throw DioError(error: InvalidParamException('请先输入校准后测试值(零点漂移校准)'));
-    if (TextUtil.isEmpty(data.rangeVal))
+    if (TextUtil.isEmpty(data.rangeVal.text))
       throw DioError(error: InvalidParamException('请先输入标气浓度值(量程漂移校准)'));
-    if (TextUtil.isEmpty(data.beforeRangeVal))
+    if (TextUtil.isEmpty(data.beforeRangeVal.text))
       throw DioError(error: InvalidParamException('请先输入上次校准后测试值(量程漂移校准)'));
-    if (TextUtil.isEmpty(data.correctRangeVal))
+    if (TextUtil.isEmpty(data.correctRangeVal.text))
       throw DioError(error: InvalidParamException('请先输入校前测试值(量程漂移校准)'));
-    if (TextUtil.isEmpty(data.rangePercent))
+    if (TextUtil.isEmpty(data.rangePercent.text))
       throw DioError(error: InvalidParamException('请先输入量程漂移 %F.S.(量程漂移校准)'));
-    if (TextUtil.isEmpty(data.rangeCorrectVal))
+    if (TextUtil.isEmpty(data.rangeCorrectVal.text))
       throw DioError(error: InvalidParamException('请先输入校准后测试值(量程漂移校准)'));
   }
 
@@ -75,18 +75,18 @@ class AirDeviceCorrectUploadRepository
         MapEntry('correctEndTime',
             DateUtil.getDateStrByDateTime(data.correctStartTime))
       ])
-      ..addAll([MapEntry('zeroVal', data.zeroVal)])
-      ..addAll([MapEntry('beforeZeroVal', data.beforeZeroVal)])
-      ..addAll([MapEntry('correctZeroVal', data.correctZeroVal)])
-      ..addAll([MapEntry('zeroPercent', data.zeroPercent)])
+      ..addAll([MapEntry('zeroVal', data.zeroVal.text)])
+      ..addAll([MapEntry('beforeZeroVal', data.beforeZeroVal.text)])
+      ..addAll([MapEntry('correctZeroVal', data.correctZeroVal.text)])
+      ..addAll([MapEntry('zeroPercent', data.zeroPercent.text)])
       ..addAll([MapEntry('zeroIsNormal', data.zeroIsNormal ? '正常' : '不正常')])
-      ..addAll([MapEntry('zeroCorrectVal', data.zeroCorrectVal)])
-      ..addAll([MapEntry('rangeVal', data.rangeVal)])
-      ..addAll([MapEntry('beforeRangeVal', data.beforeRangeVal)])
-      ..addAll([MapEntry('correctRangeVal', data.correctRangeVal)])
-      ..addAll([MapEntry('rangePercent', data.rangePercent)])
+      ..addAll([MapEntry('zeroCorrectVal', data.zeroCorrectVal.text)])
+      ..addAll([MapEntry('rangeVal', data.rangeVal.text)])
+      ..addAll([MapEntry('beforeRangeVal', data.beforeRangeVal.text)])
+      ..addAll([MapEntry('correctRangeVal', data.correctRangeVal.text)])
+      ..addAll([MapEntry('rangePercent', data.rangePercent.text)])
       ..addAll([MapEntry('rangeIsNormal', data.rangeIsNormal ? '正常' : '不正常')])
-      ..addAll([MapEntry('rangeCorrectVal', data.rangeCorrectVal)]);
+      ..addAll([MapEntry('rangeCorrectVal', data.rangeCorrectVal.text)]);
     return formData;
   }
 }

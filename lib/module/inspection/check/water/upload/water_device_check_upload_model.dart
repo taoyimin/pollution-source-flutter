@@ -1,61 +1,33 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 /// 废水监测设备校验上报
-class WaterDeviceCheckUpload extends Equatable {
-  final String inspectionTaskId;
-  final String itemType;
-  final DateTime currentCheckTime;
-  final String standardSolution;
-  final String realitySolution;
-  final String currentCheckResult;
-  final bool currentCheckIsPass;
-  final DateTime currentCorrectTime;
-  final bool currentCorrectIsPass;
+class WaterDeviceCheckUpload {
+  /// 任务id
+  String inspectionTaskId;
 
-  const WaterDeviceCheckUpload({
-    this.inspectionTaskId,
-    this.itemType,
-    this.currentCheckTime,
-    this.standardSolution,
-    this.realitySolution,
-    this.currentCheckResult,
-    this.currentCheckIsPass = true,
-    this.currentCorrectTime,
-    this.currentCorrectIsPass = true,
-  });
+  /// 任务类型
+  String itemType;
 
-  @override
-  List<Object> get props => [
-        inspectionTaskId,
-        itemType,
-        currentCheckTime,
-        standardSolution,
-        realitySolution,
-        currentCheckResult,
-        currentCheckIsPass,
-        currentCorrectTime,
-        currentCorrectIsPass,
-      ];
+  /// 核查时间
+  DateTime currentCheckTime;
 
-  WaterDeviceCheckUpload copyWith({
-    DateTime currentCheckTime,
-    String standardSolution,
-    String realitySolution,
-    String currentCheckResult,
-    bool currentCheckIsPass,
-    DateTime currentCorrectTime,
-    bool currentCorrectIsPass,
-  }) {
-    return WaterDeviceCheckUpload(
-      inspectionTaskId: this.inspectionTaskId,
-      itemType: this.itemType,
-      currentCheckTime: currentCheckTime ?? this.currentCheckTime,
-      standardSolution: standardSolution ?? this.standardSolution,
-      realitySolution: realitySolution ?? this.realitySolution,
-      currentCheckResult: currentCheckResult ?? this.currentCheckResult,
-      currentCheckIsPass: currentCheckIsPass ?? this.currentCheckIsPass,
-      currentCorrectTime: currentCorrectTime ?? this.currentCorrectTime,
-      currentCorrectIsPass: currentCorrectIsPass ?? this.currentCorrectIsPass,
-    );
-  }
+  /// 标液浓度
+  final TextEditingController standardSolution = TextEditingController();
+
+  /// 实测浓度
+  final TextEditingController realitySolution = TextEditingController();
+
+  /// 核查结果
+  final TextEditingController currentCheckResult = TextEditingController();
+
+  /// 是否合格
+  bool currentCheckIsPass = true;
+
+  /// 校准时间
+  DateTime currentCorrectTime;
+
+  /// 是否通过
+  bool currentCorrectIsPass = true;
+
+  WaterDeviceCheckUpload({this.inspectionTaskId, this.itemType});
 }

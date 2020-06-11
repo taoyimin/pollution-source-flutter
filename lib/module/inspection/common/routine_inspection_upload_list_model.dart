@@ -3,31 +3,44 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'routine_inspection_upload_list_model.g.dart';
 
-// 常规巡检上报列表
+/// 常规巡检上报列表
 @JsonSerializable()
 class RoutineInspectionUploadList extends Equatable {
+  @JsonKey(defaultValue: '')
   final String inspectionTaskId;
+  @JsonKey(defaultValue: '')
   final String itemName;
+  @JsonKey(defaultValue: '')
   final String itemType;
+  @JsonKey(defaultValue: '')
   final String contentName;
+  @JsonKey(defaultValue: '')
   final String inspectionStartTime;
+  @JsonKey(defaultValue: '')
   final String inspectionEndTime;
+  @JsonKey(defaultValue: '')
   final String inspectionRemark;
+  @JsonKey(defaultValue: '')
   final String remark;
+  @JsonKey(defaultValue: '')
   final String deviceName;
-  @JsonKey(name: 'enterpriseName')
+  @JsonKey(name: 'enterpriseName', defaultValue: '')
   final String enterName;
-  @JsonKey(name: 'disOutName')
+  @JsonKey(name: 'disOutName', defaultValue: '')
   final String dischargeName;
-  @JsonKey(name: 'disMonitorName')
+  @JsonKey(name: 'disMonitorName', defaultValue: '')
   final String monitorName;
+  @JsonKey(defaultValue: '')
   final String factorCode;
+  @JsonKey(defaultValue: '')
   final String monitorId;
+  @JsonKey(defaultValue: '')
   final String deviceId;
+  @JsonKey(defaultValue: '')
   final String factorName;
-  @JsonKey(name: 'measure_principle')
+  @JsonKey(name: 'measure_principle', defaultValue: '')
   final String measurePrinciple;
-  @JsonKey(name: 'analysis_method')
+  @JsonKey(name: 'analysis_method', defaultValue: '')
   final String analysisMethod;
 
   const RoutineInspectionUploadList({

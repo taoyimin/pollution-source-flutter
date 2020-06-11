@@ -29,6 +29,8 @@ class AirDeviceCheckUpload {
   /// 总体校验是否合格
   final TextEditingController checkResult = TextEditingController();
 
+  AirDeviceCheckUpload({this.inspectionTaskId, this.itemType});
+
   /// 获取参比方法测量值平均值
   String get compareAvgVal {
     try {

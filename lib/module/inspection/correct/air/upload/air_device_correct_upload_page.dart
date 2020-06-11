@@ -9,9 +9,6 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_event.dart';
-import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
@@ -26,67 +23,76 @@ import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
-class AirDeviceCorrectUploadPage extends StatefulWidget {
-  final String json;
+import 'air_device_correct_upload_repository.dart';
 
-  AirDeviceCorrectUploadPage({
-    this.json,
-  });
+class AirDeviceCorrectUploadPage extends StatefulWidget {
+  final String taskJson;
+
+  AirDeviceCorrectUploadPage({this.taskJson});
 
   @override
   _AirDeviceCorrectUploadPageState createState() =>
-      _AirDeviceCorrectUploadPageState();
+      _AirDeviceCorrectUploadPageState(
+        task: RoutineInspectionUploadList.fromJson(json.decode(taskJson)),
+      );
 }
 
 class _AirDeviceCorrectUploadPageState
     extends State<AirDeviceCorrectUploadPage> {
-  PageBloc _pageBloc;
+  /// 运维任务
+  final RoutineInspectionUploadList task;
+
+  /// 上报Bloc
+  final UploadBloc _uploadBloc =
+      UploadBloc(uploadRepository: AirDeviceCorrectUploadRepository());
 
   /// 加载因子信息Bloc
-  DetailBloc _detailBloc;
+  final DetailBloc _detailBloc =
+      DetailBloc(detailRepository: RoutineInspectionUploadFactorRepository());
 
   /// 加载上次校准后测试值Bloc
-  DetailBloc _lastValueBloc;
-  UploadBloc _uploadBloc;
-  RoutineInspectionUploadList task;
-  TextEditingController _zeroCorrectValController;
-  TextEditingController _rangeCorrectValController;
+  final DetailBloc _lastValueBloc =
+      DetailBloc(detailRepository: AirDeviceLastValueRepository());
+
+  final AirDeviceCorrectUpload _airDeviceCorrectUpload =
+      AirDeviceCorrectUpload();
+
+  _AirDeviceCorrectUploadPageState({this.task});
 
   @override
   void initState() {
     super.initState();
-    _zeroCorrectValController = TextEditingController();
-    _rangeCorrectValController = TextEditingController();
-    task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
-    // 初始化页面Bloc
-    _pageBloc = BlocProvider.of<PageBloc>(context);
-    // 加载界面(默认有一条记录)
-    _pageBloc.add(PageLoad(
-        model: AirDeviceCorrectUpload(
-      inspectionTaskId: task.inspectionTaskId,
-    )));
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
+    _airDeviceCorrectUpload.inspectionTaskId = task.inspectionTaskId;
     // 加载该设备的监测因子
-    _detailBloc.add(DetailLoad(
-        params: RoutineInspectionUploadFactorRepository.createParams(
-      factorCode: task.factorCode,
-      deviceId: task.deviceId,
-      monitorId: task.monitorId,
-    )));
-    _lastValueBloc =
-        DetailBloc(detailRepository: AirDeviceLastValueRepository());
+    _loadFactor();
     // 加载上次校准后测试值
     _lastValueBloc.add(DetailLoad(detailId: task.inspectionTaskId));
-    // 初始化上报Bloc
-    _uploadBloc = BlocProvider.of<UploadBloc>(context);
   }
 
   @override
   void dispose() {
-    // 释放资源
+    /// 释放资源
+    _airDeviceCorrectUpload.zeroVal.dispose();
+    _airDeviceCorrectUpload.beforeZeroVal.dispose();
+    _airDeviceCorrectUpload.correctZeroVal.dispose();
+    _airDeviceCorrectUpload.zeroPercent.dispose();
+    _airDeviceCorrectUpload.zeroCorrectVal.dispose();
+    _airDeviceCorrectUpload.rangeVal.dispose();
+    _airDeviceCorrectUpload.beforeRangeVal.dispose();
+    _airDeviceCorrectUpload.correctRangeVal.dispose();
+    _airDeviceCorrectUpload.rangePercent.dispose();
+    _airDeviceCorrectUpload.rangeCorrectVal.dispose();
     super.dispose();
-    _zeroCorrectValController.dispose();
-    _rangeCorrectValController.dispose();
+  }
+
+  _loadFactor() {
+    _detailBloc.add(DetailLoad(
+      params: RoutineInspectionUploadFactorRepository.createParams(
+        factorCode: task.factorCode,
+        deviceId: task.deviceId,
+        monitorId: task.monitorId,
+      ),
+    ));
   }
 
   @override
@@ -94,39 +100,24 @@ class _AirDeviceCorrectUploadPageState
     return Scaffold(
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<PageBloc, PageState>(
-            builder: (context, state) {
-              String enterName = '';
-              String monitorName = '';
-              String deviceName = '';
-              String inspectionStartTime = '';
-              String inspectionEndTime = '';
-              if (state is PageLoaded) {
-                enterName = task?.enterName ?? '';
-                monitorName = task?.monitorName ?? '';
-                deviceName = task?.deviceName ?? '';
-                inspectionStartTime = task?.inspectionStartTime ?? '';
-                inspectionEndTime = task?.inspectionEndTime ?? '';
-              }
-              return UploadHeaderWidget(
-                title: '废气监测设备校准',
-                subTitle: '''$enterName
-监控点名：$monitorName
-设备名称：$deviceName
-开始日期：$inspectionStartTime
-截至日期：$inspectionEndTime''',
-                imagePath:
-                    'assets/images/factor_report_upload_header_image.png',
-                backgroundColor: Colours.primary_color,
-              );
-            },
+          UploadHeaderWidget(
+            title: '废气监测设备校准',
+            subTitle: '''${task.enterName}
+监控点名：${task.monitorName}
+设备名称：${task.deviceName}
+开始日期：${task.inspectionStartTime}
+截至日期：${task.inspectionEndTime}''',
+            imagePath: 'assets/images/factor_report_upload_header_image.png',
+            backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
             listeners: [
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: uploadListener,
               ),
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: (context, state) {
                   if (state is UploadSuccess) {
                     Toast.show(state.message);
@@ -137,32 +128,23 @@ class _AirDeviceCorrectUploadPageState
               BlocListener<DetailBloc, DetailState>(
                 bloc: _lastValueBloc,
                 listener: (context, state) {
-                  final currentState = _pageBloc.state;
-                  if (state is DetailLoaded && currentState is PageLoaded) {
+                  if (state is DetailLoaded) {
                     // 加载上次校准后测试值成功
-                    if (!TextUtil.isEmpty(state.detail.zeroCorrectVal)) {
-                      _zeroCorrectValController.text =
-                          state.detail.zeroCorrectVal;
-                    }
-                    if (!TextUtil.isEmpty(state.detail.rangeCorrectVal)) {
-                      _rangeCorrectValController.text =
-                          state.detail.rangeCorrectVal;
-                    }
+                    setState(() {
+                      if (!TextUtil.isEmpty(state.detail.zeroCorrectVal)) {
+                        _airDeviceCorrectUpload.beforeZeroVal.text =
+                            state.detail.zeroCorrectVal;
+                      }
+                      if (!TextUtil.isEmpty(state.detail.rangeCorrectVal)) {
+                        _airDeviceCorrectUpload.beforeRangeVal.text =
+                            state.detail.rangeCorrectVal;
+                      }
+                    });
                   }
                 },
               ),
             ],
-            child: BlocBuilder<PageBloc, PageState>(
-              builder: (context, state) {
-                if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model);
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                  );
-                }
-              },
-            ),
+            child: _buildPageLoadedDetail(_airDeviceCorrectUpload),
           ),
         ],
       ),
@@ -178,8 +160,9 @@ class _AirDeviceCorrectUploadPageState
             return RoutineInspectionUploadFactorDialog(
               factor: airDeviceCorrectUpload.factor,
               changeCallBack: (RoutineInspectionUploadFactor factor) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(factor: factor)));
+                setState(() {
+                  airDeviceCorrectUpload.factor = factor;
+                });
               },
             );
           });
@@ -195,21 +178,12 @@ class _AirDeviceCorrectUploadPageState
               content: airDeviceCorrectUpload?.factor?.factorName,
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {
-                _pageBloc.add(PageLoad(
-                  model: airDeviceCorrectUpload.copyWith(factor: factor),
-                ));
+                setState(() {
+                  airDeviceCorrectUpload.factor = factor;
+                });
               },
               onSuccessTap: onSuccessTap,
-              onErrorTap: () {
-                // 加载失败后点击重新加载
-                _detailBloc.add(DetailLoad(
-                    params:
-                        RoutineInspectionUploadFactorRepository.createParams(
-                  factorCode: task.factorCode,
-                  deviceId: task.deviceId,
-                  monitorId: task.monitorId,
-                )));
-              },
+              onErrorTap: _loadFactor,
             ),
             Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
@@ -219,16 +193,7 @@ class _AirDeviceCorrectUploadPageState
               onLoaded: (RoutineInspectionUploadFactor factor) {},
               successFontColor: Colours.primary_color,
               onSuccessTap: onSuccessTap,
-              onErrorTap: () {
-                // 加载失败后点击重新加载
-                _detailBloc.add(DetailLoad(
-                    params:
-                        RoutineInspectionUploadFactorRepository.createParams(
-                  factorCode: task.factorCode,
-                  deviceId: task.deviceId,
-                  monitorId: task.monitorId,
-                )));
-              },
+              onErrorTap: _loadFactor,
             ),
             Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
@@ -239,16 +204,7 @@ class _AirDeviceCorrectUploadPageState
               onLoaded: (RoutineInspectionUploadFactor factor) {},
               successFontColor: Colours.primary_color,
               onSuccessTap: onSuccessTap,
-              onErrorTap: () {
-                // 加载失败后点击重新加载
-                _detailBloc.add(DetailLoad(
-                    params:
-                        RoutineInspectionUploadFactorRepository.createParams(
-                  factorCode: task.factorCode,
-                  deviceId: task.deviceId,
-                  monitorId: task.monitorId,
-                )));
-              },
+              onErrorTap: _loadFactor,
             ),
             Gaps.hLine,
             InfoRowWidget(
@@ -269,9 +225,9 @@ class _AirDeviceCorrectUploadPageState
                   maxDateTime: airDeviceCorrectUpload?.correctEndTime,
                   onClose: () {},
                   onConfirm: (dateTime, selectedIndex) {
-                    _pageBloc.add(PageLoad(
-                        model: airDeviceCorrectUpload.copyWith(
-                            correctStartTime: dateTime)));
+                    setState(() {
+                      airDeviceCorrectUpload.correctStartTime = dateTime;
+                    });
                   },
                 );
               },
@@ -292,9 +248,9 @@ class _AirDeviceCorrectUploadPageState
                   minDateTime: airDeviceCorrectUpload?.correctStartTime,
                   onClose: () {},
                   onConfirm: (dateTime, selectedIndex) {
-                    _pageBloc.add(PageLoad(
-                        model: airDeviceCorrectUpload.copyWith(
-                            correctEndTime: dateTime)));
+                    setState(() {
+                      airDeviceCorrectUpload.correctEndTime = dateTime;
+                    });
                   },
                 );
               },
@@ -318,36 +274,25 @@ class _AirDeviceCorrectUploadPageState
             EditRowWidget(
               title: '零气浓度值',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(zeroVal: value)));
-              },
+              controller: airDeviceCorrectUpload.zeroVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '上次校准后测试值',
               keyboardType: TextInputType.number,
-              controller: _zeroCorrectValController,
+              controller: airDeviceCorrectUpload.beforeZeroVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '校前测试值',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(
-                        correctZeroVal: value)));
-              },
+              controller: airDeviceCorrectUpload.correctZeroVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '零点漂移 %F.S.',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model:
-                        airDeviceCorrectUpload.copyWith(zeroPercent: value)));
-              },
+              controller: airDeviceCorrectUpload.zeroPercent,
             ),
             Gaps.hLine,
             RadioRowWidget(
@@ -356,20 +301,16 @@ class _AirDeviceCorrectUploadPageState
               falseText: '不正常',
               checked: airDeviceCorrectUpload?.zeroIsNormal ?? true,
               onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model:
-                        airDeviceCorrectUpload.copyWith(zeroIsNormal: value)));
+                setState(() {
+                  airDeviceCorrectUpload.zeroIsNormal = value;
+                });
               },
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '校准后测试值',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(
-                        zeroCorrectVal: value)));
-              },
+              controller: airDeviceCorrectUpload.zeroCorrectVal,
             ),
             Gaps.hLine,
             Row(
@@ -390,36 +331,25 @@ class _AirDeviceCorrectUploadPageState
             EditRowWidget(
               title: '标气浓度值',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(rangeVal: value)));
-              },
+              controller: airDeviceCorrectUpload.rangeVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '上次校准后测试值',
               keyboardType: TextInputType.number,
-              controller: _rangeCorrectValController,
+              controller: airDeviceCorrectUpload.beforeRangeVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '校前测试值',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(
-                        correctRangeVal: value)));
-              },
+              controller: airDeviceCorrectUpload.correctRangeVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '量程漂移 %F.S.',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model:
-                        airDeviceCorrectUpload.copyWith(rangePercent: value)));
-              },
+              controller: airDeviceCorrectUpload.rangePercent,
             ),
             Gaps.hLine,
             RadioRowWidget(
@@ -428,20 +358,16 @@ class _AirDeviceCorrectUploadPageState
               falseText: '不正常',
               checked: airDeviceCorrectUpload?.rangeIsNormal ?? true,
               onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model:
-                        airDeviceCorrectUpload.copyWith(rangeIsNormal: value)));
+                setState(() {
+                  airDeviceCorrectUpload.rangeIsNormal = value;
+                });
               },
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '校准后测试值',
               keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _pageBloc.add(PageLoad(
-                    model: airDeviceCorrectUpload.copyWith(
-                        rangeCorrectVal: value)));
-              },
+              controller: airDeviceCorrectUpload.rangeCorrectVal ,
             ),
             Gaps.hLine,
             Gaps.vGap20,
@@ -452,12 +378,7 @@ class _AirDeviceCorrectUploadPageState
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    _uploadBloc.add(Upload(
-                      data: airDeviceCorrectUpload.copyWith(
-                        beforeZeroVal: _zeroCorrectValController.text,
-                        beforeRangeVal: _rangeCorrectValController.text,
-                      ),
-                    ));
+                    _uploadBloc.add(Upload(data: airDeviceCorrectUpload));
                   },
                 ),
               ],

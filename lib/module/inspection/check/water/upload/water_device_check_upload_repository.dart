@@ -14,11 +14,11 @@ class WaterDeviceUploadRepository
     for (int i = 0; i < data.length; i++) {
       if (data[i].currentCheckTime == null)
         throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的核查时间'));
-      if (TextUtil.isEmpty(data[i].standardSolution))
+      if (TextUtil.isEmpty(data[i].standardSolution.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的标液浓度'));
-      if (TextUtil.isEmpty(data[i].realitySolution))
+      if (TextUtil.isEmpty(data[i].realitySolution.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的实测浓度'));
-      if (TextUtil.isEmpty(data[i].currentCheckResult))
+      if (TextUtil.isEmpty(data[i].currentCheckResult.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的核查结果'));
       if (data[i].currentCorrectTime == null)
         throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的校准时间'));
@@ -44,13 +44,13 @@ class WaterDeviceUploadRepository
         return MapEntry('currentCheckTime', DateUtil.getDateStrByDateTime(item.currentCheckTime) ?? '');
       }))
       ..addAll(data.map((item) {
-        return MapEntry('standardSolution', item.standardSolution);
+        return MapEntry('standardSolution', item.standardSolution.text);
       }))
       ..addAll(data.map((item) {
-        return MapEntry('realitySolution', item.realitySolution);
+        return MapEntry('realitySolution', item.realitySolution.text);
       }))
       ..addAll(data.map((item) {
-        return MapEntry('currentCheckResult', item.currentCheckResult);
+        return MapEntry('currentCheckResult', item.currentCheckResult.text);
       }))
       ..addAll(data.map((item) {
         return MapEntry(
