@@ -78,8 +78,7 @@ class _WaterDeviceCheckUploadPageState
 设备名称：${task.deviceName}
 开始日期：${task.inspectionStartTime}
 截至日期：${task.inspectionEndTime}''',
-            imagePath:
-            'assets/images/long_stop_report_upload_header_image.png',
+            imagePath: 'assets/images/long_stop_report_upload_header_image.png',
             backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
@@ -98,25 +97,25 @@ class _WaterDeviceCheckUploadPageState
                 },
               ),
             ],
-            child: _buildPageLoadedDetail(_waterDeviceCheckUploadList),
+            child: _buildPageLoadedDetail(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPageLoadedDetail(List<WaterDeviceCheckUpload> list) {
+  Widget _buildPageLoadedDetail() {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              children: list
+              children: _waterDeviceCheckUploadList
                       ?.asMap()
                       ?.map(
                           (i, WaterDeviceCheckUpload waterDeviceCheckUpload) =>
-                              MapEntry(i, _buildPageListItem(list, i)))
+                              MapEntry(i, _buildPageListItem(i)))
                       ?.values
                       ?.toList() ??
                   [],
@@ -141,7 +140,7 @@ class _WaterDeviceCheckUploadPageState
                   color: Colors.lightGreen,
                   onTap: () {
                     setState(() {
-                      list.add(WaterDeviceCheckUpload(
+                      _waterDeviceCheckUploadList.add(WaterDeviceCheckUpload(
                         inspectionTaskId: task.inspectionTaskId,
                         itemType: task.itemType,
                       ));
@@ -154,7 +153,7 @@ class _WaterDeviceCheckUploadPageState
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    _uploadBloc.add(Upload(data: list));
+                    _uploadBloc.add(Upload(data: _waterDeviceCheckUploadList));
                   },
                 ),
               ],
@@ -166,7 +165,7 @@ class _WaterDeviceCheckUploadPageState
     );
   }
 
-  Widget _buildPageListItem(List<WaterDeviceCheckUpload> list, int index) {
+  Widget _buildPageListItem(int index) {
     return Column(
       children: <Widget>[
         Row(
@@ -185,7 +184,7 @@ class _WaterDeviceCheckUploadPageState
               child: Gaps.empty,
             ),
             Offstage(
-              offstage: list.length == 1,
+              offstage: _waterDeviceCheckUploadList.length == 1,
               child: Transform.translate(
                 offset: Offset(13, 0),
                 child: IconButton(
@@ -212,7 +211,7 @@ class _WaterDeviceCheckUploadPageState
                               onPressed: () async {
                                 Navigator.of(context).pop();
                                 setState(() {
-                                  list.removeAt(index);
+                                  _waterDeviceCheckUploadList.removeAt(index);
                                 });
                               },
                               child: const Text("确认"),
@@ -230,7 +229,8 @@ class _WaterDeviceCheckUploadPageState
         Gaps.hLine,
         SelectRowWidget(
           title: '核查时间',
-          content: DateUtil.formatDate(list[index]?.currentCheckTime,
+          content: DateUtil.formatDate(
+              _waterDeviceCheckUploadList[index]?.currentCheckTime,
               format: 'yyyy-MM-dd HH:mm'),
           onTap: () {
             DatePicker.showDatePicker(
@@ -238,11 +238,13 @@ class _WaterDeviceCheckUploadPageState
               dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
               locale: DateTimePickerLocale.zh_cn,
               pickerMode: DateTimePickerMode.datetime,
-              initialDateTime: list[index]?.currentCheckTime,
+              initialDateTime:
+                  _waterDeviceCheckUploadList[index]?.currentCheckTime,
               onClose: () {},
               onConfirm: (dateTime, selectedIndex) {
                 setState(() {
-                  list[index].currentCheckTime = dateTime;
+                  _waterDeviceCheckUploadList[index].currentCheckTime =
+                      dateTime;
                 });
               },
             );
@@ -251,34 +253,35 @@ class _WaterDeviceCheckUploadPageState
         Gaps.hLine,
         EditRowWidget(
           title: '标液浓度',
-          controller: list[index].standardSolution,
+          controller: _waterDeviceCheckUploadList[index].standardSolution,
         ),
         Gaps.hLine,
         EditRowWidget(
           title: '实测浓度',
-          controller: list[index].realitySolution,
+          controller: _waterDeviceCheckUploadList[index].realitySolution,
         ),
         Gaps.hLine,
         EditRowWidget(
           title: '核查结果',
-          controller: list[index].currentCheckResult,
+          controller: _waterDeviceCheckUploadList[index].currentCheckResult,
         ),
         Gaps.hLine,
         RadioRowWidget(
           title: '是否合格',
           trueText: '合格',
           falseText: '不合格',
-          checked: list[index].currentCheckIsPass,
+          checked: _waterDeviceCheckUploadList[index].currentCheckIsPass,
           onChanged: (value) {
             setState(() {
-              list[index].currentCheckIsPass = value;
+              _waterDeviceCheckUploadList[index].currentCheckIsPass = value;
             });
           },
         ),
         Gaps.hLine,
         SelectRowWidget(
           title: '校准时间',
-          content: DateUtil.formatDate(list[index]?.currentCorrectTime,
+          content: DateUtil.formatDate(
+              _waterDeviceCheckUploadList[index]?.currentCorrectTime,
               format: 'yyyy-MM-dd HH:mm'),
           onTap: () {
             DatePicker.showDatePicker(
@@ -286,11 +289,13 @@ class _WaterDeviceCheckUploadPageState
               dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
               locale: DateTimePickerLocale.zh_cn,
               pickerMode: DateTimePickerMode.datetime,
-              initialDateTime: list[index]?.currentCorrectTime,
+              initialDateTime:
+                  _waterDeviceCheckUploadList[index]?.currentCorrectTime,
               onClose: () {},
               onConfirm: (dateTime, selectedIndex) {
                 setState(() {
-                  list[index].currentCorrectTime = dateTime;
+                  _waterDeviceCheckUploadList[index].currentCorrectTime =
+                      dateTime;
                 });
               },
             );
@@ -301,10 +306,10 @@ class _WaterDeviceCheckUploadPageState
           title: '是否通过',
           trueText: '通过',
           falseText: '不通过',
-          checked: list[index].currentCorrectIsPass,
+          checked: _waterDeviceCheckUploadList[index].currentCorrectIsPass,
           onChanged: (value) {
             setState(() {
-              list[index].currentCorrectIsPass = value;
+              _waterDeviceCheckUploadList[index].currentCorrectIsPass = value;
             });
           },
         ),

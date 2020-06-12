@@ -144,24 +144,24 @@ class _AirDeviceCorrectUploadPageState
                 },
               ),
             ],
-            child: _buildPageLoadedDetail(_airDeviceCorrectUpload),
+            child: _buildPageLoadedDetail(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPageLoadedDetail(AirDeviceCorrectUpload airDeviceCorrectUpload) {
+  Widget _buildPageLoadedDetail() {
     final GestureTapCallback onSuccessTap = () {
       showDialog(
           context: context, //BuildContext对象
           barrierDismissible: false,
           builder: (BuildContext context) {
             return RoutineInspectionUploadFactorDialog(
-              factor: airDeviceCorrectUpload.factor,
+              factor: _airDeviceCorrectUpload.factor,
               changeCallBack: (RoutineInspectionUploadFactor factor) {
                 setState(() {
-                  airDeviceCorrectUpload.factor = factor;
+                  _airDeviceCorrectUpload.factor = factor;
                 });
               },
             );
@@ -175,11 +175,11 @@ class _AirDeviceCorrectUploadPageState
           children: <Widget>[
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '校准因子',
-              content: airDeviceCorrectUpload?.factor?.factorName,
+              content: _airDeviceCorrectUpload?.factor?.factorName,
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {
                 setState(() {
-                  airDeviceCorrectUpload.factor = factor;
+                  _airDeviceCorrectUpload.factor = factor;
                 });
               },
               onSuccessTap: onSuccessTap,
@@ -188,7 +188,7 @@ class _AirDeviceCorrectUploadPageState
             Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '计量单位',
-              content: airDeviceCorrectUpload?.factor?.unit,
+              content: _airDeviceCorrectUpload?.factor?.unit,
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
               successFontColor: Colours.primary_color,
@@ -199,7 +199,7 @@ class _AirDeviceCorrectUploadPageState
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '分析仪量程',
               content:
-                  '${airDeviceCorrectUpload?.factor?.measureLower} — ${airDeviceCorrectUpload?.factor?.measureUpper}',
+                  '${_airDeviceCorrectUpload?.factor?.measureLower} — ${_airDeviceCorrectUpload?.factor?.measureUpper}',
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
               successFontColor: Colours.primary_color,
@@ -213,7 +213,7 @@ class _AirDeviceCorrectUploadPageState
             SelectRowWidget(
               title: '校准开始时间',
               content: DateUtil.formatDate(
-                  airDeviceCorrectUpload?.correctStartTime,
+                  _airDeviceCorrectUpload?.correctStartTime,
                   format: 'yyyy-MM-dd HH:mm'),
               onTap: () {
                 DatePicker.showDatePicker(
@@ -221,12 +221,12 @@ class _AirDeviceCorrectUploadPageState
                   dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                   locale: DateTimePickerLocale.zh_cn,
                   pickerMode: DateTimePickerMode.datetime,
-                  initialDateTime: airDeviceCorrectUpload?.correctStartTime,
-                  maxDateTime: airDeviceCorrectUpload?.correctEndTime,
+                  initialDateTime: _airDeviceCorrectUpload?.correctStartTime,
+                  maxDateTime: _airDeviceCorrectUpload?.correctEndTime,
                   onClose: () {},
                   onConfirm: (dateTime, selectedIndex) {
                     setState(() {
-                      airDeviceCorrectUpload.correctStartTime = dateTime;
+                      _airDeviceCorrectUpload.correctStartTime = dateTime;
                     });
                   },
                 );
@@ -236,7 +236,7 @@ class _AirDeviceCorrectUploadPageState
             SelectRowWidget(
               title: '校准结束时间',
               content: DateUtil.formatDate(
-                  airDeviceCorrectUpload?.correctEndTime,
+                  _airDeviceCorrectUpload?.correctEndTime,
                   format: 'yyyy-MM-dd HH:mm'),
               onTap: () {
                 DatePicker.showDatePicker(
@@ -244,12 +244,12 @@ class _AirDeviceCorrectUploadPageState
                   dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                   locale: DateTimePickerLocale.zh_cn,
                   pickerMode: DateTimePickerMode.datetime,
-                  initialDateTime: airDeviceCorrectUpload?.correctEndTime,
-                  minDateTime: airDeviceCorrectUpload?.correctStartTime,
+                  initialDateTime: _airDeviceCorrectUpload?.correctEndTime,
+                  minDateTime: _airDeviceCorrectUpload?.correctStartTime,
                   onClose: () {},
                   onConfirm: (dateTime, selectedIndex) {
                     setState(() {
-                      airDeviceCorrectUpload.correctEndTime = dateTime;
+                      _airDeviceCorrectUpload.correctEndTime = dateTime;
                     });
                   },
                 );
@@ -274,35 +274,35 @@ class _AirDeviceCorrectUploadPageState
             EditRowWidget(
               title: '零气浓度值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.zeroVal,
+              controller: _airDeviceCorrectUpload.zeroVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '上次校准后测试值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.beforeZeroVal,
+              controller: _airDeviceCorrectUpload.beforeZeroVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '校前测试值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.correctZeroVal,
+              controller: _airDeviceCorrectUpload.correctZeroVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '零点漂移 %F.S.',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.zeroPercent,
+              controller: _airDeviceCorrectUpload.zeroPercent,
             ),
             Gaps.hLine,
             RadioRowWidget(
               title: '仪器校准是否正常',
               trueText: '正常',
               falseText: '不正常',
-              checked: airDeviceCorrectUpload?.zeroIsNormal ?? true,
+              checked: _airDeviceCorrectUpload?.zeroIsNormal ?? true,
               onChanged: (value) {
                 setState(() {
-                  airDeviceCorrectUpload.zeroIsNormal = value;
+                  _airDeviceCorrectUpload.zeroIsNormal = value;
                 });
               },
             ),
@@ -310,7 +310,7 @@ class _AirDeviceCorrectUploadPageState
             EditRowWidget(
               title: '校准后测试值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.zeroCorrectVal,
+              controller: _airDeviceCorrectUpload.zeroCorrectVal,
             ),
             Gaps.hLine,
             Row(
@@ -331,35 +331,35 @@ class _AirDeviceCorrectUploadPageState
             EditRowWidget(
               title: '标气浓度值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.rangeVal,
+              controller: _airDeviceCorrectUpload.rangeVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '上次校准后测试值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.beforeRangeVal,
+              controller: _airDeviceCorrectUpload.beforeRangeVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '校前测试值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.correctRangeVal,
+              controller: _airDeviceCorrectUpload.correctRangeVal,
             ),
             Gaps.hLine,
             EditRowWidget(
               title: '量程漂移 %F.S.',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.rangePercent,
+              controller: _airDeviceCorrectUpload.rangePercent,
             ),
             Gaps.hLine,
             RadioRowWidget(
               title: '仪器校准是否正常',
               trueText: '正常',
               falseText: '不正常',
-              checked: airDeviceCorrectUpload?.rangeIsNormal ?? true,
+              checked: _airDeviceCorrectUpload?.rangeIsNormal ?? true,
               onChanged: (value) {
                 setState(() {
-                  airDeviceCorrectUpload.rangeIsNormal = value;
+                  _airDeviceCorrectUpload.rangeIsNormal = value;
                 });
               },
             ),
@@ -367,7 +367,7 @@ class _AirDeviceCorrectUploadPageState
             EditRowWidget(
               title: '校准后测试值',
               keyboardType: TextInputType.number,
-              controller: airDeviceCorrectUpload.rangeCorrectVal ,
+              controller: _airDeviceCorrectUpload.rangeCorrectVal ,
             ),
             Gaps.hLine,
             Gaps.vGap20,
@@ -378,7 +378,7 @@ class _AirDeviceCorrectUploadPageState
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    _uploadBloc.add(Upload(data: airDeviceCorrectUpload));
+                    _uploadBloc.add(Upload(data: _airDeviceCorrectUpload));
                   },
                 ),
               ],

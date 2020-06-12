@@ -119,14 +119,14 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                 },
               ),
             ],
-            child: _buildPageLoadedDetail(_airDeviceCheckUpload),
+            child: _buildPageLoadedDetail(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPageLoadedDetail(AirDeviceCheckUpload airDeviceCheckUpload) {
+  Widget _buildPageLoadedDetail() {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -135,18 +135,18 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
             LocationWidget(
               locationCallback: (BaiduLocation baiduLocation) {
                 setState(() {
-                  airDeviceCheckUpload.baiduLocation = baiduLocation;
+                  _airDeviceCheckUpload.baiduLocation = baiduLocation;
                 });
               },
             ),
             Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '校验因子',
-              content: airDeviceCheckUpload?.factor?.factorName,
+              content: _airDeviceCheckUpload?.factor?.factorName,
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {
                 setState(() {
-                  airDeviceCheckUpload.factor = factor;
+                  _airDeviceCheckUpload.factor = factor;
                 });
               },
               onErrorTap: () {
@@ -162,7 +162,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
             Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '测量单位',
-              content: airDeviceCheckUpload?.factor?.unit,
+              content: _airDeviceCheckUpload?.factor?.unit,
               detailBloc: _detailBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
               onErrorTap: () {
@@ -215,14 +215,14 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
             ),
             Gaps.hLine,
             Column(
-              children: airDeviceCheckUpload?.airDeviceCheckRecordList
+              children: _airDeviceCheckUpload?.airDeviceCheckRecordList
                       ?.asMap()
                       ?.map((i, AirDeviceCheckRecord airDeviceCheckRecord) =>
                           MapEntry(
                               i,
                               _buildPageListItem(
                                 i,
-                                airDeviceCheckUpload.airDeviceCheckRecordList,
+                                _airDeviceCheckUpload.airDeviceCheckRecordList,
                               )))
                       ?.values
                       ?.toList() ??
@@ -246,7 +246,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                     flex: 1,
                     child: Center(
                       child: Text(
-                        '${airDeviceCheckUpload?.compareAvgVal}',
+                        '${_airDeviceCheckUpload?.compareAvgVal}',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15),
                       ),
@@ -256,7 +256,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                     flex: 1,
                     child: Center(
                       child: Text(
-                        '${airDeviceCheckUpload?.cemsAvgVal}',
+                        '${_airDeviceCheckUpload?.cemsAvgVal}',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15),
                       ),
@@ -281,7 +281,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      airDeviceCheckUpload.airDeviceCheckRecordList
+                      _airDeviceCheckUpload.airDeviceCheckRecordList
                           .add(AirDeviceCheckRecord());
                     });
                   },
@@ -306,7 +306,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                 ),
                 TextAreaWidget(
                   maxLines: 3,
-                  controller: airDeviceCheckUpload.paramRemark,
+                  controller: _airDeviceCheckUpload.paramRemark,
                 ),
                 Gaps.hLine,
                 Padding(
@@ -315,7 +315,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                 ),
                 TextAreaWidget(
                   maxLines: 3,
-                  controller: airDeviceCheckUpload.changeRemark,
+                  controller: _airDeviceCheckUpload.changeRemark,
                 ),
                 Gaps.hLine,
                 Padding(
@@ -324,7 +324,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                 ),
                 TextAreaWidget(
                   maxLines: 3,
-                  controller: airDeviceCheckUpload.checkResult,
+                  controller: _airDeviceCheckUpload.checkResult,
                 ),
               ],
             ),
@@ -335,7 +335,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                   icon: Icons.file_upload,
                   color: Colors.lightBlue,
                   onTap: () {
-                    _uploadBloc.add(Upload(data: airDeviceCheckUpload));
+                    _uploadBloc.add(Upload(data: _airDeviceCheckUpload));
                   },
                 ),
               ],
