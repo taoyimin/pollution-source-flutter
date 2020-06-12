@@ -145,7 +145,7 @@ class _DischargeListPageState extends State<DischargeListPage> {
       areaCode: _areaResult?.areaId ?? '',
       dischargeType: _dischargeType,
       state: widget.state,
-      attentionLevel: widget.attentionLevel,
+      attentionLevel: _attentionLevel,
     );
   }
 
