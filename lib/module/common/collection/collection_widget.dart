@@ -12,16 +12,20 @@ typedef ConfirmCallBack = void Function(List collection);
 class CollectionDialog<T> extends StatefulWidget {
   final String title;
   final String imagePath;
+  final TextEditingController controller;
   final List<T> collection;
   final List<T> checkList;
   final ConfirmCallBack confirmCallBack;
+  final GestureTapCallback cancelCallBack;
 
   CollectionDialog({
     this.title = '',
     this.imagePath = '',
+    this.controller,
     @required this.collection,
     this.checkList = const [],
     this.confirmCallBack,
+    this.cancelCallBack,
   });
 
   @override
@@ -76,6 +80,25 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                   ],
                 ),
                 Gaps.vGap16,
+                Container(
+                  height: 46,
+                  color: Colours.divider_color,
+                  child: TextField(
+                    controller: widget.controller ?? TextEditingController(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 14),
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                      hintText: '手动录入任务编码',
+                      hintStyle: const TextStyle(fontSize: 14),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+                Gaps.vGap6,
                 Flexible(
                   child: ListView.separated(
                       itemCount: widget.collection.length,
@@ -101,16 +124,16 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                               color: checkList.contains(item)
                                   ? Colors.lightBlueAccent
                                   : Colours.divider_color,
-                              borderRadius: BorderRadius.circular(2),
                             ),
                             child: Center(
                               child: () {
                                 if (item is MobileLaw) {
                                   return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        '执法ID：${item.lawId}',
+                                        '任务编码：${item.number}',
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: checkList.contains(item)
@@ -164,6 +187,8 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                       child: InkWellButton(
                         onTap: () {
                           Navigator.pop(context);
+                          if (widget.cancelCallBack != null)
+                            widget.cancelCallBack();
                         },
                         children: <Widget>[
                           Container(
@@ -188,10 +213,9 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                       flex: 1,
                       child: InkWellButton(
                         onTap: () {
-                          if (widget.confirmCallBack != null) {
+                          Navigator.pop(context);
+                          if (widget.confirmCallBack != null)
                             widget.confirmCallBack(checkList);
-                            Navigator.pop(context);
-                          }
                         },
                         children: <Widget>[
                           Container(
