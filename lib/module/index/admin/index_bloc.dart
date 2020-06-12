@@ -50,12 +50,12 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
             waterStatisticsList.skipWhile((WaterStatistics waterStatistics) {
               return !waterStatistics.show;
             }).toList());
-        // 污染源企业统计
+        // 排污单位统计
         List<Meta> pollutionEnterStatisticsList =
             await _convertPollutionEnterStatistics(
                 response.data[Constant.responseDataKey]
                     [Constant.pollutionEnterStatisticsKey]);
-        // 代办任务统计
+        // 报警管理单统计
         List<Meta> todoTaskStatisticsList = await _convertTodoTaskStatistics(
             response.data[Constant.responseDataKey]
                 [Constant.todoTaskStatisticsKey]);
@@ -228,63 +228,68 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         imagePath: 'assets/images/icon_pollution_all_enter.png',
         color: Color.fromRGBO(77, 167, 248, 1),
         content: strings[1],
-        router: '${Routes.enterList}',
-      ),
-      Meta(
-        title: '重点企业',
-        imagePath: 'assets/images/icon_pollution_point_enter.png',
-        color: Color.fromRGBO(241, 190, 67, 1),
-        content: strings[2],
-        router: '${Routes.enterList}?attentionLevel=1&state=1',
+        router:
+            '${Routes.enterList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '在线企业',
         imagePath: 'assets/images/icon_pollution_online_enter.png',
         color: Color.fromRGBO(136, 191, 89, 1),
-        content: strings[3],
-        router: '${Routes.enterList}?state=1',
+        content: strings[2],
+        router:
+            '${Routes.enterList}?state=1&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+      ),
+      Meta(
+        title: '资料完整率',
+        imagePath: 'assets/images/icon_pollution_point_enter.png',
+        color: Color.fromRGBO(241, 190, 67, 1),
+        content: '${strings[3]}%',
       ),
       Meta(
         title: '废水企业',
         imagePath: 'assets/images/icon_pollution_water_enter.png',
         color: Color.fromRGBO(0, 188, 212, 1),
         content: strings[4],
-        router: '${Routes.enterList}?enterType=2',
+        router:
+            '${Routes.enterList}?enterType=2&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '废气企业',
         imagePath: 'assets/images/icon_pollution_air_enter.png',
         color: Color.fromRGBO(255, 87, 34, 1),
         content: strings[5],
-        router: '${Routes.enterList}?enterType=3',
+        router:
+            '${Routes.enterList}?enterType=3&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '水气企业',
         imagePath: 'assets/images/icon_pollution_air_water.png',
         color: Color.fromRGBO(137, 137, 137, 1),
         content: strings[6],
-        router: '${Routes.enterList}?enterType=4',
+        router:
+            '${Routes.enterList}?enterType=4&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '废水排口',
         imagePath: 'assets/images/icon_pollution_water_outlet.png',
         color: Color.fromRGBO(63, 81, 181, 1),
         content: strings[7],
-        router: '${Routes.dischargeList}?dischargeType=outletType2',
+        router: '${Routes.dischargeList}?dischargeType=outletType2&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '废气排口',
         imagePath: 'assets/images/icon_pollution_air_outlet.png',
         color: Color.fromRGBO(233, 30, 99, 1),
         content: strings[8],
-        router: '${Routes.dischargeList}?dischargeType=outletType3',
+        router: '${Routes.dischargeList}?dischargeType=outletType3&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '许可证企业',
         imagePath: 'assets/images/icon_pollution_licence_enter.png',
         color: Color.fromRGBO(179, 129, 127, 1),
         content: strings[9],
-        router: '${Routes.enterList}?enterType=5',
+        router:
+            '${Routes.enterList}?enterType=5&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
     ];
   }

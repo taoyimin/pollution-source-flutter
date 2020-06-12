@@ -15,6 +15,7 @@ import 'dart:async';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/index/admin/index.dart';
@@ -87,49 +88,49 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                     children: <Widget>[
                       state.aqiStatistics.show
                           ? AqiStatisticsWidget(
-                          aqiStatistics: state.aqiStatistics)
+                              aqiStatistics: state.aqiStatistics)
                           : HeaderWidget(),
                       state.todoTaskStatisticsList.length > 0
                           ? TodoTaskStatisticsWidget(
-                        metaList: state.todoTaskStatisticsList,
-                      )
+                              metaList: state.todoTaskStatisticsList,
+                            )
                           : Gaps.empty,
                       state.aqiExamineList.length > 0
                           ? AqiExamineWidget(
-                          aqiExamineList: state.aqiExamineList)
+                              aqiExamineList: state.aqiExamineList)
                           : Gaps.empty,
                       //WeekTrendWidget(),
                       //AlarmListWidget(),
                       MonitorStatisticsWidget(
-                        title: '监控点(出口)概况',
+                        title: '${UIUtils.getAttentionLevelTitle()}监控点(出口)概况',
                         collectionBloc: monitorStatisticsBloc,
                         onReloadTap: () {
-                          monitorStatisticsBloc.add(
-                              CollectionLoad(params: _getRequestParam()));
+                          monitorStatisticsBloc
+                              .add(CollectionLoad(params: _getRequestParam()));
                         },
                       ),
                       state.waterStatisticsList.length > 0
                           ? WaterStatisticsWidget(
-                        waterStatisticsList: state.waterStatisticsList,
-                      )
+                              waterStatisticsList: state.waterStatisticsList,
+                            )
                           : Gaps.empty,
                       state.pollutionEnterStatisticsList.length > 0
                           ? PollutionEnterStatisticsWidget(
-                          metaList: state.pollutionEnterStatisticsList)
+                              metaList: state.pollutionEnterStatisticsList)
                           : Gaps.empty,
                       state.rainEnterStatisticsList.length > 0
                           ? RainEnterStatisticsWidget(
-                          metaList: state.rainEnterStatisticsList)
+                              metaList: state.rainEnterStatisticsList)
                           : Gaps.empty,
                       state.reportStatisticsList.length > 0
                           ? ReportStatisticsWidget(
-                        metaList: state.reportStatisticsList,
-                      )
+                              metaList: state.reportStatisticsList,
+                            )
                           : Gaps.empty,
                       state.comprehensiveStatisticsList.length > 0
                           ? ComprehensiveStatisticsWidget(
-                        metaList: state.comprehensiveStatisticsList,
-                      )
+                              metaList: state.comprehensiveStatisticsList,
+                            )
                           : Gaps.empty,
                     ],
                   ),
@@ -198,7 +199,7 @@ class AqiStatisticsWidget extends StatelessWidget {
       height: 190,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/index_header_bg.png"),
+          image: AssetImage('assets/images/index_header_bg.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -208,7 +209,7 @@ class AqiStatisticsWidget extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: SvgPicture.asset(
-              "assets/images/index_header_image.svg",
+              'assets/images/index_header_image.svg',
               width: 150,
               fit: BoxFit.fill,
             ),
@@ -227,7 +228,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(5),
                       child: Image(
                           image:
-                              AssetImage("assets/images/index_location.png")),
+                              AssetImage('assets/images/index_location.png')),
                     ),
                     const SizedBox(
                       width: 6,
@@ -305,7 +306,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         _getAqiStatisticsRowItem(
-                          "PM2.5",
+                          'PM2.5',
                           aqiStatistics.pm25,
                         ),
                         VerticalDividerWidget(
@@ -314,7 +315,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           color: Colors.white,
                         ),
                         _getAqiStatisticsRowItem(
-                          "PM10",
+                          'PM10',
                           aqiStatistics.pm10,
                         ),
                         VerticalDividerWidget(
@@ -323,7 +324,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           color: Colors.white,
                         ),
                         _getAqiStatisticsRowItem(
-                          "SO₂",
+                          'SO₂',
                           aqiStatistics.so2,
                         ),
                         VerticalDividerWidget(
@@ -332,7 +333,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           color: Colors.white,
                         ),
                         _getAqiStatisticsRowItem(
-                          "NO₂",
+                          'NO₂',
                           aqiStatistics.no2,
                         ),
                         VerticalDividerWidget(
@@ -341,7 +342,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           color: Colors.white,
                         ),
                         _getAqiStatisticsRowItem(
-                          "O₃",
+                          'O₃',
                           aqiStatistics.o3,
                         ),
                         VerticalDividerWidget(
@@ -350,7 +351,7 @@ class AqiStatisticsWidget extends StatelessWidget {
                           color: Colors.white,
                         ),
                         _getAqiStatisticsRowItem(
-                          "CO",
+                          'CO',
                           aqiStatistics.co,
                         ),
                       ],
@@ -375,7 +376,7 @@ class HeaderWidget extends StatelessWidget {
       height: 190,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/index_header_bg.png"),
+          image: AssetImage('assets/images/index_header_bg.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -385,7 +386,7 @@ class HeaderWidget extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: SvgPicture.asset(
-              "assets/images/index_header_image.svg",
+              'assets/images/index_header_image.svg',
               width: 150,
               fit: BoxFit.fill,
             ),
@@ -518,7 +519,7 @@ class AqiExamineWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "空气质量考核达标"),
+          TitleWidget(title: '空气质量考核达标'),
           Column(
             children: aqiExamineList
                 .map((aqiExamine) => _getAqiExamineColumnItem(aqiExamine))
@@ -573,11 +574,11 @@ class WaterStatisticsWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text(
-                  "数量:${waterStatistics.count}",
+                  '数量:${waterStatistics.count}',
                   style: const TextStyle(fontSize: 13),
                 ),
                 Text(
-                  "达标率:${waterStatistics.achievementRate}%",
+                  '达标率:${waterStatistics.achievementRate}%',
                   style: const TextStyle(fontSize: 13),
                 ),
               ],
@@ -590,11 +591,11 @@ class WaterStatisticsWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text(
-                  "环比:${waterStatistics.monthOnMonth}%",
+                  '环比:${waterStatistics.monthOnMonth}%',
                   style: const TextStyle(fontSize: 13),
                 ),
                 Text(
-                  "同比:${waterStatistics.yearOnYear}%",
+                  '同比:${waterStatistics.yearOnYear}%',
                   style: const TextStyle(fontSize: 13),
                 ),
               ],
@@ -611,7 +612,7 @@ class WaterStatisticsWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "水环境质量情况"),
+          TitleWidget(title: '水环境质量情况'),
           Column(
             children: waterStatisticsList
                 .map((waterStatistics) =>
@@ -636,7 +637,7 @@ class TodoTaskStatisticsWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "报警管理单统计"),
+          TitleWidget(title: '${UIUtils.getAttentionLevelTitle()}报警管理单统计'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -671,7 +672,7 @@ class ReportStatisticsWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "异常申报(有效数)统计"),
+          TitleWidget(title: '${UIUtils.getAttentionLevelTitle()}异常申报有效数统计'),
           Row(
             children: <Widget>[
               InkWellButton3(
@@ -705,7 +706,9 @@ class PollutionEnterStatisticsWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "污染源企业概况"),
+          TitleWidget(
+              title:
+                  '${UIUtils.getAttentionLevelTitle(defaultTitle: '排污单位')}概况'),
           InkWellButtonGrid(metaList: metaList),
         ],
       ),
@@ -725,7 +728,7 @@ class RainEnterStatisticsWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "雨水企业概况"),
+          TitleWidget(title: '雨水排污单位概况'),
           Row(
             children: <Widget>[
               InkWellButton1(
@@ -759,7 +762,7 @@ class ComprehensiveStatisticsWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "综合统计信息"),
+          TitleWidget(title: '综合统计信息'),
           Row(
             children: <Widget>[
               //监察执法
@@ -792,7 +795,7 @@ class WeekTrendWidget extends StatelessWidget {
       child: Container(
         child: Column(
           children: <Widget>[
-            TitleWidget(title: "最近一周变化趋势"),
+            TitleWidget(title: '最近一周变化趋势'),
             Container(
               height: 200,
               child: Row(
@@ -800,20 +803,20 @@ class WeekTrendWidget extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: BarChartWidget(
-                        title: "AQI",
-                        subTitle: "空气质量",
+                        title: 'AQI',
+                        subTitle: '空气质量',
                         color: Color.fromRGBO(136, 191, 89, 1),
                         imagePath:
-                            "assets/images/icon_aqi_examine_quality.png"),
+                            'assets/images/icon_aqi_examine_quality.png'),
                   ),
                   Gaps.hGap10,
                   Expanded(
                     flex: 1,
                     child: BarChartWidget(
-                        title: "PM2.5",
-                        subTitle: "细颗粒物",
+                        title: 'PM2.5',
+                        subTitle: '细颗粒物',
                         color: Color.fromRGBO(241, 190, 67, 1),
-                        imagePath: "assets/images/icon_aqi_examine_pm25.png"),
+                        imagePath: 'assets/images/icon_aqi_examine_pm25.png'),
                   ),
                 ],
               ),
@@ -1099,7 +1102,7 @@ class _AlarmListWidgetState extends State<AlarmListWidget> {
     return Container(
       child: Column(
         children: <Widget>[
-          TitleWidget(title: "报警管理单统计"),
+          TitleWidget(title: '报警管理单统计'),
           SizedBox(
             height: 10,
           ),
@@ -1193,13 +1196,13 @@ class SimplePieChart extends StatelessWidget {
   static List<charts.Series<LinearAlarms, String>> _createSampleData() {
     final data = [
       new LinearAlarms(
-          "待处理            92*个", 92, charts.Color.fromHex(code: "#4DA7F8")),
+          '待处理            92*个', 92, charts.Color.fromHex(code: '#4DA7F8')),
       new LinearAlarms(
-          "待审核            123*个", 123, charts.Color.fromHex(code: "#F1BE43")),
+          '待审核            123*个', 123, charts.Color.fromHex(code: '#F1BE43')),
       new LinearAlarms(
-          "已退回            42*个", 42, charts.Color.fromHex(code: "#E9776F")),
+          '已退回            42*个', 42, charts.Color.fromHex(code: '#E9776F')),
       new LinearAlarms(
-          "已办结            14*个", 14, charts.Color.fromHex(code: "#88BF59")),
+          '已办结            14*个', 14, charts.Color.fromHex(code: '#88BF59')),
     ];
 
     return [
