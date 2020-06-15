@@ -33,7 +33,10 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
           detailId: event.detailId,
           params: event.params,
           cancelToken: cancelToken);
-      yield DetailLoaded(detail: detail);
+      if(detail != null)
+        yield DetailLoaded(detail: detail);
+      else
+        yield DetailError(message: '数据为空，请重新加载！');
     } catch (e) {
       yield DetailError(message: ExceptionHandle.handleException(e).msg);
     }
