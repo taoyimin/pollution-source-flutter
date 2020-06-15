@@ -74,7 +74,9 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                     ),
                     Gaps.hGap10,
                     Text(
-                      '${widget.title}(已选中${checkList.length}项)',
+                      checkList.length != 0
+                          ? '${widget.title}(已选中${checkList.length}项)'
+                          : '${widget.title}',
                       style: TextStyle(fontSize: 17),
                     ),
                   ],
@@ -125,56 +127,54 @@ class _CollectionDialogState<T> extends State<CollectionDialog<T>> {
                                   ? Colors.lightBlueAccent
                                   : Colours.divider_color,
                             ),
-                            child: Center(
-                              child: () {
-                                if (item is MobileLaw) {
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        '任务编码：${item.number}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: checkList.contains(item)
-                                              ? Colors.white
-                                              : Colours.secondary_text,
-                                        ),
+                            child: () {
+                              if (item is MobileLaw) {
+                                return Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      '任务编码：${item.number}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: checkList.contains(item)
+                                            ? Colors.white
+                                            : Colours.secondary_text,
                                       ),
-                                      Text(
-                                        '执法人：${item.lawPersonStr}',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: checkList.contains(item)
-                                              ? Colors.white
-                                              : Colours.secondary_text,
-                                        ),
+                                    ),
+                                    Text(
+                                      '执法人：${item.lawPersonStr}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: checkList.contains(item)
+                                            ? Colors.white
+                                            : Colours.secondary_text,
                                       ),
-                                      Text(
-                                        '开始时间：${item.startTimeStr}',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: checkList.contains(item)
-                                              ? Colors.white
-                                              : Colours.secondary_text,
-                                        ),
+                                    ),
+                                    Text(
+                                      '开始时间：${item.startTimeStr}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: checkList.contains(item)
+                                            ? Colors.white
+                                            : Colours.secondary_text,
                                       ),
-                                      Text(
-                                        '结束时间：${item.endTimeStr}',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: checkList.contains(item)
-                                              ? Colors.white
-                                              : Colours.secondary_text,
-                                        ),
+                                    ),
+                                    Text(
+                                      '结束时间：${item.endTimeStr}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: checkList.contains(item)
+                                            ? Colors.white
+                                            : Colours.secondary_text,
                                       ),
-                                    ],
-                                  );
-                                } else {
-                                  return const Text('未知的类型');
-                                }
-                              }(),
-                            ),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return const Text('未知的类型');
+                              }
+                            }(),
                           ),
                         );
                       }),
