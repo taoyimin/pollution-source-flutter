@@ -43,6 +43,8 @@ class _EnterHomePageState extends State<EnterHomePage> {
       ),
       MinePage(),
     ];
+    // 检查定位权限
+    SystemUtils.checkLocation();
     // 检查推送权限
     SystemUtils.checkNotification(context);
     // 检查版本更新

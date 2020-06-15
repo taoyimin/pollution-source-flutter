@@ -55,6 +55,8 @@ class _OperationHomePageState extends State<OperationHomePage> {
   @override
   void initState() {
     super.initState();
+    // 检查定位权限
+    SystemUtils.checkLocation();
     // 检查推送权限
     SystemUtils.checkNotification(context);
     // 检查版本更新
