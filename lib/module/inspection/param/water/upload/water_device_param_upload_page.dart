@@ -7,9 +7,6 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_event.dart';
-import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
@@ -20,12 +17,11 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+/// 废水监测设备参数巡检上报界面
 class WaterDeviceParamUploadPage extends StatefulWidget {
   final String json;
 
-  WaterDeviceParamUploadPage({
-    this.json,
-  });
+  WaterDeviceParamUploadPage({this.json});
 
   @override
   _WaterDeviceParamUploadPageState createState() =>
@@ -34,24 +30,24 @@ class WaterDeviceParamUploadPage extends StatefulWidget {
 
 class _WaterDeviceParamUploadPageState
     extends State<WaterDeviceParamUploadPage> {
-  PageBloc _pageBloc;
-
   /// 加载待巡检参数Bloc
   ListBloc _listBloc;
+
+  /// 废水监测设备参数巡检上报Bloc
   UploadBloc _uploadBloc;
+
+  /// 巡检任务
   RoutineInspectionUploadList task;
+
+  /// 废水监测设备参数巡检上报类
+  final WaterDeviceParamUpload _waterDeviceParamUpload =
+      WaterDeviceParamUpload();
 
   @override
   void initState() {
     super.initState();
     task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
-    // 初始化页面Bloc
-    _pageBloc = BlocProvider.of<PageBloc>(context);
-    // 加载界面
-    _pageBloc.add(PageLoad(
-        model: WaterDeviceParamUpload(
-      inspectionTaskId: task.inspectionTaskId,
-    )));
+    _waterDeviceParamUpload.inspectionTaskId = task.inspectionTaskId;
     _listBloc = BlocProvider.of<ListBloc>(context);
     // 加载待巡检参数
     _loadData();
@@ -63,6 +59,18 @@ class _WaterDeviceParamUploadPageState
   void dispose() {
     // 释放资源
     super.dispose();
+    _waterDeviceParamUpload.waterDeviceParamTypeList
+        .forEach((WaterDeviceParamType waterDeviceParamType) {
+      waterDeviceParamType.waterDeviceParamNameList
+          .forEach((WaterDeviceParamName waterDeviceParamName) {
+        waterDeviceParamName.originalVal.dispose();
+        waterDeviceParamName.updateVal.dispose();
+        waterDeviceParamName.modifyReason.dispose();
+      });
+    });
+    // 取消正在进行的请求
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
   }
 
   /// 加载数据
@@ -75,32 +83,15 @@ class _WaterDeviceParamUploadPageState
     return Scaffold(
       body: EasyRefresh.custom(
         slivers: <Widget>[
-          BlocBuilder<PageBloc, PageState>(
-            builder: (context, state) {
-              String enterName = '';
-              String monitorName = '';
-              String deviceName = '';
-              String inspectionStartTime = '';
-              String inspectionEndTime = '';
-              if (state is PageLoaded) {
-                enterName = task?.enterName ?? '';
-                monitorName = task?.monitorName ?? '';
-                deviceName = task?.deviceName ?? '';
-                inspectionStartTime = task?.inspectionStartTime ?? '';
-                inspectionEndTime = task?.inspectionEndTime ?? '';
-              }
-              return UploadHeaderWidget(
-                title: '废水监测设备参数巡检',
-                subTitle: '''$enterName
-监控点名：$monitorName
-设备名称：$deviceName
-开始日期：$inspectionStartTime
-截至日期：$inspectionEndTime''',
-                imagePath:
-                    'assets/images/discharge_report_upload_header_image.png',
-                backgroundColor: Colours.primary_color,
-              );
-            },
+          UploadHeaderWidget(
+            title: '废水监测设备参数巡检',
+            subTitle: '''${task.enterName}
+监控点名：${task.monitorName}
+设备名称：${task.deviceName}
+开始日期：${task.inspectionStartTime}
+截至日期：${task.inspectionEndTime}''',
+            imagePath: 'assets/images/discharge_report_upload_header_image.png',
+            backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
             listeners: [
@@ -117,40 +108,29 @@ class _WaterDeviceParamUploadPageState
               ),
               BlocListener<ListBloc, ListState>(
                 listener: (context, state) {
-                  final currentState = _pageBloc.state;
-                  if (state is ListLoaded && currentState is PageLoaded) {
-                    _pageBloc.add(PageLoad(
-                        model: currentState.model
-                            .copyWith(waterDeviceParamTypeList: state.list)));
+                  if (state is ListLoaded) {
+                    _waterDeviceParamUpload.waterDeviceParamTypeList =
+                        state.list;
                   }
                 },
               ),
             ],
-            child: BlocBuilder<PageBloc, PageState>(
-              builder: (context, state) {
-                if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model);
-                } else {
-                  return ErrorSliver(
-                      errorMessage: 'BlocBuilder监听到未知的的状态！state=$state');
-                }
-              },
-            ),
+            child: _buildPageLoadedDetail(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPageLoadedDetail(WaterDeviceParamUpload waterDeviceParamUpload) {
+  Widget _buildPageLoadedDetail() {
     return SliverToBoxAdapter(
         child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: <Widget>[
-          InfoRowWidget(title: '测量原理', content: task?.measurePrinciple ?? '无'),
+          InfoRowWidget(title: '测量原理', content: task.measurePrinciple ?? '无'),
           Gaps.hLine,
-          InfoRowWidget(title: '分析方法', content: task?.analysisMethod ?? '无'),
+          InfoRowWidget(title: '分析方法', content: task.analysisMethod ?? '无'),
           Gaps.hLine,
           BlocBuilder<ListBloc, ListState>(
             builder: (context, state) {
@@ -171,19 +151,12 @@ class _WaterDeviceParamUploadPageState
               } else if (state is ListLoaded) {
                 return Column(
                   children: <Widget>[
-                    ...(waterDeviceParamUpload?.waterDeviceParamTypeList
+                    ...(_waterDeviceParamUpload.waterDeviceParamTypeList
                             ?.asMap()
                             ?.map((i,
                                     WaterDeviceParamType
                                         waterDeviceParamType) =>
-                                MapEntry(
-                                    i,
-                                    _buildPageParamType(
-                                      i,
-                                      waterDeviceParamUpload
-                                          .waterDeviceParamTypeList,
-                                      waterDeviceParamUpload,
-                                    )))
+                                MapEntry(i, _buildPageParamType(i)))
                             ?.values
                             ?.toList() ??
                         []),
@@ -195,9 +168,8 @@ class _WaterDeviceParamUploadPageState
                           icon: Icons.file_upload,
                           color: Colors.lightBlue,
                           onTap: () {
-                            _uploadBloc.add(Upload(
-                              data: waterDeviceParamUpload,
-                            ));
+                            _uploadBloc
+                                .add(Upload(data: _waterDeviceParamUpload));
                           },
                         ),
                       ],
@@ -218,8 +190,9 @@ class _WaterDeviceParamUploadPageState
     ));
   }
 
-  Widget _buildPageParamType(int index, List<WaterDeviceParamType> list,
-      WaterDeviceParamUpload waterDeviceParamUpload) {
+  Widget _buildPageParamType(int index) {
+    List<WaterDeviceParamType> list =
+        _waterDeviceParamUpload.waterDeviceParamTypeList;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -252,43 +225,19 @@ class _WaterDeviceParamUploadPageState
                               child: Text(waterDeviceParamName.parameterName),
                             ),
                             EditWidget(
+                              controller: waterDeviceParamName.originalVal,
                               hintText: '原始值',
                               flex: 2,
-                              onChanged: (value) {
-                                list[index].waterDeviceParamNameList[i] =
-                                    list[index]
-                                        .waterDeviceParamNameList[i]
-                                        .copyWith(originalVal: value);
-                                _pageBloc.add(PageLoad(
-                                    model: waterDeviceParamUpload.copyWith(
-                                        waterDeviceParamTypeList: list)));
-                              },
                             ),
                             EditWidget(
+                              controller: waterDeviceParamName.updateVal,
                               hintText: '修改值',
                               flex: 2,
-                              onChanged: (value) {
-                                list[index].waterDeviceParamNameList[i] =
-                                    list[index]
-                                        .waterDeviceParamNameList[i]
-                                        .copyWith(updateVal: value);
-                                _pageBloc.add(PageLoad(
-                                    model: waterDeviceParamUpload.copyWith(
-                                        waterDeviceParamTypeList: list)));
-                              },
                             ),
                             EditWidget(
+                              controller: waterDeviceParamName.modifyReason,
                               hintText: '修改原因',
                               flex: 2,
-                              onChanged: (value) {
-                                list[index].waterDeviceParamNameList[i] =
-                                    list[index]
-                                        .waterDeviceParamNameList[i]
-                                        .copyWith(modifyReason: value);
-                                _pageBloc.add(PageLoad(
-                                    model: waterDeviceParamUpload.copyWith(
-                                        waterDeviceParamTypeList: list)));
-                              },
                             ),
                           ],
                         ),

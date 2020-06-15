@@ -1,92 +1,26 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 // 废水监测设备参数巡检上报
-class WaterDeviceParamUpload extends Equatable {
-  final String inspectionTaskId;
-  final List<WaterDeviceParamType> waterDeviceParamTypeList;
-
-  const WaterDeviceParamUpload({
-    this.inspectionTaskId,
-    this.waterDeviceParamTypeList,
-  });
-
-  @override
-  List<Object> get props => [
-        inspectionTaskId,
-        waterDeviceParamTypeList,
-      ];
-
-  WaterDeviceParamUpload copyWith({
-    List<WaterDeviceParamType> waterDeviceParamTypeList,
-  }) {
-    return WaterDeviceParamUpload(
-      inspectionTaskId: this.inspectionTaskId,
-      waterDeviceParamTypeList:
-          waterDeviceParamTypeList ?? this.waterDeviceParamTypeList,
-    );
-  }
+class WaterDeviceParamUpload{
+  String inspectionTaskId;
+  List<WaterDeviceParamType> waterDeviceParamTypeList = [];
 }
 
 /// 巡检参数类型
-class WaterDeviceParamType extends Equatable {
-  final String parameterType;
+class WaterDeviceParamType {
+  String parameterType;
   final List<WaterDeviceParamName> waterDeviceParamNameList;
 
-  const WaterDeviceParamType({
-    this.parameterType,
-    this.waterDeviceParamNameList,
-  });
-
-  @override
-  List<Object> get props => [
-        parameterType,
-        waterDeviceParamNameList,
-      ];
-
-  WaterDeviceParamType copyWith({
-    String originalVal,
-    List<WaterDeviceParamName> waterDeviceParamNameList,
-  }) {
-    return WaterDeviceParamType(
-      parameterType: this.parameterType,
-      waterDeviceParamNameList:
-          waterDeviceParamNameList ?? this.waterDeviceParamNameList,
-    );
-  }
+  WaterDeviceParamType({this.parameterType, this.waterDeviceParamNameList});
 }
 
 /// 巡检参数名
-class WaterDeviceParamName extends Equatable {
-  final String parameterName;
-  final String originalVal;
-  final String updateVal;
-  final String modifyReason;
+class WaterDeviceParamName{
+  String parameterName;
+  final TextEditingController originalVal = TextEditingController();
+  final TextEditingController updateVal = TextEditingController();
+  final TextEditingController modifyReason = TextEditingController();
 
-  const WaterDeviceParamName({
-    this.parameterName,
-    this.originalVal = '',
-    this.updateVal = '',
-    this.modifyReason = '',
-  });
-
-  @override
-  List<Object> get props => [
-        parameterName,
-        originalVal,
-        updateVal,
-        modifyReason,
-      ];
-
-  WaterDeviceParamName copyWith({
-    String originalVal,
-    String updateVal,
-    String modifyReason,
-  }) {
-    return WaterDeviceParamName(
-      parameterName: this.parameterName,
-      originalVal: originalVal ?? this.originalVal,
-      updateVal: updateVal ?? this.updateVal,
-      modifyReason: modifyReason ?? this.modifyReason,
-    );
-  }
+  WaterDeviceParamName({this.parameterName});
 }
+

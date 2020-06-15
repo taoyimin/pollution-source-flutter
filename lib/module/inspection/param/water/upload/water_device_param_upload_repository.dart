@@ -46,21 +46,21 @@ class WaterDeviceParamUploadRepository
           .expand((WaterDeviceParamType waterDeviceParamType) {
         return waterDeviceParamType.waterDeviceParamNameList
             .map((WaterDeviceParamName waterDeviceParamName) {
-          return MapEntry('originalVal', waterDeviceParamName.originalVal);
+          return MapEntry('originalVal', waterDeviceParamName.originalVal.text);
         });
       }))
       ..addAll(data.waterDeviceParamTypeList
           .expand((WaterDeviceParamType waterDeviceParamType) {
         return waterDeviceParamType.waterDeviceParamNameList
             .map((WaterDeviceParamName waterDeviceParamName) {
-          return MapEntry('updateVal', waterDeviceParamName.updateVal);
+          return MapEntry('updateVal', waterDeviceParamName.updateVal.text);
         });
       }))
       ..addAll(data.waterDeviceParamTypeList
           .expand((WaterDeviceParamType waterDeviceParamType) {
         return waterDeviceParamType.waterDeviceParamNameList
             .map((WaterDeviceParamName waterDeviceParamName) {
-          return MapEntry('modifyReason', waterDeviceParamName.modifyReason);
+          return MapEntry('modifyReason', waterDeviceParamName.modifyReason.text);
         });
       }));
     return formData;

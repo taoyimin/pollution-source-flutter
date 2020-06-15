@@ -65,7 +65,7 @@ class AirDeviceCheckUploadRepository
       }))
       ..addAll(data.airDeviceCheckRecordList.map((item) {
         return MapEntry('currentCheckTime',
-            DateUtil.getDateStrByDateTime(item.currentCheckTime));
+            DateUtil.formatDate(item.currentCheckTime));
       }))
       ..addAll(data.airDeviceCheckRecordList.map((item) {
         return MapEntry('currentCheckResult', item.currentCheckResult.text);

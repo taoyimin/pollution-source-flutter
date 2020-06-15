@@ -9,6 +9,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
+import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
@@ -44,7 +45,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
       UploadBloc(uploadRepository: AirDeviceCheckUploadRepository());
 
   /// 加载因子信息Bloc
-  final DetailBloc _detailBloc =
+  final DetailBloc _factorBloc =
       DetailBloc(detailRepository: RoutineInspectionUploadFactorRepository());
 
   /// 废气监测设备校验类
@@ -67,13 +68,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
       AirDeviceCheckRecord(),
     ];
     // 加载该设备的监测因子
-    _detailBloc.add(DetailLoad(
-      params: RoutineInspectionUploadFactorRepository.createParams(
-        factorCode: task.factorCode,
-        deviceId: task.deviceId,
-        monitorId: task.monitorId,
-      ),
-    ));
+    _loadFactor();
   }
 
   @override
@@ -84,7 +79,20 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
       airDeviceCheckRecord.currentCheckIsPass.dispose();
       airDeviceCheckRecord.currentCheckResult.dispose();
     });
+    // 取消正在进行的请求
+    if (_factorBloc?.state is DetailLoading)
+      (_factorBloc?.state as DetailLoading).cancelToken.cancel();
     super.dispose();
+  }
+
+  _loadFactor() {
+    _factorBloc.add(DetailLoad(
+      params: RoutineInspectionUploadFactorRepository.createParams(
+        factorCode: task.factorCode,
+        deviceId: task.deviceId,
+        monitorId: task.monitorId,
+      ),
+    ));
   }
 
   @override
@@ -143,37 +151,21 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '校验因子',
               content: _airDeviceCheckUpload?.factor?.factorName,
-              detailBloc: _detailBloc,
+              detailBloc: _factorBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {
                 setState(() {
                   _airDeviceCheckUpload.factor = factor;
                 });
               },
-              onErrorTap: () {
-                _detailBloc.add(DetailLoad(
-                  params: RoutineInspectionUploadFactorRepository.createParams(
-                    factorCode: task.factorCode,
-                    deviceId: task.deviceId,
-                    monitorId: task.monitorId,
-                  ),
-                ));
-              },
+              onErrorTap: _loadFactor,
             ),
             Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '测量单位',
               content: _airDeviceCheckUpload?.factor?.unit,
-              detailBloc: _detailBloc,
+              detailBloc: _factorBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
-              onErrorTap: () {
-                _detailBloc.add(DetailLoad(
-                  params: RoutineInspectionUploadFactorRepository.createParams(
-                    factorCode: task.factorCode,
-                    deviceId: task.deviceId,
-                    monitorId: task.monitorId,
-                  ),
-                ));
-              },
+              onErrorTap: _loadFactor,
             ),
             Gaps.hLine,
             Container(

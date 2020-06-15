@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
@@ -29,8 +30,13 @@ class DeviceInspectionUploadRepository
         return MapEntry(
             'inspectionRemark', deviceInspectUpload.isNormal ? '正常' : '不正常');
       }))
+      // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
       ..addAll(deviceInspectUpload.selectedList.map((item) {
-        return MapEntry('remark', deviceInspectUpload.remark);
+        return MapEntry(
+            'remark',
+            TextUtil.isEmpty(deviceInspectUpload.remark.text)
+                ? ' '
+                : deviceInspectUpload.remark.text);
       }));
     return formData;
   }

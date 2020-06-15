@@ -1,3 +1,4 @@
+import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_model.dart';
 
@@ -5,6 +6,9 @@ import 'package:pollution_source/module/inspection/common/routine_inspection_upl
 class AirDeviceCorrectUpload {
   /// 任务id
   String inspectionTaskId;
+
+  /// 位置信息
+  BaiduLocation baiduLocation;
 
   /// 校准因子
   RoutineInspectionUploadFactor factor;

@@ -41,7 +41,7 @@ class WaterDeviceUploadRepository
         return MapEntry('itemType', item.itemType);
       }))
       ..addAll(data.map((item) {
-        return MapEntry('currentCheckTime', DateUtil.getDateStrByDateTime(item.currentCheckTime) ?? '');
+        return MapEntry('currentCheckTime', DateUtil.formatDate(item.currentCheckTime));
       }))
       ..addAll(data.map((item) {
         return MapEntry('standardSolution', item.standardSolution.text);
@@ -57,7 +57,7 @@ class WaterDeviceUploadRepository
             'currentCheckIsPass', item.currentCheckIsPass ? '合格' : '不合格');
       }))
       ..addAll(data.map((item) {
-        return MapEntry('currentCorrectTime', DateUtil.getDateStrByDateTime(item.currentCorrectTime) ?? '');
+        return MapEntry('currentCorrectTime', DateUtil.formatDate(item.currentCorrectTime));
       }))
       ..addAll(data.map((item) {
         return MapEntry('currentCorrectIsPass', item.currentCorrectIsPass ? '通过' : '不通过');

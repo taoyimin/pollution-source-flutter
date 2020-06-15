@@ -10,6 +10,8 @@ class AirDeviceCorrectUploadRepository
     extends UploadRepository<AirDeviceCorrectUpload, String> {
   @override
   checkData(AirDeviceCorrectUpload data) {
+    if (data.baiduLocation == null)
+      throw DioError(error: InvalidParamException('请先获取位置信息'));
     if (data.factor == null)
       throw DioError(error: InvalidParamException('请先加载校验因子'));
     if (TextUtil.isEmpty(data.factor.unit))
@@ -53,6 +55,8 @@ class AirDeviceCorrectUploadRepository
   Future<FormData> createFormData(AirDeviceCorrectUpload data) async {
     FormData formData = FormData();
     formData.fields
+      ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
+      ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('factorId', data.factor.factorId.toString())])
       ..addAll([MapEntry('unit', data.factor.unit)])
@@ -68,12 +72,10 @@ class AirDeviceCorrectUploadRepository
       ])
       ..addAll([MapEntry('factorName', data.factor.factorName)])
       ..addAll([
-        MapEntry('correctStartTime',
-            DateUtil.getDateStrByDateTime(data.correctStartTime))
+        MapEntry('correctStartTime', DateUtil.formatDate(data.correctStartTime))
       ])
       ..addAll([
-        MapEntry('correctEndTime',
-            DateUtil.getDateStrByDateTime(data.correctStartTime))
+        MapEntry('correctEndTime', DateUtil.formatDate(data.correctStartTime))
       ])
       ..addAll([MapEntry('zeroVal', data.zeroVal.text)])
       ..addAll([MapEntry('beforeZeroVal', data.beforeZeroVal.text)])

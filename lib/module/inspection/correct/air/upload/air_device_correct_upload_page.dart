@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,7 +48,7 @@ class _AirDeviceCorrectUploadPageState
       UploadBloc(uploadRepository: AirDeviceCorrectUploadRepository());
 
   /// 加载因子信息Bloc
-  final DetailBloc _detailBloc =
+  final DetailBloc _factorBloc =
       DetailBloc(detailRepository: RoutineInspectionUploadFactorRepository());
 
   /// 加载上次校准后测试值Bloc
@@ -82,11 +83,17 @@ class _AirDeviceCorrectUploadPageState
     _airDeviceCorrectUpload.correctRangeVal.dispose();
     _airDeviceCorrectUpload.rangePercent.dispose();
     _airDeviceCorrectUpload.rangeCorrectVal.dispose();
+    // 取消正在进行的请求
+    if (_factorBloc?.state is DetailLoading)
+      (_factorBloc?.state as DetailLoading).cancelToken.cancel();
+    // 取消正在进行的请求
+    if (_lastValueBloc?.state is DetailLoading)
+      (_lastValueBloc?.state as DetailLoading).cancelToken.cancel();
     super.dispose();
   }
 
   _loadFactor() {
-    _detailBloc.add(DetailLoad(
+    _factorBloc.add(DetailLoad(
       params: RoutineInspectionUploadFactorRepository.createParams(
         factorCode: task.factorCode,
         deviceId: task.deviceId,
@@ -173,10 +180,18 @@ class _AirDeviceCorrectUploadPageState
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: <Widget>[
+            LocationWidget(
+              locationCallback: (BaiduLocation baiduLocation) {
+                setState(() {
+                  _airDeviceCorrectUpload.baiduLocation = baiduLocation;
+                });
+              },
+            ),
+            Gaps.hLine,
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '校准因子',
               content: _airDeviceCorrectUpload?.factor?.factorName,
-              detailBloc: _detailBloc,
+              detailBloc: _factorBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {
                 setState(() {
                   _airDeviceCorrectUpload.factor = factor;
@@ -189,7 +204,7 @@ class _AirDeviceCorrectUploadPageState
             DetailRowWidget<RoutineInspectionUploadFactor>(
               title: '计量单位',
               content: _airDeviceCorrectUpload?.factor?.unit,
-              detailBloc: _detailBloc,
+              detailBloc: _factorBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
               successFontColor: Colours.primary_color,
               onSuccessTap: onSuccessTap,
@@ -200,7 +215,7 @@ class _AirDeviceCorrectUploadPageState
               title: '分析仪量程',
               content:
                   '${_airDeviceCorrectUpload?.factor?.measureLower} — ${_airDeviceCorrectUpload?.factor?.measureUpper}',
-              detailBloc: _detailBloc,
+              detailBloc: _factorBloc,
               onLoaded: (RoutineInspectionUploadFactor factor) {},
               successFontColor: Colours.primary_color,
               onSuccessTap: onSuccessTap,

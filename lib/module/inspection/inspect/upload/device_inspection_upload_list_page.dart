@@ -9,9 +9,6 @@ import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';
 import 'package:pollution_source/module/common/list/list_event.dart';
 import 'package:pollution_source/module/common/list/list_state.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_event.dart';
-import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
@@ -49,18 +46,22 @@ class _DeviceInspectionUploadListPageState
   @override
   bool get wantKeepAlive => true;
   ListBloc _listBloc;
-  PageBloc _pageBloc;
   UploadBloc _uploadBloc;
 
   /// 用于刷新常规巡检详情（上报成功后刷新header中的数据条数）
   DetailBloc _detailBloc;
   Completer<void> _refreshCompleter;
-  TextEditingController _remarkController;
   AnimationController _animateController;
   Animation _animation;
   PersistentBottomSheetController _bottomSheetController;
   IconData _actionIcon = Icons.edit;
-  final List<RoutineInspectionUploadList> _selectedList = [];
+  /// 用于刷新BottomSheet
+  StateSetter bottomSheetStateSetter;
+
+  /// 辅助/监测设备巡检上报类
+  final DeviceInspectUpload _deviceInspectUpload = DeviceInspectUpload();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
 
   @override
@@ -71,13 +72,6 @@ class _DeviceInspectionUploadListPageState
     // 首次加载
     _listBloc.add(ListLoad(params: _getRequestParam()));
     _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    _pageBloc = PageBloc();
-    // 首次加载
-    _pageBloc.add(PageLoad(
-      model: DeviceInspectUpload(selectedList: _selectedList),
-    ));
-    // 初始化编辑框控制器
-    _remarkController = TextEditingController();
     // 初始化fab颜色渐变动画
     _animateController = AnimationController(
       duration: Duration(milliseconds: 500),
@@ -95,11 +89,12 @@ class _DeviceInspectionUploadListPageState
   void dispose() {
     // 释放资源
     _refreshController.dispose();
-    _remarkController.dispose();
+    _deviceInspectUpload.remark.dispose();
     _animateController.dispose();
     // 取消正在进行的请求
-    final currentState = _listBloc?.state;
-    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    // 取消正在进行的请求
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -147,22 +142,18 @@ class _DeviceInspectionUploadListPageState
                 Application.router.pop(context);
                 // 关闭BottomSheet
                 _bottomSheetController?.close();
-                // 重置已选中任务
-                _selectedList.clear();
+                // 清空上报界面
+                _deviceInspectUpload.selectedList.clear();
+                _deviceInspectUpload.isNormal = true;
+                _deviceInspectUpload.remark.text = '';
                 // 刷新列表页面
                 _listBloc.add(ListLoad(
                     isRefresh: true,
-                    params:
-                    RoutineInspectionUploadListRepository.createParams(
+                    params: RoutineInspectionUploadListRepository.createParams(
                       monitorId: widget.monitorId,
                       itemInspectType: widget.itemInspectType,
                       state: widget.state,
                     )));
-                // 清空上报界面
-                _pageBloc.add(PageLoad(
-                    model:
-                    DeviceInspectUpload(selectedList: _selectedList)));
-                _remarkController.text = '';
                 // 刷新常规巡检详情界面header中的任务条数
                 _detailBloc.add(DetailLoad(
                   params: RoutineInspectionDetailRepository.createParams(
@@ -190,7 +181,7 @@ class _DeviceInspectionUploadListPageState
                 _refreshCompleter?.complete();
                 _refreshCompleter = Completer();
               },
-              buildWhen: (previous, current){
+              buildWhen: (previous, current) {
                 if (current is ListLoading)
                   return false;
                 else
@@ -235,18 +226,18 @@ class _DeviceInspectionUploadListPageState
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                if (_selectedList.contains(list[index])) {
-                  // 如果已选中则移除
-                  _selectedList.remove(list[index]);
-                } else {
-                  // 如果未选中则添加
-                  _selectedList.add(list[index]);
-                }
-                // 刷新界面
-                _listBloc.add(ListUpdate());
-                // 刷新BottomSheet顶部任务个数提示
-                _pageBloc.add(PageLoad(
-                    model: DeviceInspectUpload(selectedList: _selectedList)));
+                setState(() {
+                  if (_deviceInspectUpload.selectedList.contains(list[index])) {
+                    // 如果已选中则移除
+                    _deviceInspectUpload.selectedList.remove(list[index]);
+                  } else {
+                    // 如果未选中则添加
+                    _deviceInspectUpload.selectedList.add(list[index]);
+                  }
+                });
+                // 刷新BottomSheet中的选中数
+                if(bottomSheetStateSetter!=null)
+                  bottomSheetStateSetter((){});
               },
               children: <Widget>[
                 Container(
@@ -293,7 +284,8 @@ class _DeviceInspectionUploadListPageState
                         ),
                       ),
                       Checkbox(
-                        value: _selectedList.contains(list[index]),
+                        value: _deviceInspectUpload.selectedList
+                            .contains(list[index]),
                         onChanged: (value) {},
                       ),
                     ],
@@ -330,7 +322,7 @@ class _DeviceInspectionUploadListPageState
             _bottomSheetController.close();
             return;
           }
-          if (_selectedList.length == 0) {
+          if (_deviceInspectUpload.selectedList.length == 0) {
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: const Text('请至少选择一项任务进行处理'),
@@ -354,17 +346,7 @@ class _DeviceInspectionUploadListPageState
             backgroundColor: Colors.white,
             builder: (BuildContext context) {
               // 生成流程上报界面
-              return BlocBuilder<PageBloc, PageState>(
-                bloc: _pageBloc,
-                builder: (context, state) {
-                  if (state is PageLoaded) {
-                    return _buildBottomSheet(state.model);
-                  } else {
-                    return MessageWidget(
-                        message: 'BlocBuilder监听到未知的的状态！state=$state');
-                  }
-                },
-              );
+              return _buildBottomSheet();
             },
           );
           // 监听BottomSheet关闭
@@ -381,124 +363,124 @@ class _DeviceInspectionUploadListPageState
     });
   }
 
-  Widget _buildBottomSheet(DeviceInspectUpload deviceInspectUpload) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ImageTitleWidget(
-            title: '巡检上报(已选中${deviceInspectUpload?.selectedList?.length}项)',
-            imagePath: 'assets/images/icon_alarm_manage.png',
-          ),
-          Gaps.vGap16,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Gaps.hGap16,
-              IconCheckButton(
-                text: '    维护情况',
-                imagePath: 'assets/images/icon_fixed.png',
-                imageHeight: 20,
-                imageWidth: 20,
-                color: Colors.transparent,
-                flex: 4,
-                style: const TextStyle(
-                  color: Colours.primary_text,
-                  fontSize: 14,
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-                checked: true,
-                onTap: () {},
-              ),
-              Gaps.hGap16,
-              IconCheckButton(
-                text: '    正常',
-                imagePath: 'assets/images/icon_normal.png',
-                imageHeight: 28,
-                imageWidth: 28,
-                color: Colors.lightBlueAccent,
-                flex: 3,
-                checked: deviceInspectUpload.isNormal,
-                onTap: () {
-                  _pageBloc.add(PageLoad(
-                      model: deviceInspectUpload.copyWith(
-                          isNormal: !deviceInspectUpload.isNormal)));
-                },
-              ),
-              Gaps.hGap6,
-              IconCheckButton(
-                text: '    不正常',
-                imagePath: 'assets/images/icon_abnormal.png',
-                imageHeight: 28,
-                imageWidth: 28,
-                color: Colors.orangeAccent,
-                flex: 3,
-                checked: !deviceInspectUpload.isNormal,
-                onTap: () {
-                  _pageBloc.add(PageLoad(
-                      model: deviceInspectUpload.copyWith(
-                          isNormal: !deviceInspectUpload.isNormal)));
-                },
-              ),
-            ],
-          ),
-          Gaps.vGap10,
-          DecoratedBox(
-            decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
-            child: Row(
+  Widget _buildBottomSheet() {
+    return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      bottomSheetStateSetter = setState;
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ImageTitleWidget(
+              title: '巡检上报(已选中${_deviceInspectUpload.selectedList.length}项)',
+              imagePath: 'assets/images/icon_alarm_manage.png',
+            ),
+            Gaps.vGap16,
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 12),
-                  child: Image.asset(
-                    'assets/images/icon_alarm_manage.png',
-                    height: 20,
-                    width: 20,
+                Gaps.hGap16,
+                IconCheckButton(
+                  text: '    维护情况',
+                  imagePath: 'assets/images/icon_fixed.png',
+                  imageHeight: 20,
+                  imageWidth: 20,
+                  color: Colors.transparent,
+                  flex: 4,
+                  style: const TextStyle(
+                    color: Colours.primary_text,
+                    fontSize: 14,
                   ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+                  checked: true,
+                  onTap: () {},
                 ),
-                Flexible(
-                  child: TextField(
-                    maxLines: 3,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                    controller: _remarkController,
-                    decoration: const InputDecoration(
-                      fillColor: Color(0xFFDFDFDF),
-                      filled: true,
-                      hintText: "请输入备注",
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: Colours.secondary_text,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  ),
+                Gaps.hGap16,
+                IconCheckButton(
+                  text: '    正常',
+                  imagePath: 'assets/images/icon_normal.png',
+                  imageHeight: 28,
+                  imageWidth: 28,
+                  color: Colors.lightBlueAccent,
+                  flex: 3,
+                  checked: _deviceInspectUpload.isNormal,
+                  onTap: () {
+                    setState(() {
+                      _deviceInspectUpload.isNormal = true;
+                    });
+                  },
+                ),
+                Gaps.hGap6,
+                IconCheckButton(
+                  text: '    不正常',
+                  imagePath: 'assets/images/icon_abnormal.png',
+                  imageHeight: 28,
+                  imageWidth: 28,
+                  color: Colors.orangeAccent,
+                  flex: 3,
+                  checked: !_deviceInspectUpload.isNormal,
+                  onTap: () {
+                    setState(() {
+                      _deviceInspectUpload.isNormal = false;
+                    });
+                  },
                 ),
               ],
             ),
-          ),
-          Gaps.vGap10,
-          Row(
-            children: <Widget>[
-              ClipButton(
-                text: '提交',
-                icon: Icons.file_upload,
-                color: Colors.lightBlue,
-                onTap: () {
-                  // 发送上传事件
-                  _uploadBloc.add(Upload(
-                      data: deviceInspectUpload.copyWith(
-                    selectedList: _selectedList,
-                    remark: _remarkController.text,
-                  )));
-                },
+            Gaps.vGap10,
+            DecoratedBox(
+              decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, top: 12),
+                    child: Image.asset(
+                      'assets/images/icon_alarm_manage.png',
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
+                  Flexible(
+                    child: TextField(
+                      maxLines: 3,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                      controller: _deviceInspectUpload.remark,
+                      decoration: const InputDecoration(
+                        fillColor: Color(0xFFDFDFDF),
+                        filled: true,
+                        hintText: "请输入备注",
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          color: Colours.secondary_text,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
-    );
+            ),
+            Gaps.vGap10,
+            Row(
+              children: <Widget>[
+                ClipButton(
+                  text: '提交',
+                  icon: Icons.file_upload,
+                  color: Colors.lightBlue,
+                  onTap: () {
+                    // 发送上传事件
+                    _uploadBloc.add(Upload(data: _deviceInspectUpload));
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

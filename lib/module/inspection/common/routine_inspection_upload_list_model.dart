@@ -38,9 +38,9 @@ class RoutineInspectionUploadList extends Equatable {
   final String deviceId;
   @JsonKey(defaultValue: '')
   final String factorName;
-  @JsonKey(name: 'measure_principle', defaultValue: '')
+  @JsonKey(name: 'measure_principle')
   final String measurePrinciple;
-  @JsonKey(name: 'analysis_method', defaultValue: '')
+  @JsonKey(name: 'analysis_method')
   final String analysisMethod;
 
   const RoutineInspectionUploadList({
