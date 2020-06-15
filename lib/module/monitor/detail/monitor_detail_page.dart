@@ -36,9 +36,8 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
   @override
   void dispose() {
     // 取消正在进行的请求
-    final currentState = _monitorDetailBloc?.state;
-    if (currentState is MonitorDetailLoading)
-      currentState.cancelToken?.cancel();
+    if (_monitorDetailBloc?.state is MonitorDetailLoading)
+      (_monitorDetailBloc?.state as MonitorDetailLoading).cancelToken.cancel();
     super.dispose();
   }
 

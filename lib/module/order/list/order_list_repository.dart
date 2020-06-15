@@ -30,20 +30,20 @@ class OrderListRepository extends ListRepository<Order> {
   /// [startTime] 报警开始时间
   /// [endTime] 报警结束时间
   static Map<String, dynamic> createParams({
-    currentPage = Constant.defaultCurrentPage,
-    pageSize = Constant.defaultPageSize,
-    enterName = '',
-    cityCode = '',
-    areaCode = '',
-    alarmState = '',
-    enterId = '',
-    monitorId = '',
-    alarmLevel = '',
-    attentionLevel = '',
-    alarmType = '',
-    alarmCause = '',
-    startTime,
-    endTime,
+    int currentPage = Constant.defaultCurrentPage,
+    int pageSize = Constant.defaultPageSize,
+    String enterName = '',
+    String cityCode = '',
+    String areaCode = '',
+    String alarmState = '',
+    String enterId = '',
+    String monitorId = '',
+    String alarmLevel = '',
+    String attentionLevel = '',
+    String alarmType = '',
+    String alarmCause = '',
+    DateTime startTime,
+    DateTime endTime,
   }) {
     return {
       'currentPage': currentPage,
@@ -60,10 +60,9 @@ class OrderListRepository extends ListRepository<Order> {
       'alarmCause': alarmCause,
       'attentionLevel': attentionLevel,
       'alarmType': alarmType,
-      'alarmBeginTime': DateUtil.getDateStrByDateTime(startTime,
-          format: DateFormat.YEAR_MONTH_DAY) ?? '',
-      'alarmEndTime': DateUtil.getDateStrByDateTime(endTime,
-          format: DateFormat.YEAR_MONTH_DAY) ?? '',
+      'alarmBeginTime':
+          DateUtil.formatDate(startTime, format: DateFormats.y_mo_d),
+      'alarmEndTime': DateUtil.formatDate(endTime, format: DateFormats.y_mo_d),
       'alarmState': alarmState,
     };
   }

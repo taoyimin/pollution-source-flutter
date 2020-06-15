@@ -39,13 +39,9 @@ class WarnListRepository extends ListRepository<Warn> {
       'alarmType': alarmType,
       'cityCode': cityCode,
       'areaCode': areaCode,
-      'startTime':
-          DateUtil.getDateStrByDateTime(startTime, format: DateFormat.NORMAL) ??
-              '',
-      'endTime': DateUtil.getDateStrByDateTime(
-              endTime?.add(Duration(hours: 23, minutes: 59, seconds: 59)),
-              format: DateFormat.NORMAL) ??
-          '',
+      'startTime': DateUtil.formatDate(startTime),
+      'endTime': DateUtil.formatDate(
+          endTime?.add(Duration(hours: 23, minutes: 59, seconds: 59))),
     };
   }
 }

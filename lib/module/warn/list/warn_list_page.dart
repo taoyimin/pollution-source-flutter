@@ -89,8 +89,8 @@ class _WarnListPageState extends State<WarnListPage> {
     // 释放资源
     _refreshController.dispose();
     // 取消正在进行的请求
-    final currentState = _listBloc?.state;
-    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -336,7 +336,8 @@ class _WarnListPageState extends State<WarnListPage> {
                           ),
                           DateTimeWidget(
                             title: '生成时间',
-                            height: UIUtils.getSearchItemHeight(context, orientation),
+                            height: UIUtils.getSearchItemHeight(
+                                context, orientation),
                             startTime: _startTime,
                             endTime: _endTime,
                             onStartTimeConfirm: (dateTime, selectedIndex) {

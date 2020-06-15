@@ -274,14 +274,16 @@ Future<List<Meta>> _convertPollutionEnterStatistics(String string) async {
         imagePath: 'assets/images/icon_pollution_water_outlet.png',
         color: Color.fromRGBO(63, 81, 181, 1),
         content: strings[7],
-        router: '${Routes.dischargeList}?dischargeType=outletType2&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+        router:
+            '${Routes.dischargeList}?dischargeType=outletType2&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '废气排口',
         imagePath: 'assets/images/icon_pollution_air_outlet.png',
         color: Color.fromRGBO(233, 30, 99, 1),
         content: strings[8],
-        router: '${Routes.dischargeList}?dischargeType=outletType3&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+        router:
+            '${Routes.dischargeList}?dischargeType=outletType3&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
       ),
       Meta(
         title: '许可证企业',
@@ -322,7 +324,7 @@ Future<List<Meta>> _convertTodoTaskStatistics(String string) async {
         imagePath: 'assets/images/button_bg_green.png',
         content: strings[3],
         router:
-            '${Routes.orderList}?alarmState=50&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&startTime=${DateUtil.getDateStrByDateTime(DateTime(DateTime.now().year, 1, 1), format: DateFormat.YEAR_MONTH_DAY)}',
+            '${Routes.orderList}?alarmState=50&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
       ),
     ];
   }

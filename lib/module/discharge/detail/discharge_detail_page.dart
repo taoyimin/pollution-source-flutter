@@ -35,8 +35,8 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
   @override
   void dispose() {
     // 取消正在进行的请求
-    final currentState = _detailBloc?.state;
-    if (currentState is DetailLoading) currentState.cancelToken?.cancel();
+    if (_detailBloc?.state is DetailLoading)
+      (_detailBloc?.state as DetailLoading).cancelToken.cancel();
     super.dispose();
   }
 

@@ -52,8 +52,8 @@ class _LicenseListPageState extends State<LicenseListPage> {
     // 释放资源
     _refreshController.dispose();
     // 取消正在进行的请求
-    final currentState = _listBloc?.state;
-    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
     super.dispose();
   }
 

@@ -59,12 +59,8 @@ class MonitorHistoryDataRepository extends DetailRepository<MonitorTable> {
     return {
       'monitorId': monitorId,
       'dataType': dataType,
-      'startTime':
-          DateUtil.getDateStrByDateTime(startTime, format: DateFormat.NORMAL) ??
-              '',
-      'endTime':
-          DateUtil.getDateStrByDateTime(endTime, format: DateFormat.NORMAL) ??
-              '',
+      'startTime': DateUtil.formatDate(startTime),
+      'endTime': DateUtil.formatDate(endTime),
     };
   }
 }

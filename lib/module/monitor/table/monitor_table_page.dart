@@ -70,6 +70,15 @@ class _MonitorTableState extends State<MonitorTablePage> {
     _loadData();
   }
 
+  @override
+  void dispose() {
+    // 取消正在进行的请求
+    if (_detailBloc?.state is DetailLoading)
+      (_detailBloc?.state as DetailLoading).cancelToken.cancel();
+    super.dispose();
+  }
+
+
   /// 加载数据
   _loadData() {
     _detailBloc.add(DetailLoad(params: _getRequestParam()));

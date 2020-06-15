@@ -31,12 +31,9 @@ class NoticeListRepository extends ListRepository<Notice> {
       'pageSize': pageSize,
       'start': (currentPage - 1) * pageSize,
       'length': pageSize,
-      'startTime': DateUtil.getDateStrByDateTime(startTime,
-              format: DateFormat.NORMAL) ??
-          '',
-      'endTime': DateUtil.getDateStrByDateTime(endTime?.add(Duration(hours: 23, minutes: 59, seconds: 59)),
-              format: DateFormat.NORMAL) ??
-          '',
+      'startTime': DateUtil.formatDate(startTime),
+      'endTime': DateUtil.formatDate(
+          endTime?.add(Duration(hours: 23, minutes: 59, seconds: 59))),
       'userType': Constant.userTags[SpUtil.getInt(Constant.spUserType)],
     };
   }

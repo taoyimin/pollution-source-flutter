@@ -98,9 +98,9 @@ class _LoginPageState extends State<LoginPage> {
           CompatUtils.getResponseAttentionLevel(response));
       // 储存登录时间
       SpUtil.putString(
-          Constant.spLoginTime,
-          DateUtil.getDateStrByDateTime(DateTime.now(),
-              format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE));
+        Constant.spLoginTime,
+        DateUtil.formatDate(DateTime.now(), format: DateFormats.zh_y_mo_d_h_m),
+      );
       // 储存账号
       SpUtil.putString(
           Constant.spUsernameList[_userType], _nameController.text);

@@ -436,12 +436,10 @@ class MessageWidget extends StatelessWidget {
 class InkWellButton1 extends StatelessWidget {
   final double ratio;
   final Meta meta;
-  final GestureTapCallback onTap;
 
   InkWellButton1({
     this.ratio = 1,
     @required this.meta,
-    this.onTap,
   });
 
   @override
@@ -449,10 +447,10 @@ class InkWellButton1 extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: InkWellButton(
-        onTap: onTap ??
-            () {
-              Application.router.navigateTo(context, meta.router);
-            },
+        onTap: () {
+          if (!TextUtil.isEmpty(meta.router))
+            Application.router.navigateTo(context, meta.router);
+        },
         children: <Widget>[
           Container(
             height: 60 * ratio,
@@ -490,8 +488,9 @@ class InkWellButton1 extends StatelessWidget {
                           color: this.meta.color,
                         ),
                       ),
-                      Text(
+                      AutoSizeText(
                         this.meta.content,
+                        maxLines: 1,
                         style: const TextStyle(
                           fontSize: 18,
                         ),
@@ -1508,11 +1507,11 @@ class AttachmentWidget extends StatelessWidget {
                     '${attachment.fileName}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 13),
                   ),
                   Text(
                     '附件大小:${attachment.fileSize}',
-                    style: const TextStyle(fontSize: 13),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -2027,6 +2026,8 @@ class EditWidget extends StatelessWidget {
   final String hintText;
   final int flex;
   final TextStyle style;
+  final TextEditingController controller;
+  @Deprecated('已弃用')
   final ValueChanged<String> onChanged;
 
   EditWidget({
@@ -2034,6 +2035,7 @@ class EditWidget extends StatelessWidget {
     this.hintText = '请输入',
     this.flex = 1,
     this.style = const TextStyle(fontSize: 15),
+    this.controller,
     this.onChanged,
   }) : super(key: key);
 
@@ -2044,6 +2046,7 @@ class EditWidget extends StatelessWidget {
       child: Container(
         height: 46,
         child: TextField(
+          controller: controller ?? TextEditingController(),
           textAlign: TextAlign.center,
           style: style,
           keyboardType: TextInputType.number,
@@ -2123,6 +2126,7 @@ class TextAreaWidget extends StatelessWidget {
   final String title;
   final String hintText;
   final TextEditingController controller;
+  @Deprecated('已弃用')
   final ValueChanged<String> onChanged;
   final GestureTapCallback onTap;
   final int maxLines;
@@ -2782,9 +2786,11 @@ class DateTimeWidget extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      DateUtil.getDateStrByDateTime(startTime,
-                              format: DateFormat.ZH_YEAR_MONTH_DAY) ??
-                          '开始时间',
+                      TextUtil.isEmpty(DateUtil.formatDate(startTime,
+                              format: DateFormats.zh_y_mo_d))
+                          ? '开始时间'
+                          : DateUtil.formatDate(startTime,
+                              format: DateFormats.zh_y_mo_d),
                       style: TextStyle(
                         fontSize: 12,
                         color: startTime != null
@@ -2837,9 +2843,11 @@ class DateTimeWidget extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      DateUtil.getDateStrByDateTime(endTime,
-                              format: DateFormat.ZH_YEAR_MONTH_DAY) ??
-                          '结束时间',
+                      TextUtil.isEmpty(DateUtil.formatDate(endTime,
+                              format: DateFormats.zh_y_mo_d))
+                          ? '结束时间'
+                          : DateUtil.formatDate(endTime,
+                              format: DateFormats.zh_y_mo_d),
                       style: TextStyle(
                         fontSize: 12,
                         color: endTime != null
