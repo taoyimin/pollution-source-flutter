@@ -19,5 +19,3 @@ class ListLoad extends ListEvent {
   @override
   List<Object> get props => [isRefresh, params];
 }
-
-class ListUpdate extends ListEvent {}

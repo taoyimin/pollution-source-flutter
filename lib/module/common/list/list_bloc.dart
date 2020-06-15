@@ -20,8 +20,6 @@ class ListBloc extends Bloc<ListEvent, ListState> {
     if (event is ListLoad) {
       // 加载列表
       yield* _mapListLoadToState(event);
-    } else if (event is ListUpdate) {
-      yield* _mapListUpdateToState(event);
     }
   }
 
@@ -58,18 +56,6 @@ class ListBloc extends Bloc<ListEvent, ListState> {
       yield ListError(message: ExceptionHandle
           .handleException(e)
           .msg);
-    }
-  }
-
-  Stream<ListState> _mapListUpdateToState(ListUpdate event) async* {
-    final currentState = state;
-    if (currentState is ListLoaded) {
-      yield ListLoaded(
-        list: currentState.list,
-        currentPage: currentState.currentPage,
-        hasNextPage: currentState.hasNextPage,
-        total: currentState.total,
-      );
     }
   }
 }
