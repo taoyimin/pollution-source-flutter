@@ -14,6 +14,7 @@ class OrderDetail extends Equatable {
   final String enterName; // 企业名称
   final String enterAddress; // 企业地址
   final String districtName; // 区域
+  final String operationName; // 运维公司
   final String monitorName; // 监控点名称
   final String alarmDateStr; // 报警时间
   final String alarmState; // 督办单状态
@@ -36,6 +37,7 @@ class OrderDetail extends Equatable {
     this.enterName,
     this.enterAddress,
     this.districtName,
+    this.operationName,
     this.monitorName,
     this.alarmDateStr,
     this.alarmState,
@@ -58,6 +60,7 @@ class OrderDetail extends Equatable {
         enterName,
         enterAddress,
         districtName,
+        operationName,
         monitorName,
         alarmDateStr,
         alarmState,
@@ -96,24 +99,25 @@ OrderDetail _$OrderDetailFromJson(Map<String, dynamic> json) {
     orderId: json['commonSuperviseOrder']['id'] as int,
     enterId: json['commonSuperviseOrder']['enterId'] as int,
     monitorId: json['commonSuperviseOrder']['monitorId'] as int,
-    enterName: json['commonSuperviseOrder']['enterpriseName'] as String,
-    enterAddress: json['commonSuperviseOrder']['entAddress'] as String,
-    districtName: json['commonSuperviseOrder']['areaName'] as String,
-    monitorName: json['commonSuperviseOrder']['disMonitorName'] as String,
-    alarmDateStr: json['commonSuperviseOrder']['alarmDate'] as String,
-    alarmState: json['commonSuperviseOrder']['alarmState'] as String,
-    alarmStateStr: json['commonSuperviseOrder']['alarmStateStr'] as String,
-    alarmTypeStr: json['commonSuperviseOrder']['alarmTypeStr'] as String,
+    enterName: json['commonSuperviseOrder']['enterpriseName'] as String ?? '',
+    enterAddress: json['commonSuperviseOrder']['entAddress'] as String ?? '',
+    districtName: json['commonSuperviseOrder']['areaName'] as String ?? '',
+    operationName: json['commonSuperviseOrder']['operationFullName'] as String ?? '',
+    monitorName: json['commonSuperviseOrder']['disMonitorName'] as String ?? '',
+    alarmDateStr: json['commonSuperviseOrder']['alarmDate'] as String ?? '',
+    alarmState: json['commonSuperviseOrder']['alarmState'] as String ?? '',
+    alarmStateStr: json['commonSuperviseOrder']['alarmStateStr'] as String ?? '',
+    alarmTypeStr: json['commonSuperviseOrder']['alarmTypeStr'] as String ?? '',
     alarmCause: json['commonSuperviseOrder']['alarmCause'] as String ?? '',
     alarmCauseStr:
         json['commonSuperviseOrder']['alarmCauseStr'] as String ?? '',
-    alarmDesc: json['commonSuperviseOrder']['alarmDesc'] as String,
+    alarmDesc: json['commonSuperviseOrder']['alarmDesc'] as String ?? '',
     processes: (json['processes'] as List)
         ?.map((e) =>
             e == null ? null : Process.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    deal: json['commonSuperviseOrder']['hasDeal'] as String,
-    audit: json['commonSuperviseOrder']['hasAudit'] as String,
+    deal: json['commonSuperviseOrder']['hasDeal'] as String ?? '',
+    audit: json['commonSuperviseOrder']['hasAudit'] as String ?? '',
     mobileLawList: json.containsKey('enforcement')
         ? (json['enforcement'] as List)
             ?.map((e) => e == null
@@ -132,6 +136,7 @@ Map<String, dynamic> _$OrderDetailToJson(OrderDetail instance) =>
       'enterpriseName': instance.enterName,
       'entAddress': instance.enterAddress,
       'areaName': instance.districtName,
+      'operationFullName': instance.operationName,
       'disMonitorName': instance.monitorName,
       'alarmDate': instance.alarmDateStr,
       'alarmState': instance.alarmState,

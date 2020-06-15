@@ -20,14 +20,12 @@ import 'package:pollution_source/module/common/dict/data_dict_repository.dart';
 import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/dict/data_dict_widget.dart';
 import 'package:pollution_source/module/common/map_info_page.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_event.dart';
-import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/order/detail/order_detail_model.dart';
 import 'package:pollution_source/module/process/upload/process_upload_model.dart';
+import 'package:pollution_source/module/process/upload/process_upload_repository.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
@@ -38,29 +36,30 @@ import 'package:pollution_source/widget/custom_header.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/widget/left_line_widget.dart';
 
-///报警管理单详情界面
+import 'order_detail_repository.dart';
+
+/// 报警管理单详情界面
 ///
-///[orderId]是要查询的报警管理单Id，必传
-class OrderDetailPage2 extends StatefulWidget {
+/// [orderId]是要查询的报警管理单Id，必传
+class OrderDetailPage extends StatefulWidget {
   final String orderId;
 
-  OrderDetailPage2({@required this.orderId}) : assert(orderId != null);
+  OrderDetailPage({@required this.orderId}) : assert(orderId != null);
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
 }
 
 /// 报警管理单详情状态管理
-class _OrderDetailPageState extends State<OrderDetailPage2>
+class _OrderDetailPageState extends State<OrderDetailPage>
     with SingleTickerProviderStateMixin {
   /// 报警管理单详情界面Bloc
-  DetailBloc _detailBloc;
-
-  /// 上报界面Bloc
-  PageBloc _pageBloc;
+  final DetailBloc _detailBloc =
+      DetailBloc(detailRepository: OrderDetailRepository());
 
   /// 处理流程上报业务Bloc
-  UploadBloc _uploadBloc;
+  final UploadBloc _uploadBloc =
+      UploadBloc(uploadRepository: ProcessUploadRepository());
 
   /// 报警原因数据字典Bloc
   final DataDictBloc _alarmCauseBloc = DataDictBloc(
@@ -70,8 +69,8 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   final CollectionBloc<MobileLaw> _mobileLawBloc =
       CollectionBloc<MobileLaw>(collectionRepository: MobileLawRepository());
 
-  /// 上报界面操作描述输入框
-  final TextEditingController _operateDescController = TextEditingController();
+  /// 督办单处理上报类
+  final ProcessUpload _processUpload = ProcessUpload();
 
   /// 图标渐变动画控制器
   AnimationController _controller;
@@ -88,10 +87,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   @override
   void initState() {
     super.initState();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
-    _pageBloc = BlocProvider.of<PageBloc>(context);
-    _uploadBloc = BlocProvider.of<UploadBloc>(context);
     // 初始化fab颜色渐变动画
     _controller = AnimationController(
       duration: Duration(milliseconds: 500),
@@ -107,8 +103,9 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
   @override
   void dispose() {
     // 释放资源
-    _operateDescController.dispose();
     _controller.dispose();
+    _processUpload.mobileLawNumber.dispose();
+    _processUpload.operateDesc.dispose();
     // 取消正在进行的请求
     if (_detailBloc?.state is DetailLoading)
       (_detailBloc?.state as DetailLoading).cancelToken.cancel();
@@ -142,6 +139,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
         slivers: <Widget>[
           // 生成header
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
@@ -166,6 +164,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
           MultiBlocListener(
             listeners: [
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: (context, state) {
                   if (state is Uploading) {
                     showDialog<bool>(
@@ -208,21 +207,18 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 },
               ),
               BlocListener<DetailBloc, DetailState>(
+                bloc: _detailBloc,
                 listener: (context, state) {
                   if (state is DetailLoaded) {
-                    // 详情加载完成后，加载上报界面
-                    _pageBloc.add(PageLoad(
-                      model: ProcessUpload(
-                        orderId: state.detail.orderId,
-                        alarmState: state.detail.alarmState,
-                        alarmCauseList: state.detail.alarmCauseList,
-                      ),
-                    ));
-                    if(state.detail.deal == 'T'){
+                    // 详情加载完成后，初始化上报界面
+                    _processUpload.orderId = state.detail.orderId;
+                    _processUpload.alarmState = state.detail.alarmState;
+                    _processUpload.alarmCauseList = state.detail.alarmCauseList;
+                    if (state.detail.deal == 'T') {
                       // 加载报警原因数据字典
                       _loadAlarmCause();
                     }
-                    if(state.detail.audit == 'T'){
+                    if (state.detail.audit == 'T') {
                       // 加载报警原因数据字典
                       _loadAlarmCause();
                       // 加载移动执法
@@ -234,6 +230,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             ],
             // 生成body
             child: BlocBuilder<DetailBloc, DetailState>(
+              bloc: _detailBloc,
               builder: (context, state) {
                 if (state is DetailLoading) {
                   return LoadingSliver();
@@ -257,6 +254,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
       ),
       // 生成fab
       floatingActionButton: BlocBuilder<DetailBloc, DetailState>(
+        bloc: _detailBloc,
         builder: (context, state) {
           if (state is DetailLoading) {
             return Gaps.empty;
@@ -293,10 +291,26 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                   imagePath: 'assets/images/icon_baseinfo.png',
                 ),
                 Gaps.vGap10,
+                Offstage(
+                  offstage: TextUtil.isEmpty(orderDetail.operationName),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          IconBaseInfoWidget(
+                            content: '运维公司：${orderDetail.operationName}',
+                            icon: Icons.business,
+                          ),
+                        ],
+                      ),
+                      Gaps.vGap10,
+                    ],
+                  ),
+                ),
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '监控名称：${orderDetail.monitorName ?? ''}',
+                      content: '监控名称：${orderDetail.monitorName}',
                       icon: Icons.linked_camera,
                     ),
                   ],
@@ -305,7 +319,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '报警时间：${orderDetail.alarmDateStr ?? ''}',
+                      content: '报警时间：${orderDetail.alarmDateStr}',
                       icon: Icons.date_range,
                     ),
                   ],
@@ -314,7 +328,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '工单状态：${orderDetail.alarmStateStr ?? ''}',
+                      content: '工单状态：${orderDetail.alarmStateStr}',
                       icon: Icons.assignment_late,
                     ),
                   ],
@@ -323,7 +337,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '报警类型：${orderDetail.alarmTypeStr ?? ''}',
+                      content: '报警类型：${orderDetail.alarmTypeStr}',
                       icon: Icons.alarm,
                     ),
                   ],
@@ -336,7 +350,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                       Row(
                         children: <Widget>[
                           IconBaseInfoWidget(
-                            content: '报警原因：${orderDetail.alarmCauseStr ?? ''}',
+                            content: '报警原因：${orderDetail.alarmCauseStr}',
                             icon: Icons.help,
                           ),
                         ],
@@ -348,7 +362,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
                 Row(
                   children: <Widget>[
                     IconBaseInfoWidget(
-                      content: '报警描述：${orderDetail.alarmDesc ?? ''}',
+                      content: '报警描述：${orderDetail.alarmDesc}',
                       icon: Icons.receipt,
                     ),
                   ],
@@ -702,17 +716,7 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
             backgroundColor: Colors.white,
             builder: (BuildContext context) {
               // 生成流程上报界面
-              return BlocBuilder<PageBloc, PageState>(
-                bloc: _pageBloc,
-                builder: (context, state) {
-                  if (state is PageLoaded) {
-                    return _buildBottomSheet(state.model, orderDetail);
-                  } else {
-                    return MessageWidget(
-                        message: 'BlocBuilder监听到未知的的状态！state=$state');
-                  }
-                },
-              );
+              return _buildBottomSheet(orderDetail);
             },
           );
           // 监听BottomSheet关闭
@@ -729,363 +733,351 @@ class _OrderDetailPageState extends State<OrderDetailPage2>
     });
   }
 
-  Widget _buildBottomSheet(
-      ProcessUpload processUpload, OrderDetail orderDetail) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ImageTitleWidget(
-              title: '处理督办单',
-              imagePath: 'assets/images/icon_order_process.png',
-            ),
-            Gaps.vGap16,
-            BlocBuilder<DataDictBloc, DataDictState>(
-              bloc: _alarmCauseBloc,
-              builder: (context, state) {
-                if (state is DataDictLoading) {
-                  return LoadingWidget();
-                } else if (state is DataDictError) {
-                  return RowErrorWidget(
-                    tipMessage: '报警原因加载失败，请重试！',
-                    errorMessage: state.message,
-                    onReloadTap: () => _loadAlarmCause(),
-                  );
-                } else if (state is DataDictLoaded) {
-                  return GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context, //BuildCont
-                        builder: (BuildContext context) {
-                          return DataDictDialog(
-                            title: '报警原因',
-                            imagePath: 'assets/images/icon_alarm_error.png',
-                            dataDictList: state.dataDictList,
-                            checkList: processUpload.alarmCauseList,
-                            confirmCallBack: (dataDictList) {
-                              _pageBloc.add(PageLoad(
-                                  model: processUpload.copyWith(
-                                      alarmCauseList: dataDictList)));
+  Widget _buildBottomSheet(OrderDetail orderDetail) {
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ImageTitleWidget(
+                  title: '处理督办单',
+                  imagePath: 'assets/images/icon_order_process.png',
+                ),
+                Gaps.vGap16,
+                BlocBuilder<DataDictBloc, DataDictState>(
+                  bloc: _alarmCauseBloc,
+                  builder: (context, state) {
+                    if (state is DataDictLoading) {
+                      return LoadingWidget();
+                    } else if (state is DataDictError) {
+                      return RowErrorWidget(
+                        tipMessage: '报警原因加载失败，请重试！',
+                        errorMessage: state.message,
+                        onReloadTap: () => _loadAlarmCause(),
+                      );
+                    } else if (state is DataDictLoaded) {
+                      return GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context, //BuildCont
+                            builder: (BuildContext context) {
+                              return DataDictDialog(
+                                title: '报警原因',
+                                imagePath: 'assets/images/icon_alarm_error.png',
+                                dataDictList: state.dataDictList,
+                                checkList: _processUpload.alarmCauseList,
+                                confirmCallBack: (dataDictList) {
+                                  setState(() {
+                                    _processUpload.alarmCauseList =
+                                        dataDictList;
+                                  });
+                                },
+                              );
                             },
                           );
                         },
-                      );
-                    },
-                    child: Container(
-                      height: 46,
-                      color: Color(0xFFDFDFDF),
-                      child: Row(
-                        children: <Widget>[
-                          Gaps.hGap16,
-                          Image.asset(
-                            'assets/images/icon_alarm_error.png',
-                            height: 20,
-                            width: 20,
-                          ),
-                          Flexible(
-                            child: TextField(
-                              controller: TextEditingController(
-                                  text: processUpload.alarmCauseList
-                                      .map((dataDict) {
-                                return dataDict.name;
-                              }).join(' ')),
-                              style: const TextStyle(
-                                fontSize: 14,
+                        child: Container(
+                          height: 46,
+                          color: Color(0xFFDFDFDF),
+                          child: Row(
+                            children: <Widget>[
+                              Gaps.hGap16,
+                              Image.asset(
+                                'assets/images/icon_alarm_error.png',
+                                height: 20,
+                                width: 20,
                               ),
-                              enabled: false,
-                              decoration: const InputDecoration(
-                                fillColor: Color(0xFFDFDFDF),
-                                filled: true,
-                                hintText: "请选择报警原因",
-                                hintStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: Colours.secondary_text,
+                              Flexible(
+                                child: TextField(
+                                  controller: TextEditingController(
+                                      text: _processUpload.alarmCauseList
+                                          .map((dataDict) {
+                                    return dataDict.name;
+                                  }).join(' ')),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                  enabled: false,
+                                  decoration: const InputDecoration(
+                                    fillColor: Color(0xFFDFDFDF),
+                                    filled: true,
+                                    hintText: "请选择报警原因",
+                                    hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      color: Colours.secondary_text,
+                                    ),
+                                    border: InputBorder.none,
+                                  ),
                                 ),
-                                border: InputBorder.none,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                } else {
-                  return RowErrorWidget(
-                    errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
-                    onReloadTap: () => _loadAlarmCause(),
-                  );
-                }
-              },
-            ),
-            Gaps.vGap10,
-            Offstage(
-              offstage: orderDetail.audit != 'T',
-              child: Column(
-                children: <Widget>[
-                  BlocBuilder<CollectionBloc, CollectionState>(
-                    bloc: _mobileLawBloc,
-                    builder: (context, state) {
-                      if (state is CollectionLoading) {
-                        return LoadingWidget();
-                      } else if (state is CollectionError) {
-                        return RowErrorWidget(
-                          tipMessage: '现场检查情况加载失败，请重试！',
-                          errorMessage: state.message,
-                          onReloadTap: () => _loadMobileLaw(),
-                        );
-                      } else if (state is CollectionEmpty) {
-                        return Gaps.empty;
-                      } else if (state is CollectionLoaded) {
-                        return GestureDetector(
-                          onTap: () {
-                            showDialog(
-                              context: context, //BuildCont
-                              builder: (BuildContext context) {
-                                return CollectionDialog<MobileLaw>(
-                                  title: '现场检查情况',
-                                  imagePath:
-                                      'assets/images/icon_mobile_law.png',
-                                  collection: state.collection,
-                                  checkList: processUpload.mobileLawList,
-                                  confirmCallBack: (mobileLawList) {
-                                    _pageBloc.add(PageLoad(
-                                        model: processUpload.copyWith(
-                                            mobileLawList: mobileLawList)));
+                        ),
+                      );
+                    } else {
+                      return RowErrorWidget(
+                        errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                        onReloadTap: () => _loadAlarmCause(),
+                      );
+                    }
+                  },
+                ),
+                Gaps.vGap10,
+                Offstage(
+                  offstage: orderDetail.audit != 'T',
+                  child: Column(
+                    children: <Widget>[
+                      BlocBuilder<CollectionBloc, CollectionState>(
+                        bloc: _mobileLawBloc,
+                        builder: (context, state) {
+                          if (state is CollectionLoading) {
+                            return LoadingWidget();
+                          } else if (state is CollectionError) {
+                            return RowErrorWidget(
+                              tipMessage: '现场检查情况加载失败，请重试！',
+                              errorMessage: state.message,
+                              onReloadTap: () => _loadMobileLaw(),
+                            );
+                          } else if (state is CollectionLoaded || state is CollectionEmpty) {
+                            return GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context, //BuildCont
+                                  builder: (BuildContext context) {
+                                    return CollectionDialog<MobileLaw>(
+                                      controller:
+                                          _processUpload.mobileLawNumber,
+                                      title: '现场检查情况',
+                                      imagePath:
+                                          'assets/images/icon_mobile_law.png',
+                                      collection: state is CollectionLoaded ? state.collection : [],
+                                      checkList: _processUpload.mobileLawList,
+                                      confirmCallBack: (mobileLawList) {
+                                        setState(() {
+                                          _processUpload.mobileLawList =
+                                              mobileLawList;
+                                        });
+                                      },
+                                      cancelCallBack: (){
+                                        setState(() {
+                                          // 更新已关联的现场检查情况条数
+                                        });
+                                      },
+                                    );
                                   },
                                 );
                               },
-                            );
-                          },
-                          child: Container(
-                            height: 46,
-                            color: Color(0xFFDFDFDF),
-                            child: Row(
-                              children: <Widget>[
-                                Gaps.hGap16,
-                                Image.asset(
-                                  'assets/images/icon_mobile_law.png',
-                                  height: 20,
-                                  width: 20,
-                                ),
-                                Flexible(
-                                  child: TextField(
-                                    controller: TextEditingController(
-                                        text: processUpload
-                                                    .mobileLawList.length ==
-                                                0
-                                            ? ''
-                                            : '已关联${processUpload.mobileLawList.length}条现场检查情况'),
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                              child: Container(
+                                height: 46,
+                                color: Color(0xFFDFDFDF),
+                                child: Row(
+                                  children: <Widget>[
+                                    Gaps.hGap16,
+                                    Image.asset(
+                                      'assets/images/icon_mobile_law.png',
+                                      height: 20,
+                                      width: 20,
                                     ),
-                                    enabled: false,
-                                    decoration: const InputDecoration(
-                                      fillColor: Color(0xFFDFDFDF),
-                                      filled: true,
-                                      hintText: "选择关联现场检查情况",
-                                      hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        color: Colours.secondary_text,
+                                    Flexible(
+                                      child: TextField(
+                                        controller: TextEditingController(
+                                            text: _processUpload.mobileLawList
+                                                            .length ==
+                                                        0 &&
+                                                    TextUtil.isEmpty(
+                                                        _processUpload
+                                                            .mobileLawNumber
+                                                            .text)
+                                                ? ''
+                                                : '已关联${_processUpload.mobileLawList.length + (TextUtil.isEmpty(_processUpload.mobileLawNumber.text) ? 0 : 1)}条现场检查情况'),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                        enabled: false,
+                                        decoration: const InputDecoration(
+                                          fillColor: Color(0xFFDFDFDF),
+                                          filled: true,
+                                          hintText: "选择关联现场检查情况",
+                                          hintStyle: TextStyle(
+                                            fontSize: 14,
+                                            color: Colours.secondary_text,
+                                          ),
+                                          border: InputBorder.none,
+                                        ),
                                       ),
-                                      border: InputBorder.none,
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
+                            );
+                          } else {
+                            return RowErrorWidget(
+                              errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
+                              onReloadTap: () => _loadMobileLaw(),
+                            );
+                          }
+                        },
+                      ),
+                      Gaps.vGap10,
+                    ],
+                  ),
+                ),
+                DecoratedBox(
+                  decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, top: 12),
+                        child: Image.asset(
+                          'assets/images/icon_alarm_manage.png',
+                          height: 20,
+                          width: 20,
+                        ),
+                      ),
+                      Flexible(
+                        child: TextField(
+                          maxLines: 3,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                          controller: _processUpload.operateDesc,
+                          decoration: const InputDecoration(
+                            fillColor: Color(0xFFDFDFDF),
+                            filled: true,
+                            hintText: "请输入核实情况",
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gaps.vGap5,
+                //没有选取附件则隐藏GridView
+                Offstage(
+                  offstage: _processUpload.attachments == null ||
+                      _processUpload.attachments.length == 0,
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 4,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                    ),
+                    children: List.generate(
+                      _processUpload.attachments == null
+                          ? 0
+                          : _processUpload.attachments.length,
+                      (index) {
+                        Asset asset = _processUpload.attachments[index];
+                        return AssetThumb(
+                          asset: asset,
+                          width: 300,
+                          height: 300,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Gaps.vGap3,
+                Offstage(
+                  offstage: orderDetail.audit != 'T',
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        height: 46,
+                        width: 46,
+                        child: RaisedButton(
+                          padding: const EdgeInsets.all(0),
+                          color: Colors.white,
+                          onPressed: () async {
+                            // 选取图片后重新加载界面
+                            _processUpload.attachments =
+                                await SystemUtils.loadAssets(
+                                    _processUpload.attachments);
+                            setState(() {});
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Icon(
+                              Icons.image,
+                              color: Colors.green,
                             ),
                           ),
-                        );
-                      } else {
-                        return RowErrorWidget(
-                          errorMessage: 'BlocBuilder监听到未知的的状态!state=$state',
-                          onReloadTap: () => _loadMobileLaw(),
-                        );
-                      }
-                    },
-                  ),
-                  BlocBuilder<CollectionBloc, CollectionState>(
-                    bloc: _mobileLawBloc,
-                    builder: (context, state) {
-                      if (state is CollectionEmpty) {
-                        return Gaps.empty;
-                      } else {
-                        return Gaps.vGap10;
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-            DecoratedBox(
-              decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, top: 12),
-                    child: Image.asset(
-                      'assets/images/icon_alarm_manage.png',
-                      height: 20,
-                      width: 20,
-                    ),
-                  ),
-                  Flexible(
-                    child: TextField(
-                      maxLines: 3,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                      controller: _operateDescController,
-                      decoration: const InputDecoration(
-                        fillColor: Color(0xFFDFDFDF),
-                        filled: true,
-                        hintText: "请输入核实情况",
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: Colours.secondary_text,
                         ),
-                        border: InputBorder.none,
                       ),
-                    ),
+                      Gaps.hGap10,
+                      ClipButton(
+                        text: '不通过',
+                        icon: Icons.clear,
+                        color: Colors.redAccent,
+                        onTap: () {
+                          // 发送上传事件
+                          _processUpload.operateType = '1';
+                          _uploadBloc.add(Upload(data: _processUpload));
+                        },
+                      ),
+                      Gaps.hGap10,
+                      ClipButton(
+                        text: '通过',
+                        icon: Icons.check,
+                        color: Colors.lightBlue,
+                        onTap: () {
+                          // 发送上传事件
+                          _processUpload.operateType = '0';
+                          _uploadBloc.add(
+                            Upload(data: _processUpload),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Gaps.vGap5,
-            //没有选取附件则隐藏GridView
-            Offstage(
-              offstage: processUpload.attachments == null ||
-                  processUpload.attachments.length == 0,
-              child: GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 4,
-                childAspectRatio: 1,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 5,
                 ),
-                children: List.generate(
-                  processUpload.attachments == null
-                      ? 0
-                      : processUpload.attachments.length,
-                  (index) {
-                    Asset asset = processUpload.attachments[index];
-                    return AssetThumb(
-                      asset: asset,
-                      width: 300,
-                      height: 300,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Gaps.vGap3,
-            Offstage(
-              offstage: orderDetail.audit != 'T',
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 46,
-                    width: 46,
-                    child: RaisedButton(
-                      padding: const EdgeInsets.all(0),
-                      color: Colors.white,
-                      onPressed: () async {
-                        // 选取图片后重新加载界面
-                        _pageBloc.add(PageLoad(
-                            model: processUpload.copyWith(
-                                attachments: await SystemUtils.loadAssets(
-                                    processUpload.attachments))));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(
-                          Icons.image,
-                          color: Colors.green,
-                        ),
+                Gaps.vGap3,
+                Offstage(
+                  offstage: orderDetail.deal != 'T',
+                  child: Row(
+                    children: <Widget>[
+                      ClipButton(
+                        text: '选择图片',
+                        icon: Icons.image,
+                        color: Colors.green,
+                        onTap: () async {
+                          _processUpload.attachments =
+                              await SystemUtils.loadAssets(
+                                  _processUpload.attachments);
+                          setState(() {});
+                        },
                       ),
-                    ),
+                      Gaps.hGap20,
+                      ClipButton(
+                        text: '处理',
+                        icon: Icons.file_upload,
+                        color: Colors.lightBlue,
+                        onTap: () {
+                          // 发送上传事件
+                          _processUpload.operateType = '-1';
+                          _uploadBloc.add(Upload(data: _processUpload));
+                        },
+                      ),
+                    ],
                   ),
-                  Gaps.hGap10,
-                  ClipButton(
-                    text: '不通过',
-                    icon: Icons.clear,
-                    color: Colors.redAccent,
-                    onTap: () {
-                      // 发送上传事件
-                      _uploadBloc.add(
-                        Upload(
-                          data: processUpload.copyWith(
-                            operateType: '1',
-                            operateDesc: _operateDescController.text,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  Gaps.hGap10,
-                  ClipButton(
-                    text: '通过',
-                    icon: Icons.check,
-                    color: Colors.lightBlue,
-                    onTap: () {
-                      // 发送上传事件
-                      _uploadBloc.add(
-                        Upload(
-                          data: processUpload.copyWith(
-                            operateType: '0',
-                            operateDesc: _operateDescController.text,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Gaps.vGap3,
-            Offstage(
-              offstage: orderDetail.deal != 'T',
-              child: Row(
-                children: <Widget>[
-                  ClipButton(
-                    text: '选择图片',
-                    icon: Icons.image,
-                    color: Colors.green,
-                    onTap: () async {
-                      // 选取图片后重新加载界面
-                      _pageBloc.add(PageLoad(
-                          model: processUpload.copyWith(
-                              attachments: await SystemUtils.loadAssets(
-                                  processUpload.attachments))));
-                    },
-                  ),
-                  Gaps.hGap20,
-                  ClipButton(
-                    text: '处理',
-                    icon: Icons.file_upload,
-                    color: Colors.lightBlue,
-                    onTap: () {
-                      // 发送上传事件
-                      _uploadBloc.add(
-                        Upload(
-                          data: processUpload.copyWith(
-                            operateType: '-1',
-                            operateDesc: _operateDescController.text,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
