@@ -6,9 +6,10 @@ part 'mobile_law_model.g.dart';
 /// 移动执法类
 @JsonSerializable()
 class MobileLaw extends Equatable {
-  final int id;
+  @JsonKey(defaultValue: '')
+  final String number; // 任务编码
   @JsonKey(name: 'zfid', defaultValue: '')
-  final String lawId; //执法id
+  final String lawId; // 执法id
   @JsonKey(name: 'wrymc', defaultValue: '')
   final String enterName; // 污染源名称
   @JsonKey(name: 'rwlx', defaultValue: '')
@@ -23,7 +24,7 @@ class MobileLaw extends Equatable {
   final String summary; // 留痕表监察小结
 
   MobileLaw({
-    this.id,
+    this.number,
     this.lawId,
     this.enterName,
     this.taskTypeStr,
@@ -35,7 +36,7 @@ class MobileLaw extends Equatable {
 
   @override
   List<Object> get props => [
-        id,
+        number,
         lawId,
         enterName,
         taskTypeStr,
@@ -52,6 +53,7 @@ class MobileLaw extends Equatable {
 
   Map<String, dynamic> getMapInfo() => <String, dynamic>{
         '执法ID': this.lawId,
+        '任务编码': this.number,
         '污染源名称': this.enterName,
         '检查人': this.lawPersonStr,
         '任务类型': this.taskTypeStr,
