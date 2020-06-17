@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
@@ -29,7 +30,7 @@ class FactorReportUploadRepository
       throw DioError(error: InvalidParamException('请选择结束时间'));
     if (data.alarmTypeList.length == 1 && data.alarmTypeList[0].code == 'fault' && data.endTime.difference(data.startTime).inMinutes > data.limitDay * 24 * 60)
       throw DioError(error: InvalidParamException('当异常类型为${data.alarmTypeList[0].name}时,开始时间和结束时间间隔不能超过${data.limitDay}天'));
-    if (data.exceptionReason.isEmpty)
+    if (TextUtil.isEmpty(data.exceptionReason.text))
       throw DioError(error: InvalidParamException('请输入异常原因'));
     if (data.attachments == null || data.attachments.length == 0)
       throw DioError(error: InvalidParamException('请选择附件上传'));
@@ -52,7 +53,7 @@ class FactorReportUploadRepository
           data.alarmTypeList.map((dataDict) => dataDict.code).join(','),
       'factorCode':
           data.factorCodeList.map((dataDict) => dataDict.code).join(','),
-      'exceptionReason': data.exceptionReason,
+      'exceptionReason': data.exceptionReason.text,
       "file": await Future.wait(data.attachments?.map((asset) async {
             ByteData byteData = await asset.getByteData();
             return MultipartFile.fromBytes(byteData.buffer.asUint8List(),

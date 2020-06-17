@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
@@ -18,7 +19,7 @@ class LongStopReportUploadRepository
       throw DioError(error: InvalidParamException('请选择结束时间'));
 /*    if (data.endTime.difference(data.startTime).inDays < 90)
       throw DioError(error: InvalidParamException('停产时间必须大于90天'));*/
-    if (data.remark.isEmpty)
+    if (TextUtil.isEmpty(data.remark.text))
       throw DioError(error: InvalidParamException('请输入描述'));
   }
 
@@ -33,7 +34,7 @@ class LongStopReportUploadRepository
       'enterId': data.enter.enterId,
       'startTime': data.startTime.toString(),
       'endTime': data.endTime.toString(),
-      'remark': data.remark,
+      'remark': data.remark.text,
       "file": await Future.wait(data.attachments?.map((asset) async {
         ByteData byteData = await asset.getByteData();
         return MultipartFile.fromBytes(byteData.buffer.asUint8List(),

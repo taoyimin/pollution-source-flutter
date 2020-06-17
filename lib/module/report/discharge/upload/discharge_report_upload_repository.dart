@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
@@ -28,7 +29,7 @@ class DischargeReportUploadRepository
       throw DioError(error: InvalidParamException('请选择开始时间'));
     if (data.endTime == null)
       throw DioError(error: InvalidParamException('请选择结束时间'));
-    if (data.stopReason.isEmpty)
+    if (TextUtil.isEmpty(data.stopReason.text))
       throw DioError(error: InvalidParamException('请输入异常描述'));
     if (data.attachments == null || data.attachments.length == 0)
       throw DioError(error: InvalidParamException('请选择附件上传'));
@@ -59,7 +60,7 @@ class DischargeReportUploadRepository
           return data.isShutdown ? '1' : '0';
         }
       }(),
-      'stopReason': data.stopReason,
+      'stopReason': data.stopReason.text,
       "file": await Future.wait(data.attachments?.map((asset) async {
             ByteData byteData = await asset.getByteData();
             return MultipartFile.fromBytes(byteData.buffer.asUint8List(),

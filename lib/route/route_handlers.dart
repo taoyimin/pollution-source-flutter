@@ -37,28 +37,23 @@ import 'package:pollution_source/module/monitor/table/monitor_table_repository.d
 import 'package:pollution_source/module/notice/list/notice_list_page.dart';
 import 'package:pollution_source/module/notice/list/notice_list_repository.dart';
 import 'package:pollution_source/module/order/detail/order_detail_page.dart';
-import 'package:pollution_source/module/order/detail/order_detail_repository.dart';
 import 'package:pollution_source/module/order/list/order_list_page.dart';
 import 'package:pollution_source/module/order/list/order_list_repository.dart';
-import 'package:pollution_source/module/process/upload/process_upload_repository.dart';
 import 'package:pollution_source/module/report/discharge/detail/discharge_report_detail_page.dart';
 import 'package:pollution_source/module/report/discharge/detail/discharge_report_detail_repository.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_repository.dart';
 import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_page.dart';
-import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_repository.dart';
 import 'package:pollution_source/module/report/factor/detail/factor_report_detail_page.dart';
 import 'package:pollution_source/module/report/factor/detail/factor_report_detail_repository.dart';
 import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
 import 'package:pollution_source/module/report/factor/list/factor_report_list_repository.dart';
 import 'package:pollution_source/module/report/factor/upload/factor_report_upload_page.dart';
-import 'package:pollution_source/module/report/factor/upload/factor_report_upload_repository.dart';
 import 'package:pollution_source/module/report/longstop/detail/long_stop_report_detail_page.dart';
 import 'package:pollution_source/module/report/longstop/detail/long_stop_report_detail_repository.dart';
 import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_page.dart';
 import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_repository.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_page.dart';
-import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_repository.dart';
 import 'package:pollution_source/module/warn/detail/warn_detail_page.dart';
 import 'package:pollution_source/module/warn/detail/warn_detail_repository.dart';
 import 'package:pollution_source/module/warn/list/warn_list_page.dart';
@@ -246,22 +241,7 @@ var orderListHandler = Handler(
 var orderDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String orderId = params['id']?.first;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<DetailBloc>(
-          create: (BuildContext context) =>
-              DetailBloc(detailRepository: OrderDetailRepository()),
-        ),
-        BlocProvider<PageBloc>(
-          create: (BuildContext context) => PageBloc(),
-        ),
-        BlocProvider<UploadBloc>(
-          create: (BuildContext context) =>
-              UploadBloc(uploadRepository: ProcessUploadRepository()),
-        ),
-      ],
-      child: OrderDetailPage2(orderId: orderId),
-    );
+    return OrderDetailPage(orderId: orderId);
   },
 );
 
@@ -366,54 +346,21 @@ var longStopReportDetailHandler = Handler(
 var dischargeReportUploadHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String enterId = params['enterId']?.first;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<UploadBloc>(
-          create: (BuildContext context) =>
-              UploadBloc(uploadRepository: DischargeReportUploadRepository()),
-        ),
-        BlocProvider<PageBloc>(
-          create: (BuildContext context) => PageBloc(),
-        ),
-      ],
-      child: DischargeReportUploadPage(enterId: enterId),
-    );
+    return DischargeReportUploadPage(enterId: enterId);
   },
 );
 
 var factorReportUploadHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String enterId = params['enterId']?.first;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<UploadBloc>(
-          create: (BuildContext context) =>
-              UploadBloc(uploadRepository: FactorReportUploadRepository()),
-        ),
-        BlocProvider<PageBloc>(
-          create: (BuildContext context) => PageBloc(),
-        ),
-      ],
-      child: FactorReportUploadPage(enterId: enterId),
-    );
+    return FactorReportUploadPage(enterId: enterId);
   },
 );
 
 var longStopReportUploadHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String enterId = params['enterId']?.first;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<UploadBloc>(
-          create: (BuildContext context) =>
-              UploadBloc(uploadRepository: LongStopReportUploadRepository()),
-        ),
-        BlocProvider<PageBloc>(
-          create: (BuildContext context) => PageBloc(),
-        ),
-      ],
-      child: LongStopReportUploadPage(enterId: enterId),
-    );
+    return LongStopReportUploadPage(enterId: enterId);
   },
 );
 

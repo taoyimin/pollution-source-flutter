@@ -1,4 +1,5 @@
 import 'package:common_utils/common_utils.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
@@ -11,16 +12,12 @@ import 'package:pollution_source/module/common/dict/data_dict_event.dart';
 import 'package:pollution_source/module/common/dict/data_dict_model.dart';
 import 'package:pollution_source/module/common/dict/data_dict_state.dart';
 import 'package:pollution_source/module/common/dict/system/system_config_repository.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/page/page_event.dart';
-import 'package:pollution_source/module/common/page/page_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -28,7 +25,9 @@ import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
-/// 长期停产上报界面
+import 'long_stop_report_upload_repository.dart';
+
+/// 长期停产申报上报界面
 class LongStopReportUploadPage extends StatefulWidget {
   final String enterId;
 
@@ -40,40 +39,34 @@ class LongStopReportUploadPage extends StatefulWidget {
 }
 
 class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
-  PageBloc _pageBloc;
-  UploadBloc _uploadBloc;
-  DataDictBloc _stopAdvanceTimeBloc;
-  TextEditingController _remarkController;
-  DateTime minStartTime =
-      DateTime.now().add(Duration(hours: -Constant.defaultStopAdvanceTime));
+  /// 上报Bloc
+  final UploadBloc _uploadBloc = UploadBloc(
+    uploadRepository: LongStopReportUploadRepository(),
+  );
 
-  /// 默认选中的企业，企业用户上报时，默认选中的企业为自己，无需选择
-  Enter defaultEnter;
+  /// 开始时间最多滞后的小时数Bloc
+  final DataDictBloc _stopAdvanceTimeBloc = DataDictBloc(
+    dataDictRepository: SystemConfigRepository(HttpApi.reportStopAdvanceTime),
+  );
+
+  /// 长期停产申报上报类
+  final LongStopReportUpload _longStopReportUpload = LongStopReportUpload();
 
   @override
   void initState() {
     super.initState();
-    // 初始化defaultEnter
-    if (!TextUtil.isEmpty(widget.enterId))
-      defaultEnter = Enter(enterId: int.parse(widget.enterId));
-    // 初始化页面Bloc
-    _pageBloc = BlocProvider.of<PageBloc>(context);
-    // 加载界面
-    _pageBloc.add(PageLoad(model: LongStopReportUpload(enter: defaultEnter)));
-    // 初始化上报Bloc
-    _uploadBloc = BlocProvider.of<UploadBloc>(context);
-    _stopAdvanceTimeBloc = DataDictBloc(
-        dataDictRepository:
-            SystemConfigRepository(HttpApi.reportStopAdvanceTime));
+    // 设置默认企业，企业用户上报时，默认选中的企业为自己，无需选择
+    _longStopReportUpload.enter = TextUtil.isEmpty(widget.enterId)
+        ? null
+        : Enter(enterId: int.parse(widget.enterId));
     // 加载异常申报开始时间最多滞后的小时数
     _stopAdvanceTimeBloc.add(DataDictLoad());
-    _remarkController = TextEditingController();
   }
 
   @override
   void dispose() {
     // 释放资源
-    _remarkController.dispose();
+    _longStopReportUpload.remark.dispose();
     if (_stopAdvanceTimeBloc?.state is DataDictLoading)
       (_stopAdvanceTimeBloc?.state as DataDictLoading).cancelToken.cancel();
     super.dispose();
@@ -95,14 +88,22 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
           MultiBlocListener(
             listeners: [
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: uploadListener,
               ),
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: (context, state) {
                   if (state is UploadSuccess) {
-                    //提交成功后重置界面
-                    _remarkController.text = '';
-                    _pageBloc.add(PageLoad(model: LongStopReportUpload()));
+                    setState(() {
+                      // 重置界面
+                      if (widget.enterId == null)
+                        _longStopReportUpload.enter = null;
+                      _longStopReportUpload.startTime = null;
+                      _longStopReportUpload.endTime = null;
+                      _longStopReportUpload.remark.text = '';
+                      _longStopReportUpload.attachments.clear();
+                    });
                   }
                 },
               ),
@@ -115,31 +116,21 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                             .dataDictList;
                     if (dataDictList.length != 0) {
                       // 设置最小开始时间
-                      minStartTime = DateTime.now().add(
+                      _longStopReportUpload.minStartTime = DateTime.now().add(
                           Duration(hours: -int.parse(dataDictList[0].code)));
                     }
                   }
                 },
               ),
             ],
-            child: BlocBuilder<PageBloc, PageState>(
-              builder: (context, state) {
-                if (state is PageLoaded) {
-                  return _buildPageLoadedDetail(state.model);
-                } else {
-                  return ErrorSliver(
-                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                  );
-                }
-              },
-            ),
+            child: _buildPageLoadedDetail(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPageLoadedDetail(LongStopReportUpload reportUpload) {
+  Widget _buildPageLoadedDetail() {
     return SliverToBoxAdapter(
       child: Column(
         children: <Widget>[
@@ -151,18 +142,14 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                   offstage: widget.enterId != null,
                   child: SelectRowWidget(
                     title: '企业名称',
-                    content: reportUpload?.enter?.enterName,
+                    content: _longStopReportUpload.enter?.enterName,
                     onTap: () async {
                       // 打开企业选择界面并等待结果返回
-                      Enter enter = await Application.router
-                          .navigateTo(context, '${Routes.enterList}?type=1&state=1');
+                      Enter enter = await Application.router.navigateTo(
+                          context, '${Routes.enterList}?type=1&state=1');
                       if (enter != null) {
                         // 设置已经选中的企业
-                        _pageBloc.add(
-                          PageLoad(
-                            model: reportUpload.copyWith(enter: enter),
-                          ),
-                        );
+                        _longStopReportUpload.enter = enter;
                       }
                     },
                   ),
@@ -170,24 +157,22 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                 widget.enterId != null ? Gaps.empty : Gaps.hLine,
                 SelectRowWidget(
                   title: '开始时间',
-                  content: DateUtil.formatDate(reportUpload?.startTime,
-                      format: 'yyyy-MM-dd HH:mm'),
+                  content: DateUtil.formatDate(_longStopReportUpload.startTime,
+                      format: DateFormats.y_mo_d_h_m),
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
                       dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
-                      initialDateTime: reportUpload?.startTime,
-                      minDateTime: minStartTime,
-                      maxDateTime: reportUpload?.endTime,
+                      initialDateTime: _longStopReportUpload.startTime,
+                      minDateTime: _longStopReportUpload.minStartTime,
+                      maxDateTime: _longStopReportUpload.endTime,
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
-                        _pageBloc.add(
-                          PageLoad(
-                            model: reportUpload.copyWith(startTime: dateTime),
-                          ),
-                        );
+                        setState(() {
+                          _longStopReportUpload.startTime = dateTime;
+                        });
                       },
                     );
                   },
@@ -195,24 +180,23 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                 Gaps.hLine,
                 SelectRowWidget(
                   title: '结束时间',
-                  content: DateUtil.formatDate(reportUpload?.endTime,
-                      format: 'yyyy-MM-dd HH:mm'),
+                  content: DateUtil.formatDate(_longStopReportUpload.endTime,
+                      format: DateFormats.y_mo_d_h_m),
                   onTap: () {
                     DatePicker.showDatePicker(
                       context,
                       dateFormat: 'yyyy年MM月dd日 EEE,HH时:mm分',
                       locale: DateTimePickerLocale.zh_cn,
                       pickerMode: DateTimePickerMode.datetime,
-                      initialDateTime: reportUpload?.endTime,
+                      initialDateTime: _longStopReportUpload.endTime,
                       minDateTime: CommonUtils.getMaxDateTime(
-                              reportUpload?.startTime, minStartTime),
+                          _longStopReportUpload.startTime,
+                          _longStopReportUpload.minStartTime),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
-                        _pageBloc.add(
-                          PageLoad(
-                            model: reportUpload.copyWith(endTime: dateTime),
-                          ),
-                        );
+                        setState(() {
+                          _longStopReportUpload.endTime = dateTime;
+                        });
                       },
                     );
                   },
@@ -221,13 +205,12 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                 TextAreaWidget(
                   title: '备注',
                   hintText: '请输入备注',
-                  controller: _remarkController,
+                  controller: _longStopReportUpload.remark,
                 ),
                 Gaps.vGap5,
                 // 没有附件则隐藏GridView
                 Offstage(
-                  offstage: reportUpload?.attachments == null ||
-                      reportUpload.attachments.length == 0,
+                  offstage: _longStopReportUpload.attachments.length == 0,
                   child: GridView.count(
                     shrinkWrap: true,
                     crossAxisCount: 4,
@@ -236,11 +219,9 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                     mainAxisSpacing: 10,
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     children: List.generate(
-                      reportUpload?.attachments == null
-                          ? 0
-                          : reportUpload.attachments.length,
+                      _longStopReportUpload.attachments.length,
                       (index) {
-                        Asset asset = reportUpload.attachments[index];
+                        Asset asset = _longStopReportUpload.attachments[index];
                         return AssetThumb(
                           asset: asset,
                           width: 300,
@@ -258,14 +239,10 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       icon: Icons.image,
                       color: Colors.green,
                       onTap: () async {
-                        _pageBloc.add(
-                          PageLoad(
-                            model: reportUpload.copyWith(
-                              attachments: await SystemUtils.loadAssets(
-                                  reportUpload.attachments),
-                            ),
-                          ),
-                        );
+                        _longStopReportUpload.attachments =
+                            await SystemUtils.loadAssets(
+                                _longStopReportUpload.attachments);
+                        setState(() {});
                       },
                     ),
                     Gaps.hGap20,
@@ -274,11 +251,7 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       icon: Icons.file_upload,
                       color: Colors.lightBlue,
                       onTap: () {
-                        _uploadBloc.add(Upload(
-                          data: reportUpload.copyWith(
-                            remark: _remarkController.text,
-                          ),
-                        ));
+                        _uploadBloc.add(Upload(data: _longStopReportUpload));
                       },
                     ),
                   ],
