@@ -14,7 +14,6 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
-
 import 'module/common/list/list_bloc.dart';
 import 'module/warn/list/warn_list_page.dart';
 import 'module/warn/list/warn_list_repository.dart';
@@ -42,10 +41,11 @@ class MyApp extends StatefulWidget {
 /// [build]方法最外层包裹一层[OKToast]用于弹出吐司
 /// 并且在[MaterialApp]中设置程序的中文本地化，主题样式和路由
 class _MyAppState extends State<MyApp> {
-  final GlobalKey<NavigatorState> navigatorKey =
-      new GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  _MyAppState() {
+  @override
+  void initState() {
+    super.initState();
     // 初始化路由
     final router = Router();
     Routes.configureRoutes(router);
@@ -73,6 +73,8 @@ class _MyAppState extends State<MyApp> {
       debug: !Constant.inProduction, // 设置是否打印 debug 日志
     );
     jpush.applyPushAuthority();
+    // 初始化日志类
+    LogUtil.init(isDebug: !Constant.inProduction);
   }
 
   @override
@@ -101,8 +103,7 @@ class _MyAppState extends State<MyApp> {
             primaryColorBrightness: Brightness.dark,
             // 设置中文和英文的基准线一致
             textTheme: const TextTheme(
-              subhead: TextStyle(textBaseline: TextBaseline.alphabetic),
-              //subtitle1: TextStyle(textBaseline: TextBaseline.alphabetic),
+              subtitle1: TextStyle(textBaseline: TextBaseline.alphabetic),
             ),
           ),
 //          onGenerateRoute: Application.router.generator,
