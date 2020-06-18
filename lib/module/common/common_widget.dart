@@ -2027,8 +2027,6 @@ class EditWidget extends StatelessWidget {
   final int flex;
   final TextStyle style;
   final TextEditingController controller;
-  @Deprecated('已弃用')
-  final ValueChanged<String> onChanged;
 
   EditWidget({
     Key key,
@@ -2036,7 +2034,6 @@ class EditWidget extends StatelessWidget {
     this.flex = 1,
     this.style = const TextStyle(fontSize: 15),
     this.controller,
-    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -2050,7 +2047,6 @@ class EditWidget extends StatelessWidget {
           textAlign: TextAlign.center,
           style: style,
           keyboardType: TextInputType.number,
-          onChanged: onChanged,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: style,
@@ -2126,8 +2122,6 @@ class TextAreaWidget extends StatelessWidget {
   final String title;
   final String hintText;
   final TextEditingController controller;
-  @Deprecated('已弃用')
-  final ValueChanged<String> onChanged;
   final GestureTapCallback onTap;
   final int maxLines;
 
@@ -2136,7 +2130,6 @@ class TextAreaWidget extends StatelessWidget {
     this.title,
     this.hintText = '请输入',
     this.controller,
-    this.onChanged,
     this.onTap,
     this.maxLines = 4,
   }) : super(key: key);
@@ -2163,7 +2156,6 @@ class TextAreaWidget extends StatelessWidget {
           child: TextField(
             onTap: onTap ?? () {},
             controller: controller,
-            onChanged: onChanged,
             textAlign: TextAlign.start,
             maxLines: maxLines,
             style: TextStyle(fontSize: 15),
