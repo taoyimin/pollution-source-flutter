@@ -41,11 +41,17 @@ class _WaterDeviceCheckUploadListPageState
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  ListBloc _listBloc;
+
+  /// 任务列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: RoutineInspectionUploadListRepository(),
+  );
 
   /// 常规巡检详情Bloc，用于上报成功后刷新header中的数据条数
   DetailBloc _detailBloc;
   Completer<void> _refreshCompleter;
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
 
   @override
@@ -53,7 +59,6 @@ class _WaterDeviceCheckUploadListPageState
     super.initState();
     _refreshCompleter = Completer<void>();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(params: _getRequestParam()));
   }
@@ -87,12 +92,13 @@ class _WaterDeviceCheckUploadListPageState
         header: UIUtils.getRefreshClassicalHeader(),
         slivers: <Widget>[
           BlocConsumer<ListBloc, ListState>(
+            bloc: _listBloc,
             listener: (context, state) {
               if (state is ListLoading) return;
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
-            buildWhen: (previous, current){
+            buildWhen: (previous, current) {
               if (current is ListLoading)
                 return false;
               else

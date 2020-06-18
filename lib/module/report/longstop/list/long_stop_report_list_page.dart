@@ -50,8 +50,13 @@ class LongStopReportListPage extends StatefulWidget {
 }
 
 class _LongStopReportListPageState extends State<LongStopReportListPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
+
+  /// 企业名称编辑器
   final TextEditingController _enterNameController = TextEditingController();
 
   /// 运维用户隐藏关注程度相关布局
@@ -59,6 +64,11 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
 
   /// 环保用户显示选择区域相关布局
   final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: LongStopReportListRepository(),
+  );
 
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
@@ -77,10 +87,16 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
 
   /// 区域信息
   Result _areaResult;
+
+  /// 是否有效
   String _valid;
+
+  /// 关注程度
   String _attentionLevel;
+
+  /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
-  ListBloc _listBloc;
+
   Completer<void> _refreshCompleter;
 
   @override
@@ -94,8 +110,6 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
     // 加载关注程度
     if (_showAttentionLevel) _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -172,6 +186,7 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();

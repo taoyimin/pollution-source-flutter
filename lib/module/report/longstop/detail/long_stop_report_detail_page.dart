@@ -12,6 +12,8 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+import 'long_stop_report_detail_repository.dart';
+
 /// 长期停产详情界面
 class LongStopReportDetailPage extends StatefulWidget {
   final String reportId;
@@ -25,12 +27,14 @@ class LongStopReportDetailPage extends StatefulWidget {
 }
 
 class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
-  DetailBloc _detailBloc;
+  /// 详情Bloc
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: LongStopReportDetailRepository(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
   }
 
@@ -53,6 +57,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
@@ -74,6 +79,7 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
             },
           ),
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               if (state is DetailLoading) {
                 return LoadingSliver();
@@ -169,17 +175,17 @@ class _LongStopReportDetailPageState extends State<LongStopReportDetailPage> {
                 Gaps.vGap10,
                 reportDetail.attachments.length == 0
                     ? const Text(
-                  '没有上传证明材料',
-                  style: TextStyle(fontSize: 13),
-                )
+                        '没有上传证明材料',
+                        style: TextStyle(fontSize: 13),
+                      )
                     : Column(
-                  children: () {
-                    return reportDetail.attachments.map((attachment) {
-                      return AttachmentWidget(
-                          attachment: attachment, onTap: () {});
-                    }).toList();
-                  }(),
-                )
+                        children: () {
+                          return reportDetail.attachments.map((attachment) {
+                            return AttachmentWidget(
+                                attachment: attachment, onTap: () {});
+                          }).toList();
+                        }(),
+                      )
               ],
             ),
           ),

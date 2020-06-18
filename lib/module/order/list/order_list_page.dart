@@ -57,12 +57,22 @@ class OrderListPage extends StatefulWidget {
 }
 
 class _OrderListPageState extends State<OrderListPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
+
+  /// 企业名称编辑器
   final TextEditingController _enterNameController = TextEditingController();
 
   /// 环保用户显示选择区域相关布局
   final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: OrderListRepository(),
+  );
 
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
@@ -121,9 +131,6 @@ class _OrderListPageState extends State<OrderListPage> {
   /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
 
-  /// 列表Bloc
-  ListBloc _listBloc;
-
   Completer<void> _refreshCompleter;
 
   @override
@@ -143,8 +150,6 @@ class _OrderListPageState extends State<OrderListPage> {
     // 加载报警级别
     _alarmLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -237,6 +242,7 @@ class _OrderListPageState extends State<OrderListPage> {
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();
@@ -419,8 +425,8 @@ class _OrderListPageState extends State<OrderListPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         EnterNameWidget(
-                          height: UIUtils.getSearchItemHeight(
-                              context, orientation),
+                          height:
+                              UIUtils.getSearchItemHeight(context, orientation),
                           controller: _enterNameController,
                         ),
                         Offstage(
@@ -439,7 +445,8 @@ class _OrderListPageState extends State<OrderListPage> {
                         ),
                         DateTimeWidget(
                           title: '报警时间',
-                          height: UIUtils.getSearchItemHeight(context, orientation),
+                          height:
+                              UIUtils.getSearchItemHeight(context, orientation),
                           startTime: _startTime,
                           endTime: _endTime,
                           maxStartTime: _endTime ??

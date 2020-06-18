@@ -12,6 +12,9 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+import 'discharge_detail_repository.dart';
+
+/// 排口详情界面
 class DischargeDetailPage extends StatefulWidget {
   final String dischargeId;
 
@@ -23,12 +26,14 @@ class DischargeDetailPage extends StatefulWidget {
 }
 
 class _DischargeDetailPageState extends State<DischargeDetailPage> {
-  DetailBloc _detailBloc;
+  /// 详情Bloc
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: DischargeDetailRepository(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
   }
 
@@ -51,6 +56,7 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
@@ -69,6 +75,7 @@ class _DischargeDetailPageState extends State<DischargeDetailPage> {
             },
           ),
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               if (state is DetailLoading) {
                 return LoadingSliver();

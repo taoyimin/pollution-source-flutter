@@ -6,15 +6,10 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
-import 'package:pollution_source/module/common/list/list_bloc.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_list_page.dart';
-import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_repository.dart';
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_page.dart';
-import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_repository.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_model.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
@@ -41,14 +36,20 @@ class RoutineInspectionDetailPage extends StatefulWidget {
 
 class _RoutineInspectionDetailPageState
     extends State<RoutineInspectionDetailPage> with TickerProviderStateMixin {
+  /// header背景图片
   final String _headerBackground = 'assets/images/button_bg_lightblue.png';
+
+  /// 详情Bloc
   DetailBloc _detailBloc;
+
+  /// Tab控制器
   TabController _tabController;
 
   // 初始化
   @override
   void initState() {
     super.initState();
+    /// 初始化详情Bloc
     _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
   }
@@ -71,8 +72,8 @@ class _RoutineInspectionDetailPageState
     // _tabController是在请求完成之后初始化的，所以页面销毁时可能为null
     _tabController?.dispose();
     // 取消正在进行的请求
-    final currentState = _detailBloc?.state;
-    if (currentState is DetailLoading) currentState.cancelToken?.cancel();
+    if (_detailBloc?.state is DetailLoading)
+      (_detailBloc?.state as DetailLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -88,174 +89,171 @@ class _RoutineInspectionDetailPageState
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            BlocListener<DetailBloc, DetailState>(
-              listener: (context, state) {
-                if (state is DetailLoaded) {
-                  if (_tabController == null ||
-                      _tabController.length != state.detail.length) {
-                    // 如果_tabController为null或者tab个数改变了再重新初始化_tabController
-                    _tabController =
-                        TabController(length: state.detail.length, vsync: this);
+            SliverAppBar(
+              title: const Text('常规巡检详情'),
+              expandedHeight: 170.0,
+              backgroundColor: Colours.background_light_blue,
+              flexibleSpace: BlocConsumer<DetailBloc, DetailState>(
+                listener: (context, state) {
+                  if (state is DetailLoaded) {
+                    if (_tabController == null ||
+                        _tabController.length != state.detail.length) {
+                      // 如果_tabController为null或者tab个数改变了再重新初始化_tabController
+                      _tabController = TabController(
+                          length: state.detail.length, vsync: this);
+                    }
                   }
-                }
-              },
-              child: SliverAppBar(
-                title: const Text('常规巡检详情'),
-                expandedHeight: 170.0,
-                backgroundColor: Colours.background_light_blue,
-                flexibleSpace: BlocBuilder<DetailBloc, DetailState>(
-                  builder: (context, state) {
-                    if (state is DetailLoaded) {
-                      // tabView切换时，列表header同时渐变切换
-                      return AnimatedBuilder(
-                        animation: _tabController.animation,
-                        builder: (BuildContext context, snapshot) {
-                          return FlexibleSpaceBar(
-                            background: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    _headerBackground,
-                                  ),
-                                  fit: BoxFit.cover,
+                },
+                builder: (context, state) {
+                  if (state is DetailLoaded) {
+                    // tabView切换时，列表header同时渐变切换
+                    return AnimatedBuilder(
+                      animation: _tabController.animation,
+                      builder: (BuildContext context, snapshot) {
+                        return FlexibleSpaceBar(
+                          background: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  _headerBackground,
                                 ),
-                              ),
-                              child: Opacity(
-                                opacity:
-                                    getOpacity(_tabController.animation.value),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Positioned(
-                                      right: 16,
-                                      bottom: 45,
-                                      child: Image.asset(
-                                        [
-                                          'assets/images/routine_inspection_detail_header_image1.png',
-                                          'assets/images/routine_inspection_detail_header_image2.png',
-                                          'assets/images/routine_inspection_detail_header_image3.png',
-                                        ][_tabController.animation.value
-                                                .round() %
-                                            3],
-                                        width: 230,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 80,
-                                      left: 20,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 80,
-                                            child: Text(
-                                              () {
-                                                if (state.detail.length == 0)
-                                                  return '当前监控点没有待办巡检项目';
-                                                String type = state
-                                                    .detail[_tabController
-                                                        .animation.value
-                                                        .round()]
-                                                    .itemInspectType;
-                                                switch (type) {
-                                                  case '1':
-                                                  case '5':
-                                                    return '选中要处理的任务点击处理按钮进行批量处理';
-                                                  case '2':
-                                                  case '3':
-                                                  case '4':
-                                                    return '点击列表中要处理的任务进入该任务的上报界面';
-                                                  default:
-                                                    return '未知任务类型！itemInspectType=$type';
-                                                }
-                                              }(),
-                                              style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                          Gaps.vGap10,
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 10,
-                                              vertical: 3,
-                                            ),
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                            ),
-                                            child: Text(
-                                              state.detail.length != 0
-                                                  ? '共${state.detail[_tabController.animation.value.round()].taskCount}条数据'
-                                                  : '没有巡检项目',
-                                              style: const TextStyle(
-                                                fontSize: 10,
-                                                color: Colours
-                                                    .background_light_blue,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                fit: BoxFit.cover,
                               ),
                             ),
-                          );
-                        },
-                      );
-                    } else {
-                      return FlexibleSpaceBar(
-                        background: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(
-                                _headerBackground,
+                            child: Opacity(
+                              opacity:
+                                  getOpacity(_tabController.animation.value),
+                              child: Stack(
+                                children: <Widget>[
+                                  Positioned(
+                                    right: 16,
+                                    bottom: 45,
+                                    child: Image.asset(
+                                      [
+                                        'assets/images/routine_inspection_detail_header_image1.png',
+                                        'assets/images/routine_inspection_detail_header_image2.png',
+                                        'assets/images/routine_inspection_detail_header_image3.png',
+                                      ][_tabController.animation.value.round() %
+                                          3],
+                                      width: 230,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 80,
+                                    left: 20,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 80,
+                                          child: Text(
+                                            () {
+                                              if (state.detail.length == 0)
+                                                return '当前监控点没有待办巡检项目';
+                                              String type = state
+                                                  .detail[_tabController
+                                                      .animation.value
+                                                      .round()]
+                                                  .itemInspectType;
+                                              switch (type) {
+                                                case '1':
+                                                case '5':
+                                                  return '选中要处理的任务点击处理按钮进行批量处理';
+                                                case '2':
+                                                case '3':
+                                                case '4':
+                                                  return '点击列表中要处理的任务进入该任务的上报界面';
+                                                default:
+                                                  return '未知任务类型！itemInspectType=$type';
+                                              }
+                                            }(),
+                                            style: const TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                        Gaps.vGap10,
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 3,
+                                          ),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                          ),
+                                          child: Text(
+                                            state.detail.length != 0
+                                                ? '共${state.detail[_tabController.animation.value.round()].taskCount}条数据'
+                                                : '没有巡检项目',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              color:
+                                                  Colours.background_light_blue,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                              fit: BoxFit.cover,
                             ),
                           ),
+                        );
+                      },
+                    );
+                  } else {
+                    return FlexibleSpaceBar(
+                      background: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              _headerBackground,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      );
-                    }
-                  },
-                ),
-                floating: false,
-                pinned: true,
-                bottom: PreferredSize(
-                  child: Card(
-                      color: Colors.transparent,
-                      elevation: 0.0,
-                      margin: const EdgeInsets.all(0.0),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0.0)),
                       ),
-                      child: BlocBuilder<DetailBloc, DetailState>(
-                        builder: (context, state) {
-                          if (state is DetailLoaded) {
-                            return TabBar(
-                              labelColor: Colors.cyanAccent,
-                              unselectedLabelColor:
-                                  Colors.white.withOpacity(0.7),
-                              isScrollable: true,
-                              indicatorColor: Colors.cyanAccent,
-                              controller: _tabController,
-                              tabs: state.detail
-                                  .map<Widget>((routineInspectionDetail) {
-                                return Tab(
-                                    text:
-                                        '${routineInspectionDetail.itemInspectTypeName}');
-                              }).toList(),
-                            );
-                          } else {
-                            return Gaps.empty;
-                          }
-                        },
-                      )),
-                  preferredSize: const Size(double.infinity, 46.0),
+                    );
+                  }
+                },
+              ),
+              floating: false,
+              pinned: true,
+              bottom: PreferredSize(
+                child: Card(
+                  color: Colors.transparent,
+                  elevation: 0.0,
+                  margin: const EdgeInsets.all(0.0),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(0.0)),
+                  ),
+                  child: BlocBuilder<DetailBloc, DetailState>(
+                    builder: (context, state) {
+                      if (state is DetailLoaded) {
+                        return TabBar(
+                          labelColor: Colors.cyanAccent,
+                          unselectedLabelColor: Colors.white.withOpacity(0.7),
+                          isScrollable: true,
+                          indicatorColor: Colors.cyanAccent,
+                          controller: _tabController,
+                          tabs: state.detail
+                              .map<Widget>((routineInspectionDetail) {
+                            return Tab(
+                                text:
+                                    '${routineInspectionDetail.itemInspectTypeName}');
+                          }).toList(),
+                        );
+                      } else {
+                        return Gaps.empty;
+                      }
+                    },
+                  ),
                 ),
+                preferredSize: const Size(double.infinity, 46.0),
               ),
             ),
           ];
@@ -314,54 +312,25 @@ class _RoutineInspectionDetailPageState
                 case '1':
                 case '5':
                   // 辅助/监测设备巡检上报列表
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider<UploadBloc>(
-                        create: (BuildContext context) => UploadBloc(
-                            uploadRepository:
-                                DeviceInspectionUploadRepository()),
-                      ),
-                      BlocProvider<PageBloc>(
-                        create: (BuildContext context) => PageBloc(),
-                      ),
-                      BlocProvider<ListBloc>(
-                        create: (BuildContext context) => ListBloc(
-                            listRepository:
-                                RoutineInspectionUploadListRepository()),
-                      ),
-                    ],
-                    child: DeviceInspectionUploadListPage(
-                      monitorId: widget.monitorId,
-                      itemInspectType: routineInspectionDetail.itemInspectType,
-                      state: widget.state,
-                    ),
+                  return DeviceInspectionUploadListPage(
+                    monitorId: widget.monitorId,
+                    itemInspectType: routineInspectionDetail.itemInspectType,
+                    state: widget.state,
                   );
                 case '3':
                   if (widget.monitorType == 'outletType2') {
                     // 废水监测设备校验上报列表
-                    return BlocProvider<ListBloc>(
-                      create: (BuildContext context) => ListBloc(
-                          listRepository:
-                              RoutineInspectionUploadListRepository()),
-                      child: WaterDeviceCheckUploadListPage(
-                        monitorId: widget.monitorId,
-                        itemInspectType:
-                            routineInspectionDetail.itemInspectType,
-                        state: widget.state,
-                      ),
+                    return WaterDeviceCheckUploadListPage(
+                      monitorId: widget.monitorId,
+                      itemInspectType: routineInspectionDetail.itemInspectType,
+                      state: widget.state,
                     );
                   } else if (widget.monitorType == 'outletType3') {
                     // 废气监测设备校验上报列表
-                    return BlocProvider<ListBloc>(
-                      create: (BuildContext context) => ListBloc(
-                          listRepository:
-                              RoutineInspectionUploadListRepository()),
-                      child: AirDeviceCheckUploadListPage(
-                        monitorId: widget.monitorId,
-                        itemInspectType:
-                            routineInspectionDetail.itemInspectType,
-                        state: widget.state,
-                      ),
+                    return AirDeviceCheckUploadListPage(
+                      monitorId: widget.monitorId,
+                      itemInspectType: routineInspectionDetail.itemInspectType,
+                      state: widget.state,
                     );
                   }
                   return Center(
@@ -369,27 +338,17 @@ class _RoutineInspectionDetailPageState
                   );
                 case '2':
                   // 废气监测设备校准上报列表
-                  return BlocProvider<ListBloc>(
-                    create: (BuildContext context) => ListBloc(
-                        listRepository:
-                            RoutineInspectionUploadListRepository()),
-                    child: AirDeviceCorrectUploadListPage(
-                      monitorId: widget.monitorId,
-                      itemInspectType: routineInspectionDetail.itemInspectType,
-                      state: widget.state,
-                    ),
+                  return AirDeviceCorrectUploadListPage(
+                    monitorId: widget.monitorId,
+                    itemInspectType: routineInspectionDetail.itemInspectType,
+                    state: widget.state,
                   );
                 case '4':
                   // 废水监测设备参数巡检上报列表
-                  return BlocProvider<ListBloc>(
-                    create: (BuildContext context) => ListBloc(
-                        listRepository:
-                            RoutineInspectionUploadListRepository()),
-                    child: WaterDeviceParamUploadListPage(
-                      monitorId: widget.monitorId,
-                      itemInspectType: routineInspectionDetail.itemInspectType,
-                      state: widget.state,
-                    ),
+                  return WaterDeviceParamUploadListPage(
+                    monitorId: widget.monitorId,
+                    itemInspectType: routineInspectionDetail.itemInspectType,
+                    state: widget.state,
                   );
                 default:
                   return Center(

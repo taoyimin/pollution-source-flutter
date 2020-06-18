@@ -54,12 +54,22 @@ class DischargeListPage extends StatefulWidget {
 }
 
 class _DischargeListPageState extends State<DischargeListPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
+
+  /// 企业名称编辑器
   final TextEditingController _enterNameController = TextEditingController();
 
   /// 环保用户显示选择区域相关布局
   final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: DischargeListRepository(),
+  );
 
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
@@ -88,8 +98,6 @@ class _DischargeListPageState extends State<DischargeListPage> {
   /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
 
-  // 列表Bloc
-  ListBloc _listBloc;
   Completer<void> _refreshCompleter;
 
   @override
@@ -103,8 +111,6 @@ class _DischargeListPageState extends State<DischargeListPage> {
     // 加载关注程度
     _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -181,6 +187,7 @@ class _DischargeListPageState extends State<DischargeListPage> {
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();

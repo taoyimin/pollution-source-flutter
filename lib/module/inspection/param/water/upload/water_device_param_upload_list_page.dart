@@ -41,7 +41,10 @@ class _WaterDeviceParamUploadListPageState
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  ListBloc _listBloc;
+  /// 任务列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: RoutineInspectionUploadListRepository(),
+  );
 
   /// 用于刷新常规巡检详情（上报成功后刷新header中的数据条数）
   DetailBloc _detailBloc;
@@ -53,7 +56,6 @@ class _WaterDeviceParamUploadListPageState
     super.initState();
     _refreshCompleter = Completer<void>();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -87,12 +89,13 @@ class _WaterDeviceParamUploadListPageState
         header: UIUtils.getRefreshClassicalHeader(),
         slivers: <Widget>[
           BlocConsumer<ListBloc, ListState>(
+            bloc: _listBloc,
             listener: (context, state) {
               if (state is ListLoading) return;
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
-            buildWhen: (previous, current){
+            buildWhen: (previous, current) {
               if (current is ListLoading)
                 return false;
               else

@@ -13,6 +13,8 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+import 'discharge_report_detail_repository.dart';
+
 /// 排口异常申报详细界面
 class DischargeReportDetailPage extends StatefulWidget {
   final String reportId;
@@ -26,13 +28,17 @@ class DischargeReportDetailPage extends StatefulWidget {
 }
 
 class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  DetailBloc _detailBloc;
+
+  /// 详情Bloc
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: DischargeReportDetailRepository(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
   }
 
@@ -56,6 +62,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
@@ -77,6 +84,7 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
             },
           ),
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               if (state is DetailLoading) {
                 return LoadingSliver();
@@ -170,7 +178,8 @@ class _DischargeReportDetailPageState extends State<DischargeReportDetailPage> {
                       Row(
                         children: <Widget>[
                           IconBaseInfoWidget(
-                            content: '是否关停设备：${reportDetail.isShutdownStr ?? ''}',
+                            content:
+                                '是否关停设备：${reportDetail.isShutdownStr ?? ''}',
                             icon: Icons.do_not_disturb,
                           ),
                         ],

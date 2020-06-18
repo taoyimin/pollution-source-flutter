@@ -12,6 +12,9 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+import 'warn_detail_repository.dart';
+
+/// 实时预警单详情界面
 class WarnDetailPage extends StatefulWidget {
   final String warnId;
 
@@ -22,14 +25,17 @@ class WarnDetailPage extends StatefulWidget {
 }
 
 class _WarnDetailPageState extends State<WarnDetailPage> {
-  DetailBloc _detailBloc;
-
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 详情Bloc
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: WarnDetailRepository(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
   }
 
@@ -53,6 +59,7 @@ class _WarnDetailPageState extends State<WarnDetailPage> {
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               String enterName = '';
               String districtName = '';
@@ -72,6 +79,7 @@ class _WarnDetailPageState extends State<WarnDetailPage> {
           ),
           // 生成body
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               if (state is DetailLoading) {
                 return LoadingSliver();
@@ -206,11 +214,10 @@ class _WarnDetailPageState extends State<WarnDetailPage> {
                           title: '企业信息',
                           content: '查看该预警单所属的企业信息',
                           backgroundPath:
-                          'assets/images/button_bg_lightblue.png',
+                              'assets/images/button_bg_lightblue.png',
                           imagePath:
-                          'assets/images/image_enter_statistics1.png',
-                          router:
-                          '${Routes.enterDetail}/${warnDetail.enterId}',
+                              'assets/images/image_enter_statistics1.png',
+                          router: '${Routes.enterDetail}/${warnDetail.enterId}',
                         ),
                       ),
                       Gaps.hGap10,
@@ -218,12 +225,11 @@ class _WarnDetailPageState extends State<WarnDetailPage> {
                         meta: Meta(
                           title: '在线数据',
                           content: '查看该预警单对应的在线数据',
-                          backgroundPath:
-                          'assets/images/button_bg_red.png',
+                          backgroundPath: 'assets/images/button_bg_red.png',
                           imagePath:
-                          'assets/images/image_enter_statistics2.png',
+                              'assets/images/image_enter_statistics2.png',
                           router:
-                          '${Routes.monitorDetail}/${warnDetail.monitorId}',
+                              '${Routes.monitorDetail}/${warnDetail.monitorId}',
                         ),
                       ),
                     ],

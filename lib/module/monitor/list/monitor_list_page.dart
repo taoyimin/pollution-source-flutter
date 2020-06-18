@@ -33,7 +33,7 @@ import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 
-/// 监控点列表
+/// 监控点列表界面
 class MonitorListPage extends StatefulWidget {
   final String enterId;
   final String dischargeId;
@@ -58,8 +58,13 @@ class MonitorListPage extends StatefulWidget {
 }
 
 class _MonitorListPageState extends State<MonitorListPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
+
+  /// 企业名称编辑器
   final TextEditingController _enterNameController = TextEditingController();
 
   /// 运维用户隐藏关注程度相关布局
@@ -67,6 +72,11 @@ class _MonitorListPageState extends State<MonitorListPage> {
 
   /// 环保用户显示选择区域相关布局
   final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: MonitorListRepository(),
+  );
 
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
@@ -95,12 +105,22 @@ class _MonitorListPageState extends State<MonitorListPage> {
 
   /// 区域信息
   Result _areaResult;
+
+  /// 排口状态
   String _state;
+
+  /// 排放类型
   String _outType;
+
+  /// 监控点类型
   String _monitorType;
+
+  /// 关注程度
   String _attentionLevel;
+
+  /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
-  ListBloc _listBloc;
+
   Completer<void> _refreshCompleter;
 
   @override
@@ -118,7 +138,6 @@ class _MonitorListPageState extends State<MonitorListPage> {
     // 加载关注程度
     if (_showAttentionLevel) _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -204,6 +223,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();

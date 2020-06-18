@@ -38,11 +38,16 @@ class MonitorTablePage extends StatefulWidget {
 }
 
 class _MonitorTableState extends State<MonitorTablePage> {
-  /// 每页数据条数
-  final int pageSize = 30;
+  /// 全局Key
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  /// 当前页数
-  int currentPage = 0;
+  /// Stack Key
+  final GlobalKey _stackKey = GlobalKey();
+
+  /// 详情Bloc
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: MonitorHistoryDataRepository(),
+  );
 
   /// 数据类型菜单
   final List<DataDict> _dataTypeList = [
@@ -51,22 +56,33 @@ class _MonitorTableState extends State<MonitorTablePage> {
     DataDict(name: '小时数据', code: 'hour', checked: true),
     DataDict(name: '日数据', code: 'day', checked: false),
   ];
-  final GZXDropdownMenuController _dropdownMenuController =
-      GZXDropdownMenuController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey _stackKey = GlobalKey();
 
+  /// 弹出下拉菜单控制器
+  final GZXDropdownMenuController _dropdownMenuController =
+  GZXDropdownMenuController();
+
+  /// 数据类型
   String _dataType;
+
+  /// 数据类型中文
   String _dataTypeStr;
+
+  /// 开始时间
   DateTime _startTime;
+
+  /// 结束时间
   DateTime _endTime;
-  DetailBloc _detailBloc;
+
+  /// 每页数据条数
+  final int pageSize = 30;
+
+  /// 当前页数
+  int currentPage = 0;
 
   @override
   void initState() {
     super.initState();
     initParam();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
   }
 
@@ -77,7 +93,6 @@ class _MonitorTableState extends State<MonitorTablePage> {
       (_detailBloc?.state as DetailLoading).cancelToken.cancel();
     super.dispose();
   }
-
 
   /// 加载数据
   _loadData() {
@@ -266,6 +281,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
               ),
               Expanded(
                 child: BlocBuilder<DetailBloc, DetailState>(
+                  bloc: _detailBloc,
                   builder: (context, state) {
                     if (state is DetailLoading) {
                       return LoadingWidget();
@@ -289,6 +305,7 @@ class _MonitorTableState extends State<MonitorTablePage> {
                 ),
               ),
               BlocBuilder<DetailBloc, DetailState>(
+                bloc: _detailBloc,
                 builder: (context, state) {
                   if (state is DetailLoaded) {
                     int pages =

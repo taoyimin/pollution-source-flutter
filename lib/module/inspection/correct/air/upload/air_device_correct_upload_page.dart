@@ -26,6 +26,7 @@ import 'package:pollution_source/widget/custom_header.dart';
 
 import 'air_device_correct_upload_repository.dart';
 
+/// 废气监测设备校准上报页面
 class AirDeviceCorrectUploadPage extends StatefulWidget {
   final String taskJson;
 
@@ -55,6 +56,7 @@ class _AirDeviceCorrectUploadPageState
   final DetailBloc _lastValueBloc =
       DetailBloc(detailRepository: AirDeviceLastValueRepository());
 
+  /// 废气监测设备校准上报类
   final AirDeviceCorrectUpload _airDeviceCorrectUpload =
       AirDeviceCorrectUpload();
 

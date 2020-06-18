@@ -18,7 +18,7 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'notice_list_model.dart';
 import 'notice_list_repository.dart';
 
-/// 消息通知列表
+/// 消息通知列表界面
 class NoticeListPage extends StatefulWidget {
   NoticeListPage();
 
@@ -27,11 +27,19 @@ class NoticeListPage extends StatefulWidget {
 }
 
 class _NoticeListPageState extends State<NoticeListPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
-  ListBloc _listBloc;
-  Completer<void> _refreshCompleter;
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(listRepository: NoticeListRepository());
+
+  /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
+
+  Completer<void> _refreshCompleter;
 
   /// 开始时间
   DateTime _startTime;
@@ -43,8 +51,6 @@ class _NoticeListPageState extends State<NoticeListPage> {
   void initState() {
     super.initState();
     _initParam();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshCompleter = Completer<void>();
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
@@ -108,6 +114,7 @@ class _NoticeListPageState extends State<NoticeListPage> {
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   // 刷新状态不触发_refreshCompleter
                   if (state is ListLoading) return;
@@ -245,7 +252,8 @@ class _NoticeListPageState extends State<NoticeListPage> {
                         children: <Widget>[
                           DateTimeWidget(
                             title: '推送时间',
-                            height: UIUtils.getSearchItemHeight(context, orientation),
+                            height: UIUtils.getSearchItemHeight(
+                                context, orientation),
                             startTime: _startTime,
                             endTime: _endTime,
                             onStartTimeConfirm: (dateTime, selectedIndex) {

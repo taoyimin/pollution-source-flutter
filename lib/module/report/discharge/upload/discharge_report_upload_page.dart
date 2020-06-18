@@ -43,7 +43,9 @@ class DischargeReportUploadPage extends StatefulWidget {
 
 class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
   /// 上报Bloc
-  final UploadBloc _uploadBloc = UploadBloc(uploadRepository: DischargeReportUploadRepository());
+  final UploadBloc _uploadBloc = UploadBloc(
+    uploadRepository: DischargeReportUploadRepository(),
+  );
 
   /// 停产类型Bloc
   final DataDictBloc _stopTypeBloc = DataDictBloc(
@@ -272,7 +274,8 @@ class _DischargeReportUploadPageState extends State<DischargeReportUploadPage> {
                       pickerMode: DateTimePickerMode.datetime,
                       initialDateTime: _dischargeReportUpload.endTime,
                       minDateTime: CommonUtils.getMaxDateTime(
-                          _dischargeReportUpload.startTime, _dischargeReportUpload.minStartTime),
+                          _dischargeReportUpload.startTime,
+                          _dischargeReportUpload.minStartTime),
                       onClose: () {},
                       onConfirm: (dateTime, selectedIndex) {
                         setState(() {

@@ -60,8 +60,14 @@ class _EnterListPageState extends State<EnterListPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
+
+  /// 企业名称编辑器
   final TextEditingController _enterNameController = TextEditingController();
 
   /// 环保用户显示选择区域相关布局
@@ -89,19 +95,32 @@ class _EnterListPageState extends State<EnterListPage>
     DataDict(name: '未安装', code: '2'),
   ];
 
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: EnterListRepository(),
+  );
+
   /// 关注程度Bloc
   final DataDictBloc _attentionLevelBloc = DataDictBloc(
     dataDictRepository: DataDictRepository(HttpApi.attentionLevel),
   );
-  ListBloc _listBloc;
-  Completer<void> _refreshCompleter;
 
   /// 区域信息
   Result _areaResult;
+
+  /// 企业类型
   String _enterType;
+
+  /// 是否安装在线
   String _state;
+
+  /// 关注程度
   String _attentionLevel;
+
+  /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
+
+  Completer<void> _refreshCompleter;
 
   @override
   void initState() {
@@ -112,8 +131,6 @@ class _EnterListPageState extends State<EnterListPage>
     // 加载关注程度
     _attentionLevelBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -205,6 +222,7 @@ class _EnterListPageState extends State<EnterListPage>
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();

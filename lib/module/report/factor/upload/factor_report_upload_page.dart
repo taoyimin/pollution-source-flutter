@@ -45,7 +45,9 @@ class FactorReportUploadPage extends StatefulWidget {
 
 class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
   /// 上报Bloc
-  final UploadBloc _uploadBloc = UploadBloc(uploadRepository: FactorReportUploadRepository());
+  final UploadBloc _uploadBloc = UploadBloc(
+    uploadRepository: FactorReportUploadRepository(),
+  );
 
   /// 异常类型Bloc
   final DataDictBloc _alarmTypeBloc = DataDictBloc(

@@ -11,48 +11,54 @@ import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
+import 'package:pollution_source/module/inspection/common/water_device_param_list_repository.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+import 'water_device_param_upload_repository.dart';
+
 /// 废水监测设备参数巡检上报界面
 class WaterDeviceParamUploadPage extends StatefulWidget {
-  final String json;
+  final String taskJson;
 
-  WaterDeviceParamUploadPage({this.json});
+  WaterDeviceParamUploadPage({this.taskJson});
 
   @override
   _WaterDeviceParamUploadPageState createState() =>
-      _WaterDeviceParamUploadPageState();
+      _WaterDeviceParamUploadPageState(
+          task: RoutineInspectionUploadList.fromJson(json.decode(taskJson)));
 }
 
 class _WaterDeviceParamUploadPageState
     extends State<WaterDeviceParamUploadPage> {
+  /// 巡检任务
+  final RoutineInspectionUploadList task;
+
   /// 加载待巡检参数Bloc
-  ListBloc _listBloc;
+  final ListBloc _listBloc = ListBloc(
+    listRepository: WaterDeviceParamListRepository(),
+  );
 
   /// 废水监测设备参数巡检上报Bloc
-  UploadBloc _uploadBloc;
-
-  /// 巡检任务
-  RoutineInspectionUploadList task;
+  final UploadBloc _uploadBloc = UploadBloc(
+    uploadRepository: WaterDeviceParamUploadRepository(),
+  );
 
   /// 废水监测设备参数巡检上报类
   final WaterDeviceParamUpload _waterDeviceParamUpload =
       WaterDeviceParamUpload();
 
+  _WaterDeviceParamUploadPageState({this.task});
+
   @override
   void initState() {
     super.initState();
-    task = RoutineInspectionUploadList.fromJson(json.decode(widget.json));
     _waterDeviceParamUpload.inspectionTaskId = task.inspectionTaskId;
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 加载待巡检参数
     _loadData();
-    // 初始化上报Bloc
-    _uploadBloc = BlocProvider.of<UploadBloc>(context);
   }
 
   @override
@@ -96,9 +102,11 @@ class _WaterDeviceParamUploadPageState
           MultiBlocListener(
             listeners: [
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: uploadListener,
               ),
               BlocListener<UploadBloc, UploadState>(
+                bloc: _uploadBloc,
                 listener: (context, state) {
                   if (state is UploadSuccess) {
                     Toast.show('${state.message}');
@@ -107,6 +115,7 @@ class _WaterDeviceParamUploadPageState
                 },
               ),
               BlocListener<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoaded) {
                     _waterDeviceParamUpload.waterDeviceParamTypeList =
@@ -133,6 +142,7 @@ class _WaterDeviceParamUploadPageState
           InfoRowWidget(title: '分析方法', content: task.analysisMethod ?? '无'),
           Gaps.hLine,
           BlocBuilder<ListBloc, ListState>(
+            bloc: _listBloc,
             builder: (context, state) {
               if (state is ListInitial || state is ListLoading) {
                 return Container(height: 300, child: LoadingWidget());

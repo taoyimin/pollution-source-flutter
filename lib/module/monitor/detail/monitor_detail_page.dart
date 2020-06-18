@@ -13,7 +13,9 @@ import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
 import 'monitor_detail.dart';
+import 'monitor_detail_repository.dart';
 
+/// 监控点详情界面
 class MonitorDetailPage extends StatefulWidget {
   final String monitorId;
 
@@ -24,12 +26,14 @@ class MonitorDetailPage extends StatefulWidget {
 }
 
 class _MonitorDetailPageState extends State<MonitorDetailPage> {
-  MonitorDetailBloc _monitorDetailBloc;
+  /// 详情Bloc
+  final MonitorDetailBloc _monitorDetailBloc = MonitorDetailBloc(
+    detailRepository: MonitorDetailRepository(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _monitorDetailBloc = BlocProvider.of<MonitorDetailBloc>(context);
     _loadData();
   }
 
@@ -52,6 +56,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<MonitorDetailBloc, MonitorDetailState>(
+            bloc: _monitorDetailBloc,
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
@@ -98,6 +103,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
             },
           ),
           BlocBuilder<MonitorDetailBloc, MonitorDetailState>(
+            bloc: _monitorDetailBloc,
             builder: (context, state) {
               if (state is MonitorDetailLoading) {
                 return LoadingSliver();

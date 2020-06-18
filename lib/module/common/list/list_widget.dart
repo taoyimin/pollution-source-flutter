@@ -93,6 +93,7 @@ class ListHeaderWidget extends StatelessWidget {
                         color: Colors.white,
                       ),
                       child: BlocBuilder<ListBloc, ListState>(
+                        bloc: listBloc,
                         builder: (context, state) {
                           String tip = '';
                           if (state is ListLoading)
@@ -189,6 +190,7 @@ class ListBodyState extends State<ListBodyWidget> {
       footer: UIUtils.getLoadClassicalFooter(),
       slivers: <Widget>[
         BlocConsumer<ListBloc, ListState>(
+          bloc: widget.listBloc,
           listener: (context, state) {
             if (state is ListLoading) return;
             _refreshCompleter?.complete();

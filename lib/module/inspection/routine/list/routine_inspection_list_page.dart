@@ -20,7 +20,7 @@ import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 
-/// 常规巡检列表
+/// 常规巡检列表界面
 class RoutineInspectionListPage extends StatefulWidget {
   final String enterId;
   final String monitorId;
@@ -38,9 +38,19 @@ class RoutineInspectionListPage extends StatefulWidget {
 }
 
 class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
+
+  /// 企业名称编辑器
   final TextEditingController _enterNameController = TextEditingController();
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: RoutineInspectionListRepository(),
+  );
 
   /// 巡检任务状态菜单
   final List<DataDict> _stateList = [
@@ -55,16 +65,12 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
   /// 当前页
   int _currentPage = Constant.defaultCurrentPage;
 
-  /// 列表Bloc
-  ListBloc _listBloc;
   Completer<void> _refreshCompleter;
 
   @override
   void initState() {
     super.initState();
     initParam();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     _refreshCompleter = Completer<void>();
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
@@ -76,8 +82,8 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
     _refreshController.dispose();
     _enterNameController.dispose();
     // 取消正在进行的请求
-    final currentState = _listBloc?.state;
-    if (currentState is ListLoading) currentState.cancelToken?.cancel();
+    if (_listBloc?.state is ListLoading)
+      (_listBloc?.state as ListLoading).cancelToken.cancel();
     super.dispose();
   }
 
@@ -131,6 +137,7 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();

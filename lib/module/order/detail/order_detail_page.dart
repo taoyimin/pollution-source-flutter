@@ -54,20 +54,24 @@ class OrderDetailPage extends StatefulWidget {
 class _OrderDetailPageState extends State<OrderDetailPage>
     with SingleTickerProviderStateMixin {
   /// 报警管理单详情界面Bloc
-  final DetailBloc _detailBloc =
-      DetailBloc(detailRepository: OrderDetailRepository());
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: OrderDetailRepository(),
+  );
 
   /// 处理流程上报业务Bloc
-  final UploadBloc _uploadBloc =
-      UploadBloc(uploadRepository: ProcessUploadRepository());
+  final UploadBloc _uploadBloc = UploadBloc(
+    uploadRepository: ProcessUploadRepository(),
+  );
 
   /// 报警原因数据字典Bloc
   final DataDictBloc _alarmCauseBloc = DataDictBloc(
-      dataDictRepository: DataDictRepository(HttpApi.orderAlarmCause));
+    dataDictRepository: DataDictRepository(HttpApi.orderAlarmCause),
+  );
 
   /// 移动执法Bloc
-  final CollectionBloc<MobileLaw> _mobileLawBloc =
-      CollectionBloc<MobileLaw>(collectionRepository: MobileLawRepository());
+  final CollectionBloc<MobileLaw> _mobileLawBloc = CollectionBloc<MobileLaw>(
+    collectionRepository: MobileLawRepository(),
+  );
 
   /// 督办单处理上报类
   final ProcessUpload _processUpload = ProcessUpload();
@@ -841,7 +845,8 @@ class _OrderDetailPageState extends State<OrderDetailPage>
                               errorMessage: state.message,
                               onReloadTap: () => _loadMobileLaw(),
                             );
-                          } else if (state is CollectionLoaded || state is CollectionEmpty) {
+                          } else if (state is CollectionLoaded ||
+                              state is CollectionEmpty) {
                             return GestureDetector(
                               onTap: () {
                                 showDialog(
@@ -853,7 +858,9 @@ class _OrderDetailPageState extends State<OrderDetailPage>
                                       title: '现场检查情况',
                                       imagePath:
                                           'assets/images/icon_mobile_law.png',
-                                      collection: state is CollectionLoaded ? state.collection : [],
+                                      collection: state is CollectionLoaded
+                                          ? state.collection
+                                          : [],
                                       checkList: _processUpload.mobileLawList,
                                       confirmCallBack: (mobileLawList) {
                                         setState(() {
@@ -861,7 +868,7 @@ class _OrderDetailPageState extends State<OrderDetailPage>
                                               mobileLawList;
                                         });
                                       },
-                                      cancelCallBack: (){
+                                      cancelCallBack: () {
                                         setState(() {
                                           // 更新已关联的现场检查情况条数
                                         });
@@ -1001,7 +1008,6 @@ class _OrderDetailPageState extends State<OrderDetailPage>
                           padding: const EdgeInsets.all(0),
                           color: Colors.white,
                           onPressed: () async {
-                            // 选取图片后重新加载界面
                             _processUpload.attachments =
                                 await SystemUtils.loadAssets(
                                     _processUpload.attachments);

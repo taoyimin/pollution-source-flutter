@@ -29,7 +29,7 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 
-/// 实时预警单列表
+/// 实时预警单列表界面
 class WarnListPage extends StatefulWidget {
   WarnListPage();
 
@@ -38,14 +38,17 @@ class WarnListPage extends StatefulWidget {
 }
 
 class _WarnListPageState extends State<WarnListPage> {
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
-  ListBloc _listBloc;
-  Completer<void> _refreshCompleter;
-  int _currentPage = Constant.defaultCurrentPage;
 
   /// 环保用户显示选择区域相关布局
   final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(listRepository: WarnListRepository());
 
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
@@ -69,6 +72,11 @@ class _WarnListPageState extends State<WarnListPage> {
   /// 结束时间
   DateTime _endTime;
 
+  /// 当前页
+  int _currentPage = Constant.defaultCurrentPage;
+
+  Completer<void> _refreshCompleter;
+
   @override
   void initState() {
     super.initState();
@@ -78,8 +86,6 @@ class _WarnListPageState extends State<WarnListPage> {
     // 加载报警类型
     _alarmTypeBloc.add(DataDictLoad());
     _refreshCompleter = Completer<void>();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -147,6 +153,7 @@ class _WarnListPageState extends State<WarnListPage> {
             footer: UIUtils.getLoadClassicalFooter(),
             slivers: <Widget>[
               BlocConsumer<ListBloc, ListState>(
+                bloc: _listBloc,
                 listener: (context, state) {
                   if (state is ListLoading) return;
                   _refreshCompleter?.complete();

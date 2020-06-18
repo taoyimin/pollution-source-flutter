@@ -12,6 +12,8 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+import 'factor_report_detail_repository.dart';
+
 /// 因子异常申报详情界面
 class FactorReportDetailPage extends StatefulWidget {
   final String reportId;
@@ -23,12 +25,14 @@ class FactorReportDetailPage extends StatefulWidget {
 }
 
 class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
-  DetailBloc _detailBloc;
+  /// 详情Bloc
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: FactorReportDetailRepository(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
   }
 
@@ -51,6 +55,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
@@ -72,6 +77,7 @@ class _FactorReportDetailPageState extends State<FactorReportDetailPage> {
             },
           ),
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               if (state is DetailLoading) {
                 return LoadingSliver();

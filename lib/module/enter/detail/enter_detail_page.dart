@@ -18,6 +18,8 @@ import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 
+import 'enter_detail_repository.dart';
+
 /// 企业详情页面
 class EnterDetailPage extends StatefulWidget {
   final String enterId;
@@ -29,18 +31,22 @@ class EnterDetailPage extends StatefulWidget {
 }
 
 class _EnterDetailPageState extends State<EnterDetailPage> {
-  DetailBloc _detailBloc;
-
+  /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// 详情Bloc
+  final DetailBloc _detailBloc = DetailBloc(
+    detailRepository: EnterDetailRepository(),
+  );
+
   /// 监控点统计Bloc
-  final CollectionBloc monitorStatisticsBloc =
-      CollectionBloc(collectionRepository: MonitorStatisticsRepository());
+  final CollectionBloc monitorStatisticsBloc = CollectionBloc(
+    collectionRepository: MonitorStatisticsRepository(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _detailBloc = BlocProvider.of<DetailBloc>(context);
     _loadData();
     // 加载监控点统计信息
     monitorStatisticsBloc.add(CollectionLoad(params: _getRequestParam()));
@@ -76,6 +82,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
       body: EasyRefresh.custom(
         slivers: <Widget>[
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               String enterName = '';
               String enterAddress = '';
@@ -98,6 +105,7 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
           ),
           // 生成body
           BlocBuilder<DetailBloc, DetailState>(
+            bloc: _detailBloc,
             builder: (context, state) {
               if (state is DetailLoading) {
                 return LoadingSliver();

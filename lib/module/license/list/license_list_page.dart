@@ -14,7 +14,7 @@ import 'package:pollution_source/util/ui_utils.dart';
 
 import 'package:pollution_source/module/common/common_widget.dart';
 
-/// 排污许可证列表
+/// 排污许可证列表(只显示一页数据，没有下拉刷新上拉加载)
 class LicenseListPage extends StatefulWidget {
   final String enterId;
 
@@ -25,15 +25,18 @@ class LicenseListPage extends StatefulWidget {
 }
 
 class _LicenseListPageState extends State<LicenseListPage> {
-  ListBloc _listBloc;
-  int _currentPage = Constant.defaultCurrentPage;
+  /// 刷新控制器
   final EasyRefreshController _refreshController = EasyRefreshController();
+
+  /// 列表Bloc
+  final ListBloc _listBloc = ListBloc(listRepository: LicenseListRepository());
+
+  /// 当前页
+  final int _currentPage = Constant.defaultCurrentPage;
 
   @override
   void initState() {
     super.initState();
-    // 初始化列表Bloc
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(isRefresh: true, params: _getRequestParam()));
   }
@@ -74,6 +77,7 @@ class _LicenseListPageState extends State<LicenseListPage> {
             elevation: 0,
           ),
           BlocBuilder<ListBloc, ListState>(
+            bloc: _listBloc,
             condition: (previousState, state) {
               if (state is ListLoading)
                 return false;

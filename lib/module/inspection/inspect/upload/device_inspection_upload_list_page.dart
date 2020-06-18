@@ -22,6 +22,8 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/git_dialog.dart';
 
+import 'device_inspection_upload_list_repository.dart';
+
 /// 辅助/监测设备巡检上报列表
 class DeviceInspectionUploadListPage extends StatefulWidget {
   final String monitorId;
@@ -45,8 +47,16 @@ class _DeviceInspectionUploadListPageState
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
-  ListBloc _listBloc;
-  UploadBloc _uploadBloc;
+
+  /// 查询任务列表Bloc
+  final ListBloc _listBloc = ListBloc(
+    listRepository: RoutineInspectionUploadListRepository(),
+  );
+
+  /// 任务上报Bloc
+  final UploadBloc _uploadBloc = UploadBloc(
+    uploadRepository: DeviceInspectionUploadRepository(),
+  );
 
   /// 用于刷新常规巡检详情（上报成功后刷新header中的数据条数）
   DetailBloc _detailBloc;
@@ -55,6 +65,7 @@ class _DeviceInspectionUploadListPageState
   Animation _animation;
   PersistentBottomSheetController _bottomSheetController;
   IconData _actionIcon = Icons.edit;
+
   /// 用于刷新BottomSheet
   StateSetter bottomSheetStateSetter;
 
@@ -68,10 +79,8 @@ class _DeviceInspectionUploadListPageState
   void initState() {
     super.initState();
     _detailBloc = BlocProvider.of<DetailBloc>(context);
-    _listBloc = BlocProvider.of<ListBloc>(context);
     // 首次加载
     _listBloc.add(ListLoad(params: _getRequestParam()));
-    _uploadBloc = BlocProvider.of<UploadBloc>(context);
     // 初始化fab颜色渐变动画
     _animateController = AnimationController(
       duration: Duration(milliseconds: 500),
@@ -118,6 +127,7 @@ class _DeviceInspectionUploadListPageState
         header: UIUtils.getRefreshClassicalHeader(),
         slivers: <Widget>[
           BlocListener<UploadBloc, UploadState>(
+            bloc: _uploadBloc,
             listener: (context, state) {
               if (state is Uploading) {
                 showDialog<bool>(
@@ -176,6 +186,7 @@ class _DeviceInspectionUploadListPageState
               }
             },
             child: BlocConsumer<ListBloc, ListState>(
+              bloc: _listBloc,
               listener: (context, state) {
                 if (state is ListLoading) return;
                 _refreshCompleter?.complete();
@@ -236,8 +247,8 @@ class _DeviceInspectionUploadListPageState
                   }
                 });
                 // 刷新BottomSheet中的选中数
-                if(bottomSheetStateSetter!=null)
-                  bottomSheetStateSetter((){});
+                if (bottomSheetStateSetter != null)
+                  bottomSheetStateSetter(() {});
               },
               children: <Widget>[
                 Container(
@@ -364,7 +375,8 @@ class _DeviceInspectionUploadListPageState
   }
 
   Widget _buildBottomSheet() {
-    return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
       bottomSheetStateSetter = setState;
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
