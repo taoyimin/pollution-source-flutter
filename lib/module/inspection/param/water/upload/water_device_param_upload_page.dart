@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -133,71 +134,80 @@ class _WaterDeviceParamUploadPageState
 
   Widget _buildPageLoadedDetail() {
     return SliverToBoxAdapter(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: <Widget>[
-          InfoRowWidget(title: '测量原理', content: task.measurePrinciple ?? '无'),
-          Gaps.hLine,
-          InfoRowWidget(title: '分析方法', content: task.analysisMethod ?? '无'),
-          Gaps.hLine,
-          BlocBuilder<ListBloc, ListState>(
-            bloc: _listBloc,
-            builder: (context, state) {
-              if (state is ListInitial || state is ListLoading) {
-                return Container(height: 300, child: LoadingWidget());
-              } else if (state is ListEmpty) {
-                return Container(
-                  height: 300,
-                  child: EmptyWidget(
-                    message: '没有查询到设备的参数巡检项目',
-                  ),
-                );
-              } else if (state is ListError) {
-                return ColumnErrorWidget(
-                  errorMessage: state.message,
-                  onReloadTap: () => _loadData(),
-                );
-              } else if (state is ListLoaded) {
-                return Column(
-                  children: <Widget>[
-                    ...(_waterDeviceParamUpload.waterDeviceParamTypeList
-                            ?.asMap()
-                            ?.map((i,
-                                    WaterDeviceParamType
-                                        waterDeviceParamType) =>
-                                MapEntry(i, _buildPageParamType(i)))
-                            ?.values
-                            ?.toList() ??
-                        []),
-                    Gaps.vGap10,
-                    Row(
-                      children: <Widget>[
-                        ClipButton(
-                          text: '提交',
-                          icon: Icons.file_upload,
-                          color: Colors.lightBlue,
-                          onTap: () {
-                            _uploadBloc
-                                .add(Upload(data: _waterDeviceParamUpload));
-                          },
-                        ),
-                      ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: <Widget>[
+            LocationWidget(
+              locationCallback: (BaiduLocation baiduLocation) {
+                setState(() {
+                  _waterDeviceParamUpload.baiduLocation = baiduLocation;
+                });
+              },
+            ),
+            Gaps.hLine,
+            InfoRowWidget(title: '测量原理', content: task.measurePrinciple ?? '无'),
+            Gaps.hLine,
+            InfoRowWidget(title: '分析方法', content: task.analysisMethod ?? '无'),
+            Gaps.hLine,
+            BlocBuilder<ListBloc, ListState>(
+              bloc: _listBloc,
+              builder: (context, state) {
+                if (state is ListInitial || state is ListLoading) {
+                  return Container(height: 300, child: LoadingWidget());
+                } else if (state is ListEmpty) {
+                  return Container(
+                    height: 300,
+                    child: EmptyWidget(
+                      message: '没有查询到设备的参数巡检项目',
                     ),
-                    Gaps.vGap20,
-                  ],
-                );
-              } else {
-                return ColumnErrorWidget(
-                  errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
-                  onReloadTap: () => _loadData(),
-                );
-              }
-            },
-          ),
-        ],
+                  );
+                } else if (state is ListError) {
+                  return ColumnErrorWidget(
+                    errorMessage: state.message,
+                    onReloadTap: () => _loadData(),
+                  );
+                } else if (state is ListLoaded) {
+                  return Column(
+                    children: <Widget>[
+                      ...(_waterDeviceParamUpload.waterDeviceParamTypeList
+                              ?.asMap()
+                              ?.map((i,
+                                      WaterDeviceParamType
+                                          waterDeviceParamType) =>
+                                  MapEntry(i, _buildPageParamType(i)))
+                              ?.values
+                              ?.toList() ??
+                          []),
+                      Gaps.vGap10,
+                      Row(
+                        children: <Widget>[
+                          ClipButton(
+                            text: '提交',
+                            icon: Icons.file_upload,
+                            color: Colors.lightBlue,
+                            onTap: () {
+                              _uploadBloc
+                                  .add(Upload(data: _waterDeviceParamUpload));
+                            },
+                          ),
+                        ],
+                      ),
+                      Gaps.vGap20,
+                    ],
+                  );
+                } else {
+                  return ColumnErrorWidget(
+                    errorMessage: 'BlocBuilder监听到未知的的状态！state=$state',
+                    onReloadTap: () => _loadData(),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Widget _buildPageParamType(int index) {

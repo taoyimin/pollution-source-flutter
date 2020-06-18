@@ -45,16 +45,19 @@ class _AirDeviceCorrectUploadPageState
   final RoutineInspectionUploadList task;
 
   /// 上报Bloc
-  final UploadBloc _uploadBloc =
-      UploadBloc(uploadRepository: AirDeviceCorrectUploadRepository());
+  final UploadBloc _uploadBloc = UploadBloc(
+    uploadRepository: AirDeviceCorrectUploadRepository(),
+  );
 
   /// 加载因子信息Bloc
-  final DetailBloc _factorBloc =
-      DetailBloc(detailRepository: RoutineInspectionUploadFactorRepository());
+  final DetailBloc _factorBloc = DetailBloc(
+    detailRepository: RoutineInspectionUploadFactorRepository(),
+  );
 
   /// 加载上次校准后测试值Bloc
-  final DetailBloc _lastValueBloc =
-      DetailBloc(detailRepository: AirDeviceLastValueRepository());
+  final DetailBloc _lastValueBloc = DetailBloc(
+    detailRepository: AirDeviceLastValueRepository(),
+  );
 
   /// 废气监测设备校准上报类
   final AirDeviceCorrectUpload _airDeviceCorrectUpload =
@@ -163,18 +166,19 @@ class _AirDeviceCorrectUploadPageState
   Widget _buildPageLoadedDetail() {
     final GestureTapCallback onSuccessTap = () {
       showDialog(
-          context: context, //BuildContext对象
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return RoutineInspectionUploadFactorDialog(
-              factor: _airDeviceCorrectUpload.factor,
-              changeCallBack: (RoutineInspectionUploadFactor factor) {
-                setState(() {
-                  _airDeviceCorrectUpload.factor = factor;
-                });
-              },
-            );
-          });
+        context: context, //BuildContext对象
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return RoutineInspectionUploadFactorDialog(
+            factor: _airDeviceCorrectUpload.factor,
+            changeCallBack: (RoutineInspectionUploadFactor factor) {
+              setState(() {
+                _airDeviceCorrectUpload.factor = factor;
+              });
+            },
+          );
+        },
+      );
     };
 
     return SliverToBoxAdapter(
@@ -384,7 +388,7 @@ class _AirDeviceCorrectUploadPageState
             EditRowWidget(
               title: '校准后测试值',
               keyboardType: TextInputType.number,
-              controller: _airDeviceCorrectUpload.rangeCorrectVal ,
+              controller: _airDeviceCorrectUpload.rangeCorrectVal,
             ),
             Gaps.hLine,
             Gaps.vGap20,

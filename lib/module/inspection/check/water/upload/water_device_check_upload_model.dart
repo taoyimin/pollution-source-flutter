@@ -1,7 +1,17 @@
+import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
 
 /// 废水监测设备校验上报
 class WaterDeviceCheckUpload {
+  /// 位置信息
+  BaiduLocation baiduLocation;
+
+  /// 废水监测设备校验记录集合
+  final List<WaterDeviceCheckRecord> waterDeviceCheckRecordList = [];
+}
+
+/// 废水监测设备校验记录
+class WaterDeviceCheckRecord{
   /// 任务id
   String inspectionTaskId;
 
@@ -29,5 +39,5 @@ class WaterDeviceCheckUpload {
   /// 是否通过
   bool currentCorrectIsPass = true;
 
-  WaterDeviceCheckUpload({this.inspectionTaskId, this.itemType});
+  WaterDeviceCheckRecord({this.inspectionTaskId, this.itemType});
 }

@@ -42,6 +42,9 @@ class _WaterDeviceCheckUploadListPageState
   @override
   bool get wantKeepAlive => true;
 
+  /// 刷新控制器
+  final EasyRefreshController _refreshController = EasyRefreshController();
+
   /// 任务列表Bloc
   final ListBloc _listBloc = ListBloc(
     listRepository: RoutineInspectionUploadListRepository(),
@@ -49,10 +52,8 @@ class _WaterDeviceCheckUploadListPageState
 
   /// 常规巡检详情Bloc，用于上报成功后刷新header中的数据条数
   DetailBloc _detailBloc;
-  Completer<void> _refreshCompleter;
 
-  /// 刷新控制器
-  final EasyRefreshController _refreshController = EasyRefreshController();
+  Completer<void> _refreshCompleter;
 
   @override
   void initState() {
@@ -144,7 +145,7 @@ class _WaterDeviceCheckUploadListPageState
               onTap: () async {
                 bool success = await Application.router.navigateTo(context,
                     '${Routes.waterDeviceCheckUpload}?json=${Uri.encodeComponent(json.encode(list[index].toJson()))}');
-                if (success) {
+                if (success ?? false) {
                   // 刷新常规巡检详情界面header中的任务条数
                   _detailBloc.add(DetailLoad(
                     params: RoutineInspectionDetailRepository.createParams(

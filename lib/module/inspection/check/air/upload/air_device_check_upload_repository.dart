@@ -41,6 +41,7 @@ class AirDeviceCheckUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
+      ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('itemType', data.itemType)])
       ..addAll([MapEntry('factorId', data.factor.factorId.toString())])

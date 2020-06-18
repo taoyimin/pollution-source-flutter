@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -48,6 +49,9 @@ class _DeviceInspectionUploadListPageState
   @override
   bool get wantKeepAlive => true;
 
+  /// 刷新控制器
+  final EasyRefreshController _refreshController = EasyRefreshController();
+
   /// 查询任务列表Bloc
   final ListBloc _listBloc = ListBloc(
     listRepository: RoutineInspectionUploadListRepository(),
@@ -58,22 +62,28 @@ class _DeviceInspectionUploadListPageState
     uploadRepository: DeviceInspectionUploadRepository(),
   );
 
+  /// 辅助/监测设备巡检上报类
+  final DeviceInspectUpload _deviceInspectUpload = DeviceInspectUpload();
+
   /// 用于刷新常规巡检详情（上报成功后刷新header中的数据条数）
   DetailBloc _detailBloc;
-  Completer<void> _refreshCompleter;
+
+  /// 渐变动画控制器
   AnimationController _animateController;
+
+  /// fab颜色渐变动画
   Animation _animation;
+
+  /// BottomSheet控制器
   PersistentBottomSheetController _bottomSheetController;
+
+  /// fab图标
   IconData _actionIcon = Icons.edit;
 
   /// 用于刷新BottomSheet
   StateSetter bottomSheetStateSetter;
 
-  /// 辅助/监测设备巡检上报类
-  final DeviceInspectUpload _deviceInspectUpload = DeviceInspectUpload();
-
-  /// 刷新控制器
-  final EasyRefreshController _refreshController = EasyRefreshController();
+  Completer<void> _refreshCompleter;
 
   @override
   void initState() {
@@ -388,6 +398,13 @@ class _DeviceInspectionUploadListPageState
               imagePath: 'assets/images/icon_alarm_manage.png',
             ),
             Gaps.vGap16,
+            LocationWidget(
+              locationCallback: (BaiduLocation baiduLocation) {
+                setState(() {
+                  _deviceInspectUpload.baiduLocation = baiduLocation;
+                });
+              },
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

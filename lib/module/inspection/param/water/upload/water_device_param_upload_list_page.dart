@@ -41,6 +41,10 @@ class _WaterDeviceParamUploadListPageState
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  /// 刷新控制器
+  final EasyRefreshController _refreshController = EasyRefreshController();
+
   /// 任务列表Bloc
   final ListBloc _listBloc = ListBloc(
     listRepository: RoutineInspectionUploadListRepository(),
@@ -48,8 +52,8 @@ class _WaterDeviceParamUploadListPageState
 
   /// 用于刷新常规巡检详情（上报成功后刷新header中的数据条数）
   DetailBloc _detailBloc;
+
   Completer<void> _refreshCompleter;
-  final EasyRefreshController _refreshController = EasyRefreshController();
 
   @override
   void initState() {

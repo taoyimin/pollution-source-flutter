@@ -6,21 +6,26 @@ import 'package:pollution_source/module/common/upload/upload_repository.dart';
 import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_model.dart';
 
 class WaterDeviceUploadRepository
-    extends UploadRepository<List<WaterDeviceCheckUpload>, String> {
+    extends UploadRepository<WaterDeviceCheckUpload, String> {
   @override
-  checkData(List<WaterDeviceCheckUpload> data) {
-    if (data.length == 0)
+  checkData(WaterDeviceCheckUpload data) {
+    if (data.baiduLocation == null)
+      throw DioError(error: InvalidParamException('请先获取位置信息'));
+    if (data.waterDeviceCheckRecordList.length == 0)
       throw DioError(error: InvalidParamException('请至少上传一条记录'));
-    for (int i = 0; i < data.length; i++) {
-      if (data[i].currentCheckTime == null)
+    for (int i = 0; i < data.waterDeviceCheckRecordList.length; i++) {
+      if (data.waterDeviceCheckRecordList[i].currentCheckTime == null)
         throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的核查时间'));
-      if (TextUtil.isEmpty(data[i].standardSolution.text))
+      if (TextUtil.isEmpty(
+          data.waterDeviceCheckRecordList[i].standardSolution.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的标液浓度'));
-      if (TextUtil.isEmpty(data[i].realitySolution.text))
+      if (TextUtil.isEmpty(
+          data.waterDeviceCheckRecordList[i].realitySolution.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的实测浓度'));
-      if (TextUtil.isEmpty(data[i].currentCheckResult.text))
+      if (TextUtil.isEmpty(
+          data.waterDeviceCheckRecordList[i].currentCheckResult.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的核查结果'));
-      if (data[i].currentCorrectTime == null)
+      if (data.waterDeviceCheckRecordList[i].currentCorrectTime == null)
         throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的校准时间'));
     }
   }
@@ -31,36 +36,42 @@ class WaterDeviceUploadRepository
   }
 
   @override
-  Future<FormData> createFormData(List<WaterDeviceCheckUpload> data) async {
+  Future<FormData> createFormData(WaterDeviceCheckUpload data) async {
     FormData formData = FormData();
     formData.fields
-      ..addAll(data.map((item) {
+      ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
+      ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
+      ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
         return MapEntry('inspectionTaskId', item.inspectionTaskId);
       }))
-      ..addAll(data.map((item) {
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
         return MapEntry('itemType', item.itemType);
       }))
-      ..addAll(data.map((item) {
-        return MapEntry('currentCheckTime', DateUtil.formatDate(item.currentCheckTime));
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
+        return MapEntry(
+            'currentCheckTime', DateUtil.formatDate(item.currentCheckTime));
       }))
-      ..addAll(data.map((item) {
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
         return MapEntry('standardSolution', item.standardSolution.text);
       }))
-      ..addAll(data.map((item) {
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
         return MapEntry('realitySolution', item.realitySolution.text);
       }))
-      ..addAll(data.map((item) {
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
         return MapEntry('currentCheckResult', item.currentCheckResult.text);
       }))
-      ..addAll(data.map((item) {
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
         return MapEntry(
             'currentCheckIsPass', item.currentCheckIsPass ? '合格' : '不合格');
       }))
-      ..addAll(data.map((item) {
-        return MapEntry('currentCorrectTime', DateUtil.formatDate(item.currentCorrectTime));
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
+        return MapEntry(
+            'currentCorrectTime', DateUtil.formatDate(item.currentCorrectTime));
       }))
-      ..addAll(data.map((item) {
-        return MapEntry('currentCorrectIsPass', item.currentCorrectIsPass ? '通过' : '不通过');
+      ..addAll(data.waterDeviceCheckRecordList.map((item) {
+        return MapEntry(
+            'currentCorrectIsPass', item.currentCorrectIsPass ? '通过' : '不通过');
       }));
     return formData;
   }
