@@ -229,13 +229,32 @@ class HttpApiPollution {
   static const String factorReportFactorList = 'stopApply/getPollutionFactor';
   static const String reportStopAdvanceTime =
       'dictionary/getSysDictionary?dicCode=StopAdvanceTime';
+  static const String routineInspectionList =
+      'ywmh/tInspectionTask/enterStatTasksList';
+  static const String routineInspectionDetail =
+      'ywmh/tInspectionTask/enterTaskCount';
+  static const String routineInspectionUploadList =
+      'ywmh/tInspectionTask/doMonitorTasksDeatil';
+  static const String deviceInspectionUpload = 'ywmh/tInspectionTask/submit';
+  static const String deviceCheckUpload =
+      'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
+  static const String routineInspectionFactorDetail =
+      'ywmh/tInspectionTask/selectMonitorPoint';
+  static const String deviceCorrectUpload =
+      'ywmh/tInspectionTask/submitGasCmesCorrect';
+  static const String deviceCorrectLastValue =
+      'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
+  static const String deviceParamUpload =
+      'ywmh/tInspectionTask/submitWatParameter';
+  static const String deviceParamList =
+      'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
   static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
   static const String notificationList = 'pushMessage/getPushMessageHistory';
   static const String mobileLawList = 'Supervise/getEnforcementsById';
   static const String warnList = 'pushMessage/realWarnList';
   static const String warnDetail = 'pushMessage/getRealWarnById?id=';
-  static const String areaList = 'tree/getAreaList';
+  static const String areaList = 'treeInfo/getAreaList';
 }
 
 class HttpApiOperation {

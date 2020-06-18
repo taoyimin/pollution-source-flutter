@@ -419,6 +419,26 @@ class CompatUtils {
         return HttpApiPollution.factorReportFactorList;
       case HttpApi.reportStopAdvanceTime:
         return HttpApiPollution.reportStopAdvanceTime;
+      case HttpApi.routineInspectionList:
+        return HttpApiPollution.routineInspectionList;
+      case HttpApi.routineInspectionDetail:
+        return HttpApiPollution.routineInspectionDetail;
+      case HttpApi.routineInspectionUploadList:
+        return HttpApiPollution.routineInspectionUploadList;
+      case HttpApi.deviceInspectionUpload:
+        return HttpApiPollution.deviceInspectionUpload;
+      case HttpApi.deviceCheckUpload:
+        return HttpApiPollution.deviceCheckUpload;
+      case HttpApi.routineInspectionFactorDetail:
+        return HttpApiPollution.routineInspectionFactorDetail;
+      case HttpApi.deviceCorrectUpload:
+        return HttpApiPollution.deviceCorrectUpload;
+      case HttpApi.deviceCorrectLastValue:
+        return HttpApiPollution.deviceCorrectLastValue;
+      case HttpApi.deviceParamUpload:
+        return HttpApiPollution.deviceParamUpload;
+      case HttpApi.deviceParamList:
+        return HttpApiPollution.deviceParamList;
       case HttpApi.checkVersion:
         return HttpApiPollution.checkVersion;
       case HttpApi.changePassword:
