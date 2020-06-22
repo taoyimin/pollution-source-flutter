@@ -274,7 +274,7 @@ class _MinePageState extends State<MinePage>
                                       bool success = await Application.router
                                           .navigateTo(context,
                                               '${Routes.changePassword}');
-                                      if (success != null && success) {
+                                      if (success ?? false) {
                                         Scaffold.of(context).showSnackBar(
                                           SnackBar(
                                             content: const Text('密码修改成功！'),

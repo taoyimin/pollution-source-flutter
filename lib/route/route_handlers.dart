@@ -3,61 +3,36 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
-import 'package:pollution_source/module/common/list/list_bloc.dart';
-import 'package:pollution_source/module/common/page/page_bloc.dart';
-import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
-import 'package:pollution_source/module/discharge/detail/discharge_detail_repository.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_page.dart';
-import 'package:pollution_source/module/discharge/list/discharge_list_repository.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
-import 'package:pollution_source/module/enter/detail/enter_detail_repository.dart';
 import 'package:pollution_source/module/enter/list/enter_list_page.dart';
-import 'package:pollution_source/module/enter/list/enter_list_repository.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_page.dart';
 import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_page.dart';
-import 'package:pollution_source/module/inspection/common/water_device_param_list_repository.dart';
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_page.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_page.dart';
-import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_repository.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
 import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_page.dart';
-import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_repository.dart';
 import 'package:pollution_source/module/license/list/license_list_page.dart';
-import 'package:pollution_source/module/license/list/license_list_repository.dart';
 import 'package:pollution_source/module/login/login_page.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_bloc.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
-import 'package:pollution_source/module/monitor/detail/monitor_detail_repository.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
-import 'package:pollution_source/module/monitor/list/monitor_list_repository.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_page.dart';
-import 'package:pollution_source/module/monitor/table/monitor_table_repository.dart';
 import 'package:pollution_source/module/notice/list/notice_list_page.dart';
-import 'package:pollution_source/module/notice/list/notice_list_repository.dart';
 import 'package:pollution_source/module/order/detail/order_detail_page.dart';
 import 'package:pollution_source/module/order/list/order_list_page.dart';
-import 'package:pollution_source/module/order/list/order_list_repository.dart';
 import 'package:pollution_source/module/report/discharge/detail/discharge_report_detail_page.dart';
-import 'package:pollution_source/module/report/discharge/detail/discharge_report_detail_repository.dart';
 import 'package:pollution_source/module/report/discharge/list/discharge_report_list_page.dart';
-import 'package:pollution_source/module/report/discharge/list/discharge_report_list_repository.dart';
 import 'package:pollution_source/module/report/discharge/upload/discharge_report_upload_page.dart';
 import 'package:pollution_source/module/report/factor/detail/factor_report_detail_page.dart';
-import 'package:pollution_source/module/report/factor/detail/factor_report_detail_repository.dart';
 import 'package:pollution_source/module/report/factor/list/factor_report_list_page.dart';
-import 'package:pollution_source/module/report/factor/list/factor_report_list_repository.dart';
 import 'package:pollution_source/module/report/factor/upload/factor_report_upload_page.dart';
 import 'package:pollution_source/module/report/longstop/detail/long_stop_report_detail_page.dart';
-import 'package:pollution_source/module/report/longstop/detail/long_stop_report_detail_repository.dart';
 import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_page.dart';
-import 'package:pollution_source/module/report/longstop/list/long_stop_report_list_repository.dart';
 import 'package:pollution_source/module/report/longstop/upload/long_stop_report_upload_page.dart';
 import 'package:pollution_source/module/warn/detail/warn_detail_page.dart';
-import 'package:pollution_source/module/warn/detail/warn_detail_repository.dart';
 import 'package:pollution_source/module/warn/list/warn_list_page.dart';
-import 'package:pollution_source/module/warn/list/warn_list_repository.dart';
 import 'package:pollution_source/page/admin_home.dart';
 import 'package:pollution_source/page/change_password_page.dart';
 import 'package:pollution_source/page/enter_home.dart';
@@ -98,16 +73,12 @@ var enterListHandler = Handler(
     String enterType = params['enterType']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
     int type = int.parse(params['type']?.first ?? '0');
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: EnterListRepository()),
-      child: EnterListPage(
-        automaticallyImplyLeading: automaticallyImplyLeading,
-        state: state,
-        enterType: enterType,
-        attentionLevel: attentionLevel,
-        type: type,
-      ),
+    return EnterListPage(
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      state: state,
+      enterType: enterType,
+      attentionLevel: attentionLevel,
+      type: type,
     );
   },
 );
@@ -115,11 +86,7 @@ var enterListHandler = Handler(
 var enterDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String enterId = params['id']?.first;
-    return BlocProvider<DetailBloc>(
-      create: (BuildContext context) =>
-          DetailBloc(detailRepository: EnterDetailRepository()),
-      child: EnterDetailPage(enterId: enterId),
-    );
+    return EnterDetailPage(enterId: enterId);
   },
 );
 
@@ -130,16 +97,12 @@ var dischargeListHandler = Handler(
     int type = int.parse(params['type']?.first ?? '0');
     String dischargeType = params['dischargeType']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: DischargeListRepository()),
-      child: DischargeListPage(
-        enterId: enterId,
-        state: state,
-        type: type,
-        dischargeType: dischargeType,
-        attentionLevel: attentionLevel,
-      ),
+    return DischargeListPage(
+      enterId: enterId,
+      state: state,
+      type: type,
+      dischargeType: dischargeType,
+      attentionLevel: attentionLevel,
     );
   },
 );
@@ -147,11 +110,7 @@ var dischargeListHandler = Handler(
 var dischargeDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String dischargeId = params['id']?.first;
-    return BlocProvider<DetailBloc>(
-      create: (BuildContext context) =>
-          DetailBloc(detailRepository: DischargeDetailRepository()),
-      child: DischargeDetailPage(dischargeId: dischargeId),
-    );
+    return DischargeDetailPage(dischargeId: dischargeId);
   },
 );
 
@@ -164,18 +123,14 @@ var monitorListHandler = Handler(
     String outType = params['outType']?.first ?? '';
     String monitorType = params['monitorType']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: MonitorListRepository()),
-      child: MonitorListPage(
-        enterId: enterId,
-        dischargeId: dischargeId,
-        type: type,
-        state: state,
-        outType: outType,
-        monitorType: monitorType,
-        attentionLevel: attentionLevel,
-      ),
+    return MonitorListPage(
+      enterId: enterId,
+      dischargeId: dischargeId,
+      type: type,
+      state: state,
+      outType: outType,
+      monitorType: monitorType,
+      attentionLevel: attentionLevel,
     );
   },
 );
@@ -183,11 +138,7 @@ var monitorListHandler = Handler(
 var monitorDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String monitorId = params['id']?.first;
-    return BlocProvider<MonitorDetailBloc>(
-      create: (BuildContext context) =>
-          MonitorDetailBloc(detailRepository: MonitorDetailRepository()),
-      child: MonitorDetailPage(monitorId: monitorId),
-    );
+    return MonitorDetailPage(monitorId: monitorId);
   },
 );
 
@@ -202,15 +153,11 @@ var monitorHistoryDataHandler = Handler(
     DateTime endTime = TextUtil.isEmpty(params['endTime']?.first)
         ? null
         : DateUtil.getDateTime(params['endTime']?.first);
-    return BlocProvider<DetailBloc>(
-      create: (BuildContext context) =>
-          DetailBloc(detailRepository: MonitorHistoryDataRepository()),
-      child: MonitorTablePage(
-        monitorId: monitorId,
-        dataType: dataType,
-        startTime: startTime,
-        endTime: endTime,
-      ),
+    return MonitorTablePage(
+      monitorId: monitorId,
+      dataType: dataType,
+      startTime: startTime,
+      endTime: endTime,
     );
   },
 );
@@ -223,17 +170,13 @@ var orderListHandler = Handler(
     String alarmLevel = params['alarmLevel']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
     DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: OrderListRepository()),
-      child: OrderListPage(
-        enterId: enterId,
-        monitorId: monitorId,
-        alarmState: alarmState,
-        alarmLevel: alarmLevel,
-        attentionLevel: attentionLevel,
-        startTime: startTime,
-      ),
+    return OrderListPage(
+      enterId: enterId,
+      monitorId: monitorId,
+      alarmState: alarmState,
+      alarmLevel: alarmLevel,
+      attentionLevel: attentionLevel,
+      startTime: startTime,
     );
   },
 );
@@ -253,17 +196,13 @@ var dischargeReportListHandler = Handler(
     String state = params['state']?.first ?? '';
     String valid = params['valid']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: DischargeReportListRepository()),
-      child: DischargeReportListPage(
-        enterId: enterId,
-        dischargeId: dischargeId,
-        monitorId: monitorId,
-        state: state,
-        valid: valid,
-        attentionLevel: attentionLevel,
-      ),
+    return DischargeReportListPage(
+      enterId: enterId,
+      dischargeId: dischargeId,
+      monitorId: monitorId,
+      state: state,
+      valid: valid,
+      attentionLevel: attentionLevel,
     );
   },
 );
@@ -271,11 +210,7 @@ var dischargeReportListHandler = Handler(
 var dischargeReportDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String reportId = params['id']?.first;
-    return BlocProvider<DetailBloc>(
-      create: (BuildContext context) =>
-          DetailBloc(detailRepository: DischargeReportDetailRepository()),
-      child: DischargeReportDetailPage(reportId: reportId),
-    );
+    return DischargeReportDetailPage(reportId: reportId);
   },
 );
 
@@ -287,17 +222,13 @@ var factorReportListHandler = Handler(
     String state = params['state']?.first ?? '';
     String valid = params['valid']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: FactorReportListRepository()),
-      child: FactorReportListPage(
-        enterId: enterId,
-        dischargeId: dischargeId,
-        monitorId: monitorId,
-        state: state,
-        valid: valid,
-        attentionLevel: attentionLevel,
-      ),
+    return FactorReportListPage(
+      enterId: enterId,
+      dischargeId: dischargeId,
+      monitorId: monitorId,
+      state: state,
+      valid: valid,
+      attentionLevel: attentionLevel,
     );
   },
 );
@@ -305,11 +236,7 @@ var factorReportListHandler = Handler(
 var factorReportDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String reportId = params['id']?.first;
-    return BlocProvider<DetailBloc>(
-      create: (BuildContext context) =>
-          DetailBloc(detailRepository: FactorReportDetailRepository()),
-      child: FactorReportDetailPage(reportId: reportId),
-    );
+    return FactorReportDetailPage(reportId: reportId);
   },
 );
 
@@ -319,15 +246,11 @@ var longStopReportListHandler = Handler(
     String state = params['state']?.first ?? '';
     String valid = params['valid']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: LongStopReportListRepository()),
-      child: LongStopReportListPage(
-        enterId: enterId,
-        state: state,
-        valid: valid,
-        attentionLevel: attentionLevel,
-      ),
+    return LongStopReportListPage(
+      enterId: enterId,
+      state: state,
+      valid: valid,
+      attentionLevel: attentionLevel,
     );
   },
 );
@@ -335,11 +258,7 @@ var longStopReportListHandler = Handler(
 var longStopReportDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String reportId = params['id']?.first;
-    return BlocProvider<DetailBloc>(
-      create: (BuildContext context) =>
-          DetailBloc(detailRepository: LongStopReportDetailRepository()),
-      child: LongStopReportDetailPage(reportId: reportId),
-    );
+    return LongStopReportDetailPage(reportId: reportId);
   },
 );
 
@@ -367,13 +286,7 @@ var longStopReportUploadHandler = Handler(
 var licenseListHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String enterId = params['enterId']?.first ?? '';
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: LicenseListRepository()),
-      child: LicenseListPage(
-        enterId: enterId,
-      ),
-    );
+    return LicenseListPage(enterId: enterId);
   },
 );
 
@@ -382,14 +295,10 @@ var routineInspectionListHandler = Handler(
     String enterId = params['enterId']?.first ?? '';
     String monitorId = params['monitorId']?.first ?? '';
     String state = params['state']?.first ?? '';
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: RoutineInspectionListRepository()),
-      child: RoutineInspectionListPage(
-        enterId: enterId,
-        monitorId: monitorId,
-        state: state,
-      ),
+    return RoutineInspectionListPage(
+      enterId: enterId,
+      monitorId: monitorId,
+      state: state,
     );
   },
 );
@@ -399,6 +308,7 @@ var routineInspectionDetailHandler = Handler(
     String id = params['id']?.first;
     String monitorType = params['monitorType']?.first;
     String state = params['state']?.first ?? '';
+    /// 使用全局Bloc，因为子页面中需要使用该Bloc刷新数据
     return BlocProvider<DetailBloc>(
       create: (BuildContext context) =>
           DetailBloc(detailRepository: RoutineInspectionDetailRepository()),
@@ -435,24 +345,7 @@ var airDeviceCorrectUploadHandler = Handler(
 var waterDeviceParamUploadHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String json = params['json']?.first;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<UploadBloc>(
-          create: (BuildContext context) =>
-              UploadBloc(uploadRepository: WaterDeviceParamUploadRepository()),
-        ),
-        BlocProvider<ListBloc>(
-          create: (BuildContext context) =>
-              ListBloc(listRepository: WaterDeviceParamListRepository()),
-        ),
-        BlocProvider<PageBloc>(
-          create: (BuildContext context) => PageBloc(),
-        ),
-      ],
-      child: WaterDeviceParamUploadPage(
-        json: json,
-      ),
-    );
+    return WaterDeviceParamUploadPage(taskJson: json);
   },
 );
 
@@ -470,31 +363,19 @@ var shareProductHandler = Handler(
 
 var noticeListHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: NoticeListRepository()),
-      child: NoticeListPage(),
-    );
+    return NoticeListPage();
   },
 );
 
 var warnListHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    return BlocProvider<ListBloc>(
-      create: (BuildContext context) =>
-          ListBloc(listRepository: WarnListRepository()),
-      child: WarnListPage(),
-    );
+    return WarnListPage();
   },
 );
 
 var warnDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String warnId = params['id']?.first;
-    return BlocProvider<DetailBloc>(
-      create: (BuildContext context) =>
-          DetailBloc(detailRepository: WarnDetailRepository()),
-      child: WarnDetailPage(warnId: warnId),
-    );
+    return WarnDetailPage(warnId: warnId);
   },
 );
