@@ -3,7 +3,6 @@ import 'package:flustars/flustars.dart';
 import 'package:pollution_source/module/login/login_repository.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/compat_utils.dart';
-import 'package:pollution_source/util/log_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 
 import 'http.dart';
@@ -37,7 +36,7 @@ class TokenInterceptor extends Interceptor {
   onResponse(Response response) async {
     if (response != null &&
         response.statusCode == ExceptionHandle.unauthorized) {
-      Log.d("----------- 自动刷新Token ------------");
+      LogUtil.v("----------- 自动刷新Token ------------");
       _tokenDio.options = CompatUtils.getDio().options;
       // 锁住防止请求传入，直到token刷新
       CompatUtils.getDio().lock();
@@ -52,7 +51,7 @@ class TokenInterceptor extends Interceptor {
       )
           .then((tokenResponse) {
         String accessToken = CompatUtils.getResponseToken(tokenResponse);
-        Log.i("----------- NewToken: $accessToken ------------");
+        LogUtil.v("----------- NewToken: $accessToken ------------");
         //储存token
         SpUtil.putString(Constant.spToken, '$accessToken');
       }).whenComplete(() {
@@ -61,7 +60,7 @@ class TokenInterceptor extends Interceptor {
       // 重新请求失败接口
       RequestOptions options = response.request;
       CompatUtils.setToken(options);
-      Log.i("----------- 重新请求接口 ------------");
+      LogUtil.v("----------- 重新请求接口 ------------");
 //      if (options.data is FormData) {
 //        // 由于MultipartFile是基于Stream的，Stream只能读取一次，所以应该重新创建
 //        FormData formData = FormData();
@@ -170,15 +169,15 @@ class LoggingInterceptor extends Interceptor {
   @override
   onRequest(RequestOptions options) {
     startTime = DateTime.now();
-    Log.d("----------Start----------");
+    LogUtil.v("----------Start----------");
     if (options.queryParameters.isEmpty) {
-      Log.i("RequestUrl: " + options.baseUrl + options.path);
+      LogUtil.v("RequestUrl: " + options.baseUrl + options.path);
       // 如果开启Debug模式则打印接口地址
       if (SpUtil.getBool(Constant.spDebug, defValue: false)) {
         Toast.show(options.baseUrl + options.path, duration: 300000);
       }
     } else {
-      Log.i("RequestUrl: " +
+      LogUtil.v("RequestUrl: " +
           options.baseUrl +
           options.path +
           "?" +
@@ -193,13 +192,13 @@ class LoggingInterceptor extends Interceptor {
             duration: 300000);
       }
     }
-    Log.d("RequestMethod: " + options.method);
-    Log.d("RequestHeaders:" + options.headers.toString());
-    Log.d("RequestContentType: ${options.contentType}");
+    LogUtil.v("RequestMethod: " + options.method);
+    LogUtil.v("RequestHeaders:" + options.headers.toString());
+    LogUtil.v("RequestContentType: ${options.contentType}");
     if (options.data is FormData)
-      Log.d("RequestData: ${options.data.fields}");
+      LogUtil.v("RequestData: ${options.data.fields}");
     else
-      Log.d("RequestData: ${options.data.toString()}");
+      LogUtil.v("RequestData: ${options.data.toString()}");
     return super.onRequest(options);
   }
 
@@ -208,20 +207,20 @@ class LoggingInterceptor extends Interceptor {
     endTime = DateTime.now();
     int duration = endTime.difference(startTime).inMilliseconds;
     if (response.statusCode == ExceptionHandle.success) {
-      Log.d("ResponseCode: ${response.statusCode}");
+      LogUtil.v("ResponseCode: ${response.statusCode}");
     } else {
-      Log.e("ResponseCode: ${response.statusCode}");
+      LogUtil.v("ResponseCode: ${response.statusCode}");
     }
     // 输出结果
-    Log.json(response.data.toString());
-    Log.d("----------End: $duration 毫秒----------");
+    LogUtil.v(response.data.toString());
+    LogUtil.v("----------End: $duration 毫秒----------");
     return super.onResponse(response);
   }
 
   @override
   onError(DioError err) {
-    Log.d(err.toString());
-    Log.d("----------Error-----------");
+    LogUtil.v(err.toString());
+    LogUtil.v("----------Error-----------");
     return super.onError(err);
   }
 }
