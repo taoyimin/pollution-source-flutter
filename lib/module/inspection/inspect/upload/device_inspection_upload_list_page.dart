@@ -398,34 +398,40 @@ class _DeviceInspectionUploadListPageState
               imagePath: 'assets/images/icon_alarm_manage.png',
             ),
             Gaps.vGap16,
-            LocationWidget(
-              locationCallback: (BaiduLocation baiduLocation) {
-                setState(() {
-                  _deviceInspectUpload.baiduLocation = baiduLocation;
-                });
-              },
-            ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Gaps.hGap16,
-                IconCheckButton(
-                  text: '    维护情况',
-                  imagePath: 'assets/images/icon_fixed.png',
-                  imageHeight: 20,
-                  imageWidth: 20,
-                  color: Colors.transparent,
-                  flex: 4,
-                  style: const TextStyle(
-                    color: Colours.primary_text,
-                    fontSize: 14,
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-                  checked: true,
-                  onTap: () {},
+                Image.asset(
+                  'assets/images/icon_location.png',
+                  height: 20,
+                  width: 20,
                 ),
+                Gaps.hGap10,
+                Expanded(
+                  flex: 8,
+                  child: LocationWidget(
+                    locationCallback: (BaiduLocation baiduLocation) {
+                      setState(() {
+                        _deviceInspectUpload.baiduLocation = baiduLocation;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
                 Gaps.hGap16,
+                Image.asset(
+                  'assets/images/icon_fixed.png',
+                  height: 20,
+                  width: 20,
+                ),
+                Gaps.hGap10,
+                const Text('维护情况'),
+                Gaps.hGap20,
                 IconCheckButton(
                   text: '    正常',
                   imagePath: 'assets/images/icon_normal.png',
