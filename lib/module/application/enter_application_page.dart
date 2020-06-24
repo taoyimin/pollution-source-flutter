@@ -142,6 +142,48 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                           ],
                         ),
                       ),
+                      // 运维管理上报
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ImageTitleWidget(
+                                title: '运维管理上报',
+                                imagePath:
+                                'assets/images/icon_alarm_manage.png'),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '常规巡检',
+                                    content: '常规巡检上报',
+                                    imagePath:
+                                    'assets/images/application_icon_discharge_report.png',
+                                    router: '${Routes.routineInspectionList}',
+                                  ),
+                                ),
+                                Gaps.hGap20,
+                                Expanded(child: Gaps.empty),
+//                                InkWellButton9(
+//                                  meta: Meta(
+//                                      title: '易耗品更换',
+//                                      content: '易耗品更换上报',
+//                                      imagePath:
+//                                      'assets/images/application_icon_factor_report.png'),
+//                                  onTap: () {
+//                                    Application.router.navigateTo(context,
+//                                        '${Routes.factorReportUpload}');
+//                                  },
+//                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                       //异常申报查询
                       Padding(
                         padding: const EdgeInsets.symmetric(
