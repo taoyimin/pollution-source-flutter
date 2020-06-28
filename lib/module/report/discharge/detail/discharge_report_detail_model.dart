@@ -33,7 +33,7 @@ class DischargeReportDetail extends Equatable {
   final String endTimeStr; // 结束时间
   @JsonKey(defaultValue: '')
   final String stopTypeStr; // 异常类型
-  @JsonKey(name: 'hasShutdown', defaultValue: '')
+  @JsonKey(name: 'isShutdown', defaultValue: '')
   final String isShutdownStr; // 是否关停设备
   @JsonKey(defaultValue: '')
   final String stopReason; // 停产原因

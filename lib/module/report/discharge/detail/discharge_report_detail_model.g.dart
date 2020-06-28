@@ -23,7 +23,7 @@ DischargeReportDetail _$DischargeReportDetailFromJson(
     startTimeStr: json['startTimeStr'] as String ?? '',
     endTimeStr: json['endTimeStr'] as String ?? '',
     stopTypeStr: json['stopTypeStr'] as String ?? '',
-    isShutdownStr: json['hasShutdown'] as String ?? '',
+    isShutdownStr: json['isShutdown'] as String ?? '',
     stopReason: json['stopReason'] as String ?? '',
     attachments: (json['attachmentList'] as List)
             ?.map((e) => e == null
@@ -51,7 +51,7 @@ Map<String, dynamic> _$DischargeReportDetailToJson(
       'startTimeStr': instance.startTimeStr,
       'endTimeStr': instance.endTimeStr,
       'stopTypeStr': instance.stopTypeStr,
-      'hasShutdown': instance.isShutdownStr,
+      'isShutdown': instance.isShutdownStr,
       'stopReason': instance.stopReason,
       'attachmentList': instance.attachments,
     };
