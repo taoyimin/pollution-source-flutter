@@ -184,13 +184,13 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                     IconBaseInfoWidget(
                       content: '关注程度：${enterDetail.attentionLevelStr}',
                       icon: Icons.star,
-                      flex: 4,
+                      flex: 3,
                     ),
                     Gaps.hGap10,
                     IconBaseInfoWidget(
                       content: '所属区域：${enterDetail.districtName}',
                       icon: Icons.location_on,
-                      flex: 5,
+                      flex: 4,
                     ),
                   ],
                 ),
