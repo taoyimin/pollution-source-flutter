@@ -170,18 +170,14 @@ class CompatUtils {
 
   /// 根据不同的用户类型解析json中的data（有的数据最外层包了一层code，message，data）
   static dynamic getResponseData(Response response) {
+    // 如果是List则直接返回
+    if (response.data is List<dynamic>)
+      return response.data;
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
-        // 环保和企业用户
-        return response.data[Constant.responseDataKey];
       case 2:
-        // 如果是List则直接返回
-        if (response.data is List<dynamic>)
-          return response.data;
-        else
-          return response.data[Constant.responseDataKey];
-        break;
+        return response.data[Constant.responseDataKey];
       default:
         throw Exception(
             '获取数据失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
