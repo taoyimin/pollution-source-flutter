@@ -48,5 +48,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!--百度地图key-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="E8mBomgf7wqO8TnjGKHoYXExHQ2iHVqZ" />
     </application>
 </manifest>
