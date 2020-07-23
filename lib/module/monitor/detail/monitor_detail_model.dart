@@ -117,7 +117,7 @@ MonitorDetail _$MonitorDetailFromJson(Map<String, dynamic> json) {
         });
         chartData['value'] = realMonitorData['monitorValue'] ?? '无数据';
         chartData['time'] = realMonitorData['monitorTime'] as int;
-        chartData['alarmFlag'] = realMonitorData['alarm_flag'] as String;
+        chartData['alarmFlag'] = realMonitorData['alarmFlag'] as String;
         return ChartData.fromJson(chartData as Map<String, dynamic>);
       })?.toList());
 }
