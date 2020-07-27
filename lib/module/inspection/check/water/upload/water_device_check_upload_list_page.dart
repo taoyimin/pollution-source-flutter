@@ -184,7 +184,7 @@ class _WaterDeviceCheckUploadListPageState
                             Padding(
                               padding: const EdgeInsets.only(right: 16),
                               child: Text(
-                                '${list[index].deviceName}',
+                                '${list[index].deviceName}-${list[index].factorName}校验',
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
