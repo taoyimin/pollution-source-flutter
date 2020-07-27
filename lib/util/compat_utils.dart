@@ -423,12 +423,16 @@ class CompatUtils {
         return HttpApiPollution.routineInspectionUploadList;
       case HttpApi.deviceInspectionUpload:
         return HttpApiPollution.deviceInspectionUpload;
-      case HttpApi.deviceCheckUpload:
-        return HttpApiPollution.deviceCheckUpload;
+      case HttpApi.airDeviceCheckUpload:
+        return HttpApiPollution.airDeviceCheckUpload;
+      case HttpApi.waterDeviceCheckUpload:
+        return HttpApiPollution.waterDeviceCheckUpload;
       case HttpApi.routineInspectionFactorDetail:
         return HttpApiPollution.routineInspectionFactorDetail;
-      case HttpApi.deviceCorrectUpload:
-        return HttpApiPollution.deviceCorrectUpload;
+      case HttpApi.airDeviceCorrectUpload:
+        return HttpApiPollution.airDeviceCorrectUpload;
+      case HttpApi.waterDeviceCorrectUpload:
+        return HttpApiPollution.waterDeviceCorrectUpload;
       case HttpApi.deviceCorrectLastValue:
         return HttpApiPollution.deviceCorrectLastValue;
       case HttpApi.deviceParamUpload:
@@ -535,12 +539,16 @@ class CompatUtils {
         return HttpApiOperation.routineInspectionUploadList;
       case HttpApi.deviceInspectionUpload:
         return HttpApiOperation.deviceInspectionUpload;
-      case HttpApi.deviceCheckUpload:
-        return HttpApiOperation.deviceCheckUpload;
+      case HttpApi.airDeviceCheckUpload:
+        return HttpApiOperation.airDeviceCheckUpload;
+      case HttpApi.waterDeviceCheckUpload:
+        return HttpApiOperation.waterDeviceCheckUpload;
       case HttpApi.routineInspectionFactorDetail:
         return HttpApiOperation.routineInspectionFactorDetail;
-      case HttpApi.deviceCorrectUpload:
-        return HttpApiOperation.deviceCorrectUpload;
+      case HttpApi.airDeviceCorrectUpload:
+        return HttpApiOperation.airDeviceCorrectUpload;
+      case HttpApi.waterDeviceCorrectUpload:
+        return HttpApiPollution.waterDeviceCorrectUpload;
       case HttpApi.deviceCorrectLastValue:
         return HttpApiOperation.deviceCorrectLastValue;
       case HttpApi.deviceParamUpload:
