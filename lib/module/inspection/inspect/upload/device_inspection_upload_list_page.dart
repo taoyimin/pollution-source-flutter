@@ -386,136 +386,139 @@ class _DeviceInspectionUploadListPageState
 
   Widget _buildBottomSheet() {
     return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-      bottomSheetStateSetter = setState;
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ImageTitleWidget(
-              title: '巡检上报(已选中${_deviceInspectUpload.selectedList.length}项)',
-              imagePath: 'assets/images/icon_alarm_manage.png',
-            ),
-            Gaps.vGap16,
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      builder: (BuildContext context, StateSetter setState) {
+        bottomSheetStateSetter = setState;
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Gaps.hGap16,
-                Image.asset(
-                  'assets/images/icon_location.png',
-                  height: 20,
-                  width: 20,
+                ImageTitleWidget(
+                  title: '巡检上报(已选中${_deviceInspectUpload.selectedList.length}项)',
+                  imagePath: 'assets/images/icon_alarm_manage.png',
                 ),
-                Gaps.hGap10,
-                Expanded(
-                  flex: 8,
-                  child: LocationWidget(
-                    locationCallback: (BaiduLocation baiduLocation) {
-                      setState(() {
-                        _deviceInspectUpload.baiduLocation = baiduLocation;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Gaps.hGap16,
-                Image.asset(
-                  'assets/images/icon_fixed.png',
-                  height: 20,
-                  width: 20,
-                ),
-                Gaps.hGap10,
-                const Text('维护情况'),
-                Gaps.hGap20,
-                IconCheckButton(
-                  text: '    正常',
-                  imagePath: 'assets/images/icon_normal.png',
-                  imageHeight: 28,
-                  imageWidth: 28,
-                  color: Colors.lightBlueAccent,
-                  flex: 3,
-                  checked: _deviceInspectUpload.isNormal,
-                  onTap: () {
-                    setState(() {
-                      _deviceInspectUpload.isNormal = true;
-                    });
-                  },
-                ),
-                Gaps.hGap6,
-                IconCheckButton(
-                  text: '    不正常',
-                  imagePath: 'assets/images/icon_abnormal.png',
-                  imageHeight: 28,
-                  imageWidth: 28,
-                  color: Colors.orangeAccent,
-                  flex: 3,
-                  checked: !_deviceInspectUpload.isNormal,
-                  onTap: () {
-                    setState(() {
-                      _deviceInspectUpload.isNormal = false;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Gaps.vGap10,
-            DecoratedBox(
-              decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, top: 12),
-                    child: Image.asset(
-                      'assets/images/icon_alarm_manage.png',
+                Gaps.vGap16,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Gaps.hGap16,
+                    Image.asset(
+                      'assets/images/icon_location.png',
                       height: 20,
                       width: 20,
                     ),
-                  ),
-                  Flexible(
-                    child: TextField(
-                      maxLines: 3,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                      controller: _deviceInspectUpload.remark,
-                      decoration: const InputDecoration(
-                        fillColor: Color(0xFFDFDFDF),
-                        filled: true,
-                        hintText: "请输入备注",
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: Colours.secondary_text,
-                        ),
-                        border: InputBorder.none,
+                    Gaps.hGap10,
+                    Expanded(
+                      flex: 8,
+                      child: LocationWidget(
+                        locationCallback: (BaiduLocation baiduLocation) {
+                          setState(() {
+                            _deviceInspectUpload.baiduLocation = baiduLocation;
+                          });
+                        },
                       ),
                     ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Gaps.hGap16,
+                    Image.asset(
+                      'assets/images/icon_fixed.png',
+                      height: 20,
+                      width: 20,
+                    ),
+                    Gaps.hGap10,
+                    const Text('维护情况'),
+                    Gaps.hGap20,
+                    IconCheckButton(
+                      text: '    正常',
+                      imagePath: 'assets/images/icon_normal.png',
+                      imageHeight: 28,
+                      imageWidth: 28,
+                      color: Colors.lightBlueAccent,
+                      flex: 3,
+                      checked: _deviceInspectUpload.isNormal,
+                      onTap: () {
+                        setState(() {
+                          _deviceInspectUpload.isNormal = true;
+                        });
+                      },
+                    ),
+                    Gaps.hGap6,
+                    IconCheckButton(
+                      text: '    不正常',
+                      imagePath: 'assets/images/icon_abnormal.png',
+                      imageHeight: 28,
+                      imageWidth: 28,
+                      color: Colors.orangeAccent,
+                      flex: 3,
+                      checked: !_deviceInspectUpload.isNormal,
+                      onTap: () {
+                        setState(() {
+                          _deviceInspectUpload.isNormal = false;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Gaps.vGap10,
+                DecoratedBox(
+                  decoration: const BoxDecoration(color: Color(0xFFDFDFDF)),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, top: 12),
+                        child: Image.asset(
+                          'assets/images/icon_alarm_manage.png',
+                          height: 20,
+                          width: 20,
+                        ),
+                      ),
+                      Flexible(
+                        child: TextField(
+                          maxLines: 3,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                          controller: _deviceInspectUpload.remark,
+                          decoration: const InputDecoration(
+                            fillColor: Color(0xFFDFDFDF),
+                            filled: true,
+                            hintText: "请输入备注",
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colours.secondary_text,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Gaps.vGap10,
-            Row(
-              children: <Widget>[
-                ClipButton(
-                  text: '提交',
-                  icon: Icons.file_upload,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    // 发送上传事件
-                    _uploadBloc.add(Upload(data: _deviceInspectUpload));
-                  },
+                ),
+                Gaps.vGap10,
+                Row(
+                  children: <Widget>[
+                    ClipButton(
+                      text: '提交',
+                      icon: Icons.file_upload,
+                      color: Colors.lightBlue,
+                      onTap: () {
+                        // 发送上传事件
+                        _uploadBloc.add(Upload(data: _deviceInspectUpload));
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      );
-    });
+          ),
+        );
+      },
+    );
   }
 }
