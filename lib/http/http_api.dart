@@ -132,14 +132,20 @@ enum HttpApi {
   /// 辅助/监测设备巡检上报
   deviceInspectionUpload,
 
-  /// 废水/废气监测设备校验上报
-  deviceCheckUpload,
+  /// 废气监测设备校验上报
+  airDeviceCheckUpload,
+
+  /// 废水监测设备校验上报
+  waterDeviceCheckUpload,
 
   /// 巡检上报查询设备的某个监测因子
   routineInspectionFactorDetail,
 
   /// 废气监测设备校准上报
-  deviceCorrectUpload,
+  airDeviceCorrectUpload,
+
+  /// 废水监测设备校准
+  waterDeviceCorrectUpload,
 
   /// 废气监测设备校准获取上次校准后测量值
   deviceCorrectLastValue,
@@ -236,12 +242,16 @@ class HttpApiPollution {
   static const String routineInspectionUploadList =
       'ywmh/tInspectionTask/doMonitorTasksDeatil';
   static const String deviceInspectionUpload = 'ywmh/tInspectionTask/submit';
-  static const String deviceCheckUpload =
+  static const String airDeviceCheckUpload =
       'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
+  static const String waterDeviceCheckUpload =
+      'ywmh/tInspectionTask/submitWatCorrectInfo';
   static const String routineInspectionFactorDetail =
       'ywmh/tInspectionTask/selectMonitorPoint';
-  static const String deviceCorrectUpload =
+  static const String airDeviceCorrectUpload =
       'ywmh/tInspectionTask/submitGasCmesCorrect';
+  static const String waterDeviceCorrectUpload =
+      'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
   static const String deviceCorrectLastValue =
       'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
   static const String deviceParamUpload =
@@ -322,12 +332,16 @@ class HttpApiOperation {
   static const String routineInspectionUploadList =
       'ywmh/tInspectionTask/doMonitorTasksForJson';
   static const String deviceInspectionUpload = 'ywmh/tInspectionTask/submit';
-  static const String deviceCheckUpload =
+  static const String airDeviceCheckUpload =
       'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
+  static const String waterDeviceCheckUpload =
+      'ywmh/tInspectionTask/submitWatCorrectInfo';
   static const String routineInspectionFactorDetail =
       'ywmh/tInspectionTask/selectMonitorPoint';
-  static const String deviceCorrectUpload =
+  static const String airDeviceCorrectUpload =
       'ywmh/tInspectionTask/submitGasCmesCorrect';
+  static const String waterDeviceCorrectUpload =
+      'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
   static const String deviceCorrectLastValue =
       'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
   static const String deviceParamUpload =
