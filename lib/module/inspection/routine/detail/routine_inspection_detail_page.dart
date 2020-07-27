@@ -9,6 +9,7 @@ import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_list_page.dart';
+import 'package:pollution_source/module/inspection/correct/water/upload/water_device_correct_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_model.dart';
@@ -337,11 +338,23 @@ class _RoutineInspectionDetailPageState
                     child: Text('未知的监控点类型，monitorType=${widget.monitorType}'),
                   );
                 case '2':
-                  // 废气监测设备校准上报列表
-                  return AirDeviceCorrectUploadListPage(
-                    monitorId: widget.monitorId,
-                    itemInspectType: routineInspectionDetail.itemInspectType,
-                    state: widget.state,
+                  if (widget.monitorType == 'outletType2') {
+                    // 废水监测设备校准上报列表
+                    return WaterDeviceCorrectUploadListPage(
+                      monitorId: widget.monitorId,
+                      itemInspectType: routineInspectionDetail.itemInspectType,
+                      state: widget.state,
+                    );
+                  } else if (widget.monitorType == 'outletType3') {
+                    // 废气监测设备校准上报列表
+                    return AirDeviceCorrectUploadListPage(
+                      monitorId: widget.monitorId,
+                      itemInspectType: routineInspectionDetail.itemInspectType,
+                      state: widget.state,
+                    );
+                  }
+                  return Center(
+                    child: Text('未知的监控点类型，monitorType=${widget.monitorType}'),
                   );
                 case '4':
                   // 废水监测设备参数巡检上报列表
