@@ -48,7 +48,7 @@ class AirDeviceCorrectUploadRepository
 
   @override
   HttpApi createApi() {
-    return HttpApi.deviceCorrectUpload;
+    return HttpApi.airDeviceCorrectUpload;
   }
 
   @override

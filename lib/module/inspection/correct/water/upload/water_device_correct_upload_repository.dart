@@ -40,7 +40,7 @@ class WaterDeviceCorrectUploadRepository
 
   @override
   HttpApi createApi() {
-    return HttpApi.deviceCheckUpload;
+    return HttpApi.waterDeviceCorrectUpload;
   }
 
   @override
