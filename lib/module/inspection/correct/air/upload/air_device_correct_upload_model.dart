@@ -1,6 +1,5 @@
 import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
-import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_model.dart';
 
 /// 废气监测设备校准上报
 class AirDeviceCorrectUpload {
@@ -10,8 +9,20 @@ class AirDeviceCorrectUpload {
   /// 位置信息
   BaiduLocation baiduLocation;
 
-  /// 校准因子
-  RoutineInspectionUploadFactor factor;
+  /// 校准因子名称
+  String factorName;
+
+  /// 校准因子代码
+  String factorCode;
+
+  /// 校准因子单位
+  String unit;
+
+  /// 分析仪量程下限
+  String measureLower;
+
+  /// 分析仪量程上限
+  String measureUpper;
 
   /// 校准开始时间
   DateTime correctStartTime;

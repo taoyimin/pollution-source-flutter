@@ -12,13 +12,11 @@ class AirDeviceCorrectUploadRepository
   checkData(AirDeviceCorrectUpload data) {
     if (data.baiduLocation == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
-    if (data.factor == null)
-      throw DioError(error: InvalidParamException('请先加载校验因子'));
-    if (TextUtil.isEmpty(data.factor.unit))
+    if (TextUtil.isEmpty(data.unit))
       throw DioError(error: InvalidParamException('请先输入计量单位'));
-    if (TextUtil.isEmpty(data.factor.measureLower.toString()))
+    if (TextUtil.isEmpty(data.measureLower))
       throw DioError(error: InvalidParamException('请先输入分析仪量程下限'));
-    if (TextUtil.isEmpty(data.factor.measureUpper.toString()))
+    if (TextUtil.isEmpty(data.measureUpper))
       throw DioError(error: InvalidParamException('请先输入分析仪量程上限'));
     if (data.correctStartTime == null)
       throw DioError(error: InvalidParamException('请先选择校准开始时间'));
@@ -59,19 +57,11 @@ class AirDeviceCorrectUploadRepository
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
       ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
-      ..addAll([MapEntry('factorId', data.factor.factorId.toString())])
-      ..addAll([MapEntry('unit', data.factor.unit)])
-      ..addAll([MapEntry('measureLower', data.factor.measureLower.toString())])
-      ..addAll([MapEntry('measureUpper', data.factor.measureUpper.toString())])
-      // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
-      ..addAll([
-        MapEntry(
-            'factorCode',
-            TextUtil.isEmpty(data.factor.factorCode)
-                ? ' '
-                : data.factor.factorCode)
-      ])
-      ..addAll([MapEntry('factorName', data.factor.factorName)])
+      ..addAll([MapEntry('factorCode', data.factorCode)])
+      ..addAll([MapEntry('factorName', data.factorName)])
+      ..addAll([MapEntry('unit', data.unit)])
+      ..addAll([MapEntry('measureLower', data.measureLower)])
+      ..addAll([MapEntry('measureUpper', data.measureUpper)])
       ..addAll([
         MapEntry('correctStartTime', DateUtil.formatDate(data.correctStartTime))
       ])

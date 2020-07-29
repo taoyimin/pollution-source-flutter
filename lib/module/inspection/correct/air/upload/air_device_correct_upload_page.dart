@@ -14,8 +14,6 @@ import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
 import 'package:pollution_source/module/inspection/common/air_device_last_value_repository.dart';
-import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_model.dart';
-import 'package:pollution_source/module/inspection/common/routine_inspection_upload_factor_repository.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_model.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -49,11 +47,6 @@ class _AirDeviceCorrectUploadPageState
     uploadRepository: AirDeviceCorrectUploadRepository(),
   );
 
-  /// 加载因子信息Bloc
-  final DetailBloc _factorBloc = DetailBloc(
-    detailRepository: RoutineInspectionUploadFactorRepository(),
-  );
-
   /// 加载上次校准后测试值Bloc
   final DetailBloc _lastValueBloc = DetailBloc(
     detailRepository: AirDeviceLastValueRepository(),
@@ -69,8 +62,11 @@ class _AirDeviceCorrectUploadPageState
   void initState() {
     super.initState();
     _airDeviceCorrectUpload.inspectionTaskId = task.inspectionTaskId;
-    // 加载该设备的监测因子
-    _loadFactor();
+    _airDeviceCorrectUpload.factorName = task.factorName;
+    _airDeviceCorrectUpload.factorCode = task.factorCode;
+    _airDeviceCorrectUpload.unit = task.factorUnit;
+    _airDeviceCorrectUpload.measureUpper = task.measureUpper;
+    _airDeviceCorrectUpload.measureLower = task.measureLower;
     // 加载上次校准后测试值
     _lastValueBloc.add(DetailLoad(detailId: task.inspectionTaskId));
   }
@@ -89,22 +85,9 @@ class _AirDeviceCorrectUploadPageState
     _airDeviceCorrectUpload.rangePercent.dispose();
     _airDeviceCorrectUpload.rangeCorrectVal.dispose();
     // 取消正在进行的请求
-    if (_factorBloc?.state is DetailLoading)
-      (_factorBloc?.state as DetailLoading).cancelToken.cancel();
-    // 取消正在进行的请求
     if (_lastValueBloc?.state is DetailLoading)
       (_lastValueBloc?.state as DetailLoading).cancelToken.cancel();
     super.dispose();
-  }
-
-  _loadFactor() {
-    _factorBloc.add(DetailLoad(
-      params: RoutineInspectionUploadFactorRepository.createParams(
-        factorCode: task.factorCode,
-        deviceId: task.deviceId,
-        monitorId: task.monitorId,
-      ),
-    ));
   }
 
   @override
@@ -163,24 +146,20 @@ class _AirDeviceCorrectUploadPageState
     );
   }
 
-  Widget _buildPageLoadedDetail() {
-    final GestureTapCallback onSuccessTap = () {
-      showDialog(
-        context: context, //BuildContext对象
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return RoutineInspectionUploadFactorDialog(
-            factor: _airDeviceCorrectUpload.factor,
-            changeCallBack: (RoutineInspectionUploadFactor factor) {
-              setState(() {
-                _airDeviceCorrectUpload.factor = factor;
-              });
-            },
-          );
-        },
-      );
-    };
+  showFactorDialog(){
+    showDialog(
+      context: context, //BuildContext对象
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return RoutineInspectionUploadFactorDialog2(
+          airDeviceCorrectUpload: _airDeviceCorrectUpload,
+          setState: setState,
+        );
+      },
+    );
+  }
 
+  Widget _buildPageLoadedDetail() {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -194,38 +173,23 @@ class _AirDeviceCorrectUploadPageState
               },
             ),
             Gaps.hLine,
-            DetailRowWidget<RoutineInspectionUploadFactor>(
+            InfoRowWidget(
               title: '校准因子',
-              content: _airDeviceCorrectUpload?.factor?.factorName,
-              detailBloc: _factorBloc,
-              onLoaded: (RoutineInspectionUploadFactor factor) {
-                setState(() {
-                  _airDeviceCorrectUpload.factor = factor;
-                });
-              },
-              onSuccessTap: onSuccessTap,
-              onErrorTap: _loadFactor,
+              content: _airDeviceCorrectUpload.factorName,
             ),
             Gaps.hLine,
-            DetailRowWidget<RoutineInspectionUploadFactor>(
+            InfoRowWidget(
               title: '计量单位',
-              content: _airDeviceCorrectUpload?.factor?.unit,
-              detailBloc: _factorBloc,
-              onLoaded: (RoutineInspectionUploadFactor factor) {},
-              successFontColor: Colours.primary_color,
-              onSuccessTap: onSuccessTap,
-              onErrorTap: _loadFactor,
+              content: _airDeviceCorrectUpload.unit,
+              color: Colours.primary_color,
+              onTap: showFactorDialog,
             ),
             Gaps.hLine,
-            DetailRowWidget<RoutineInspectionUploadFactor>(
+            InfoRowWidget(
               title: '分析仪量程',
-              content:
-                  '${_airDeviceCorrectUpload?.factor?.measureLower} — ${_airDeviceCorrectUpload?.factor?.measureUpper}',
-              detailBloc: _factorBloc,
-              onLoaded: (RoutineInspectionUploadFactor factor) {},
-              successFontColor: Colours.primary_color,
-              onSuccessTap: onSuccessTap,
-              onErrorTap: _loadFactor,
+              content: '${_airDeviceCorrectUpload.measureLower} — ${_airDeviceCorrectUpload.measureUpper}',
+              color: Colours.primary_color,
+              onTap: showFactorDialog,
             ),
             Gaps.hLine,
             InfoRowWidget(
@@ -412,23 +376,20 @@ class _AirDeviceCorrectUploadPageState
   }
 }
 
-/// [RoutineInspectionUploadFactorDialog]点击修改按钮的回调函数
-typedef ChangeCallBack = void Function(RoutineInspectionUploadFactor value);
+class RoutineInspectionUploadFactorDialog2 extends StatefulWidget {
+  final AirDeviceCorrectUpload airDeviceCorrectUpload;
+  final StateSetter setState;
 
-class RoutineInspectionUploadFactorDialog extends StatefulWidget {
-  final RoutineInspectionUploadFactor factor;
-  final ChangeCallBack changeCallBack;
-
-  RoutineInspectionUploadFactorDialog(
-      {@required this.factor, this.changeCallBack});
+  RoutineInspectionUploadFactorDialog2(
+      {@required this.airDeviceCorrectUpload, this.setState});
 
   @override
-  _RoutineInspectionUploadFactorDialogState createState() =>
-      _RoutineInspectionUploadFactorDialogState();
+  _RoutineInspectionUploadFactorDialogState2 createState() =>
+      _RoutineInspectionUploadFactorDialogState2();
 }
 
-class _RoutineInspectionUploadFactorDialogState
-    extends State<RoutineInspectionUploadFactorDialog> {
+class _RoutineInspectionUploadFactorDialogState2
+    extends State<RoutineInspectionUploadFactorDialog2> {
   TextEditingController unitController;
   TextEditingController measureUpperController;
   TextEditingController measureLowerController;
@@ -437,13 +398,13 @@ class _RoutineInspectionUploadFactorDialogState
   void initState() {
     super.initState();
     unitController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.factor.unit.toString()),
+      TextEditingValue(text:widget.airDeviceCorrectUpload.unit.toString()),
     );
     measureUpperController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.factor.measureUpper.toString()),
+      TextEditingValue(text: widget.airDeviceCorrectUpload.measureUpper.toString()),
     );
     measureLowerController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.factor.measureLower.toString()),
+      TextEditingValue(text: widget.airDeviceCorrectUpload.measureLower.toString()),
     );
   }
 
@@ -593,14 +554,12 @@ class _RoutineInspectionUploadFactorDialogState
                       flex: 1,
                       child: InkWellButton(
                         onTap: () {
-                          if (widget.changeCallBack != null) {
-                            (widget.changeCallBack)(widget.factor.copyWith(
-                              unit: unitController.text,
-                              measureUpper: measureUpperController.text,
-                              measureLower: measureLowerController.text,
-                            ));
-                            Navigator.pop(context);
-                          }
+                          widget.setState(() {
+                            widget.airDeviceCorrectUpload.unit = unitController.text;
+                            widget.airDeviceCorrectUpload.measureUpper = measureUpperController.text;
+                            widget.airDeviceCorrectUpload.measureLower = measureLowerController.text;
+                          });
+                          Navigator.pop(context);
                         },
                         children: <Widget>[
                           Container(
