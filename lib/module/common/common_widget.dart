@@ -2287,36 +2287,42 @@ class DetailRowWidget<T> extends StatelessWidget {
 class InfoRowWidget extends StatelessWidget {
   final String title;
   final String content;
+  final Color color;
+  final GestureTapCallback onTap;
 
   InfoRowWidget({
     @required this.title,
     @required this.content,
+    this.color = Colours.primary_text,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 46),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          children: <Widget>[
-            Text(
-              '$title',
-              style: TextStyle(fontSize: 15),
-            ),
-            Gaps.hGap20,
-            Expanded(
-              flex: 1,
-              child: Text(
-                '$content',
-                textAlign: TextAlign.right,
+      child: InkWellButton(onTap: onTap ?? () {}, children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            children: <Widget>[
+              Text(
+                '$title',
                 style: TextStyle(fontSize: 15),
               ),
-            ),
-          ],
+              Gaps.hGap20,
+              Expanded(
+                flex: 1,
+                child: Text(
+                  '$content',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(fontSize: 15, color: color),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }
