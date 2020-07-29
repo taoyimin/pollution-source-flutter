@@ -38,10 +38,16 @@ class RoutineInspectionUploadList extends Equatable {
   final String deviceId;
   @JsonKey(defaultValue: '')
   final String factorName;
+  @JsonKey(defaultValue: '')
+  final String factorUnit;
   @JsonKey(name: 'measure_principle')
   final String measurePrinciple;
   @JsonKey(name: 'analysis_method')
   final String analysisMethod;
+  @JsonKey(defaultValue: '')
+  final String measureUpper;
+  @JsonKey(defaultValue: '')
+  final String measureLower;
 
   const RoutineInspectionUploadList({
     this.inspectionTaskId,
@@ -60,8 +66,11 @@ class RoutineInspectionUploadList extends Equatable {
     this.monitorId,
     this.deviceId,
     this.factorName,
+    this.factorUnit,
     this.measurePrinciple,
     this.analysisMethod,
+    this.measureUpper,
+    this.measureLower,
   });
 
   @override
@@ -82,8 +91,11 @@ class RoutineInspectionUploadList extends Equatable {
         monitorId,
         deviceId,
         factorName,
+        factorUnit,
         measurePrinciple,
         analysisMethod,
+        measureUpper,
+        measureLower,
       ];
 
   factory RoutineInspectionUploadList.fromJson(Map<String, dynamic> json) =>
@@ -105,6 +117,9 @@ class RoutineInspectionUploadList extends Equatable {
       // factorCode和factorName可能为null
       List<String> factorCodes = item.factorCode?.split(';');
       List<String> factorNames = item.factorName?.split(';');
+      List<String> factorUnits = item.factorUnit?.split(';');
+      List<String> measureUppers = item.measureUpper?.split(';');
+      List<String> measureLowers = item.measureLower?.split(';');
       for (int i = 0; i < inspectionTaskIds.length; i++) {
         itemList.add(RoutineInspectionUploadList(
           itemName: itemNames[i],
@@ -115,6 +130,9 @@ class RoutineInspectionUploadList extends Equatable {
           inspectionEndTime: inspectionEndTimes[i],
           factorCode: factorCodes != null ? factorCodes[i] : factorCodes,
           factorName: factorNames != null ? factorNames[i] : factorNames,
+          factorUnit: factorUnits != null ? factorUnits[i] : factorUnits,
+          measureUpper: measureUppers != null ? measureUppers[i] : measureUppers,
+          measureLower: measureLowers != null ? measureLowers[i] : measureLowers,
         ));
       }
       return itemList.expand((content) {
@@ -128,6 +146,9 @@ class RoutineInspectionUploadList extends Equatable {
         // factorCode和factorName可能为null
         List<String> factorCodes = content.factorCode?.split(',');
         List<String> factorNames = content.factorName?.split(',');
+        List<String> factorUnits = content.factorUnit?.split(',');
+        List<String> measureUppers = content.measureUpper?.split(',');
+        List<String> measureLowers = content.measureLower?.split(',');
         for (int j = 0; j < inspectionTaskIds.length; j++) {
           contentList.add(RoutineInspectionUploadList(
             // 下列是没有分号和逗号拼接的字段
@@ -147,6 +168,9 @@ class RoutineInspectionUploadList extends Equatable {
             inspectionEndTime: inspectionEndTimes[j],
             factorCode: factorCodes != null ? factorCodes[j] : factorCodes,
             factorName: factorNames != null ? factorNames[j] : factorNames,
+            factorUnit: factorUnits != null ? factorUnits[j] : factorUnits,
+            measureUpper: measureUppers != null ? measureUppers[j] : measureUppers,
+            measureLower: measureLowers != null ? measureLowers[j] : measureLowers,
           ));
         }
         return contentList;

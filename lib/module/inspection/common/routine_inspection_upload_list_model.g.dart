@@ -25,8 +25,11 @@ RoutineInspectionUploadList _$RoutineInspectionUploadListFromJson(
     monitorId: json['monitorId'] as String ?? '',
     deviceId: json['deviceId'] as String ?? '',
     factorName: json['factorName'] as String ?? '',
+    factorUnit: json['factorUnit'] as String ?? '',
     measurePrinciple: json['measure_principle'] as String,
     analysisMethod: json['analysis_method'] as String,
+    measureUpper: json['measureUpper'] as String ?? '',
+    measureLower: json['measureLower'] as String ?? '',
   );
 }
 
@@ -49,6 +52,9 @@ Map<String, dynamic> _$RoutineInspectionUploadListToJson(
       'monitorId': instance.monitorId,
       'deviceId': instance.deviceId,
       'factorName': instance.factorName,
+      'factorUnit': instance.factorUnit,
       'measure_principle': instance.measurePrinciple,
       'analysis_method': instance.analysisMethod,
+      'measureUpper': instance.measureUpper,
+      'measureLower': instance.measureLower,
     };
