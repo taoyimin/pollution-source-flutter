@@ -64,7 +64,7 @@ class _AirDeviceCorrectUploadPageState
     _airDeviceCorrectUpload.inspectionTaskId = task.inspectionTaskId;
     _airDeviceCorrectUpload.factorName = task.factorName;
     _airDeviceCorrectUpload.factorCode = task.factorCode;
-    _airDeviceCorrectUpload.unit = task.factorUnit;
+    _airDeviceCorrectUpload.factorUnit = task.factorUnit;
     _airDeviceCorrectUpload.measureUpper = task.measureUpper;
     _airDeviceCorrectUpload.measureLower = task.measureLower;
     // 加载上次校准后测试值
@@ -180,22 +180,27 @@ class _AirDeviceCorrectUploadPageState
             ),
             Gaps.hLine,
             InfoRowWidget(
-              title: '计量单位',
-              content: _airDeviceCorrectUpload.unit,
-              color: Colours.primary_color,
-              onTap: showFactorDialog,
+              title: '分析仪原理',
+              content:
+              TextUtil.isEmpty(task.measurePrinciple)
+                  ? '无'
+                  : task.measurePrinciple,
             ),
             Gaps.hLine,
             InfoRowWidget(
               title: '分析仪量程',
               content:
-                  '${_airDeviceCorrectUpload.measureLower} — ${_airDeviceCorrectUpload.measureUpper}',
+              '${_airDeviceCorrectUpload.measureLower} — ${_airDeviceCorrectUpload.measureUpper}',
               color: Colours.primary_color,
               onTap: showFactorDialog,
             ),
             Gaps.hLine,
             InfoRowWidget(
-                title: '分析仪原理', content: task?.measurePrinciple ?? '无'),
+              title: '计量单位',
+              content: _airDeviceCorrectUpload.factorUnit,
+              color: Colours.primary_color,
+              onTap: showFactorDialog,
+            ),
             Gaps.hLine,
             SelectRowWidget(
               title: '校准开始时间',
@@ -395,15 +400,15 @@ class RoutineInspectionUploadFactorDialog extends StatefulWidget {
 
 class _RoutineInspectionUploadFactorDialogState
     extends State<RoutineInspectionUploadFactorDialog> {
-  TextEditingController unitController;
+  TextEditingController factorUnitController;
   TextEditingController measureUpperController;
   TextEditingController measureLowerController;
 
   @override
   void initState() {
     super.initState();
-    unitController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.airDeviceCorrectUpload.unit.toString()),
+    factorUnitController = TextEditingController.fromValue(
+      TextEditingValue(text: widget.airDeviceCorrectUpload.factorUnit.toString()),
     );
     measureUpperController = TextEditingController.fromValue(
       TextEditingValue(
@@ -450,7 +455,7 @@ class _RoutineInspectionUploadFactorDialogState
                       Gaps.hGap20,
                       Flexible(
                         child: TextField(
-                          controller: unitController,
+                          controller: factorUnitController,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 14,
@@ -562,8 +567,8 @@ class _RoutineInspectionUploadFactorDialogState
                       child: InkWellButton(
                         onTap: () {
                           widget.setState(() {
-                            widget.airDeviceCorrectUpload.unit =
-                                unitController.text;
+                            widget.airDeviceCorrectUpload.factorUnit =
+                                factorUnitController.text;
                             widget.airDeviceCorrectUpload.measureUpper =
                                 measureUpperController.text;
                             widget.airDeviceCorrectUpload.measureLower =

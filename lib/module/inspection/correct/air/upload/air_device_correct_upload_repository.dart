@@ -12,7 +12,7 @@ class AirDeviceCorrectUploadRepository
   checkData(AirDeviceCorrectUpload data) {
     if (data.baiduLocation == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
-    if (TextUtil.isEmpty(data.unit))
+    if (TextUtil.isEmpty(data.factorUnit))
       throw DioError(error: InvalidParamException('请先输入计量单位'));
     if (TextUtil.isEmpty(data.measureLower))
       throw DioError(error: InvalidParamException('请先输入分析仪量程下限'));
@@ -59,7 +59,7 @@ class AirDeviceCorrectUploadRepository
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('factorCode', data.factorCode)])
       ..addAll([MapEntry('factorName', data.factorName)])
-      ..addAll([MapEntry('unit', data.unit)])
+      ..addAll([MapEntry('unit', data.factorUnit)])
       ..addAll([MapEntry('measureLower', data.measureLower)])
       ..addAll([MapEntry('measureUpper', data.measureUpper)])
       ..addAll([

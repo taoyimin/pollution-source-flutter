@@ -16,7 +16,7 @@ class AirDeviceCorrectUpload {
   String factorCode;
 
   /// 校准因子单位
-  String unit;
+  String factorUnit;
 
   /// 分析仪量程下限
   String measureLower;
