@@ -17,14 +17,20 @@ class AirDeviceCheckUploadRepository
     for (int i = 0; i < data.airDeviceCheckRecordList.length; i++) {
       if (data.airDeviceCheckRecordList[i].currentCheckTime == null)
         throw DioError(error: InvalidParamException('请选择第${i + 1}条记录的监测时间'));
-      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckResult.text))
+      if (TextUtil.isEmpty(
+          data.airDeviceCheckRecordList[i].currentCheckResult.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的参比方法测量值'));
-      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckResult.text))
-        throw DioError(error: InvalidParamException('第${i + 1}条记录的参比方法测量值不是合法数值'));
-      if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
+      if (!CommonUtils.isNumeric(
+          data.airDeviceCheckRecordList[i].currentCheckResult.text))
+        throw DioError(
+            error: InvalidParamException('第${i + 1}条记录的参比方法测量值不是合法数值'));
+      if (TextUtil.isEmpty(
+          data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的CEMS测量值'));
-      if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
-        throw DioError(error: InvalidParamException('第${i + 1}条记录的CEMS测量值不是合法数值'));
+      if (!CommonUtils.isNumeric(
+          data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
+        throw DioError(
+            error: InvalidParamException('第${i + 1}条记录的CEMS测量值不是合法数值'));
     }
   }
 
@@ -52,8 +58,8 @@ class AirDeviceCheckUploadRepository
         return MapEntry('inspectionTaskInsideId', data.inspectionTaskId);
       }))
       ..addAll(data.airDeviceCheckRecordList.map((item) {
-        return MapEntry('currentCheckTime',
-            DateUtil.formatDate(item.currentCheckTime));
+        return MapEntry(
+            'currentCheckTime', DateUtil.formatDate(item.currentCheckTime));
       }))
       ..addAll(data.airDeviceCheckRecordList.map((item) {
         return MapEntry('currentCheckResult', item.currentCheckResult.text);
@@ -61,19 +67,9 @@ class AirDeviceCheckUploadRepository
       ..addAll(data.airDeviceCheckRecordList.map((item) {
         return MapEntry('currentCheckIsPass', item.currentCheckIsPass.text);
       }))
-      // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
-      ..addAll([
-        MapEntry('paramRemark',
-            TextUtil.isEmpty(data.paramRemark.text) ? ' ' : data.paramRemark.text)
-      ])
-      ..addAll([
-        MapEntry('changeRemark',
-            TextUtil.isEmpty(data.changeRemark.text) ? ' ' : data.changeRemark.text)
-      ])
-      ..addAll([
-        MapEntry('checkResult',
-            TextUtil.isEmpty(data.checkResult.text) ? ' ' : data.checkResult.text)
-      ]);
+      ..addAll([MapEntry('paramRemark', data.paramRemark.text)])
+      ..addAll([MapEntry('changeRemark', data.changeRemark.text)])
+      ..addAll([MapEntry('checkResult', data.checkResult.text)]);
     return formData;
   }
 }

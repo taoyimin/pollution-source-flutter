@@ -52,6 +52,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
     _airDeviceCheckUpload.inspectionTaskId = task.inspectionTaskId;
     _airDeviceCheckUpload.itemType = task.itemType;
     _airDeviceCheckUpload.factorName = task.factorName;
+    _airDeviceCheckUpload.factorCode = task.factorCode;
     _airDeviceCheckUpload.factorUnit = task.factorUnit;
     // 默认五条校准记录
     _airDeviceCheckUpload.airDeviceCheckRecordList = [
@@ -359,8 +360,6 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
                             onPressed: () async {
                               Navigator.of(context).pop();
                               setState(() {
-                                list[index].currentCheckResult.dispose();
-                                list[index].currentCheckIsPass.dispose();
                                 list.removeAt(index);
                               });
                             },
