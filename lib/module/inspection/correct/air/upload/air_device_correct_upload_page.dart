@@ -146,12 +146,13 @@ class _AirDeviceCorrectUploadPageState
     );
   }
 
-  showFactorDialog(){
+  /// 打开修改因子信息Dialog
+  showFactorDialog() {
     showDialog(
       context: context, //BuildContext对象
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return RoutineInspectionUploadFactorDialog2(
+        return RoutineInspectionUploadFactorDialog(
           airDeviceCorrectUpload: _airDeviceCorrectUpload,
           setState: setState,
         );
@@ -187,7 +188,8 @@ class _AirDeviceCorrectUploadPageState
             Gaps.hLine,
             InfoRowWidget(
               title: '分析仪量程',
-              content: '${_airDeviceCorrectUpload.measureLower} — ${_airDeviceCorrectUpload.measureUpper}',
+              content:
+                  '${_airDeviceCorrectUpload.measureLower} — ${_airDeviceCorrectUpload.measureUpper}',
               color: Colours.primary_color,
               onTap: showFactorDialog,
             ),
@@ -376,20 +378,23 @@ class _AirDeviceCorrectUploadPageState
   }
 }
 
-class RoutineInspectionUploadFactorDialog2 extends StatefulWidget {
+class RoutineInspectionUploadFactorDialog extends StatefulWidget {
+  /// 废气监测设备校准上报类
   final AirDeviceCorrectUpload airDeviceCorrectUpload;
+
+  /// 界面状态更新方法
   final StateSetter setState;
 
-  RoutineInspectionUploadFactorDialog2(
+  RoutineInspectionUploadFactorDialog(
       {@required this.airDeviceCorrectUpload, this.setState});
 
   @override
-  _RoutineInspectionUploadFactorDialogState2 createState() =>
-      _RoutineInspectionUploadFactorDialogState2();
+  _RoutineInspectionUploadFactorDialogState createState() =>
+      _RoutineInspectionUploadFactorDialogState();
 }
 
-class _RoutineInspectionUploadFactorDialogState2
-    extends State<RoutineInspectionUploadFactorDialog2> {
+class _RoutineInspectionUploadFactorDialogState
+    extends State<RoutineInspectionUploadFactorDialog> {
   TextEditingController unitController;
   TextEditingController measureUpperController;
   TextEditingController measureLowerController;
@@ -398,13 +403,15 @@ class _RoutineInspectionUploadFactorDialogState2
   void initState() {
     super.initState();
     unitController = TextEditingController.fromValue(
-      TextEditingValue(text:widget.airDeviceCorrectUpload.unit.toString()),
+      TextEditingValue(text: widget.airDeviceCorrectUpload.unit.toString()),
     );
     measureUpperController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.airDeviceCorrectUpload.measureUpper.toString()),
+      TextEditingValue(
+          text: widget.airDeviceCorrectUpload.measureUpper.toString()),
     );
     measureLowerController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.airDeviceCorrectUpload.measureLower.toString()),
+      TextEditingValue(
+          text: widget.airDeviceCorrectUpload.measureLower.toString()),
     );
   }
 
@@ -431,7 +438,7 @@ class _RoutineInspectionUploadFactorDialogState2
               children: <Widget>[
                 SelectRowWidget(
                   title: '校准因子',
-                  content: '颗粒物',
+                  content: '${widget.airDeviceCorrectUpload.factorName}',
                   onTap: () {},
                 ),
                 Gaps.vGap6,
@@ -555,9 +562,12 @@ class _RoutineInspectionUploadFactorDialogState2
                       child: InkWellButton(
                         onTap: () {
                           widget.setState(() {
-                            widget.airDeviceCorrectUpload.unit = unitController.text;
-                            widget.airDeviceCorrectUpload.measureUpper = measureUpperController.text;
-                            widget.airDeviceCorrectUpload.measureLower = measureLowerController.text;
+                            widget.airDeviceCorrectUpload.unit =
+                                unitController.text;
+                            widget.airDeviceCorrectUpload.measureUpper =
+                                measureUpperController.text;
+                            widget.airDeviceCorrectUpload.measureLower =
+                                measureLowerController.text;
                           });
                           Navigator.pop(context);
                         },
