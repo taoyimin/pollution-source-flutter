@@ -12,8 +12,6 @@ class AirDeviceCheckUploadRepository
   checkData(AirDeviceCheckUpload data) {
     if (data.baiduLocation == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
-    else if (data.factor == null)
-      throw DioError(error: InvalidParamException('请先加载校验因子'));
     else if (data.airDeviceCheckRecordList.length < 5)
       throw DioError(error: InvalidParamException('请至少上传五条记录'));
     for (int i = 0; i < data.airDeviceCheckRecordList.length; i++) {
@@ -22,17 +20,17 @@ class AirDeviceCheckUploadRepository
       if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckResult.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的参比方法测量值'));
       if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckResult.text))
-        throw DioError(error: InvalidParamException('第${i + 1}条记录的参比方法测量值是无效值'));
+        throw DioError(error: InvalidParamException('第${i + 1}条记录的参比方法测量值不是合法数值'));
       if (TextUtil.isEmpty(data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
         throw DioError(error: InvalidParamException('请输入第${i + 1}条记录的CEMS测量值'));
       if (!CommonUtils.isNumeric(data.airDeviceCheckRecordList[i].currentCheckIsPass.text))
-        throw DioError(error: InvalidParamException('第${i + 1}条记录的CEMS测量值是无效值'));
+        throw DioError(error: InvalidParamException('第${i + 1}条记录的CEMS测量值不是合法数值'));
     }
   }
 
   @override
   HttpApi createApi() {
-    return HttpApi.deviceCheckUpload;
+    return HttpApi.airDeviceCheckUpload;
   }
 
   @override
@@ -44,25 +42,14 @@ class AirDeviceCheckUploadRepository
       ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('itemType', data.itemType)])
-      ..addAll([MapEntry('factorId', data.factor.factorId.toString())])
-      // 如果参数为空，默认用一个空格，防止空字符参数被过滤掉
-      ..addAll([
-        MapEntry(
-            'factorCode',
-            TextUtil.isEmpty(data.factor.factorCode)
-                ? ' '
-                : data.factor.factorCode)
-      ])
-      ..addAll([MapEntry('factorName', data.factor.factorName)])
-      ..addAll([MapEntry('compareUnit', data.factor.unit)])
-      ..addAll([MapEntry('cemsUnit', data.factor.unit)])
+      ..addAll([MapEntry('factorCode', data.factorCode)])
+      ..addAll([MapEntry('factorName', data.factorName)])
+      ..addAll([MapEntry('compareUnit', data.factorUnit)])
+      ..addAll([MapEntry('cemsUnit', data.factorUnit)])
       ..addAll([MapEntry('compareAvgVal', data.compareAvgVal)])
       ..addAll([MapEntry('cemsAvgVal', data.cemsAvgVal)])
       ..addAll(data.airDeviceCheckRecordList.map((item) {
         return MapEntry('inspectionTaskInsideId', data.inspectionTaskId);
-      }))
-      ..addAll(data.airDeviceCheckRecordList.map((item) {
-        return MapEntry('factorInsideId', data.factor.factorId.toString());
       }))
       ..addAll(data.airDeviceCheckRecordList.map((item) {
         return MapEntry('currentCheckTime',
