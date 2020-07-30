@@ -138,9 +138,6 @@ enum HttpApi {
   /// 废水监测设备校验上报
   waterDeviceCheckUpload,
 
-  /// 巡检上报查询设备的某个监测因子
-  routineInspectionFactorDetail,
-
   /// 废气监测设备校准上报
   airDeviceCorrectUpload,
 
@@ -206,8 +203,7 @@ class HttpApiPollution {
       'dictionary/getSubListByParent?dicCode=alarm_type';
   static const String orderAlarmLevel =
       'dictionary/getSubListByParent?dicCode=alarmLevel';
-  static const String orderDetail =
-      'Supervise/querySuperviseDetailById?id=';
+  static const String orderDetail = 'Supervise/querySuperviseDetailById?id=';
   static const String orderAlarmCause =
       'dictionary/getSubListByParent?dicCode=alarm_cause';
   static const String processesUpload = 'Supervise/dealSupervise';
@@ -246,8 +242,6 @@ class HttpApiPollution {
       'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
   static const String waterDeviceCheckUpload =
       'ywmh/tInspectionTask/submitWatCorrectInfo';
-  static const String routineInspectionFactorDetail =
-      'ywmh/tInspectionTask/selectMonitorPoint';
   static const String airDeviceCorrectUpload =
       'ywmh/tInspectionTask/submitGasCmesCorrect';
   static const String waterDeviceCorrectUpload =
@@ -336,8 +330,6 @@ class HttpApiOperation {
       'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
   static const String waterDeviceCheckUpload =
       'ywmh/tInspectionTask/submitWatCorrectInfo';
-  static const String routineInspectionFactorDetail =
-      'ywmh/tInspectionTask/selectMonitorPoint';
   static const String airDeviceCorrectUpload =
       'ywmh/tInspectionTask/submitGasCmesCorrect';
   static const String waterDeviceCorrectUpload =

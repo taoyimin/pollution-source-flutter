@@ -427,8 +427,6 @@ class CompatUtils {
         return HttpApiPollution.airDeviceCheckUpload;
       case HttpApi.waterDeviceCheckUpload:
         return HttpApiPollution.waterDeviceCheckUpload;
-      case HttpApi.routineInspectionFactorDetail:
-        return HttpApiPollution.routineInspectionFactorDetail;
       case HttpApi.airDeviceCorrectUpload:
         return HttpApiPollution.airDeviceCorrectUpload;
       case HttpApi.waterDeviceCorrectUpload:
@@ -543,8 +541,6 @@ class CompatUtils {
         return HttpApiOperation.airDeviceCheckUpload;
       case HttpApi.waterDeviceCheckUpload:
         return HttpApiOperation.waterDeviceCheckUpload;
-      case HttpApi.routineInspectionFactorDetail:
-        return HttpApiOperation.routineInspectionFactorDetail;
       case HttpApi.airDeviceCorrectUpload:
         return HttpApiOperation.airDeviceCorrectUpload;
       case HttpApi.waterDeviceCorrectUpload:
