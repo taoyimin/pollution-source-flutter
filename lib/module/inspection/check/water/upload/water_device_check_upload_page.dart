@@ -55,7 +55,7 @@ class _WaterDeviceCheckUploadPageState
     _waterDeviceCheckUpload.itemType = task.itemType;
     _waterDeviceCheckUpload.factorName = task.factorName;
     _waterDeviceCheckUpload.factorCode = task.factorCode;
-    _waterDeviceCheckUpload.unit = TextEditingController(text: task.factorUnit);
+    _waterDeviceCheckUpload.factorUnit = TextEditingController(text: task.factorUnit);
   }
 
   @override
@@ -63,7 +63,7 @@ class _WaterDeviceCheckUploadPageState
     /// 释放资源
     _waterDeviceCheckUpload.measuredDisparity.dispose();
     _waterDeviceCheckUpload.measuredResult.dispose();
-    _waterDeviceCheckUpload.unit.dispose();
+    _waterDeviceCheckUpload.factorUnit.dispose();
     _waterDeviceCheckUpload.comparisonMeasuredResultList.forEach(
       (comparisonMeasuredResult) {
         comparisonMeasuredResult.dispose();
@@ -139,7 +139,7 @@ class _WaterDeviceCheckUploadPageState
             EditRowWidget(
               title: '测定结果单位',
               hintText: '请输入测定单位',
-              controller: _waterDeviceCheckUpload.unit,
+              controller: _waterDeviceCheckUpload.factorUnit,
             ),
             Gaps.hLine,
             Row(

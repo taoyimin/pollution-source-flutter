@@ -13,17 +13,17 @@ class WaterDeviceCheckUpload {
   /// 位置信息
   BaiduLocation baiduLocation;
 
-  /// 校验因子代码
-  String factorCode;
-
   /// 校验因子名称
   String factorName;
 
-  /// 在线监测仪器测定结果
-  final TextEditingController measuredResult = TextEditingController();
+  /// 校验因子代码
+  String factorCode;
 
   /// 测定结果单位
-  TextEditingController unit;
+  TextEditingController factorUnit;
+
+  /// 在线监测仪器测定结果
+  final TextEditingController measuredResult = TextEditingController();
 
   /// 比对方法测定结果集合
   final List<TextEditingController> comparisonMeasuredResultList = [
@@ -42,9 +42,9 @@ class WaterDeviceCheckUpload {
   WaterDeviceCheckUpload(
       {this.inspectionTaskId,
       this.itemType,
-      this.factorCode,
       this.factorName,
-      this.unit});
+      this.factorCode,
+      this.factorUnit});
 
   /// 获取比对方法测定结果平均值
   String get comparisonMeasuredAvg {

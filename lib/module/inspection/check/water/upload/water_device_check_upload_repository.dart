@@ -14,7 +14,7 @@ class WaterDeviceUploadRepository
       throw DioError(error: InvalidParamException('请先获取位置信息'));
     if (TextUtil.isEmpty(data.measuredResult.text))
       throw DioError(error: InvalidParamException('请输入在线监测仪器测定结果'));
-    if (TextUtil.isEmpty(data.unit.text))
+    if (TextUtil.isEmpty(data.factorUnit.text))
       throw DioError(error: InvalidParamException('请输入测定结果单位'));
     if (data.comparisonMeasuredResultList.length == 0)
       throw DioError(error: InvalidParamException('请至少上传一条比对方法测定结果'));
@@ -47,7 +47,7 @@ class WaterDeviceUploadRepository
       ..addAll([MapEntry('factorCode', data.factorCode)])
       ..addAll([MapEntry('factorName', data.factorName)])
       ..addAll([MapEntry('measuredResult', data.measuredResult.text)])
-      ..addAll([MapEntry('unit', data.unit.text)])
+      ..addAll([MapEntry('unit', data.factorUnit.text)])
       ..addAll(data.comparisonMeasuredResultList.map((item) {
         return MapEntry('inspectionTaskInsideId', data.inspectionTaskId);
       }))
