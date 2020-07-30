@@ -40,9 +40,9 @@ class RoutineInspectionUploadList extends Equatable {
   final String factorName;
   @JsonKey(defaultValue: '')
   final String factorUnit;
-  @JsonKey(name: 'measure_principle')
+  @JsonKey(defaultValue: '')
   final String measurePrinciple;
-  @JsonKey(name: 'analysis_method')
+  @JsonKey(defaultValue: '')
   final String analysisMethod;
   @JsonKey(defaultValue: '')
   final String measureUpper;
@@ -120,6 +120,8 @@ class RoutineInspectionUploadList extends Equatable {
       List<String> factorUnits = item.factorUnit?.split(';');
       List<String> measureUppers = item.measureUpper?.split(';');
       List<String> measureLowers = item.measureLower?.split(';');
+      List<String> measurePrinciples = item.measurePrinciple?.split(';');
+      List<String> analysisMethods = item.analysisMethod?.split(';');
       for (int i = 0; i < inspectionTaskIds.length; i++) {
         itemList.add(RoutineInspectionUploadList(
           itemName: itemNames[i],
@@ -133,6 +135,8 @@ class RoutineInspectionUploadList extends Equatable {
           factorUnit: factorUnits != null ? factorUnits[i] : factorUnits,
           measureUpper: measureUppers != null ? measureUppers[i] : measureUppers,
           measureLower: measureLowers != null ? measureLowers[i] : measureLowers,
+          measurePrinciple: measurePrinciples != null ? measurePrinciples[i] : measurePrinciples,
+          analysisMethod: analysisMethods != null ? analysisMethods[i] : analysisMethods,
         ));
       }
       return itemList.expand((content) {
@@ -149,16 +153,16 @@ class RoutineInspectionUploadList extends Equatable {
         List<String> factorUnits = content.factorUnit?.split(',');
         List<String> measureUppers = content.measureUpper?.split(',');
         List<String> measureLowers = content.measureLower?.split(',');
+        List<String> measurePrinciples = content.measurePrinciple?.split(',');
+        List<String> analysisMethods = content.analysisMethod?.split(',');
         for (int j = 0; j < inspectionTaskIds.length; j++) {
           contentList.add(RoutineInspectionUploadList(
-            // 下列是没有分号和逗号拼接的字段
+            // 下面是没有分号和逗号拼接的字段
             enterName: item.enterName,
             monitorName: item.monitorName,
             deviceName: item.deviceName,
             deviceId: item.deviceId,
             monitorId: item.monitorId,
-            measurePrinciple: item.measurePrinciple,
-            analysisMethod: item.analysisMethod,
             // itemName只有分号拼接，没有逗号拼接
             itemName: content.itemName,
             inspectionTaskId: inspectionTaskIds[j],
@@ -171,6 +175,8 @@ class RoutineInspectionUploadList extends Equatable {
             factorUnit: factorUnits != null ? factorUnits[j] : factorUnits,
             measureUpper: measureUppers != null ? measureUppers[j] : measureUppers,
             measureLower: measureLowers != null ? measureLowers[j] : measureLowers,
+            measurePrinciple: measurePrinciples != null ? measurePrinciples[j] : measurePrinciples,
+            analysisMethod: analysisMethods != null ? analysisMethods[j] : analysisMethods,
           ));
         }
         return contentList;
