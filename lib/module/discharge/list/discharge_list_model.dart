@@ -3,25 +3,25 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'discharge_list_model.g.dart';
 
-//排口列表
+/// 排口列表
 @JsonSerializable()
 class Discharge extends Equatable {
   @JsonKey(name: 'outId')
-  final int dischargeId; //排口ID
+  final int dischargeId; // 排口ID
   @JsonKey(name: 'enterpriseName')
-  final String enterName; //企业名称
+  final String enterName; // 企业名称
   @JsonKey(name: 'disOutName')
-  final String dischargeName; //排口名称
+  final String dischargeName; // 排口名称
   @JsonKey(name: 'disOutAddress')
-  final String dischargeAddress; //排口地址
+  final String dischargeAddress; // 排口地址
   @JsonKey(name: 'disOutType')
-  final String dischargeType; //排口类型
+  final String dischargeType; // 排口类型
   @JsonKey(name: 'disOutTypeStr')
-  final String dischargeTypeStr; //排口类型
+  final String dischargeTypeStr; // 排口类型
   @JsonKey(name: 'outletTypeStr')
-  final String dischargeCategoryStr; //排口类别
+  final String dischargeCategoryStr; // 排口类别
   @JsonKey(name: 'disOutRuleStr')
-  final String dischargeRuleStr; //排放规律
+  final String dischargeRuleStr; // 排放规律
 
   const Discharge({
     this.dischargeId,
