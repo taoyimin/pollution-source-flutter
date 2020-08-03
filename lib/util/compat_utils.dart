@@ -369,6 +369,8 @@ class CompatUtils {
         return HttpApiPollution.monitorHistoryData;
       case HttpApi.monitorStatistics:
         return HttpApiPollution.monitorStatistics;
+      case HttpApi.deviceList:
+        return HttpApiPollution.deviceList;
       case HttpApi.orderList:
         return HttpApiPollution.orderList;
       case HttpApi.orderState:
@@ -489,6 +491,8 @@ class CompatUtils {
         return HttpApiOperation.monitorHistoryData;
       case HttpApi.monitorStatistics:
         return HttpApiOperation.monitorStatistics;
+      case HttpApi.deviceList:
+        return HttpApiOperation.deviceList;
       case HttpApi.orderList:
         return HttpApiOperation.orderList;
       case HttpApi.orderState:

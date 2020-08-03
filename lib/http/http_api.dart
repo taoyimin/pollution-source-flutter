@@ -51,6 +51,9 @@ enum HttpApi {
   /// 监控点统计
   monitorStatistics,
 
+  /// 监测设备列表
+  deviceList,
+
   /// 报警管理单列表
   orderList,
 
@@ -196,6 +199,8 @@ class HttpApiPollution {
       'tDisChargeOut/getDrainInfoById?monitorId=';
   static const String monitorHistoryData = 'monitorRealData/queryDetailHistory';
   static const String monitorStatistics = 'appIndex/getMonitorStatistics';
+  static const String deviceList =
+      'ywmh/tParameterInspectionRecord/selectDevice';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
   static const String orderState =
       'dictionary/getSubListByParent?dicCode=orderStatus';
@@ -249,7 +254,7 @@ class HttpApiPollution {
   static const String deviceCorrectLastValue =
       'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
   static const String deviceParamUpload =
-      'ywmh/tInspectionTask/submitWatParameter';
+      'ywmh/tParameterInspectionRecord/submitParameterInspectionRecord';
   static const String deviceParamList =
       'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
   static const String checkVersion = 'update/update.json';
@@ -284,6 +289,8 @@ class HttpApiOperation {
       'pollutantsource/tMonitorRealDataView/queryDetailHistoryAPI';
   static const String monitorStatistics =
       'statistics/queryMonitorRealDataCountByCondition';
+  static const String deviceList =
+      'ywmh/tParameterInspectionRecord/selectDevice';
   static const String orderList = 'commonSupervise/list';
   static const String orderState =
       'dictionary/getSubListAPI?dicCode=orderStatus';
@@ -337,7 +344,7 @@ class HttpApiOperation {
   static const String deviceCorrectLastValue =
       'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
   static const String deviceParamUpload =
-      'ywmh/tInspectionTask/submitWatParameter';
+      'ywmh/tParameterInspectionRecord/submitParameterInspectionRecord';
   static const String deviceParamList =
       'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
   static const String checkVersion = 'app/update.json';
