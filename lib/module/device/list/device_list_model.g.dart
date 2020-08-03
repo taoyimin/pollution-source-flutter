@@ -14,7 +14,9 @@ Device _$DeviceFromJson(Map<String, dynamic> json) {
     deviceType: json['deviceType'] as String ?? '',
     markerName: json['markerName'] as String ?? '',
     measureMethod: json['measure_method'] as String ?? '',
+    measurePrinciple: json['measure_principle'] as String ?? '',
     measurePrincipleStr: json['measurePrincipleStr'] as String ?? '',
+    analysisMethod: json['analysis_method'] as String ?? '',
     analysisMethodStr: json['analysisMethodStr'] as String ?? '',
   );
 }
@@ -26,6 +28,8 @@ Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
       'deviceType': instance.deviceType,
       'markerName': instance.markerName,
       'measure_method': instance.measureMethod,
+      'measure_principle': instance.measurePrinciple,
       'measurePrincipleStr': instance.measurePrincipleStr,
+      'analysis_method': instance.analysisMethod,
       'analysisMethodStr': instance.analysisMethodStr,
     };
