@@ -264,7 +264,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ImageTitleWidget(
-                  title: '报警管理单',
+                  title: '近一年报警管理单',
                   imagePath: 'assets/images/icon_alarm_manage.png',
                 ),
                 Gaps.vGap10,
@@ -277,7 +277,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         content: '${enterDetail.orderIncompleteCount ?? ''}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
                         router:
-                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=00',
+                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=00&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
                       ),
                     ),
                     Gaps.hGap10,
@@ -289,7 +289,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         imagePath:
                             'assets/images/icon_alarm_manage_return.png',
                         router:
-                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20&alarmLevel=3',
+                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20&alarmLevel=3&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
                       ),
                     ),
                     Gaps.hGap10,
@@ -301,7 +301,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         imagePath:
                         'assets/images/icon_alarm_manage_complete.png',
                         router:
-                        '${Routes.orderList}?enterId=${widget.enterId}&alarmState=50',
+                        '${Routes.orderList}?enterId=${widget.enterId}&alarmState=50&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
                       ),
                     ),
                   ],

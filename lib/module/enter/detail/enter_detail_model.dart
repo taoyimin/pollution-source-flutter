@@ -93,7 +93,7 @@ class EnterDetail extends Equatable {
         areaName,
         industryTypeStr,
         creditCode,
-    orderIncompleteCount,
+        orderIncompleteCount,
         orderCompleteCount,
         orderTotalCount,
         orderDealCount,
@@ -134,7 +134,8 @@ EnterDetail _$EnterDetailFromJson(Map<String, dynamic> json) {
       contactPersonTel: json['enterprise']['envirLinkPhone'] as String ?? '',
       legalPerson: json['enterprise']['legalPerson'] as String ?? '',
       legalPersonTel: json['enterprise']['legalLinkPhone'] as String ?? '',
-      attentionLevelStr: json['enterprise']['attentionLevelStr'] as String ?? '',
+      attentionLevelStr:
+          json['enterprise']['attentionLevelStr'] as String ?? '',
       cityName: json['enterprise']['cityName'] as String ?? '',
       areaName: json['enterprise']['areaName'] as String ?? '',
       industryTypeStr: json['enterprise']['industryTypeStr'] as String ?? '',
