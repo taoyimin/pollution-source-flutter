@@ -14,6 +14,7 @@ class Routes {
   static String monitorList = "/monitorList";
   static String monitorDetail = "/monitorDetail";
   static String monitorHistoryData = "/monitorHistoryData";
+  static String deviceList = "/deviceList";
   static String orderList = "/orderList";
   static String orderDetail = "/orderDetail";
   static String dischargeReportList = "/dischargeReportList";
@@ -30,6 +31,7 @@ class Routes {
   static String routineInspectionDetail = "/routineInspectionDetail";
   static String waterDeviceCheckUpload = "/waterDeviceCheckUpload";
   static String airDeviceCheckUpload = "/airDeviceCheckUpload";
+  static String waterDeviceCorrectUpload = "/waterDeviceCorrectUpload";
   static String airDeviceCorrectUpload = "/airDeviceCorrectUpload";
   static String waterDeviceParamUpload = "/waterDeviceParamUpload";
   static String changePassword = "/changePassword";
@@ -97,6 +99,11 @@ class Routes {
     router.define(
       monitorHistoryData,
       handler: monitorHistoryDataHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      deviceList,
+      handler: deviceListHandler,
       transitionType: TransitionType.native,
     );
     router.define(
@@ -177,6 +184,11 @@ class Routes {
     router.define(
       airDeviceCheckUpload,
       handler: airDeviceCheckUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      waterDeviceCorrectUpload,
+      handler: waterDeviceCorrectUploadHandler,
       transitionType: TransitionType.native,
     );
     router.define(

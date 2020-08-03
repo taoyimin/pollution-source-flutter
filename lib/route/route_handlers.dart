@@ -3,6 +3,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollution_source/module/common/detail/detail_bloc.dart';
+import 'package:pollution_source/module/device/list/device_list_page.dart';
 import 'package:pollution_source/module/discharge/detail/discharge_detail_page.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_page.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_page.dart';
@@ -10,6 +11,7 @@ import 'package:pollution_source/module/enter/list/enter_list_page.dart';
 import 'package:pollution_source/module/inspection/check/air/upload/air_device_check_upload_page.dart';
 import 'package:pollution_source/module/inspection/check/water/upload/water_device_check_upload_page.dart';
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_page.dart';
+import 'package:pollution_source/module/inspection/correct/water/upload/water_device_correct_upload_page.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
@@ -119,7 +121,8 @@ var monitorListHandler = Handler(
     String enterId = params['enterId']?.first ?? '';
     String dischargeId = params['dischargeId']?.first ?? '';
     int type = int.parse(params['type']?.first ?? '0');
-    String state = params['state']?.first ?? '';
+    // 状态默认查询全部
+    String state = params['state']?.first ?? 'all';
     String outType = params['outType']?.first ?? '';
     String monitorType = params['monitorType']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
@@ -162,6 +165,17 @@ var monitorHistoryDataHandler = Handler(
   },
 );
 
+var deviceListHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String monitorId = params['monitorId']?.first ?? '';
+    int type = int.parse(params['type']?.first ?? '1');
+    return DeviceListPage(
+      monitorId: monitorId,
+      type: type,
+    );
+  },
+);
+
 var orderListHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String enterId = params['enterId']?.first ?? '';
@@ -170,6 +184,7 @@ var orderListHandler = Handler(
     String alarmLevel = params['alarmLevel']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
     DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
+    DateTime endTime = DateUtil.getDateTime(params['endTime']?.first ?? '');
     return OrderListPage(
       enterId: enterId,
       monitorId: monitorId,
@@ -177,6 +192,7 @@ var orderListHandler = Handler(
       alarmLevel: alarmLevel,
       attentionLevel: attentionLevel,
       startTime: startTime,
+      endTime: endTime,
     );
   },
 );
@@ -335,6 +351,13 @@ var airDeviceCheckUploadHandler = Handler(
   },
 );
 
+var waterDeviceCorrectUploadHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String json = params['json']?.first;
+    return WaterDeviceCorrectUploadPage(taskJson: json);
+  },
+);
+
 var airDeviceCorrectUploadHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String json = params['json']?.first;
@@ -344,8 +367,7 @@ var airDeviceCorrectUploadHandler = Handler(
 
 var waterDeviceParamUploadHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    String json = params['json']?.first;
-    return WaterDeviceParamUploadPage(taskJson: json);
+    return WaterDeviceParamUploadPage();
   },
 );
 
