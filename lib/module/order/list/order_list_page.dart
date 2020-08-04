@@ -42,6 +42,7 @@ class OrderListPage extends StatefulWidget {
   final String enterId;
   final String monitorId;
   final DateTime startTime;
+  final DateTime endTime;
 
   OrderListPage({
     this.alarmState = '',
@@ -50,6 +51,7 @@ class OrderListPage extends StatefulWidget {
     this.enterId = '',
     this.monitorId = '',
     this.startTime,
+    this.endTime,
   });
 
   @override
@@ -182,7 +184,7 @@ class _OrderListPageState extends State<OrderListPage> {
     _enterNameController.text = '';
     _areaResult = null;
     _startTime = widget.startTime;
-    _endTime = null;
+    _endTime = widget.endTime;
     _alarmType = '';
     _alarmCause = '';
     _alarmLevel = widget.alarmLevel;
