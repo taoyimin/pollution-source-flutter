@@ -26,8 +26,8 @@ RoutineInspectionUploadList _$RoutineInspectionUploadListFromJson(
     deviceId: json['deviceId'] as String ?? '',
     factorName: json['factorName'] as String ?? '',
     factorUnit: json['factorUnit'] as String ?? '',
-    measurePrinciple: json['measurePrinciple'] as String,
-    analysisMethod: json['analysisMethod'] as String,
+    measurePrinciple: json['measurePrinciple'] as String ?? '',
+    analysisMethod: json['analysisMethod'] as String ?? '',
     measureUpper: json['measureUpper'] as String ?? '',
     measureLower: json['measureLower'] as String ?? '',
   );

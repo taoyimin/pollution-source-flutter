@@ -82,7 +82,7 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
             subTitle: '''1、停产申报一天，起止时间写同一天；
 2、停产申报两天（如2号、3号），开始写2号，结束写3号；
 3、在尊重事实的情况下，尽量将预计结束时间设置大的范围；''',
-            imagePath: 'assets/images/long_stop_report_upload_header_image.png',
+            imagePath: 'assets/images/upload_header_image3.png',
             backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(

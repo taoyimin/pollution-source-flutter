@@ -55,7 +55,8 @@ class _WaterDeviceCheckUploadPageState
     _waterDeviceCheckUpload.itemType = task.itemType;
     _waterDeviceCheckUpload.factorName = task.factorName;
     _waterDeviceCheckUpload.factorCode = task.factorCode;
-    _waterDeviceCheckUpload.factorUnit = TextEditingController(text: task.factorUnit);
+    _waterDeviceCheckUpload.factorUnit =
+        TextEditingController(text: task.factorUnit);
   }
 
   @override
@@ -84,7 +85,7 @@ class _WaterDeviceCheckUploadPageState
 设备名称：${task.deviceName}
 开始日期：${task.inspectionStartTime}
 截至日期：${task.inspectionEndTime}''',
-            imagePath: 'assets/images/long_stop_report_upload_header_image.png',
+            imagePath: 'assets/images/upload_header_image3.png',
             backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
@@ -142,19 +143,12 @@ class _WaterDeviceCheckUploadPageState
               controller: _waterDeviceCheckUpload.factorUnit,
             ),
             Gaps.hLine,
-            Row(
-              children: [
-                Container(
-                  height: 46,
-                  child: Center(
-                    child: Text(
-                      '比对方法测定结果',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
+            InfoRowWidget(
+              title: '比对方法测定结果',
+              titleStyle: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Gaps.hLine,
             ...(_waterDeviceCheckUpload.comparisonMeasuredResultList
@@ -268,10 +262,8 @@ class _WaterDeviceCheckUploadPageState
           child: EditRowWidget(
             title: '测定结果${index + 1}',
             keyboardType: TextInputType.number,
-            onChanged: (value){
-              setState(() {
-
-              });
+            onChanged: (value) {
+              setState(() {});
             },
             controller:
                 _waterDeviceCheckUpload.comparisonMeasuredResultList[index],

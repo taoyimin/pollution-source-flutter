@@ -102,7 +102,7 @@ class _AirDeviceCorrectUploadPageState
 设备名称：${task.deviceName}
 开始日期：${task.inspectionStartTime}
 截至日期：${task.inspectionEndTime}''',
-            imagePath: 'assets/images/factor_report_upload_header_image.png',
+            imagePath: 'assets/images/upload_header_image4.png',
             backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
@@ -181,8 +181,7 @@ class _AirDeviceCorrectUploadPageState
             Gaps.hLine,
             InfoRowWidget(
               title: '分析仪原理',
-              content:
-              TextUtil.isEmpty(task.measurePrinciple)
+              content: TextUtil.isEmpty(task.measurePrinciple)
                   ? '无'
                   : task.measurePrinciple,
             ),
@@ -190,15 +189,21 @@ class _AirDeviceCorrectUploadPageState
             InfoRowWidget(
               title: '分析仪量程',
               content:
-              '${_airDeviceCorrectUpload.measureLower} — ${_airDeviceCorrectUpload.measureUpper}',
-              color: Colours.primary_color,
+                  '${_airDeviceCorrectUpload.measureLower} — ${_airDeviceCorrectUpload.measureUpper}',
+              contentStyle: TextStyle(
+                fontSize: 15,
+                color: Colours.primary_color,
+              ),
               onTap: showFactorDialog,
             ),
             Gaps.hLine,
             InfoRowWidget(
               title: '计量单位',
               content: _airDeviceCorrectUpload.factorUnit,
-              color: Colours.primary_color,
+              contentStyle: TextStyle(
+                fontSize: 15,
+                color: Colours.primary_color,
+              ),
               onTap: showFactorDialog,
             ),
             Gaps.hLine,
@@ -408,7 +413,8 @@ class _RoutineInspectionUploadFactorDialogState
   void initState() {
     super.initState();
     factorUnitController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.airDeviceCorrectUpload.factorUnit.toString()),
+      TextEditingValue(
+          text: widget.airDeviceCorrectUpload.factorUnit.toString()),
     );
     measureUpperController = TextEditingController.fromValue(
       TextEditingValue(

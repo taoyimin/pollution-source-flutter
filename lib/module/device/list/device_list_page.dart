@@ -86,7 +86,7 @@ class _DeviceListPageState extends State<DeviceListPage> {
               title: '设备列表',
               subtitle: '展示污染源监控设备列表，点击列表项查看该设备的详细信息',
               background: 'assets/images/button_bg_yellow.png',
-              image: 'assets/images/device_list_bg_image.png',
+              image: 'assets/images/discharge_list_bg_image.png',
               color: Colours.background_yellow,
             )
           ];

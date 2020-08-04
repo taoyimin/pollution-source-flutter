@@ -88,7 +88,7 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
 开始日期：${task.inspectionStartTime}
 截至日期：${task.inspectionEndTime}''',
             imagePath:
-            'assets/images/long_stop_report_upload_header_image.png',
+            'assets/images/upload_header_image3.png',
             backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
@@ -334,9 +334,11 @@ class _AirDeviceCheckUploadPageState extends State<AirDeviceCheckUploadPage> {
               },
             ),
             EditWidget(
+              keyboardType: TextInputType.number,
               controller: list[index].currentCheckResult,
             ),
             EditWidget(
+              keyboardType: TextInputType.number,
               controller: list[index].currentCheckIsPass,
             ),
             Offstage(

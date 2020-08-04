@@ -85,7 +85,7 @@ class _WaterDeviceCorrectUploadPageState
 设备名称：${task.deviceName}
 开始日期：${task.inspectionStartTime}
 截至日期：${task.inspectionEndTime}''',
-            imagePath: 'assets/images/long_stop_report_upload_header_image.png',
+            imagePath: 'assets/images/upload_header_image4.png',
             backgroundColor: Colours.primary_color,
           ),
           MultiBlocListener(
@@ -128,9 +128,10 @@ class _WaterDeviceCorrectUploadPageState
             Column(
               children: _waterDeviceCorrectUpload.waterDeviceCorrectRecordList
                       ?.asMap()
-                      ?.map(
-                          (i, WaterDeviceCorrectRecord waterDeviceCorrectRecord) =>
-                              MapEntry(i, _buildPageListItem(i)))
+                      ?.map((i,
+                              WaterDeviceCorrectRecord
+                                  waterDeviceCorrectRecord) =>
+                          MapEntry(i, _buildPageListItem(i)))
                       ?.values
                       ?.toList() ??
                   [],
@@ -149,7 +150,8 @@ class _WaterDeviceCorrectUploadPageState
                   color: Colors.lightGreen,
                   onTap: () {
                     setState(() {
-                      _waterDeviceCorrectUpload.waterDeviceCorrectRecordList.add(
+                      _waterDeviceCorrectUpload.waterDeviceCorrectRecordList
+                          .add(
                         WaterDeviceCorrectRecord(
                           inspectionTaskId: task.inspectionTaskId,
                           itemType: task.itemType,
@@ -195,9 +197,9 @@ class _WaterDeviceCorrectUploadPageState
               child: Gaps.empty,
             ),
             Offstage(
-              offstage:
-                  _waterDeviceCorrectUpload.waterDeviceCorrectRecordList.length ==
-                      1,
+              offstage: _waterDeviceCorrectUpload
+                      .waterDeviceCorrectRecordList.length ==
+                  1,
               child: Transform.translate(
                 offset: Offset(13, 0),
                 child: IconButton(
@@ -240,6 +242,11 @@ class _WaterDeviceCorrectUploadPageState
               ),
             ),
           ],
+        ),
+        Gaps.hLine,
+        InfoRowWidget(
+          title: '核查情况',
+          titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15,),
         ),
         Gaps.hLine,
         SelectRowWidget(
@@ -295,10 +302,15 @@ class _WaterDeviceCorrectUploadPageState
               .waterDeviceCorrectRecordList[index].currentCheckIsPass,
           onChanged: (value) {
             setState(() {
-              _waterDeviceCorrectUpload
-                  .waterDeviceCorrectRecordList[index].currentCheckIsPass = value;
+              _waterDeviceCorrectUpload.waterDeviceCorrectRecordList[index]
+                  .currentCheckIsPass = value;
             });
           },
+        ),
+        Gaps.hLine,
+        InfoRowWidget(
+          title: '校准情况',
+          titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15,),
         ),
         Gaps.hLine,
         SelectRowWidget(

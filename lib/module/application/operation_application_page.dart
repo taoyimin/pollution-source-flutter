@@ -108,8 +108,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           children: <Widget>[
                             ImageTitleWidget(
                                 title: '基础数据查询',
-                                imagePath:
-                                    'assets/images/icon_data_query.png'),
+                                imagePath: 'assets/images/icon_data_query.png'),
                             //Gaps.vGap10,
                             Row(
                               children: <Widget>[
@@ -129,7 +128,8 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                     content: '查询在线数据',
                                     imagePath:
                                         'assets/images/application_icon_monitor.png',
-                                    router: '${Routes.monitorList}?state=online',
+                                    router:
+                                        '${Routes.monitorList}?state=online',
                                   ),
                                 ),
                               ],
@@ -162,18 +162,15 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                   ),
                                 ),
                                 Gaps.hGap20,
-                                Expanded(child: Gaps.empty),
-//                                InkWellButton9(
-//                                  meta: Meta(
-//                                      title: '易耗品更换',
-//                                      content: '易耗品更换上报',
-//                                      imagePath:
-//                                      'assets/images/application_icon_factor_report.png'),
-//                                  onTap: () {
-//                                    Application.router.navigateTo(context,
-//                                        '${Routes.factorReportUpload}');
-//                                  },
-//                                ),
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '仪器参数设置',
+                                    content: '参数查询与上报',
+                                    imagePath:
+                                        'assets/images/application_icon_factor_report.png',
+                                    router: '${Routes.waterDeviceParamUpload}',
+                                  ),
+                                ),
                               ],
                             ),
                           ],

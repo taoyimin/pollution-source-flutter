@@ -115,7 +115,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
 3、在尊重事实的情况下，尽量将预计结束时间设置大的范围； 
 4、异常解决之后，可以根据实际情况申请更改实际结束时间；
 5、申报证明材料加盖企业公章。''',
-            imagePath: 'assets/images/factor_report_upload_header_image.png',
+            imagePath: 'assets/images/upload_header_image2.png',
             backgroundColor: Colors.deepOrangeAccent,
           ),
           MultiBlocListener(
