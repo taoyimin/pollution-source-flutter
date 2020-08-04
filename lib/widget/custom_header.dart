@@ -109,6 +109,7 @@ class UploadHeaderWidget extends StatelessWidget {
   final String title;
   final Color backgroundColor;
   final String imagePath;
+  final AlignmentGeometry imageAlignment;
   final String subTitle;
   final Widget popupMenuButton;
 
@@ -116,6 +117,7 @@ class UploadHeaderWidget extends StatelessWidget {
     this.title = '主标题',
     this.subTitle = '副标题',
     this.imagePath = '',
+    this.imageAlignment = Alignment.centerRight,
     this.backgroundColor = Colours.primary_color,
     this.popupMenuButton,
   });
@@ -138,8 +140,10 @@ class UploadHeaderWidget extends StatelessWidget {
                 top: SystemUtils.isWeb ? 50 : 70,
                 right: 16,
                 bottom: 10,
+                left: 16,
                 child: Image.asset(
                   imagePath,
+                  alignment: imageAlignment,
                 ),
               ),
               Positioned(
