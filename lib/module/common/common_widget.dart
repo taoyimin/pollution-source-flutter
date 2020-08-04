@@ -2026,6 +2026,9 @@ class EditWidget extends StatelessWidget {
   final String hintText;
   final int flex;
   final TextStyle style;
+  final TextStyle hintStyle;
+  final TextAlign textAlign;
+  final TextInputType keyboardType;
   final TextEditingController controller;
 
   EditWidget({
@@ -2033,6 +2036,9 @@ class EditWidget extends StatelessWidget {
     this.hintText = '请输入',
     this.flex = 1,
     this.style = const TextStyle(fontSize: 15),
+    this.hintStyle = const TextStyle(fontSize: 15),
+    this.textAlign = TextAlign.center,
+    this.keyboardType = TextInputType.text,
     this.controller,
   }) : super(key: key);
 
@@ -2044,12 +2050,12 @@ class EditWidget extends StatelessWidget {
         height: 46,
         child: TextField(
           controller: controller ?? TextEditingController(),
-          textAlign: TextAlign.center,
+          textAlign: textAlign,
           style: style,
-          keyboardType: TextInputType.number,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: style,
+            hintStyle: hintStyle,
             border: UnderlineInputBorder(
               borderSide: BorderSide.none,
             ),
@@ -2174,10 +2180,12 @@ class TextAreaWidget extends StatelessWidget {
   }
 }
 
-/// [DetailRowWidget]加载完成后的回调函数
+/// 加载完成后的回调函数
+@Deprecated('已弃用')
 typedef DetailRowLoaded<T> = void Function(T value);
 
 /// 详情加载单行控件
+@Deprecated('已弃用')
 class DetailRowWidget<T> extends StatelessWidget {
   final String title;
   final String content;
@@ -2287,13 +2295,15 @@ class DetailRowWidget<T> extends StatelessWidget {
 class InfoRowWidget extends StatelessWidget {
   final String title;
   final String content;
-  final Color color;
+  final TextStyle titleStyle;
+  final TextStyle contentStyle;
   final GestureTapCallback onTap;
 
   InfoRowWidget({
     @required this.title,
-    @required this.content,
-    this.color = Colours.primary_text,
+    this.content = '',
+    this.titleStyle = const TextStyle(fontSize: 15),
+    this.contentStyle = const TextStyle(fontSize: 15),
     this.onTap,
   });
 
@@ -2303,12 +2313,12 @@ class InfoRowWidget extends StatelessWidget {
       constraints: BoxConstraints(minHeight: 46),
       child: InkWellButton(onTap: onTap ?? () {}, children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: <Widget>[
               Text(
                 '$title',
-                style: TextStyle(fontSize: 15),
+                style: titleStyle,
               ),
               Gaps.hGap20,
               Expanded(
@@ -2316,7 +2326,7 @@ class InfoRowWidget extends StatelessWidget {
                 child: Text(
                   '$content',
                   textAlign: TextAlign.right,
-                  style: TextStyle(fontSize: 15, color: color),
+                  style: contentStyle,
                 ),
               ),
             ],
