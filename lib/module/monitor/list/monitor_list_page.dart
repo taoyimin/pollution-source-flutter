@@ -41,7 +41,11 @@ class MonitorListPage extends StatefulWidget {
   final String state;
   final String outType;
   final String attentionLevel;
-  final int type; //页面启动类型 0：点击列表项查看详情 1：点击列表项携带数据返回上一层
+
+  /// 页面启动类型 0：点击列表项查看详情
+  /// 1：点击列表项携带数据返回上一层
+  /// 2：上报仪器参数界面选择监控点时打开，点击列表项携带数据返回上一层，并且监控点类型只能选废水
+  final int type;
 
   MonitorListPage({
     this.enterId = '',
@@ -298,6 +302,7 @@ class _MonitorListPageState extends State<MonitorListPage> {
                         '${Routes.monitorDetail}/${monitorList[index].monitorId}');
                     break;
                   case 1:
+                  case 2:
                     Navigator.pop(context, monitorList[index]);
                     break;
                   default:
@@ -470,8 +475,20 @@ class _MonitorListPageState extends State<MonitorListPage> {
                         icon: Icons.search,
                         color: Colors.lightBlue,
                         onTap: () {
-                          Navigator.pop(context);
-                          _refreshController.callRefresh();
+                          if(widget.type == 2 && _monitorType != 'outletType2'){
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('仪器参数上报只能选择废水监控点！'),
+                                action: SnackBarAction(
+                                    label: '我知道了',
+                                    textColor: Colours.primary_color,
+                                    onPressed: () {}),
+                              ),
+                            );
+                          }else {
+                            Navigator.pop(context);
+                            _refreshController.callRefresh();
+                          }
                         },
                       ),
                     ],
