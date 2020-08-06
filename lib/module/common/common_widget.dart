@@ -1969,7 +1969,9 @@ class SelectWidget extends StatelessWidget {
 class EditRowWidget extends StatelessWidget {
   final String title;
   final String hintText;
-  final TextStyle style;
+  final TextStyle titleStyle;
+  final TextStyle contentStyle;
+  final TextStyle hintStyle;
   final TextInputType keyboardType;
   final bool obscureText;
   final ValueChanged<String> onChanged;
@@ -1979,7 +1981,9 @@ class EditRowWidget extends StatelessWidget {
     Key key,
     @required this.title,
     this.hintText,
-    this.style = const TextStyle(fontSize: 15),
+    this.titleStyle = const TextStyle(fontSize: 15),
+    this.contentStyle = const TextStyle(fontSize: 15),
+    this.hintStyle = const TextStyle(fontSize: 15),
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.onChanged,
@@ -1995,20 +1999,20 @@ class EditRowWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             '$title',
-            style: style,
+            style: titleStyle,
           ),
           Gaps.hGap20,
           Flexible(
             child: TextField(
               textAlign: TextAlign.right,
-              style: style,
+              style: contentStyle,
               keyboardType: keyboardType,
               onChanged: onChanged,
               obscureText: obscureText,
               controller: controller,
               decoration: InputDecoration(
                 hintText: hintText ?? '请输入$title',
-                hintStyle: style,
+                hintStyle: hintStyle,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
