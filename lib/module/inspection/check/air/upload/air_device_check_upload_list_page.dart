@@ -181,13 +181,10 @@ class _AirDeviceCheckUploadListPageState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16),
-                              child: Text(
-                                '${list[index].deviceName}：${list[index].factorName}校验',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
+                            Text(
+                              '${list[index].deviceName}：${list[index].factorName}校验',
+                              style: TextStyle(
+                                fontSize: 15,
                               ),
                             ),
                             Gaps.vGap6,

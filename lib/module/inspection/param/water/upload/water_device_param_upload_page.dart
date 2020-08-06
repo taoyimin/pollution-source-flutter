@@ -36,6 +36,9 @@ class WaterDeviceParamUploadPage extends StatefulWidget {
 
 class _WaterDeviceParamUploadPageState
     extends State<WaterDeviceParamUploadPage> {
+  /// 全局Key
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   /// 加载待巡检参数Bloc
   final ListBloc _listBloc = ListBloc(
     listRepository: WaterDeviceParamListRepository(),
@@ -85,6 +88,7 @@ class _WaterDeviceParamUploadPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: EasyRefresh.custom(
         slivers: <Widget>[
           UploadHeaderWidget(
@@ -111,7 +115,7 @@ class _WaterDeviceParamUploadPageState
                       ),
                     );
                   } else if (state is UploadSuccess) {
-                    Scaffold.of(context).showSnackBar(
+                    _scaffoldKey.currentState.showSnackBar(
                       SnackBar(
                         content: Text('${state.message}'),
                         action: SnackBarAction(
@@ -123,7 +127,7 @@ class _WaterDeviceParamUploadPageState
                     Application.router.pop(context);
                   } else if (state is UploadFail) {
                     if (state.message.endsWith('（不会填写可以填入 / 代替）')) {
-                      Scaffold.of(context).showSnackBar(
+                      _scaffoldKey.currentState.showSnackBar(
                         SnackBar(
                           content: Text('${state.message}'),
                           action: SnackBarAction(
@@ -165,7 +169,7 @@ class _WaterDeviceParamUploadPageState
                         ),
                       );
                     } else {
-                      Scaffold.of(context).showSnackBar(
+                      _scaffoldKey.currentState.showSnackBar(
                         SnackBar(
                           content: Text('${state.message}'),
                           action: SnackBarAction(
@@ -242,7 +246,7 @@ class _WaterDeviceParamUploadPageState
               content: _waterDeviceParamUpload.monitor?.monitorName,
               onTap: () async {
                 if (_waterDeviceParamUpload.enter == null) {
-                  Scaffold.of(context).showSnackBar(
+                  _scaffoldKey.currentState.showSnackBar(
                     SnackBar(
                       content: const Text('请先选择企业！'),
                       action: SnackBarAction(
@@ -254,7 +258,7 @@ class _WaterDeviceParamUploadPageState
                 } else {
                   // 打开监控点选择界面并等待返回结果
                   Monitor monitor = await Application.router.navigateTo(context,
-                      '${Routes.monitorList}?enterId=${_waterDeviceParamUpload.enter?.enterId}&type=1');
+                      '${Routes.monitorList}?enterId=${_waterDeviceParamUpload.enter?.enterId}&type=2&monitorType=outletType2');
                   if (monitor != null) {
                     // 设置选中的监控点，重置已经选中的设备
                     setState(() {
@@ -271,7 +275,7 @@ class _WaterDeviceParamUploadPageState
               content: _waterDeviceParamUpload.device?.deviceName,
               onTap: () async {
                 if (_waterDeviceParamUpload.enter == null) {
-                  Scaffold.of(context).showSnackBar(
+                  _scaffoldKey.currentState.showSnackBar(
                     SnackBar(
                       content: const Text('请先选择企业！'),
                       action: SnackBarAction(
@@ -281,7 +285,7 @@ class _WaterDeviceParamUploadPageState
                     ),
                   );
                 } else if (_waterDeviceParamUpload.monitor == null) {
-                  Scaffold.of(context).showSnackBar(
+                  _scaffoldKey.currentState.showSnackBar(
                     SnackBar(
                       content: const Text('请先选择监控点！'),
                       action: SnackBarAction(

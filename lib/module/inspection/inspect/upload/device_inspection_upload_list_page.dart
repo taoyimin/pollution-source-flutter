@@ -262,55 +262,14 @@ class _DeviceInspectionUploadListPageState
               },
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
                       UIUtils.getBoxShadow(),
                     ],
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16),
-                              child: Text(
-                                '${list[index].itemName}：${list[index].contentName}',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            Gaps.vGap6,
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: ListTileWidget(
-                                      '开始日期：${list[index].inspectionStartTime}'),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: ListTileWidget(
-                                      '截至日期：${list[index].inspectionEndTime}'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Checkbox(
-                        value: _deviceInspectUpload.selectedList
-                            .contains(list[index]),
-                        onChanged: (value) {},
-                      ),
-                    ],
-                  ),
+                  child: _buildListItem(list[index], widget.itemInspectType),
                 ),
               ],
             ),
@@ -319,6 +278,116 @@ class _DeviceInspectionUploadListPageState
         childCount: list.length,
       ),
     );
+  }
+
+  Widget _buildListItem(RoutineInspectionUploadList routineInspectionUploadList,
+      String itemInspectType) {
+    if (itemInspectType == "1") {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '${routineInspectionUploadList.itemName}：${routineInspectionUploadList.contentName}',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+                Gaps.vGap6,
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: ListTileWidget(
+                          '开始日期：${routineInspectionUploadList.inspectionStartTime}'),
+                    ),
+                    ListTileWidget(
+                        '截至日期：${routineInspectionUploadList.inspectionEndTime}'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Checkbox(
+            value: _deviceInspectUpload.selectedList
+                .contains(routineInspectionUploadList),
+            onChanged: (value) {},
+          ),
+        ],
+      );
+    } else if (itemInspectType == "5") {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '${routineInspectionUploadList.itemName}：${routineInspectionUploadList.contentName}',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              Checkbox(
+                value: _deviceInspectUpload.selectedList
+                    .contains(routineInspectionUploadList),
+                onChanged: (value) {},
+              ),
+            ],
+          ),
+          Gaps.vGap6,
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: ListTileWidget(
+                  '监测设备：${routineInspectionUploadList.deviceName}',
+                ),
+              ),
+              ListTileWidget(
+                '开始日期：${routineInspectionUploadList.inspectionStartTime}',
+              ),
+              Gaps.hGap16,
+            ],
+          ),
+          Gaps.vGap6,
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: ListTileWidget(
+                  '监测因子：${routineInspectionUploadList.factorName}',
+                ),
+              ),
+              ListTileWidget(
+                '截至日期：${routineInspectionUploadList.inspectionEndTime}',
+              ),
+              Gaps.hGap16,
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Text(
+              '位置的任务类型！itemInspectType=$itemInspectType',
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
@@ -395,7 +464,8 @@ class _DeviceInspectionUploadListPageState
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ImageTitleWidget(
-                  title: '巡检上报(已选中${_deviceInspectUpload.selectedList.length}项)',
+                  title:
+                      '巡检上报(已选中${_deviceInspectUpload.selectedList.length}项)',
                   imagePath: 'assets/images/icon_alarm_manage.png',
                 ),
                 Gaps.vGap16,

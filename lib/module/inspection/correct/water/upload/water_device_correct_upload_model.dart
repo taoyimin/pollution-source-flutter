@@ -6,6 +6,9 @@ class WaterDeviceCorrectUpload {
   /// 位置信息
   BaiduLocation baiduLocation;
 
+  /// 测量单位
+  final TextEditingController factorUnit = TextEditingController();
+
   /// 废水监测设备校准记录集合
   final List<WaterDeviceCorrectRecord> waterDeviceCorrectRecordList = [];
 }

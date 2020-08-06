@@ -182,13 +182,10 @@ class _AirDeviceCorrectUploadListPageState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16),
-                              child: Text(
-                                '${list[index].deviceName}：${list[index].factorName}-${list[index].itemName}',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
+                            Text(
+                              '${list[index].itemName}',
+                              style: TextStyle(
+                                fontSize: 15,
                               ),
                             ),
                             Gaps.vGap6,
@@ -197,13 +194,22 @@ class _AirDeviceCorrectUploadListPageState
                                 Expanded(
                                   flex: 1,
                                   child: ListTileWidget(
-                                      '开始日期：${list[index].inspectionStartTime}'),
+                                      '设备名称：${list[index].deviceName}'),
                                 ),
+                                ListTileWidget(
+                                    '开始日期：${list[index].inspectionStartTime}'),
+                              ],
+                            ),
+                            Gaps.vGap6,
+                            Row(
+                              children: <Widget>[
                                 Expanded(
                                   flex: 1,
                                   child: ListTileWidget(
-                                      '截至日期：${list[index].inspectionEndTime}'),
+                                      '监测因子：${list[index].factorName}'),
                                 ),
+                                ListTileWidget(
+                                    '截至日期：${list[index].inspectionEndTime}')
                               ],
                             ),
                           ],

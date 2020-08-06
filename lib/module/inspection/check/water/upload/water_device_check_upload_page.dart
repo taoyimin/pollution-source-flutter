@@ -127,7 +127,7 @@ class _WaterDeviceCheckUploadPageState
             ),
             Gaps.hLine,
             InfoRowWidget(
-              title: '校验因子',
+              title: '监测因子',
               content: _waterDeviceCheckUpload.factorName ?? '无',
             ),
             Gaps.hLine,
@@ -141,6 +141,10 @@ class _WaterDeviceCheckUploadPageState
               title: '测定结果单位',
               hintText: '请输入测定单位',
               controller: _waterDeviceCheckUpload.factorUnit,
+              contentStyle: TextStyle(
+                color: Colours.primary_color,
+                fontSize: 15,
+              ),
             ),
             Gaps.hLine,
             InfoRowWidget(

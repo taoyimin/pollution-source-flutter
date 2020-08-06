@@ -13,6 +13,8 @@ class WaterDeviceCorrectUploadRepository
   checkData(WaterDeviceCorrectUpload data) {
     if (data.baiduLocation == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
+    if (TextUtil.isEmpty(data.factorUnit.text))
+      throw DioError(error: InvalidParamException('请输入测量单位'));
     if (data.waterDeviceCorrectRecordList.length == 0)
       throw DioError(error: InvalidParamException('请至少上传一条记录'));
     for (int i = 0; i < data.waterDeviceCorrectRecordList.length; i++) {

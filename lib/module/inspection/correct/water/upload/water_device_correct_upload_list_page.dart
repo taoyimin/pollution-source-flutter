@@ -194,12 +194,27 @@ class _WaterDeviceCorrectUploadListPageState
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 1,
+                                  flex: 6,
+                                  child: ListTileWidget(
+                                      '监控点名：${list[index].monitorName}'),
+                                ),
+                                Expanded(
+                                  flex: 5,
                                   child: ListTileWidget(
                                       '开始日期：${list[index].inspectionStartTime}'),
                                 ),
+                              ],
+                            ),
+                            Gaps.vGap6,
+                            Row(
+                              children: <Widget>[
                                 Expanded(
-                                  flex: 1,
+                                  flex: 6,
+                                  child: ListTileWidget(
+                                      '监测因子：${list[index].factorName}'),
+                                ),
+                                Expanded(
+                                  flex: 5,
                                   child: ListTileWidget(
                                       '截至日期：${list[index].inspectionEndTime}'),
                                 ),

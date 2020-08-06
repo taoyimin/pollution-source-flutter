@@ -51,6 +51,7 @@ class _WaterDeviceCorrectUploadPageState
   @override
   void initState() {
     super.initState();
+    _waterDeviceCorrectUpload.factorUnit.text = task.factorUnit;
     // 加载界面(默认有一条记录)
     _waterDeviceCorrectUpload.waterDeviceCorrectRecordList.add(
       WaterDeviceCorrectRecord(
@@ -63,6 +64,7 @@ class _WaterDeviceCorrectUploadPageState
   @override
   void dispose() {
     /// 释放资源
+    _waterDeviceCorrectUpload.factorUnit.dispose();
     _waterDeviceCorrectUpload.waterDeviceCorrectRecordList.forEach(
       (waterDeviceCorrectUpload) {
         waterDeviceCorrectUpload.standardSolution.dispose();
@@ -123,6 +125,18 @@ class _WaterDeviceCorrectUploadPageState
                   _waterDeviceCorrectUpload.baiduLocation = baiduLocation;
                 });
               },
+            ),
+            Gaps.hLine,
+            InfoRowWidget(
+              title: '监测因子',
+              content: task.factorName ?? '无',
+            ),
+            Gaps.hLine,
+            EditRowWidget(
+              title: '测量单位',
+              controller: _waterDeviceCorrectUpload.factorUnit,
+              contentStyle:
+                  TextStyle(color: Colours.primary_color, fontSize: 15),
             ),
             Gaps.hLine,
             Column(
@@ -246,7 +260,10 @@ class _WaterDeviceCorrectUploadPageState
         Gaps.hLine,
         InfoRowWidget(
           title: '核查情况',
-          titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15,),
+          titleStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
         ),
         Gaps.hLine,
         SelectRowWidget(
@@ -310,7 +327,10 @@ class _WaterDeviceCorrectUploadPageState
         Gaps.hLine,
         InfoRowWidget(
           title: '校准情况',
-          titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15,),
+          titleStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
         ),
         Gaps.hLine,
         SelectRowWidget(

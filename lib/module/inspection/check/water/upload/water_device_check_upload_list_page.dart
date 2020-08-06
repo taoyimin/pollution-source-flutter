@@ -181,27 +181,43 @@ class _WaterDeviceCheckUploadListPageState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16),
-                              child: Text(
-                                '${list[index].deviceName}-${list[index].factorName}校验',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
+                            Text(
+                              '${list[index].deviceName}',
+                              style: TextStyle(
+                                fontSize: 15,
                               ),
                             ),
                             Gaps.vGap6,
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 1,
+                                  flex: 6,
                                   child: ListTileWidget(
-                                      '开始日期：${list[index].inspectionStartTime}'),
+                                    '监控点名：${list[index].monitorName}',
+                                  ),
                                 ),
                                 Expanded(
-                                  flex: 1,
+                                  flex: 5,
                                   child: ListTileWidget(
-                                      '截至日期：${list[index].inspectionEndTime}'),
+                                    '开始日期：${list[index].inspectionStartTime}',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Gaps.vGap6,
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 6,
+                                  child: ListTileWidget(
+                                    '监测因子：${list[index].factorName}',
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: ListTileWidget(
+                                    '截至日期：${list[index].inspectionEndTime}',
+                                  ),
                                 ),
                               ],
                             ),
