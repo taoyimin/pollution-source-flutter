@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'device_list_model.g.dart';
+part 'water_device_list_model.g.dart';
 
-/// 设备列表
+/// 废水监测设备列表
 @JsonSerializable()
-class Device extends Equatable {
+class WaterDevice extends Equatable {
   @JsonKey(name: 'Device_Id')
   final int deviceId; // 设备ID
   @JsonKey(defaultValue: '')
@@ -27,7 +27,7 @@ class Device extends Equatable {
   @JsonKey(defaultValue: '')
   final String analysisMethodStr; // 分析方法中文
 
-  const Device({
+  const WaterDevice({
     this.deviceId,
     this.deviceName,
     this.deviceNo,
@@ -54,7 +54,7 @@ class Device extends Equatable {
         analysisMethodStr,
       ];
 
-  factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
+  factory WaterDevice.fromJson(Map<String, dynamic> json) => _$WaterDeviceFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DeviceToJson(this);
+  Map<String, dynamic> toJson() => _$WaterDeviceToJson(this);
 }

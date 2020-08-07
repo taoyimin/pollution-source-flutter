@@ -15,24 +15,24 @@ import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 
-import 'device_list_model.dart';
-import 'device_list_repository.dart';
+import 'water_device_list_model.dart';
+import 'water_device_list_repository.dart';
 
 /// 设备列表
-class DeviceListPage extends StatefulWidget {
+class WaterDeviceListPage extends StatefulWidget {
   final String monitorId;
   final int type; //启用页面的类型 0：点击列表项查看详情（暂无详情页） 1：点击列表项返回上一层与设备信息
 
-  DeviceListPage({
+  WaterDeviceListPage({
     this.monitorId = '',
     this.type = 1,
   });
 
   @override
-  _DeviceListPageState createState() => _DeviceListPageState();
+  _WaterDeviceListPageState createState() => _WaterDeviceListPageState();
 }
 
-class _DeviceListPageState extends State<DeviceListPage> {
+class _WaterDeviceListPageState extends State<WaterDeviceListPage> {
   /// 全局Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -41,7 +41,7 @@ class _DeviceListPageState extends State<DeviceListPage> {
 
   /// 列表Bloc
   final ListBloc _listBloc = ListBloc(
-    listRepository: DeviceListRepository(),
+    listRepository: WaterDeviceListRepository(),
   );
 
   Completer<void> _refreshCompleter;
@@ -66,7 +66,7 @@ class _DeviceListPageState extends State<DeviceListPage> {
 
   /// 获取请求参数
   Map<String, dynamic> _getRequestParam() {
-    return DeviceListRepository.createParams(
+    return WaterDeviceListRepository.createParams(
       monitorId: widget.monitorId,
     );
   }
@@ -149,7 +149,7 @@ class _DeviceListPageState extends State<DeviceListPage> {
     );
   }
 
-  Widget _buildPageLoadedList(List<Device> deviceList) {
+  Widget _buildPageLoadedList(List<WaterDevice> deviceList) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

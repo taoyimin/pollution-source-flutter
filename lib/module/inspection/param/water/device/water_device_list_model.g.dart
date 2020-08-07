@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'device_list_model.dart';
+part of 'water_device_list_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Device _$DeviceFromJson(Map<String, dynamic> json) {
-  return Device(
+WaterDevice _$WaterDeviceFromJson(Map<String, dynamic> json) {
+  return WaterDevice(
     deviceId: json['Device_Id'] as int,
     deviceName: json['deviceName'] as String ?? '',
     deviceNo: json['deviceNo'] as String ?? '',
@@ -21,7 +21,7 @@ Device _$DeviceFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
+Map<String, dynamic> _$WaterDeviceToJson(WaterDevice instance) => <String, dynamic>{
       'Device_Id': instance.deviceId,
       'deviceName': instance.deviceName,
       'deviceNo': instance.deviceNo,
