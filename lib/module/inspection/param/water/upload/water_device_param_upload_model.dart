@@ -1,6 +1,6 @@
 import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
-import 'package:pollution_source/module/device/list/device_list_model.dart';
+import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
@@ -20,7 +20,7 @@ class WaterDeviceParamUpload {
   Monitor monitor;
 
   /// 选中设备
-  Device device;
+  WaterDevice device;
 
   /// 测量原理
   String measurePrincipleStr;

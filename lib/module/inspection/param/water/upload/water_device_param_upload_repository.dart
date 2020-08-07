@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
-import 'package:pollution_source/module/device/list/device_list_model.dart';
+import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_model.dart';
 
 class WaterDeviceParamUploadRepository
@@ -122,7 +122,7 @@ class WaterDeviceParamUploadRepository
 
   /// 当前参数类型是否为必要参数
   static bool isRequiredParam(
-      WaterDeviceParamType waterDeviceParamType, Device device) {
+      WaterDeviceParamType waterDeviceParamType, WaterDevice device) {
     if (waterDeviceParamType.parameterTypeId == 906 && device?.deviceId != 31) {
       // 参数类型是明渠流量计，且设备ID不等于31，不是必要参数
       return false;

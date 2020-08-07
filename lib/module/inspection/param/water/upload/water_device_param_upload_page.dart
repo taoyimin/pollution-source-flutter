@@ -10,7 +10,7 @@ import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
-import 'package:pollution_source/module/device/list/device_list_model.dart';
+import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/upload/water_device_param_list_repository.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_model.dart';
@@ -296,7 +296,7 @@ class _WaterDeviceParamUploadPageState
                   );
                 } else {
                   // 打开设备选择界面并等待返回结果
-                  Device device = await Application.router.navigateTo(context,
+                  WaterDevice device = await Application.router.navigateTo(context,
                       '${Routes.deviceList}?monitorId=${_waterDeviceParamUpload.monitor?.monitorId}&type=1');
                   if (device != null) {
                     // 设置选中的设备和测量原理与分析方法
