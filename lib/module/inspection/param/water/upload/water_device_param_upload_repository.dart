@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
-import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/device/water_device_list_model.dart';
+import 'package:pollution_source/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_model.dart';
 
 class WaterDeviceParamUploadRepository

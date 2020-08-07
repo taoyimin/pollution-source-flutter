@@ -10,9 +10,8 @@ import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/common/upload/upload_bloc.dart';
 import 'package:pollution_source/module/common/upload/upload_event.dart';
 import 'package:pollution_source/module/common/upload/upload_state.dart';
-import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
-import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/upload/water_device_param_list_repository.dart';
+import 'package:pollution_source/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -23,6 +22,7 @@ import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/custom_header.dart';
 import 'package:pollution_source/widget/git_dialog.dart';
 
+import 'water_device_param_list_repository.dart';
 import 'water_device_param_upload_repository.dart';
 
 /// 上报仪器参数设置界面

@@ -1,8 +1,8 @@
 import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/Android/FlutterProjects/pollution_source/lib/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
+import 'package:pollution_source/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_model.dart';
 
 /// 废水监测设备参数巡检上报
