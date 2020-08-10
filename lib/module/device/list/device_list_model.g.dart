@@ -13,6 +13,7 @@ Device _$DeviceFromJson(Map<String, dynamic> json) {
     deviceNo: json['deviceNo'] as String ?? '',
     deviceTypeName: json['deviceTypeName'] as String ?? '',
     markerName: json['markerName'] as String ?? '',
+    markerHotLine: json['markerHotLine'] as String ?? '',
   );
 }
 
@@ -22,4 +23,5 @@ Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
       'deviceNo': instance.deviceNo,
       'deviceTypeName': instance.deviceTypeName,
       'markerName': instance.markerName,
+      'markerHotLine': instance.markerHotLine,
     };

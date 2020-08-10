@@ -439,6 +439,14 @@ class CompatUtils {
         return HttpApiPollution.deviceParamUpload;
       case HttpApi.deviceParamList:
         return HttpApiPollution.deviceParamList;
+      case HttpApi.waterDeviceList:
+        return HttpApiPollution.waterDeviceList;
+      case HttpApi.consumableReplaceUpload:
+        return HttpApiPollution.consumableReplaceUpload;
+      case HttpApi.deviceRepairUpload:
+        return HttpApiPollution.deviceRepairUpload;
+      case HttpApi.standardReplaceUpload:
+        return HttpApiPollution.standardReplaceUpload;
       case HttpApi.checkVersion:
         return HttpApiPollution.checkVersion;
       case HttpApi.changePassword:
@@ -555,6 +563,14 @@ class CompatUtils {
         return HttpApiOperation.deviceParamUpload;
       case HttpApi.deviceParamList:
         return HttpApiOperation.deviceParamList;
+      case HttpApi.waterDeviceList:
+        return HttpApiOperation.waterDeviceList;
+      case HttpApi.consumableReplaceUpload:
+        return HttpApiOperation.consumableReplaceUpload;
+      case HttpApi.deviceRepairUpload:
+        return HttpApiOperation.deviceRepairUpload;
+      case HttpApi.standardReplaceUpload:
+        return HttpApiOperation.standardReplaceUpload;
       case HttpApi.checkVersion:
         return HttpApiOperation.checkVersion;
       case HttpApi.changePassword:

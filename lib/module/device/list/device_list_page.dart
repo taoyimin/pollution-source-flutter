@@ -84,7 +84,7 @@ class _DeviceListPageState extends State<DeviceListPage> {
             ListHeaderWidget(
               listBloc: _listBloc,
               title: '设备列表',
-              subtitle: '展示污染源监控设备列表，点击列表项查看该设备的详细信息',
+              subtitle: '展示污染源监控设备列表，点击列表项则选中对应的设备',
               background: 'assets/images/button_bg_yellow.png',
               image: 'assets/images/discharge_list_bg_image.png',
               color: Colours.background_yellow,
@@ -186,7 +186,7 @@ class _DeviceListPageState extends State<DeviceListPage> {
                       Container(
                         padding: const EdgeInsets.all(3),
                         child: Image.asset(
-                          'assets/images/icon_unknown_monitor.png',
+                          'assets/images/icon_device_list.png',
                           width: 40,
                           height: 40,
                         ),
@@ -210,12 +210,12 @@ class _DeviceListPageState extends State<DeviceListPage> {
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 1,
+                                  flex: 6,
                                   child: ListTileWidget(
                                       '设备编号：${deviceList[index].deviceNo}'),
                                 ),
                                 Expanded(
-                                  flex: 1,
+                                  flex: 5,
                                   child: ListTileWidget(
                                       '设备类型：${deviceList[index].deviceTypeName}'),
                                 ),

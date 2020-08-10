@@ -16,6 +16,8 @@ class Device extends Equatable {
   final String deviceTypeName; // 设备类型
   @JsonKey(defaultValue: '')
   final String markerName; // 制造商
+  @JsonKey(defaultValue: '')
+  final String markerHotLine; // 客服热线
 
   const Device({
     this.deviceId,
@@ -23,6 +25,7 @@ class Device extends Equatable {
     this.deviceNo,
     this.deviceTypeName,
     this.markerName,
+    this.markerHotLine,
   });
 
   @override
@@ -32,6 +35,7 @@ class Device extends Equatable {
         deviceNo,
         deviceTypeName,
         markerName,
+        markerHotLine,
       ];
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
