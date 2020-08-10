@@ -15,9 +15,11 @@ import 'package:pollution_source/module/inspection/correct/air/upload/air_device
 import 'package:pollution_source/module/inspection/correct/water/upload/water_device_correct_upload_page.dart';
 import 'package:pollution_source/module/inspection/param/water/device/water_device_list_page.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_page.dart';
+import 'package:pollution_source/module/inspection/repair/upload/device_repair_upload_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
 import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_page.dart';
+import 'package:pollution_source/module/inspection/standard/upload/standard_replace_upload_page.dart';
 import 'package:pollution_source/module/license/list/license_list_page.dart';
 import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
@@ -387,6 +389,18 @@ var waterDeviceListHandler = Handler(
 var consumableReplaceUploadHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     return ConsumableReplaceUploadPage();
+  },
+);
+
+var deviceRepairUploadHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return DeviceRepairUploadPage();
+  },
+);
+
+var standardReplaceUploadHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return StandardReplaceUploadPage();
   },
 );
 

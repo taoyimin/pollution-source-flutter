@@ -36,6 +36,8 @@ class Routes {
   static String waterDeviceParamUpload = "/waterDeviceParamUpload";
   static String waterDeviceList = "/waterDeviceList";
   static String consumableReplaceUpload = "/consumableReplaceUpload";
+  static String deviceRepairUpload = "/deviceRepairUpload";
+  static String standardReplaceUpload = "/standardReplaceUpload";
   static String changePassword = "/changePassword";
   static String shareProduct = "/shareProduct";
   static String noticeList = "/noticeList";
@@ -211,6 +213,16 @@ class Routes {
     router.define(
       consumableReplaceUpload,
       handler: consumableReplaceUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      deviceRepairUpload,
+      handler: deviceRepairUploadHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      standardReplaceUpload,
+      handler: standardReplaceUploadHandler,
       transitionType: TransitionType.native,
     );
     router.define(
