@@ -50,6 +50,7 @@ class AirDeviceCheckUploadRepository
       ..addAll([MapEntry('itemType', data.itemType)])
       ..addAll([MapEntry('factorCode', data.factorCode)])
       ..addAll([MapEntry('factorName', data.factorName)])
+      ..addAll([MapEntry('factorUnit', data.factorUnit)])
       ..addAll([MapEntry('compareUnit', data.factorUnit)])
       ..addAll([MapEntry('cemsUnit', data.factorUnit)])
       ..addAll([MapEntry('compareAvgVal', data.compareAvgVal)])

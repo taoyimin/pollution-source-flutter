@@ -59,6 +59,9 @@ class WaterDeviceCorrectUploadRepository
         return MapEntry('itemType', item.itemType);
       }))
       ..addAll(data.waterDeviceCorrectRecordList.map((item) {
+        return MapEntry('factorUnit', data.factorUnit.text);
+      }))
+      ..addAll(data.waterDeviceCorrectRecordList.map((item) {
         return MapEntry(
             'currentCheckTime', DateUtil.formatDate(item.currentCheckTime));
       }))

@@ -66,7 +66,7 @@ class AirDeviceCorrectUploadRepository
         MapEntry('correctStartTime', DateUtil.formatDate(data.correctStartTime))
       ])
       ..addAll([
-        MapEntry('correctEndTime', DateUtil.formatDate(data.correctStartTime))
+        MapEntry('correctEndTime', DateUtil.formatDate(data.correctEndTime))
       ])
       ..addAll([MapEntry('zeroVal', data.zeroVal.text)])
       ..addAll([MapEntry('beforeZeroVal', data.beforeZeroVal.text)])
