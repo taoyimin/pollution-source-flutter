@@ -156,6 +156,18 @@ enum HttpApi {
   /// 废水监测设备参数列表
   deviceParamList,
 
+  /// 废水监测设备列表
+  waterDeviceList,
+
+  /// 易耗品更换上报
+  consumableReplaceUpload,
+
+  /// 设备检修上报
+  deviceRepairUpload,
+
+  /// 标准样品更换上报
+  standardReplaceUpload,
+
   /// 检查更新
   checkVersion,
 
@@ -200,7 +212,7 @@ class HttpApiPollution {
   static const String monitorHistoryData = 'monitorRealData/queryDetailHistory';
   static const String monitorStatistics = 'appIndex/getMonitorStatistics';
   static const String deviceList =
-      'ywmh/tParameterInspectionRecord/selectDevice';
+      'archives/enterOutMonitorDevice/selectDevice';
   static const String orderList = 'Supervise/getReadyRemindDataByStatus';
   static const String orderState =
       'dictionary/getSubListByParent?dicCode=orderStatus';
@@ -250,13 +262,19 @@ class HttpApiPollution {
   static const String airDeviceCorrectUpload =
       'ywmh/tInspectionTask/submitGasCmesCorrect';
   static const String waterDeviceCorrectUpload =
-      'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
+      'ywmh/tInspectionTask/submitWatCorrectInfo';
   static const String deviceCorrectLastValue =
       'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
   static const String deviceParamUpload =
       'ywmh/tParameterInspectionRecord/submitParameterInspectionRecord';
   static const String deviceParamList =
       'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
+  static const String waterDeviceList =
+      'ywmh/tParameterInspectionRecord/selectDevice';
+  static const String consumableReplaceUpload =
+      'consumableChangeRecord/insertOrUpdate';
+  static const String deviceRepairUpload = 'ywmh/overhaulRecord/save';
+  static const String standardReplaceUpload = 'standardSampleChangeRecord/insertOrUpdate';
   static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
   static const String notificationList = 'pushMessage/getPushMessageHistory';
@@ -290,7 +308,7 @@ class HttpApiOperation {
   static const String monitorStatistics =
       'statistics/queryMonitorRealDataCountByCondition';
   static const String deviceList =
-      'ywmh/tParameterInspectionRecord/selectDevice';
+      'archives/enterOutMonitorDevice/selectDevice';
   static const String orderList = 'commonSupervise/list';
   static const String orderState =
       'dictionary/getSubListAPI?dicCode=orderStatus';
@@ -347,6 +365,12 @@ class HttpApiOperation {
       'ywmh/tParameterInspectionRecord/submitParameterInspectionRecord';
   static const String deviceParamList =
       'ywmh/tInspectionTask/selectThreeListByParent?dic_code=watParameterSet';
+  static const String waterDeviceList =
+      'ywmh/tParameterInspectionRecord/selectDevice';
+  static const String consumableReplaceUpload =
+      'consumableChangeRecord/insertOrUpdate';
+  static const String deviceRepairUpload = 'ywmh/overhaulRecord/save';
+  static const String standardReplaceUpload = 'standardSampleChangeRecord/insertOrUpdate';
   static const String checkVersion = 'app/update.json';
   static const String changePassword = 'ywyh/updatePassword';
   static const String notificationList = 'pushMessage/getPushMessageHistory';
