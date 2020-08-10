@@ -149,7 +149,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                             ImageTitleWidget(
                                 title: '运维管理上报',
                                 imagePath:
-                                    'assets/images/icon_alarm_manage.png'),
+                                    'assets/images/icon_operation_manage_upload.png'),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
@@ -170,6 +170,47 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                         'assets/images/application_icon_factor_report.png',
                                     router: '${Routes.waterDeviceParamUpload}',
                                   ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '易耗品更换',
+                                    content: '易耗品更换上报',
+                                    imagePath:
+                                    'assets/images/application_icon_longStop_report.png',
+                                    router: '${Routes.consumableReplaceUpload}',
+                                  ),
+                                ),
+                                Gaps.hGap20,
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '设备检修',
+                                    content: '设备检修上报',
+                                    imagePath:
+                                    'assets/images/application_icon_enter.png',
+                                    router: '${Routes.deviceRepairUpload}',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '标准样品更换',
+                                    content: '标准品更换上报',
+                                    imagePath:
+                                    'assets/images/application_icon_monitor.png',
+                                    router: '${Routes.standardReplaceUpload}',
+                                  ),
+                                ),
+                                Gaps.hGap20,
+                                Expanded(
+                                  flex: 1,
+                                  child: Gaps.empty,
                                 ),
                               ],
                             ),
