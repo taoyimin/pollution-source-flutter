@@ -11,7 +11,6 @@ import 'package:pollution_source/module/inspection/check/water/upload/water_devi
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/correct/water/upload/water_device_correct_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspection_upload_list_page.dart';
-import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_list_page.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_model.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
 import 'package:pollution_source/res/colors.dart';
@@ -356,13 +355,13 @@ class _RoutineInspectionDetailPageState
                   return Center(
                     child: Text('未知的监控点类型，monitorType=${widget.monitorType}'),
                   );
-                case '4':
-                  // 废水监测设备参数巡检上报列表
-                  return WaterDeviceParamUploadListPage(
-                    monitorId: widget.monitorId,
-                    itemInspectType: routineInspectionDetail.itemInspectType,
-                    state: widget.state,
-                  );
+//                case '4':
+//                  // 废水监测设备参数巡检上报列表
+//                  return WaterDeviceParamUploadListPage(
+//                    monitorId: widget.monitorId,
+//                    itemInspectType: routineInspectionDetail.itemInspectType,
+//                    state: widget.state,
+//                  );
                 default:
                   return Center(
                     child: Text(

@@ -18,7 +18,7 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'water_device_list_model.dart';
 import 'water_device_list_repository.dart';
 
-/// 设备列表
+/// 废水监测设备列表
 class WaterDeviceListPage extends StatefulWidget {
   final String monitorId;
   final int type; //启用页面的类型 0：点击列表项查看详情（暂无详情页） 1：点击列表项返回上一层与设备信息
@@ -84,7 +84,7 @@ class _WaterDeviceListPageState extends State<WaterDeviceListPage> {
             ListHeaderWidget(
               listBloc: _listBloc,
               title: '设备列表',
-              subtitle: '展示污染源监控设备列表，点击列表项查看该设备的详细信息',
+              subtitle: '展示污染源监控设备列表，点击列表项则选中对应的设备',
               background: 'assets/images/button_bg_yellow.png',
               image: 'assets/images/discharge_list_bg_image.png',
               color: Colours.background_yellow,
@@ -186,7 +186,7 @@ class _WaterDeviceListPageState extends State<WaterDeviceListPage> {
                       Container(
                         padding: const EdgeInsets.all(3),
                         child: Image.asset(
-                          'assets/images/icon_unknown_monitor.png',
+                          'assets/images/icon_device_list.png',
                           width: 40,
                           height: 40,
                         ),
@@ -207,23 +207,13 @@ class _WaterDeviceListPageState extends State<WaterDeviceListPage> {
                               ),
                             ),
                             Gaps.vGap6,
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: ListTileWidget(
-                                      '设备编号：${deviceList[index].deviceNo}'),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: ListTileWidget(
-                                      '设备类型：${deviceList[index].deviceType}'),
-                                ),
-                              ],
+                            ListTileWidget(
+                              '分析方法：${deviceList[index].analysisMethodStr}',
                             ),
                             Gaps.vGap6,
                             ListTileWidget(
-                                '制造商：${deviceList[index].markerName}'),
+                              '测量原理：${deviceList[index].measurePrincipleStr}',
+                            ),
                           ],
                         ),
                       )

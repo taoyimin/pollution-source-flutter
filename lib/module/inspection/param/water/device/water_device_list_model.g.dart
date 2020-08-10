@@ -21,7 +21,8 @@ WaterDevice _$WaterDeviceFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$WaterDeviceToJson(WaterDevice instance) => <String, dynamic>{
+Map<String, dynamic> _$WaterDeviceToJson(WaterDevice instance) =>
+    <String, dynamic>{
       'Device_Id': instance.deviceId,
       'deviceName': instance.deviceName,
       'deviceNo': instance.deviceNo,

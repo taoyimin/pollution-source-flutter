@@ -6,7 +6,7 @@ import 'water_device_list_model.dart';
 class WaterDeviceListRepository extends ListRepository<WaterDevice> {
   @override
   HttpApi createApi() {
-    return HttpApi.deviceList;
+    return HttpApi.waterDeviceList;
   }
 
   @override
