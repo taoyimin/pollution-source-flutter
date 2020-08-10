@@ -20,6 +20,7 @@ import 'package:pollution_source/module/inspection/routine/detail/routine_inspec
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
+import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/git_dialog.dart';
 
@@ -150,15 +151,7 @@ class _DeviceInspectionUploadListPageState
                   ),
                 );
               } else if (state is UploadSuccess) {
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${state.message}'),
-                    action: SnackBarAction(
-                        label: '我知道了',
-                        textColor: Colours.primary_color,
-                        onPressed: () {}),
-                  ),
-                );
+                Toast.show('${state.message}');
                 Application.router.pop(context);
                 // 关闭BottomSheet
                 _bottomSheetController?.close();

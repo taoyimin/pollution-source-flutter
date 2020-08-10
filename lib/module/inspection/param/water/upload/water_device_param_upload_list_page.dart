@@ -19,6 +19,7 @@ import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 
 /// 废水监测设备参数巡检上报列表
+@Deprecated('已弃用')
 class WaterDeviceParamUploadListPage extends StatefulWidget {
   final String monitorId;
   final String itemInspectType;
@@ -36,6 +37,7 @@ class WaterDeviceParamUploadListPage extends StatefulWidget {
       _WaterDeviceParamUploadListPageState();
 }
 
+@Deprecated('已弃用')
 class _WaterDeviceParamUploadListPageState
     extends State<WaterDeviceParamUploadListPage>
     with AutomaticKeepAliveClientMixin {

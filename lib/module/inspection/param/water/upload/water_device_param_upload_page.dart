@@ -297,7 +297,7 @@ class _WaterDeviceParamUploadPageState
                 } else {
                   // 打开设备选择界面并等待返回结果
                   WaterDevice device = await Application.router.navigateTo(context,
-                      '${Routes.deviceList}?monitorId=${_waterDeviceParamUpload.monitor?.monitorId}&type=1');
+                      '${Routes.waterDeviceList}?monitorId=${_waterDeviceParamUpload.monitor?.monitorId}&type=1');
                   if (device != null) {
                     // 设置选中的设备和测量原理与分析方法
                     setState(() {
