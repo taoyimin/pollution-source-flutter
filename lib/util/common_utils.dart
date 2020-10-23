@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
+
 import 'package:pollution_source/module/common/common_model.dart';
 
 class CommonUtils {
@@ -84,5 +88,18 @@ class CommonUtils {
     }
     String size = value.toStringAsFixed(2);
     return size + unitArr[index];
+  }
+
+  /// 检查密码是否符合规范
+  static bool checkPassword(String password){
+    RegExp regExp = RegExp(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!^&@#$%.?\*-\+=:,\\?\[\]\{}]).{6,16}$');
+    return regExp.hasMatch(password);
+  }
+
+  /// 对字符串进行MD5加密
+  static String generateMD5(String string) {
+    var content = new Utf8Encoder().convert(string);
+    var digest = md5.convert(content);
+    return hex.encode(digest.bytes);
   }
 }
