@@ -30,9 +30,10 @@ class PollutionDioUtils {
         return true;
       },
       // 正式环境
-      baseUrl: 'http://111.75.227.207:19551/'
+      baseUrl: 'http://111.75.227.207:19551/',
       // 测试环境
       // baseUrl: 'http://182.106.189.190:9999/',
+      // baseUrl: 'http://kevin.cn1.utools.club/',
     );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());
@@ -71,10 +72,9 @@ class OperationDioUtils {
         return true;
       },
       // 正式环境
-      baseUrl: 'http://111.75.227.207:19550/',
+       baseUrl: 'http://111.75.227.207:19550/',
       // 测试环境
       // baseUrl: 'http://192.168.253.3:8002/',
-      // baseUrl: 'http://192.168.253.1:8002/',
     );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());

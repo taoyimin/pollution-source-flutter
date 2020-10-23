@@ -556,7 +556,7 @@ class CompatUtils {
       case HttpApi.airDeviceCorrectUpload:
         return HttpApiOperation.airDeviceCorrectUpload;
       case HttpApi.waterDeviceCorrectUpload:
-        return HttpApiPollution.waterDeviceCorrectUpload;
+        return HttpApiOperation.waterDeviceCorrectUpload;
       case HttpApi.deviceCorrectLastValue:
         return HttpApiOperation.deviceCorrectLastValue;
       case HttpApi.deviceParamUpload:

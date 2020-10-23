@@ -5,6 +5,7 @@ import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 
 /// 修改密码界面
@@ -91,6 +92,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       }
                       if (TextUtil.isEmpty(newPasswordController.text)) {
                         throw DioError(error: InvalidParamException('请输入新密码'));
+                      }
+                      if(!CommonUtils.checkPassword(newPasswordController.text)){
+                        throw DioError(error: InvalidParamException('密码最少6位,必须由大写字母，小写字母，数字，特殊符号组成!'));
                       }
                       if (TextUtil.isEmpty(confirmPasswordController.text)) {
                         throw DioError(error: InvalidParamException('请确认新密码'));

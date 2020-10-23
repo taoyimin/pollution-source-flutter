@@ -10,6 +10,7 @@ import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/widget/login_button.dart';
@@ -80,6 +81,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _login() async {
+    if(!CommonUtils.checkPassword(_passwordController.text)){
+      Toast.show("您当前使用的是弱密码，无法登录，请前往PC端修改密码！");
+      return;
+    }
     try {
       Response response = await _loginRepository.login(
         userType: _userType,

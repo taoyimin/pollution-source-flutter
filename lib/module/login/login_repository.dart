@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/intercept.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/compat_utils.dart';
 import 'dart:convert' as convert;
 
@@ -12,7 +13,7 @@ class LoginRepository {
       // 运维用户把用户名和密码放在header中
       var header = {
         'userCode': userName,
-        'passWord': passWord,
+        'passWord': CommonUtils.generateMD5(passWord),
         'timestamp': DateUtil.getNowDateMs(),
       };
       // 运维登录的时候使用新的dio添加Authorization，防止token拦截器覆盖Authorization
@@ -46,7 +47,7 @@ class LoginRepository {
         //环保和企业用户
         return FormData.fromMap({
           'userName': userName,
-          'password': passWord,
+          'password': CommonUtils.generateMD5(passWord),
         });
       case 2:
         //运维用户账号密码放在header中，isEncryption为false表示登录不需要加密解密

@@ -97,6 +97,8 @@ class _StandardReplaceUploadPageState extends State<StandardReplaceUploadPage> {
                       _standardReplaceUpload.validityTime = null;
                       _standardReplaceUpload.maintainTime = null;
                       _standardReplaceUpload.maintainPerson.text = '';
+                      _standardReplaceUpload.unit.text = '';
+                      _standardReplaceUpload.supplier.text = '';
                       _standardReplaceUpload.attachments.clear();
                     });
                   }

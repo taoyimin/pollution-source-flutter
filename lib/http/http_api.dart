@@ -262,7 +262,7 @@ class HttpApiPollution {
   static const String airDeviceCorrectUpload =
       'ywmh/tInspectionTask/submitGasCmesCorrect';
   static const String waterDeviceCorrectUpload =
-      'ywmh/tInspectionTask/submitWatCorrectInfo';
+      'ywmh/tInspectionTask/submitGasOrWatCheckAPI';
   static const String deviceCorrectLastValue =
       'ywmh/tInspectionGasCmesCorrectRecord/selectPreviousByinspectionTaskId?inspectionTaskId=';
   static const String deviceParamUpload =
