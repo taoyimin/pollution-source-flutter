@@ -72,7 +72,7 @@ class OperationDioUtils {
         return true;
       },
       // 正式环境
-       baseUrl: 'http://111.75.227.207:19550/',
+      baseUrl: 'http://111.75.227.207:19550/',
       // 测试环境
       // baseUrl: 'http://192.168.253.3:8002/',
     );

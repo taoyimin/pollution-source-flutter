@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
+import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/intercept.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/util/common_utils.dart';
@@ -41,6 +42,9 @@ class LoginRepository {
 
   static FormData createParams(
       {int userType, String userName, String passWord}) {
+    if(!CommonUtils.checkPassword(passWord)){
+      throw InvalidParamException('您当前使用的是弱密码，无法登录，请前往PC端修改密码！');
+    }
     switch (userType) {
       case 0:
       case 1:
