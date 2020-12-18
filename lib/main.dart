@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/page/admin_home.dart';
 import 'package:pollution_source/page/enter_home.dart';
 import 'package:pollution_source/page/operation_home.dart';
@@ -14,6 +15,7 @@ import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/config_utils.dart';
 import 'module/common/list/list_bloc.dart';
 import 'module/warn/list/warn_list_page.dart';
 import 'module/warn/list/warn_list_repository.dart';
@@ -25,6 +27,11 @@ import 'module/warn/list/warn_list_repository.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  /*if(Platform.isIOS){
+    BMFMapSDK.setApiKeyAndCoordType(
+        '请输入百度开放平台申请的iOS端API KEY', BMF_COORD_TYPE.BD09LL);
+  }else if(Platform.isAndroid){
+    BMFMapSDK.setCoordType(BMF_COORD_TYPE.BD09LL);}*/
   await SpUtil.getInstance();
   runApp(MyApp());
 }
@@ -37,7 +44,7 @@ class MyApp extends StatefulWidget {
 
 /// 应用程序最外层Widget状态
 ///
-/// 在构造方法中初始化[Router]路由类和[Application]
+/// 在构造方法中初始化[FluroRouter]路由类和[Application]
 /// [build]方法最外层包裹一层[OKToast]用于弹出吐司
 /// 并且在[MaterialApp]中设置程序的中文本地化，主题样式和路由
 class _MyAppState extends State<MyApp> {
@@ -47,7 +54,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // 初始化路由
-    final router = Router();
+    final router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;
     // 初始化JPush
@@ -125,10 +132,10 @@ class _MyAppState extends State<MyApp> {
                 case 2:
                   return OperationHomePage();
                 default:
-                  return LoginPage();
+                  return ConfigUtils.getLoginPage();
               }
             } else {
-              return LoginPage();
+              return ConfigUtils.getLoginPage();
             }
           }(),
         ),

@@ -8,19 +8,19 @@ part 'discharge_list_model.g.dart';
 class Discharge extends Equatable {
   @JsonKey(name: 'outId')
   final int dischargeId; // 排口ID
-  @JsonKey(name: 'enterpriseName')
+  @JsonKey(name: 'enterpriseName', defaultValue: '')
   final String enterName; // 企业名称
-  @JsonKey(name: 'disOutName')
+  @JsonKey(name: 'disOutName', defaultValue: '')
   final String dischargeName; // 排口名称
-  @JsonKey(name: 'disOutAddress')
+  @JsonKey(name: 'disOutAddress', defaultValue: '')
   final String dischargeAddress; // 排口地址
-  @JsonKey(name: 'disOutType')
+  @JsonKey(name: 'disOutType', defaultValue: '')
   final String dischargeType; // 排口类型
-  @JsonKey(name: 'disOutTypeStr')
+  @JsonKey(name: 'disOutTypeStr', defaultValue: '')
   final String dischargeTypeStr; // 排口类型
-  @JsonKey(name: 'outletTypeStr')
+  @JsonKey(name: 'outletTypeStr', defaultValue: '')
   final String dischargeCategoryStr; // 排口类别
-  @JsonKey(name: 'disOutRuleStr')
+  @JsonKey(name: 'disOutRuleStr', defaultValue: '')
   final String dischargeRuleStr; // 排放规律
 
   const Discharge({

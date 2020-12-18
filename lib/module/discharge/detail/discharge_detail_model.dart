@@ -9,21 +9,23 @@ class DischargeDetail extends Equatable {
   @JsonKey(name: 'outId')
   final int dischargeId; // 排口ID
   final int enterId; // 企业ID
-  @JsonKey(name: 'enterpriseName')
+  @JsonKey(name: 'enterpriseName', defaultValue: '')
   final String enterName; // 企业名称
-  @JsonKey(name: 'entAddress')
+  @JsonKey(name: 'entAddress', defaultValue: '')
   final String enterAddress; // 企业地址
-  @JsonKey(name: 'disOutName')
+  @JsonKey(name: 'disOutName', defaultValue: '')
   final String dischargeName; // 排口名称
-  @JsonKey(name: 'disOutId')
+  @JsonKey(name: 'disOutId', defaultValue: '')
   final String dischargeNumber; // 排口编号
-  @JsonKey(name: 'disOutRuleStr')
+  @JsonKey(name: 'disOutRuleStr', defaultValue: '')
   final String dischargeRuleStr; // 排放规律
+  @JsonKey(defaultValue: '')
   final String denoterInstallTypeStr; // 标志牌安装形式
-  @JsonKey(name: 'disOutTypeStr')
+  @JsonKey(name: 'disOutTypeStr', defaultValue: '')
   final String dischargeTypeStr; // 监测类型
-  @JsonKey(name: 'outletTypeStr')
+  @JsonKey(name: 'outletTypeStr', defaultValue: '')
   final String dischargeCategoryStr; // 排口类型
+  @JsonKey(defaultValue: '')
   final String outTypeStr; // 排放类别
   final int dischargeReportTotalCount; // 排口异常申报个数
   final int factorReportTotalCount; // 因子异常申报个数

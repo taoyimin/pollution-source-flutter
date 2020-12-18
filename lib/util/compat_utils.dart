@@ -4,6 +4,7 @@ import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/config_utils.dart';
 
 /// 兼容工具类
 ///
@@ -138,6 +139,34 @@ class CompatUtils {
             '获取AttentionLevel失败！response=${response.toString()}'));
   }
 
+  /// 根据不同的用户类型解析json中的gobalLevel
+  static String getResponseGobalLevel(Response response) {
+    if (response == null)
+      throw DioError(error: TokenException('获取GobalLevel失败！response为空！'));
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+        //环保用户
+        if (response.statusCode == ExceptionHandle.success &&
+            response.data[Constant.responseCodeKey] ==
+                ExceptionHandle.success_code) {
+          return response.data[Constant.responseDataKey]
+              [Constant.responseGobalLevelKey];
+        }
+        break;
+      case 1:
+      case 2:
+        // 运维和企业用户没有用户级别
+        return '';
+        break;
+      default:
+        throw Exception(
+            '获取GobalLevel失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+    throw DioError(
+        error:
+            TokenException('获取GobalLevel失败！response=${response.toString()}'));
+  }
+
   /// 用户登录时，根据不同用户类型解析response中的userId
   static getResponseUserId(response) {
     if (response == null)
@@ -171,8 +200,7 @@ class CompatUtils {
   /// 根据不同的用户类型解析json中的data（有的数据最外层包了一层code，message，data）
   static dynamic getResponseData(Response response) {
     // 如果是List则直接返回
-    if (response.data is List<dynamic>)
-      return response.data;
+    if (response.data is List<dynamic>) return response.data;
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
@@ -294,10 +322,10 @@ class CompatUtils {
       case 0:
       case 1:
         // 环保和企业用户
-        return 'assets/images/image_pollution_download_QRcode.png';
+        return ConfigUtils.getPollutionDownloadQRcode();
       case 2:
         // 运维用户
-        return 'assets/images/iamge_operation_download_QRcode.png';
+        return ConfigUtils.getOperationDownloadQRcode();
       default:
         throw Exception(
             '获取下载地址二维码失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');

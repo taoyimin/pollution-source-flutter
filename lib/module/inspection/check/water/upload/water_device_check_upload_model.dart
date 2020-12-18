@@ -1,5 +1,5 @@
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 import 'package:pollution_source/util/common_utils.dart';
 
 /// 废水监测设备校验上报

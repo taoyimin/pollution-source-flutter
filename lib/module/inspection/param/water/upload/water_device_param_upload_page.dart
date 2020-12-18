@@ -1,7 +1,7 @@
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/module/common/list/list_bloc.dart';

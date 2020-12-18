@@ -26,9 +26,9 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="江西污染源监控"
-        android:icon="@mipmap/ic_launcher">
+        android:label="${APP_NAME}"
+        android:icon="@mipmap/ic_launcher"
+        android:name=".MyApplication">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -52,5 +52,8 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="E8mBomgf7wqO8TnjGKHoYXExHQ2iHVqZ" />
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
     </application>
 </manifest>

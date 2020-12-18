@@ -70,6 +70,9 @@ class Constant {
   /// 解析返回数据中attentionLevel用的key
   static const String responseAttentionLevelKey = 'attentionLevel';
 
+  /// 解析返回数据中gobalLevel用的key
+  static const String responseGobalLevelKey = 'gobalLevel';
+
   /// *********SharedPreferences存取数据用的key*********
 
   /// 是否开启debug模式
@@ -98,6 +101,9 @@ class Constant {
 
   /// 当前登录用户的关注程度
   static const String spAttentionLevel = 'attentionLevel';
+
+  /// 当前登录用户的用户级别
+  static const String spGobalLevel = 'gobalLevel';
 
   /// 登录时间
   static const String spLoginTime = 'loginTime';

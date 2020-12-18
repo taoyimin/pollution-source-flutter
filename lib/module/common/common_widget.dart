@@ -8,6 +8,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bmflocation/bdmap_location_flutter_plugin.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location_android_option.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location_ios_option.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:open_file/open_file.dart';
@@ -25,10 +29,6 @@ import 'package:pollution_source/util/toast_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/util/system_utils.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:bdmap_location_flutter_plugin/bdmap_location_flutter_plugin.dart';
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location_android_option.dart';
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location_ios_option.dart';
 
 import 'collection/collection_state.dart';
 import 'common_model.dart';
@@ -2349,6 +2349,7 @@ class IconCheckButton extends StatelessWidget {
   final double imageHeight;
   final Color color;
   final bool checked;
+  final bool show;
   final TextStyle style;
   final EdgeInsetsGeometry padding;
   final int flex;
@@ -2361,6 +2362,7 @@ class IconCheckButton extends StatelessWidget {
     this.imageHeight = 30,
     this.color,
     this.checked = true,
+    this.show = true,
     this.style = const TextStyle(color: Colors.white, fontSize: 13),
     this.padding = const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
     this.flex = 1,
@@ -2370,29 +2372,95 @@ class IconCheckButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: flex,
-      child: Opacity(
-        opacity: checked ? 1 : 0.5,
+      flex: show ? flex : 0,
+      child: Container(
+        width: show ? double.infinity : 0,
+        child: Opacity(
+          opacity: checked ? 1 : 0.5,
+          child: FlatButton(
+            onPressed: onTap ?? () {},
+            padding: padding,
+            color: color,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Image.asset(
+                  imagePath,
+                  height: imageHeight,
+                  width: imageWidth,
+                ),
+                Expanded(
+                  child: AutoSizeText(
+                    text,
+                    style: style,
+                    maxLines: 1,
+                    minFontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 地市登录页选择用户类型按钮
+class CheckBoxButton extends StatelessWidget {
+  final String text;
+  final bool checked;
+  final bool show;
+  final TextStyle style;
+  final EdgeInsetsGeometry padding;
+  final int flex;
+  final GestureTapCallback onTap;
+
+  CheckBoxButton({
+    this.text,
+    this.checked = true,
+    this.show = true,
+    this.style = const TextStyle(color: Colors.white, fontSize: 13),
+    this.padding = const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+    this.flex = 1,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: show ? flex : 0,
+      child: Container(
+        width: show ? double.infinity : 0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            width: 1,
+            color: Colours.login_page1_blue,
+          ),
+          color: checked ? Colours.login_page1_blue : Colors.transparent,
+        ),
+        height: 40,
         child: FlatButton(
           onPressed: onTap ?? () {},
           padding: padding,
-          color: color,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Image.asset(
-                imagePath,
-                height: imageHeight,
-                width: imageWidth,
+                checked
+                    ? 'assets/images/icon_checkbox_checked.png'
+                    : 'assets/images/icon_checkbox_unchecked.png',
+                height: 12,
+                width: 12,
               ),
-              Expanded(
-                child: AutoSizeText(
-                  text,
-                  style: style,
-                  maxLines: 1,
-                  minFontSize: 10,
-                ),
+              AutoSizeText(
+                text,
+                style: style,
+                maxLines: 1,
+                minFontSize: 10,
               ),
             ],
           ),
@@ -3011,6 +3079,82 @@ class LocationWidgetState extends State<LocationWidget> {
                   ),
                 ),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LoginButton extends StatelessWidget {
+  const LoginButton({
+    Key key,
+    this.text = '',
+    this.color = Colours.primary_color,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final String text;
+  final Color color;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: onPressed,
+      textColor: Colors.white,
+      color: color,
+      disabledTextColor: Colors.white.withOpacity(0.7),
+      disabledColor: Colours.primary_color.withOpacity(0.5),
+      //shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 48,
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LoginButton1 extends StatelessWidget {
+  const LoginButton1({
+    Key key,
+    this.text = '',
+    this.color = Colours.login_page1_blue,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final String text;
+  final Color color;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: onPressed,
+      textColor: Colors.white,
+      color: color,
+      disabledTextColor: Colors.white.withOpacity(0.7),
+      disabledColor: Colours.login_page1_blue.withOpacity(0.5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 40,
+            width: 200,
+            alignment: Alignment.center,
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 16),
             ),
           ),
         ],

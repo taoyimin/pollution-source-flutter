@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/intercept.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:pollution_source/util/config_utils.dart';
 
 /// Dio工具类，使用单例模式
 ///
@@ -29,11 +30,7 @@ class PollutionDioUtils {
       validateStatus: (status) {
         return true;
       },
-      // 正式环境
-      baseUrl: 'http://111.75.227.207:19551/',
-      // 测试环境
-      // baseUrl: 'http://182.106.189.190:9999/',
-      // baseUrl: 'http://kevin.cn1.utools.club/',
+      baseUrl: ConfigUtils.getPollutionBaseUrl(),
     );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());
@@ -71,10 +68,7 @@ class OperationDioUtils {
       validateStatus: (status) {
         return true;
       },
-      // 正式环境
-      baseUrl: 'http://111.75.227.207:19550/',
-      // 测试环境
-      // baseUrl: 'http://192.168.253.3:8002/',
+      baseUrl: ConfigUtils.getOperationBaseUrl(),
     );
     _dio = Dio(options);
     _dio.interceptors.add(AuthInterceptor());

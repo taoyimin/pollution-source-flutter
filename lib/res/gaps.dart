@@ -27,6 +27,7 @@ class Gaps {
   static const Widget vGap20 = const SizedBox(height: Dimens.gap_dp20);
   static const Widget vGap25 = const SizedBox(height: Dimens.gap_dp25);
   static const Widget vGap30 = const SizedBox(height: Dimens.gap_dp30);
+  static const Widget vGap50 = const SizedBox(height: Dimens.gap_dp50);
 
   //水平分割线
   static const Widget hLine = const SizedBox(

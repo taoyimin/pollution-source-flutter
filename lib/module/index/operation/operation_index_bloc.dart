@@ -6,6 +6,7 @@ import 'package:pollution_source/http/http.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/compat_utils.dart';
+import 'package:pollution_source/util/config_utils.dart';
 
 import 'operation_index_event.dart';
 import 'operation_index_state.dart';
@@ -21,9 +22,11 @@ class IndexBloc extends Bloc<IndexEvent, IndexState> {
         Response response = await CompatUtils.getDio()
             .get(CompatUtils.getApi(HttpApi.operationIndex));
         // 巡检任务统计
-        List<Meta> inspectionStatisticsList =
-            await _convertInspectionStatistics(
-                response.data[Constant.responseDataKey]['processedCount']);
+        List<Meta> inspectionStatisticsList;
+        if (ConfigUtils.showRoutineInspection()) {
+          inspectionStatisticsList = await _convertInspectionStatistics(
+              response.data[Constant.responseDataKey]['processedCount']);
+        }
         // 污染源企业统计
         List<Meta> pollutionEnterStatisticsList =
             await _convertPollutionEnterStatistics(response

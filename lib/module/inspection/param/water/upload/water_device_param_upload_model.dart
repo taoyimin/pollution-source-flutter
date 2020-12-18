@@ -1,5 +1,5 @@
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 import 'package:pollution_source/module/discharge/list/discharge_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';
 import 'package:pollution_source/module/inspection/param/water/device/water_device_list_model.dart';

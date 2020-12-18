@@ -43,8 +43,9 @@ class Routes {
   static String noticeList = "/noticeList";
   static String warnList = "/warnList";
   static String warnDetail = "/warnDetail";
+  static String map = "/map";
 
-  static void configureRoutes(Router router) {
+  static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = Handler(
         // ignore: missing_return
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -248,6 +249,11 @@ class Routes {
     router.define(
       '$warnDetail/:id',
       handler: warnDetailHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      map,
+      handler: mapHandler,
       transitionType: TransitionType.native,
     );
   }

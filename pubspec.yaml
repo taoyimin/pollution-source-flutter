@@ -14,20 +14,18 @@ description: A new Flutter application.
 version: 1.2.1+22
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  bdmap_location_flutter_plugin:
-    path: plugins/bdmap_location_flutter_plugin
   # cupertino_icons: ^0.1.2
   # 多语言支持
   flutter_localizations:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
   # 格式化json https://github.com/dart-lang/json_serializable
-  json_annotation: ^3.0.1
+  json_annotation: ^3.1.1
   # 下拉刷新上拉加载库 https://github.com/xuelongqy/flutter_easyrefresh
   flutter_easyrefresh: ^2.1.1
   # 扩展嵌套滚动视图 https://github.com/fluttercandies/extended_nested_scroll_view
@@ -43,7 +41,7 @@ dependencies:
   # 网络请求库 https://github.com/flutterchina/dio
   dio: ^3.0.9
   # 矢量图控件 https://github.com/dnfield/flutter_svg
-  flutter_svg: ^0.17.4
+  flutter_svg: ^0.18.0
   # 启动URL的插件 https://github.com/flutter/plugins/tree/master/packages/url_launcher
   url_launcher: ^5.4.5
   # 城市选择控件 https://github.com/hanxu317317/city_pickers
@@ -62,7 +60,7 @@ dependencies:
   # Toast插件 https://github.com/OpenFlutter/flutter_oktoast
   oktoast: ^2.3.2
   # 选择时间插件 https://github.com/dylanwuzh/flutter-cupertino-date-picker
-  flutter_cupertino_date_picker: ^1.0.26
+  flutter_cupertino_date_picker: ^1.0.26+2
   # 下拉筛选菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
   gzx_dropdown_menu: ^2.0.0
   # 图片选择器 https://github.com/Sh1d0w/multi_image_picker
@@ -86,19 +84,28 @@ dependencies:
   # 分享功能 https://github.com/flutter/plugins/tree/master/packages/share
   share: ^0.6.4+1
   # 极光推送插件 https://github.com/jpush/jpush-flutter-plugin
-  jpush_flutter: ^0.5.3
+  # jpush_flutter: ^0.5.3
+  jpush_flutter: ^0.6.1
   # 二维码扫描插件 https://github.com/mintware-de/flutter_barcode_reader
   # barcode_scan: ^3.0.0
+  # 百度地图定位依赖
+  flutter_bmflocation: ^1.0.3
+  # 百度地图基础地图依赖
+  flutter_bmfmap:  ^1.0.2
+  # 百度地图计算工具依赖
+  # flutter_bmfutils: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  #一次性生成 flutter packages pub run build_runner build
-  #持续性生成 flutter packages pub run build_runner watch
-  build_runner: ^1.0.0
+  # 一次性生成 flutter packages pub run build_runner build
+  # flutter packages pub run build_runner clean
+  # flutter packages pub run build_runner build --delete-conflicting-outputs
+  # 持续性生成 flutter packages pub run build_runner watch
+  build_runner: ^1.10.11
   # 格式化json https://github.com/dart-lang/json_serializable
-  json_serializable: ^3.3.0
+  json_serializable: ^3.5.1
 
 
 # For information on the generic Dart part of this file, see the

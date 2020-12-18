@@ -1,11 +1,13 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/config_utils.dart';
 import 'package:pollution_source/util/system_utils.dart';
 
 class AdminApplicationPage extends StatefulWidget {
@@ -63,7 +65,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                               top: 36,
                               left: 130,
                               child: Image.asset(
-                                'assets/images/application_image_header.png',
+                                ConfigUtils.getApplicationHeaderImage(),
                                 fit: BoxFit.fill,
                               ),
                             ),
@@ -132,7 +134,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     imagePath:
                                         'assets/images/application_icon_monitor.png',
                                     router:
-                                        '${Routes.monitorList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&outType=0&state=online',
+                                        '${Routes.monitorList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&outType=' + CommonUtils.getOutTypeByGobalLevel() + '&state=online',
                                   ),
                                 ),
                               ],

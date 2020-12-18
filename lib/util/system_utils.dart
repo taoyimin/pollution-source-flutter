@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:bdmap_location_flutter_plugin/bdmap_location_flutter_plugin.dart';
 import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bmflocation/bdmap_location_flutter_plugin.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:open_file/open_file.dart';

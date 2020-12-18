@@ -1,5 +1,5 @@
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 
 /// 废气监测设备校准上报
 class AirDeviceCorrectUpload {

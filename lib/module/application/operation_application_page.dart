@@ -4,6 +4,7 @@ import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/config_utils.dart';
 import 'package:pollution_source/util/system_utils.dart';
 
 class OperationApplicationPage extends StatefulWidget {
@@ -62,7 +63,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                               top: 36,
                               left: 130,
                               child: Image.asset(
-                                'assets/images/application_image_header.png',
+                                ConfigUtils.getApplicationHeaderImage(),
                                 fit: BoxFit.fill,
                               ),
                             ),
@@ -143,79 +144,144 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           horizontal: 20,
                           vertical: 18,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                                title: '运维管理上报',
-                                imagePath:
-                                    'assets/images/icon_operation_manage_upload.png'),
-                            Row(
-                              children: <Widget>[
-                                InkWellButton9(
-                                  meta: Meta(
-                                    title: '常规巡检',
-                                    content: '常规巡检上报',
-                                    imagePath:
-                                        'assets/images/application_icon_discharge_report.png',
-                                    router: '${Routes.routineInspectionList}',
+                        child: ConfigUtils.showRoutineInspection()
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  ImageTitleWidget(
+                                      title: '运维管理上报',
+                                      imagePath:
+                                          'assets/images/icon_operation_manage_upload.png'),
+                                  Row(
+                                    children: <Widget>[
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '常规巡检',
+                                          content: '常规巡检上报',
+                                          imagePath:
+                                              'assets/images/application_icon_discharge_report.png',
+                                          router:
+                                              '${Routes.routineInspectionList}',
+                                        ),
+                                      ),
+                                      Gaps.hGap20,
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '仪器参数设置',
+                                          content: '参数查询与上报',
+                                          imagePath:
+                                              'assets/images/application_icon_factor_report.png',
+                                          router:
+                                              '${Routes.waterDeviceParamUpload}',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Gaps.hGap20,
-                                InkWellButton9(
-                                  meta: Meta(
-                                    title: '仪器参数设置',
-                                    content: '参数查询与上报',
-                                    imagePath:
-                                        'assets/images/application_icon_factor_report.png',
-                                    router: '${Routes.waterDeviceParamUpload}',
+                                  Row(
+                                    children: <Widget>[
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '易耗品更换',
+                                          content: '易耗品更换上报',
+                                          imagePath:
+                                              'assets/images/application_icon_longStop_report.png',
+                                          router:
+                                              '${Routes.consumableReplaceUpload}',
+                                        ),
+                                      ),
+                                      Gaps.hGap20,
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '设备检修',
+                                          content: '设备检修上报',
+                                          imagePath:
+                                              'assets/images/application_icon_enter.png',
+                                          router:
+                                              '${Routes.deviceRepairUpload}',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                InkWellButton9(
-                                  meta: Meta(
-                                    title: '易耗品更换',
-                                    content: '易耗品更换上报',
-                                    imagePath:
-                                    'assets/images/application_icon_longStop_report.png',
-                                    router: '${Routes.consumableReplaceUpload}',
+                                  Row(
+                                    children: <Widget>[
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '标准样品更换',
+                                          content: '标准品更换上报',
+                                          imagePath:
+                                              'assets/images/application_icon_monitor.png',
+                                          router:
+                                              '${Routes.standardReplaceUpload}',
+                                        ),
+                                      ),
+                                      Gaps.hGap20,
+                                      Expanded(
+                                        flex: 1,
+                                        child: Gaps.empty,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Gaps.hGap20,
-                                InkWellButton9(
-                                  meta: Meta(
-                                    title: '设备检修',
-                                    content: '设备检修上报',
-                                    imagePath:
-                                    'assets/images/application_icon_enter.png',
-                                    router: '${Routes.deviceRepairUpload}',
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  ImageTitleWidget(
+                                      title: '运维管理上报',
+                                      imagePath:
+                                          'assets/images/icon_operation_manage_upload.png'),
+                                  Row(
+                                    children: <Widget>[
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '仪器参数设置',
+                                          content: '参数查询与上报',
+                                          imagePath:
+                                          'assets/images/application_icon_factor_report.png',
+                                          router:
+                                          '${Routes.waterDeviceParamUpload}',
+                                        ),
+                                      ),
+                                      Gaps.hGap20,
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '易耗品更换',
+                                          content: '易耗品更换上报',
+                                          imagePath:
+                                          'assets/images/application_icon_longStop_report.png',
+                                          router:
+                                          '${Routes.consumableReplaceUpload}',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                InkWellButton9(
-                                  meta: Meta(
-                                    title: '标准样品更换',
-                                    content: '标准品更换上报',
-                                    imagePath:
-                                    'assets/images/application_icon_monitor.png',
-                                    router: '${Routes.standardReplaceUpload}',
+                                  Row(
+                                    children: <Widget>[
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '设备检修',
+                                          content: '设备检修上报',
+                                          imagePath:
+                                          'assets/images/application_icon_enter.png',
+                                          router:
+                                          '${Routes.deviceRepairUpload}',
+                                        ),
+                                      ),
+                                      Gaps.hGap20,
+                                      InkWellButton9(
+                                        meta: Meta(
+                                          title: '标准样品更换',
+                                          content: '标准品更换上报',
+                                          imagePath:
+                                          'assets/images/application_icon_monitor.png',
+                                          router:
+                                          '${Routes.standardReplaceUpload}',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Gaps.hGap20,
-                                Expanded(
-                                  flex: 1,
-                                  child: Gaps.empty,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                ],
+                              ),
                       ),
                       // 报警管理单查询
                       Padding(
@@ -357,6 +423,40 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                           ],
                         ),
                       ),
+                      // 地图
+                      /*Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ImageTitleWidget(
+                                title: '地图',
+                                imagePath:
+                                    'assets/images/icon_alarm_manage.png'),
+                            Row(
+                              children: <Widget>[
+                                InkWellButton9(
+                                  meta: Meta(
+                                    title: '监控位置',
+                                    content: '查看监控点坐标',
+                                    imagePath:
+                                        'assets/images/application_icon_discharge_report.png',
+                                    router: '${Routes.map}',
+                                  ),
+                                ),
+                                Gaps.hGap20,
+                                Expanded(
+                                  flex: 1,
+                                  child: Gaps.empty,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),*/
                     ],
                   ),
                 ),

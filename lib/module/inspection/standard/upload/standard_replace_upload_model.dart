@@ -1,5 +1,5 @@
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:pollution_source/module/device/list/device_list_model.dart';
 import 'package:pollution_source/module/enter/list/enter_list_model.dart';

@@ -1,5 +1,5 @@
-import 'package:bdmap_location_flutter_plugin/flutter_baidu_location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
 
 /// 辅助/监测设备巡检上报类

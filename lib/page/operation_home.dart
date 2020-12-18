@@ -87,19 +87,19 @@ class _OperationHomePageState extends State<OperationHomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('首页'),
+            label: '首页',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.apps),
-            title: Text('应用'),
+            label: '应用',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            title: Text('企业'),
+            label: '企业',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('我的'),
+            label: '我的',
           ),
         ],
         currentIndex: _selectedIndex,

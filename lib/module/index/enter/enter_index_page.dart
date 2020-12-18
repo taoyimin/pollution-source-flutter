@@ -15,8 +15,10 @@ import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
+import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
+import 'package:pollution_source/util/config_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 
 class EnterIndexPage extends StatefulWidget {
@@ -58,7 +60,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
   /// 获取监控点统计接口请求参数
   Map<String, dynamic> _getRequestParam() {
     return MonitorStatisticsRepository.createParams(
-      userType: '2',
+      userType: (SpUtil.getInt(Constant.spUserType) + 1).toString(),
       enterId: widget.enterId,
       outType: '',
       attentionLevel: '',
@@ -125,14 +127,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
             color: Colours.primary_color,
             child: Stack(
               children: <Widget>[
-                Positioned(
-                  right: 20,
-                  bottom: 10,
-                  child: Image.asset(
-                    'assets/images/enter_index_image_header.png',
-                    height: 105,
-                  ),
-                ),
+                ConfigUtils.getEnterIndexImageWidget(),
                 Positioned(
                   top: 35,
                   left: 20,
@@ -167,10 +162,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
           ),
           //基本信息
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -286,8 +278,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         color: Color(0xFFFD6C6B),
                         title: '超期待办',
                         content: '${enterDetail.orderOverdueCount ?? ''}',
-                        imagePath:
-                            'assets/images/icon_alarm_manage_return.png',
+                        imagePath: 'assets/images/icon_alarm_manage_return.png',
                         router:
                             '${Routes.orderList}?enterId=${widget.enterId}&alarmState=20&alarmLevel=3&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
                       ),
@@ -299,9 +290,9 @@ class _EnterIndexPageState extends State<EnterIndexPage>
                         title: '已办结',
                         content: '${enterDetail.orderCompleteCount ?? ''}',
                         imagePath:
-                        'assets/images/icon_alarm_manage_complete.png',
+                            'assets/images/icon_alarm_manage_complete.png',
                         router:
-                        '${Routes.orderList}?enterId=${widget.enterId}&alarmState=50&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
+                            '${Routes.orderList}?enterId=${widget.enterId}&alarmState=50&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
                       ),
                     ),
                   ],
@@ -372,10 +363,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
           ),
           //排污许可证信息
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flustars/flustars.dart';
 
 import 'package:pollution_source/module/common/common_model.dart';
+import 'package:pollution_source/res/constant.dart';
 
 class CommonUtils {
   /// 获取一个数组中的最大数
@@ -101,5 +103,16 @@ class CommonUtils {
     var content = new Utf8Encoder().convert(string);
     var digest = md5.convert(content);
     return hex.encode(digest.bytes);
+  }
+
+  /// 根据当前用户级别返回默认查询的监控点类型
+  static String getOutTypeByGobalLevel(){
+    if(SpUtil.getString(Constant.spGobalLevel) == 'province'){
+      // 省及用户默认查进口
+      return '0';
+    }else{
+      // 其他用户默认差全部
+      return '';
+    }
   }
 }

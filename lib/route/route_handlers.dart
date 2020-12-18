@@ -21,7 +21,7 @@ import 'package:pollution_source/module/inspection/routine/detail/routine_inspec
 import 'package:pollution_source/module/inspection/routine/list/routine_inspection_list_page.dart';
 import 'package:pollution_source/module/inspection/standard/upload/standard_replace_upload_page.dart';
 import 'package:pollution_source/module/license/list/license_list_page.dart';
-import 'package:pollution_source/module/login/login_page.dart';
+import 'package:pollution_source/module/map/map_page.dart';
 import 'package:pollution_source/module/monitor/detail/monitor_detail_page.dart';
 import 'package:pollution_source/module/monitor/list/monitor_list_page.dart';
 import 'package:pollution_source/module/monitor/table/monitor_table_page.dart';
@@ -44,10 +44,11 @@ import 'package:pollution_source/page/change_password_page.dart';
 import 'package:pollution_source/page/enter_home.dart';
 import 'package:pollution_source/page/operation_home.dart';
 import 'package:pollution_source/page/share_product_page.dart';
+import 'package:pollution_source/util/config_utils.dart';
 
 var rootHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-    return LoginPage();
+    return ConfigUtils.getLoginPage();
   },
 );
 
@@ -432,5 +433,11 @@ var warnDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String warnId = params['id']?.first;
     return WarnDetailPage(warnId: warnId);
+  },
+);
+
+var mapHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    return MapPage();
   },
 );

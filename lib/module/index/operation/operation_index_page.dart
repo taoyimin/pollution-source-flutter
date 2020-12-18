@@ -12,6 +12,7 @@ import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/config_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 
 import 'operation_index_bloc.dart';
@@ -54,7 +55,7 @@ class _OperationIndexPageState extends State<OperationIndexPage>
   /// 获取监控点统计接口请求参数
   Map<String, dynamic> _getRequestParam() {
     return MonitorStatisticsRepository.createParams(
-      userType: '3',
+      userType: (SpUtil.getInt(Constant.spUserType)+1).toString(),
       userId: '${SpUtil.getInt(Constant.spUserId)}',
       outType: '',
       attentionLevel: '',
@@ -82,25 +83,26 @@ class _OperationIndexPageState extends State<OperationIndexPage>
                   child: Column(
                     children: <Widget>[
                       HeaderWidget(),
-                      state.inspectionStatisticsList.length > 0
+                      state.inspectionStatisticsList != null &&
+                              state.inspectionStatisticsList.length > 0
                           ? RoutineInspectionStatisticsWidget(
-                          metaList: state.inspectionStatisticsList)
+                              metaList: state.inspectionStatisticsList)
                           : Gaps.empty,
                       MonitorStatisticsWidget(
                         title: '监控点概况',
                         collectionBloc: monitorStatisticsBloc,
                         onReloadTap: () {
-                          monitorStatisticsBloc.add(
-                              CollectionLoad(params: _getRequestParam()));
+                          monitorStatisticsBloc
+                              .add(CollectionLoad(params: _getRequestParam()));
                         },
                       ),
                       state.pollutionEnterStatisticsList.length > 0
                           ? PollutionEnterStatisticsWidget(
-                          metaList: state.pollutionEnterStatisticsList)
+                              metaList: state.pollutionEnterStatisticsList)
                           : Gaps.empty,
                       state.orderStatisticsList.length > 0
                           ? OrderStatisticsWidget(
-                          metaList: state.orderStatisticsList)
+                              metaList: state.orderStatisticsList)
                           : Gaps.empty,
                     ],
                   ),
@@ -146,15 +148,7 @@ class HeaderWidget extends StatelessWidget {
       ),
       child: Stack(
         children: <Widget>[
-          Positioned(
-            right: 0,
-            bottom: 20,
-            child: Image.asset(
-              "assets/images/image_operation_index_header.png",
-              height: 100,
-              fit: BoxFit.fill,
-            ),
-          ),
+          ConfigUtils.getOperationIndexImageWidget(),
           Column(
             children: <Widget>[
               Container(

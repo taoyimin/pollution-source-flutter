@@ -14,4 +14,5 @@ class Colours {
   static const Color background_light_blue = Color(0xFF1799E8);
   static const Color background_red = Color(0xFFFF5F5D);
   static const Color background_yellow = Color(0xFFFFBD7A);
+  static const Color login_page1_blue = Color(0xFF0353C4);
 }

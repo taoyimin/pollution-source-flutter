@@ -3,9 +3,37 @@ import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/login/login_page1.dart';
 
 class ConfigUtils {
-   static const String config = '江西';
+  static const String config = '江西';
 
-  //static const String config = '高安';
+  // static const String config = '高安';
+
+  // static const String config = '测试';
+
+  /// 获取污染源接口地址
+  static String getPollutionBaseUrl() {
+    switch (config) {
+      case '江西':
+        return 'http://111.75.227.207:19551/';
+      case '高安':
+        return 'http://59.63.215.141:8090/';
+      default:
+        return 'http://182.106.189.190:9999/';
+        // return 'http://kevin.cn1.utools.club/';
+    }
+  }
+
+  /// 获取运维接口地址
+  static String getOperationBaseUrl() {
+    switch (config) {
+      case '江西':
+        return 'http://111.75.227.207:19550/';
+      case '高安':
+        return 'http://59.63.215.141:9180/';
+        // return 'http://taoyimin.iok.la:34261/';
+      default:
+        return 'http://taoyimin.iok.la:34261/';
+    }
+  }
 
   /// 获取登录页面
   static Widget getLoginPage() {
@@ -25,7 +53,7 @@ class ConfigUtils {
       case '江西':
         return '江西污染源监控移动应用';
       case '高安':
-        return '江西污染源监控移动应用';
+        return '高安污染源监控移动应用';
       default:
         return '江西污染源监控移动应用';
     }
@@ -172,6 +200,54 @@ class ConfigUtils {
     }
   }
 
+  /// 获取污染源APP下载二维码
+  static String getPollutionDownloadQRcode() {
+    switch (config) {
+      case '江西':
+        return 'assets/images/image_pollution_download_QRcode.png';
+      case '高安':
+        return 'assets/images/image_gaoan_pollution_download_QRcode.png';
+      default:
+        return 'assets/images/image_pollution_download_QRcode.png';
+    }
+  }
+
+  /// 获取运维APP下载二维码
+  static String getOperationDownloadQRcode() {
+    switch (config) {
+      case '江西':
+        return 'assets/images/image_operation_download_QRcode.png';
+      case '高安':
+        return 'assets/images/image_gaoan_operation_download_QRcode.png.png';
+      default:
+        return 'assets/images/image_operation_download_QRcode.png';
+    }
+  }
+
+  /// 获取污染源APP下载地址
+  static String getPollutionDownloadUrl() {
+    switch (config) {
+      case '江西':
+        return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
+      case '高安':
+        return 'http://59.63.215.141:8090/dowload/pollution-source.apk';
+      default:
+        return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
+    }
+  }
+
+  /// 获取运维APP下载地址
+  static String getOperationDownloadUrl() {
+    switch (config) {
+      case '江西':
+        return 'http://111.75.227.207:19550/app/pollution-source.apk';
+      case '高安':
+        return 'http://59.63.215.141:9180/app/pollution-source.apk';
+      default:
+        return 'http://111.75.227.207:19550/app/pollution-source.apk';
+    }
+  }
+
   /// 是否显示企业门户相关功能
   static bool showEnter() {
     switch (config) {
@@ -186,6 +262,18 @@ class ConfigUtils {
 
   /// 是否显示运维系统相关功能
   static bool showOperation() {
+    switch (config) {
+      case '江西':
+        return true;
+      case '高安':
+        return true;
+      default:
+        return true;
+    }
+  }
+
+  /// 是否显示常规巡检
+  static bool showRoutineInspection() {
     switch (config) {
       case '江西':
         return true;

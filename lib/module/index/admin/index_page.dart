@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_svg/svg.dart';
 import 'package:pollution_source/module/common/collection/collection_bloc.dart';
 import 'package:pollution_source/module/common/collection/collection_event.dart';
 import 'package:pollution_source/module/common/collection/monitor/monitor_statistics_repository.dart';
+import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'dart:ui';
 import 'dart:async';
@@ -15,6 +15,7 @@ import 'dart:async';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
+import 'package:pollution_source/util/config_utils.dart';
 import 'package:pollution_source/util/ui_utils.dart';
 import 'package:pollution_source/widget/space_header.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
@@ -59,9 +60,9 @@ class _AdminIndexPageState extends State<AdminIndexPage>
   /// 获取监控点统计接口请求参数
   Map<String, dynamic> _getRequestParam() {
     return MonitorStatisticsRepository.createParams(
-      userType: '1',
+      userType: (SpUtil.getInt(Constant.spUserType)+1).toString(),
       userId: '${SpUtil.getInt(Constant.spUserId)}',
-      outType: '0',
+      outType: CommonUtils.getOutTypeByGobalLevel(),
       attentionLevel: '${SpUtil.getString(Constant.spAttentionLevel)}',
     );
   }
@@ -102,7 +103,7 @@ class _AdminIndexPageState extends State<AdminIndexPage>
                       //WeekTrendWidget(),
                       //AlarmListWidget(),
                       MonitorStatisticsWidget(
-                        title: '${UIUtils.getAttentionLevelTitle()}监控点(出口)概况',
+                        title: '${UIUtils.getAttentionLevelTitle()}监控点概况',
                         collectionBloc: monitorStatisticsBloc,
                         onReloadTap: () {
                           monitorStatisticsBloc
@@ -205,15 +206,7 @@ class AqiStatisticsWidget extends StatelessWidget {
       ),
       child: Stack(
         children: <Widget>[
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: SvgPicture.asset(
-              'assets/images/index_header_image.svg',
-              width: 150,
-              fit: BoxFit.fill,
-            ),
-          ),
+          ConfigUtils.getAdminIndexImageWidget(),
           Column(
             children: <Widget>[
               Container(
@@ -382,15 +375,7 @@ class HeaderWidget extends StatelessWidget {
       ),
       child: Stack(
         children: <Widget>[
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: SvgPicture.asset(
-              'assets/images/index_header_image.svg',
-              width: 150,
-              fit: BoxFit.fill,
-            ),
-          ),
+          ConfigUtils.getAdminIndexImageWidget(),
           Column(
             children: <Widget>[
               Container(

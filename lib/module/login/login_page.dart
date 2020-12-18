@@ -12,8 +12,8 @@ import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/common_utils.dart';
 import 'package:pollution_source/util/compat_utils.dart';
+import 'package:pollution_source/util/config_utils.dart';
 import 'package:pollution_source/util/toast_utils.dart';
-import 'package:pollution_source/widget/login_button.dart';
 import 'package:pollution_source/widget/login_text_field.dart';
 
 // import 'package:keyboard_actions/keyboard_actions.dart';
@@ -99,8 +99,12 @@ class _LoginPageState extends State<LoginPage> {
       // 储存用户名
       SpUtil.putString(
           Constant.spRealName, CompatUtils.getResponseRealName(response));
+      // 储存关注程度
       SpUtil.putString(Constant.spAttentionLevel,
           CompatUtils.getResponseAttentionLevel(response));
+      // 储存用户级别
+      SpUtil.putString(Constant.spGobalLevel,
+          CompatUtils.getResponseGobalLevel(response));
       // 储存登录时间
       SpUtil.putString(
         Constant.spLoginTime,
@@ -202,59 +206,70 @@ class _LoginPageState extends State<LoginPage> {
             hintText: "请输入密码",
           ),
           Gaps.vGap25,
-          Row(
-            children: <Widget>[
-              IconCheckButton(
-                text: '环保用户',
-                imagePath: 'assets/images/login_icon_admin.png',
-                color: Colors.lightGreen,
-                checked: _userType == 0,
-                onTap: () {
-                  setState(() {
-                    _userType = 0;
-                  });
-                  SpUtil.putInt(Constant.spUserType, _userType);
-                  _nameController.text =
-                      SpUtil.getString(Constant.spUsernameList[_userType]);
-                  _passwordController.text =
-                      SpUtil.getString(Constant.spPasswordList[_userType]);
-                },
-              ),
-              Gaps.hGap10,
-              IconCheckButton(
-                text: '企业用户',
-                imagePath: 'assets/images/login_icon_enter.png',
-                color: Colors.lightBlueAccent,
-                checked: _userType == 1,
-                onTap: () {
-                  setState(() {
-                    _userType = 1;
-                  });
-                  SpUtil.putInt(Constant.spUserType, _userType);
-                  _nameController.text =
-                      SpUtil.getString(Constant.spUsernameList[_userType]);
-                  _passwordController.text =
-                      SpUtil.getString(Constant.spPasswordList[_userType]);
-                },
-              ),
-              Gaps.hGap10,
-              IconCheckButton(
-                text: '运维用户',
-                imagePath: 'assets/images/login_icon_maintain.png',
-                color: Colors.orangeAccent,
-                checked: _userType == 2,
-                onTap: () {
-                  setState(() {
-                    _userType = 2;
-                  });
-                  SpUtil.putInt(Constant.spUserType, _userType);
-                  _nameController.text =
-                      SpUtil.getString(Constant.spUsernameList[_userType]);
-                  _passwordController.text =
-                      SpUtil.getString(Constant.spPasswordList[_userType]);
-                },
-              ),
-            ],
+          Offstage(
+            offstage: !ConfigUtils.showEnter() && !ConfigUtils.showOperation(),
+            child: Row(
+              children: <Widget>[
+                IconCheckButton(
+                  text: '环保用户',
+                  imagePath: 'assets/images/login_icon_admin.png',
+                  color: Colors.lightGreen,
+                  checked: _userType == 0,
+                  onTap: () {
+                    setState(() {
+                      _userType = 0;
+                    });
+                    SpUtil.putInt(Constant.spUserType, _userType);
+                    _nameController.text =
+                        SpUtil.getString(Constant.spUsernameList[_userType]);
+                    _passwordController.text =
+                        SpUtil.getString(Constant.spPasswordList[_userType]);
+                  },
+                ),
+                Offstage(
+                  offstage: !ConfigUtils.showEnter(),
+                  child: Gaps.hGap10,
+                ),
+                IconCheckButton(
+                  text: '企业用户',
+                  imagePath: 'assets/images/login_icon_enter.png',
+                  color: Colors.lightBlueAccent,
+                  checked: _userType == 1,
+                  show: ConfigUtils.showEnter(),
+                  onTap: () {
+                    setState(() {
+                      _userType = 1;
+                    });
+                    SpUtil.putInt(Constant.spUserType, _userType);
+                    _nameController.text =
+                        SpUtil.getString(Constant.spUsernameList[_userType]);
+                    _passwordController.text =
+                        SpUtil.getString(Constant.spPasswordList[_userType]);
+                  },
+                ),
+                Offstage(
+                  offstage: !ConfigUtils.showOperation(),
+                  child: Gaps.hGap10,
+                ),
+                IconCheckButton(
+                  text: '运维用户',
+                  imagePath: 'assets/images/login_icon_maintain.png',
+                  color: Colors.orangeAccent,
+                  checked: _userType == 2,
+                  show: ConfigUtils.showOperation(),
+                  onTap: () {
+                    setState(() {
+                      _userType = 2;
+                    });
+                    SpUtil.putInt(Constant.spUserType, _userType);
+                    _nameController.text =
+                        SpUtil.getString(Constant.spUsernameList[_userType]);
+                    _passwordController.text =
+                        SpUtil.getString(Constant.spPasswordList[_userType]);
+                  },
+                ),
+              ],
+            ),
           ),
           Gaps.vGap15,
           LoginButton(

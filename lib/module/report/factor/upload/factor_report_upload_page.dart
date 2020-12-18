@@ -555,7 +555,7 @@ class _FactorReportUploadPageState extends State<FactorReportUploadPage> {
   }
 
   Widget _buildBottomSheet({
-    FactorReportUpload reportUpload,
+    //FactorReportUpload reportUpload,
     List<DataDict> dataDictList,
     BottomSheetItemTap onItemTap,
     GestureTapCallback onResetTap,
