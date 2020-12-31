@@ -540,8 +540,9 @@ class InkWellButton2 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
+                AutoSizeText(
                   meta.content,
+                  maxLines: 1,
                   style: const TextStyle(
                     fontSize: 30,
                     color: Colors.white,

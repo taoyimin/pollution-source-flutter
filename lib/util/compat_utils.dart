@@ -338,10 +338,10 @@ class CompatUtils {
       case 0:
       case 1:
         // 环保和企业用户
-        return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
+        return ConfigUtils.getPollutionDownloadUrl();
       case 2:
         // 运维用户
-        return 'http://111.75.227.207:19550/app/pollution-source.apk';
+        return ConfigUtils.getOperationDownloadUrl();
       default:
         throw Exception(
             '获取下载地址失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');

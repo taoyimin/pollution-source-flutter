@@ -25,10 +25,10 @@ apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 // 配置打包签名文件
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def configProperties = new Properties()
+def configPropertiesFile = rootProject.file('config.properties')
+if (configPropertiesFile.exists()) {
+    configProperties.load(new FileInputStream(configPropertiesFile))
 }
 
 android {
@@ -52,58 +52,41 @@ android {
 
     // 签名配置
     signingConfigs {
-        jiangxi {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storePassword keystoreProperties['storePassword']
-            storeFile file(keystoreProperties['storeFile'])
-        }
-        gaoan {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storePassword keystoreProperties['storePassword']
-            storeFile file(keystoreProperties['storeFileGaoAn'])
+        release {
+            keyAlias configProperties['keyAlias']
+            keyPassword configProperties['keyPassword']
+            storePassword configProperties['storePassword']
+            storeFile file(configProperties['storeFile'])
         }
     }
 
     buildTypes {
         debug {
-            manifestPlaceholders = [APP_NAME     : "测试污染源监控",
-                                    JPUSH_PKGNAME: "com.jxtele.pollution_source",
-                                    JPUSH_APPKEY : "eb5a21dcceead742e52f47a5",
+            manifestPlaceholders = [APP_NAME     : configProperties['applicationNameDebug'],
+                                    JPUSH_PKGNAME: configProperties['applicationPackageNameDebug'],
+                                    JPUSH_APPKEY : configProperties['jpushKeyDebug'],
                                     JPUSH_CHANNEL: "developer-default",
+                                    BAIDU_KEY    : configProperties['baiduKeyDebug'],
             ]
+            applicationIdSuffix configProperties['applicationIdSuffixDebug']
             ndk {
                 abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
             }
         }
-        // jiangxi
         release {
-            manifestPlaceholders = [APP_NAME     : "江西污染源监控",
-                                    JPUSH_PKGNAME: "com.jxtele.pollution_source",
-                                    JPUSH_APPKEY : "eb5a21dcceead742e52f47a5",
+            manifestPlaceholders = [APP_NAME     : configProperties['applicationName'],
+                                    JPUSH_PKGNAME: configProperties['applicationPackageName'],
+                                    JPUSH_APPKEY : configProperties['jpushKey'],
                                     JPUSH_CHANNEL: "developer-default",
+                                    BAIDU_KEY    : configProperties['baiduKey'],
             ]
-            signingConfig signingConfigs.jiangxi
+            applicationIdSuffix configProperties['applicationIdSuffix']
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk {
                 abiFilters 'armeabi', 'armeabi-v7a'
             }
         }
-        // gaoan
-        /*release {
-            manifestPlaceholders = [APP_NAME     : "高安污染源监控",
-                                    JPUSH_PKGNAME: "com.jxtele.pollution_source.gaoan",
-                                    JPUSH_APPKEY : "b92d8682f1baad09b089c2d8",
-                                    JPUSH_CHANNEL: "developer-default",
-            ]
-            applicationIdSuffix ".gaoan"
-            signingConfig signingConfigs.gaoan
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ndk {
-                abiFilters 'armeabi', 'armeabi-v7a'
-            }
-        }*/
     }
 }
 

@@ -19,6 +19,8 @@ import 'package:pollution_source/util/config_utils.dart';
 import 'module/common/list/list_bloc.dart';
 import 'module/warn/list/warn_list_page.dart';
 import 'module/warn/list/warn_list_repository.dart';
+import 'package:flutter_bmfbase/BaiduMap/bmfmap_base.dart'
+    show BMFMapSDK, BMF_COORD_TYPE;
 
 /// 应用程序入口
 ///
@@ -27,11 +29,14 @@ import 'module/warn/list/warn_list_repository.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-  /*if(Platform.isIOS){
-    BMFMapSDK.setApiKeyAndCoordType(
-        '请输入百度开放平台申请的iOS端API KEY', BMF_COORD_TYPE.BD09LL);
-  }else if(Platform.isAndroid){
-    BMFMapSDK.setCoordType(BMF_COORD_TYPE.BD09LL);}*/
+  if(ConfigUtils.showMap()){
+    if (Platform.isIOS) {
+      BMFMapSDK.setApiKeyAndCoordType(
+          '请输入百度开放平台申请的iOS端API KEY', BMF_COORD_TYPE.BD09LL);
+    } else if (Platform.isAndroid) {
+      BMFMapSDK.setCoordType(BMF_COORD_TYPE.BD09LL);
+    }
+  }
   await SpUtil.getInstance();
   runApp(MyApp());
 }
