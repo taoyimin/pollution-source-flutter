@@ -37,7 +37,9 @@ class TokenInterceptor extends Interceptor {
     if (response != null &&
         response.statusCode == ExceptionHandle.unauthorized) {
       LogUtil.v("----------- 自动刷新Token ------------");
-      _tokenDio.options = CompatUtils.getDio().options;
+      _tokenDio.options = CompatUtils
+          .getDio()
+          .options;
       // 锁住防止请求传入，直到token刷新
       CompatUtils.getDio().lock();
       await LoginRepository()
@@ -61,18 +63,15 @@ class TokenInterceptor extends Interceptor {
       RequestOptions options = response.request;
       CompatUtils.setToken(options);
       LogUtil.v("----------- 重新请求接口 ------------");
-//      if (options.data is FormData) {
-//        // 由于MultipartFile是基于Stream的，Stream只能读取一次，所以应该重新创建
-//        FormData formData = FormData();
-//        formData.fields.addAll(options.data.fields);
-//        for (MapEntry mapFile in options.data.files) {
-//          formData.files.add(MapEntry(
-//            mapFile.key,
-//            mapFile.value,
-//          ));
-//        }
-//        options.data = formData;
-//      }
+      if (options.data is FormData) {
+        // 由于MultipartFile是基于Stream的，Stream只能读取一次，所以应该重新创建
+        FormData formData = FormData();
+        formData.fields.addAll(options.data.fields);
+        if ((options.data.files??[]).length != 0)
+          throw DioError(
+              error: UnauthorizedException('当前登录信息已失效，已为您刷新认证信息，请重新再提交一次！'));
+        options.data = formData;
+      }
       //避免重复执行拦截器，使用tokenDio
       var newResponse = await _tokenDio.request(
         options.path,
@@ -100,12 +99,12 @@ class HandleErrorInterceptor extends Interceptor {
         // 有时接口会直接返回List
         return super.onResponse(response);
       } else if (response.data is Map &&
-              response.data.containsKey(Constant.responseCodeKey)
+          response.data.containsKey(Constant.responseCodeKey)
           ? response.data[Constant.responseCodeKey] ==
-              ExceptionHandle.success_code
+          ExceptionHandle.success_code
           : true && response.data.containsKey(Constant.responseSuccessKey)
-              ? response.data[Constant.responseSuccessKey]
-              : true)
+          ? response.data[Constant.responseSuccessKey]
+          : true)
         // 状态码200服务器处理成功
         return super.onResponse(response);
       else {
@@ -124,7 +123,7 @@ class HandleErrorInterceptor extends Interceptor {
       // 状态码400
       throw DioError(
           error: BadRequestException(response.data is Map &&
-                  response.data.containsKey(Constant.responseMessageKey)
+              response.data.containsKey(Constant.responseMessageKey)
               ? '${response.data[Constant.responseMessageKey]}'
               : '400错误,错误接口:${response.request.uri.toString()}'));
     } else if (response != null &&
@@ -143,7 +142,7 @@ class HandleErrorInterceptor extends Interceptor {
       // 状态码404
       throw DioError(
           error: NotFoundException(response.data is Map &&
-                  response.data.containsKey(Constant.responseMessageKey)
+              response.data.containsKey(Constant.responseMessageKey)
               ? '${response.data[Constant.responseMessageKey]}'
               : '404错误,错误接口:${response.request.uri.toString()}'));
     } else if (response != null &&
@@ -151,7 +150,8 @@ class HandleErrorInterceptor extends Interceptor {
       // 状态码500
       throw DioError(
           error: ServerErrorException(
-              '500错误,错误接口:${response.request.uri.toString()}\nresponse=${response.toString()}'));
+              '500错误,错误接口:${response.request.uri
+                  .toString()}\nresponse=${response.toString()}'));
     } else {
       throw DioError(
           error: UnKnownException('未知错误,response=${response.toString()}'));
@@ -205,7 +205,9 @@ class LoggingInterceptor extends Interceptor {
   @override
   onResponse(Response response) {
     endTime = DateTime.now();
-    int duration = endTime.difference(startTime).inMilliseconds;
+    int duration = endTime
+        .difference(startTime)
+        .inMilliseconds;
     if (response.statusCode == ExceptionHandle.success) {
       LogUtil.v("ResponseCode: ${response.statusCode}");
     } else {
