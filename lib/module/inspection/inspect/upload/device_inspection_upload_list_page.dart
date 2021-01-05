@@ -112,7 +112,6 @@ class _DeviceInspectionUploadListPageState
     _deviceInspectUpload.remark.dispose();
     _animateController.dispose();
     // 取消正在进行的请求
-    // 取消正在进行的请求
     if (_listBloc?.state is ListLoading)
       (_listBloc?.state as ListLoading).cancelToken.cancel();
     super.dispose();
@@ -132,7 +131,10 @@ class _DeviceInspectionUploadListPageState
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: _buildFloatingActionButton(context),
+      // 如果是未处理任务则隐藏FloatingActionButton
+      floatingActionButton: widget.state == '1'
+          ? _buildFloatingActionButton(context)
+          : Gaps.empty,
       body: EasyRefresh.custom(
         controller: _refreshController,
         header: UIUtils.getRefreshClassicalHeader(),
@@ -240,18 +242,32 @@ class _DeviceInspectionUploadListPageState
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () {
-                setState(() {
-                  if (_deviceInspectUpload.selectedList.contains(list[index])) {
-                    // 如果已选中则移除
-                    _deviceInspectUpload.selectedList.remove(list[index]);
-                  } else {
-                    // 如果未选中则添加
-                    _deviceInspectUpload.selectedList.add(list[index]);
-                  }
-                });
-                // 刷新BottomSheet中的选中数
-                if (bottomSheetStateSetter != null)
-                  bottomSheetStateSetter(() {});
+                if (widget.state == '1') {
+                  setState(() {
+                    if (_deviceInspectUpload.selectedList
+                        .contains(list[index])) {
+                      // 如果已选中则移除
+                      _deviceInspectUpload.selectedList.remove(list[index]);
+                    } else {
+                      // 如果未选中则添加
+                      _deviceInspectUpload.selectedList.add(list[index]);
+                    }
+                  });
+                  // 刷新BottomSheet中的选中数
+                  if (bottomSheetStateSetter != null)
+                    bottomSheetStateSetter(() {});
+                } else {
+                  // 未巡检和已巡检任务不支持查看详情
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('暂不支持查看详情'),
+                      action: SnackBarAction(
+                          label: '我知道了',
+                          textColor: Colours.primary_color,
+                          onPressed: () {}),
+                    ),
+                  );
+                }
               },
               children: <Widget>[
                 Container(
@@ -305,11 +321,14 @@ class _DeviceInspectionUploadListPageState
               ],
             ),
           ),
-          Checkbox(
-            value: _deviceInspectUpload.selectedList
-                .contains(routineInspectionUploadList),
-            onChanged: (value) {},
-          ),
+          if (widget.state == '1')
+            Checkbox(
+              value: _deviceInspectUpload.selectedList
+                  .contains(routineInspectionUploadList),
+              onChanged: (value) {},
+            )
+          else
+            Gaps.hGap16
         ],
       );
     } else if (itemInspectType == "5") {
@@ -325,11 +344,14 @@ class _DeviceInspectionUploadListPageState
                   ),
                 ),
               ),
-              Checkbox(
-                value: _deviceInspectUpload.selectedList
-                    .contains(routineInspectionUploadList),
-                onChanged: (value) {},
-              ),
+              if (widget.state == '1')
+                Checkbox(
+                  value: _deviceInspectUpload.selectedList
+                      .contains(routineInspectionUploadList),
+                  onChanged: (value) {},
+                )
+              else
+                Gaps.hGap16
             ],
           ),
           Gaps.vGap6,
@@ -372,7 +394,7 @@ class _DeviceInspectionUploadListPageState
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Text(
-              '位置的任务类型！itemInspectType=$itemInspectType',
+              '未知的任务类型！itemInspectType=$itemInspectType',
               style: TextStyle(
                 fontSize: 15,
               ),

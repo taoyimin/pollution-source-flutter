@@ -13,6 +13,7 @@ import 'package:pollution_source/module/common/list/list_state.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_model.dart';
 import 'package:pollution_source/module/inspection/common/routine_inspection_upload_list_repository.dart';
 import 'package:pollution_source/module/inspection/routine/detail/routine_inspection_detail_repository.dart';
+import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/application.dart';
 import 'package:pollution_source/route/routes.dart';
@@ -143,25 +144,41 @@ class _AirDeviceCheckUploadListPageState
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: InkWellButton(
               onTap: () async {
-                bool success = await Application.router.navigateTo(context,
-                    '${Routes.airDeviceCheckUpload}?json=${Uri.encodeComponent(json.encode(list[index].toJson()))}');
-                if (success ?? false) {
-                  // 刷新常规巡检详情界面header中的任务条数
-                  _detailBloc.add(DetailLoad(
-                    params: RoutineInspectionDetailRepository.createParams(
-                      monitorId: widget.monitorId,
-                      state: widget.state,
+                if(widget.state == '1'){
+                  bool success = await Application.router.navigateTo(context,
+                      '${Routes.airDeviceCheckUpload}?json=${Uri
+                          .encodeComponent(json.encode(list[index]
+                          .toJson()))}');
+                  if (success ?? false) {
+                    // 刷新常规巡检详情界面header中的任务条数
+                    _detailBloc.add(DetailLoad(
+                      params: RoutineInspectionDetailRepository.createParams(
+                        monitorId: widget.monitorId,
+                        state: widget.state,
+                      ),
+                    ));
+                    // 刷新列表页面
+                    _listBloc.add(ListLoad(
+                      isRefresh: true,
+                      params: RoutineInspectionUploadListRepository
+                          .createParams(
+                        monitorId: widget.monitorId,
+                        itemInspectType: widget.itemInspectType,
+                        state: widget.state,
+                      ),
+                    ));
+                  }
+                }else {
+                  // 未巡检和已巡检的任务暂不支持查看详情
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('暂不支持查看详情'),
+                      action: SnackBarAction(
+                          label: '我知道了',
+                          textColor: Colours.primary_color,
+                          onPressed: () {}),
                     ),
-                  ));
-                  // 刷新列表页面
-                  _listBloc.add(ListLoad(
-                    isRefresh: true,
-                    params: RoutineInspectionUploadListRepository.createParams(
-                      monitorId: widget.monitorId,
-                      itemInspectType: widget.itemInspectType,
-                      state: widget.state,
-                    ),
-                  ));
+                  );
                 }
               },
               children: <Widget>[

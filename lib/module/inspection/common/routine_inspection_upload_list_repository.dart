@@ -16,7 +16,7 @@ class RoutineInspectionUploadListRepository
     return RoutineInspectionUploadList.fromJson(json);
   }
 
-  /// [state]状态 0：全部 1：当前待处理 2：超时待处理
+  /// [state]状态 0：全部 1：待巡检 2：未巡检 3：已巡检
   static Map<String, dynamic> createParams({
     @required monitorId,
     @required itemInspectType,
@@ -30,7 +30,9 @@ class RoutineInspectionUploadListRepository
           case '1':
             return '10';
           case '2':
-            return '11';
+            return '21';
+          case '3':
+            return '20';
           default:
             return '';
         }

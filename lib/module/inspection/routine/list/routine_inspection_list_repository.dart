@@ -16,7 +16,7 @@ class RoutineInspectionListRepository
   }
 
   /// [enterName]根据企业名称筛选
-  /// [state]状态 1：当前待处理 2：超时待处理
+  /// [state]状态 1：待巡检 2：未巡检 3：已巡检
   static Map<String, dynamic> createParams({
     currentPage = Constant.defaultCurrentPage,
     pageSize = Constant.defaultPageSize,
@@ -31,12 +31,14 @@ class RoutineInspectionListRepository
       'query.like.e.enterpriseName': enterName,
       'query.eq.enterId': enterId,
       'query.eq.monitorId': monitorId,
-      'query.eq.inspectionStatus': () {
+      'inspectionStatus': () {
         switch (state) {
           case '1':
             return '10';
           case '2':
-            return '11';
+            return '21';
+          case '3':
+            return '20';
           default:
             return '';
         }

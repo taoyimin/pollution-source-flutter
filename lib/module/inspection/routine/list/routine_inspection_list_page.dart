@@ -55,8 +55,9 @@ class _RoutineInspectionListPageState extends State<RoutineInspectionListPage> {
   /// 巡检任务状态菜单
   final List<DataDict> _stateList = [
     DataDict(name: '全部', code: ''),
-    DataDict(name: '当前待处理', code: '1'),
-    DataDict(name: '超时待处理', code: '2'),
+    DataDict(name: '待巡检', code: '1'),
+    DataDict(name: '未巡检', code: '2'),
+    DataDict(name: '已巡检', code: '3'),
   ];
 
   /// 巡检任务状态

@@ -198,7 +198,7 @@ class RoutineInspectionStatisticsWidget extends StatelessWidget {
                 meta: metaList[0],
               ),
               Gaps.hGap6,
-              // 超期任务数
+              // 未巡检任务数
               InkWellButton2(
                 meta: metaList[1],
               ),
@@ -206,17 +206,6 @@ class RoutineInspectionStatisticsWidget extends StatelessWidget {
               // 已巡检任务数
               InkWellButton2(
                 meta: metaList[2],
-                onTap: () {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('暂不支持查询已巡检任务'),
-                      action: SnackBarAction(
-                          label: '我知道了',
-                          textColor: Colours.primary_color,
-                          onPressed: () {}),
-                    ),
-                  );
-                },
               ),
             ],
           ),

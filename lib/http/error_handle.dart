@@ -9,6 +9,7 @@ class ExceptionHandle{
   static const int success = 200;
   static const int success_not_content = 204;
   static const int invalid_param = 300;
+  static const int redirect = 302;
   static const int bad_request = 400;
   static const int unauthorized = 401;
   static const int forbidden = 403;

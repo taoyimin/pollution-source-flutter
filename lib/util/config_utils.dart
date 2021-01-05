@@ -3,13 +3,13 @@ import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/login/login_page1.dart';
 
 class ConfigUtils {
-  // static const String config = '江西';
+  static const String config = '江西';
 
   // static const String config = '高安';
 
   // static const String config = '万年';
 
-  static const String config = '贵溪';
+  // static const String config = '贵溪';
 
   // static const String config = '测试';
 
@@ -26,7 +26,7 @@ class ConfigUtils {
         return 'http://115.153.156.134:9502/';
       default:
         return 'http://182.106.189.190:9999/';
-        // return 'http://kevin.cn1.utools.club/';
+      // return 'http://kevin.cn1.utools.club/';
     }
   }
 
@@ -35,9 +35,9 @@ class ConfigUtils {
     switch (config) {
       case '江西':
         return 'http://111.75.227.207:19550/';
+        // return 'http://taoyimin.iok.la:34261/';
       case '高安':
         return 'http://59.63.215.141:9180/';
-        // return 'http://taoyimin.iok.la:34261/';
       case '万年':
         return '-';
       case '贵溪':

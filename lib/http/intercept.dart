@@ -64,13 +64,8 @@ class TokenInterceptor extends Interceptor {
       CompatUtils.setToken(options);
       LogUtil.v("----------- 重新请求接口 ------------");
       if (options.data is FormData) {
-        // 由于MultipartFile是基于Stream的，Stream只能读取一次，所以应该重新创建
-        FormData formData = FormData();
-        formData.fields.addAll(options.data.fields);
-        if ((options.data.files??[]).length != 0)
-          throw DioError(
-              error: UnauthorizedException('当前登录信息已失效，已为您刷新认证信息，请重新再提交一次！'));
-        options.data = formData;
+        throw DioError(
+            error: UnauthorizedException('当前登录信息已失效，已为您刷新认证信息，请重新再提交一次！'));
       }
       //避免重复执行拦截器，使用tokenDio
       var newResponse = await _tokenDio.request(
@@ -118,6 +113,10 @@ class HandleErrorInterceptor extends Interceptor {
         // 状态码200但服务器处理失败
         throw DioError(error: ServerErrorException('$message'));
       }
+    }else if (response != null &&
+        response.statusCode == ExceptionHandle.bad_request) {
+      // 状态码302
+      return super.onResponse(response);
     } else if (response != null &&
         response.statusCode == ExceptionHandle.bad_request) {
       // 状态码400
