@@ -3,9 +3,9 @@ import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/login/login_page1.dart';
 
 class ConfigUtils {
-  static const String config = '江西';
+  // static const String config = '江西';
 
-  // static const String config = '高安';
+  static const String config = '高安';
 
   // static const String config = '万年';
 
@@ -19,7 +19,7 @@ class ConfigUtils {
       case '江西':
         return 'http://111.75.227.207:19551/';
       case '高安':
-        return 'http://59.63.215.141:8090/';
+        return 'http://115.149.164.211:9180/';
       case '万年':
         return 'http://223.83.222.189:9281/';
       case '贵溪':
@@ -37,7 +37,7 @@ class ConfigUtils {
         return 'http://111.75.227.207:19550/';
         // return 'http://taoyimin.iok.la:34261/';
       case '高安':
-        return 'http://59.63.215.141:9180/';
+        return 'http://115.149.164.212:9181/';
       case '万年':
         return '-';
       case '贵溪':
@@ -236,7 +236,7 @@ class ConfigUtils {
       case '江西':
         return 'assets/images/image_pollution_download_QRcode.png';
       case '高安':
-        return 'assets/images/image_wannian_pollution_download_QRcode.png';
+        return 'assets/images/image_gaoan_pollution_download_QRcode.png';
       case '万年':
         return 'assets/images/image_wannian_pollution_download_QRcode.png';
       case '贵溪':
@@ -268,7 +268,7 @@ class ConfigUtils {
       case '江西':
         return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
       case '高安':
-        return 'http://59.63.215.141:8090/dowload/pollution-source.apk';
+        return 'http://115.149.164.211:9180/dowload/pollution-source.apk';
       case '万年':
         return 'http://223.83.222.189:9281/dowload/pollution-source.apk';
       case '贵溪':
@@ -284,7 +284,7 @@ class ConfigUtils {
       case '江西':
         return 'http://111.75.227.207:19550/app/pollution-source.apk';
       case '高安':
-        return 'http://59.63.215.141:9180/app/pollution-source.apk';
+        return 'http://115.149.164.212:9181/app/pollution-source.apk';
       case '万年':
         return '-';
       case '贵溪':
