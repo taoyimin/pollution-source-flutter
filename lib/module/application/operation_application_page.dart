@@ -161,7 +161,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                           imagePath:
                                               'assets/images/application_icon_discharge_report.png',
                                           router:
-                                              '${Routes.routineInspectionList}',
+                                              '${Routes.routineInspectionList}?state=1',
                                         ),
                                       ),
                                       Gaps.hGap20,

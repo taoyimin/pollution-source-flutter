@@ -15,7 +15,6 @@ import 'package:pollution_source/module/common/detail/detail_event.dart';
 import 'package:pollution_source/module/common/detail/detail_state.dart';
 import 'package:pollution_source/module/enter/detail/enter_detail_model.dart';
 import 'package:pollution_source/res/colors.dart';
-import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/route/routes.dart';
 import 'package:pollution_source/util/config_utils.dart';
@@ -60,7 +59,7 @@ class _EnterIndexPageState extends State<EnterIndexPage>
   /// 获取监控点统计接口请求参数
   Map<String, dynamic> _getRequestParam() {
     return MonitorStatisticsRepository.createParams(
-      userType: (SpUtil.getInt(Constant.spUserType) + 1).toString(),
+      userType: '2',
       enterId: widget.enterId,
       outType: '',
       attentionLevel: '',

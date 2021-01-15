@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
 import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/util/compat_utils.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 
 /// 分享产品界面
@@ -31,9 +32,10 @@ class _ShareProductPageState extends State<ShareProductPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.asset(CompatUtils.getDownloadQRcode()),
+            QrImage(
+              data: CompatUtils.getDownloadUrl(),
+              version: QrVersions.auto,
+              size: 200.0,
             ),
             const Text(
               '扫码下载或点击下方按钮进行分享',

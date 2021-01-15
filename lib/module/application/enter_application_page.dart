@@ -166,7 +166,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                       content: '常规巡检上报',
                                       imagePath:
                                       'assets/images/application_icon_discharge_report.png',
-                                      router: '${Routes.routineInspectionList}',
+                                      router: '${Routes.routineInspectionList}?state=1',
                                     ),
                                   ),
                                   Gaps.hGap20,

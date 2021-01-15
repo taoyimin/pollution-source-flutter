@@ -132,6 +132,12 @@ class Constant {
   /// 历史数据列表是否显示接收时间
   static const String spShowReceiveTime = 'showReceiveTime';
 
+  /// 污染源android版本下载地址
+  static const String spPollutionAndroidUrl = 'pollutionAndroidUrl';
+
+  /// 运维android版本下载地址
+  static const String spOperationAndroidUrl = 'operationAndroidUrl';
+
   /// 登录接口集合
   static const List<HttpApi> loginApis = [
     HttpApi.adminToken,

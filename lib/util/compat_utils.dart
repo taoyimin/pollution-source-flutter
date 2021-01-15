@@ -316,32 +316,16 @@ class CompatUtils {
     }
   }
 
-  /// 根据不同的用户类型获取对应的下载地址二维码
-  static String getDownloadQRcode() {
-    switch (SpUtil.getInt(Constant.spUserType)) {
-      case 0:
-      case 1:
-        // 环保和企业用户
-        return ConfigUtils.getPollutionDownloadQRcode();
-      case 2:
-        // 运维用户
-        return ConfigUtils.getOperationDownloadQRcode();
-      default:
-        throw Exception(
-            '获取下载地址二维码失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
-    }
-  }
-
   /// 根据不同的用户类型获取对应的下载地址
   static String getDownloadUrl() {
     switch (SpUtil.getInt(Constant.spUserType)) {
       case 0:
       case 1:
         // 环保和企业用户
-        return ConfigUtils.getPollutionDownloadUrl();
+        return SpUtil.getString(Constant.spPollutionAndroidUrl);
       case 2:
         // 运维用户
-        return ConfigUtils.getOperationDownloadUrl();
+        return SpUtil.getString(Constant.spOperationAndroidUrl);
       default:
         throw Exception(
             '获取下载地址失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
@@ -361,6 +345,24 @@ class CompatUtils {
       default:
         throw Exception(
             '获取接口失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
+    }
+  }
+
+  /// 根据不同的用户类型保存对应的下载地址
+  static void saveAndroidUrl(String url) {
+    switch (SpUtil.getInt(Constant.spUserType)) {
+      case 0:
+      case 1:
+        //环保和企业用户
+        SpUtil.putString(Constant.spPollutionAndroidUrl, url);
+        break;
+      case 2:
+        //运维用户
+        SpUtil.putString(Constant.spOperationAndroidUrl, url);
+        break;
+      default:
+        throw Exception(
+            '保存下载地址失败，未知的用户类型！userType=${SpUtil.getInt(Constant.spUserType)}');
     }
   }
 
@@ -476,7 +478,7 @@ class CompatUtils {
       case HttpApi.standardReplaceUpload:
         return HttpApiPollution.standardReplaceUpload;
       case HttpApi.checkVersion:
-        return HttpApiPollution.checkVersion;
+        return ConfigUtils.getPollutionUpdateApi();
       case HttpApi.changePassword:
         return HttpApiPollution.changePassword;
       case HttpApi.notificationList:
@@ -600,7 +602,7 @@ class CompatUtils {
       case HttpApi.standardReplaceUpload:
         return HttpApiOperation.standardReplaceUpload;
       case HttpApi.checkVersion:
-        return HttpApiOperation.checkVersion;
+        return ConfigUtils.getOperationUpdateApi();
       case HttpApi.changePassword:
         return HttpApiOperation.changePassword;
       case HttpApi.notificationList:

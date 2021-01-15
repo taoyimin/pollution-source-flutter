@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/login/login_page.dart';
-import 'package:pollution_source/module/login/login_page1.dart';
+import 'package:pollution_source/module/login/login_page_city.dart';
 
 class ConfigUtils {
-  // static const String config = '江西';
+  static const String config = '江西';
 
-  static const String config = '高安';
+  // static const String config = '高安';
 
   // static const String config = '万年';
 
@@ -47,6 +47,38 @@ class ConfigUtils {
     }
   }
 
+  /// 获取污染源更新接口地址
+  static String getPollutionUpdateApi() {
+    switch (config) {
+      case '江西':
+        return 'update/update-jiangxi.json';
+      case '高安':
+        return 'update/update-gaoan.json';
+      case '万年':
+        return 'update/update-wannian.json';
+      case '贵溪':
+        return 'update/update-guixi.json';
+      default:
+        return 'update/update-jiangxi.json';
+    }
+  }
+
+  /// 获取运维更新接口地址
+  static String getOperationUpdateApi() {
+    switch (config) {
+      case '江西':
+        return 'app/update-jiangxi.json';
+      case '高安':
+        return 'app/update-gaoan.json';
+      case '万年':
+        return '-';
+      case '贵溪':
+        return '-';
+      default:
+        return 'app/update-jiangxi.json';
+    }
+  }
+
   /// 获取登录页面
   static Widget getLoginPage() {
     switch (config) {
@@ -55,7 +87,7 @@ class ConfigUtils {
       case '高安':
       case '万年':
       case '贵溪':
-        return LoginPage1();
+        return LoginPageCity();
       default:
         return LoginPage();
     }
@@ -227,70 +259,6 @@ class ConfigUtils {
         return 'assets/images/image_application_header1.png';
       default:
         return 'assets/images/image_application_header.png';
-    }
-  }
-
-  /// 获取污染源APP下载二维码
-  static String getPollutionDownloadQRcode() {
-    switch (config) {
-      case '江西':
-        return 'assets/images/image_pollution_download_QRcode.png';
-      case '高安':
-        return 'assets/images/image_gaoan_pollution_download_QRcode.png';
-      case '万年':
-        return 'assets/images/image_wannian_pollution_download_QRcode.png';
-      case '贵溪':
-        return 'assets/images/image_guixi_pollution_download_QRcode.png';
-      default:
-        return 'assets/images/image_pollution_download_QRcode.png';
-    }
-  }
-
-  /// 获取运维APP下载二维码
-  static String getOperationDownloadQRcode() {
-    switch (config) {
-      case '江西':
-        return 'assets/images/image_operation_download_QRcode.png';
-      case '高安':
-        return 'assets/images/image_gaoan_operation_download_QRcode.png';
-      case '万年':
-        return '-';
-      case '贵溪':
-        return '-';
-      default:
-        return 'assets/images/image_operation_download_QRcode.png';
-    }
-  }
-
-  /// 获取污染源APP下载地址
-  static String getPollutionDownloadUrl() {
-    switch (config) {
-      case '江西':
-        return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
-      case '高安':
-        return 'http://115.149.164.211:9180/dowload/pollution-source.apk';
-      case '万年':
-        return 'http://223.83.222.189:9281/dowload/pollution-source.apk';
-      case '贵溪':
-        return 'http://115.153.156.134:9502/dowload/pollution-source.apk';
-      default:
-        return 'http://111.75.227.207:19551/dowload/pollution-source.apk';
-    }
-  }
-
-  /// 获取运维APP下载地址
-  static String getOperationDownloadUrl() {
-    switch (config) {
-      case '江西':
-        return 'http://111.75.227.207:19550/app/pollution-source.apk';
-      case '高安':
-        return 'http://115.149.164.212:9181/app/pollution-source.apk';
-      case '万年':
-        return '-';
-      case '贵溪':
-        return '-';
-      default:
-        return 'http://111.75.227.207:19550/app/pollution-source.apk';
     }
   }
 

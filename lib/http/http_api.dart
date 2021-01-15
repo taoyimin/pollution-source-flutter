@@ -275,7 +275,6 @@ class HttpApiPollution {
       'consumableChangeRecord/insertOrUpdate';
   static const String deviceRepairUpload = 'ywmh/overhaulRecord/save';
   static const String standardReplaceUpload = 'standardSampleChangeRecord/insertOrUpdate';
-  static const String checkVersion = 'update/update.json';
   static const String changePassword = 'user/changePwd';
   static const String notificationList = 'pushMessage/getPushMessageHistory';
   static const String mobileLawList = 'Supervise/getEnforcementsById';
@@ -371,7 +370,6 @@ class HttpApiOperation {
       'consumableChangeRecord/insertOrUpdate';
   static const String deviceRepairUpload = 'ywmh/overhaulRecord/save';
   static const String standardReplaceUpload = 'standardSampleChangeRecord/insertOrUpdate';
-  static const String checkVersion = 'app/update.json';
   static const String changePassword = 'ywyh/updatePassword';
   static const String notificationList = 'pushMessage/getPushMessageHistory';
   static const String mobileLawList = '暂无';

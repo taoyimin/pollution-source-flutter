@@ -91,6 +91,8 @@ class SystemUtils {
         .get(CompatUtils.getApi(HttpApi.checkVersion));
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isAndroid) {
+      // 保存android下载地址
+      CompatUtils.saveAndroidUrl(response.data['android']['url']);
       if (checkVersion(
           packageInfo.buildNumber, response.data['android']['build'])) {
         String title = response.data['android']['title'];

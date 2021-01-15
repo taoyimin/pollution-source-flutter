@@ -19,12 +19,12 @@ import 'package:pollution_source/widget/login_text_field.dart';
 // import 'package:keyboard_actions/keyboard_actions.dart';
 
 /// 登录页(地市)
-class LoginPage1 extends StatefulWidget {
+class LoginPageCity extends StatefulWidget {
   @override
-  _LoginPage1State createState() => _LoginPage1State();
+  _LoginPageCityState createState() => _LoginPageCityState();
 }
 
-class _LoginPage1State extends State<LoginPage1> {
+class _LoginPageCityState extends State<LoginPageCity> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _nodeText1 = FocusNode();
