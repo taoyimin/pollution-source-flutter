@@ -3,9 +3,9 @@ import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/login/login_page_city.dart';
 
 class ConfigUtils {
-  static const String config = '江西';
+  // static const String config = '江西';
 
-  // static const String config = '高安';
+  static const String config = '高安';
 
   // static const String config = '万年';
 
@@ -37,7 +37,8 @@ class ConfigUtils {
         return 'http://111.75.227.207:19550/';
         // return 'http://taoyimin.iok.la:34261/';
       case '高安':
-        return 'http://115.149.164.212:9181/';
+        // return 'http://115.149.164.212:9181/';
+        return 'http://taoyimin.iok.la:34261/';
       case '万年':
         return '-';
       case '贵溪':

@@ -30,7 +30,7 @@ class RoutineInspectionUploadListRepository
           case '1':
             return '10';
           case '2':
-            return '21';
+            return '11';
           case '3':
             return '20';
           default:
