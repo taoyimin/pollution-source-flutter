@@ -9,7 +9,7 @@ class DeviceInspectionUploadRepository
     extends UploadRepository<DeviceInspectUpload, String> {
   @override
   checkData(DeviceInspectUpload data) {
-    if (data.baiduLocation == null)
+    if (data.baiduLocation == null || data.baiduLocation.latitude == null || data.baiduLocation.longitude == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
     if (data.selectedList.length == 0)
       throw DioError(error: InvalidParamException('至少选择一项任务进行处理'));
@@ -26,7 +26,7 @@ class DeviceInspectionUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
+      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
       ..addAll(data.selectedList.map((item) {
         return MapEntry('inspectionTaskId', item.inspectionTaskId);
       }))

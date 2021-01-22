@@ -13,7 +13,7 @@ class ConsumableReplaceUploadRepository
     extends UploadRepository<ConsumableReplaceUpload, String> {
   @override
   checkData(ConsumableReplaceUpload data) {
-    if (data.baiduLocation == null)
+    if (data.baiduLocation == null || data.baiduLocation.latitude == null || data.baiduLocation.longitude == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
     if (data.enter == null)
       throw DioError(error: InvalidParamException('请选择企业'));
@@ -51,7 +51,7 @@ class ConsumableReplaceUploadRepository
     return FormData.fromMap({
       'latitude': data.baiduLocation.latitude.toString(),
       'longitude': data.baiduLocation.longitude.toString(),
-      'address': data.baiduLocation.locationDetail,
+      'address': data.baiduLocation.locationDetail??'无',
       'consumableChangeId': '',
       'enterId': data.enter.enterId,
       'outId': data.monitor.dischargeId,

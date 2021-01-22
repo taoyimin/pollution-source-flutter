@@ -10,7 +10,7 @@ class AirDeviceCorrectUploadRepository
     extends UploadRepository<AirDeviceCorrectUpload, String> {
   @override
   checkData(AirDeviceCorrectUpload data) {
-    if (data.baiduLocation == null)
+    if (data.baiduLocation == null || data.baiduLocation.latitude == null || data.baiduLocation.longitude == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
     if (TextUtil.isEmpty(data.factorUnit))
       throw DioError(error: InvalidParamException('请先输入计量单位'));
@@ -55,7 +55,7 @@ class AirDeviceCorrectUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
+      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('factorCode', data.factorCode)])
       ..addAll([MapEntry('factorName', data.factorName)])

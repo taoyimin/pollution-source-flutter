@@ -10,7 +10,7 @@ class WaterDeviceUploadRepository
     extends UploadRepository<WaterDeviceCheckUpload, String> {
   @override
   checkData(WaterDeviceCheckUpload data) {
-    if (data.baiduLocation == null)
+    if (data.baiduLocation == null || data.baiduLocation.latitude == null || data.baiduLocation.longitude == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
     if (TextUtil.isEmpty(data.measuredResult.text))
       throw DioError(error: InvalidParamException('请输入在线监测仪器测定结果'));
@@ -41,7 +41,7 @@ class WaterDeviceUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
+      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('itemType', data.itemType)])
       ..addAll([MapEntry('factorCode', data.factorCode)])

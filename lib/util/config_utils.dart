@@ -3,9 +3,9 @@ import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/login/login_page_city.dart';
 
 class ConfigUtils {
-  // static const String config = '江西';
+  static const String config = '江西';
 
-  static const String config = '高安';
+  // static const String config = '高安';
 
   // static const String config = '万年';
 

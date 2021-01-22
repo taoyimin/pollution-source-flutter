@@ -10,7 +10,7 @@ class AirDeviceCheckUploadRepository
     extends UploadRepository<AirDeviceCheckUpload, String> {
   @override
   checkData(AirDeviceCheckUpload data) {
-    if (data.baiduLocation == null)
+    if (data.baiduLocation == null || data.baiduLocation.latitude == null || data.baiduLocation.longitude == null)
       throw DioError(error: InvalidParamException('请先获取位置信息'));
     else if (data.airDeviceCheckRecordList.length < 5)
       throw DioError(error: InvalidParamException('请至少上传五条记录'));
@@ -45,7 +45,7 @@ class AirDeviceCheckUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail)])
+      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('itemType', data.itemType)])
       ..addAll([MapEntry('factorCode', data.factorCode)])
