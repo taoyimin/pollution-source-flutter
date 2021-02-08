@@ -34,12 +34,16 @@ import 'package:pollution_source/module/common/common_widget.dart';
 /// 长期停产申报列表界面
 class LongStopReportListPage extends StatefulWidget {
   final String enterId;
+  final DateTime startTime;
+  final DateTime endTime;
   final String state;
   final String valid;
   final String attentionLevel;
 
   LongStopReportListPage({
     this.enterId = '',
+    this.startTime,
+    this.endTime,
     this.state = '',
     this.valid = '',
     this.attentionLevel = '',
@@ -88,6 +92,12 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
   /// 区域信息
   Result _areaResult;
 
+  /// 申报开始时间
+  DateTime _startTime;
+
+  /// 申报结束时间
+  DateTime _endTime;
+
   /// 是否有效
   String _valid;
 
@@ -135,6 +145,8 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
   initParam() {
     _enterNameController.text = '';
     _areaResult = null;
+    _startTime = widget.startTime;
+    _endTime = widget.endTime;
     _valid = widget.valid;
     _attentionLevel = widget.attentionLevel;
   }
@@ -148,6 +160,8 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
       enterName: _enterNameController.text,
       cityCode: _areaResult?.cityId ?? '',
       areaCode: _areaResult?.areaId ?? '',
+      startTime: _startTime,
+      endTime: _endTime,
       state: widget.state,
       valid: _valid,
       attentionLevel: _attentionLevel,
@@ -355,6 +369,25 @@ class _LongStopReportListPageState extends State<LongStopReportListPage> {
                                 });
                               },
                             ),
+                          ),
+                          DateTimeWidget(
+                            title: '申报时间',
+                            height: UIUtils.getSearchItemHeight(
+                                context, orientation),
+                            startTime: _startTime,
+                            endTime: _endTime,
+                            maxStartTime: _endTime ?? DateTime.now(),
+                            maxEndTime: DateTime.now(),
+                            onStartTimeConfirm: (dateTime, selectedIndex) {
+                              setState(() {
+                                _startTime = dateTime;
+                              });
+                            },
+                            onEndTimeConfirm: (dateTime, selectedIndex) {
+                              setState(() {
+                                _endTime = dateTime;
+                              });
+                            },
                           ),
                           DataDictBlocGridWidget(
                             title: '是否生效',

@@ -148,8 +148,10 @@ class _LongStopReportUploadPageState extends State<LongStopReportUploadPage> {
                       Enter enter = await Application.router.navigateTo(
                           context, '${Routes.enterList}?type=1&state=1');
                       if (enter != null) {
-                        // 设置已经选中的企业
-                        _longStopReportUpload.enter = enter;
+                        setState(() {
+                          // 设置已经选中的企业
+                          _longStopReportUpload.enter = enter;
+                        });
                       }
                     },
                   ),
