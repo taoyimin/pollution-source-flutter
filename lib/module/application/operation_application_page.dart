@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
@@ -366,7 +367,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                     content: '排口异常列表',
                                     imagePath:
                                         'assets/images/application_icon_discharge_report.png',
-                                    router: '${Routes.dischargeReportList}',
+                                    router: '${Routes.dischargeReportList}?startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -376,7 +377,7 @@ class _OperationApplicationPageState extends State<OperationApplicationPage>
                                     content: '因子异常列表',
                                     imagePath:
                                         'assets/images/application_icon_factor_report.png',
-                                    router: '${Routes.factorReportList}',
+                                    router: '${Routes.factorReportList}?startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                               ],

@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pollution_source/module/common/common_model.dart';
@@ -199,7 +200,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                     imagePath:
                                         'assets/images/application_icon_discharge_report.png',
                                     router:
-                                        '${Routes.dischargeReportList}?enterId=${widget.enterId}',
+                                        '${Routes.dischargeReportList}?enterId=${widget.enterId}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -210,7 +211,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                     imagePath:
                                         'assets/images/application_icon_factor_report.png',
                                     router:
-                                        '${Routes.factorReportList}?enterId=${widget.enterId}',
+                                        '${Routes.factorReportList}?enterId=${widget.enterId}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                               ],
@@ -224,7 +225,7 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                                     imagePath:
                                         'assets/images/application_icon_longStop_report.png',
                                     router:
-                                        '${Routes.longStopReportList}?enterId=${widget.enterId}',
+                                        '${Routes.longStopReportList}?enterId=${widget.enterId}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                                 Gaps.hGap20,

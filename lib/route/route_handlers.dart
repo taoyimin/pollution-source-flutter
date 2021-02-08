@@ -214,6 +214,8 @@ var dischargeReportListHandler = Handler(
     String enterId = params['enterId']?.first ?? '';
     String dischargeId = params['dischargeId']?.first ?? '';
     String monitorId = params['monitorId']?.first ?? '';
+    DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
+    DateTime endTime = DateUtil.getDateTime(params['endTime']?.first ?? '');
     String state = params['state']?.first ?? '';
     String valid = params['valid']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
@@ -221,6 +223,8 @@ var dischargeReportListHandler = Handler(
       enterId: enterId,
       dischargeId: dischargeId,
       monitorId: monitorId,
+      startTime: startTime,
+      endTime: endTime,
       state: state,
       valid: valid,
       attentionLevel: attentionLevel,
@@ -240,6 +244,8 @@ var factorReportListHandler = Handler(
     String enterId = params['enterId']?.first ?? '';
     String dischargeId = params['dischargeId']?.first ?? '';
     String monitorId = params['monitorId']?.first ?? '';
+    DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
+    DateTime endTime = DateUtil.getDateTime(params['endTime']?.first ?? '');
     String state = params['state']?.first ?? '';
     String valid = params['valid']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
@@ -247,6 +253,8 @@ var factorReportListHandler = Handler(
       enterId: enterId,
       dischargeId: dischargeId,
       monitorId: monitorId,
+      startTime: startTime,
+      endTime: endTime,
       state: state,
       valid: valid,
       attentionLevel: attentionLevel,
@@ -264,11 +272,15 @@ var factorReportDetailHandler = Handler(
 var longStopReportListHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String enterId = params['enterId']?.first ?? '';
+    DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
+    DateTime endTime = DateUtil.getDateTime(params['endTime']?.first ?? '');
     String state = params['state']?.first ?? '';
     String valid = params['valid']?.first ?? '';
     String attentionLevel = params['attentionLevel']?.first ?? '';
     return LongStopReportListPage(
       enterId: enterId,
+      startTime: startTime,
+      endTime: endTime,
       state: state,
       valid: valid,
       attentionLevel: attentionLevel,

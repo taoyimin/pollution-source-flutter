@@ -163,7 +163,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '排口异常列表',
                                     imagePath:
                                         'assets/images/application_icon_discharge_report.png',
-                                    router: '${Routes.dischargeReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                    router: '${Routes.dischargeReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                                 Gaps.hGap20,
@@ -173,7 +173,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '因子异常列表',
                                     imagePath:
                                         'assets/images/application_icon_factor_report.png',
-                                    router: '${Routes.factorReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                    router: '${Routes.factorReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                               ],
@@ -186,7 +186,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     content: '长期停产列表',
                                     imagePath:
                                         'assets/images/application_icon_longStop_report.png',
-                                    router: '${Routes.longStopReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                    router: '${Routes.longStopReportList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year, 1, 1), format: DateFormats.y_mo_d)}',
                                   ),
                                 ),
                                 Gaps.hGap20,
