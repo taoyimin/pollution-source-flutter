@@ -17,8 +17,8 @@ class ConfigUtils {
   static String getPollutionBaseUrl() {
     switch (config) {
       case '江西':
-        // return 'http://111.75.227.207:19551/';
-        return 'http://106.225.129.166:8839/';
+        return 'http://111.75.227.207:19551/';
+        // return 'http://106.225.129.166:8839/';
       case '高安':
         return 'http://115.149.164.211:9180/';
       case '万年':
@@ -35,8 +35,8 @@ class ConfigUtils {
   static String getOperationBaseUrl() {
     switch (config) {
       case '江西':
-        // return 'http://111.75.227.207:19550/';
-        return 'http://106.225.129.166:8090/';
+        return 'http://111.75.227.207:19550/';
+        // return 'http://106.225.129.166:8090/';
         // return 'http://taoyimin.iok.la:34261/';
       case '高安':
         return 'http://115.149.164.212:9181/';

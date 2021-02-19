@@ -214,11 +214,6 @@ class _DeviceRepairUploadPageState extends State<DeviceRepairUploadPage> {
                 ),
                 Gaps.hLine,
                 InfoRowWidget(
-                  title: '设备类型',
-                  content: _deviceRepairUpload.device?.deviceTypeName ?? '无',
-                ),
-                Gaps.hLine,
-                InfoRowWidget(
                   title: '设备编码',
                   content: _deviceRepairUpload.device?.deviceNo ?? '无',
                 ),

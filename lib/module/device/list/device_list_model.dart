@@ -13,8 +13,6 @@ class Device extends Equatable {
   @JsonKey(defaultValue: '')
   final String deviceNo; // 设备编号
   @JsonKey(defaultValue: '')
-  final String deviceTypeName; // 设备类型
-  @JsonKey(defaultValue: '')
   final String markerName; // 制造商
   @JsonKey(defaultValue: '')
   final String markerHotLine; // 客服热线
@@ -23,7 +21,6 @@ class Device extends Equatable {
     this.deviceId,
     this.deviceName,
     this.deviceNo,
-    this.deviceTypeName,
     this.markerName,
     this.markerHotLine,
   });
@@ -33,7 +30,6 @@ class Device extends Equatable {
         deviceId,
         deviceName,
         deviceNo,
-        deviceTypeName,
         markerName,
         markerHotLine,
       ];

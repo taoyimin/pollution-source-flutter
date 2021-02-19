@@ -210,14 +210,9 @@ class _DeviceListPageState extends State<DeviceListPage> {
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 6,
+                                  flex: 1,
                                   child: ListTileWidget(
                                       '设备编号：${deviceList[index].deviceNo}'),
-                                ),
-                                Expanded(
-                                  flex: 5,
-                                  child: ListTileWidget(
-                                      '设备类型：${deviceList[index].deviceTypeName}'),
                                 ),
                               ],
                             ),

@@ -2973,14 +2973,13 @@ class LocationWidgetState extends State<LocationWidget> {
     BaiduLocationAndroidOption androidOption = BaiduLocationAndroidOption();
     androidOption.setCoorType("bd09ll"); // 设置返回的位置坐标系类型
     androidOption.setIsNeedAltitude(false); // 设置是否需要返回海拔高度信息
-    androidOption.setIsNeedAddres(false); // 设置是否需要返回地址信息
+    androidOption.setIsNeedAddres(true); // 设置是否需要返回地址信息
     androidOption.setIsNeedLocationPoiList(false); // 设置是否需要返回周边poi信息
     androidOption.setIsNeedNewVersionRgc(true); // 设置是否需要返回最新版本rgc信息
     androidOption.setIsNeedLocationDescribe(true); // 设置是否需要返回位置描述
     androidOption.setOpenGps(true); // 设置是否需要使用gps
     androidOption.setLocationMode(LocationMode.Hight_Accuracy); // 设置定位模式
-    androidOption.setScanspan(10000); // 设置发起定位请求时间间隔
-
+    androidOption.setScanspan(0); // 设置发起定位请求时间间隔
     Map androidMap = androidOption.getMap();
 
     /// ios 端设置定位参数
