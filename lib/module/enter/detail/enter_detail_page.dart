@@ -68,7 +68,8 @@ class _EnterDetailPageState extends State<EnterDetailPage> {
   /// 获取监控点统计接口请求参数
   Map<String, dynamic> _getRequestParam() {
     return MonitorStatisticsRepository.createParams(
-      userType: '2',
+      // 运维用户传3，其他用户传2
+      userType: SpUtil.getInt(Constant.spUserType) == 2 ? '3' : '2',
       enterId: widget.enterId,
       outType: '',
       attentionLevel: '',
