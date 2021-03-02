@@ -96,6 +96,7 @@ dependencies:
   # flutter_bmfutils: ^1.0.2
   # 生成二维码 https://github.com/theyakka/qr.flutter
   qr_flutter: ^3.2.0
+  marquee_flutter: ^0.1.2
 
 dev_dependencies:
   flutter_test:

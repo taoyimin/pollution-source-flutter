@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flustars/flustars.dart';
+import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/res/constant.dart';
@@ -63,6 +64,15 @@ class CommonUtils {
       return false;
     }
     return double.tryParse(str) != null;
+  }
+
+  /// 获取定位信息的详细描述
+  static String getDetailAddress(BaiduLocation baiduLocation) {
+    if(baiduLocation == null){
+      return '无';
+    }else{
+      return baiduLocation.province + baiduLocation.city + baiduLocation.district + baiduLocation.street + baiduLocation.address;
+    }
   }
 
   /// 获取两个时间中更小的时间
