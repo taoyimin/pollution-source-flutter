@@ -51,7 +51,7 @@ class WaterDeviceCorrectUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
+      ..addAll([MapEntry('address', CommonUtils.getDetailAddress(data.baiduLocation))])
       ..addAll(data.waterDeviceCorrectRecordList.map((item) {
         return MapEntry('inspectionTaskId', item.inspectionTaskId);
       }))

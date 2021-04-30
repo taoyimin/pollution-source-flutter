@@ -6,6 +6,7 @@ import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
 import 'package:pollution_source/module/inspection/param/water/device/water_device_list_model.dart';
 import 'package:pollution_source/module/inspection/param/water/upload/water_device_param_upload_model.dart';
+import 'package:pollution_source/util/common_utils.dart';
 
 class WaterDeviceParamUploadRepository
     extends UploadRepository<WaterDeviceParamUpload, String> {
@@ -68,7 +69,7 @@ class WaterDeviceParamUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
+      ..addAll([MapEntry('address', CommonUtils.getDetailAddress(data.baiduLocation))])
       ..addAll([MapEntry('enterId', data.enter.enterId.toString())])
       ..addAll([MapEntry('outId', data.monitor.dischargeId.toString())])
       ..addAll([MapEntry('monitorId', data.monitor.monitorId.toString())])

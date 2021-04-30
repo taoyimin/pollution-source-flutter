@@ -4,6 +4,7 @@ import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
 import 'package:pollution_source/module/inspection/inspect/upload/device_inspect_upload_model.dart';
+import 'package:pollution_source/util/common_utils.dart';
 
 class DeviceInspectionUploadRepository
     extends UploadRepository<DeviceInspectUpload, String> {
@@ -26,7 +27,7 @@ class DeviceInspectionUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
+      ..addAll([MapEntry('address', CommonUtils.getDetailAddress(data.baiduLocation))])
       ..addAll(data.selectedList.map((item) {
         return MapEntry('inspectionTaskId', item.inspectionTaskId);
       }))

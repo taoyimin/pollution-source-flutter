@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.5+26
+version: 1.2.6+27
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
@@ -60,7 +60,10 @@ dependencies:
   # Toast插件 https://github.com/OpenFlutter/flutter_oktoast
   oktoast: ^2.3.2
   # 选择时间插件 https://github.com/dylanwuzh/flutter-cupertino-date-picker
-  flutter_cupertino_date_picker: ^1.0.26+2
+  flutter_cupertino_date_picker:
+    git:
+      url: https://github.com/SargerasWang/flutter-cupertino-date-picker
+      ref: master
   # 下拉筛选菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
   gzx_dropdown_menu: ^2.0.0
   # 图片选择器 https://github.com/Sh1d0w/multi_image_picker
@@ -96,7 +99,10 @@ dependencies:
   # flutter_bmfutils: ^1.0.2
   # 生成二维码 https://github.com/theyakka/qr.flutter
   qr_flutter: ^3.2.0
-  marquee_flutter: ^0.1.2
+  # 跑马灯 https://github.com/baoolong/MarqueeWidget
+  marquee_flutter: ^0.1.4
+  # AES加密
+  encrypt: ^4.0.0
 
 dev_dependencies:
   flutter_test:

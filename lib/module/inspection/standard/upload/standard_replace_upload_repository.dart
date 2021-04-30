@@ -6,6 +6,7 @@ import 'package:flustars/flustars.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
+import 'package:pollution_source/util/common_utils.dart';
 
 import 'standard_replace_upload_model.dart';
 
@@ -53,7 +54,7 @@ class StandardReplaceUploadRepository
     return FormData.fromMap({
       'latitude': data.baiduLocation.latitude.toString(),
       'longitude': data.baiduLocation.longitude.toString(),
-      'address': data.baiduLocation.locationDetail??'无',
+      'address': CommonUtils.getDetailAddress(data.baiduLocation),
       'standardSampleId': '',
       'enterId': data.enter.enterId,
       'outId': data.monitor.dischargeId,

@@ -4,6 +4,7 @@ import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/upload/upload_repository.dart';
 import 'package:pollution_source/module/inspection/correct/air/upload/air_device_correct_upload_model.dart';
+import 'package:pollution_source/util/common_utils.dart';
 
 /// 废气监测设备校准存储库
 class AirDeviceCorrectUploadRepository
@@ -55,7 +56,7 @@ class AirDeviceCorrectUploadRepository
     formData.fields
       ..addAll([MapEntry('latitude', data.baiduLocation.latitude.toString())])
       ..addAll([MapEntry('longitude', data.baiduLocation.longitude.toString())])
-      ..addAll([MapEntry('address', data.baiduLocation.locationDetail??'无')])
+      ..addAll([MapEntry('address', CommonUtils.getDetailAddress(data.baiduLocation))])
       ..addAll([MapEntry('inspectionTaskId', data.inspectionTaskId)])
       ..addAll([MapEntry('factorCode', data.factorCode)])
       ..addAll([MapEntry('factorName', data.factorName)])

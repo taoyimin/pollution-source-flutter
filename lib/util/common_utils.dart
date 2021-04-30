@@ -6,6 +6,7 @@ import 'package:flutter_bmflocation/flutter_baidu_location.dart';
 
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/res/constant.dart';
+import 'package:encrypt/encrypt.dart' as XYQ;
 
 class CommonUtils {
   /// 获取一个数组中的最大数
@@ -104,7 +105,7 @@ class CommonUtils {
 
   /// 检查密码是否符合规范
   static bool checkPassword(String password){
-    RegExp regExp = RegExp(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!^&@#$%.?\*-\+=:,\\?\[\]\{}]).{6,16}$');
+    RegExp regExp = RegExp(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!^&@#$%.?\*-\+=:,\\?\[\]\{}]).{8,}$');
     return regExp.hasMatch(password);
   }
 
@@ -113,6 +114,13 @@ class CommonUtils {
     var content = new Utf8Encoder().convert(string);
     var digest = md5.convert(content);
     return hex.encode(digest.bytes);
+  }
+
+  /// 对字符串进行AES加密
+  static String generateAES(String string) {
+    final key = XYQ.Key.fromUtf8(Constant.aesKey);
+    final encrypter = XYQ.Encrypter(XYQ.AES(key, mode: XYQ.AESMode.ecb));
+    return encrypter.encrypt(string).base64;
   }
 
   /// 根据当前用户级别返回默认查询的监控点类型

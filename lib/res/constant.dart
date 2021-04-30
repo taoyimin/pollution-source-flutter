@@ -8,6 +8,9 @@ class Constant {
   static const bool inProduction =
       const bool.fromEnvironment("dart.vm.product");
 
+  /// 请求列表时默认页数
+  static const String aesKey = '2021030115382900';
+
   /// ****************app的一些默认配置***************
 
   /// 请求列表时默认页数

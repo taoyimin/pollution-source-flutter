@@ -9,7 +9,6 @@ import 'package:pollution_source/module/common/collection/collection_event.dart'
 import 'package:pollution_source/module/common/collection/monitor/monitor_statistics_repository.dart';
 import 'package:pollution_source/module/common/common_model.dart';
 import 'package:pollution_source/module/common/common_widget.dart';
-import 'package:pollution_source/res/colors.dart';
 import 'package:pollution_source/res/constant.dart';
 import 'package:pollution_source/res/gaps.dart';
 import 'package:pollution_source/util/config_utils.dart';

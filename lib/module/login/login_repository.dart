@@ -14,7 +14,7 @@ class LoginRepository {
       // 运维用户把用户名和密码放在header中
       var header = {
         'userCode': userName,
-        'passWord': CommonUtils.generateMD5(passWord),
+        'passWord': CommonUtils.generateMD5(CommonUtils.generateAES(passWord)),
         'timestamp': DateUtil.getNowDateMs(),
       };
       // 运维登录的时候使用新的dio添加Authorization，防止token拦截器覆盖Authorization
@@ -51,7 +51,7 @@ class LoginRepository {
         //环保和企业用户
         return FormData.fromMap({
           'userName': userName,
-          'password': CommonUtils.generateMD5(passWord),
+          'password': CommonUtils.generateMD5(CommonUtils.generateAES(passWord)),
         });
       case 2:
         //运维用户账号密码放在header中，isEncryption为false表示登录不需要加密解密
