@@ -14,7 +14,6 @@ import 'package:flutter_bmflocation/flutter_baidu_location_android_option.dart';
 import 'package:flutter_bmflocation/flutter_baidu_location_ios_option.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:marquee_flutter/marquee_flutter.dart';
 import 'package:open_file/open_file.dart';
 import 'package:pollution_source/http/dio_utils.dart';
 import 'package:pollution_source/module/common/collection/collection_bloc.dart';
@@ -3067,11 +3066,11 @@ class LocationWidgetState extends State<LocationWidget> {
               },
               child: Container(
                 alignment: Alignment.centerRight,
-                child: MarqueeWidget(
-                  text: _baiduLocation != null
+                child: Text(
+                  _baiduLocation != null
                       ? '${CommonUtils.getDetailAddress(_baiduLocation)}'
                       : '获取位置信息中',
-                  textStyle: TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     color: Colours.primary_color,
                   ),

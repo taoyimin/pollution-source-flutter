@@ -113,11 +113,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         CompatUtils.getApi(HttpApi.changePassword),
                         queryParameters: {
                           // 污染源参数
-                          'pwdOld': oldPasswordController.text,
-                          'pwdNew': newPasswordController.text,
+                          'pwdOld': CommonUtils.generateMD5(CommonUtils.generateAES(oldPasswordController.text)),
+                          'pwdNew': CommonUtils.generateMD5(CommonUtils.generateAES(newPasswordController.text)),
                           // 运维参数
-                          'password': oldPasswordController.text,
-                          'oldPassword': newPasswordController.text,
+                          'password': CommonUtils.generateMD5(CommonUtils.generateAES(newPasswordController.text)),
+                          'oldPassword': CommonUtils.generateMD5(CommonUtils.generateAES(oldPasswordController.text)),
                         },
                       );
                       SpUtil.putString(Constant.spPasswordList[SpUtil.getInt(Constant.spUserType)], newPasswordController.text);

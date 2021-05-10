@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.6+27
+version: 1.2.7+28
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
@@ -100,7 +100,7 @@ dependencies:
   # 生成二维码 https://github.com/theyakka/qr.flutter
   qr_flutter: ^3.2.0
   # 跑马灯 https://github.com/baoolong/MarqueeWidget
-  marquee_flutter: ^0.1.4
+  # marquee_flutter: ^0.1.4
   # AES加密
   encrypt: ^4.0.0
 

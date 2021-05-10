@@ -276,10 +276,10 @@ class HttpApiPollution {
   static const String deviceRepairUpload = 'ywmh/overhaulRecord/save';
   static const String standardReplaceUpload = 'standardSampleChangeRecord/insertOrUpdate';
   static const String changePassword = 'user/changePwd';
-  static const String notificationList = 'pushMessage/getPushMessageHistory';
+  static const String notificationList = 'pushMessage/wry/getPushMessageHistory';
   static const String mobileLawList = 'Supervise/getEnforcementsById';
-  static const String warnList = 'pushMessage/realWarnList';
-  static const String warnDetail = 'pushMessage/getRealWarnById?id=';
+  static const String warnList = 'pushMessage/wry/realWarnList';
+  static const String warnDetail = 'pushMessage/wry/getRealWarnById?id=';
   static const String areaList = 'treeInfo/getAreaList';
 }
 
