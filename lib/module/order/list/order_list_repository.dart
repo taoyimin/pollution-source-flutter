@@ -1,13 +1,22 @@
 import 'package:flustars/flustars.dart';
+import 'package:meta/meta.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/list/list_repository.dart';
 import 'package:pollution_source/module/order/list/order_list_model.dart';
 import 'package:pollution_source/res/constant.dart';
 
 class OrderListRepository extends ListRepository<Order> {
+  final int type; // 0:日督办单 1:小时督办单
+
+  OrderListRepository({@required this.type}) : assert(type != null);
+
   @override
   HttpApi createApi() {
-    return HttpApi.orderList;
+    if (type == 0) {
+      return HttpApi.orderList;
+    } else {
+      return HttpApi.realOrderList;
+    }
   }
 
   @override

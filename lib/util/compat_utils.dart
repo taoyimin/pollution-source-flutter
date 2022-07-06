@@ -491,6 +491,18 @@ class CompatUtils {
         return HttpApiPollution.warnDetail;
       case HttpApi.areaList:
         return HttpApiPollution.areaList;
+      case HttpApi.standardList:
+        return HttpApiPollution.standardList;
+      case HttpApi.samplerList:
+        return HttpApiPollution.samplerList;
+      case HttpApi.realOrderList:
+        return HttpApiPollution.realOrderList;
+      case HttpApi.realOrderDetail:
+        return HttpApiPollution.realOrderDetail;
+      case HttpApi.realProcessesUpload:
+        return HttpApiPollution.realProcessesUpload;
+      case HttpApi.realMobileLawList:
+        return HttpApiPollution.realMobileLawList;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,
@@ -613,6 +625,14 @@ class CompatUtils {
         return HttpApiOperation.warnList;
       case HttpApi.warnDetail:
         return HttpApiOperation.warnDetail;
+      case HttpApi.standardList:
+        return HttpApiOperation.standardList;
+      case HttpApi.realOrderList:
+        return HttpApiOperation.realOrderList;
+      case HttpApi.realOrderDetail:
+        return HttpApiOperation.realOrderDetail;
+      case HttpApi.realProcessesUpload:
+        return HttpApiOperation.realProcessesUpload;
       default:
         throw DioError(
             type: DioErrorType.DEFAULT,

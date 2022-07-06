@@ -188,6 +188,24 @@ enum HttpApi {
 
   /// 获取区域列表
   areaList,
+
+  /// 获取排放标准列表
+  standardList,
+
+  /// 获取采样器留样信息列表
+  samplerList,
+
+  /// 实时督办单列表
+  realOrderList,
+
+  /// 实时督办单详情
+  realOrderDetail,
+
+  /// 实时督办单处理
+  realProcessesUpload,
+
+  /// 实时督办单移动执法
+  realMobileLawList,
 }
 
 class HttpApiPollution {
@@ -281,6 +299,12 @@ class HttpApiPollution {
   static const String warnList = 'pushMessage/wry/realWarnList';
   static const String warnDetail = 'pushMessage/wry/getRealWarnById?id=';
   static const String areaList = 'treeInfo/getAreaList';
+  static const String standardList = 'monitorRealData/queryStandardByMonitorId';
+  static const String samplerList = 'monitorRealData/querySamplerDataByMonitorId';
+  static const String realOrderList = 'realSupervise/getReadyRemindDataByStatus';
+  static const String realOrderDetail = 'realSupervise/querySuperviseDetailById?id=';
+  static const String realProcessesUpload = 'realSupervise/dealSupervise';
+  static const String realMobileLawList = 'realSupervise/getEnforcementsById';
 }
 
 class HttpApiOperation {
@@ -375,4 +399,8 @@ class HttpApiOperation {
   static const String mobileLawList = '暂无';
   static const String warnList = 'pushMessage/realWarnList';
   static const String warnDetail = 'pushMessage/getRealWarnById?id=';
+  static const String standardList = 'ywmh/tInspectionTask/queryStandardByMonitorId';
+  static const String realOrderList = 'realSupervise/list';
+  static const String realOrderDetail = 'realSupervise/querySuperviseDetailByIdAPI?id=';
+  static const String realProcessesUpload = 'realSupervise/dealSuperviseAPI';
 }

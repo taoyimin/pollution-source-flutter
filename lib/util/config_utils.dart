@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pollution_source/module/login/login_page.dart';
 import 'package:pollution_source/module/login/login_page_city.dart';
+import 'package:pollution_source/module/login/login_page_operation.dart';
 
 class ConfigUtils {
   static const String config = '江西';
@@ -11,6 +12,8 @@ class ConfigUtils {
 
   // static const String config = '贵溪';
 
+  // static const String config = '运维';
+
   // static const String config = '测试';
 
   /// 获取污染源接口地址
@@ -18,17 +21,21 @@ class ConfigUtils {
     switch (config) {
       case '江西':
         return 'http://111.75.227.207:19551/';
-        // return 'http://106.225.129.166:8839/';
-        // return 'http://192.168.1.29:9999/';
+        // 测试
+        //return 'http://taoyimin.iok.la/';
+      // return 'http://106.225.129.166:8839/';
+      // return 'http://192.168.1.29:9999/';
+      // return 'http://106.225.135.29:9181/';
       case '高安':
         return 'http://115.149.164.211:9180/';
       case '万年':
         return 'http://223.83.222.189:9281/';
       case '贵溪':
         return 'http://115.153.156.134:9502/';
+      case '运维':
+        return '-';
       default:
         return 'http://182.106.189.190:9999/';
-      // return 'http://kevin.cn1.utools.club/';
     }
   }
 
@@ -36,17 +43,21 @@ class ConfigUtils {
   static String getOperationBaseUrl() {
     switch (config) {
       case '江西':
-        return 'http://111.75.227.207:19550/';
-        // return 'http://106.225.129.166:8090/';
-        // return 'http://taoyimin.iok.la:56310/';
-        // return 'http://192.168.1.29:9999/';
+        //return 'http://111.75.227.207:19550/';
+        // 测试
+        return 'http://taoyimin.iok.la/';
+      // return 'http://106.225.129.166:8090/';
+      // return 'http://taoyimin.iok.la:56310/';
+      // return 'http://192.168.1.29:9999/';
+      // return 'http://106.225.135.29:9182/';
       case '高安':
         return 'http://115.149.164.212:9181/';
-        // return 'http://taoyimin.iok.la:34261/';
       case '万年':
         return '-';
       case '贵溪':
         return '-';
+      case '运维':
+        return 'http://182.106.191.239:9180/';
       default:
         return 'http://taoyimin.iok.la:34261/';
     }
@@ -63,6 +74,8 @@ class ConfigUtils {
         return 'update/update-wannian.json';
       case '贵溪':
         return 'update/update-guixi.json';
+      case '运维':
+        return '-';
       default:
         return 'update/update-jiangxi.json';
     }
@@ -79,6 +92,8 @@ class ConfigUtils {
         return '-';
       case '贵溪':
         return '-';
+      case '运维':
+        return 'app/update-yunwei.json';
       default:
         return 'app/update-jiangxi.json';
     }
@@ -93,6 +108,8 @@ class ConfigUtils {
       case '万年':
       case '贵溪':
         return LoginPageCity();
+      case '运维':
+        return LoginPageOperation();
       default:
         return LoginPage();
     }
@@ -109,6 +126,8 @@ class ConfigUtils {
         return '万年污染源监控移动应用';
       case '贵溪':
         return '贵溪污染源监控移动应用';
+      case '运维':
+        return '运维移动应用';
       default:
         return '江西污染源监控移动应用';
     }
@@ -118,6 +137,7 @@ class ConfigUtils {
   static String getLoginLogo() {
     switch (config) {
       case '江西':
+      case '运维':
         return 'assets/images/login_logo.png';
       case '高安':
       case '万年':
@@ -132,6 +152,7 @@ class ConfigUtils {
   static String getLoginBackground() {
     switch (config) {
       case '江西':
+      case '运维':
         return 'assets/images/background_login.png';
       case '高安':
       case '万年':
@@ -146,6 +167,7 @@ class ConfigUtils {
   static Widget getAdminIndexImageWidget() {
     switch (config) {
       case '江西':
+      case '运维':
         return Positioned(
           right: 0,
           bottom: 0,
@@ -184,6 +206,7 @@ class ConfigUtils {
   static Widget getEnterIndexImageWidget() {
     switch (config) {
       case '江西':
+      case '运维':
         return Positioned(
           right: 20,
           bottom: 10,
@@ -219,6 +242,7 @@ class ConfigUtils {
   static Widget getOperationIndexImageWidget() {
     switch (config) {
       case '江西':
+      case '运维':
         return Positioned(
           right: 0,
           bottom: 20,
@@ -257,6 +281,7 @@ class ConfigUtils {
   static String getApplicationHeaderImage() {
     switch (config) {
       case '江西':
+      case '运维':
         return 'assets/images/image_application_header.png';
       case '高安':
       case '万年':
@@ -278,6 +303,8 @@ class ConfigUtils {
         return false;
       case '贵溪':
         return false;
+      case '运维':
+        return false;
       default:
         return true;
     }
@@ -294,6 +321,8 @@ class ConfigUtils {
         return false;
       case '贵溪':
         return false;
+      case '运维':
+        return true;
       default:
         return true;
     }
@@ -303,6 +332,7 @@ class ConfigUtils {
   static bool showRoutineInspection() {
     switch (config) {
       case '江西':
+      case '运维':
         return true;
       case '高安':
       case '万年':
@@ -317,7 +347,22 @@ class ConfigUtils {
   static bool showMap() {
     switch (config) {
       case '江西':
+      case '运维':
+      case '高安':
+      case '万年':
+      case '贵溪':
         return false;
+      default:
+        return true;
+    }
+  }
+
+  /// 应用页是否显示小时督办单
+  static bool showRealOrder() {
+    switch (config) {
+      case '江西':
+      case '运维':
+        return true;
       case '高安':
       case '万年':
       case '贵溪':

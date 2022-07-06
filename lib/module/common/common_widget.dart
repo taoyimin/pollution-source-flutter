@@ -3074,6 +3074,8 @@ class LocationWidgetState extends State<LocationWidget> {
                     fontSize: 15,
                     color: Colours.primary_color,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 /*Text(
 

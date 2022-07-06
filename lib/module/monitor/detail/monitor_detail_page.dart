@@ -31,6 +31,9 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
     detailRepository: MonitorDetailRepository(),
   );
 
+  /// 环保用户显示采样器留样信息
+  final bool _showSampler = SpUtil.getInt(Constant.spUserType) == 0;
+
   @override
   void initState() {
     super.initState();
@@ -268,23 +271,6 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                 Gaps.vGap10,
                 Row(
                   children: <Widget>[
-//                    ClipButton(
-//                      text: '排放标准',
-//                      icon: Icons.business_center,
-//                      color: Colors.lightBlueAccent,
-//                      onTap: () {
-//                        Scaffold.of(context).showSnackBar(
-//                          SnackBar(
-//                            content: const Text('排放标准功能开发中'),
-//                            action: SnackBarAction(
-//                                label: '我知道了',
-//                                textColor: Colours.primary_color,
-//                                onPressed: () {}),
-//                          ),
-//                        );
-//                      },
-//                    ),
-//                    Gaps.hGap20,
                     ClipButton(
                       text: '历史数据',
                       icon: Icons.table_chart,
@@ -294,7 +280,38 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                             '${Routes.monitorHistoryData}?monitorId=${monitorDetail.monitorId}');
                       },
                     ),
+                    Gaps.hGap20,
+                    ClipButton(
+                      text: '排放标准',
+                      icon: Icons.article,
+                      color: Colors.green,
+                      onTap: () {
+                        Application.router.navigateTo(context,
+                            '${Routes.emissionStandard}?monitorId=${monitorDetail.monitorId}&enterName=${Uri.encodeComponent(monitorDetail.enterName)}&monitorName=${Uri.encodeComponent(monitorDetail.monitorName)}');
+                      },
+                    ),
                   ],
+                ),
+                Offstage(
+                  offstage: !_showSampler,
+                  child: Column(
+                    children: [
+                      Gaps.vGap10,
+                      Row(
+                        children: [
+                          ClipButton(
+                            text: '采样器留样信息',
+                            icon: Icons.info,
+                            color: Colors.lightBlueAccent,
+                            onTap: () {
+                              Application.router.navigateTo(context,
+                                  '${Routes.samplerInfo}?monitorId=${monitorDetail.monitorId}&enterName=${Uri.encodeComponent(monitorDetail.enterName)}&monitorName=${Uri.encodeComponent(monitorDetail.monitorName)}');
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -309,7 +326,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ImageTitleWidget(
-                  title: '近一年报警管理单',
+                  title: '当年报警管理单',
                   imagePath: 'assets/images/icon_alarm_manage.png',
                 ),
                 Gaps.vGap10,
@@ -324,7 +341,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                         imagePath:
                             'assets/images/icon_alarm_manage_complete.png',
                         router:
-                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&alarmState=50&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
+                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&alarmState=50&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
                       ),
                     ),
                     Gaps.hGap10,
@@ -336,7 +353,7 @@ class _MonitorDetailPageState extends State<MonitorDetailPage> {
                         content: '${monitorDetail.orderTotalCount}',
                         imagePath: 'assets/images/icon_alarm_manage_all.png',
                         router:
-                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&startTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -366)), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
+                            '${Routes.orderList}?monitorId=${monitorDetail.monitorId}&startTime=${DateUtil.formatDate(DateTime(DateTime.now().year), format: DateFormats.y_mo_d)}&endTime=${DateUtil.formatDate(DateTime.now().add(Duration(days: -1)), format: DateFormats.y_mo_d)}',
                       ),
                     ),
                   ],

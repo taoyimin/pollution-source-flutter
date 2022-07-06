@@ -48,7 +48,7 @@ class MapInfoPage extends StatelessWidget {
             );
           },
           child: () {
-            if (TextUtil.isEmpty(content)) {
+            if (TextUtil.isEmpty(content.toString())) {
               // 不显示内容为空的项
               return Gaps.empty;
             } else if ('$title'.endsWith('\n')) {

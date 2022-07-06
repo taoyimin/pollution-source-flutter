@@ -19,9 +19,9 @@ class FixedDataTable<T> extends StatefulWidget {
     this.fixedRowCells,
     @required this.rowsCells,
     this.cellBuilder,
-    this.fixedColWidth = 76.0,
+    this.fixedColWidth = 96.0,
     this.cellHeight = 50.0,
-    this.cellWidth = 70.0,
+    this.cellWidth = 96.0,
     this.cellMargin = 0.0,
     this.cellSpacing = 0.0,
   });
@@ -143,9 +143,11 @@ class FixedDataTableState<T> extends State<FixedDataTable<T>> {
               child: SingleChildScrollView(
                 controller: _subTableXController,
                 scrollDirection: Axis.horizontal,
+                physics: ClampingScrollPhysics(),
                 child: SingleChildScrollView(
                   controller: _subTableYController,
                   scrollDirection: Axis.vertical,
+                  physics: ClampingScrollPhysics(),
                   child: _buildSubTable(),
                 ),
               ),

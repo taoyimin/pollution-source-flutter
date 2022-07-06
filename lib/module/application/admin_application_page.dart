@@ -196,7 +196,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                           ],
                         ),
                       ),
-                      // 报警管理单查询
+                      // 日督办单管理
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -206,9 +206,9 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             ImageTitleWidget(
-                                title: '报警管理单查询',
+                                title: '日督办单管理',
                                 imagePath:
-                                    'assets/images/application_icon_alarm.png'),
+                                'assets/images/application_icon_alarm.png'),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
@@ -216,29 +216,72 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                     title: '未办结督办单',
                                     content: '查询待办督办单',
                                     imagePath:
-                                        'assets/images/application_icon_order.png',
+                                    'assets/images/application_icon_order.png',
                                     router:
-                                        '${Routes.orderList}?alarmState=00&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                    '${Routes.orderList}?type=0&alarmState=00&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                    title: '全部督办单',
+                                    title: '督办单汇总',
                                     content: '查询全部督办单',
                                     imagePath:
-                                        'assets/images/application_icon_order.png',
-                                    router: '${Routes.orderList}?attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                    'assets/images/application_icon_order.png',
+                                    router: '${Routes.orderList}?type=0&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
                                   ),
                                 ),
                               ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      // 实时预警管理
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ImageTitleWidget(
+                                title: ConfigUtils.showRealOrder() ? '小时督办单管理' : '实时预警管理',
+                                imagePath:
+                                    'assets/images/application_icon_alarm.png'),
+                            Offstage(
+                              offstage: !ConfigUtils.showRealOrder(),
+                              child: Row(
+                                children: <Widget>[
+                                  InkWellButton9(
+                                    meta: Meta(
+                                      title: '未办结督办单',
+                                      content: '查询待办督办单',
+                                      imagePath:
+                                      'assets/images/application_icon_order.png',
+                                      router:
+                                      '${Routes.orderList}?type=1&alarmState=00&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                    ),
+                                  ),
+                                  Gaps.hGap20,
+                                  InkWellButton9(
+                                    meta: Meta(
+                                      title: '督办单汇总',
+                                      content: '查询全部督办单',
+                                      imagePath:
+                                      'assets/images/application_icon_order.png',
+                                      router: '${Routes.orderList}?type=1&attentionLevel=${SpUtil.getString(Constant.spAttentionLevel, defValue: '')}',
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Row(
                               children: <Widget>[
                                 InkWellButton9(
                                   meta: Meta(
-                                    title: '实时预警单',
-                                    content: '查询实时预警单',
+                                    title: '实时异常数据',
+                                    content: '查询异常数据',
                                     imagePath:
                                         'assets/images/application_icon_enter.png',
                                     router: '${Routes.warnList}',
@@ -247,7 +290,7 @@ class _AdminApplicationPageState extends State<AdminApplicationPage>
                                 Gaps.hGap20,
                                 InkWellButton9(
                                   meta: Meta(
-                                    title: '历史预警消息',
+                                    title: '历史异常数据',
                                     content: '查询历史推送',
                                     imagePath:
                                         'assets/images/application_icon_monitor.png',

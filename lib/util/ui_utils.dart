@@ -110,6 +110,8 @@ class UIUtils {
             imagePath: 'assets/images/icon_alarm_type_constant_value.png',
             color: Colors.green);
       case '超标异常':
+      case '超标排放':
+      case '时均值超标':
         return Label(
             name: string,
             imagePath: 'assets/images/icon_alarm_type_outrange_error.png',
@@ -125,6 +127,7 @@ class UIUtils {
             imagePath: 'assets/images/icon_alarm_type_connect_error.png',
             color: Colors.orange);
       case '零值':
+      case '无废水外排':
         return Label(
             name: string,
             imagePath: 'assets/images/icon_alarm_type_zero_value.png',
@@ -135,6 +138,9 @@ class UIUtils {
             imagePath: 'assets/images/icon_alarm_type_negative_value.png',
             color: Colors.cyan);
       case '设备故障':
+      case '数采仪故障':
+      case '分析仪故障':
+      case '采样器故障':
         return Label(
             name: string,
             imagePath: 'assets/images/icon_alarm_cause_device_error.png',
@@ -145,6 +151,7 @@ class UIUtils {
             imagePath: 'assets/images/icon_alarm_cause_correct.png',
             color: Colors.lightGreen);
       case '接口松动':
+      case '数采仪掉线':
         return Label(
             name: string,
             imagePath: 'assets/images/icon_alarm_cause_device_offline.png',

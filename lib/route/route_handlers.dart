@@ -45,6 +45,8 @@ import 'package:pollution_source/page/enter_home.dart';
 import 'package:pollution_source/page/operation_home.dart';
 import 'package:pollution_source/page/share_product_page.dart';
 import 'package:pollution_source/util/config_utils.dart';
+import 'package:pollution_source/module/monitor/standard/emission_standard_page.dart';
+import 'package:pollution_source/module/monitor/sampler/sampler_info_page.dart';
 
 var rootHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -183,6 +185,7 @@ var deviceListHandler = Handler(
 
 var orderListHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    int type = int.parse(params['type']?.first ?? '0');
     String enterId = params['enterId']?.first ?? '';
     String monitorId = params['monitorId']?.first ?? '';
     String alarmState = params['alarmState']?.first ?? '';
@@ -191,6 +194,7 @@ var orderListHandler = Handler(
     DateTime startTime = DateUtil.getDateTime(params['startTime']?.first ?? '');
     DateTime endTime = DateUtil.getDateTime(params['endTime']?.first ?? '');
     return OrderListPage(
+      type: type,
       enterId: enterId,
       monitorId: monitorId,
       alarmState: alarmState,
@@ -205,7 +209,8 @@ var orderListHandler = Handler(
 var orderDetailHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     String orderId = params['id']?.first;
-    return OrderDetailPage(orderId: orderId);
+    int type = int.parse(params['type']?.first ?? '0');
+    return OrderDetailPage(orderId: orderId, type: type);
   },
 );
 
@@ -341,6 +346,7 @@ var routineInspectionDetailHandler = Handler(
     String id = params['id']?.first;
     String monitorType = params['monitorType']?.first;
     String state = params['state']?.first ?? '';
+
     /// 使用全局Bloc，因为子页面中需要使用该Bloc刷新数据
     return BlocProvider<DetailBloc>(
       create: (BuildContext context) =>
@@ -451,5 +457,23 @@ var warnDetailHandler = Handler(
 var mapHandler = Handler(
   handlerFunc: (BuildContext context, Map<String, List<String>> params) {
     return MapPage();
+  },
+);
+
+var emissionStandardHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String monitorId = params['monitorId']?.first;
+    String enterName = params['enterName']?.first;
+    String monitorName = params['monitorName']?.first;
+    return EmissionStandardPage(monitorId: monitorId, enterName: enterName, monitorName: monitorName);
+  },
+);
+
+var samplerInfoHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+    String monitorId = params['monitorId']?.first;
+    String enterName = params['enterName']?.first;
+    String monitorName = params['monitorName']?.first;
+    return SamplerInfoPage(monitorId: monitorId, enterName: enterName, monitorName: monitorName);
   },
 );

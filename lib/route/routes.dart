@@ -44,6 +44,8 @@ class Routes {
   static String warnList = "/warnList";
   static String warnDetail = "/warnDetail";
   static String map = "/map";
+  static String emissionStandard = "/emissionStandard";
+  static String samplerInfo = "/samplerInfo";
 
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = Handler(
@@ -117,7 +119,7 @@ class Routes {
       transitionType: TransitionType.native,
     );
     router.define(
-      '$orderDetail/:id',
+      orderDetail,
       handler: orderDetailHandler,
       transitionType: TransitionType.native,
     );
@@ -254,6 +256,16 @@ class Routes {
     router.define(
       map,
       handler: mapHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      emissionStandard,
+      handler: emissionStandardHandler,
+      transitionType: TransitionType.native,
+    );
+    router.define(
+      samplerInfo,
+      handler: samplerInfoHandler,
       transitionType: TransitionType.native,
     );
   }

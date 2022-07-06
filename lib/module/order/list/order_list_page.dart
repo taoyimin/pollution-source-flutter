@@ -36,6 +36,7 @@ import 'package:pollution_source/widget/label_widget.dart';
 
 /// 报警管理单列表界面
 class OrderListPage extends StatefulWidget {
+  final int type;
   final String alarmState;
   final String alarmLevel;
   final String attentionLevel;
@@ -45,6 +46,7 @@ class OrderListPage extends StatefulWidget {
   final DateTime endTime;
 
   OrderListPage({
+    this.type = 0,
     this.alarmState = '',
     this.alarmLevel = '',
     this.attentionLevel = '',
@@ -72,9 +74,7 @@ class _OrderListPageState extends State<OrderListPage> {
   final bool _showArea = SpUtil.getInt(Constant.spUserType) == 0;
 
   /// 列表Bloc
-  final ListBloc _listBloc = ListBloc(
-    listRepository: OrderListRepository(),
-  );
+  ListBloc _listBloc;
 
   /// 区域Bloc
   final CollectionBloc _areaBloc = CollectionBloc(
@@ -139,6 +139,9 @@ class _OrderListPageState extends State<OrderListPage> {
   void initState() {
     super.initState();
     _initParam();
+    _listBloc = ListBloc(
+      listRepository: OrderListRepository(type: widget.type),
+    );
     // 加载区域信息
     if (_showArea) _areaBloc.add(CollectionLoad());
     // 加载报警管理单状态
@@ -314,7 +317,7 @@ class _OrderListPageState extends State<OrderListPage> {
             child: InkWellButton(
               onTap: () {
                 Application.router.navigateTo(context,
-                    '${Routes.orderDetail}/${orderList[index].orderId}');
+                    '${Routes.orderDetail}?id=${orderList[index].orderId}&type=${widget.type}');
               },
               children: <Widget>[
                 Container(

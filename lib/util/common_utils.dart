@@ -71,8 +71,10 @@ class CommonUtils {
   static String getDetailAddress(BaiduLocation baiduLocation) {
     if(baiduLocation == null){
       return '无';
+    }else if(baiduLocation.address == null){
+      return '无';
     }else{
-      return baiduLocation.province + baiduLocation.city + baiduLocation.district + baiduLocation.street + baiduLocation.address;
+      return baiduLocation.address;
     }
   }
 

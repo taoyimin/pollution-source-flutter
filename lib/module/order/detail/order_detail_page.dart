@@ -42,9 +42,10 @@ import 'order_detail_repository.dart';
 ///
 /// [orderId]是要查询的报警管理单Id，必传
 class OrderDetailPage extends StatefulWidget {
+  final int type;
   final String orderId;
 
-  OrderDetailPage({@required this.orderId}) : assert(orderId != null);
+  OrderDetailPage({@required this.orderId, this.type=0}) : assert(orderId != null);
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -54,14 +55,10 @@ class OrderDetailPage extends StatefulWidget {
 class _OrderDetailPageState extends State<OrderDetailPage>
     with SingleTickerProviderStateMixin {
   /// 报警管理单详情界面Bloc
-  final DetailBloc _detailBloc = DetailBloc(
-    detailRepository: OrderDetailRepository(),
-  );
+  DetailBloc _detailBloc;
 
   /// 处理流程上报业务Bloc
-  final UploadBloc _uploadBloc = UploadBloc(
-    uploadRepository: ProcessUploadRepository(),
-  );
+  UploadBloc _uploadBloc;
 
   /// 报警原因数据字典Bloc
   final DataDictBloc _alarmCauseBloc = DataDictBloc(
@@ -69,9 +66,7 @@ class _OrderDetailPageState extends State<OrderDetailPage>
   );
 
   /// 移动执法Bloc
-  final CollectionBloc<MobileLaw> _mobileLawBloc = CollectionBloc<MobileLaw>(
-    collectionRepository: MobileLawRepository(),
-  );
+  CollectionBloc<MobileLaw> _mobileLawBloc;
 
   /// 督办单处理上报类
   final ProcessUpload _processUpload = ProcessUpload();
@@ -91,6 +86,15 @@ class _OrderDetailPageState extends State<OrderDetailPage>
   @override
   void initState() {
     super.initState();
+    _detailBloc = DetailBloc(
+      detailRepository: OrderDetailRepository(type: widget.type),
+    );
+    _uploadBloc = UploadBloc(
+      uploadRepository: ProcessUploadRepository(type: widget.type),
+    );
+    _mobileLawBloc  = CollectionBloc<MobileLaw>(
+      collectionRepository: MobileLawRepository(type: widget.type),
+    );
     _loadData();
     // 初始化fab颜色渐变动画
     _controller = AnimationController(

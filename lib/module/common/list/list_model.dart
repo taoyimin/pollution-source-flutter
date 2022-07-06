@@ -26,6 +26,9 @@ class ListPage<T> extends Equatable {
       ];
 
   static fromJson<T>({dynamic json,T Function(dynamic) fromJson}) {
+    if(json == '[]'){
+      json = [];
+    }
     if(json is List){
       // 列表接口一次性加载全部数据，没有分页信息
       return ListPage<T>(

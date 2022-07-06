@@ -37,9 +37,11 @@ class TokenInterceptor extends Interceptor {
     if (response != null &&
         response.statusCode == ExceptionHandle.unauthorized) {
       LogUtil.v("----------- 自动刷新Token ------------");
-      _tokenDio.options = CompatUtils
-          .getDio()
-          .options;
+      if (TextUtil.isEmpty(SpUtil.getString(
+          Constant.spPasswordList[SpUtil.getInt(Constant.spUserType)]))) {
+        throw DioError(error: UnauthorizedException('自动登录失败，请重新登录！'));
+      }
+      _tokenDio.options = CompatUtils.getDio().options;
       // 锁住防止请求传入，直到token刷新
       CompatUtils.getDio().lock();
       await LoginRepository()
@@ -94,12 +96,12 @@ class HandleErrorInterceptor extends Interceptor {
         // 有时接口会直接返回List
         return super.onResponse(response);
       } else if (response.data is Map &&
-          response.data.containsKey(Constant.responseCodeKey)
+              response.data.containsKey(Constant.responseCodeKey)
           ? response.data[Constant.responseCodeKey] ==
-          ExceptionHandle.success_code
+              ExceptionHandle.success_code
           : true && response.data.containsKey(Constant.responseSuccessKey)
-          ? response.data[Constant.responseSuccessKey]
-          : true)
+              ? response.data[Constant.responseSuccessKey]
+              : true)
         // 状态码200服务器处理成功
         return super.onResponse(response);
       else {
@@ -113,7 +115,7 @@ class HandleErrorInterceptor extends Interceptor {
         // 状态码200但服务器处理失败
         throw DioError(error: ServerErrorException('$message'));
       }
-    }else if (response != null &&
+    } else if (response != null &&
         response.statusCode == ExceptionHandle.bad_request) {
       // 状态码302
       return super.onResponse(response);
@@ -122,7 +124,7 @@ class HandleErrorInterceptor extends Interceptor {
       // 状态码400
       throw DioError(
           error: BadRequestException(response.data is Map &&
-              response.data.containsKey(Constant.responseMessageKey)
+                  response.data.containsKey(Constant.responseMessageKey)
               ? '${response.data[Constant.responseMessageKey]}'
               : '400错误,错误接口:${response.request.uri.toString()}'));
     } else if (response != null &&
@@ -141,7 +143,7 @@ class HandleErrorInterceptor extends Interceptor {
       // 状态码404
       throw DioError(
           error: NotFoundException(response.data is Map &&
-              response.data.containsKey(Constant.responseMessageKey)
+                  response.data.containsKey(Constant.responseMessageKey)
               ? '${response.data[Constant.responseMessageKey]}'
               : '404错误,错误接口:${response.request.uri.toString()}'));
     } else if (response != null &&
@@ -149,8 +151,7 @@ class HandleErrorInterceptor extends Interceptor {
       // 状态码500
       throw DioError(
           error: ServerErrorException(
-              '500错误,错误接口:${response.request.uri
-                  .toString()}\nresponse=${response.toString()}'));
+              '500错误,错误接口:${response.request.uri.toString()}\nresponse=${response.toString()}'));
     } else {
       throw DioError(
           error: UnKnownException('未知错误,response=${response.toString()}'));
@@ -204,9 +205,7 @@ class LoggingInterceptor extends Interceptor {
   @override
   onResponse(Response response) {
     endTime = DateTime.now();
-    int duration = endTime
-        .difference(startTime)
-        .inMilliseconds;
+    int duration = endTime.difference(startTime).inMilliseconds;
     if (response.statusCode == ExceptionHandle.success) {
       LogUtil.v("ResponseCode: ${response.statusCode}");
     } else {

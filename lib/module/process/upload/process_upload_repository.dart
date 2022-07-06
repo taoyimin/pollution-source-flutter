@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:common_utils/common_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
+import 'package:meta/meta.dart';
 import 'package:pollution_source/http/error_handle.dart';
 import 'package:pollution_source/http/http_api.dart';
 import 'package:pollution_source/module/common/collection/law/mobile_law_model.dart';
@@ -12,6 +13,10 @@ import 'package:pollution_source/module/process/upload/process_upload_model.dart
 import 'package:pollution_source/res/constant.dart';
 
 class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
+  final int type; // 0:日督办单 1:小时督办单
+
+  ProcessUploadRepository({@required this.type}) : assert(type != null);
+
   @override
   checkData(ProcessUpload data) {
     if (data.orderId == null)
@@ -31,7 +36,11 @@ class ProcessUploadRepository extends UploadRepository<ProcessUpload, String> {
 
   @override
   HttpApi createApi() {
-    return HttpApi.processesUpload;
+    if (type == 0) {
+      return HttpApi.processesUpload;
+    } else {
+      return HttpApi.realProcessesUpload;
+    }
   }
 
   @override
