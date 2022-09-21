@@ -23,8 +23,8 @@ class ConfigUtils {
         return 'http://111.75.227.207:19551/';
         // 测试
         //return 'http://taoyimin.iok.la/';
-      // return 'http://106.225.129.166:8839/';
-      // return 'http://192.168.1.29:9999/';
+      // return 'http://182.106.191.239:9181/';
+      // return 'http://192.168.191.1:9999/';
       // return 'http://106.225.135.29:9181/';
       case '高安':
         return 'http://115.149.164.211:9180/';
@@ -35,7 +35,7 @@ class ConfigUtils {
       case '运维':
         return '-';
       default:
-        return 'http://182.106.189.190:9999/';
+        return 'http://182.106.191.239:9181/';
     }
   }
 
@@ -43,9 +43,9 @@ class ConfigUtils {
   static String getOperationBaseUrl() {
     switch (config) {
       case '江西':
-        //return 'http://111.75.227.207:19550/';
+        return 'http://111.75.227.207:19550/';
         // 测试
-        return 'http://taoyimin.iok.la/';
+        //return 'http://taoyimin.iok.la/';
       // return 'http://106.225.129.166:8090/';
       // return 'http://taoyimin.iok.la:56310/';
       // return 'http://192.168.1.29:9999/';
@@ -362,8 +362,8 @@ class ConfigUtils {
     switch (config) {
       case '江西':
       case '运维':
-        return true;
       case '高安':
+        return true;
       case '万年':
       case '贵溪':
         return false;

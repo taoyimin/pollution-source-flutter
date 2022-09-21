@@ -130,22 +130,22 @@ Future<List<Meta>> _convertInspectionStatistics(dynamic json) async {
   } else {
     return [
       Meta(
-        title: '待巡检任务数',
+        title: '当日待巡检',
         imagePath: 'assets/images/button_bg_blue.png',
-        content: json['toBeProcessedC'].toString(),
+        content: json['currBeProcessedCnt'].toString(),
         router: '${Routes.routineInspectionList}?state=1',
       ),
       Meta(
-        title: '未巡检任务数',
+        title: '当月待巡检',
         imagePath: 'assets/images/button_bg_pink.png',
-        content: json['processedO'].toString(),
-        router: '${Routes.routineInspectionList}?state=2',
+        content: json['currMonthBeProcessedCnt'].toString(),
+        router: '${Routes.routineInspectionList}?state=1',
       ),
       Meta(
-        title: '已巡检任务数',
+        title: '待巡检总数',
         imagePath: 'assets/images/button_bg_green.png',
-        content: json['processedC'].toString(),
-        router: '${Routes.routineInspectionList}?state=3',
+        content: json['allBeProcessedCnt'].toString(),
+        router: '${Routes.routineInspectionList}?state=1',
       ),
     ];
   }
