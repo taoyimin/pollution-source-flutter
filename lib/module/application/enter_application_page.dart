@@ -343,46 +343,46 @@ class _EnterApplicationPageState extends State<EnterApplicationPage>
                         ),
                       ),
                       //异常申报上报
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 18,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ImageTitleWidget(
-                                title: '异常申报上报',
-                                imagePath:
-                                    'assets/images/icon_alarm_manage.png'),
-                            Row(
-                              children: <Widget>[
-                                InkWellButton9(
-                                  meta: Meta(
-                                    title: '排口异常',
-                                    content: '排口异常上报',
-                                    imagePath:
-                                        'assets/images/application_icon_discharge_report.png',
-                                    router:
-                                        '${Routes.dischargeReportUpload}?enterId=${widget.enterId}',
-                                  ),
-                                ),
-                                Gaps.hGap20,
-                                InkWellButton9(
-                                  meta: Meta(
-                                    title: '因子异常',
-                                    content: '因子异常上报',
-                                    imagePath:
-                                        'assets/images/application_icon_factor_report.png',
-                                    router:
-                                        '${Routes.factorReportUpload}?enterId=${widget.enterId}',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(
+                      //     horizontal: 20,
+                      //     vertical: 18,
+                      //   ),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: <Widget>[
+                      //       ImageTitleWidget(
+                      //           title: '异常申报上报',
+                      //           imagePath:
+                      //               'assets/images/icon_alarm_manage.png'),
+                      //       Row(
+                      //         children: <Widget>[
+                      //           InkWellButton9(
+                      //             meta: Meta(
+                      //               title: '排口异常',
+                      //               content: '排口异常上报',
+                      //               imagePath:
+                      //                   'assets/images/application_icon_discharge_report.png',
+                      //               router:
+                      //                   '${Routes.dischargeReportUpload}?enterId=${widget.enterId}',
+                      //             ),
+                      //           ),
+                      //           Gaps.hGap20,
+                      //           InkWellButton9(
+                      //             meta: Meta(
+                      //               title: '因子异常',
+                      //               content: '因子异常上报',
+                      //               imagePath:
+                      //                   'assets/images/application_icon_factor_report.png',
+                      //               router:
+                      //                   '${Routes.factorReportUpload}?enterId=${widget.enterId}',
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
